@@ -1,0 +1,125 @@
+.home-page {
+    @include setHeight();
+    background: radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%);
+    .menu {
+        background-color: black;
+    }
+    .hero-image {
+        width: 100%;
+        opacity: 0.4;
+    }
+    .home {
+        align-items: flex-start;
+        &-section {
+            @include setHeight();
+            padding: 57px 0;
+            @include mq("tablet") {
+                padding-top: 97px;
+            }
+        }
+        &-title {
+            text-transform: uppercase;
+        }
+        &-text {
+            margin-top: 73px;
+            text-transform: uppercase;
+            font-size: 27px;
+            line-height: 33px;
+            letter-spacing: 0.04em;
+            @include mq("phone", max) {
+                margin-top: 25px;
+                font-size: 18px;
+                line-height: 24px;
+            }
+        }
+    }
+    .home2 {
+        text-align: center;
+        @include setHeight();
+        &-header {
+            @include mq("laptop", max) {
+                font-size: 40px;
+            }
+            @include mq("phone", max) {
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 29px;
+                text-transform: uppercase;
+            }
+        }
+        .btn-green {
+            padding: 8px 52px;
+            margin: 50px 0 24px;
+            @include mq("phone", max) {
+                margin: 20px 0 5px;
+            }
+        }
+    }
+    .home3 {
+        @include mq("phone", max) {
+            padding-top: 30px;
+        }
+        &-title {
+            font-weight: 600;
+            font-size: 41px;
+            line-height: 70px;
+            letter-spacing: 0.02em;
+            @include mq("laptop", max) {
+                font-size: 33px;
+            }
+            @include mq("phone", max) {
+                font-size: 24px;
+                line-height: 29px;
+            }
+        }
+        &-text {
+            font-weight: bold;
+            font-size: 64px;
+            line-height: 72px;
+            @include mq("laptop", max) {
+                font-size: 45px;
+            }
+            @include mq("phone", max) {
+                font-size: 36px;
+                line-height: 42px;
+            }
+        }
+        .hero-image {
+            opacity: 1;
+        }
+    }
+}
+
+.countdown-wrapper {
+    display: flex;
+    justify-content: center;
+    .time-section {
+        text-align: center;
+        .time {
+            font-weight: 600;
+            font-size: 144px;
+            line-height: 176px;
+            letter-spacing: -0.02em;
+            color: white;
+            @include mq("laptop", max) {
+                font-size: 80px;
+            }
+            @include mq("phone", max) {
+                font-size: 50px;
+                line-height: 88px;
+            }
+            &-text {
+                font-weight: 500;
+                font-size: 36px;
+                line-height: 44px;
+                letter-spacing: -0.02em;
+                color: white;
+                text-transform: uppercase;
+                @include mq("phone", max) {
+                    font-size: 17.5462px;
+                    line-height: 21px;
+                }
+            }
+        }
+    }
+}

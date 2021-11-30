@@ -1,0 +1,36 @@
+@mixin mq($width, $type: min) {
+    @if map_has_key($breakpoints, $width) {
+        $width: map_get($breakpoints, $width);
+        @if $type == max {
+            $width: $width - 1px;
+        }
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}
+
+@mixin setHeight() {
+    overflow: hidden;
+    height: calc(100vh - 97px);
+    min-height: auto;
+    width: 100vw;
+    @include mq("tablet", max) {
+        overflow: auto;
+        height: calc(100vh - 57px);
+        position: relative;
+    }
+}
+
+%selectStyle {
+    border: 1px solid white;
+    border-radius: unset;
+    background-color: $black;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+    padding: 4px 10px;
+    color: white;
+    box-shadow: unset;
+    height: 100%;
+}

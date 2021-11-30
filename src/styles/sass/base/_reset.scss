@@ -1,0 +1,24 @@
+.form-control {
+    font-family: "Montserrat";
+    border: 1px solid #ced4da;
+    border-radius: unset;
+    font-size: 13px;
+    line-height: 19px;
+    color: $black;
+    padding: 8px 12px;
+}
+
+.timeframe-bar {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 24px;
+    height: 12px;
+    background-color: #464646;
+    .timeleft {
+        height: 100%;
+        text-align: right;
+        line-height: 12px;
+        width: 0;
+        box-sizing: border-box;
+    }
+}
