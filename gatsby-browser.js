@@ -1,3 +1,5 @@
+import React from "react"
+
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./src/styles/sass/app.scss"
 import "jquery/dist/jquery.min.js"
@@ -6,4 +8,8 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import "react-tabs/style/react-tabs.css"
 import "rc-slider/assets/index.css"
 
-export { wrapRootElement } from "./src/apollo/provider"
+import { ApplicationContext } from "./src/context/store"
+
+// export { wrapRootElement } from "./src/apollo/provider"
+
+export const wrapRootElement = ({ element }) => <ApplicationContext>{element}</ApplicationContext>
