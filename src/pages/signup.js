@@ -48,7 +48,6 @@ const SingupPage = () => {
         },
         [remember]
     )
-    
 
     // const [signup, { data, loading, error }] = useMutation(SIGNUP)
     return (
