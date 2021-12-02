@@ -32,6 +32,7 @@ const HomeWithSign = () => {
                         </div>
                     </div>
                 </section>
+                <div className="back-image"></div>
             </main>
         </>
     );

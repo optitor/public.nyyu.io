@@ -1,5 +1,29 @@
 main.purchaseWithSign-page {
     background: radial-gradient(73.12% 156.15% at 24.15% 95.07%, rgba(0, 0, 0, 0.22) 19.22%, rgba(0, 0, 0, 0.62) 39.09%, #000000 92.94%);
+    position: relative;
+    overflow: hidden;
+    div.back-image {
+        position: absolute;
+        z-index: -1;
+        width: 30%;
+        height: 200vh;
+        top:-20%;
+        left: 30%;
+        transform: rotate(-15deg);
+        background-image: url("./../../../images/hero1.png");
+        background-size: contain;
+        opacity: 0.4;
+        @media screen and (max-width: 1480px) {
+            width: 40%;
+        }
+        @media screen and (max-width: 786px) {
+            left: 0;
+            width: 100%;
+        }
+    }
+    nav.menu {
+        background-color: transparent;
+    }
     .home-section {
         height: 90vh;
         display: flex;
@@ -36,7 +60,7 @@ main.purchaseWithSign-page {
                             font-size: 24px;
                         }
                     }
-                    @media screen and (max-width: 584px) {
+                    @media screen and (max-width: 786px) {
                         h4.clock-title {
                             font-size: 12px;
                         }
@@ -84,7 +108,7 @@ main.purchaseWithSign-page {
                             font-size: 22px;
                         }
                     }
-                    @media screen and (max-width: 584px) {
+                    @media screen and (max-width: 786px) {
                         h4.title1 {
                             font-size: 16px;
                         }
