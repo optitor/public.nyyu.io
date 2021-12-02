@@ -1,9 +1,48 @@
 import React from 'react';
+import "./style.scss";
+import styled from 'styled-components';
+import Seo from '../../../components/seo';
+import Header from '../../../components/common/header';
+import CountDown from '../../../components/common/countdown';
 
 const HomeWithSign = () => {
     return (
-        <div className="text-white">HomeWithSign</div>
+        <>
+            <Seo title="Purchase and Sign" />
+            <main className="purchaseWithSign-page">
+                <Header />
+                <section className="home-section">
+                    <div className="customContainer">
+                        <div className="row">
+                            <div className="col-sm-6 clock-div">
+                                <h4 className="clock-title">The next Auction round starts in</h4>
+                                <CountDown />
+                            </div>
+                            <TextDiv className="col-sm-6 d-flex flex-column justify-content-center">
+                                <h4 className="title1 txt-green">Exclusive Sale of</h4>
+                                <h3 className="title2">10 ndb tokens!</h3>
+                                <p className="text">Don’t miss an opportunity to buy limited number of NDB Tokens at the fixed price before the next auction round started.</p>
+                            </TextDiv>
+                        </div>
+                        <div className="row mt-4">
+                            <div className="col-sm-6"></div>
+                            <div className="col-sm-6">
+                                <button className="btn btn-green">buy now</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </>
     );
 };
 
 export default HomeWithSign;
+
+const TextDiv = styled.div`
+    padding: 0 3%;
+    @media screen and (max-width: 584px) {
+        padding: 3% 10%;
+        margin-top: 20px;
+    }
+`;

@@ -3,7 +3,6 @@ import "./style.scss";
 import Seo from '../../../components/seo';
 
 import Header from '../../../components/common/header';
-import { Hero1 } from '../../../utilities/imgImport';
 
 const Home = () => {
     return (
