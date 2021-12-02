@@ -13,9 +13,9 @@ const IndexPage = () => {
             <main className="home-page">
                 <Header />
                 <section className="home2 home-section">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-sm-7">
+                    <div className="container h-100">
+                        <div className="row h-100">
+                            <div className="col-sm-7 d-flex flex-column justify-content-center align-items-center">
                                 <h2 className="home2-header">Round 20 Ends in</h2>
                                 <CountDown />
                                 <button className="btn btn-green">Place a bid</button>

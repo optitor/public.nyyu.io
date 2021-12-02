@@ -1,6 +1,6 @@
 .auction-page {
     background-color: $black;
-    @include setHeight();
+    @extend %setHeight;
     .menu {
         border-bottom: 2px solid #464646;
     }

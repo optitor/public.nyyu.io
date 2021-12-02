@@ -44,6 +44,12 @@ import coinbase from "../images/coinbase.png"
 import trustWallet from "../images/trust_wallet.png"
 import address from "../images/address.png"
 
+import pass from "../images/pass.png"
+import unpass1 from "../images/unpass1.png"
+import unpass2 from "../images/unpass2.png"
+import newDoc from "../images/new_doc.png"
+import photoIcon from "../images/photo-icon.png"
+
 export const Logo = logo
 export const Hero1 = hero1
 export const Hero2 = hero2
@@ -89,3 +95,9 @@ export const WalletConnect = walletConnect
 export const Coinbase = coinbase
 export const TrustWallet = trustWallet
 export const Address = address
+
+export const Pass = pass
+export const Unpass1 = unpass1
+export const Unpass2 = unpass2
+export const NewDoc = newDoc
+export const PhotoIcon = photoIcon

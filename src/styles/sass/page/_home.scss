@@ -1,5 +1,5 @@
 .home-page {
-    @include setHeight();
+    @extend %setHeight;
     background: radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%);
     .menu {
         background-color: black;
@@ -11,11 +11,11 @@
     .home {
         align-items: flex-start;
         &-section {
-            @include setHeight();
+            @extend %setHeight;
             padding: 57px 0;
-            @include mq("tablet") {
-                padding-top: 97px;
-            }
+            // @include mq("tablet") {
+            //     padding-top: 97px;
+            // }
         }
         &-title {
             text-transform: uppercase;
@@ -34,8 +34,10 @@
         }
     }
     .home2 {
+        display: flex;
+        align-items: center;
         text-align: center;
-        @include setHeight();
+        @extend %setHeight;
         &-header {
             @include mq("laptop", max) {
                 font-size: 40px;
@@ -97,7 +99,7 @@
         text-align: center;
         .time {
             font-weight: 600;
-            font-size: 144px;
+            font-size: 123px;
             line-height: 176px;
             letter-spacing: -0.02em;
             color: white;

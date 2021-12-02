@@ -10,7 +10,7 @@
     }
 }
 
-@mixin setHeight() {
+%setHeight {
     overflow: hidden;
     height: calc(100vh - 97px);
     min-height: auto;

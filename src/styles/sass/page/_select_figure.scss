@@ -1,5 +1,5 @@
 .profile-page {
-    @include setHeight();
+    @extend %setHeight;
     .figure-section {
         max-width: 992px;
         margin: 0 auto;

@@ -12,7 +12,7 @@ body {
     overflow: hidden;
     padding-top: 97px;
     background-color: $black;
-    @include mq("tablet", max) {
+    @include mq("laptop", max) {
         overflow: auto;
     }
     @include mq("phone", max) {
