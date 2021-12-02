@@ -199,7 +199,7 @@ const VerificationPage = () => {
                                             <FileList key={idx} data={item} />
                                         ))}
                                     </ul>
-                                    {files && (
+                                    {files.length > 0 && (
                                         <button
                                             className="btn-add"
                                             onClick={() => inputRef.current.click()}

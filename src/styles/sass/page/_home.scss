@@ -11,11 +11,6 @@
     .home {
         align-items: flex-start;
         &-section {
-            @extend %setHeight;
-            padding: 57px 0;
-            // @include mq("tablet") {
-            //     padding-top: 97px;
-            // }
         }
         &-title {
             text-transform: uppercase;
@@ -37,7 +32,7 @@
         display: flex;
         align-items: center;
         text-align: center;
-        @extend %setHeight;
+        // @extend %setHeight;
         &-header {
             @include mq("laptop", max) {
                 font-size: 40px;
