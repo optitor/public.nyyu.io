@@ -1,25 +1,25 @@
 main.purchaseWithSign-page {
+    background: radial-gradient(73.12% 156.15% at 24.15% 95.07%, rgba(0, 0, 0, 0.22) 19.22%, rgba(0, 0, 0, 0.62) 39.09%, #000000 92.94%);
     .home-section {
-        height: 80vh;
+        height: 90vh;
         display: flex;
         align-items: center;
-        div.customContainer {
+        div.container {
             width: 100%;
-            padding: 0 5%;
             div.row {
                 .clock-div {
                     h4.clock-title {
-                        font-size: 32px;
+                        font-size: 24px;
                         font-weight: 700;
                         text-transform: uppercase;
                         text-align: center;
                     }
                     p.time {
-                        font-size: 130px;
-                        line-height: 160px;
+                        font-size: 100px;
+                        line-height: 122px;
                     }
                     small.time-text {
-                        font-size: 36px;
+                        font-size: 24px;
                         font-weight: 600;
                         color: dimgray;
                         text-transform: none;
@@ -51,41 +51,33 @@ main.purchaseWithSign-page {
                 }
                 .col-sm-6 {
                     h4.title1 {
-                        font-size: 30px;
+                        font-size: 24px;
                         font-weight: 700;
                         text-transform: uppercase;
                         margin-bottom: 1vw;               
                     }
                     h3.title2 {
                         margin-left: 2vw;
-                        margin-bottom: 4vw;
-                        font-size: 72px;
+                        margin-bottom: 2vw;
+                        font-size: 48px;
                         font-style: italic;
                         font-weight: 800;
                         text-transform: uppercase;
                     }
                     p.text {
-                        font-size: 24px;
+                        font-size: 16px;
                         font-weight: 500;
+                        margin-bottom: 2vw;
                     }
                     button.btn-green {
                         display: block;
                         margin: auto;
                         width: 320px;
-                        padding: 15px;
+                        padding: 12px;
                         font-size: 30px;
                         font-weight: 700;
                     }
                     @media screen and (max-width: 1480px) {
-                        h4.title1 {
-                            font-size: 24px;
-                        }
-                        h3.title2 {
-                            font-size: 48px;
-                        }
-                        p.text {
-                            font-size: 16px;
-                        }
                         button.btn-green {
                             width: 250px;
                             padding: 10px;

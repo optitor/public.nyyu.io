@@ -12,7 +12,7 @@ const HomeWithSign = () => {
             <main className="purchaseWithSign-page">
                 <Header />
                 <section className="home-section">
-                    <div className="customContainer">
+                    <div className="container">
                         <div className="row">
                             <div className="col-sm-6 clock-div">
                                 <h4 className="clock-title">The next Auction round starts in</h4>
@@ -24,7 +24,7 @@ const HomeWithSign = () => {
                                 <p className="text">Don’t miss an opportunity to buy limited number of NDB Tokens at the fixed price before the next auction round started.</p>
                             </TextDiv>
                         </div>
-                        <div className="row mt-4">
+                        <div className="row">
                             <div className="col-sm-6"></div>
                             <div className="col-sm-6">
                                 <button className="btn btn-green">buy now</button>
@@ -40,7 +40,6 @@ const HomeWithSign = () => {
 export default HomeWithSign;
 
 const TextDiv = styled.div`
-    padding: 0 3%;
     @media screen and (max-width: 584px) {
         padding: 3% 10%;
         margin-top: 20px;

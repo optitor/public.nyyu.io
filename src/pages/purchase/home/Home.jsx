@@ -11,7 +11,7 @@ const Home = () => {
             <main className="purchase-page">
                 <Header />
                 <section className="home-section">
-                    <div className="customContainer">
+                    <div className="container">
                         <div className="row">
                             <div className="col-sm-7 d-flex flex-column justify-content-center desctription">
                                 <h4 className="title1 txt-green">Exclusive Sale of</h4>

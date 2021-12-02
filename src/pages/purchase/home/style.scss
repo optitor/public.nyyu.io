@@ -3,9 +3,11 @@ main.purchase-page {
         height: 80vh;
         display: flex;
         align-items: center;
-        div.customContainer {
+        @media screen and (max-width: 584px) {
+            height: 100vh;
+        }
+        div.container {
             width: 100%;
-            padding: 0 5%;
             div.row {
                 .col-sm-7 {
                     h4.title1 {
@@ -24,7 +26,6 @@ main.purchase-page {
                     }
                     p.text {
                         margin-left: 5vw;
-                        margin-right: 8vw;
                         font-size: 24px;
                         font-weight: 600;
                     }
@@ -32,7 +33,7 @@ main.purchase-page {
                         display: block;
                         margin: auto;
                         width: 320px;
-                        padding: 15px;
+                        padding: 10px;
                         font-size: 30px;
                         font-weight: 700;
                     }
@@ -49,7 +50,6 @@ main.purchase-page {
                         }
                         button.btn-green {
                             width: 250px;
-                            padding: 10px;
                             font-size: 22px;
                         }
                     }
