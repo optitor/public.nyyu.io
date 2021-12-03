@@ -1,0 +1,21 @@
+main.purchaseAuction-page {
+    nav.menu {
+        border-bottom: 2px solid #464646;
+    }
+    section.container {
+        table {
+            tbody {
+                tr {
+                    line-height: 55px;
+                    border-bottom: 2px solid #464646;
+                    td.item {
+                        padding-left: 2.5vw;
+                    }
+                    td.quantity {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}

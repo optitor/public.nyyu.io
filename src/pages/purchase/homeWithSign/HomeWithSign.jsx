@@ -41,8 +41,8 @@ const HomeWithSign = () => {
 export default HomeWithSign;
 
 const TextDiv = styled.div`
-    @media screen and (max-width: 584px) {
-        padding: 3% 10%;
+    @media screen and (max-width: 786px) {
+        padding: 3% 20px;
         margin-top: 20px;
     }
 `;

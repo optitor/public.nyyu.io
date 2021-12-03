@@ -13,10 +13,10 @@ main.purchaseWithSign-page {
         background-image: url("./../../../images/hero1.png");
         background-size: contain;
         opacity: 0.4;
-        @media screen and (max-width: 1480px) {
+        @media screen and (max-width: 1400px) {
             width: 40%;
         }
-        @media screen and (max-width: 786px) {
+        @media screen and (max-width: 768px) {
             left: 0;
             width: 100%;
         }
@@ -60,7 +60,7 @@ main.purchaseWithSign-page {
                             font-size: 24px;
                         }
                     }
-                    @media screen and (max-width: 786px) {
+                    @media screen and (max-width: 768px) {
                         h4.clock-title {
                             font-size: 12px;
                         }
@@ -108,16 +108,18 @@ main.purchaseWithSign-page {
                             font-size: 22px;
                         }
                     }
-                    @media screen and (max-width: 786px) {
+                    @media screen and (max-width: 768px) {
                         h4.title1 {
                             font-size: 16px;
+                            text-align: center;
                         }
                         h3.title2 {
                             font-size: 20px;
-                            margin-left: 10vw;
+                            text-align: center;
                         }
                         p.text {
                             font-size: 12px;
+                            text-align: center;
                         }
                         button.btn-green {
                             width: 200px;

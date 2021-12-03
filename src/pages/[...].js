@@ -3,8 +3,9 @@ import { Router } from '@gatsbyjs/reach-router';
 
 import Purchase from "./purchase/home";
 import PurchaseWithSign from "./purchase/homeWithSign";
+import Auction from "./purchase/auction";
 
-const Test = () => (<div>Test</div>)
+
 
 const App = () => {
     return (
@@ -12,7 +13,7 @@ const App = () => {
             <Router>
                 <Purchase path="/purchase/home" />
                 <PurchaseWithSign path="/purchase/homeWithSign" />
-                <Test path="/test" /> 
+                <Auction path="/purchase/auction" /> 
             </Router>
         </>
     );
