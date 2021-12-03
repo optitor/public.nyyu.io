@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 export const AuctionLeft = styled.div`
+    height: 90vh;
     border-right: 2px solid #464646;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1
+    padding: 1vw 0;
     @media screen and (max-width: 768px) {
         border: none;
         height: auto;
@@ -17,6 +18,7 @@ export const AuctionRight = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 1vw 4vw;
+    margin-bottom: 20px;
     &>div.tokenDiv {
         width: 100%;
         border: 1px solid #464646;
@@ -31,7 +33,7 @@ export const AuctionRight = styled.div`
 `;
 
 export const Title = styled.p`
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 700;
     margin: 16px 0;
     text-transform: uppercase;
@@ -78,8 +80,16 @@ export const TableContainer = styled.div`
 `;
 
 export const SliderContainer = styled.div`
+    position: relative;
     display: flex;
     align-items: center;
+    &>span.max {
+        position: absolute;
+        font-weight: 500;
+        font-size: 14px;
+        top: 30px;
+        right: 0px;
+    }
     &>input {
         padding: 8px 10px;
         background: #1e1e1e;
@@ -129,7 +139,7 @@ export const TotalPrice = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 80px;
+    margin-top: 70px;
     &>.totalPrice {
         width: 40%;
         margin: 0;
@@ -158,9 +168,11 @@ export const BuyButton = styled.button`
     border: 1px solid #ffffff;
     font-size: 30px;
     font-weight: 700;
+    width: 100%;
     padding: 7px;
     margin: 35px 0;
     &:hover {
         color: #23c865;
+        border: 1px solid #23c865;
     }
 `
