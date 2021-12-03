@@ -11,6 +11,7 @@
     .home {
         align-items: flex-start;
         &-section {
+            @extend %setHeight2;
         }
         &-title {
             text-transform: uppercase;
@@ -32,12 +33,12 @@
         display: flex;
         align-items: center;
         text-align: center;
-        // @extend %setHeight;
         &-header {
             @include mq("laptop", max) {
                 font-size: 40px;
             }
             @include mq("phone", max) {
+                margin-top: 8px;
                 font-weight: bold;
                 font-size: 24px;
                 line-height: 29px;

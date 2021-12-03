@@ -4,7 +4,16 @@ import Header from "../components/common/header"
 import Select from "react-select"
 import useFileUpload from "react-use-file-upload"
 import { CheckBox } from "../components/common/FormControl"
-import { NewDoc, Pass, PhotoIcon, QRCode2, Trees, Unpass1, Unpass2 } from "../utilities/imgImport"
+import {
+    NewDoc,
+    Pass,
+    PhotoIcon,
+    QRCode2,
+    SelfieImg,
+    Trees,
+    Unpass1,
+    Unpass2,
+} from "../utilities/imgImport"
 import { countries } from "../utilities/staticData"
 import Modal from "react-modal"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -82,7 +91,7 @@ const VerificationPage = () => {
     return (
         <main className="verify-page">
             <Header />
-            <section className="d-flex align-items-center h-100">
+            <section className="d-flex align-items-center">
                 <div className="container">
                     <h4 className="text-center mt-2 mb-4">Verify your identity</h4>
                     {step !== -1 && (
@@ -93,7 +102,11 @@ const VerificationPage = () => {
                                     className="step-progress"
                                     style={{ width: step * 50 + "%" }}
                                 ></div>
-                                <div className="right-circle bg-white"></div>
+                                <div
+                                    className={`right-circle ${
+                                        step === 2 ? "bg-green" : "bg-white"
+                                    }`}
+                                ></div>
                             </div>
                         </div>
                     )}
@@ -148,8 +161,8 @@ const VerificationPage = () => {
                     {step === 1 && (
                         <div className="verify-step2">
                             <h5 className="text-center">Identity document</h5>
-                            <div className="d-flex flex-wrap justify-content-around">
-                                <div className="upload-doc">
+                            <div className="d-flex flex-wrap justify-content-center">
+                                <div className="upload-doc me-lg-5">
                                     <div className="mb-3">
                                         <div
                                             className={`file-upload ${
@@ -192,23 +205,24 @@ const VerificationPage = () => {
                                         ))}
                                     </ul>
                                 </div>
-                                <div className="uploaded-list">
-                                    <p className="uploaded-list__text">You uploaded:</p>
-                                    <ul className="file-list">
-                                        {files?.map((item, idx) => (
-                                            <FileList key={idx} data={item} />
-                                        ))}
-                                    </ul>
-                                    {files.length > 0 && (
+                                {files.length > 0 && (
+                                    <div className="uploaded-list">
+                                        <p className="uploaded-list__text">You uploaded:</p>
+                                        <ul className="file-list">
+                                            {files?.map((item, idx) => (
+                                                <FileList key={idx} data={item} />
+                                            ))}
+                                        </ul>
+
                                         <button
                                             className="btn-add"
                                             onClick={() => inputRef.current.click()}
                                         >
                                             <span></span>Add more files
                                         </button>
-                                    )}
-                                </div>
-                                <div className="upload-rule">
+                                    </div>
+                                )}
+                                <div className="upload-rule ms-lg-3">
                                     <p>Take a photo of your document. </p>
                                     <p>The photo should be:</p>
                                     <ul>
@@ -229,6 +243,17 @@ const VerificationPage = () => {
                             </div>
                         </div>
                     )}
+                    {step === 2 && (
+                        <div className="verify-step3">
+                            <h6 className="verify-step3__heading">Selfie</h6>
+                            <p className="verify-step3__text">
+                                Face the camera.
+                                <br /> Make sure your face is visible and fits in the frame.
+                                <br /> Then, slowly turn your head around in a circle.
+                            </p>
+                            <img className="selfie-img" src={SelfieImg} alt="seflie" />
+                        </div>
+                    )}
                     <div className="text-center">
                         <button className="btn-link" onClick={() => setState({ phoneModal: true })}>
                             Continue on a phone
@@ -243,18 +268,46 @@ const VerificationPage = () => {
                                 Back
                             </button>
                         )}
-                        <button
-                            className="btn-primary btn-next"
-                            onClick={() => setState({ step: step + 1 })}
-                        >
-                            Next
-                        </button>
-                        {/* <button
-                            className="btn-green btn-upload"
-                            onClick={() => setState({ step: step + 1 })}
-                        >
-                            Upload
-                        </button> */}
+                        {step === 1 ? (
+                            files.length === 0 ? (
+                                <>
+                                    <button
+                                        className="btn-green btn-upload"
+                                        onClick={() => inputRef.current.click()}
+                                    >
+                                        Upload
+                                    </button>
+                                    <button
+                                        className="btn-primary btn-next"
+                                        onClick={() => setState({ step: step + 1 })}
+                                    >
+                                        Next
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        className="btn-green"
+                                        onClick={() => setState({ step: step + 1 })}
+                                    >
+                                        Next
+                                    </button>
+                                    <button
+                                        className="btn-primary btn-next"
+                                        onClick={() => setState({ step: step + 1 })}
+                                    >
+                                        Next
+                                    </button>
+                                </>
+                            )
+                        ) : (
+                            <button
+                                className={step > 1 ? "btn-ready" : "btn-primary"}
+                                onClick={() => setState({ step: step + 1 })}
+                            >
+                                {step > 1 ? "I'm Reaady" : "Next"}
+                            </button>
+                        )}
                     </div>
                 </div>
             </section>

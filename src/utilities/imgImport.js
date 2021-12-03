@@ -49,6 +49,7 @@ import unpass1 from "../images/unpass1.png"
 import unpass2 from "../images/unpass2.png"
 import newDoc from "../images/new_doc.png"
 import photoIcon from "../images/photo-icon.png"
+import selfieImg from "../images/selfie.png"
 
 export const Logo = logo
 export const Hero1 = hero1
@@ -101,3 +102,4 @@ export const Unpass1 = unpass1
 export const Unpass2 = unpass2
 export const NewDoc = newDoc
 export const PhotoIcon = photoIcon
+export const SelfieImg = selfieImg

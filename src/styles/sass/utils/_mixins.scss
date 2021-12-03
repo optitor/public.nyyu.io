@@ -13,11 +13,17 @@
 %setHeight {
     overflow: hidden;
     height: 100vh;
-    min-height: auto;
     width: 100vw;
     @include mq("tablet", max) {
         overflow: auto;
         position: relative;
+    }
+}
+
+%setHeight2 {
+    height: calc(100% - 97px);
+    @include mq("phone", max) {
+        height: calc(100% - 57px);
     }
 }
 

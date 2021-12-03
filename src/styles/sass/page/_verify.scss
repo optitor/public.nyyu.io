@@ -1,8 +1,11 @@
 .verify-page {
     @extend %setHeight;
     overflow: auto;
-    @include mq("laptop", max) {
+    @include mq("tablet", max) {
         height: 100%;
+    }
+    section {
+        @extend %setHeight2;
     }
     .step {
         &-bar {
@@ -14,11 +17,8 @@
             width: 65%;
             height: 3px;
             margin: 0 auto;
-            margin-bottom: 95px;
+            margin-bottom: 80px;
             background-color: white;
-            @include mq("phone", max) {
-                margin-bottom: 75px;
-            }
         }
         &-progress {
             position: absolute;
@@ -56,6 +56,7 @@
         font-size: 20px;
         line-height: 30px;
         text-transform: uppercase;
+        margin-bottom: 24px;
         @include mq("phone", max) {
             font-size: 18px;
         }
@@ -114,6 +115,7 @@
             }
         }
         &-step2 {
+            margin-bottom: 24px;
             .upload {
                 &-doc {
                     @include mq("phone", max) {
@@ -164,9 +166,9 @@
                     }
                 }
                 &-rule {
+                    max-width: 455px;
                     p,
-                    li,
-                    strong {
+                    li {
                         font-size: 16px;
                         line-height: 30px;
                         color: #fbfbfb;
@@ -355,9 +357,41 @@
                 }
             }
         }
+        &-step3 {
+            text-align: center;
+            &__heading {
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 30px;
+                text-transform: uppercase;
+            }
+            &__text {
+                max-width: 537px;
+                margin: 0 auto;
+                font-size: 16px;
+                line-height: 26px;
+                br {
+                    display: none;
+                }
+                @include mq("phone", max) {
+                    width: 258px;
+                    br {
+                        display: block;
+                    }
+                }
+            }
+            .selfie-img {
+                margin: 16px 0;
+                width: 237px;
+                height: 237px;
+                @include mq("phone", max) {
+                    width: 167px;
+                    height: 167px;
+                }
+            }
+        }
     }
     .btn-link {
-        margin-top: 50px;
         @include mq("phone", max) {
             display: none;
         }
@@ -366,15 +400,37 @@
         display: flex;
         justify-content: center;
         margin: 50px 0;
-        .btn-primary {
-            padding: 14px 60px;
+        .btn-primary,
+        .btn-green,
+        .btn-ready {
+            padding: 14px;
             font-size: 20px;
             line-height: 24px;
+            width: 196px;
             @include mq("phone", max) {
-                padding: 10px 40px;
-                font-size: 15.3647px;
+                padding: 10px;
+                font-size: 15px;
                 font-weight: bold;
                 line-height: 19px;
+                width: 150px;
+            }
+        }
+        .btn-ready,
+        .btn-upload {
+            background-color: $green;
+            text-transform: uppercase;
+            border: unset;
+            font-weight: bold;
+        }
+        .btn-green {
+            display: none;
+        }
+        @include mq("phone", max) {
+            .btn-green {
+                display: inline-block;
+            }
+            .btn-next {
+                display: none;
             }
         }
     }

@@ -1,5 +1,8 @@
 .signup-page {
     @extend %setHeight;
+    section {
+        @extend %setHeight2;
+    }
     .signup {
         position: relative;
         width: 100%;
@@ -120,7 +123,7 @@
     position: absolute;
     bottom: 0;
     z-index: -1;
-    @include mq("phone", max) {
+    @include mq("tablet", max) {
         display: none;
     }
 }
