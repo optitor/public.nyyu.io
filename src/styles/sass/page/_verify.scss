@@ -272,6 +272,7 @@
                         padding: 22px 0 16px;
                         width: 80px;
                         background: rgba(62, 62, 62, 0.3);
+                        cursor: pointer;
                         @include mq("phone", max) {
                             display: flex;
                             justify-content: space-between;
@@ -450,5 +451,35 @@
         text-transform: uppercase;
         padding: 14px 38px;
         border: unset;
+    }
+}
+
+.file-modal {
+    max-width: 539px;
+    padding: 26px 20px;
+    text-align: center;
+    &__body {
+        padding: 30px;
+        @include mq("phone", max) {
+            padding: 0;
+        }
+        img {
+            margin: 8px 0;
+            width: 100%;
+        }
+        p {
+            color: #e8e8e8;
+            @include mq("phone", max) {
+                font-size: 13px;
+                line-height: 39px;
+            }
+        }
+    }
+    .btn-primary {
+        margin-top: 24px;
+        padding: 14px 49px;
+        @include mq("phone") {
+            display: none;
+        }
     }
 }

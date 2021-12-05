@@ -1,22 +1,30 @@
-import React, { useReducer, useRef } from "react"
+import React, { useState, useRef } from "react"
 import Header from "../components/common/header"
 import useFileUpload from "react-use-file-upload"
 import { NewDoc, PhotoIcon, Trees } from "../utilities/imgImport"
 import { formatBytes } from "../utilities/number"
+import Modal from "react-modal"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
 const ProofResidence = () => {
     const inputRef = useRef()
     const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        step: -1,
-    })
-    const { step } = state
+    const [fileOpen, setIsOpen] = useState(false)
+    const [file, setFile] = useState(null)
 
     const FileList = ({ data }) => {
         return (
             <li className="file-item">
                 <div className="file-item__info">
-                    <div>
+                    <div
+                        onClick={() => {
+                            setIsOpen(true)
+                            setFile(data)
+                        }}
+                        onKeyDown={() => setIsOpen(true)}
+                        role="presentation"
+                    >
                         <img className="mb-2" src={PhotoIcon} alt="file img" />
                         <div>
                             <p className="file-name">{data.name}</p>
@@ -119,24 +127,64 @@ const ProofResidence = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="btn-group">
-                        <button
-                            className="btn-primary me-3"
-                            onClick={() => setState({ step: step + 1 })}
-                        >
-                            Skip
-                        </button>
-                        <button
-                            className="btn-primary btn-upload"
-                            onClick={() => inputRef.current.click()}
-                        >
-                            Upload
-                        </button>
+                    <div className="btn-group pt-lg-5">
+                        <button className="btn-primary me-3">Skip</button>
+                        {files.length > 0 ? (
+                            <button
+                                className="btn-primary btn-ready"
+                                onClick={() => inputRef.current.click()}
+                            >
+                                Complete
+                            </button>
+                        ) : (
+                            <button
+                                className="btn-primary btn-upload"
+                                onClick={() => inputRef.current.click()}
+                            >
+                                Upload
+                            </button>
+                        )}
                     </div>
                 </div>
             </section>
-
-            {step !== -1 && <img src={Trees} alt="trees" className="trees-img w-100" />}
+            <Modal
+                isOpen={fileOpen}
+                onRequestClose={() => setIsOpen(false)}
+                ariaHideApp={false}
+                className="file-modal"
+                overlayClassName="file-modal__overlay"
+            >
+                <p className="phone-modal__header">
+                    <FontAwesomeIcon
+                        icon={faTimes}
+                        className="text-white modal-close"
+                        onClick={() => setIsOpen(false)}
+                        onKeyDown={() => setIsOpen(false)}
+                        role="button"
+                        tabIndex="0"
+                    />
+                </p>
+                {file && (
+                    <div className="file-modal__body">
+                        <img src={URL.createObjectURL(file)} alt="file" />
+                        <p>{file.name}</p>
+                    </div>
+                )}
+                <button
+                    className="btn-primary"
+                    onClick={() => {
+                        removeFile(file.name)
+                        setIsOpen(false)
+                    }}
+                    onKeyDown={() => {
+                        removeFile(file.name)
+                        setIsOpen(false)
+                    }}
+                >
+                    Delete
+                </button>
+            </Modal>
+            <img src={Trees} alt="trees" className="trees-img w-100" />
         </main>
     )
 }

@@ -10,28 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import { FormInput } from "../components/common/FormControl"
 
-// const securities = [
-//     {
-//         name: "Enable 2FA",
-//         status: true,
-//         status_label: "Enabled",
-//     },
-//     {
-//         name: "Identity Verificatoin",
-//         status: true,
-//         status_label: "Verified",
-//     },
-//     {
-//         name: "Mobile Verification",
-//         status: false,
-//         status_label: "Setup",
-//     },
-//     {
-//         name: "Turn-on Withdrawal Whitelist",
-//         status: false,
-//         status_label: "Setup",
-//     },
-// ]
 const recent = [
     {
         status: true,

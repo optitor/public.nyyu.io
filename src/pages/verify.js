@@ -49,8 +49,10 @@ const VerificationPage = () => {
         country: countries[0],
         doc_type: doc_types[0],
         phoneModal: false,
+        file: null,
+        fileOpen: false,
     })
-    const { agree, accept, step, country, doc_type, phoneModal } = state
+    const { agree, accept, step, country, doc_type, phoneModal, file, fileOpen } = state
     const handleAgreeOption = useCallback(
         (e) => {
             setState({ agree: !agree })
@@ -67,7 +69,14 @@ const VerificationPage = () => {
         return (
             <li className="file-item">
                 <div className="file-item__info">
-                    <div>
+                    <div
+                        onClick={() => {
+                            setState({ fileOpen: true })
+                            setState({ file: data })
+                        }}
+                        onKeyDown={() => setState({ fileOpen: true })}
+                        role="presentation"
+                    >
                         <img className="mb-2" src={PhotoIcon} alt="file img" />
                         <div>
                             <p className="file-name">{data.name}</p>
@@ -87,7 +96,6 @@ const VerificationPage = () => {
             </li>
         )
     }
-
     return (
         <main className="verify-page">
             <Header />
@@ -141,7 +149,7 @@ const VerificationPage = () => {
                         </div>
                     )}
                     {step === 0 && (
-                        <div className="verify-step1">
+                        <div className="verify-step1 mb-sm-5">
                             <h5 className="text-center mb-4">Identity document</h5>
                             <Select
                                 options={countries}
@@ -300,12 +308,14 @@ const VerificationPage = () => {
                                     </button>
                                 </>
                             )
+                        ) : step === 2 ? (
+                            <button className="btn-ready">I'm Reaady</button>
                         ) : (
                             <button
-                                className={step > 1 ? "btn-ready" : "btn-primary"}
+                                className="btn-primary"
                                 onClick={() => setState({ step: step + 1 })}
                             >
-                                {step > 1 ? "I'm Reaady" : "Next"}
+                                Next
                             </button>
                         )}
                     </div>
@@ -333,6 +343,43 @@ const VerificationPage = () => {
                 <button className="btn-green">Copy Link</button>
                 <p className="my-5">Or scan the QR code with your phone</p>
                 <img src={QRCode2} alt="qr code" />
+            </Modal>
+            <Modal
+                isOpen={fileOpen}
+                onRequestClose={() => setState({ fileOpen: false })}
+                ariaHideApp={false}
+                className="file-modal"
+                overlayClassName="file-modal__overlay"
+            >
+                <p className="phone-modal__header">
+                    <FontAwesomeIcon
+                        icon={faTimes}
+                        className="text-white modal-close"
+                        onClick={() => setState({ fileOpen: false })}
+                        onKeyDown={() => setState({ fileOpen: false })}
+                        role="button"
+                        tabIndex="0"
+                    />
+                </p>
+                {file && (
+                    <div className="file-modal__body">
+                        <img src={URL.createObjectURL(file)} alt="file" />
+                        <p>{file.name}</p>
+                    </div>
+                )}
+                <button
+                    className="btn-primary"
+                    onClick={() => {
+                        removeFile(file.name)
+                        setState({ fileOpen: false })
+                    }}
+                    onKeyDown={() => {
+                        removeFile(file.name)
+                        setState({ fileOpen: false })
+                    }}
+                >
+                    Delete
+                </button>
             </Modal>
             {step !== -1 && <img src={Trees} alt="trees" className="trees-img w-100" />}
         </main>
