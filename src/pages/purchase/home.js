@@ -1,8 +1,7 @@
 import React from 'react';
-import "./style.scss";
-import Seo from '../../../components/seo';
+import Seo from '../../components/seo';
 
-import Header from '../../../components/common/header';
+import Header from '../../components/common/header';
 
 const Home = () => {
     return (
