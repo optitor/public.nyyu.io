@@ -73,6 +73,7 @@ const Payment = () => {
     const [copied, setCopied] = useState(false)
     const [tabIndex, setTabIndex] = useState(0)
     const [payment_type, setPaymentType] = useState(payment_types[0])
+    const [getDepoAddress, setGetDepoAddress] = useState(false);
 
     const handleInput = useCallback((e) => {
         e.preventDefault()
@@ -96,7 +97,19 @@ const Payment = () => {
     const handlePaymentType = (value) => {
         setPaymentType(value)
         setTabIndex(value.index)
-    }
+    };
+
+    const handleCopyText = () => {
+        setCopied(true);
+        setTimeout(() => {
+            setCopied(false);
+        }, 1000);
+    };
+
+    const handleGetDepoAddress = () => {
+        setGetDepoAddress(true);
+    };
+
     return (
         <main className="purchase_payment-page">
             <Header />
@@ -146,27 +159,36 @@ const Payment = () => {
                                                 onChange={handleInput}
                                             />
                                         </div>
-                                        <CopyToClipboard
-                                            onCopy={() => setCopied(true)}
-                                            text={copyText}
-                                            options={{ message: "copied" }}
-                                        >
-                                            <p
-                                                className="clipboard"
-                                                onClick={() => setCopied(true)}
-                                                onKeyDown={() => setCopied(true)}
-                                                role="presentation"
-                                            >
-                                                <code>{copyText}</code>
-                                                <img src={Copy} alt="copy" />
-                                            </p>
-                                        </CopyToClipboard>
-                                        {copied ? (
-                                            <span style={{ color: "white" }}>Copied.</span>
-                                        ) : null}
+                                        {
+                                            !getDepoAddress? 
+                                            (
+                                                <button className="btn-primary" onClick={handleGetDepoAddress}>Get Deposit Address</button>
+                                            ): (
+                                                <>
+                                                    <CopyToClipboard
+                                                        onCopy={handleCopyText}
+                                                        text={copyText}
+                                                        options={{ message: "copied" }}
+                                                    >
+                                                        <p
+                                                            className="clipboard"
+                                                            onClick={handleCopyText}
+                                                            onKeyDown={handleCopyText}
+                                                            role="presentation"
+                                                        >
+                                                            <code>{copyText}</code>
+                                                            <img src={Copy} alt="copy" />
+                                                        </p>
+                                                    </CopyToClipboard>
+                                                    {copied ? (
+                                                        <span style={{ color: "white" }}>Copied.</span>
+                                                    ) : null}
+                                                </>
+                                            )
+                                        }                                       
                                     </div>
                                     <div className="qr-code col-lg-3">
-                                        <img src={QRCode} alt="qr code" />
+                                        {!getDepoAddress? "": <img src={QRCode} alt="qr code" />}                                        
                                     </div>
                                 </div>
                             </TabPanel>
@@ -278,13 +300,9 @@ const Payment = () => {
                         </Tabs>
                     </div>
                     <div className="col-md-4 order-summary">
-                        <h3>Order Summary</h3>
-                        <p>
-                            The token will be paid to your wallet at ndb Will be hold based on the
-                            bid and deducted if you win. If you lose it will be availabel in the NDB
-                            wallet and can be either released to the personal or stay in NDB wallet
-                            for The next round.
-                        </p>
+                        <h3>
+                            {tabIndex === 0? "Wallet": "Order Summary"}
+                        </h3>
                         <div className="total-amount">
                             <div className="d-flex align-items-center">
                                 <p className="amount-label">total amount</p>
