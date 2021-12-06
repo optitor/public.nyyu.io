@@ -6,6 +6,7 @@ import { formatBytes } from "../utilities/number"
 import Modal from "react-modal"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimes } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "gatsby"
 
 const ProofResidence = () => {
     const inputRef = useRef()
@@ -130,12 +131,9 @@ const ProofResidence = () => {
                     <div className="btn-group pt-lg-5">
                         <button className="btn-primary me-3">Skip</button>
                         {files.length > 0 ? (
-                            <button
-                                className="btn-primary btn-ready"
-                                onClick={() => inputRef.current.click()}
-                            >
+                            <Link className="btn-primary btn-ready text-center" to="/auction">
                                 Complete
-                            </button>
+                            </Link>
                         ) : (
                             <button
                                 className="btn-primary btn-upload"

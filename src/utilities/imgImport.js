@@ -49,7 +49,7 @@ import unpass1 from "../images/unpass1.png"
 import unpass2 from "../images/unpass2.png"
 import newDoc from "../images/new_doc.png"
 import photoIcon from "../images/photo-icon.png"
-import selfieImg from "../images/selfie.png"
+import selfieImg from "../images/selfie-img.png"
 
 export const Logo = logo
 export const Hero1 = hero1

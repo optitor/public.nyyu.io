@@ -383,12 +383,17 @@
             }
             .selfie-img {
                 margin: 16px 0;
-                width: 237px;
-                height: 237px;
+                width: 183px;
+                height: 236px;
                 @include mq("phone", max) {
-                    width: 167px;
-                    height: 167px;
+                    width: 122px;
+                    height: 157px;
                 }
+            }
+        }
+        &-step4 {
+            .selfie-content {
+                margin: 80px 0 50px;
             }
         }
     }
@@ -417,20 +422,26 @@
             }
         }
         .btn-ready,
-        .btn-upload {
+        .btn-upload,
+        .btn-take {
             background-color: $green;
             text-transform: uppercase;
             border: unset;
             font-weight: bold;
         }
-        .btn-green {
+        .btn-green,
+        .btn-take {
             display: none;
         }
         @include mq("phone", max) {
+            .btn-take {
+                display: block;
+            }
             .btn-green {
                 display: inline-block;
             }
-            .btn-next {
+            .btn-next,
+            .btn-ready {
                 display: none;
             }
         }
@@ -480,6 +491,40 @@
         padding: 14px 49px;
         @include mq("phone") {
             display: none;
+        }
+    }
+}
+
+.selfie-modal {
+    max-width: 539px;
+    padding: 29px 33px;
+    text-align: center;
+    @include mq("phone", max) {
+        display: none;
+    }
+    &__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .selfie-content {
+            margin-top: 33px;
+            width: 237px;
+            height: 306px;
+        }
+        .btn-group {
+            margin-top: 42px;
+            .btn-primary {
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 24px;
+                padding: 14px 60px;
+                @include mq("phone", max) {
+                    font-size: 15px;
+                    line-height: 19px;
+                    padding: 10px 35px;
+                }
+            }
         }
     }
 }

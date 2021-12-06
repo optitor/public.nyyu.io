@@ -4,6 +4,12 @@ import Header from "../components/common/header"
 import Select from "react-select"
 import useFileUpload from "react-use-file-upload"
 import { CheckBox } from "../components/common/FormControl"
+import Modal from "react-modal"
+import Webcam from "react-webcam"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTimes } from "@fortawesome/free-solid-svg-icons"
+import { formatBytes } from "../utilities/number"
+import { countries } from "../utilities/staticData"
 import {
     NewDoc,
     Pass,
@@ -14,11 +20,6 @@ import {
     Unpass1,
     Unpass2,
 } from "../utilities/imgImport"
-import { countries } from "../utilities/staticData"
-import Modal from "react-modal"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes } from "@fortawesome/free-solid-svg-icons"
-import { formatBytes } from "../utilities/number"
 
 const content = `Before we start, please prepare your identity document and make sure it is valid.
 
@@ -41,6 +42,8 @@ const doc_types = [
 
 const VerificationPage = () => {
     const inputRef = useRef()
+    const webcamRef = useRef(null)
+
     const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         agree: false,
@@ -51,8 +54,22 @@ const VerificationPage = () => {
         phoneModal: false,
         file: null,
         fileOpen: false,
+        selfieModal: false,
+        selfieImg: "",
     })
-    const { agree, accept, step, country, doc_type, phoneModal, file, fileOpen } = state
+    const {
+        agree,
+        accept,
+        step,
+        country,
+        doc_type,
+        phoneModal,
+        file,
+        fileOpen,
+        selfieModal,
+        selfieImg,
+    } = state
+
     const handleAgreeOption = useCallback(
         (e) => {
             setState({ agree: !agree })
@@ -65,6 +82,10 @@ const VerificationPage = () => {
         },
         [accept]
     )
+    const capture = useCallback(() => {
+        setState({ selfieImg: webcamRef.current.getScreenshot() })
+    }, [webcamRef])
+    console.log(selfieImg)
     const FileList = ({ data }) => {
         return (
             <li className="file-item">
@@ -101,8 +122,8 @@ const VerificationPage = () => {
             <Header />
             <section className="d-flex align-items-center">
                 <div className="container">
-                    <h4 className="text-center mt-2 mb-4">Verify your identity</h4>
-                    {step !== -1 && (
+                    {step < 3 && <h4 className="text-center mt-2 mb-4">Verify your identity</h4>}
+                    {step !== -1 && step < 3 && (
                         <div className="d-flex mt-4">
                             <div className="step-bar">
                                 <div className="left-circle bg-green"></div>
@@ -262,63 +283,106 @@ const VerificationPage = () => {
                             <img className="selfie-img" src={SelfieImg} alt="seflie" />
                         </div>
                     )}
+                    {step === 3 && (
+                        <div className="verify-step4">
+                            <div className="selfie-modal__body">
+                                <div className="selfie-content">
+                                    <Webcam
+                                        audio={false}
+                                        ref={webcamRef}
+                                        screenshotFormat="image/jpeg"
+                                        style={{
+                                            width: "100%",
+                                            height: "100%",
+                                        }}
+                                    />
+                                </div>
+                                <div className="btn-group">
+                                    <button
+                                        className="btn-primary me-3"
+                                        onClick={() => setState({ selfieImg: "" })}
+                                    >
+                                        Retake
+                                    </button>
+                                    <button className="btn-primary btn-green" onClick={capture}>
+                                        Upload
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <div className="text-center">
                         <button className="btn-link" onClick={() => setState({ phoneModal: true })}>
                             Continue on a phone
                         </button>
                     </div>
-                    <div className="btn-group">
-                        {step > 0 && (
-                            <button
-                                className="btn-primary me-3"
-                                onClick={() => setState({ step: step - 1 })}
-                            >
-                                Back
-                            </button>
-                        )}
-                        {step === 1 ? (
-                            files.length === 0 ? (
+                    {step < 3 && (
+                        <div className="btn-group">
+                            {step > 0 && (
+                                <button
+                                    className="btn-primary me-3"
+                                    onClick={() => setState({ step: step - 1 })}
+                                >
+                                    Back
+                                </button>
+                            )}
+                            {step === 1 ? (
+                                files.length === 0 ? (
+                                    <>
+                                        <button
+                                            className="btn-green btn-upload"
+                                            onClick={() => inputRef.current.click()}
+                                        >
+                                            Upload
+                                        </button>
+                                        <button
+                                            className="btn-primary btn-next"
+                                            onClick={() => setState({ step: step + 1 })}
+                                        >
+                                            Next
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button
+                                            className="btn-green"
+                                            onClick={() => setState({ step: step + 1 })}
+                                        >
+                                            Next
+                                        </button>
+                                        <button
+                                            className="btn-primary btn-next"
+                                            onClick={() => setState({ step: step + 1 })}
+                                        >
+                                            Next
+                                        </button>
+                                    </>
+                                )
+                            ) : step === 2 ? (
                                 <>
                                     <button
-                                        className="btn-green btn-upload"
-                                        onClick={() => inputRef.current.click()}
+                                        className="btn-ready"
+                                        onClick={() => setState({ selfieModal: true })}
                                     >
-                                        Upload
+                                        I'm Ready
                                     </button>
                                     <button
-                                        className="btn-primary btn-next"
+                                        className="btn-primary btn-take"
                                         onClick={() => setState({ step: step + 1 })}
                                     >
-                                        Next
+                                        Take photo
                                     </button>
                                 </>
                             ) : (
-                                <>
-                                    <button
-                                        className="btn-green"
-                                        onClick={() => setState({ step: step + 1 })}
-                                    >
-                                        Next
-                                    </button>
-                                    <button
-                                        className="btn-primary btn-next"
-                                        onClick={() => setState({ step: step + 1 })}
-                                    >
-                                        Next
-                                    </button>
-                                </>
-                            )
-                        ) : step === 2 ? (
-                            <button className="btn-ready">I'm Reaady</button>
-                        ) : (
-                            <button
-                                className="btn-primary"
-                                onClick={() => setState({ step: step + 1 })}
-                            >
-                                Next
-                            </button>
-                        )}
-                    </div>
+                                <button
+                                    className="btn-primary"
+                                    onClick={() => setState({ step: step + 1 })}
+                                >
+                                    Next
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
             </section>
             <Modal
@@ -380,6 +444,48 @@ const VerificationPage = () => {
                 >
                     Delete
                 </button>
+            </Modal>
+            <Modal
+                isOpen={selfieModal}
+                onRequestClose={() => setState({ selfieModal: false })}
+                ariaHideApp={false}
+                className="selfie-modal"
+                overlayClassName="phone-modal__overlay"
+            >
+                <p className="phone-modal__header">
+                    <FontAwesomeIcon
+                        icon={faTimes}
+                        className="text-white modal-close"
+                        onClick={() => setState({ selfieModal: false })}
+                        onKeyDown={() => setState({ selfieModal: false })}
+                        role="button"
+                        tabIndex="0"
+                    />
+                </p>
+                <div className="selfie-modal__body">
+                    <div className="selfie-content">
+                        <Webcam
+                            audio={false}
+                            ref={webcamRef}
+                            screenshotFormat="image/jpeg"
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                            }}
+                        />
+                    </div>
+                    <div className="btn-group">
+                        <button
+                            className="btn-primary me-3"
+                            onClick={() => setState({ selfieImg: "" })}
+                        >
+                            Retake
+                        </button>
+                        <button className="btn-primary btn-green" onClick={capture}>
+                            Upload
+                        </button>
+                    </div>
+                </div>
             </Modal>
             {step !== -1 && <img src={Trees} alt="trees" className="trees-img w-100" />}
         </main>
