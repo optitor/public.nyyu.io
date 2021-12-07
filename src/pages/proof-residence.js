@@ -1,11 +1,9 @@
 import React, { useState, useRef } from "react"
 import Header from "../components/common/header"
 import useFileUpload from "react-use-file-upload"
-import { NewDoc, PhotoIcon, Trees } from "../utilities/imgImport"
+import { NewDoc, PhotoIcon, Trees, CloseIcon } from "../utilities/imgImport"
 import { formatBytes } from "../utilities/number"
 import Modal from "react-modal"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "gatsby"
 
 const ProofResidence = () => {
@@ -153,14 +151,14 @@ const ProofResidence = () => {
                 overlayClassName="file-modal__overlay"
             >
                 <p className="phone-modal__header">
-                    <FontAwesomeIcon
-                        icon={faTimes}
-                        className="text-white modal-close"
+                    <div
                         onClick={() => setIsOpen(false)}
                         onKeyDown={() => setIsOpen(false)}
                         role="button"
                         tabIndex="0"
-                    />
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
                 </p>
                 {file && (
                     <div className="file-modal__body">

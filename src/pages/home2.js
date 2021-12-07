@@ -10,14 +10,14 @@ const IndexPage = () => (
         <Seo title="Home" />
         <main className="home-page">
             <Header />
-            <section className="home home-section">
-                <div className="container">
-                    <div className="row ">
+            <section className="home-section">
+                <div className="container h-100">
+                    <div className="row mt-5 pt-5">
                         <div className="col-sm-7">
                             <h2 className="home-title">
                                 <span className="txt-green">a</span>uction will be lauNched soon!
                             </h2>
-                            <p className="home-text ">
+                            <p className="home-text mt-5 pt-5">
                                 <Link to="/" className="txt-underline">
                                     SUBSCRIBE
                                 </Link>{" "}

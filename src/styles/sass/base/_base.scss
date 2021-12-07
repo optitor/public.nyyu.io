@@ -8,12 +8,7 @@
 }
 
 body {
-    max-height: 100vh;
-    overflow: hidden;
     background-color: $black;
-    @include mq("laptop", max) {
-        overflow: auto;
-    }
 }
 
 a,

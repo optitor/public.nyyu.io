@@ -6,8 +6,6 @@ import useFileUpload from "react-use-file-upload"
 import { CheckBox } from "../components/common/FormControl"
 import Modal from "react-modal"
 import Webcam from "react-webcam"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import { formatBytes } from "../utilities/number"
 import { countries } from "../utilities/staticData"
 import {
@@ -19,6 +17,7 @@ import {
     Trees,
     Unpass1,
     Unpass2,
+    CloseIcon,
 } from "../utilities/imgImport"
 
 const content = `Before we start, please prepare your identity document and make sure it is valid.
@@ -121,7 +120,7 @@ const VerificationPage = () => {
         <main className="verify-page">
             <Header />
             <section className="d-flex align-items-center">
-                <div className="container">
+                <div className="container h-100">
                     {step < 3 && <h4 className="text-center mt-2 mb-4">Verify your identity</h4>}
                     {step !== -1 && step < 3 && (
                         <div className="d-flex mt-4">
@@ -311,11 +310,16 @@ const VerificationPage = () => {
                             </div>
                         </div>
                     )}
-                    <div className="text-center">
-                        <button className="btn-link" onClick={() => setState({ phoneModal: true })}>
-                            Continue on a phone
-                        </button>
-                    </div>
+                    {step > -1 && (
+                        <div className="text-center">
+                            <button
+                                className="btn-link"
+                                onClick={() => setState({ phoneModal: true })}
+                            >
+                                Continue on a phone
+                            </button>
+                        </div>
+                    )}
                     {step < 3 && (
                         <div className="btn-group">
                             {step > 0 && (
@@ -384,6 +388,7 @@ const VerificationPage = () => {
                         </div>
                     )}
                 </div>
+                {step !== -1 && <img src={Trees} alt="trees" className="trees-img w-100" />}
             </section>
             <Modal
                 isOpen={phoneModal}
@@ -393,14 +398,14 @@ const VerificationPage = () => {
                 overlayClassName="phone-modal__overlay"
             >
                 <p className="phone-modal__header">
-                    <FontAwesomeIcon
-                        icon={faTimes}
-                        className="text-white modal-close"
+                    <div
                         onClick={() => setState({ phoneModal: false })}
                         onKeyDown={() => setState({ phoneModal: false })}
                         role="button"
                         tabIndex="0"
-                    />
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
                 </p>
                 <h4 className="mt-4">Continue verification on your phone</h4>
                 <p className="my-5">Copy a link to your mobile phone</p>
@@ -416,14 +421,14 @@ const VerificationPage = () => {
                 overlayClassName="file-modal__overlay"
             >
                 <p className="phone-modal__header">
-                    <FontAwesomeIcon
-                        icon={faTimes}
-                        className="text-white modal-close"
+                    <div
                         onClick={() => setState({ fileOpen: false })}
                         onKeyDown={() => setState({ fileOpen: false })}
                         role="button"
                         tabIndex="0"
-                    />
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
                 </p>
                 {file && (
                     <div className="file-modal__body">
@@ -453,14 +458,14 @@ const VerificationPage = () => {
                 overlayClassName="phone-modal__overlay"
             >
                 <p className="phone-modal__header">
-                    <FontAwesomeIcon
-                        icon={faTimes}
-                        className="text-white modal-close"
+                    <div
                         onClick={() => setState({ selfieModal: false })}
                         onKeyDown={() => setState({ selfieModal: false })}
                         role="button"
                         tabIndex="0"
-                    />
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
                 </p>
                 <div className="selfie-modal__body">
                     <div className="selfie-content">
@@ -487,7 +492,6 @@ const VerificationPage = () => {
                     </div>
                 </div>
             </Modal>
-            {step !== -1 && <img src={Trees} alt="trees" className="trees-img w-100" />}
         </main>
     )
 }

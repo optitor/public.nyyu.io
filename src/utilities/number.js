@@ -11,8 +11,8 @@ export const getSecTomorrow = () => {
 export const numberSign = (num) => {
     return Math.sign(num) >= 0 ? "+" : ""
 }
-export const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+export const numberWithCommas = (x, ch = ",") => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ch)
 }
 
 export const formatBytes = (bytes, decimals = 0) => {

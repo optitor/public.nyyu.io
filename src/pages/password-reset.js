@@ -28,7 +28,7 @@ const ForgetPassword = () => {
                         type="text"
                         value={email.value}
                         onChange={handleEmailChange}
-                        placeholder="Email"
+                        placeholder="Enter email"
                         error={email.error}
                     />
                 </div>

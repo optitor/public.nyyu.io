@@ -13,6 +13,7 @@ import linkedin from "../images/linkedin.png"
 import apple from "../images/apple.png"
 
 import failed from "../images/failed.png"
+import closeIcon from "../images/close.png"
 
 import tesla from "../images/tesla.png"
 import volta from "../images/volta.png"
@@ -66,6 +67,7 @@ export const Linkedin = linkedin
 export const Apple = apple
 
 export const Failed = failed
+export const CloseIcon = closeIcon
 
 export const Tesla = tesla
 export const Volta = volta

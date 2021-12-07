@@ -15,12 +15,11 @@ import {
     Airdrop,
     Address,
     Copy2,
+    CloseIcon,
 } from "../utilities/imgImport"
 import { Link } from "gatsby"
 import CountDown from "../components/common/countdown"
 import Modal from "react-modal"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Input } from "../components/common/FormControl"
 
@@ -539,14 +538,14 @@ const History = () => {
             >
                 <p className="pwd-modal__header">
                     Desposits and withdrawals
-                    <FontAwesomeIcon
-                        icon={faTimes}
-                        className="text-white modal-close"
+                    <div
                         onClick={() => setIsOpen(false)}
                         onKeyDown={() => setIsOpen(false)}
                         role="button"
                         tabIndex="0"
-                    />
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
                 </p>
                 <Select
                     className="cryptocoin-select"

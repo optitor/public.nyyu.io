@@ -1,11 +1,10 @@
 .verify-page {
-    @extend %setHeight;
-    overflow: auto;
-    @include mq("tablet", max) {
-        height: 100%;
-    }
     section {
         @extend %setHeight2;
+        overflow: auto;
+        .trees-img {
+            display: block;
+        }
     }
     .step {
         &-bar {
@@ -37,6 +36,7 @@
             position: absolute;
             top: 20px;
             left: 50%;
+            font-family: "Montserrat";
             font-size: 16px;
             line-height: 30px;
             color: #929292;
@@ -52,7 +52,7 @@
         content: "Selfie";
     }
     h5 {
-        font-weight: 600;
+        font-weight: 500;
         font-size: 20px;
         line-height: 30px;
         text-transform: uppercase;
@@ -92,7 +92,7 @@
                         border-radius: unset;
                     }
                     &-label {
-                        font-weight: 500;
+                        font-weight: 400;
                         font-size: 18px;
                         line-height: 30px;
                         @include mq("phone", max) {
@@ -108,6 +108,10 @@
             .css-1s2u09g-control {
                 border-radius: unset;
                 .css-319lph-ValueContainer {
+                    .css-qc6sy-singleValue {
+                        font-family: "Montserrat";
+                        font-size: 13px;
+                    }
                     @include mq("phone", max) {
                         padding: 8px;
                     }
@@ -172,6 +176,9 @@
                         font-size: 16px;
                         line-height: 30px;
                         color: #fbfbfb;
+                        strong {
+                            font-weight: 500;
+                        }
                     }
                     ul {
                         list-style: disc;
@@ -406,6 +413,7 @@
         display: flex;
         justify-content: center;
         margin: 50px 0;
+        padding-bottom: 50px;
         .btn-primary,
         .btn-green,
         .btn-ready {

@@ -14,7 +14,6 @@ const Header = () => {
     return (
         <nav className={navMenuClsName}>
             <div className="container d-flex align-items-center justify-content-between">
-                {/* <div className={navMenuClsName}> */}
                 <Link to="/">
                     <img src={Logo} alt="logo" className="logo" />
                 </Link>

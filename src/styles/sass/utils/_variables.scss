@@ -13,3 +13,20 @@ $breakpoints: (
     "laptop": 1025px,
     "laptop-wide": 1441px,
 );
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 1025px,
+    xl: 1441px,
+    xxl: 1900px,
+);
+
+$container-max-widths: (
+    sm: 540px,
+    md: 668px,
+    lg: 1290px,
+    xl: 1340px,
+    xxl: 1610px,
+);

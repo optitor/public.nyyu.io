@@ -1,6 +1,8 @@
 @import "utils/variables";
 @import "utils/mixins";
 
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
 @import "base/base";
 @import "base/reset";
 @import "base/typography";
