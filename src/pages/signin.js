@@ -60,7 +60,7 @@ const Signin = () => {
                         error={pwd.error}
                     />
                 </div>
-                <div className="form-group d-flex justify-content-between align-items-center">
+                <div className="form-group d-flex justify-content-between align-items-center mb-5">
                     <CheckBox
                         name="remember"
                         type="checkbox"
