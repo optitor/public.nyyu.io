@@ -1,4 +1,4 @@
-import logo from "../images/logo.png"
+import logo from "../images/logo.svg"
 import hero1 from "../images/hero1.png"
 import hero2 from "../images/hero2.png"
 import chart from "../images/chart.png"
