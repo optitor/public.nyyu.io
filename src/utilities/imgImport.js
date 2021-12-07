@@ -1,6 +1,6 @@
 import logo from "../images/logo.svg"
 import hero1 from "../images/hero1.png"
-import hero2 from "../images/hero2.png"
+import hero2 from "../images/hero2.svg"
 import chart from "../images/chart.png"
 import qmark from "../images/question_mark.png"
 import apart from "../images/apart.svg"
