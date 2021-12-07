@@ -1,9 +1,7 @@
 .home-page {
     @extend %setHeight;
-    background-color: black;
-    // background: radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%);
     .menu {
-        background-color: black;
+        background-color: transparent;
     }
     .hero-image {
         width: 100%;
