@@ -15,15 +15,15 @@ const IndexPage = () => {
                 <Header />
                 <section className="home-section">
                     <div className="container h-100">
-                        <div className="row mt-5 pt-5">
+                        <div className="row">
                             <div className="left-part col-md-6">
-                                <h3 className="home-title text-start">
-                                    <span className="txt-green">Round 20</span>&nbsp; Ends in
+                                <h3 className="home-title ">
+                                    <span className="txt-green">Round 20</span> Ends in
                                 </h3>
                                 <div className="d-flex justify-content-end">
                                     <CountDown />
                                 </div>
-                                <p className="token-left mt-4">Token Left</p>
+                                <p className="token-left text-uppercase mt-4">Token Left</p>
                                 <p className="token-value">{numberWithCommas(604800, " ")}</p>
                                 <button className="btn btn-green">Place a bid</button>
                                 <br />
@@ -31,8 +31,9 @@ const IndexPage = () => {
                                     Learn more
                                 </Link>
                             </div>
-                            <div className="right-part col-md-6">
-                                <img src={Hero2} alt="home hero" className="hero-image" />
+                            <div className="col-md-1"></div>
+                            <div className="right-part col-md-5">
+                                <img src={Hero2} alt="home hero" className="hero-image img-fluid" />
                             </div>
                         </div>
                     </div>

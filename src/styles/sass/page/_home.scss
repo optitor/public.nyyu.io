@@ -1,6 +1,7 @@
 .home-page {
     @extend %setHeight;
-    background: radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%);
+    background-color: black;
+    // background: radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%);
     .menu {
         background-color: black;
     }
@@ -13,12 +14,15 @@
         display: flex;
         align-items: center;
         text-align: center;
-
+        .left-part {
+            padding-left: 8%;
+        }
         .home-title {
             font-weight: bold;
             font-size: 48px;
             line-height: 59px;
             text-transform: uppercase;
+            text-align: right;
             @include mq("tablet", max) {
                 font-size: 38px;
                 line-height: 46px;
@@ -26,8 +30,8 @@
         }
         .token {
             &-left {
-                font-weight: bold;
-                font-size: 36px;
+                font-weight: 900;
+                font-size: 34px;
                 line-height: 44px;
                 text-align: left;
                 @include mq("tablet", max) {
@@ -36,7 +40,7 @@
                 }
             }
             &-value {
-                font-weight: 600;
+                font-weight: 500;
                 font-size: 100px;
                 line-height: 122px;
                 text-align: left;
@@ -51,6 +55,7 @@
             padding: 8px 52px;
             margin: 50px 0 24px;
             border-radius: unset;
+            font-size: 25px;
             @include mq("phone", max) {
                 margin: 20px 0 5px;
             }
