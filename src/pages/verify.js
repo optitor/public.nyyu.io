@@ -84,7 +84,9 @@ const VerificationPage = () => {
     const capture = useCallback(() => {
         setState({ selfieImg: webcamRef.current.getScreenshot() })
     }, [webcamRef])
+
     console.log(selfieImg)
+
     const FileList = ({ data }) => {
         return (
             <li className="file-item">
@@ -397,7 +399,7 @@ const VerificationPage = () => {
                 className="phone-modal"
                 overlayClassName="phone-modal__overlay"
             >
-                <p className="phone-modal__header">
+                <div className="phone-modal__header">
                     <div
                         onClick={() => setState({ phoneModal: false })}
                         onKeyDown={() => setState({ phoneModal: false })}
@@ -406,7 +408,7 @@ const VerificationPage = () => {
                     >
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
-                </p>
+                </div>
                 <h4 className="mt-4">Continue verification on your phone</h4>
                 <p className="my-5">Copy a link to your mobile phone</p>
                 <button className="btn-green">Copy Link</button>
@@ -420,7 +422,7 @@ const VerificationPage = () => {
                 className="file-modal"
                 overlayClassName="file-modal__overlay"
             >
-                <p className="phone-modal__header">
+                <div className="phone-modal__header">
                     <div
                         onClick={() => setState({ fileOpen: false })}
                         onKeyDown={() => setState({ fileOpen: false })}
@@ -429,7 +431,7 @@ const VerificationPage = () => {
                     >
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
-                </p>
+                </div>
                 {file && (
                     <div className="file-modal__body">
                         <img src={URL.createObjectURL(file)} alt="file" />
@@ -457,7 +459,7 @@ const VerificationPage = () => {
                 className="selfie-modal"
                 overlayClassName="phone-modal__overlay"
             >
-                <p className="phone-modal__header">
+                <div className="phone-modal__header">
                     <div
                         onClick={() => setState({ selfieModal: false })}
                         onKeyDown={() => setState({ selfieModal: false })}
@@ -466,7 +468,7 @@ const VerificationPage = () => {
                     >
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
-                </p>
+                </div>
                 <div className="selfie-modal__body">
                     <div className="selfie-content">
                         <Webcam

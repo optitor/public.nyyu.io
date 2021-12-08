@@ -150,7 +150,7 @@ const ProofResidence = () => {
                 className="file-modal"
                 overlayClassName="file-modal__overlay"
             >
-                <p className="phone-modal__header">
+                <div className="phone-modal__header">
                     <div
                         onClick={() => setIsOpen(false)}
                         onKeyDown={() => setIsOpen(false)}
@@ -159,7 +159,7 @@ const ProofResidence = () => {
                     >
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
-                </p>
+                </div>
                 {file && (
                     <div className="file-modal__body">
                         <img src={URL.createObjectURL(file)} alt="file" />

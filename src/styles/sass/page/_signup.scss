@@ -135,4 +135,69 @@
 .twoFA-modal {
     max-width: 880px;
     padding: 27px 30px;
+    h3 {
+        margin: 0 auto;
+        font-weight: bold;
+        font-size: 36px;
+        line-height: 40px;
+    }
+    .next-step {
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 29px;
+        width: 322px;
+        @include mq("phone", max) {
+            width: 100%;
+        }
+    }
+    .tfa-select {
+        max-width: 614px;
+        margin: 0 auto;
+        text-align: center;
+        h3 {
+            max-width: 445px;
+        }
+        .select-tfa {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 20px;
+            padding: 18px 20px;
+            width: 322px;
+            text-transform: none;
+            text-align: left;
+            &.active {
+                color: $black;
+                background: white;
+                &:focus {
+                    box-shadow: unset;
+                }
+            }
+            @include mq("phone", max) {
+                width: 100%;
+            }
+        }
+    }
+    .get-code {
+        margin: 0 auto;
+        text-align: center;
+        .step1-label {
+            max-width: 348px;
+            margin: 0 auto;
+            padding: 11px 0 15px;
+        }
+        .form-control {
+            width: 322px;
+            padding: 18px 20px;
+            margin: 0 auto;
+            font-size: 18px;
+            line-height: 20px;
+            color: #ffffff;
+            opacity: 0.2;
+            background: $black;
+            border: 2px solid #ffffff;
+            @include mq("phone", max) {
+                width: 100%;
+            }
+        }
+    }
 }

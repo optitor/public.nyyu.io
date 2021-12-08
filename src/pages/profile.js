@@ -447,7 +447,7 @@ const Profile = () => {
                 className="pwd-modal"
                 overlayClassName="pwd-modal__overlay"
             >
-                <p className="pwd-modal__header">
+                <div className="pwd-modal__header">
                     Change your password
                     <div
                         onClick={() => setState({ pwdModal: false })}
@@ -457,7 +457,7 @@ const Profile = () => {
                     >
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
-                </p>
+                </div>
                 <form className="form" onSubmit={(e) => e.preventDefault()}>
                     <FormInput
                         name="password"
@@ -497,7 +497,7 @@ const Profile = () => {
                 className="tfa-modal"
                 overlayClassName="tfa-modal__overlay"
             >
-                <p className="tfa-modal__header">
+                <div className="tfa-modal__header">
                     <div
                         onClick={() => setState({ tfaModal: false })}
                         onKeyDown={() => setState({ tfaModal: false })}
@@ -506,7 +506,7 @@ const Profile = () => {
                     >
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
-                </p>
+                </div>
                 <p className="tfa-modal__body my-5">
                     Are you sure you want to disable 2-step verifacation to email?
                 </p>

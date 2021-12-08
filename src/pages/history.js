@@ -536,7 +536,7 @@ const History = () => {
                 className="deposit-modal"
                 overlayClassName="doposit-modal__overlay"
             >
-                <p className="pwd-modal__header">
+                <div className="pwd-modal__header">
                     Desposits and withdrawals
                     <div
                         onClick={() => setIsOpen(false)}
@@ -546,7 +546,7 @@ const History = () => {
                     >
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
-                </p>
+                </div>
                 <Select
                     className="cryptocoin-select"
                     options={coins}
