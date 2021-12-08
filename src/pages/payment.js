@@ -258,7 +258,7 @@ const Payment = () => {
                                         onChange={handleAllowFraction}
                                         className="text-uppercase"
                                     ></CheckBox>
-                                    <div className="my-auto">
+                                    <div className="allow-text">
                                         Do you allow fraction of order compleation?
                                     </div>
                                     <FontAwesomeIcon
@@ -279,23 +279,23 @@ const Payment = () => {
                             The token will be paid to your wallet at ndb Will be hold based on the
                             bid and deducted if you win. If you lose it will be availabel in the NDB
                             wallet and can be either released to the personal or stay in NDB wallet
-                            for The next round.
+                            for the next round.
                         </p>
                         <div className="total-amount">
-                            <div className="d-flex align-items-center">
+                            <div className="d-flex align-items-start">
                                 <p className="amount-label">total amount</p>
                                 <img src={EditIcon} alt="edit" className="ms-3" />
                             </div>
                             <p className="amount">50.234 ETH</p>
                         </div>
                         <p className="payment-expire">
-                            payment expires in&nbsp;
+                            payment expires in
                             <span className="txt-green">10 minutes</span>
                         </p>
                         <button className="btn-primary text-uppercase">Confirm Payment</button>
                     </div>
                 </div>
-                <div className="remain-token__value">
+                <div className="remain-token__value col-md-12 mx-auto">
                     <div className="d-flex justify-content-between">
                         <p className="current-value">
                             current token value&nbsp;
