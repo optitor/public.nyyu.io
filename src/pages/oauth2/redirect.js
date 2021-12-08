@@ -1,6 +1,7 @@
 import React from "react";
 import { navigate } from 'gatsby';
-// import { ACCESS_TOKEN } from '../../constants';
+import { useDispatch, useSelector } from "../../context/store"
+import * as Actions from '../../context/actions'
 
 const OAuth2RedirectHandler = (props) => {
     const getUrlParameter = (name) => {
@@ -12,9 +13,14 @@ const OAuth2RedirectHandler = (props) => {
     };
     
     const token = getUrlParameter('token');
+    
+    const dispatch = useDispatch();
+
+    const userData = useSelector(state=>state.user)
+    
     if(token) {
-        localStorage.setItem("ACCESS_TOKEN", getUrlParameter("token"));
-        navigate("/verify");
+        dispatch(Actions.setUserInfo({...userData, token: token}))
+        navigate("/onetime-pwd");
     } else {
         navigate("/login");
     }
