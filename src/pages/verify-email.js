@@ -3,32 +3,35 @@ import { Link, navigate } from "gatsby"
 import { Input } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
 import Modal from "react-modal"
-import { CloseIcon, QRCode2 } from "../utilities/imgImport"
+import { CloseIcon } from "../utilities/imgImport"
 import { useSelector } from "../context/store"
 import { useMutation } from "@apollo/client"
-import { VERIFY_ACCOUNT, RESEND_VERIFY_CODE, REQUEST_2FA } from "../services/mutations/auth"
+import { 
+    VERIFY_ACCOUNT, 
+    RESEND_VERIFY_CODE, 
+    REQUEST_2FA,
+    CONFIRM_REQUEST_2FA 
+} from "../services/mutations/auth"
 
 const two_factors = [
-    {label: "Authenticator App", method: "app"}, 
-    {label:"SMS", method: "phone"}, 
-    {label:"Email", method: "email"}
+    { label: "Authenticator App", method: "app" },
+    { label: "SMS", method: "phone" },
+    { label: "Email", method: "email" }
 ]
 
 const VerifyEmail = () => {
     const user = useSelector((state) => state.user)
-    
-    if(!user.userEmail) navigate("/signup")
+
+    if (!user.userEmail) navigate("/signup")
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
         tfaModal: false,
-        auth_code: "",
-        sms_code: "",
-        email_code: "",
+        result_code: "",
         choose_type: 0,
         set_type: -1,
     })
-    const { code, tfaModal, auth_code, sms_code, email_code, choose_type, set_type } = state
+    const { code, tfaModal, result_code, choose_type, set_type } = state
 
     const [qrcode, setQRCode] = useState("")
 
@@ -41,27 +44,29 @@ const VerifyEmail = () => {
     // possible code: [verifyAccount, { data, loading, error }]
     const [verifyAccount] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
-            console.log("Verify result", data)
             if (data.verifyAccount === "Failed") navigate("/verify-failed")
-            else if (data.verifyAccount === "Success") setState({tfaModal: true})
+            else if (data.verifyAccount === "Success") setState({ tfaModal: true })
         },
     })
 
     const [resendVerifyCode] = useMutation(RESEND_VERIFY_CODE, {
         onCompleted: (data) => {
-            console.log("Resend Result", data)
             // do something here to show resend email result.
         },
     })
-    
+
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
-            console.log("request2FA Result", data.request2FA)
             setQRCode(data.request2FA);
             setState({ set_type: choose_type })
         },
     })
-
+    const [confirmRequest2FA] = useMutation(CONFIRM_REQUEST_2FA, {
+        onCompleted: (data) => {
+            if (data.confirmRequest2FA === "Failed") navigate("/verify-failed")
+            else if (data.confirmRequest2FA === "Success") navigate("/signin")
+        },
+    })
     return (
         <AuthLayout>
             <h3 className="signup-head mb-5">Verify email</h3>
@@ -91,7 +96,7 @@ const VerifyEmail = () => {
                     <Link
                         className="txt-green signup-link"
                         to="#send-again"
-                        onClick={() => 
+                        onClick={() =>
                             resendVerifyCode({
                                 variables: {
                                     email: user.userEmail,
@@ -130,7 +135,7 @@ const VerifyEmail = () => {
                     </div>
                 </div>
                 <div className="twoFA-modal__body">
-                    {set_type === -1 && (
+                    {set_type === -1 ? (
                         <div className="tfa-select">
                             <h3>Protect your account with 2-step verification</h3>
                             <p className="mt-4 mb-5">
@@ -142,9 +147,8 @@ const VerifyEmail = () => {
                                 {two_factors.map((item, idx) => (
                                     <button
                                         key={idx}
-                                        className={`btn-primary mb-2 select-tfa ${
-                                            choose_type === idx && "active"
-                                        }`}
+                                        className={`btn-primary mb-2 select-tfa ${choose_type === idx && "active"
+                                            }`}
                                         onClick={() => setState({ choose_type: idx })}
                                     >
                                         {item.label}
@@ -153,7 +157,7 @@ const VerifyEmail = () => {
 
                                 <button
                                     className="btn-primary next-step mt-4"
-                                    onClick={() => 
+                                    onClick={() =>
                                         request2FA({
                                             variables: {
                                                 email: user.userEmail,
@@ -167,73 +171,70 @@ const VerifyEmail = () => {
                                 </button>
                             </div>
                         </div>
-                    )}
-                    {set_type === 0 && (
+                    ) : (
                         <div className="get-code">
-                            <h3>Get codes from authenticator app</h3>
-                            <div className="mt-3">
-                                <p className="fw-bolder">STEP 1</p>
-                                <p className="step1-label">
-                                    Scan the QR code below or mannually type the secret key into
-                                    your authenticator app.
-                                </p>
-                                <img src={qrcode} alt="qr code" />
-                                <p>
-                                    <small className="fw-bold">123456xxxx</small>
-                                </p>
-                            </div>
-                            <div className="mt-3">
-                                <p className="fw-bolder">STEP 2</p>
-                                <p className="mt-2 mb-3">
-                                    Enter 6-digit code you see in your authentificator app
-                                </p>
+                            {set_type === 0 && (
+                                <>
+                                    <h3>Get codes from authenticator app</h3>
+                                    <div className="mt-3">
+                                        <p className="fw-bolder">STEP 1</p>
+                                        <p className="step1-label">
+                                            Scan the QR code below or mannually type the secret key into
+                                            your authenticator app.
+                                        </p>
+                                        <img src={qrcode} alt="qr code" />
+                                        <p>
+                                            <small className="fw-bold">123456xxxx</small>
+                                        </p>
+                                    </div>
+                                    <div className="mt-3">
+                                        <p className="fw-bolder">STEP 2</p>
+                                        <p className="mt-2 mb-3">
+                                            Enter 6-digit code you see in your authentificator app
+                                        </p>
+                                    </div>
+                                </>
+                            )}
+
+                            {set_type === 1 && (
+                                <>
+                                    <h3>Get codes via SMS</h3>
+                                    <p className="mt-3 pb-3">
+                                        Enter 6-digit code you got via text messages
+                                    </p>
+                                </>
+                            )}
+
+                            {set_type === 2 && (
+                                <>
+                                    <h3>Get codes via Email</h3>
+                                    <p className="mt-3 pb-3">Enter 6-digit code you got via email</p>
+                                </>
+                            )}
+                            
+                            <div className="mt-5">
                                 <Input
                                     type="text"
-                                    name="auth_code"
-                                    value={auth_code}
+                                    name="result_code"
+                                    value={result_code}
                                     onChange={handleInput}
                                     placeholder="000-000"
                                 />
-                                <button className="btn-primary next-step">Confirm</button>
+                                <button 
+                                    className="btn-primary next-step"
+                                    onClick={() =>
+                                        confirmRequest2FA({
+                                            variables: {
+                                                email: user.userEmail,
+                                                code: result_code
+                                            },
+                                        })
+                                    }
+                                >Confirm</button>
                             </div>
                         </div>
                     )}
 
-                    {set_type === 1 && (
-                        <div className="get-code">
-                            <h3>Get codes via SMS</h3>
-                            <p className="mt-3 pb-3">
-                                Enter 6-digit code you got via text messages
-                            </p>
-                            <div className="mt-5">
-                                <Input
-                                    type="text"
-                                    name="sms_code"
-                                    value={sms_code}
-                                    onChange={handleInput}
-                                    placeholder="000-000"
-                                />
-                                <button className="btn-primary next-step">Confirm</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {set_type === 2 && (
-                        <div className="get-code">
-                            <h3>Get codes via Email</h3>
-                            <p className="mt-3 pb-3">Enter 6-digit code you got via email</p>
-                            <div className="mt-5">
-                                <Input
-                                    type="text"
-                                    name="email_code"
-                                    value={email_code}
-                                    onChange={handleInput}
-                                    placeholder="000-000"
-                                />
-                                <button className="btn-primary next-step">Confirm</button>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </Modal>
         </AuthLayout>

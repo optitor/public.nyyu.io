@@ -26,7 +26,6 @@ import curie from "../images/tesla.png"
 
 import editIcon from "../images/edit.svg"
 import qrCode from "../images/qr-code.png"
-import qrCode2 from "../images/qr-code2.png"
 import eth from "../images/eth.png"
 import btc from "../images/btc.png"
 import bch from "../images/bch.png"
@@ -80,7 +79,6 @@ export const Curie = curie
 
 export const EditIcon = editIcon
 export const QRCode = qrCode
-export const QRCode2 = qrCode2
 export const ETH = eth
 export const BTC = btc
 export const BCH = bch
