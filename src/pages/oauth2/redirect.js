@@ -13,10 +13,10 @@ const OAuth2RedirectHandler = (props) => {
     
     const token = getUrlParameter('token');
     if(token) {
-        localStorage.setItem("ACCESS_TOKEN", getUrlParameter('token'));
-        navigate('/verify/');
+        localStorage.setItem("ACCESS_TOKEN", getUrlParameter("token"));
+        navigate("/verify");
     } else {
-        navigate('/login/');
+        navigate("/login");
     }
 
     return <></>

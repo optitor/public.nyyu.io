@@ -2,7 +2,8 @@ import fetch from "isomorphic-fetch"
 import { ApolloClient, InMemoryCache } from "@apollo/client"
 
 export const client = new ApolloClient({
-    uri: `https://ndb-auction.herokuapp.com/graphql`,
+    // uri: `https://ndb-auction.herokuapp.com/graphql`,
+    uri: `http://localhost:5000/graphql`,
     fetch: fetch,
     fetchOptions: {
         "Access-Control-Allow-Origin": "*",
