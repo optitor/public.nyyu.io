@@ -93,14 +93,25 @@ const Profile = () => {
         round_end: true,
         pwd: { value: "", error: "" },
         pwd_confirm: { value: "", error: "" },
+        pwdModal: false,
+        tfaModal: false,
     })
-    const { bid, outbid, new_bid, win, lose, round_start, round_end, pwd, pwd_confirm } = state
+    const {
+        bid,
+        outbid,
+        new_bid,
+        win,
+        lose,
+        round_start,
+        round_end,
+        pwd,
+        pwd_confirm,
+        pwdModal,
+        tfaModal,
+    } = state
     const [tabIndex, setTabIndex] = useState(0)
     const [profile_tab, setProfileTab] = useState(profile_tabs[0])
     const [walletId, setWalletId] = useState(0)
-
-    const [pwdModal, setPwdOpen] = useState(false)
-    const [tfaModal, setTFAOpen] = useState(false)
 
     const handleProfileTab = (value) => {
         setProfileTab(value)
@@ -199,7 +210,7 @@ const Profile = () => {
                                             <p>********</p>
                                             <button
                                                 className="btn-primary"
-                                                onClick={() => setPwdOpen(true)}
+                                                onClick={() => setState({ pwdModal: true })}
                                             >
                                                 Change Passord
                                             </button>
@@ -209,7 +220,7 @@ const Profile = () => {
                                 <div className="d-flex justify-content-center mt-3">
                                     <button
                                         className="btn-primary btn-pwd"
-                                        onClick={() => setPwdOpen(true)}
+                                        onClick={() => setState({ pwdModal: true })}
                                     >
                                         Change Pasword
                                     </button>
@@ -226,8 +237,8 @@ const Profile = () => {
                                                 <p className="security-name">Enable 2FA</p>
                                                 <p
                                                     className="txt-green security-link"
-                                                    onClick={() => setTFAOpen(true)}
-                                                    onKeyDown={() => setTFAOpen(true)}
+                                                    onClick={() => setState({ tfaModal: true })}
+                                                    onKeyDown={() => setState({ tfaModal: true })}
                                                     role="presentation"
                                                 >
                                                     Enabled
@@ -431,7 +442,7 @@ const Profile = () => {
             </section>
             <Modal
                 isOpen={pwdModal}
-                onRequestClose={() => setPwdOpen(false)}
+                onRequestClose={() => setState({ pwdModal: false })}
                 ariaHideApp={false}
                 className="pwd-modal"
                 overlayClassName="pwd-modal__overlay"
@@ -439,8 +450,8 @@ const Profile = () => {
                 <p className="pwd-modal__header">
                     Change your password
                     <div
-                        onClick={() => setPwdOpen(false)}
-                        onKeyDown={() => setPwdOpen(false)}
+                        onClick={() => setState({ pwdModal: false })}
+                        onKeyDown={() => setState({ pwdModal: false })}
                         role="button"
                         tabIndex="0"
                     >
@@ -470,7 +481,10 @@ const Profile = () => {
                         <button type="submit" className="btn-primary">
                             SAVE
                         </button>
-                        <button className="btn-cancel" onClick={() => setPwdOpen(false)}>
+                        <button
+                            className="btn-cancel"
+                            onClick={() => setState({ pwdModal: false })}
+                        >
                             Cancel
                         </button>
                     </div>
@@ -478,15 +492,15 @@ const Profile = () => {
             </Modal>
             <Modal
                 isOpen={tfaModal}
-                onRequestClose={() => setTFAOpen(false)}
+                onRequestClose={() => setState({ tfaModal: false })}
                 ariaHideApp={false}
                 className="tfa-modal"
                 overlayClassName="tfa-modal__overlay"
             >
                 <p className="tfa-modal__header">
                     <div
-                        onClick={() => setTFAOpen(false)}
-                        onKeyDown={() => setTFAOpen(false)}
+                        onClick={() => setState({ tfaModal: false })}
+                        onKeyDown={() => setState({ tfaModal: false })}
                         role="button"
                         tabIndex="0"
                     >
@@ -500,7 +514,7 @@ const Profile = () => {
                     <button type="submit" className="btn-primary">
                         Yes
                     </button>
-                    <button className="btn-cancel" onClick={() => setTFAOpen(false)}>
+                    <button className="btn-cancel" onClick={() => setState({ tfaModal: false })}>
                         Cancel
                     </button>
                 </div>
