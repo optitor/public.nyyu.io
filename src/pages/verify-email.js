@@ -23,7 +23,7 @@ const VerifyEmail = () => {
     }, [])
 
     const user = useSelector((state) => state.user)
-    if (!user.userEmail) navigate("/signup")
+    // if (!user.userEmail) navigate("/signup")
 
     const [verifyAccount, { data, loading, error }] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
@@ -81,7 +81,7 @@ const VerifyEmail = () => {
                 isOpen={tfaModal}
                 onRequestClose={() => setState({ tfaModal: false })}
                 ariaHideApp={false}
-                className="2fa-modal"
+                className="twoFA-modal"
                 overlayClassName="2fa-modal__overlay"
             >
                 <p className="tfa-modal__header">
@@ -94,7 +94,19 @@ const VerifyEmail = () => {
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
                 </p>
-
+                <div className="twoFA-modal__body">
+                    <div className="tfa-type">
+                        <h2>Protect your account with 2-step verification</h2>
+                        <p>
+                            Each time you log in, in addition to your password, you will enter a
+                            one-time code you receive via text message or generate using an
+                            authenticator app.
+                        </p>
+                        <button className="btn-primary">Authenticator App</button>
+                        <button className="btn-primary">SMS</button>
+                        <button className="btn-primary">Email</button>
+                    </div>
+                </div>
                 <div className="pwd-modal__footer">
                     <button className="btn-primary">Next</button>
                 </div>
