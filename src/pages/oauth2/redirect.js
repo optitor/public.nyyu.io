@@ -4,7 +4,7 @@ import { navigate } from 'gatsby';
 
 const OAuth2RedirectHandler = (props) => {
     const getUrlParameter = (name) => {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        name = name.replace(/\[]/, '\\[').replace(/[\]]/, '\\]');
         var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
 
         var results = regex.exec(props.location.search);

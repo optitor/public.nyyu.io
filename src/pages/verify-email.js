@@ -22,17 +22,21 @@ const VerifyEmail = () => {
         setState({ [e.target.name]: e.target.value })
     }, [])
 
-    const user = useSelector((state) => state.user)
-    // if (!user.userEmail) navigate("/signup")
-
-    const [verifyAccount, { data, loading, error }] = useMutation(VERIFY_ACCOUNT, {
-        onCompleted: (data) => {
-            if (data.verifyAccount === "Failed") navigate("/verify-failed")
-            else if (data.verifyAccount === "Success") navigate("/2fa")
-            console.log("Verify result", data)
-        },
-    })
-
+    const user = useSelector(state => state.user)
+    if(!user.userEmail) navigate("/signup")
+    
+    // possible code: [verifyAccount, { data, loading, error }]
+    const [verifyAccount] = useMutation(
+        VERIFY_ACCOUNT, 
+        {
+            onCompleted: (data) => {
+                if(data.verifyAccount === "Failed") navigate("/verify-failed")
+                else if(data.verifyAccount === "Success") navigate("/2fa")
+                console.log("Verify result", data)                         
+            }
+        }
+    )
+    
     return (
         <AuthLayout>
             <h3 className="signup-head mb-5">Verify email</h3>
