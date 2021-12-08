@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from "react"
+import React, { useCallback, useReducer, useState } from "react"
 import { Link, navigate } from "gatsby"
 import { Input } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
@@ -30,6 +30,8 @@ const VerifyEmail = () => {
     })
     const { code, tfaModal, auth_code, sms_code, email_code, choose_type, set_type } = state
 
+    const [qrcode, setQRCode] = useState("")
+
     const handleInput = useCallback((e) => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
@@ -51,10 +53,11 @@ const VerifyEmail = () => {
             // do something here to show resend email result.
         },
     })
-
+    
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
-            console.log("request2FA Result", data)
+            console.log("request2FA Result", data.request2FA)
+            setQRCode(data.request2FA);
             setState({ set_type: choose_type })
         },
     })
@@ -154,7 +157,7 @@ const VerifyEmail = () => {
                                         request2FA({
                                             variables: {
                                                 email: user.userEmail,
-                                                method: two_factors[choose_type],
+                                                method: two_factors[choose_type].method,
                                                 phone: "123456789"
                                             },
                                         })
@@ -174,7 +177,7 @@ const VerifyEmail = () => {
                                     Scan the QR code below or mannually type the secret key into
                                     your authenticator app.
                                 </p>
-                                <img src={QRCode2} alt="qr code" />
+                                <img src={qrcode} alt="qr code" />
                                 <p>
                                     <small className="fw-bold">123456xxxx</small>
                                 </p>
