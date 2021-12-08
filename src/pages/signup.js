@@ -92,7 +92,7 @@ const SingupPage = () => {
                         label="Email"
                         value={email.value}
                         onChange={handleEmailChange}
-                        placeholder="Email"
+                        placeholder="Enter email"
                         error={email.error}
                     />
                 </div>

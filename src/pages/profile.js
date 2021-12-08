@@ -1,37 +1,20 @@
 import React, { useState, useReducer, useCallback } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { Coinbase, MetaMask, Tesla, TrustWallet, WalletConnect } from "../utilities/imgImport"
 import { Link } from "gatsby"
 import Switch from "react-switch"
 import Select from "react-select"
 import Modal from "react-modal"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import { FormInput } from "../components/common/FormControl"
+import {
+    Coinbase,
+    MetaMask,
+    Tesla,
+    TrustWallet,
+    WalletConnect,
+    CloseIcon,
+} from "../utilities/imgImport"
 
-// const securities = [
-//     {
-//         name: "Enable 2FA",
-//         status: true,
-//         status_label: "Enabled",
-//     },
-//     {
-//         name: "Identity Verificatoin",
-//         status: true,
-//         status_label: "Verified",
-//     },
-//     {
-//         name: "Mobile Verification",
-//         status: false,
-//         status_label: "Setup",
-//     },
-//     {
-//         name: "Turn-on Withdrawal Whitelist",
-//         status: false,
-//         status_label: "Setup",
-//     },
-// ]
 const recent = [
     {
         status: true,
@@ -167,8 +150,9 @@ const Profile = () => {
         <main className="profile-page">
             <Header />
             <section className="container position-relative h-100">
-                <div className="row">
-                    <div className="col-lg-3 col-md-4 profile-page__left">
+                {/* <div className="d-flex align-items-center justify-content-center w-100"> */}
+                <div className="row mt-lg-5">
+                    <div className="col-lg-3 profile-page__left">
                         <div className="user-info">
                             <img className="user-info__avatar" src={Tesla} alt="tesla" />
                             <p className="user-info__name">Tesla.12</p>
@@ -191,25 +175,27 @@ const Profile = () => {
                             <TabPanel>3</TabPanel>
                         </Tabs>
                     </div>
-                    <div className="col-lg-9 col-md-8 profile-page__right">
+                    <div className="col-lg-9 profile-page__right">
                         {tabIndex === 0 && (
                             <div className="account-details">
                                 <div className="account-detail">
-                                    <div className="row">
+                                    <div className="row w-100 mx-auto">
                                         <h4>
                                             <span className="txt-green">a</span>
                                             ccount Details
                                         </h4>
                                         <div className="col-6 br">Display name</div>
-                                        <div className="col-6">tesla.12</div>
+                                        <div className="col-6 text-end text-sm-start">tesla.12</div>
                                     </div>
-                                    <div className="row">
+                                    <div className="row w-100 mx-auto">
                                         <div className="col-6 br">email</div>
-                                        <div className="col-6">exAmple@mail</div>
+                                        <div className="col-6 text-end text-sm-start">
+                                            exAmple@mail
+                                        </div>
                                     </div>
-                                    <div className="row change-password">
+                                    <div className="row w-100 mx-auto change-password">
                                         <div className="col-6 br">Password</div>
-                                        <div className="col-6 justify-content-between">
+                                        <div className="col-6 justify-content-sm-between justify-content-end">
                                             <p>********</p>
                                             <button
                                                 className="btn-primary"
@@ -229,7 +215,7 @@ const Profile = () => {
                                     </button>
                                 </div>
                                 <div className="account-security">
-                                    <div className="row">
+                                    <div className="row w-100 mx-auto">
                                         <h4>
                                             Increase your account security&nbsp;
                                             <span className="txt-green">2</span>/4
@@ -279,7 +265,7 @@ const Profile = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <p className="mt-3">
+                                <p className="mt-3 pb-5">
                                     <Link to="/" className="get-verify">
                                         Get verified
                                     </Link>
@@ -440,6 +426,7 @@ const Profile = () => {
                             </div>
                         )}
                     </div>
+                    {/* </div> */}
                 </div>
             </section>
             <Modal
@@ -451,14 +438,14 @@ const Profile = () => {
             >
                 <p className="pwd-modal__header">
                     Change your password
-                    <FontAwesomeIcon
-                        icon={faTimes}
-                        className="text-white modal-close"
+                    <div
                         onClick={() => setPwdOpen(false)}
                         onKeyDown={() => setPwdOpen(false)}
                         role="button"
                         tabIndex="0"
-                    />
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
                 </p>
                 <form className="form" onSubmit={(e) => e.preventDefault()}>
                     <FormInput
@@ -497,14 +484,14 @@ const Profile = () => {
                 overlayClassName="tfa-modal__overlay"
             >
                 <p className="tfa-modal__header">
-                    <FontAwesomeIcon
-                        icon={faTimes}
-                        className="text-white modal-close"
+                    <div
                         onClick={() => setTFAOpen(false)}
                         onKeyDown={() => setTFAOpen(false)}
                         role="button"
                         tabIndex="0"
-                    />
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
                 </p>
                 <p className="tfa-modal__body my-5">
                     Are you sure you want to disable 2-step verifacation to email?

@@ -1,5 +1,8 @@
 .signup-page {
-    @include setHeight();
+    @extend %setHeight;
+    section {
+        @extend %setHeight2;
+    }
     .signup {
         position: relative;
         width: 100%;
@@ -75,6 +78,7 @@
                     background-color: $black;
                     border: 1px solid white;
                     border-radius: unset;
+                    margin-top: 0;
                 }
                 &-label {
                     font-weight: 500;
@@ -120,7 +124,7 @@
     position: absolute;
     bottom: 0;
     z-index: -1;
-    @include mq("phone", max) {
+    @include mq("tablet", max) {
         display: none;
     }
 }

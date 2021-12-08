@@ -8,16 +8,7 @@
 }
 
 body {
-    max-height: 100vh;
-    overflow: hidden;
-    padding-top: 97px;
     background-color: $black;
-    @include mq("tablet", max) {
-        overflow: auto;
-    }
-    @include mq("phone", max) {
-        padding-top: 57px;
-    }
 }
 
 a,

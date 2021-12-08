@@ -45,7 +45,7 @@ const Signin = () => {
                         label="Email"
                         value={email.value}
                         onChange={handleEmailChange}
-                        placeholder="Email"
+                        placeholder="Enter email"
                         error={email.error}
                     />
                 </div>
@@ -60,7 +60,7 @@ const Signin = () => {
                         error={pwd.error}
                     />
                 </div>
-                <div className="form-group d-flex justify-content-between align-items-center">
+                <div className="form-group d-flex justify-content-between align-items-center mb-5">
                     <CheckBox
                         name="remember"
                         type="checkbox"

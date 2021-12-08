@@ -1,10 +1,10 @@
-import logo from "../images/logo.png"
+import logo from "../images/logo.svg"
 import hero1 from "../images/hero1.png"
-import hero2 from "../images/hero2.png"
+import hero2 from "../images/hero2.svg"
 import chart from "../images/chart.png"
 import qmark from "../images/question_mark.png"
-import apart from "../images/apart.png"
-import trees from "../images/trees.png"
+import apart from "../images/apart.svg"
+import trees from "../images/trees.svg"
 
 import facebook from "../images/facebook.png"
 import google from "../images/google.png"
@@ -13,6 +13,7 @@ import linkedin from "../images/linkedin.png"
 import apple from "../images/apple.png"
 
 import failed from "../images/failed.png"
+import closeIcon from "../images/close.png"
 
 import tesla from "../images/tesla.png"
 import volta from "../images/volta.png"
@@ -44,6 +45,13 @@ import coinbase from "../images/coinbase.png"
 import trustWallet from "../images/trust_wallet.png"
 import address from "../images/address.png"
 
+import pass from "../images/pass.png"
+import unpass1 from "../images/unpass1.png"
+import unpass2 from "../images/unpass2.png"
+import newDoc from "../images/new_doc.png"
+import photoIcon from "../images/photo-icon.png"
+import selfieImg from "../images/selfie-img.png"
+
 export const Logo = logo
 export const Hero1 = hero1
 export const Hero2 = hero2
@@ -59,6 +67,7 @@ export const Linkedin = linkedin
 export const Apple = apple
 
 export const Failed = failed
+export const CloseIcon = closeIcon
 
 export const Tesla = tesla
 export const Volta = volta
@@ -89,3 +98,10 @@ export const WalletConnect = walletConnect
 export const Coinbase = coinbase
 export const TrustWallet = trustWallet
 export const Address = address
+
+export const Pass = pass
+export const Unpass1 = unpass1
+export const Unpass2 = unpass2
+export const NewDoc = newDoc
+export const PhotoIcon = photoIcon
+export const SelfieImg = selfieImg

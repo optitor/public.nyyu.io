@@ -49,13 +49,13 @@
         }
     }
     &-green {
+        background: $green;
+        border: unset;
+        color: white;
         font-weight: bold;
         font-size: 30px;
         line-height: 37px;
-        color: white;
         text-transform: uppercase;
-        padding: 52px;
-        background: $green;
         @include mq("phone", max) {
             padding: 8px;
             width: 100%;
@@ -64,7 +64,7 @@
 }
 .learn-more {
     text-decoration: underline;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 18px;
     line-height: 30px;
     color: white;
