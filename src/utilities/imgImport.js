@@ -13,7 +13,7 @@ import linkedin from "../images/linkedin.png"
 import apple from "../images/apple.png"
 
 import failed from "../images/failed.png"
-import closeIcon from "../images/close.png"
+import closeIcon from "../images/close.svg"
 
 import tesla from "../images/tesla.png"
 import volta from "../images/volta.png"
