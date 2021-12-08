@@ -38,7 +38,9 @@ module.exports = {
         {
             resolve: "gatsby-plugin-apollo",
             options: {
-                uri: "https://ndb-auction.herokuapp.com/graphql",
+                // uri: "https://ndb-auction.herokuapp.com/graphql",
+                // uri: "http://localhost:5000/graphql",
+                uri: "http://auction.us-east-1.elasticbeanstalk.com/graphql",
             },
         },
     ],

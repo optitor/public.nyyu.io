@@ -1,12 +1,15 @@
-import React, { useCallback, useReducer, useState } from "react"
+import React, { useCallback, useReducer, useState, useEffect } from "react"
 import { Link } from "gatsby"
 import Select from "react-select"
 import { countries, social_links } from "../utilities/staticData"
 import { FormInput, CheckBox } from "../components/common/FormControl"
 import validator from "validator"
 import AuthLayout from "../components/common/AuthLayout"
-// import { useMutation } from "@apollo/client"
-// import { SIGNUP } from "../services/mutations/auth"
+import { useMutation } from "@apollo/client"
+import { SIGNUP } from "../services/mutations/auth"
+import { navigate } from 'gatsby'
+import { useDispatch, useSelector } from "../context/store"
+import * as Actions from '../context/actions'
 
 const SingupPage = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -17,6 +20,7 @@ const SingupPage = () => {
     })
     const { email, pwd, pwd_confirm, remember } = state
     const [country, setCountry] = useState(countries[0])
+    const userData = useSelector(state=>state.user)
 
     const handleEmailChange = useCallback((e) => {
         setState({
@@ -49,7 +53,18 @@ const SingupPage = () => {
         [remember]
     )
 
-    // const [signup, { data, loading, error }] = useMutation(SIGNUP)
+    const [signup, { data, loading, error }] = useMutation(
+        SIGNUP,
+        {
+            onCompleted: (data) => {
+                navigate("/verify-email")
+                console.log("Signup result", data)                         
+            }
+        }
+    )
+
+    const dispatch = useDispatch();
+
     return (
         <AuthLayout>
             <h3 className="signup-head">Create an Account</h3>
@@ -60,13 +75,14 @@ const SingupPage = () => {
                 className="form"
                 onSubmit={(e) => {
                     e.preventDefault()
-                    // signup({
-                    //     variables: {
-                    //         email: email.value,
-                    //         password: pwd.value,
-                    //         country: country.label,
-                    //     },
-                    // })
+                    signup({
+                        variables: {
+                            email: email.value,
+                            password: pwd.value,
+                            country: country.label,
+                        },
+                    })
+                    dispatch(Actions.setUserInfo({...userData, userEmail: email.value}))
                 }}
             >
                 <div className="form-group">

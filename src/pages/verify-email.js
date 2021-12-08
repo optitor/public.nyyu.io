@@ -1,24 +1,53 @@
 import React, { useCallback, useReducer } from "react"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import { Input } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
 import Modal from "react-modal"
 import { CloseIcon } from "../utilities/imgImport"
+import { useSelector } from "../context/store"
+import { useMutation } from "@apollo/client"
+import { VERIFY_ACCOUNT } from "../services/mutations/auth"
 
-const ForgetPassword = () => {
+const VerifyEmail = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
         tfaModal: true,
     })
     const { code, tfaModal } = state
+
+    console.log("code", code)
+
     const handleInput = useCallback((e) => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
     }, [])
+
+    const user = useSelector((state) => state.user)
+    if (!user.userEmail) navigate("/signup")
+
+    const [verifyAccount, { data, loading, error }] = useMutation(VERIFY_ACCOUNT, {
+        onCompleted: (data) => {
+            if (data.verifyAccount === "Failed") navigate("/verify-failed")
+            else if (data.verifyAccount === "Success") navigate("/2fa")
+            console.log("Verify result", data)
+        },
+    })
+
     return (
         <AuthLayout>
             <h3 className="signup-head mb-5">Verify email</h3>
-            <form className="form">
+            <form
+                className="form"
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    verifyAccount({
+                        variables: {
+                            email: user.userEmail,
+                            code: code,
+                        },
+                    })
+                }}
+            >
                 <div className="form-group">
                     <Input
                         type="text"
@@ -30,7 +59,11 @@ const ForgetPassword = () => {
                 </div>
                 <div className="form-group text-white">
                     Didn’t receive your code?{" "}
-                    <Link className="txt-green signup-link" to="/verify-failed">
+                    <Link
+                        className="txt-green signup-link"
+                        to=""
+                        onClick={() => console.log("clicked")}
+                    >
                         Send again
                     </Link>
                 </div>
@@ -70,4 +103,4 @@ const ForgetPassword = () => {
     )
 }
 
-export default ForgetPassword
+export default VerifyEmail

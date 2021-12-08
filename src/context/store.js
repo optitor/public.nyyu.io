@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer } from "react"
 import { reducer } from "./reducer"
 
 const defaultState = {
-    user: { userId: null, token: "", remember: false },
+    user: { userId: null, userEmail: null, token: "", remember: false },
 }
 
 export const store = createContext(defaultState)
