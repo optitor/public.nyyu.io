@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useReducer, useEffect } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { getSecTomorrow, numberWithLength } from "../utilities/number"
 import Slider from "rc-slider"
-import { Chart, Qmark } from "../utilities/imgImport"
+import { Chart, Qmark, CloseIcon } from "../utilities/imgImport"
 import Select from "react-select"
+import Modal from "react-modal"
 
 const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -43,30 +44,40 @@ const statistics = [
     },
 ]
 const options = [
-    { value: "statistics", label: "STATISTICS" },
-    { value: "ndb_token", label: "NDB TOKEN" },
-    { value: "bid_performance", label: "BID PERFORMANCE" },
+    { value: "bid_performance", label: "Bid performance" },
+    { value: "round_performance", label: "Round performance" },
+    { value: "ndb_token", label: "NDB Token Value" },
 ]
 
 const Auction = () => {
-    const [tabIndex, setTabIndex] = useState(0)
     const duration = 86400
-    const [curTime, setCurTime] = useState({
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-    })
-    const [amount, setAmount] = useState(0)
-    const [price, setPrice] = useState(0)
     const distanceToDate = getSecTomorrow()
     const percentage = (distanceToDate / duration) * 100
 
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
+        tabIndex: 0,
+        curTime: {
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+        },
+        amount: 0,
+        price: 0,
+        place_bid: false,
+        bidModal: false,
+        show_chart: false,
+    })
+
+    const { tabIndex, curTime, amount, price, place_bid, bidModal, show_chart } = state
+
     useEffect(() => {
         const id = setInterval(() => {
-            setCurTime({
-                hours: parseInt(getSecTomorrow() / (60 * 60)),
-                minutes: parseInt((getSecTomorrow() % (60 * 60)) / 60),
-                seconds: parseInt(getSecTomorrow() % 60),
+            setState({
+                curTime: {
+                    hours: parseInt(getSecTomorrow() / (60 * 60)),
+                    minutes: parseInt((getSecTomorrow() % (60 * 60)) / 60),
+                    seconds: parseInt(getSecTomorrow() % 60),
+                },
             })
         }, 1000)
         return () => {
@@ -78,165 +89,133 @@ const Auction = () => {
         <main className="auction-page">
             <Header />
             <section className="section-auction container">
-                <div className="row">
-                    <div className="auction-left col-lg-4 col-md-5">
-                        <Tabs className="round-tab">
-                            <TabList>
-                                <Tab>Round 19</Tab>
-                                <Tab>Round 20</Tab>
-                                <Tab>Round 21</Tab>
-                            </TabList>
-                            <TabPanel>
-                                Token Available <span className="fw-bold">8000</span>
-                            </TabPanel>
-                            <TabPanel>
-                                Token Available <span className="fw-bold">7000</span>
-                            </TabPanel>
-                            <TabPanel>
-                                Token Available <span className="fw-bold">6000</span>
-                            </TabPanel>
-                        </Tabs>
-                        <Tabs
-                            className="statistics-tab"
-                            selectedIndex={tabIndex}
-                            onSelect={(index) => setTabIndex(index)}
-                        >
-                            <TabList>
-                                <Tab>Ndb token</Tab>
-                                <Tab>StatiStics</Tab>
-                                <Tab>Bids history</Tab>
-                            </TabList>
-                            <TabPanel>
-                                <p className="text">{ndb_token}</p>
-                                <div className="timeframe-bar">
-                                    <div
-                                        className="timeleft"
-                                        style={{
-                                            width: percentage + "%",
-                                            background:
-                                                "linear-gradient(270deg, #941605 60%, #de4934 86.3%)",
-                                            transform: "rotate(-180deg)",
-                                        }}
-                                    ></div>
-                                </div>
-                                <div className="d-flex justify-content-between mt-4">
-                                    <div>
-                                        <p className="caption">Minimum bid</p>
-                                        <p className="value">15 ETH</p>
-                                    </div>
-                                    <div>
-                                        <p className="caption">Available Until</p>
-                                        <p className="value">
-                                            {numberWithLength(curTime.hours, 2)}:
-                                            {numberWithLength(curTime.minutes, 2)}:
-                                            {numberWithLength(curTime.seconds, 2)}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="text-center mt-5 mb-5">
-                                    <button className="btn-primary btn-increase">
-                                        Increase bid
-                                    </button>
-                                </div>
-                            </TabPanel>
-                            <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Placement</th>
-                                            <th>Highest bid per token</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {statistics.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td>{item.rank + ". " + item.placement}</td>
-                                                <td>
-                                                    {item.bid}
-                                                    <span className="txt-green"> $</span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <div className="timeframe-bar">
-                                    <div
-                                        className="timeleft"
-                                        style={{
-                                            width: percentage + "%",
-                                            background:
-                                                "linear-gradient(270deg, #FFFFFF 0%, #23C865 62.5%)",
-                                        }}
-                                    ></div>
-                                </div>
-                                <div className="d-flex justify-content-between mt-4">
-                                    <div>
-                                        <p className="caption">Minimum bid</p>
-                                        <p className="value">15 ETH</p>
-                                    </div>
-                                    <div>
-                                        <p className="caption">Available Until</p>
-                                        <p className="value">
-                                            {numberWithLength(curTime.hours, 2)}:
-                                            {numberWithLength(curTime.minutes, 2)}:
-                                            {numberWithLength(curTime.seconds, 2)}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="text-center mt-5 mb-5">
-                                    <button className="btn-primary btn-increase">
-                                        Increase bid
-                                    </button>
-                                </div>
-                            </TabPanel>
-                            <TabPanel>
-                                <p className="text">{ndb_token}</p>
-                                <div className="timeframe-bar">
-                                    <div
-                                        className="timeleft"
-                                        style={{
-                                            width: percentage + "%",
-                                            background:
-                                                "linear-gradient(270deg, #FFFFFF 0%, #23C865 62.5%)",
-                                        }}
-                                    ></div>
-                                </div>
-                                <div className="d-flex justify-content-between mt-4">
-                                    <div>
-                                        <p className="caption">Minimum bid</p>
-                                        <p className="value">15 ETH</p>
-                                    </div>
-                                    <div>
-                                        <p className="caption">Available Until</p>
-                                        <p className="value">
-                                            {numberWithLength(curTime.hours, 2)}:
-                                            {numberWithLength(curTime.minutes, 2)}:
-                                            {numberWithLength(curTime.seconds, 2)}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="text-center mt-5">
-                                    <button className="btn-primary btn-increase">
-                                        Increase bid
-                                    </button>
-                                </div>
-                            </TabPanel>
-                        </Tabs>
+                <div className="current-round">
+                    <div>
+                        <h4>Round 20</h4>
+                        <p>
+                            Token Available <span>8000</span>
+                        </p>
                     </div>
+                    <img
+                        src={Chart}
+                        alt="chart"
+                        className="show-chart"
+                        onClick={() => setState({ show_chart: !show_chart })}
+                        onKeyDown={() => setState({ show_chart: !show_chart })}
+                        role="presentation"
+                    />
+                </div>
+                <div className="row h-100">
+                    {!show_chart && (
+                        <div className="auction-left col-lg-4 col-md-5">
+                            <Tabs className="round-tab">
+                                <TabList>
+                                    <Tab>Round 19</Tab>
+                                    <Tab>Round 20</Tab>
+                                    <Tab>Round 21</Tab>
+                                </TabList>
+                                <TabPanel>
+                                    Token Available <span className="fw-bold">8000</span>
+                                </TabPanel>
+                                <TabPanel>
+                                    Token Available <span className="fw-bold">7000</span>
+                                </TabPanel>
+                                <TabPanel>
+                                    Token Available <span className="fw-bold">6000</span>
+                                </TabPanel>
+                            </Tabs>
+                            <Tabs
+                                className="statistics-tab"
+                                selectedIndex={tabIndex}
+                                onSelect={(index) => setState({ tabIndex: index })}
+                            >
+                                <TabList>
+                                    <Tab>Ndb token</Tab>
+                                    <Tab>StatiStics</Tab>
+                                    <Tab>Bids history</Tab>
+                                </TabList>
+                                <TabPanel>
+                                    <p className="text">{ndb_token}</p>
+                                </TabPanel>
+                                <TabPanel>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Placement</th>
+                                                <th>Highest bid per token</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {statistics.map((item, idx) => (
+                                                <tr key={idx}>
+                                                    <td>{item.rank + ". " + item.placement}</td>
+                                                    <td>
+                                                        {item.bid}
+                                                        <span className="txt-green"> $</span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </TabPanel>
+                                <TabPanel>
+                                    <p className="text">{ndb_token}</p>
+                                </TabPanel>
+                            </Tabs>
+                            <div className="timeframe-bar">
+                                <div
+                                    className="timeleft"
+                                    style={{
+                                        width: 100 - percentage + "%",
+                                        background: "#464646",
+                                    }}
+                                >
+                                    <div className="timeleft__value">
+                                        {numberWithLength(curTime.hours, 2)}:
+                                        {numberWithLength(curTime.minutes, 2)}:
+                                        {numberWithLength(curTime.seconds, 2)}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="d-flex justify-content-between mt-4">
+                                <div>
+                                    <p className="caption">Minimum bid</p>
+                                    <p className="value">15 ETH</p>
+                                </div>
+                                <div>
+                                    <p className="caption">Available Until</p>
+                                    <p className="value">
+                                        {numberWithLength(curTime.hours, 2)}:
+                                        {numberWithLength(curTime.minutes, 2)}:
+                                        {numberWithLength(curTime.seconds, 2)}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="text-center my-5">
+                                <button
+                                    className="btn-primary btn-increase"
+                                    onClick={() => setState({ bidModal: true })}
+                                >
+                                    {!place_bid ? "Place Bid" : "Increase bid"}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="auction-right col-lg-8 col-md-7">
-                        {tabIndex === 0 && (
+                        {!place_bid && (
                             <div className="place-bid">
                                 <h3 className="range-label">amount of Token</h3>
                                 <div className="d-flex align-items-center mb-4">
                                     <input
                                         type="number"
                                         value={amount}
-                                        onChange={(e) => setAmount(e.target.value)}
+                                        onChange={(e) => setState({ amount: e.target.value })}
                                         className="range-input"
                                     />
                                     <Slider
                                         value={amount}
-                                        onChange={(value) => setAmount(value)}
+                                        onChange={(value) => setState({ amount: value })}
                                         min={0}
                                         max={10000}
                                         step={100}
@@ -252,7 +231,7 @@ const Auction = () => {
                                     />
                                     <Slider
                                         value={price}
-                                        onChange={(value) => setPrice(value)}
+                                        onChange={(value) => setState({ price: value })}
                                         min={0}
                                         max={10000}
                                         step={100}
@@ -267,23 +246,90 @@ const Auction = () => {
                                         readOnly
                                     />
                                 </div>
-                                <button className="btn-primary text-uppercase w-100">
-                                    Place Bid
+                                <button
+                                    className="btn-primary text-uppercase w-100"
+                                    onClick={() => {
+                                        setState({ place_bid: true })
+                                    }}
+                                >
+                                    {!place_bid ? "Place Bid" : "Increase Bid"}
                                 </button>
                             </div>
                         )}
-                        {tabIndex === 1 && (
-                            <div className="chart-area">
+                        {show_chart && (
+                            <div className={`chart-area ${place_bid && "d-block"}`}>
                                 <div className="d-flex align-items-center">
                                     <Select options={options} value={options[0]} />
                                     <img src={Qmark} alt="question" className="ms-3" />
                                 </div>
-                                <img src={Chart} alt="chart " className="w-100" />
                             </div>
                         )}
                     </div>
                 </div>
             </section>
+            <Modal
+                isOpen={bidModal}
+                onRequestClose={() => setState({ bidModal: false })}
+                ariaHideApp={false}
+                className="place-bid"
+                overlayClassName="place-bid__overlay"
+            >
+                <div className="tfa-modal__header">
+                    <div
+                        onClick={() => setState({ bidModal: false })}
+                        onKeyDown={() => setState({ bidModal: false })}
+                        role="button"
+                        tabIndex="0"
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
+                </div>
+
+                <h3 className="range-label">amount of Token</h3>
+                <div className="d-flex align-items-center mb-4">
+                    <input
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setState({ amount: e.target.value })}
+                        className="range-input"
+                    />
+                    <Slider
+                        value={amount}
+                        onChange={(value) => setState({ amount: value })}
+                        min={0}
+                        max={10000}
+                        step={100}
+                    />
+                </div>
+                <h3 className="range-label">Per token price</h3>
+                <div className="d-flex align-items-center mb-4">
+                    <input
+                        type="number"
+                        value={price}
+                        onChange={(e) => e.target.value}
+                        className="range-input"
+                    />
+                    <Slider
+                        value={price}
+                        onChange={(value) => setState({ price: value })}
+                        min={0}
+                        max={10000}
+                        step={100}
+                    />
+                </div>
+                <div className="d-flex align-items-center">
+                    <span className="range-label">Total price</span>
+                    <input className="total-input" type="number" value={price * amount} readOnly />
+                </div>
+                <button
+                    className="btn-primary text-uppercase w-100"
+                    onClick={() => {
+                        setState({ place_bid: true })
+                    }}
+                >
+                    {!place_bid ? "Place Bid" : "Increase Bid"}
+                </button>
+            </Modal>
         </main>
     )
 }
