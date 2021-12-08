@@ -6,11 +6,19 @@ import Modal from "react-modal"
 import { CloseIcon, QRCode2 } from "../utilities/imgImport"
 import { useSelector } from "../context/store"
 import { useMutation } from "@apollo/client"
-import { VERIFY_ACCOUNT } from "../services/mutations/auth"
+import { VERIFY_ACCOUNT, RESEND_VERIFY_CODE, REQUEST_2FA } from "../services/mutations/auth"
 
-const two_factors = ["Authenticator App", "SMS", "Email"]
+const two_factors = [
+    {label: "Authenticator App", method: "app"}, 
+    {label:"SMS", method: "phone"}, 
+    {label:"Email", method: "email"}
+]
 
 const VerifyEmail = () => {
+    const user = useSelector((state) => state.user)
+    
+    if(!user.userEmail) navigate("/signup")
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
         tfaModal: false,
@@ -22,22 +30,32 @@ const VerifyEmail = () => {
     })
     const { code, tfaModal, auth_code, sms_code, email_code, choose_type, set_type } = state
 
-    console.log("code", code)
-
     const handleInput = useCallback((e) => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
     }, [])
 
-    const user = useSelector((state) => state.user)
-    // if(!user.userEmail) navigate("/signup")
 
     // possible code: [verifyAccount, { data, loading, error }]
     const [verifyAccount] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
+            console.log("Verify result", data)
             if (data.verifyAccount === "Failed") navigate("/verify-failed")
             else if (data.verifyAccount === "Success") setState({tfaModal: true})
-            console.log("Verify result", data)
+        },
+    })
+
+    const [resendVerifyCode] = useMutation(RESEND_VERIFY_CODE, {
+        onCompleted: (data) => {
+            console.log("Resend Result", data)
+            // do something here to show resend email result.
+        },
+    })
+
+    const [request2FA] = useMutation(REQUEST_2FA, {
+        onCompleted: (data) => {
+            console.log("request2FA Result", data)
+            setState({ set_type: choose_type })
         },
     })
 
@@ -69,8 +87,14 @@ const VerifyEmail = () => {
                     Didn’t receive your code?{" "}
                     <Link
                         className="txt-green signup-link"
-                        to=""
-                        onClick={() => console.log("clicked")}
+                        to="#send-again"
+                        onClick={() => 
+                            resendVerifyCode({
+                                variables: {
+                                    email: user.userEmail,
+                                },
+                            })
+                        }
                     >
                         Send again
                     </Link>
@@ -120,13 +144,21 @@ const VerifyEmail = () => {
                                         }`}
                                         onClick={() => setState({ choose_type: idx })}
                                     >
-                                        {item}
+                                        {item.label}
                                     </button>
                                 ))}
 
                                 <button
                                     className="btn-primary next-step mt-4"
-                                    onClick={() => setState({ set_type: choose_type })}
+                                    onClick={() => 
+                                        request2FA({
+                                            variables: {
+                                                email: user.userEmail,
+                                                method: two_factors[choose_type],
+                                                phone: "123456789"
+                                            },
+                                        })
+                                    }
                                 >
                                     Next
                                 </button>
