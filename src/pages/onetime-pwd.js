@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { Link } from "gatsby"
 import { Input } from "../components/common/FormControl"
-import validator from "validator"
 import AuthLayout from "../components/common/AuthLayout"
 
 const OnetimePassword = () => {
@@ -12,7 +11,7 @@ const OnetimePassword = () => {
 
     return (
         <AuthLayout>
-            <h3 className="signup-head mb-5">Forgot password</h3>
+            <h3 className="signup-head mb-5">One-Time Password</h3>
             <form className="form">
                 <div className="form-group">
                     <Input

@@ -62,11 +62,9 @@ const Payment = () => {
         code: "",
         bill: "",
         allow_fraction: false,
-        save_card: false,
         amount: "",
     })
-    const { firstname, lastname, card, expire, code, bill, allow_fraction, save_card, amount } =
-        state
+    const { firstname, lastname, card, expire, code, bill, allow_fraction, amount } = state
 
     const [coin, setCoin] = useState(coins[0])
     const [balance, setBalance] = useState(balances[0])
@@ -85,13 +83,6 @@ const Payment = () => {
         },
         [allow_fraction]
     )
-    // const handleSaveCard = useCallback(
-    //     (e) => {
-    //         e.preventDefault()
-    //         setState({ save_card: !save_card })
-    //     },
-    //     [save_card]
-    // )
 
     const handlePaymentType = (value) => {
         setPaymentType(value)
