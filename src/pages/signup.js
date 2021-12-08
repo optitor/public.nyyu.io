@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState, useEffect } from "react"
+import React, { useCallback, useReducer, useState } from "react"
 import { Link } from "gatsby"
 import Select from "react-select"
 import { countries, social_links } from "../utilities/staticData"
@@ -53,7 +53,8 @@ const SingupPage = () => {
         [remember]
     )
 
-    const [signup, { data, loading, error }] = useMutation(
+    // possible code: [signup, { data, loading, error }]
+    const [signup] = useMutation(
         SIGNUP,
         {
             onCompleted: (data) => {

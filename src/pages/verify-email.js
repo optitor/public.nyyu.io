@@ -23,7 +23,8 @@ const VerifyEmail = () => {
     const user = useSelector(state => state.user)
     if(!user.userEmail) navigate("/signup")
     
-    const [verifyAccount, { data, loading, error }] = useMutation(
+    // possible code: [verifyAccount, { data, loading, error }]
+    const [verifyAccount] = useMutation(
         VERIFY_ACCOUNT, 
         {
             onCompleted: (data) => {
