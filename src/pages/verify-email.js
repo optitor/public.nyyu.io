@@ -13,7 +13,7 @@ const two_factors = ["Authenticator App", "SMS", "Email"]
 const VerifyEmail = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
-        tfaModal: true,
+        tfaModal: false,
         auth_code: "",
         sms_code: "",
         email_code: "",
@@ -36,7 +36,7 @@ const VerifyEmail = () => {
     const [verifyAccount] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
             if (data.verifyAccount === "Failed") navigate("/verify-failed")
-            else if (data.verifyAccount === "Success") navigate("/2fa")
+            else if (data.verifyAccount === "Success") setState({tfaModal: true})
             console.log("Verify result", data)
         },
     })
