@@ -85,13 +85,6 @@ const Payment = () => {
         },
         [allow_fraction]
     )
-    // const handleSaveCard = useCallback(
-    //     (e) => {
-    //         e.preventDefault()
-    //         setState({ save_card: !save_card })
-    //     },
-    //     [save_card]
-    // )
 
     const handlePaymentType = (value) => {
         setPaymentType(value)
@@ -257,19 +250,22 @@ const Payment = () => {
                                 </div>
                             </TabPanel>
                             <div className="mt-3 d-flex align-items-center justify-content-between">
-                                <CheckBox
-                                    type="checkbox"
-                                    name="allow_fraction"
-                                    value={allow_fraction}
-                                    onChange={handleAllowFraction}
-                                    className="text-uppercase"
-                                >
-                                    Do you allow fraction of order compleation?
+                                <label className="d-flex flex-row">
+                                    <CheckBox
+                                        type="checkbox"
+                                        name="allow_fraction"
+                                        value={allow_fraction}
+                                        onChange={handleAllowFraction}
+                                        className="text-uppercase"
+                                    ></CheckBox>
+                                    <div className="my-auto">
+                                        Do you allow fraction of order compleation?
+                                    </div>
                                     <FontAwesomeIcon
                                         icon={faQuestionCircle}
                                         className="fa-2x ms-2"
                                     />
-                                </CheckBox>
+                                </label>
                                 <p className="payment-expire">
                                     payment expires in&nbsp;
                                     <span className="txt-green">10 minutes</span>
