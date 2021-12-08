@@ -260,9 +260,8 @@ export const countries = [
     { label: "Zimbabwe", value: "ZW" },
 ]
 
-export const API_BASE_URL = window.location.host.startsWith('localhost') ? "http://localhost:5000" : "http://auction.us-east-1.elasticbeanstalk.com/";
 // export const API_BASE_URL = "http://localhost:5000";
-// export const API_BASE_URL = "http://auction.us-east-1.elasticbeanstalk.com/";
+export const API_BASE_URL = "http://auction.us-east-1.elasticbeanstalk.com";
 
 export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2/redirect";
 
