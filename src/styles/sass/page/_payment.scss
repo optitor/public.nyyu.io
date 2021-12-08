@@ -25,8 +25,8 @@
             @include mq("tablet", max) {
                 display: none;
             }
-            display: flex;
-            justify-content: space-between;
+            // display: flex;
+            // justify-content: space-between;
             border: none;
             margin-bottom: 55px;
         }
@@ -114,7 +114,6 @@
             .cryptocoin-select {
                 margin-bottom: 8px;
                 margin-right: 8px;
-                height: calc(100% - 8px);
             }
             .clipboard {
                 display: flex;
@@ -204,6 +203,7 @@
         }
         .payment-expire {
             display: block;
+            padding-left: 30px !important;
             @include mq("tablet", max) {
                 display: none;
             }
@@ -292,6 +292,7 @@
     .remain-token__value {
         padding: 0px 60px;
         margin-top: 80px;
+        margin-bottom: 80px;
         .current-value,
         .end-value {
             font-weight: bold;
@@ -328,4 +329,12 @@
     text-transform: uppercase;
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.css-4ljt47-MenuList {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+.css-1s2u09g-control {
+    padding: 0px 4px !important;
 }

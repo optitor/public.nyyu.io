@@ -13,7 +13,6 @@ const { Option, SingleValue } = components
 const coins = [
     { value: "eth", label: "", icon: ETH },
     { value: "btc", label: "", icon: BTC },
-    { value: "doge", label: "", icon: DOGE },
 ]
 const balances = [
     { value: "3002565", label: "ETH", icon: ETH },
@@ -28,7 +27,7 @@ const payment_types = [
 
 const IconOption = (props) => (
     <Option {...props}>
-        <img src={props.data.icon} style={{ width: 39 }} alt={props.data.label} />
+        <img src={props.data.icon} style={{ width: "100%" }} alt={props.data.label} />
         {props.data.label}
     </Option>
 )
@@ -106,11 +105,18 @@ const Payment = () => {
                             onSelect={(index) => setTabIndex(index)}
                         >
                             <TabList>
-                                {payment_types.map((item, idx) => (
-                                    <Tab className="payment-type__tab-list" key={idx}>
-                                        {item.label}
-                                    </Tab>
-                                ))}
+                                <div className="row m-0">
+                                    {payment_types.map((item, index) => (
+                                        <div className={`col-lg-4 pl-0`}>
+                                            <Tab
+                                                className={`payment-type__tab-list text-center`}
+                                                key={index}
+                                            >
+                                                {item.label}
+                                            </Tab>
+                                        </div>
+                                    ))}
+                                </div>
                             </TabList>
                             <Select
                                 options={payment_types}
@@ -249,7 +255,7 @@ const Payment = () => {
                                     </div>
                                 </div>
                             </TabPanel>
-                            <div className="mt-3 d-flex align-items-center justify-content-between">
+                            <div className="mt-3 d-flex">
                                 <label className="d-flex flex-row">
                                     <CheckBox
                                         type="checkbox"
@@ -266,9 +272,8 @@ const Payment = () => {
                                         className="fa-2x ms-2"
                                     />
                                 </label>
-                                <p className="payment-expire">
-                                    payment expires in&nbsp;
-                                    <span className="txt-green">10 minutes</span>
+                                <p className="payment-expire my-auto">
+                                    payment expires in <span className="txt-green">10 minutes</span>
                                 </p>
                             </div>
                         </Tabs>
