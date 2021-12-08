@@ -1,55 +1,54 @@
 import React, { useState, useEffect, useMemo } from "react"
-import Slider from 'rc-slider';
-import Modal from 'react-modal';
-import { Link } from 'gatsby';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
-import Header from "../../components/common/header";
+import Slider from "rc-slider"
+import Modal from "react-modal"
+import { Link } from "gatsby"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTimes, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { Tabs, Tab, TabList, TabPanel } from "react-tabs"
+import Header from "../../components/common/header"
 import { getSecTomorrow, numberWithLength } from "../../utilities/number"
 
 const modalDesc = {
     sign: [
         "To buy please sign in or sign up for an account.",
         "To buy for more than 2000 CHF worth, please sign in or create an account and complete the KYC identity verification.",
-        "To buy more than 100,000 CHF worth, please sign in or create an account and complete the AML identity verification."
+        "To buy more than 100,000 CHF worth, please sign in or create an account and complete the AML identity verification.",
     ],
     verify: [
         "To buy more than 2000 CHF worth, please complete the KYC identity verification.",
-        "To buy more than 100,000 CHF worth, please complete the AML identity verification."
-    ]
-};
+        "To buy more than 100,000 CHF worth, please complete the AML identity verification.",
+    ],
+}
 
 const Auction = () => {
     const auth = {
         isSigned: true,
         isKYCVerified: false,
-        isAMLVerified: false
-    };
-    const duration = 86400;
+        isAMLVerified: false,
+    }
+    const duration = 86400
     const [curTime, setCurTime] = useState({
         hours: 0,
         minutes: 0,
         seconds: 0,
-    });
-    const [amount, setAmount] = useState(0);
-    const [price, setPrice] = useState(0);
-    const distanceToDate = getSecTomorrow();
-    const percentage = (distanceToDate / duration) * 100;
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [showSelect, setShowSelect] = useState(false);
-    const [tabIndex, setTabIndex] = useState(2);
-    const [walletAddress, setWalletAddress] = useState('');
-    
+    })
+    const [amount, setAmount] = useState(0)
+    const [price, setPrice] = useState(0)
+    const distanceToDate = getSecTomorrow()
+    const percentage = (distanceToDate / duration) * 100
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+    const [showSelect, setShowSelect] = useState(false)
+    const [tabIndex, setTabIndex] = useState(2)
+    const [walletAddress, setWalletAddress] = useState("")
+
     const paymentDisabled = useMemo(() => {
-        if(tabIndex === 0) {
-            return false;
-        } else if(tabIndex === 1 && walletAddress) {
-            return false;
+        if (tabIndex === 0) {
+            return false
+        } else if (tabIndex === 1 && walletAddress) {
+            return false
         }
-        return true;
-    }, [tabIndex, walletAddress]);
-    
+        return true
+    }, [tabIndex, walletAddress])
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -62,31 +61,36 @@ const Auction = () => {
         return () => {
             clearInterval(id)
         }
-    }, []);
+    }, [])
 
     const handleBuyToken = () => {
-        if(!auth.isSigned) {
-            setModalIsOpen(true); return;
-        } else if(amount >= 100000) {
-            if(!auth.isAMLVerified) {
-                setModalIsOpen(true); return;
+        if (!auth.isSigned) {
+            setModalIsOpen(true)
+            return
+        } else if (amount >= 100000) {
+            if (!auth.isAMLVerified) {
+                setModalIsOpen(true)
+                return
             }
-        } else if(amount >=2000) {
-            if(!auth.isKYCVerified) {
-                setModalIsOpen(true); return;
+        } else if (amount >= 2000) {
+            if (!auth.isKYCVerified) {
+                setModalIsOpen(true)
+                return
             }
         }
-        setShowSelect(true);
-    };
+        setShowSelect(true)
+    }
 
     const renderModalContent = () => {
-        if(!auth.isSigned) {
+        if (!auth.isSigned) {
             return (
                 <>
                     <p className="description">
-                        {
-                            amount >= 100000? modalDesc.sign[2]: (amount >= 2000? modalDesc.sign[1]: modalDesc.sign[0])
-                        }
+                        {amount >= 100000
+                            ? modalDesc.sign[2]
+                            : amount >= 2000
+                            ? modalDesc.sign[1]
+                            : modalDesc.sign[0]}
                     </p>
                     <div className="btnDiv">
                         <Link to="/signup">
@@ -102,27 +106,44 @@ const Auction = () => {
             return (
                 <>
                     <p className="description">
-                        {
-                            amount >= 100000? modalDesc.verify[1]: (amount >= 2000? modalDesc.verify[0]: "")
-                        }
+                        {amount >= 100000
+                            ? modalDesc.verify[1]
+                            : amount >= 2000
+                            ? modalDesc.verify[0]
+                            : ""}
                     </p>
                     <div className="btnDiv">
                         <Link to="#">
-                            <p onClick={() => setModalIsOpen(false)} className="blackbtn">Go back</p>
+                            <p
+                                onClick={() => setModalIsOpen(false)}
+                                onKeyDown={() => setModalIsOpen(false)}
+                                role="presentation"
+                                className="blackbtn"
+                            >
+                                Go back
+                            </p>
                         </Link>
-                        <Link to={`${amount >= 100000? "/aml_verify": (amount >= 2000? "/kyc_verify": "")}`}>
+                        <Link
+                            to={`${
+                                amount >= 100000
+                                    ? "/aml_verify"
+                                    : amount >= 2000
+                                    ? "/kyc_verify"
+                                    : ""
+                            }`}
+                        >
                             <p className="greenbtn">Verify</p>
                         </Link>
                     </div>
                 </>
-            );
+            )
         }
-    };
+    }
 
     const closeSelectWallet = () => {
-        setShowSelect(false);
-        setTabIndex(2);
-        setWalletAddress('');
+        setShowSelect(false)
+        setTabIndex(2)
+        setWalletAddress("")
     }
 
     return (
@@ -134,11 +155,17 @@ const Auction = () => {
                         <p className="title">Next round starts In</p>
                         <div className="timebar">
                             <div className="progress">
-                                <span className="time" style={{left: percentage * 0.8 + "%"}}>
-                                    {numberWithLength(curTime.hours, 2)} : {numberWithLength(curTime.minutes, 2)} : {numberWithLength(curTime.seconds, 2)}
+                                <span className="time" style={{ left: percentage * 0.8 + "%" }}>
+                                    {numberWithLength(curTime.hours, 2)} :{" "}
+                                    {numberWithLength(curTime.minutes, 2)} :{" "}
+                                    {numberWithLength(curTime.seconds, 2)}
                                 </span>
-                                <span className="pointer" style={{left: percentage * 0.8 + 9 + "%"}}></span>
-                                <div className="progress-bar"
+                                <span
+                                    className="pointer"
+                                    style={{ left: percentage * 0.8 + 9 + "%" }}
+                                ></span>
+                                <div
+                                    className="progress-bar"
                                     style={{
                                         width: percentage + "%",
                                         background:
@@ -161,82 +188,95 @@ const Auction = () => {
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>                        
+                        </div>
                     </div>
                     <div className="auction-right col-md-7">
                         <p className="title">Exclusive pre round</p>
                         <div className="tokenDiv">
-                            {
-                                showSelect? (
-                                    <div className="select_wallet">
-                                        <p className="title">
-                                            Select wallet destination
-                                            <FontAwesomeIcon
-                                                icon={faArrowLeft}
-                                                className="text-white"
-                                                onClick={closeSelectWallet}
-                                                role="button"
-                                            />
-                                        </p>
-                                        <div className="select_div">
-                                            <Tabs
-                                                className="wallet-type__tab"
-                                                selectedIndex={tabIndex}
-                                                onSelect={(index) => setTabIndex(index)}
-                                            >
-                                                <TabList>           
-                                                    <Tab className="wallet-type__tab-list">NDB WALLET</Tab>
-                                                    <Tab className="wallet-type__tab-list">OTHER WALLET</Tab>
-                                                </TabList>
+                            {showSelect ? (
+                                <div className="select_wallet">
+                                    <p className="title">
+                                        Select wallet destination
+                                        <FontAwesomeIcon
+                                            icon={faArrowLeft}
+                                            className="text-white"
+                                            onClick={closeSelectWallet}
+                                            role="button"
+                                        />
+                                    </p>
+                                    <div className="select_div">
+                                        <Tabs
+                                            className="wallet-type__tab"
+                                            selectedIndex={tabIndex}
+                                            onSelect={(index) => setTabIndex(index)}
+                                        >
+                                            <TabList>
+                                                <Tab className="wallet-type__tab-list">
+                                                    NDB WALLET
+                                                </Tab>
+                                                <Tab className="wallet-type__tab-list">
+                                                    OTHER WALLET
+                                                </Tab>
+                                            </TabList>
 
-                                                <TabPanel>
-                                                    <></>
-                                                </TabPanel>
-                                                <TabPanel>
-                                                    <input className="black_input"
-                                                        placeholder="Paste Wallet Address"
-                                                        value={walletAddress}
-                                                        onChange={e => setWalletAddress(e.target.value)}
-                                                    />
-                                                </TabPanel>
-                                            </Tabs>
-                                        </div>
-                                        <button className="ndb_button w-100" onClick={() => alert('ok')} disabled={paymentDisabled}> 
-                                            GO TO PAYMENT
-                                        </button> 
+                                            <TabPanel>
+                                                <></>
+                                            </TabPanel>
+                                            <TabPanel>
+                                                <input
+                                                    className="black_input"
+                                                    placeholder="Paste Wallet Address"
+                                                    value={walletAddress}
+                                                    onChange={(e) =>
+                                                        setWalletAddress(e.target.value)
+                                                    }
+                                                />
+                                            </TabPanel>
+                                        </Tabs>
                                     </div>
-                                ) : (
-                                    <div className="buy_token">
-                                        <p className="title"><span className="txt-green">100 USD</span> per token</p>
-                                        <p className="title" style={{margin: '5px 0'}}>amount of Token</p>
-                                        <div className="slider-container">
-                                            <span className="max">Maximum 10</span>
-                                            <input
-                                                type="number"
-                                                value={amount}
-                                                onChange={(e) => setAmount(e.target.value)}
-                                                className="range-input"
-                                                min={0}
-                                                max={100000}
-                                            />
-                                            <Slider
-                                                value={amount}
-                                                onChange={(value) => setAmount(value)}
-                                                min={0}
-                                                max={100000}
-                                                step={1}
-                                            />
-                                        </div>
-                                        <div className="total-price">
-                                            <p className="title">total price</p>
-                                            <div className="price">{price}</div>
-                                        </div>   
-                                        <button className="ndb_button w-100" onClick={handleBuyToken}>
-                                            BUY
-                                        </button> 
+                                    <button
+                                        className="ndb_button w-100"
+                                        onClick={() => alert("ok")}
+                                        disabled={paymentDisabled}
+                                    >
+                                        GO TO PAYMENT
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="buy_token">
+                                    <p className="title">
+                                        <span className="txt-green">100 USD</span> per token
+                                    </p>
+                                    <p className="title" style={{ margin: "5px 0" }}>
+                                        amount of Token
+                                    </p>
+                                    <div className="slider-container">
+                                        <span className="max">Maximum 10</span>
+                                        <input
+                                            type="number"
+                                            value={amount}
+                                            onChange={(e) => setAmount(e.target.value)}
+                                            className="range-input"
+                                            min={0}
+                                            max={100000}
+                                        />
+                                        <Slider
+                                            value={amount}
+                                            onChange={(value) => setAmount(value)}
+                                            min={0}
+                                            max={100000}
+                                            step={1}
+                                        />
                                     </div>
-                                )
-                            }                                                   
+                                    <div className="total-price">
+                                        <p className="title">total price</p>
+                                        <div className="price">{price}</div>
+                                    </div>
+                                    <button className="ndb_button w-100" onClick={handleBuyToken}>
+                                        BUY
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -256,12 +296,12 @@ const Auction = () => {
                             onKeyDown={() => setModalIsOpen(false)}
                             role="button"
                         />
-                    </span>    
+                    </span>
                     {renderModalContent()}
                 </Modal>
             </section>
         </main>
-    );
-};
+    )
+}
 
-export default Auction;
+export default Auction

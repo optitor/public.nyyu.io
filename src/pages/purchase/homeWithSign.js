@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import Seo from '../../components/seo';
-import Header from '../../components/common/header';
-import CountDown from '../../components/common/countdown';
+import React from "react"
+// import styled from 'styled-components';
+import Seo from "../../components/seo"
+import Header from "../../components/common/header"
+import CountDown from "../../components/common/countdown"
 
 const HomeWithSign = () => {
     return (
@@ -17,11 +17,14 @@ const HomeWithSign = () => {
                                 <h4 className="clock-title">The next Auction round starts in</h4>
                                 <CountDown />
                             </div>
-                            <TextDiv className="col-sm-6 d-flex flex-column justify-content-center">
+                            <div className="col-sm-6 d-flex flex-column justify-content-center">
                                 <h4 className="title1 txt-green">Exclusive Sale of</h4>
                                 <h3 className="title2">10 ndb tokens!</h3>
-                                <p className="text">Don’t miss an opportunity to buy limited number of NDB Tokens at the fixed price before the next auction round started.</p>
-                            </TextDiv>
+                                <p className="text">
+                                    Don’t miss an opportunity to buy limited number of NDB Tokens at
+                                    the fixed price before the next auction round started.
+                                </p>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-6"></div>
@@ -34,14 +37,14 @@ const HomeWithSign = () => {
                 <div className="back-image"></div>
             </main>
         </>
-    );
-};
+    )
+}
 
-export default HomeWithSign;
+export default HomeWithSign
 
-const TextDiv = styled.div`
-    @media screen and (max-width: 786px) {
-        padding: 3% 20px;
-        margin-top: 20px;
-    }
-`;
+// const TextDiv = styled.div`
+//     @media screen and (max-width: 786px) {
+//         padding: 3% 20px;
+//         margin-top: 20px;
+//     }
+// `

@@ -1,11 +1,14 @@
 .menu {
-    padding: 15px 0;
+    padding: 22px 0;
     position: sticky;
     top: 0;
     width: 100%;
     z-index: 100;
-    @include mq("phone") {
-        padding: 22px 0;
+    @include mq("tablet", max) {
+        padding: 9px 0;
+    }
+    @include mq("phone", max) {
+        padding: 15px 0;
     }
     background-color: $black;
     .logo {
