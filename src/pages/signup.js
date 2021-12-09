@@ -1,13 +1,12 @@
 import React, { useCallback, useReducer, useState } from "react"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import Select from "react-select"
+import validator from "validator"
+import { useMutation } from "@apollo/client"
 import { countries, social_links } from "../utilities/staticData"
 import { FormInput, CheckBox } from "../components/common/FormControl"
-import validator from "validator"
 import AuthLayout from "../components/common/AuthLayout"
-import { useMutation } from "@apollo/client"
 import { SIGNUP } from "../services/mutations/auth"
-import { navigate } from 'gatsby'
 import { useDispatch, useSelector } from "../context/store"
 import * as Actions from '../context/actions'
 
