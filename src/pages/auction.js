@@ -1,12 +1,13 @@
 import React, { useReducer, useEffect } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { getSecTomorrow, numberWithLength } from "../utilities/number"
 import Slider from "rc-slider"
-import { Chart, Qmark, CloseIcon } from "../utilities/imgImport"
 import Select from "react-select"
 import Modal from "react-modal"
 import ReactEcharts from "echarts-for-react"
+import { getSecTomorrow, numberWithLength } from "../utilities/number"
+import { Chart, Qmark, CloseIcon } from "../utilities/imgImport"
+import { useWindowSize } from "../utilities/customHook"
 
 const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -50,7 +51,7 @@ const options = [
     { value: "ndb_token", label: "NDB Token Value" },
 ]
 
-const bid_options = {
+const chartData = {
     grid: { top: 8, right: 8, bottom: 24, left: 36 },
     xAxis: {
         type: "category",
@@ -72,6 +73,8 @@ const bid_options = {
 }
 
 const Auction = () => {
+    const size = useWindowSize()
+    console.log(size)
     const duration = 86400
     const distanceToDate = getSecTomorrow()
     const percentage = (distanceToDate / duration) * 100
@@ -83,14 +86,16 @@ const Auction = () => {
             minutes: 0,
             seconds: 0,
         },
-        amount: 0,
-        price: 0,
+        amount: "",
+        price: "",
+        total: "",
         place_bid: false,
         bidModal: false,
         show_chart: false,
+        selectLabel: options[0],
     })
 
-    const { tabIndex, curTime, amount, price, place_bid, bidModal, show_chart } = state
+    const { tabIndex, curTime, amount, price, place_bid, bidModal, show_chart, selectLabel } = state
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -128,91 +133,95 @@ const Auction = () => {
                     />
                 </div>
                 <div className="row h-100">
-                    {!show_chart && (
-                        <div className="auction-left col-lg-4 col-md-5">
-                            <Tabs className="round-tab">
-                                <TabList>
-                                    <Tab>Round 19</Tab>
-                                    <Tab>Round 20</Tab>
-                                    <Tab>Round 21</Tab>
-                                </TabList>
-                                <TabPanel>
-                                    Token Available <span className="fw-bold">8000</span>
-                                </TabPanel>
-                                <TabPanel>
-                                    Token Available <span className="fw-bold">7000</span>
-                                </TabPanel>
-                                <TabPanel>
-                                    Token Available <span className="fw-bold">6000</span>
-                                </TabPanel>
-                            </Tabs>
-                            <Tabs
-                                className="statistics-tab"
-                                selectedIndex={tabIndex}
-                                onSelect={(index) => setState({ tabIndex: index })}
-                            >
-                                <TabList>
-                                    <Tab>Ndb token</Tab>
-                                    <Tab>StatiStics</Tab>
-                                    <Tab>Bids history</Tab>
-                                </TabList>
-                                <TabPanel>
-                                    <p className="text">{ndb_token}</p>
-                                </TabPanel>
-                                <TabPanel>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Placement</th>
-                                                <th>Highest bid per token</th>
+                    <div
+                        className={`auction-left col-lg-4 col-md-5 ${
+                            show_chart ? "d-none" : "d-block"
+                        }`}
+                    >
+                        <Tabs className="round-tab">
+                            <TabList>
+                                <Tab>Round 19</Tab>
+                                <Tab>Round 20</Tab>
+                                <Tab>Round 21</Tab>
+                            </TabList>
+                            <TabPanel>
+                                Token Available <span className="fw-bold">8000</span>
+                            </TabPanel>
+                            <TabPanel>
+                                Token Available <span className="fw-bold">7000</span>
+                            </TabPanel>
+                            <TabPanel>
+                                Token Available <span className="fw-bold">6000</span>
+                            </TabPanel>
+                        </Tabs>
+                        <Tabs
+                            className="statistics-tab"
+                            selectedIndex={tabIndex}
+                            onSelect={(index) => setState({ tabIndex: index })}
+                        >
+                            <TabList>
+                                <Tab>Ndb token</Tab>
+                                <Tab>StatiStics</Tab>
+                                <Tab>Bids history</Tab>
+                            </TabList>
+                            <TabPanel>
+                                <p className="text">{ndb_token}</p>
+                            </TabPanel>
+                            <TabPanel>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Placement</th>
+                                            <th>Highest bid per token</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {statistics.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td>{item.rank + ". " + item.placement}</td>
+                                                <td>
+                                                    {item.bid}
+                                                    <span className="txt-green"> $</span>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {statistics.map((item, idx) => (
-                                                <tr key={idx}>
-                                                    <td>{item.rank + ". " + item.placement}</td>
-                                                    <td>
-                                                        {item.bid}
-                                                        <span className="txt-green"> $</span>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </TabPanel>
-                                <TabPanel>
-                                    <p className="text">{ndb_token}</p>
-                                </TabPanel>
-                            </Tabs>
-                            <div className="timeframe-bar">
-                                <div
-                                    className="timeleft"
-                                    style={{
-                                        width: 100 - percentage + "%",
-                                        background: "#464646",
-                                    }}
-                                >
-                                    <div className="timeleft__value">
-                                        {numberWithLength(curTime.hours, 2)}:
-                                        {numberWithLength(curTime.minutes, 2)}:
-                                        {numberWithLength(curTime.seconds, 2)}
-                                    </div>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </TabPanel>
+                            <TabPanel>
+                                <p className="text">{ndb_token}</p>
+                            </TabPanel>
+                        </Tabs>
+                        <div className="timeframe-bar">
+                            <div
+                                className="timeleft"
+                                style={{
+                                    width: 100 - percentage + "%",
+                                    background: "#464646",
+                                }}
+                            >
+                                <div className="timeleft__value">
+                                    {numberWithLength(curTime.hours, 2)}:
+                                    {numberWithLength(curTime.minutes, 2)}:
+                                    {numberWithLength(curTime.seconds, 2)}
                                 </div>
                             </div>
-                            <div className="d-flex justify-content-between mt-4">
-                                <div>
-                                    <p className="caption">Minimum bid</p>
-                                    <p className="value">15 ETH</p>
-                                </div>
-                                <div>
-                                    <p className="caption">Available Until</p>
-                                    <p className="value">
-                                        {numberWithLength(curTime.hours, 2)}:
-                                        {numberWithLength(curTime.minutes, 2)}:
-                                        {numberWithLength(curTime.seconds, 2)}
-                                    </p>
-                                </div>
+                        </div>
+                        <div className="d-flex justify-content-between mt-4">
+                            <div>
+                                <p className="caption">Minimum bid</p>
+                                <p className="value">15 ETH</p>
                             </div>
+                            <div>
+                                <p className="caption">Available Until</p>
+                                <p className="value">
+                                    {numberWithLength(curTime.hours, 2)}:
+                                    {numberWithLength(curTime.minutes, 2)}:
+                                    {numberWithLength(curTime.seconds, 2)}
+                                </p>
+                            </div>
+                        </div>
+                        {size.width <= 1024 && (
                             <div className="text-center my-5">
                                 <button
                                     className="btn-primary btn-increase"
@@ -221,72 +230,82 @@ const Auction = () => {
                                     {!place_bid ? "Place Bid" : "Increase bid"}
                                 </button>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
 
                     <div className="auction-right col-lg-8 col-md-7">
-                        {!place_bid && (
-                            <div className="place-bid">
-                                <h3 className="range-label">amount of Token</h3>
-                                <div className="d-flex align-items-center mb-4">
-                                    <input
-                                        type="number"
-                                        value={amount}
-                                        onChange={(e) => setState({ amount: e.target.value })}
-                                        className="range-input"
-                                    />
-                                    <Slider
-                                        value={amount}
-                                        onChange={(value) => setState({ amount: value })}
-                                        min={0}
-                                        max={10000}
-                                        step={100}
-                                    />
-                                </div>
-                                <h3 className="range-label">Per token price</h3>
-                                <div className="d-flex align-items-center mb-4">
-                                    <input
-                                        type="number"
-                                        value={price}
-                                        onChange={(e) => e.target.value}
-                                        className="range-input"
-                                    />
-                                    <Slider
-                                        value={price}
-                                        onChange={(value) => setState({ price: value })}
-                                        min={0}
-                                        max={10000}
-                                        step={100}
-                                    />
-                                </div>
-                                <div className="d-flex align-items-center">
-                                    <span className="range-label">Total price</span>
-                                    <input
-                                        className="total-input"
-                                        type="number"
-                                        value={price * amount}
-                                        readOnly
-                                    />
-                                </div>
-                                <button
-                                    className="btn-primary text-uppercase w-100"
-                                    onClick={() => {
-                                        setState({ place_bid: true })
-                                    }}
-                                >
-                                    {!place_bid ? "Place Bid" : "Increase Bid"}
-                                </button>
+                        <div className={`place-bid ${place_bid && "d-none"}`}>
+                            <h3 className="range-label">amount of Token</h3>
+                            <div className="d-flex align-items-center mb-4">
+                                <input
+                                    type="number"
+                                    value={amount}
+                                    onChange={(e) => setState({ amount: e.target.value })}
+                                    className="range-input"
+                                />
+                                <Slider
+                                    value={amount}
+                                    onChange={(value) => setState({ amount: value })}
+                                    min={0}
+                                    max={10000}
+                                    step={100}
+                                />
                             </div>
-                        )}
-                        {/* {show_chart && ( */}
-                        <div className={`chart-area ${place_bid && "d-block"}`}>
+                            <h3 className="range-label">Per token price</h3>
+                            <div className="d-flex align-items-center mb-4">
+                                <input
+                                    type="number"
+                                    value={price}
+                                    onChange={(e) => setState({ price: e.target.value })}
+                                    className="range-input"
+                                />
+                                <Slider
+                                    value={price}
+                                    onChange={(value) => setState({ price: value })}
+                                    min={0}
+                                    max={10000}
+                                    step={100}
+                                />
+                            </div>
                             <div className="d-flex align-items-center">
-                                <Select options={options} value={options[0]} />
+                                <span className="range-label">Total price</span>
+                                <input
+                                    className="total-input"
+                                    type="number"
+                                    value={price * amount}
+                                    readOnly
+                                />
+                            </div>
+                            <button
+                                className="btn-primary text-uppercase w-100"
+                                onClick={() => {
+                                    setState({ place_bid: true })
+                                }}
+                            >
+                                {!place_bid ? "Place Bid" : "Increase Bid"}
+                            </button>
+                        </div>
+                        <div
+                            className={`chart-area ${
+                                size.width <= 768
+                                    ? show_chart
+                                        ? "d-block"
+                                        : "d-none"
+                                    : (size.width <= 1024 && size.width > 768 && "d-block") ||
+                                      (place_bid && "d-block")
+                            }`}
+                        >
+                            <div className="d-flex align-items-center">
+                                <Select
+                                    options={options}
+                                    value={selectLabel}
+                                    onChange={(v) => setState({ selectLabel: v })}
+                                />
                                 <img src={Qmark} alt="question" className="ms-3" />
                             </div>
-                            <ReactEcharts option={bid_options} />
+                            <p className="select-label">{selectLabel.label}</p>
+                            <ReactEcharts option={chartData} style={{ height: "450px" }} />
                         </div>
-                        {/* )} */}
                     </div>
                 </div>
             </section>
@@ -307,51 +326,88 @@ const Auction = () => {
                         <img width="14px" height="14px" src={CloseIcon} alt="close" />
                     </div>
                 </div>
-
-                <h3 className="range-label">amount of Token</h3>
-                <div className="d-flex align-items-center mb-4">
+                <div className="desktop-view">
+                    <h3 className="range-label">amount of Token</h3>
+                    <div className="d-flex align-items-center mb-4">
+                        <input
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setState({ amount: e.target.value })}
+                            className="range-input"
+                        />
+                        <Slider
+                            value={amount}
+                            onChange={(value) => setState({ amount: value })}
+                            min={0}
+                            max={10000}
+                            step={100}
+                        />
+                    </div>
+                    <h3 className="range-label">Per token price</h3>
+                    <div className="d-flex align-items-center mb-4">
+                        <input
+                            type="number"
+                            value={price}
+                            onChange={(e) => setState({ price: e.target.value })}
+                            className="range-input"
+                        />
+                        <Slider
+                            value={price}
+                            onChange={(value) => setState({ price: value })}
+                            min={0}
+                            max={10000}
+                            step={100}
+                        />
+                    </div>
+                    <div className="d-flex align-items-center">
+                        <span className="range-label">Total price</span>
+                        <input
+                            className="total-input"
+                            type="number"
+                            value={price * amount}
+                            readOnly
+                        />
+                    </div>
+                    <button
+                        className="btn-primary text-uppercase w-100"
+                        onClick={() => {
+                            setState({ place_bid: true })
+                            setState({ bidModal: false })
+                        }}
+                    >
+                        {!place_bid ? "Place Bid" : "Increase Bid"}
+                    </button>
+                </div>
+                <div className="tablet-view">
+                    <h4 className="range-label">amount of Token</h4>
                     <input
                         type="number"
                         value={amount}
                         onChange={(e) => setState({ amount: e.target.value })}
+                        placeholder="Type the Token Amount Here"
                         className="range-input"
                     />
-                    <Slider
-                        value={amount}
-                        onChange={(value) => setState({ amount: value })}
-                        min={0}
-                        max={10000}
-                        step={100}
-                    />
-                </div>
-                <h3 className="range-label">Per token price</h3>
-                <div className="d-flex align-items-center mb-4">
+                    <h4 className="range-label">Per token price</h4>
                     <input
                         type="number"
                         value={price}
-                        onChange={(e) => e.target.value}
+                        onChange={(e) => setState({ price: e.target.value })}
+                        placeholder="Type the price per Token Here"
                         className="range-input"
                     />
-                    <Slider
-                        value={price}
-                        onChange={(value) => setState({ price: value })}
-                        min={0}
-                        max={10000}
-                        step={100}
-                    />
-                </div>
-                <div className="d-flex align-items-center">
-                    <span className="range-label">Total price</span>
+                    <h4 className="range-label">Total price</h4>
                     <input className="total-input" type="number" value={price * amount} readOnly />
+                    <button
+                        className="btn-primary text-uppercase"
+                        onClick={() => {
+                            setState({ total: price * amount })
+                            setState({ bidModal: false })
+                            setState({ place_bid: true })
+                        }}
+                    >
+                        {!place_bid ? "Place Bid" : "Increase Bid"}
+                    </button>
                 </div>
-                <button
-                    className="btn-primary text-uppercase w-100"
-                    onClick={() => {
-                        setState({ place_bid: true })
-                    }}
-                >
-                    {!place_bid ? "Place Bid" : "Increase Bid"}
-                </button>
             </Modal>
         </main>
     )
