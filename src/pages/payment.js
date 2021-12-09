@@ -100,7 +100,7 @@ const Payment = () => {
             <Header />
             <section className="container position-relative h-100">
                 <div className="text-center mt-3">
-                    <div className="title">Payment Page</div>
+                    <div className="title">Payment page</div>
                     <div className="sub-title">Here you can decide how to pay</div>
                 </div>
                 <div className="row mt-5">
