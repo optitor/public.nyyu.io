@@ -1,9 +1,13 @@
 import React, { useCallback, useReducer } from "react"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
+import validator from "validator"
+import { useMutation } from "@apollo/client"
 import { social_links } from "../utilities/staticData"
 import { FormInput, CheckBox } from "../components/common/FormControl"
-import validator from "validator"
 import AuthLayout from "../components/common/AuthLayout"
+import { SIGNIN } from "../apollo/graghqls/mutations/Auth"
+import { useDispatch, useSelector } from "../context/store"
+import * as Actions from "../context/actions"
 
 const Signin = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -34,10 +38,38 @@ const Signin = () => {
         },
         [remember]
     )
+
+    const dispatch = useDispatch()
+    const userData = useSelector((state) => state?.user)
+
+    const [signin] = useMutation(
+        SIGNIN,
+        {
+            onCompleted: (data) => {
+                console.log("Signin result", data.signin)
+                if (data.signin.status === "Failed") return
+                else if (data.signin.status === "Success") {
+                    dispatch(Actions.setUserInfo({ ...userData, token: data.signin.token }))
+                    navigate("/onetime-pwd")
+                }
+            }
+        }
+    )
     return (
         <AuthLayout>
             <h3 className="signup-head">Sign in</h3>
-            <form className="form">
+            <form 
+                className="form"
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    signin({
+                        variables: {
+                            email: email.value,
+                            password: pwd.value,
+                        },
+                    })
+                }}
+            >
                 <div className="form-group">
                     <FormInput
                         name="email"
