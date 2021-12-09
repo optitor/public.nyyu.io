@@ -103,18 +103,14 @@ const Payment = () => {
                             onSelect={(index) => setTabIndex(index)}
                         >
                             <TabList>
-                                <div className="row m-0">
-                                    {payment_types.map((item, index) => (
-                                        <div className={`col-lg-4 pl-0`}>
-                                            <Tab
-                                                className={`payment-type__tab-list text-center`}
-                                                key={index}
-                                            >
-                                                {item.label}
-                                            </Tab>
-                                        </div>
-                                    ))}
-                                </div>
+                                {payment_types.map((item, index) => (
+                                    <Tab
+                                        className={`payment-type__tab-list text-center`}
+                                        key={index}
+                                    >
+                                        {item.label}
+                                    </Tab>
+                                ))}
                             </TabList>
                             <Select
                                 options={payment_types}
@@ -165,6 +161,28 @@ const Payment = () => {
                                     <div className="qr-code col-lg-3">
                                         <img src={QRCode} alt="qr code" />
                                     </div>
+                                </div>
+                                <div className="mt-3 d-flex">
+                                    <label className="d-flex flex-row">
+                                        <CheckBox
+                                            type="checkbox"
+                                            name="allow_fraction"
+                                            value={allow_fraction}
+                                            onChange={handleAllowFraction}
+                                            className="text-uppercase"
+                                        ></CheckBox>
+                                        <div className="allow-text">
+                                            Do you allow fraction of order compleation?
+                                        </div>
+                                        <FontAwesomeIcon
+                                            icon={faQuestionCircle}
+                                            className="fa-2x ms-2"
+                                        />
+                                    </label>
+                                    <p className="payment-expire my-auto">
+                                        payment expires in{" "}
+                                        <span className="txt-green">10 minutes</span>
+                                    </p>
                                 </div>
                             </TabPanel>
                             <TabPanel className="creditcard-tab">
@@ -226,6 +244,42 @@ const Payment = () => {
                                         />
                                     </div>
                                 </div>
+                                <div className="mt-3 d-flex">
+                                    <label className="d-flex flex-row">
+                                        <CheckBox
+                                            type="checkbox"
+                                            name="allow_fraction"
+                                            value={allow_fraction}
+                                            onChange={handleAllowFraction}
+                                            className="text-uppercase"
+                                        ></CheckBox>
+                                        <div className="allow-text">
+                                            Do you allow fraction of order compleation?
+                                        </div>
+                                        <FontAwesomeIcon
+                                            icon={faQuestionCircle}
+                                            className="fa-2x ms-2"
+                                        />
+                                    </label>
+                                    <p className="payment-expire my-auto">
+                                        payment expires in{" "}
+                                        <span className="txt-green">10 minutes</span>
+                                    </p>
+                                </div>
+                                <div className="d-flex">
+                                    <label className="d-flex flex-row">
+                                        <CheckBox
+                                            type="checkbox"
+                                            name="allow_fraction"
+                                            value={allow_fraction}
+                                            onChange={handleAllowFraction}
+                                            className="text-uppercase"
+                                        ></CheckBox>
+                                        <div className="allow-text">
+                                            Save card details for future purchase
+                                        </div>
+                                    </label>
+                                </div>
                             </TabPanel>
                             <TabPanel className="wallet-tab">
                                 <div className="row">
@@ -252,28 +306,29 @@ const Payment = () => {
                                         />
                                     </div>
                                 </div>
+                                <div className="mt-3 d-flex">
+                                    <label className="d-flex flex-row">
+                                        <CheckBox
+                                            type="checkbox"
+                                            name="allow_fraction"
+                                            value={allow_fraction}
+                                            onChange={handleAllowFraction}
+                                            className="text-uppercase"
+                                        ></CheckBox>
+                                        <div className="allow-text">
+                                            Do you allow fraction of order compleation?
+                                        </div>
+                                        <FontAwesomeIcon
+                                            icon={faQuestionCircle}
+                                            className="fa-2x ms-2"
+                                        />
+                                    </label>
+                                    <p className="payment-expire my-auto">
+                                        payment expires in{" "}
+                                        <span className="txt-green">10 minutes</span>
+                                    </p>
+                                </div>
                             </TabPanel>
-                            <div className="mt-3 d-flex">
-                                <label className="d-flex flex-row">
-                                    <CheckBox
-                                        type="checkbox"
-                                        name="allow_fraction"
-                                        value={allow_fraction}
-                                        onChange={handleAllowFraction}
-                                        className="text-uppercase"
-                                    ></CheckBox>
-                                    <div className="allow-text">
-                                        Do you allow fraction of order compleation?
-                                    </div>
-                                    <FontAwesomeIcon
-                                        icon={faQuestionCircle}
-                                        className="fa-2x ms-2"
-                                    />
-                                </label>
-                                <p className="payment-expire my-auto">
-                                    payment expires in <span className="txt-green">10 minutes</span>
-                                </p>
-                            </div>
                         </Tabs>
                     </div>
                     <div className="col-md-4 order-summary">
