@@ -15,9 +15,9 @@ const coins = [
     { value: "btc", label: "", icon: BTC },
 ]
 const balances = [
-    { value: "3002565", label: "ETH", icon: ETH },
-    { value: "225489", label: "BTC", icon: BTC },
-    { value: "489809", label: "DOGE", icon: DOGE },
+    { value: "3,002,565", label: "ETH", icon: ETH },
+    { value: "225,489", label: "BTC", icon: BTC },
+    { value: "489,809", label: "DOGE", icon: DOGE },
 ]
 const payment_types = [
     { value: "cryptocoin", label: "Cryptocoin", index: 0 },
@@ -56,7 +56,7 @@ const CustomOption = (props) => (
     </Option>
 )
 const CustomSingleValue = (props) => {
-    return <SingleValue {...props}>Your Balance</SingleValue>
+    return <SingleValue {...props}>{props.data.value + " - " + props.data.label}</SingleValue>
 }
 
 const Payment = () => {
@@ -74,7 +74,7 @@ const Payment = () => {
     const { firstname, lastname, card, expire, code, bill, allow_fraction, amount } = state
 
     const [coin, setCoin] = useState(coins[0])
-    const [balance, setBalance] = useState(balances[0])
+    const [balance, setBalance] = useState(null)
     const [copied, setCopied] = useState(false)
     const [tabIndex, setTabIndex] = useState(0)
     const [payment_type, setPaymentType] = useState(payment_types[0])
@@ -295,6 +295,7 @@ const Payment = () => {
                                         className="balance-select col-lg-4"
                                         options={balances}
                                         value={balance}
+                                        placeholder="YOUR BALANCE"
                                         onChange={(v) => setBalance(v)}
                                         components={{
                                             Option: CustomOption,
@@ -303,7 +304,9 @@ const Payment = () => {
                                     />
                                     <div className="col-lg-8 d-flex">
                                         <div className="choosed-icon">
-                                            <img src={balance.icon} alt="coin" />
+                                            {balance?.icon && (
+                                                <img src={balance?.icon} alt="coin" />
+                                            )}
                                         </div>
                                         <input
                                             className="form-control"
