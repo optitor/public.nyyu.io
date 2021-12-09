@@ -8,7 +8,7 @@ export const useAuthToken = () => {
     const userData = useSelector((state) => state?.user)
 
     const setAuthToken = (token) => dispatch(Actions.setUserInfo({ ...userData, token }))
-    return [userData.token, setAuthToken];
+    return [userData?.token, setAuthToken];
 };
 
 export const useAuthEmail = () => {
@@ -16,7 +16,7 @@ export const useAuthEmail = () => {
     const userData = useSelector((state) => state?.user)
 
     const setAuthEmail = (email) => dispatch(Actions.setUserInfo({ ...userData, email }))
-    return [userData.email, setAuthEmail];
+    return [userData?.email, setAuthEmail];
 };
 
 export const useLogout = () => {
