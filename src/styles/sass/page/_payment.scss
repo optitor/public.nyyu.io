@@ -1,12 +1,24 @@
 .payment-page {
     & > section {
         .title {
+            color: white;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 36px;
+            line-height: 60px;
             @include mq("tablet", max) {
                 font-size: 24px;
             }
         }
         .sub-title {
-            font-size: 14px;
+            color: white;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 23px;
+            text-align: center;
+            font-weight: 300;
+            opacity: 0.95;
         }
     }
     .payment-expire {
@@ -25,8 +37,8 @@
             @include mq("tablet", max) {
                 display: none;
             }
-            // display: flex;
-            // justify-content: space-between;
+            display: flex;
+            justify-content: space-between;
             border: none;
             margin-bottom: 55px;
         }
@@ -36,6 +48,9 @@
             line-height: 29px;
             padding: 8px 30px;
             border: 1px solid white;
+            &[aria-selected="false"] {
+                color: rgba(255, 255, 255, 0.5);
+            }
             text-transform: uppercase;
             cursor: pointer;
             @include mq("laptop-wide", max) {
@@ -337,4 +352,12 @@
 }
 .css-1s2u09g-control {
     padding: 0px 4px !important;
+}
+
+.payment-type__tab-list {
+    flex: 1 !important;
+    margin-right: 15px;
+    &:last-child {
+        margin-right: 0px;
+    }
 }
