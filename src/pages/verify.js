@@ -12,7 +12,7 @@ import {
     NewDoc,
     Pass,
     PhotoIcon,
-    QRCode2,
+    QRCode,
     SelfieImg,
     Trees,
     Unpass1,
@@ -413,7 +413,7 @@ const VerificationPage = () => {
                 <p className="my-5">Copy a link to your mobile phone</p>
                 <button className="btn-green">Copy Link</button>
                 <p className="my-5">Or scan the QR code with your phone</p>
-                <img src={QRCode2} alt="qr code" />
+                <img src={QRCode} alt="qr code" />
             </Modal>
             <Modal
                 isOpen={fileOpen}
