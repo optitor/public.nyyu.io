@@ -13,11 +13,9 @@ const OAuth2RedirectHandler = (props) => {
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "))
     }
 
-    const userData = useSelector((state) => state?.user)
     const token = useMemo(() => getUrlParameter("token"), [])
     const [, setAuthTempToken] = useAuthTempToken()
 
-    console.log("user: ", userData)
     useEffect(() => {
         if (token) {
             setAuthTempToken(token)

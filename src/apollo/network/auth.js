@@ -58,6 +58,7 @@ export const useSignupMutation = () => {
 
 export const useSignIn2FA = () => {
   const [, setAuthToken] = useAuthToken();
+  const [, setAuthTempToken] = useAuthTempToken();
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
     onCompleted: (data) => {
@@ -68,6 +69,7 @@ export const useSignIn2FA = () => {
       }
       else if (data.confirm2FA.status === "Success") {
         setAuthToken(data.confirm2FA.token)
+        setAuthTempToken("")
         navigate("/profile")
       }
     }
