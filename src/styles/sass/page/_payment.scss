@@ -191,7 +191,6 @@
                 .css-26l3qy-menu {
                     border-radius: unset;
                     background-color: $black;
-                    border: 1px solid white;
                     width: calc(100% - 24px);
                     .css-4ljt47-MenuList {
                         padding: 0;
@@ -199,7 +198,11 @@
                             background-color: $black;
                             cursor: pointer;
                             border: 1px solid white;
+                            border-bottom: none;
                             padding: 20px 15px;
+                            &:last-child {
+                                border-bottom: 1px solid white;
+                            }
                         }
                     }
                     .custom-option {
