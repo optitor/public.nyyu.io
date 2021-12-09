@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client"
 import { countries, social_links } from "../utilities/staticData"
 import { FormInput, CheckBox } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
-import { SIGNUP } from "../services/mutations/auth"
+import { SIGNUP } from "../apollo/graghqls/mutations/Auth"
 import { useDispatch, useSelector } from "../context/store"
 import * as Actions from '../context/actions'
 
@@ -19,7 +19,7 @@ const SingupPage = () => {
     })
     const { email, pwd, pwd_confirm, remember } = state
     const [country, setCountry] = useState(countries[0])
-    const userData = useSelector(state=>state.user)
+    const userData = useSelector(state => state?.user)
 
     const handleEmailChange = useCallback((e) => {
         setState({

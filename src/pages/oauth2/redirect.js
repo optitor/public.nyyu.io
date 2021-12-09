@@ -15,7 +15,7 @@ const OAuth2RedirectHandler = (props) => {
     }
 
     const dispatch = useDispatch()
-    const userData = useSelector((state) => state.user)
+    const userData = useSelector((state) => state?.user)
     const token = useMemo(() => getUrlParameter("token"), [])
 
     console.log("user: ", userData)

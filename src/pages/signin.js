@@ -5,7 +5,9 @@ import { useMutation } from "@apollo/client"
 import { social_links } from "../utilities/staticData"
 import { FormInput, CheckBox } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
-import { SIGNIN } from "../services/mutations/auth"
+import { SIGNIN } from "../apollo/graghqls/mutations/Auth"
+import { useDispatch, useSelector } from "../context/store"
+import * as Actions from "../context/actions"
 
 const Signin = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -37,6 +39,9 @@ const Signin = () => {
         [remember]
     )
 
+    const dispatch = useDispatch()
+    const userData = useSelector((state) => state?.user)
+
     const [signin] = useMutation(
         SIGNIN,
         {
@@ -44,7 +49,7 @@ const Signin = () => {
                 console.log("Signin result", data.signin)
                 if (data.signin.status === "Failed") return
                 else if (data.signin.status === "Success") {
-                    
+                    dispatch(Actions.setUserInfo({ ...userData, token: data.signin.token }))
                     navigate("/onetime-pwd")
                 }
             }

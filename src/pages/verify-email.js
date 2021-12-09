@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState } from "react"
+import React, { useCallback, useEffect, useReducer, useState } from "react"
 import { Link, navigate } from "gatsby"
 import { Input } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
@@ -11,7 +11,7 @@ import {
     RESEND_VERIFY_CODE, 
     REQUEST_2FA,
     CONFIRM_REQUEST_2FA 
-} from "../services/mutations/auth"
+} from "../apollo/graghqls/mutations/Auth"
 
 const two_factors = [
     { label: "Authenticator App", method: "app" },
@@ -20,9 +20,11 @@ const two_factors = [
 ]
 
 const VerifyEmail = () => {
-    const user = useSelector((state) => state.user)
-
-    if (!user.userEmail) navigate("/signup")
+    const user = useSelector((state) => state?.user)
+    
+    useEffect(() => {
+        if (!user.userEmail) navigate("/signup")
+    }, [user])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
