@@ -2,13 +2,13 @@ import React, { useCallback, useState } from "react"
 import { Link } from "gatsby"
 import { Input } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
-import { useAuthEmail, useAuthToken } from "../config/auth-config"
+import { useAuthEmail, useAuthTempToken } from "../config/auth-config"
 import { useSignIn2FA } from "../apollo/network/auth"
 
 const OnetimePassword = () => {
     const [code, setCode] = useState("")
 
-    const [token] = useAuthToken()
+    const [token] = useAuthTempToken()
 
     const [email] = useAuthEmail()
 

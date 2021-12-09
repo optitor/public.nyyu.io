@@ -11,6 +11,14 @@ export const useAuthToken = () => {
     return [userData?.token, setAuthToken];
 };
 
+export const useAuthTempToken = () => {
+    const dispatch = useDispatch()
+    const userData = useSelector((state) => state?.user)
+
+    const setAuthTempToken = (tempToken) => dispatch(Actions.setUserInfo({ ...userData, tempToken }))
+    return [userData?.tempToken, setAuthTempToken];
+};
+
 export const useAuthEmail = () => {
     const dispatch = useDispatch()
     const userData = useSelector((state) => state?.user)

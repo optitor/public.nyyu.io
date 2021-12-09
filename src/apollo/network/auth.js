@@ -1,10 +1,10 @@
 import * as GraphQL from "../graghqls/mutations/Auth"
-import { useAuthToken, useAuthEmail } from "../../config/auth-config"
+import { useAuthTempToken, useAuthToken, useAuthEmail } from "../../config/auth-config"
 import { useMutation } from "@apollo/client"
 import { navigate} from "gatsby"
 
 export const useSigninMutation = () => {
-  const [, setAuthToken] = useAuthToken();
+  const [, setAuthTempToken] = useAuthTempToken();
   const [, setAuthEmail] = useAuthEmail();
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN, {
@@ -14,14 +14,14 @@ export const useSigninMutation = () => {
         return
       }
       else if (data.signin.status === "Success") {
-        setAuthToken(data.signin.token);
+        setAuthTempToken(data.signin.token);
         navigate("/onetime-pwd")
       }
     }
   });
 
   const signin = (email, password) => {
-    setAuthToken('');
+    setAuthTempToken('');
     setAuthEmail(email);
     return mutation({
       variables: {
