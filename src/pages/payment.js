@@ -91,9 +91,9 @@ const Payment = () => {
         <main className="payment-page">
             <Header />
             <section className="container position-relative h-100">
-                <div className="text-center mt-5">
-                    <h3 className="title">Payment Page</h3>
-                    <p className="sub-title">Here you can decide how to pay</p>
+                <div className="text-center mt-3">
+                    <div className="title">Payment Page</div>
+                    <div className="sub-title">Here you can decide how to pay</div>
                 </div>
                 <div className="row mt-5">
                     <div className="col-md-8 payment-select">
