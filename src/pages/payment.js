@@ -29,7 +29,7 @@ const IconOption = (props) => (
     <Option {...props}>
         <img
             src={props.data.icon}
-            style={{ width: "30px", height: "auto", marginLeft: "15px" }}
+            style={{ width: "30px", height: "auto" }}
             alt={props.data.label}
         />
         {props.data.label}
@@ -40,7 +40,7 @@ const SelectedValue = (props) => {
         <SingleValue {...props}>
             <img
                 src={props.data.icon}
-                style={{ width: "30px", height: "auto", marginLeft: "15px" }}
+                style={{ width: "30px", height: "auto" }}
                 alt={props.data.label}
             />
             {props.data.label}
@@ -131,7 +131,7 @@ const Payment = () => {
                                     <div className="d-flex flex-column justify-content-between col-lg-9">
                                         <div className="d-flex justify-content-between w-100">
                                             <Select
-                                                className="cryptocoin-select col-lg-2"
+                                                className="cryptocoin-select col-lg-3"
                                                 options={coins}
                                                 value={coin}
                                                 onChange={(v) => setCoin(v)}
