@@ -33,7 +33,7 @@ const ForgetPassword = () => {
                     />
                 </div>
                 <div className="form-group text-white">
-                    Didn’t receive an email?{" "}
+                    <span className="signup-text-link">Didn't receive an email? </span>
                     <Link className="signup-link" to="/verify-email">
                         Send again
                     </Link>
