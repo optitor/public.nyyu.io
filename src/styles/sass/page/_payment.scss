@@ -355,4 +355,9 @@
 }
 
 .payment-type__tab-list {
+    flex: 1 !important;
+    margin-right: 15px;
+    &:last-child {
+        margin-right: 0px;
+    }
 }
