@@ -221,7 +221,7 @@ const Auction = () => {
                                 </p>
                             </div>
                         </div>
-                        {size.width <= 1024 && (
+                        {place_bid && (
                             <div className="text-center my-5">
                                 <button
                                     className="btn-primary btn-increase"
