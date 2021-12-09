@@ -44,12 +44,12 @@ import coinbase from "../images/coinbase.png"
 import trustWallet from "../images/trust_wallet.png"
 import address from "../images/address.png"
 
-import pass from "../images/pass.png"
-import unpass1 from "../images/unpass1.png"
-import unpass2 from "../images/unpass2.png"
+import pass from "../images/pass.svg"
+import unpass1 from "../images/unpass1.svg"
+import unpass2 from "../images/unpass2.svg"
 import newDoc from "../images/new_doc.png"
-import photoIcon from "../images/photo-icon.png"
-import selfieImg from "../images/selfie-img.png"
+import photoIcon from "../images/photo-icon.svg"
+import selfieImg from "../images/selfie-img.svg"
 
 export const Logo = logo
 export const Hero1 = hero1

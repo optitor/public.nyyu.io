@@ -6,6 +6,7 @@ import Slider from "rc-slider"
 import { Chart, Qmark, CloseIcon } from "../utilities/imgImport"
 import Select from "react-select"
 import Modal from "react-modal"
+import ReactEcharts from "echarts-for-react"
 
 const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -48,6 +49,27 @@ const options = [
     { value: "round_performance", label: "Round performance" },
     { value: "ndb_token", label: "NDB Token Value" },
 ]
+
+const bid_options = {
+    grid: { top: 8, right: 8, bottom: 24, left: 36 },
+    xAxis: {
+        type: "category",
+        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    },
+    yAxis: {
+        type: "value",
+    },
+    series: [
+        {
+            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            type: "bar",
+            smooth: true,
+        },
+    ],
+    tooltip: {
+        trigger: "axis",
+    },
+}
 
 const Auction = () => {
     const duration = 86400
@@ -256,14 +278,15 @@ const Auction = () => {
                                 </button>
                             </div>
                         )}
-                        {show_chart && (
-                            <div className={`chart-area ${place_bid && "d-block"}`}>
-                                <div className="d-flex align-items-center">
-                                    <Select options={options} value={options[0]} />
-                                    <img src={Qmark} alt="question" className="ms-3" />
-                                </div>
+                        {/* {show_chart && ( */}
+                        <div className={`chart-area ${place_bid && "d-block"}`}>
+                            <div className="d-flex align-items-center">
+                                <Select options={options} value={options[0]} />
+                                <img src={Qmark} alt="question" className="ms-3" />
                             </div>
-                        )}
+                            <ReactEcharts option={bid_options} />
+                        </div>
+                        {/* )} */}
                     </div>
                 </div>
             </section>
