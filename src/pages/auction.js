@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
 import Modal from "react-modal"
-import ReactEcharts from "echarts-for-react"
+// import ReactEcharts from "echarts-for-react"
 import { getSecTomorrow, numberWithLength } from "../utilities/number"
 import { Chart, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
@@ -304,7 +304,7 @@ const Auction = () => {
                                 <img src={Qmark} alt="question" className="ms-3" />
                             </div>
                             <p className="select-label">{selectLabel.label}</p>
-                            <ReactEcharts option={chartData} style={{ height: "450px" }} />
+                            {/* <ReactEcharts option={chartData} style={{ height: "450px" }} /> */}
                         </div>
                     </div>
                 </div>
