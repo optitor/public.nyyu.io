@@ -13,7 +13,6 @@ const { Option, SingleValue } = components
 const coins = [
     { value: "eth", label: "", icon: ETH },
     { value: "btc", label: "", icon: BTC },
-    { value: "doge", label: "", icon: DOGE },
 ]
 const balances = [
     { value: "3002565", label: "ETH", icon: ETH },
@@ -28,7 +27,7 @@ const payment_types = [
 
 const IconOption = (props) => (
     <Option {...props}>
-        <img src={props.data.icon} style={{ width: 39 }} alt={props.data.label} />
+        <img src={props.data.icon} style={{ width: "100%" }} alt={props.data.label} />
         {props.data.label}
     </Option>
 )
@@ -104,11 +103,18 @@ const Payment = () => {
                             onSelect={(index) => setTabIndex(index)}
                         >
                             <TabList>
-                                {payment_types.map((item, idx) => (
-                                    <Tab className="payment-type__tab-list" key={idx}>
-                                        {item.label}
-                                    </Tab>
-                                ))}
+                                <div className="row m-0">
+                                    {payment_types.map((item, index) => (
+                                        <div className={`col-lg-4 pl-0`}>
+                                            <Tab
+                                                className={`payment-type__tab-list text-center`}
+                                                key={index}
+                                            >
+                                                {item.label}
+                                            </Tab>
+                                        </div>
+                                    ))}
+                                </div>
                             </TabList>
                             <Select
                                 options={payment_types}
@@ -247,23 +253,25 @@ const Payment = () => {
                                     </div>
                                 </div>
                             </TabPanel>
-                            <div className="mt-3 d-flex align-items-center justify-content-between">
-                                <CheckBox
-                                    type="checkbox"
-                                    name="allow_fraction"
-                                    value={allow_fraction}
-                                    onChange={handleAllowFraction}
-                                    className="text-uppercase"
-                                >
-                                    Do you allow fraction of order compleation?
+                            <div className="mt-3 d-flex">
+                                <label className="d-flex flex-row">
+                                    <CheckBox
+                                        type="checkbox"
+                                        name="allow_fraction"
+                                        value={allow_fraction}
+                                        onChange={handleAllowFraction}
+                                        className="text-uppercase"
+                                    ></CheckBox>
+                                    <div className="allow-text">
+                                        Do you allow fraction of order compleation?
+                                    </div>
                                     <FontAwesomeIcon
                                         icon={faQuestionCircle}
                                         className="fa-2x ms-2"
                                     />
-                                </CheckBox>
-                                <p className="payment-expire">
-                                    payment expires in&nbsp;
-                                    <span className="txt-green">10 minutes</span>
+                                </label>
+                                <p className="payment-expire my-auto">
+                                    payment expires in <span className="txt-green">10 minutes</span>
                                 </p>
                             </div>
                         </Tabs>
@@ -274,23 +282,23 @@ const Payment = () => {
                             The token will be paid to your wallet at ndb Will be hold based on the
                             bid and deducted if you win. If you lose it will be availabel in the NDB
                             wallet and can be either released to the personal or stay in NDB wallet
-                            for The next round.
+                            for the next round.
                         </p>
                         <div className="total-amount">
-                            <div className="d-flex align-items-center">
+                            <div className="d-flex align-items-start">
                                 <p className="amount-label">total amount</p>
                                 <img src={EditIcon} alt="edit" className="ms-3" />
                             </div>
                             <p className="amount">50.234 ETH</p>
                         </div>
                         <p className="payment-expire">
-                            payment expires in&nbsp;
+                            payment expires in
                             <span className="txt-green">10 minutes</span>
                         </p>
                         <button className="btn-primary text-uppercase">Confirm Payment</button>
                     </div>
                 </div>
-                <div className="remain-token__value">
+                <div className="remain-token__value col-md-12 mx-auto">
                     <div className="d-flex justify-content-between">
                         <p className="current-value">
                             current token value&nbsp;
