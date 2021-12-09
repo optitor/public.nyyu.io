@@ -1,14 +1,11 @@
 import React, { useCallback, useReducer, useState } from "react"
-import { Link, navigate } from "gatsby"
+import { Link } from "gatsby"
 import Select from "react-select"
 import validator from "validator"
-import { useMutation } from "@apollo/client"
 import { countries, social_links } from "../utilities/staticData"
 import { FormInput, CheckBox } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
-import { SIGNUP } from "../apollo/graghqls/mutations/Auth"
-import { useDispatch, useSelector } from "../context/store"
-import * as Actions from '../context/actions'
+import { useSignupMutation } from "../apollo/network/auth"
 
 const SingupPage = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -19,7 +16,6 @@ const SingupPage = () => {
     })
     const { email, pwd, pwd_confirm, remember } = state
     const [country, setCountry] = useState(countries[0])
-    const userData = useSelector(state => state?.user)
 
     const handleEmailChange = useCallback((e) => {
         setState({
@@ -52,18 +48,9 @@ const SingupPage = () => {
         [remember]
     )
 
-    // possible code: [signup, { data, loading, error }]
-    const [signup] = useMutation(
-        SIGNUP,
-        {
-            onCompleted: (data) => {
-                navigate("/verify-email")
-                console.log("Signup result", data)                         
-            }
-        }
-    )
+    const [signupMutation, signupMutationResults] = useSignupMutation();
 
-    const dispatch = useDispatch();
+    const disableForm = signupMutationResults.loading;
 
     return (
         <AuthLayout>
@@ -75,14 +62,7 @@ const SingupPage = () => {
                 className="form"
                 onSubmit={(e) => {
                     e.preventDefault()
-                    signup({
-                        variables: {
-                            email: email.value,
-                            password: pwd.value,
-                            country: country.label,
-                        },
-                    })
-                    dispatch(Actions.setUserInfo({...userData, userEmail: email.value}))
+                    signupMutation(email.value, pwd.value, country.value)
                 }}
             >
                 <div className="form-group">
@@ -142,7 +122,7 @@ const SingupPage = () => {
                         </Link>
                     </CheckBox>
                 </div>
-                <button type="submit" className="btn-primary w-100 text-uppercase">
+                <button type="submit" className="btn-primary w-100 text-uppercase" disabled={disableForm}>
                     sign up with email
                 </button>
             </form>

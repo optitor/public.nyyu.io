@@ -7,9 +7,16 @@ export const useAuthToken = () => {
     const dispatch = useDispatch()
     const userData = useSelector((state) => state?.user)
 
-    const setAuthToken = (authToken) => dispatch(Actions.setUserInfo({ ...userData, token: authToken }))
-    const removeAuthToken = () => dispatch(Actions.setUserInfo({ ...userData, token: '' }))
-    return [userData.token, setAuthToken, removeAuthToken];
+    const setAuthToken = (token) => dispatch(Actions.setUserInfo({ ...userData, token }))
+    return [userData.token, setAuthToken];
+};
+
+export const useAuthEmail = () => {
+    const dispatch = useDispatch()
+    const userData = useSelector((state) => state?.user)
+
+    const setAuthEmail = (email) => dispatch(Actions.setUserInfo({ ...userData, email }))
+    return [userData.email, setAuthEmail];
 };
 
 export const useLogout = () => {

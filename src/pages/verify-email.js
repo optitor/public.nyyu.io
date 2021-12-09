@@ -23,7 +23,7 @@ const VerifyEmail = () => {
     const user = useSelector((state) => state?.user)
     
     useEffect(() => {
-        if (!user.userEmail) navigate("/signup")
+        if (!user.email) navigate("/signup")
     }, [user])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -78,7 +78,7 @@ const VerifyEmail = () => {
                     e.preventDefault()
                     verifyAccount({
                         variables: {
-                            email: user.userEmail,
+                            email: user.email,
                             code: code,
                         },
                     })
@@ -101,7 +101,7 @@ const VerifyEmail = () => {
                         onClick={() =>
                             resendVerifyCode({
                                 variables: {
-                                    email: user.userEmail,
+                                    email: user.email,
                                 },
                             })
                         }
@@ -162,7 +162,7 @@ const VerifyEmail = () => {
                                     onClick={() =>
                                         request2FA({
                                             variables: {
-                                                email: user.userEmail,
+                                                email: user.email,
                                                 method: two_factors[choose_type].method,
                                                 phone: "123456789"
                                             },
@@ -227,7 +227,7 @@ const VerifyEmail = () => {
                                     onClick={() =>
                                         confirmRequest2FA({
                                             variables: {
-                                                email: user.userEmail,
+                                                email: user.email,
                                                 code: result_code
                                             },
                                         })
