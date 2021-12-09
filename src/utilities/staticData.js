@@ -261,30 +261,30 @@ export const countries = [
 ]
 
 // export const API_BASE_URL = "http://localhost:5000";
-export const API_BASE_URL = "http://auction.us-east-1.elasticbeanstalk.com";
+export const API_BASE_URL = "http://auction.us-east-1.elasticbeanstalk.com"
 
-export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2/redirect";
+export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2/redirect"
 
 export const social_links = [
     {
         icon: Facebook,
-        to: API_BASE_URL + '/oauth2/authorize/facebook?redirect_uri=' + OAUTH2_REDIRECT_URI
+        to: API_BASE_URL + "/oauth2/authorize/facebook?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
     {
         icon: Google,
-        to: API_BASE_URL + '/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI
+        to: API_BASE_URL + "/oauth2/authorize/google?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
     {
         icon: Twitter,
-        to: API_BASE_URL + '/oauth2/authorize/twitter?redirect_uri=' + OAUTH2_REDIRECT_URI
+        to: API_BASE_URL + "/oauth2/authorize/twitter?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
     {
         icon: Linkedin,
-        to: API_BASE_URL + '/oauth2/authorize/linkedin?redirect_uri=' + OAUTH2_REDIRECT_URI
+        to: API_BASE_URL + "/oauth2/authorize/linkedin?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
     {
         icon: Apple,
-        to: API_BASE_URL + '/oauth2/authorize/apple?redirect_uri=' + OAUTH2_REDIRECT_URI
+        to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
 ]
 
