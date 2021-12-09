@@ -11,9 +11,9 @@ const AuthLayout = ({ children }) => {
                 <section className="position-relative">
                     <div className="d-flex container position-relative h-100 align-items-center">
                         <div className="signup">{children}</div>
-                        <img src={Apart} alt="apart" className="apart-img" />
+                        <img src={Apart} alt="apart" className="apart-img z-999" />
                     </div>
-                    <img src={Trees} alt="trees" className="trees-img w-100" />
+                    <img src={Trees} alt="trees" className="trees-img w-100 z-n999" />
                 </section>
             </main>
         </ApplicationContext>
