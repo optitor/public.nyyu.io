@@ -27,14 +27,22 @@ const payment_types = [
 
 const IconOption = (props) => (
     <Option {...props}>
-        <img src={props.data.icon} style={{ width: "100%" }} alt={props.data.label} />
+        <img
+            src={props.data.icon}
+            style={{ width: "30px", height: "auto", marginLeft: "15px" }}
+            alt={props.data.label}
+        />
         {props.data.label}
     </Option>
 )
 const SelectedValue = (props) => {
     return (
         <SingleValue {...props}>
-            <img src={props.data.icon} style={{ width: "100%" }} alt={props.data.label} />
+            <img
+                src={props.data.icon}
+                style={{ width: "30px", height: "auto", marginLeft: "15px" }}
+                alt={props.data.label}
+            />
             {props.data.label}
         </SingleValue>
     )
@@ -123,7 +131,7 @@ const Payment = () => {
                                     <div className="d-flex flex-column justify-content-between col-lg-9">
                                         <div className="d-flex justify-content-between w-100">
                                             <Select
-                                                className="cryptocoin-select"
+                                                className="cryptocoin-select col-lg-2"
                                                 options={coins}
                                                 value={coin}
                                                 onChange={(v) => setCoin(v)}
