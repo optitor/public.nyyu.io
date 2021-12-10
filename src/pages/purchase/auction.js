@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState, useEffect, useMemo } from "react"
 import Slider from "rc-slider"
 import Modal from "react-modal"

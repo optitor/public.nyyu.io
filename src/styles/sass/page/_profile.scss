@@ -249,6 +249,7 @@
                     letter-spacing: 0.04em;
                     color: #626161;
                     padding: 0 24px 16px 0;
+                    text-transform: uppercase;
                     &-list {
                         border-bottom: 2px solid #464646;
                     }
@@ -323,6 +324,12 @@
                 border: 2px solid #525252;
                 img {
                     margin-bottom: 16px;
+                    width: 42px;
+                    height: 42px;
+                    @include mq("phone", max) {
+                        width: 32px;
+                        height: 32px;
+                    }
                 }
                 p {
                     font-weight: 500;
@@ -392,6 +399,7 @@
         font-size: 18px;
         line-height: 22px;
         text-transform: uppercase;
+        color: white;
     }
     &__footer {
         display: flex;

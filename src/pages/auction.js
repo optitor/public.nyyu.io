@@ -51,26 +51,26 @@ const options = [
     { value: "ndb_token", label: "NDB Token Value" },
 ]
 
-const chartData = {
-    grid: { top: 8, right: 8, bottom: 24, left: 36 },
-    xAxis: {
-        type: "category",
-        data: [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
-    },
-    yAxis: {
-        type: "value",
-    },
-    series: [
-        {
-            data: [820, 932, 901, 934, 1290, 1330, 1320, 300, 467, 1290, 900],
-            type: "bar",
-            smooth: true,
-        },
-    ],
-    tooltip: {
-        trigger: "axis",
-    },
-}
+// const chartData = {
+//     grid: { top: 8, right: 8, bottom: 24, left: 36 },
+//     xAxis: {
+//         type: "category",
+//         data: [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
+//     },
+//     yAxis: {
+//         type: "value",
+//     },
+//     series: [
+//         {
+//             data: [820, 932, 901, 934, 1290, 1330, 1320, 300, 467, 1290, 900],
+//             type: "bar",
+//             smooth: true,
+//         },
+//     ],
+//     tooltip: {
+//         trigger: "axis",
+//     },
+// }
 
 const Auction = () => {
     const size = useWindowSize()
