@@ -28,7 +28,7 @@
         box-sizing: border-box;
     }
 }
-input {
+* {
     &:focus {
         box-shadow: none !important;
     }
