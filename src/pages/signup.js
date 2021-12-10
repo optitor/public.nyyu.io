@@ -125,6 +125,7 @@ const SingupPage = () => {
                     <Select
                         options={countries}
                         value={country}
+                        id="signup-country-dropdown"
                         onChange={(v) => setCountry(v)}
                         placeholder="Choose country"
                         className="text-left"
