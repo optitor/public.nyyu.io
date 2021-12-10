@@ -11,13 +11,13 @@ import { CopyToClipboard } from "react-copy-to-clipboard"
 const { Option, SingleValue } = components
 
 const coins = [
-    { value: "ETH", label: "", icon: ETH },
-    { value: "BTC", label: "", icon: BTC },
-    { value: "BCH", label: "", icon: BCH },
-    { value: "DOGE", label: "", icon: DOGE },
-    { value: "DAI", label: "", icon: DAI },
-    { value: "USDC", label: "", icon: USDC },
-    { value: "LTC", label: "", icon: LTC },
+    { value: "ETH", label: "ETH", icon: ETH },
+    { value: "BTC", label: "BTC", icon: BTC },
+    { value: "BCH", label: "BCH", icon: BCH },
+    { value: "DOGE", label: "DOGE", icon: DOGE },
+    { value: "DAI", label: "DAI", icon: DAI },
+    { value: "USDC", label: "USDC", icon: USDC },
+    { value: "LTC", label: "LTC", icon: LTC },
 ]
 const balances = [
     { value: "3,002,565", label: "ETH", icon: ETH },
@@ -37,7 +37,7 @@ const IconOption = (props) => (
             style={{ width: "30px", height: "auto" }}
             alt={props.data.label}
         />
-        {props.data.label}
+        <p className="coin-label">{props.data.label}</p>
     </Option>
 )
 const SelectedValue = (props) => {
@@ -48,7 +48,7 @@ const SelectedValue = (props) => {
                 style={{ width: "30px", height: "auto" }}
                 alt={props.data.label}
             />
-            {props.data.label}
+            {/* {props.data.label} */}
         </SingleValue>
     )
 }
