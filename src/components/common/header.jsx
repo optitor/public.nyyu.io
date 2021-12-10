@@ -61,6 +61,11 @@ const Menu = () => {
                 </Link>
 
                 <div className="d-flex align-items-center">
+                    <div className="sign-in">
+                        <Link className="btn-primary text-uppercase d-inline-block" to="/signin">
+                            sign in
+                        </Link>
+                    </div>
                     <button
                         type="button"
                         className="menu__toggler"

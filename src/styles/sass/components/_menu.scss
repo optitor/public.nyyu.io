@@ -2,10 +2,24 @@
     width: 100%;
     position: fixed;
     top: 0;
-    padding-top: 16px !important;
-    padding-bottom: 4px !important;
+    padding: 22px;
     background-color: $black;
     z-index: 9999;
+    margin-bottom: 15px;
+
+    .sign-in {
+        margin-right: 30px;
+        @include mq("phone", max) {
+            display: none;
+        }
+    }
+
+    @include mq("tablet", max) {
+        padding: 9px 0;
+    }
+    @include mq("phone", max) {
+        padding: 15px 0;
+    }
 
     .container {
         max-width: 100%;
