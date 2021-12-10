@@ -1,67 +1,97 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+
+// Libraries
 import { Link } from "gatsby"
+
+// Icons
 import { Logo } from "../../utilities/imgImport"
 
-const Header = () => {
-    const [show, setShow] = useState(false)
-    const hamburgerHandler = () => {
-        setShow(!show)
-    }
-    let navMenuClsName = "menu "
-    if (show) {
-        navMenuClsName += "active"
-    }
+const Menu = () => {
+    // State
+    const [active, setActive] = useState(false)
+
+    // Navigation Links
+    const navigationLinks = [
+        {
+            label: "Home",
+            url: "/",
+        },
+        {
+            label: "Vision",
+            url: "https://ndb.city",
+        },
+        {
+            label: "Technology",
+            url: "/technology",
+        },
+        {
+            label: "Learn",
+            url: "/learn",
+        },
+        {
+            label: "Auction",
+            url: "/auction",
+        },
+        {
+            label: "Contact Us",
+            url: "/#contactUs",
+        },
+    ]
+
+    /**
+     * Handles 'ESC' key pressing.
+     */
+    useEffect(() => {
+        const handleEscKeyPress = (event) => {
+            if (event.key === "Escape" && active) {
+                setActive(false)
+            }
+        }
+
+        document.addEventListener("keydown", handleEscKeyPress)
+
+        return () => document.removeEventListener("keydown", handleEscKeyPress)
+    })
+
     return (
-        <nav className={navMenuClsName}>
-            <div className="container d-flex align-items-center justify-content-between">
-                <Link to="/">
-                    <img src={Logo} alt="logo" className="logo" />
+        <nav className={active ? "menu menu--active" : "menu"}>
+            <div className="px-4 d-flex align-items-center justify-content-between">
+                <Link to="/" className="menu__logo d-flex" title="Logo">
+                    <img src={Logo} alt="NDB Brand Logo" />
                 </Link>
-                <div className="d-flex">
-                    <div className="sign-in">
-                        <Link className="btn-primary text-uppercase d-inline-block" to="/signin">
-                            sign in
-                        </Link>
-                    </div>
-                    <button className="hamburger" onClick={hamburgerHandler} tabIndex="0">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+
+                <div className="d-flex align-items-center">
+                    <button
+                        type="button"
+                        className="menu__toggler"
+                        onClick={() => setActive(!active)}
+                    >
+                        <span />
+                        <span />
+                        <span />
                     </button>
                 </div>
-                {show && (
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <Link className="nav-link" activeClassName="active" to="/">
-                                <span className="txt-green">H</span>ome
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" activeClassName="active" to="technology">
-                                <span className="txt-green">T</span>echnology
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" activeClassName="active" to="/fision">
-                                <span className="txt-green">V</span>ision
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" activeClassName="active" to="/learn">
-                                <span className="txt-green">L</span>earn
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" activeClassName="active" to="/contact-us">
-                                <span className="txt-green">C</span>ontact us
-                            </Link>
-                        </li>
-                    </ul>
-                )}
-                {/* </div> */}
+
+                <div className="menu__content">
+                    <div className="content d-md-flex align-items-center">
+                        <ul className="content__section menu__items">
+                            {navigationLinks.map((link) => (
+                                <li className="menu__item" key={link.label}>
+                                    <Link
+                                        to={link.url}
+                                        className="d-inline-block font-weight--700"
+                                        onClick={() => setActive(false)}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </nav>
     )
 }
 
-export default Header
+export default Menu
