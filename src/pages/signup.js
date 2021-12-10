@@ -58,7 +58,7 @@ const SingupPage = () => {
         {
             onCompleted: (data) => {
                 navigate("/verify-email")
-                console.log("Signup result", data)                         
+                console.log("Signup result", data)
             }
         }
     )
@@ -82,7 +82,7 @@ const SingupPage = () => {
                             country: country.label,
                         },
                     })
-                    dispatch(Actions.setUserInfo({...userData, userEmail: email.value}))
+                    dispatch(Actions.setUserInfo({ ...userData, userEmail: email.value }))
                 }}
             >
                 <div className="form-group">
@@ -127,6 +127,7 @@ const SingupPage = () => {
                         value={country}
                         onChange={(v) => setCountry(v)}
                         placeholder="Choose country"
+                        className="text-left"
                     />
                 </div>
                 <div className="form-group">
