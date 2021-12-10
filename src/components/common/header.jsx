@@ -17,24 +17,20 @@ const Menu = () => {
             url: "/",
         },
         {
-            label: "Vision",
-            url: "https://ndb.city",
+            label: "Technology",
+            url: "https://ndb.technology",
         },
         {
-            label: "Technology",
-            url: "/technology",
+            label: "Vision",
+            url: "https://ndb.city",
         },
         {
             label: "Learn",
             url: "/learn",
         },
         {
-            label: "Auction",
-            url: "/auction",
-        },
-        {
             label: "Contact Us",
-            url: "/#contactUs",
+            url: "https://ndb.money/#contactUs",
         },
     ]
 
@@ -84,7 +80,7 @@ const Menu = () => {
                                 <li className="menu__item" key={link.label}>
                                     <Link
                                         to={link.url}
-                                        className="d-inline-block font-weight--700"
+                                        className="d-inline-block"
                                         onClick={() => setActive(false)}
                                     >
                                         {link.label}
