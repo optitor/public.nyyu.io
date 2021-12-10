@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback } from "react"
+import React, { useReducer, useCallback } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link } from "gatsby"

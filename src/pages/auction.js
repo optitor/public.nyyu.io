@@ -4,9 +4,9 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
 import Modal from "react-modal"
-// import ReactEcharts from "echarts-for-react"
+import ReactECharts from "echarts-for-react"
 import { getSecTomorrow, numberWithLength } from "../utilities/number"
-import { Chart, Qmark, CloseIcon } from "../utilities/imgImport"
+import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
 
 const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
@@ -51,30 +51,8 @@ const options = [
     { value: "ndb_token", label: "NDB Token Value" },
 ]
 
-// const chartData = {
-//     grid: { top: 8, right: 8, bottom: 24, left: 36 },
-//     xAxis: {
-//         type: "category",
-//         data: [0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
-//     },
-//     yAxis: {
-//         type: "value",
-//     },
-//     series: [
-//         {
-//             data: [820, 932, 901, 934, 1290, 1330, 1320, 300, 467, 1290, 900],
-//             type: "bar",
-//             smooth: true,
-//         },
-//     ],
-//     tooltip: {
-//         trigger: "axis",
-//     },
-// }
-
 const Auction = () => {
     const size = useWindowSize()
-    console.log(size)
     const duration = 86400
     const distanceToDate = getSecTomorrow()
     const percentage = (distanceToDate / duration) * 100
@@ -93,9 +71,56 @@ const Auction = () => {
         bidModal: false,
         show_chart: false,
         selectLabel: options[0],
+        bidChartData: {
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "shadow",
+                },
+            },
+            color: "#23C865",
+            grid: {
+                left: "3%",
+                right: "4%",
+                bottom: "3%",
+                containLabel: true,
+            },
+            xAxis: [
+                {
+                    type: "category",
+                    data: [0, 100, 200, 300, 400, 500],
+                    axisTick: {
+                        alignWithLabel: true,
+                    },
+                },
+            ],
+            yAxis: [
+                {
+                    type: "value",
+                },
+            ],
+            series: [
+                {
+                    name: "Bid",
+                    type: "bar",
+                    barWidth: "30%",
+                    data: [330, 252, 200, 334, 390, 330, 220],
+                },
+            ],
+        },
     })
 
-    const { tabIndex, curTime, amount, price, place_bid, bidModal, show_chart, selectLabel } = state
+    const {
+        tabIndex,
+        curTime,
+        amount,
+        price,
+        place_bid,
+        bidModal,
+        show_chart,
+        selectLabel,
+        bidChartData,
+    } = state
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -124,7 +149,7 @@ const Auction = () => {
                         </p>
                     </div>
                     <img
-                        src={Chart}
+                        src={ChartIcon}
                         alt="chart"
                         className="show-chart"
                         onClick={() => setState({ show_chart: !show_chart })}
@@ -304,7 +329,11 @@ const Auction = () => {
                                 <img src={Qmark} alt="question" className="ms-3" />
                             </div>
                             <p className="select-label">{selectLabel.label}</p>
-                            {/* <ReactEcharts option={chartData} style={{ height: "450px" }} /> */}
+                            <ReactECharts
+                                option={bidChartData}
+                                style={{ height: "450px", width: "100%" }}
+                                className="echarts-for-echarts"
+                            />
                         </div>
                     </div>
                 </div>

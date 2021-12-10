@@ -54,7 +54,7 @@ import selfieImg from "../images/selfie-img.svg"
 export const Logo = logo
 export const Hero1 = hero1
 export const Hero2 = hero2
-export const Chart = chart
+export const ChartIcon = chart
 export const Qmark = qmark
 export const Apart = apart
 export const Trees = trees
