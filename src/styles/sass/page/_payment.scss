@@ -135,6 +135,27 @@
             .cryptocoin-select {
                 margin-bottom: 8px;
                 margin-right: 8px;
+                .css-26l3qy-menu {
+                    background-color: $black;
+                    border: 1px solid #ffffff;
+                    border-radius: unset;
+                    .css-4ljt47-MenuList {
+                        max-height: unset;
+                        & > div {
+                            display: flex;
+                            align-items: center;
+                            justify-content: start;
+                            .coin-label {
+                                font-weight: bold;
+                                font-size: 18px;
+                                line-height: 22px;
+                                text-transform: uppercase;
+                                color: white;
+                                margin-left: 11px;
+                            }
+                        }
+                    }
+                }
             }
             .clipboard {
                 display: flex;
@@ -187,6 +208,9 @@
                         font-size: 18px;
                         line-height: 22px;
                     }
+                }
+                .css-1pahdxg-control {
+                    border: none;
                 }
                 .css-26l3qy-menu {
                     border-radius: unset;
