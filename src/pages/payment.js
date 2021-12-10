@@ -5,14 +5,19 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Input, CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { EditIcon, ETH, BTC, DOGE, QRCode, Copy } from "../utilities/imgImport"
+import { EditIcon, ETH, BTC, DOGE, LTC, BCH, DAI, USDC, QRCode, Copy } from "../utilities/imgImport"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 
 const { Option, SingleValue } = components
 
 const coins = [
-    { value: "eth", label: "", icon: ETH },
-    { value: "btc", label: "", icon: BTC },
+    { value: "ETH", label: "", icon: ETH },
+    { value: "BTC", label: "", icon: BTC },
+    { value: "BCH", label: "", icon: BCH },
+    { value: "DOGE", label: "", icon: DOGE },
+    { value: "DAI", label: "", icon: DAI },
+    { value: "USDC", label: "", icon: USDC },
+    { value: "LTC", label: "", icon: LTC },
 ]
 const balances = [
     { value: "3,002,565", label: "ETH", icon: ETH },
