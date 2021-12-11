@@ -32,7 +32,7 @@ const payment_types = [
 
 const IconOption = (props) => (
     <Option {...props}>
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-start align-items-center">
             <img
                 src={props.data.icon}
                 style={{ width: "30px", height: "auto" }}
@@ -50,7 +50,6 @@ const SelectedValue = (props) => {
                 style={{ width: "30px", height: "auto" }}
                 alt={props.data.label}
             />
-            {/* {props.data.label} */}
         </SingleValue>
     )
 }
@@ -63,7 +62,11 @@ const CustomOption = (props) => (
     </Option>
 )
 const CustomSingleValue = (props) => {
-    return <SingleValue {...props}>{props.data.value + " - " + props.data.label}</SingleValue>
+    return (
+        <SingleValue {...props}>
+            <p className="wallet-select__value">{props.data.value + " - " + props.data.label}</p>
+        </SingleValue>
+    )
 }
 
 const Payment = () => {
