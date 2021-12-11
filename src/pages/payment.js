@@ -32,12 +32,14 @@ const payment_types = [
 
 const IconOption = (props) => (
     <Option {...props}>
-        <img
-            src={props.data.icon}
-            style={{ width: "30px", height: "auto" }}
-            alt={props.data.label}
-        />
-        <p className="coin-label">{props.data.label}</p>
+        <div className="d-flex justify-content-between align-items-center">
+            <img
+                src={props.data.icon}
+                style={{ width: "30px", height: "auto" }}
+                alt={props.data.label}
+            />
+            <p className="coin-label">{props.data.label}</p>
+        </div>
     </Option>
 )
 const SelectedValue = (props) => {

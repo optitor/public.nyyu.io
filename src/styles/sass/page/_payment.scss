@@ -211,6 +211,9 @@
                 }
                 .css-1pahdxg-control {
                     border: none;
+                    @include mq("laptop", max) {
+                        border: 1px solid white;
+                    }
                 }
                 .css-26l3qy-menu {
                     border-radius: unset;
