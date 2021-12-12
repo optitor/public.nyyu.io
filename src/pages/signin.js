@@ -44,7 +44,7 @@ const Signin = () => {
     return (
         <AuthLayout>
             <h3 className="signup-head">Sign in</h3>
-            <form 
+            <form
                 className="form"
                 onSubmit={(e) => {
                     e.preventDefault()

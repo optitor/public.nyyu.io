@@ -1,3 +1,6 @@
+* {
+    font-family: "Montserrat" !important;
+}
 .form-control {
     font-family: "Montserrat";
     border: 1px solid #ced4da;
@@ -23,5 +26,10 @@
         cursor: pointer;
         line-height: 12px;
         box-sizing: border-box;
+    }
+}
+* {
+    &:focus {
+        box-shadow: none !important;
     }
 }

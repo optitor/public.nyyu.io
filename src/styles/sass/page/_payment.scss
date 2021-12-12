@@ -1,12 +1,24 @@
 .payment-page {
     & > section {
         .title {
+            color: white;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 36px;
+            line-height: 60px;
             @include mq("tablet", max) {
                 font-size: 24px;
             }
         }
         .sub-title {
-            font-size: 14px;
+            color: white;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 23px;
+            text-align: center;
+            font-weight: 300;
+            opacity: 0.95;
         }
     }
     .payment-expire {
@@ -36,6 +48,9 @@
             line-height: 29px;
             padding: 8px 30px;
             border: 1px solid white;
+            &[aria-selected="false"] {
+                color: rgba(255, 255, 255, 0.5);
+            }
             text-transform: uppercase;
             cursor: pointer;
             @include mq("laptop-wide", max) {
@@ -78,6 +93,12 @@
                 display: flex;
                 align-items: center;
             }
+            input {
+                &::placeholder {
+                    color: white;
+                    opacity: 0.95;
+                }
+            }
         }
         .cryptocoin-tab,
         .wallet-tab {
@@ -103,9 +124,6 @@
             .css-319lph-ValueContainer {
                 padding: 0;
             }
-            .css-tlfecz-indicatorContainer {
-                padding: 0;
-            }
             .css-6j8wv5-Input {
                 display: none;
             }
@@ -114,7 +132,23 @@
             .cryptocoin-select {
                 margin-bottom: 8px;
                 margin-right: 8px;
-                height: calc(100% - 8px);
+
+                .css-26l3qy-menu {
+                    background-color: $black;
+                    border: 1px solid #ffffff;
+                    border-radius: unset;
+                    & > div {
+                        max-height: unset !important;
+                    }
+                    .coin-label {
+                        font-weight: bold !important;
+                        font-size: 18px !important;
+                        line-height: 22px !important;
+                        text-transform: uppercase !important;
+                        color: white !important;
+                        margin-left: 11px !important;
+                    }
+                }
             }
             .clipboard {
                 display: flex;
@@ -160,7 +194,7 @@
                     @include mq("laptop", max) {
                         border: 1px solid white;
                     }
-                    .css-qc6sy-singleValue {
+                    .wallet-select__value {
                         color: white;
                         text-transform: uppercase;
                         font-weight: bold;
@@ -168,18 +202,27 @@
                         line-height: 22px;
                     }
                 }
+                .css-1pahdxg-control {
+                    border: none;
+                    @include mq("laptop", max) {
+                        border: 1px solid white;
+                    }
+                }
                 .css-26l3qy-menu {
                     border-radius: unset;
                     background-color: $black;
-                    border: 1px solid white;
                     width: calc(100% - 24px);
-                    .css-4ljt47-MenuList {
+                    & > div {
                         padding: 0;
                         & > div {
                             background-color: $black;
                             cursor: pointer;
                             border: 1px solid white;
+                            border-bottom: none;
                             padding: 20px 15px;
+                            &:last-child {
+                                border-bottom: 1px solid white;
+                            }
                         }
                     }
                     .custom-option {
@@ -204,6 +247,7 @@
         }
         .payment-expire {
             display: block;
+            padding-left: 30px !important;
             @include mq("tablet", max) {
                 display: none;
             }
@@ -290,7 +334,9 @@
         }
     }
     .remain-token__value {
+        padding: 0px 60px;
         margin-top: 80px;
+        margin-bottom: 80px;
         .current-value,
         .end-value {
             font-weight: bold;
@@ -319,4 +365,39 @@
             }
         }
     }
+}
+
+.allow-text {
+    font-size: 11px !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.css-4ljt47-MenuList {
+    text-align: center !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+.css-1s2u09g-control {
+    padding: 0px 4px !important;
+}
+
+.payment-type__tab-list {
+    flex: 1 !important;
+    margin-right: 15px;
+    &:last-child {
+        margin-right: 0px;
+    }
+}
+
+.css-qc6sy-singleValue {
+    margin: auto !important;
+}
+.css-14el2xx-placeholder {
+    color: white !important;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
 }

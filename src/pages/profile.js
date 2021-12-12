@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback } from "react"
+import React, { useReducer, useCallback } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link } from "gatsby"
@@ -84,61 +84,38 @@ const wallets = [
 
 const Profile = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        bid: true,
-        outbid: false,
-        new_bid: false,
-        win: true,
-        lose: true,
-        round_start: true,
-        round_end: true,
+        bid_rank: true,
+        round_start: false,
+        round_finish: false,
+        bid_close: true,
+        payment_result: true,
         pwd: { value: "", error: "" },
         pwd_confirm: { value: "", error: "" },
         pwdModal: false,
         tfaModal: false,
+        tabIndex: 0,
+        profile_tab: profile_tabs[0],
+        walletId: 0,
     })
     const {
-        bid,
-        outbid,
-        new_bid,
-        win,
-        lose,
+        bid_rank,
         round_start,
-        round_end,
+        round_finish,
+        bid_close,
+        payment_result,
         pwd,
         pwd_confirm,
         pwdModal,
         tfaModal,
+        tabIndex,
+        profile_tab,
+        walletId,
     } = state
-    const [tabIndex, setTabIndex] = useState(0)
-    const [profile_tab, setProfileTab] = useState(profile_tabs[0])
-    const [walletId, setWalletId] = useState(0)
 
     const handleProfileTab = (value) => {
-        setProfileTab(value)
-        setTabIndex(value.index)
+        setState({ profile_tab: value })
+        setState({ tabIndex: value.index })
     }
-
-    const handleBid = useCallback(() => {
-        setState({ bid: !bid })
-    }, [bid])
-    const handleOutbid = useCallback(() => {
-        setState({ outbid: !outbid })
-    }, [outbid])
-    const handleNewbid = useCallback(() => {
-        setState({ new_bid: !new_bid })
-    }, [new_bid])
-    const handleWin = useCallback(() => {
-        setState({ win: !win })
-    }, [win])
-    const handleLose = useCallback(() => {
-        setState({ lose: !lose })
-    }, [lose])
-    const handleRoundStart = useCallback(() => {
-        setState({ round_start: !round_start })
-    }, [round_start])
-    const handleRoundEnd = useCallback(() => {
-        setState({ round_end: !round_end })
-    }, [round_end])
 
     const handlePasswordChange = useCallback((e) => {
         setState({
@@ -168,7 +145,10 @@ const Profile = () => {
                             <img className="user-info__avatar" src={Tesla} alt="tesla" />
                             <p className="user-info__name">Tesla.12</p>
                         </div>
-                        <Tabs className="profile-tab" onSelect={(index) => setTabIndex(index)}>
+                        <Tabs
+                            className="profile-tab"
+                            onSelect={(index) => setState({ tabIndex: index })}
+                        >
                             <TabList>
                                 {profile_tabs.map((item, idx) => (
                                     <Tab key={idx}>{item.label}</Tab>
@@ -231,6 +211,7 @@ const Profile = () => {
                                             Increase your account security&nbsp;
                                             <span className="txt-green">2</span>/4
                                         </h4>
+
                                         <div className="col-sm-6 br">
                                             <div className="status active"></div>
                                             <div className="security-item">
@@ -245,6 +226,7 @@ const Profile = () => {
                                                 </p>
                                             </div>
                                         </div>
+
                                         <div className="col-sm-6">
                                             <div className="status active"></div>
                                             <div className="security-item">
@@ -307,94 +289,74 @@ const Profile = () => {
                                     </TabPanel>
                                     <TabPanel>
                                         <div className="notification-item">
-                                            <p>BID</p>
+                                            <p>BID ranking updated</p>
                                             <Switch
                                                 onColor="#23c865"
                                                 offColor="#ffffff"
                                                 height={3}
-                                                width={28}
-                                                handleDiameter={11}
+                                                width={35}
+                                                handleDiameter={12}
                                                 onHandleColor="#23c865"
-                                                onChange={handleBid}
-                                                checked={bid}
+                                                onChange={() => setState({ bid_rank: !bid_rank })}
+                                                checked={bid_rank}
                                             />
                                         </div>
                                         <div className="notification-item">
-                                            <p>outbid</p>
+                                            <p>new round started</p>
                                             <Switch
                                                 onColor="#23c865"
                                                 offColor="#ffffff"
                                                 height={3}
-                                                width={28}
-                                                handleDiameter={11}
+                                                width={35}
+                                                handleDiameter={12}
                                                 onHandleColor="#23c865"
-                                                onChange={handleOutbid}
-                                                checked={outbid}
-                                            />
-                                        </div>
-                                        <div className="notification-item">
-                                            <p>New Bid</p>
-                                            <Switch
-                                                onColor="#23c865"
-                                                offColor="#ffffff"
-                                                height={3}
-                                                width={28}
-                                                handleDiameter={11}
-                                                onHandleColor="#23c865"
-                                                onChange={handleNewbid}
-                                                checked={new_bid}
-                                            />
-                                        </div>
-                                        <div className="notification-item">
-                                            <p>win</p>
-                                            <Switch
-                                                onColor="#23c865"
-                                                offColor="#ffffff"
-                                                height={3}
-                                                width={28}
-                                                handleDiameter={11}
-                                                onHandleColor="#23c865"
-                                                onChange={handleWin}
-                                                checked={win}
-                                            />
-                                        </div>
-                                        <div className="notification-item">
-                                            <p>Lose</p>
-                                            <Switch
-                                                onColor="#23c865"
-                                                offColor="#ffffff"
-                                                height={3}
-                                                width={28}
-                                                handleDiameter={11}
-                                                onHandleColor="#23c865"
-                                                onChange={handleLose}
-                                                checked={lose}
-                                            />
-                                        </div>
-                                        <div className="notification-item">
-                                            <p>Round Start</p>
-                                            <Switch
-                                                onColor="#23c865"
-                                                offColor="#ffffff"
-                                                height={3}
-                                                width={28}
-                                                handleDiameter={11}
-                                                onHandleColor="#23c865"
-                                                onChange={handleRoundStart}
+                                                onChange={() =>
+                                                    setState({ round_start: !round_start })
+                                                }
                                                 checked={round_start}
                                             />
                                         </div>
                                         <div className="notification-item">
-                                            <p>Round End</p>
+                                            <p>round finished</p>
                                             <Switch
                                                 onColor="#23c865"
                                                 offColor="#ffffff"
                                                 height={3}
-                                                width={28}
-                                                handleDiameter={11}
+                                                width={35}
+                                                handleDiameter={12}
                                                 onHandleColor="#23c865"
-                                                onChange={handleRoundEnd}
-                                                checked={round_end}
+                                                onChange={() =>
+                                                    setState({ round_finish: !round_finish })
+                                                }
+                                                checked={round_finish}
+                                            />
+                                        </div>
+                                        <div className="notification-item">
+                                            <p>bid closed</p>
+                                            <Switch
+                                                onColor="#23c865"
+                                                offColor="#ffffff"
+                                                height={3}
+                                                width={35}
+                                                handleDiameter={12}
+                                                onHandleColor="#23c865"
+                                                onChange={() => setState({ bid_close: !bid_close })}
+                                                checked={bid_close}
+                                            />
+                                        </div>
+                                        <div className="notification-item">
+                                            <p>payment result</p>
+                                            <Switch
+                                                onColor="#23c865"
+                                                offColor="#ffffff"
+                                                height={3}
+                                                width={35}
+                                                handleDiameter={12}
+                                                onHandleColor="#23c865"
+                                                onChange={() =>
+                                                    setState({ payment_result: !payment_result })
+                                                }
+                                                checked={payment_result}
                                             />
                                         </div>
                                     </TabPanel>
@@ -409,8 +371,8 @@ const Profile = () => {
                                         <div
                                             className="col-sm-6"
                                             key={idx}
-                                            onClick={() => setWalletId(idx)}
-                                            onKeyDown={() => setWalletId(idx)}
+                                            onClick={() => setState({ walletId: idx })}
+                                            onKeyDown={() => setState({ walletId: idx })}
                                             role="presentation"
                                         >
                                             <div
@@ -474,7 +436,7 @@ const Profile = () => {
                         label="Confirm New Password"
                         value={pwd_confirm.value}
                         onChange={handlePwdConfirmChange}
-                        placeholder="Enter password"
+                        placeholder="Re-enter password"
                         error={pwd_confirm.error}
                     />
                     <div className="pwd-modal__footer">

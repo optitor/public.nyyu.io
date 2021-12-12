@@ -12,7 +12,7 @@ import Modal from "react-modal"
 const Profile = () => {
     const [selectedId, setSelectId] = useState(0)
     const [selected, setSelect] = useState(false)
-    const [randomName, setRandomName] = useState("")
+    const [randomName, setRandomName] = useState("Tesla")
     const [modalIsOpen, setIsOpen] = useState(false)
 
     const handleFigure = (id) => {
@@ -35,7 +35,11 @@ const Profile = () => {
                             <input type="search" className="figure-search" placeholder="Search" />
                             <div className="row">
                                 {figures.map((item, idx) => (
-                                    <div className="col-lg-3 col-6 mb-3" key={idx}>
+                                    <div
+                                        className="col-lg-3 col-6 mb-3"
+                                        key={idx}
+                                        style={{ opacity: idx === selectedId ? "1" : "0.5" }}
+                                    >
                                         <FigureItem
                                             figure={item}
                                             active={idx === selectedId}
@@ -112,10 +116,10 @@ const Profile = () => {
                                                 />
                                             </p>
                                             <div className="d-flex align-items-end justify-content-between">
-                                                <h3 className="me-3 mb-0">
-                                                    {figures[selectedId].lastname}
+                                                <h3 className="random-display mb-0">
+                                                    {randomName}.
                                                 </h3>
-                                                <div className="form-group w-100">
+                                                <div className="random-generate">
                                                     <p className="form-label">Your display name</p>
                                                     <input
                                                         className="form-control"
@@ -129,8 +133,12 @@ const Profile = () => {
                                             </div>
                                             <p
                                                 className="random-text"
-                                                onClick={() => setRandomName(names.random())}
-                                                onKeyDown={() => setRandomName(names.random())}
+                                                onClick={() =>
+                                                    setRandomName(names.random().substring(0, 7))
+                                                }
+                                                onKeyDown={() =>
+                                                    setRandomName(names.random().substring(0, 7))
+                                                }
                                                 role="presentation"
                                             >
                                                 Random generate
@@ -212,7 +220,7 @@ const Profile = () => {
                         ) : (
                             <>
                                 <div className="d-flex align-items-end justify-content-between">
-                                    <h3 className="me-3 mb-0">{figures[selectedId].lastname}</h3>
+                                    <h3 className="me-3 mb-0">{randomName}.</h3>
                                     <div className="form-group w-100">
                                         <p className="form-label">Your display name</p>
                                         <input
@@ -225,8 +233,8 @@ const Profile = () => {
                                 </div>
                                 <p
                                     className="text-end txt-underline"
-                                    onClick={() => setRandomName(names.random())}
-                                    onKeyDown={() => setRandomName(names.random())}
+                                    onClick={() => setRandomName(names.random().substring(0, 7))}
+                                    onKeyDown={() => setRandomName(names.random().substring(0, 7))}
                                     role="presentation"
                                 >
                                     Random generate
