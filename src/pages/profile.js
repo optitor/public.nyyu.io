@@ -192,7 +192,7 @@ const Profile = () => {
                                                 className="btn-primary"
                                                 onClick={() => setState({ pwdModal: true })}
                                             >
-                                                Change Passord
+                                                Change Password
                                             </button>
                                         </div>
                                     </div>
@@ -376,9 +376,8 @@ const Profile = () => {
                                             role="presentation"
                                         >
                                             <div
-                                                className={`wallet-item ${
-                                                    idx === walletId && "active"
-                                                }`}
+                                                className={`wallet-item ${idx === walletId && "active"
+                                                    }`}
                                             >
                                                 <img src={item.icon} alt="wallet icon" />
                                                 <p>{item.desc}</p>
