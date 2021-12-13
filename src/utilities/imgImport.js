@@ -40,12 +40,13 @@ import copy from "../images/copy.png"
 import copy2 from "../images/copy2.png"
 import airdrop from "../images/airdrop.png"
 
-import metamask from "../images/metamask.svg"
-import walletConnect from "../images/wallet_connect.svg"
-import coinbase from "../images/coinbase.svg"
-import trustWallet from "../images/trust_wallet.svg"
-import address from "../images/address.png"
+//Wallets
+import metamask from "../images/wallets/metamask.svg"
+import walletConnect from "../images/wallets/wallet-connect.svg"
+import coinbase from "../images/wallets/coinbase.svg"
+import trustWallet from "../images/wallets/trust-wallet.svg"
 
+import address from "../images/address.png"
 import pass from "../images/pass.svg"
 import unpass1 from "../images/unpass1.svg"
 import unpass2 from "../images/unpass2.svg"
