@@ -22,6 +22,7 @@ import CountDown from "../components/common/countdown"
 import Modal from "react-modal"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Input } from "../components/common/FormControl"
+// import ReactECharts from "echarts-for-react"
 
 const transactions = [
     {
@@ -303,7 +304,7 @@ const History = () => {
                             <TabList>
                                 <Tab>MY ASSETS</Tab>
                                 <Tab>market</Tab>
-                                <Tab>AirdropS</Tab>
+                                <Tab className="react-tabs__tab ms-auto">AirdropS</Tab>
                             </TabList>
                             <Link to="/" className="verify-link">
                                 Get verified
@@ -314,15 +315,19 @@ const History = () => {
                                 <thead>
                                     <tr>
                                         <th>Crypto Assets</th>
-                                        <th>Amount</th>
-                                        <th>Operations</th>
+                                        <th className="text-end">Amount</th>
+                                        <th className="text-end">Operations</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {my_assets.map((item, idx) => (
                                         <tr key={idx}>
-                                            <td className="d-flex align-items-start">
-                                                <img src={item.icon} alt="coin icon" />
+                                            <td className="d-flex align-items-start ps-2">
+                                                <img
+                                                    src={item.icon}
+                                                    alt="coin icon"
+                                                    className="me-2"
+                                                />
                                                 <div>
                                                     <p className="coin-abbr">{item.abbr}</p>
                                                     <p className="coin-name">{item.name}</p>
@@ -347,7 +352,7 @@ const History = () => {
                                                     onClick={() => setIsOpen(true)}
                                                     onKeyDown={() => setIsOpen(true)}
                                                     role="presentation"
-                                                    className="operation-link"
+                                                    className="operation-link ms-5"
                                                 >
                                                     Withdraw
                                                 </p>
@@ -356,25 +361,26 @@ const History = () => {
                                     ))}
                                 </tbody>
                             </table>
-                            <div className="text-center mt-5">
-                                <button className="btn-primary">CONNECT TO EXTERNAL WALLET</button>
-                            </div>
                         </TabPanel>
                         <TabPanel>
                             <table>
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Price</th>
-                                        <th className="mobile-not">Price Chart</th>
+                                        <th className="text-end">Price</th>
+                                        <th className="mobile-not text-center">Price Chart</th>
                                         <th className="mobile-not">Volume (24h)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {market_data.map((item, idx) => (
                                         <tr key={idx}>
-                                            <td className="d-flex align-items-start">
-                                                <img src={item.icon} alt="coin icon" />
+                                            <td className="d-flex align-items-start ps-2">
+                                                <img
+                                                    src={item.icon}
+                                                    alt="coin icon"
+                                                    className="me-2"
+                                                />
                                                 <div>
                                                     <p className="coin-abbr">{item.abbr}</p>
                                                     <p className="coin-name">{item.name}</p>
@@ -394,7 +400,7 @@ const History = () => {
                                                     {numberSign(item.percent) + item.percent}%
                                                 </p>
                                             </td>
-                                            <td className="mobile-not">{item.chart}</td>
+                                            <td className="mobile-not price-chart"> </td>
                                             <td className="mobile-not">{item.volume}</td>
                                         </tr>
                                     ))}
@@ -419,8 +425,12 @@ const History = () => {
                                                 className="airdrop-link"
                                                 onClick={() => handleClick(idx)}
                                             >
-                                                <td className="d-flex align-items-start">
-                                                    <img src={item.icon} alt="coin icon" />
+                                                <td className="d-flex align-items-start ps-2">
+                                                    <img
+                                                        src={item.icon}
+                                                        alt="coin icon"
+                                                        className="me-2"
+                                                    />
                                                     <div>
                                                         <p className="coin-abbr">{item.name}</p>
                                                         <p className="coin-name mobile-not">
@@ -527,6 +537,9 @@ const History = () => {
                             )}
                         </TabPanel>
                     </Tabs>
+                    <div className="connect-external">
+                        <button className="btn-primary">CONNECT TO EXTERNAL WALLET</button>
+                    </div>
                 </div>
             </section>
             <Modal

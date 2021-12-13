@@ -6,7 +6,7 @@
     }
     .section-history {
         width: 100%;
-        height: 100%;
+        @extend %setHeight2;
         display: flex;
         flex-wrap: wrap;
         .verify-link {
@@ -15,6 +15,7 @@
             line-height: 20px;
             text-decoration: underline;
             color: white;
+            flex-shrink: 0;
             &:hover {
                 color: $green;
             }
@@ -140,6 +141,7 @@
             }
         }
         &__right {
+            position: relative;
             @include mq("laptop", max) {
                 width: 100%;
             }
@@ -158,7 +160,6 @@
                         padding: 24px 0;
                     }
                     .react-tabs__tab {
-                        padding: 0;
                         font-size: 16px;
                     }
                 }
@@ -169,8 +170,10 @@
                     margin: 0;
                     padding: 24px;
                     border: none;
+                    width: 100%;
+                    display: flex;
+                    width: 100%;
                     @include mq("phone", max) {
-                        display: flex;
                         justify-content: space-between;
                     }
                 }
@@ -187,6 +190,7 @@
                     }
                 }
                 &__tab-panel {
+                    padding: 0 32px;
                     &--selected {
                         height: 100%;
                         border-top: 2px solid #464646;
@@ -196,7 +200,7 @@
                         thead {
                             border-bottom: 2px solid #464646;
                             th {
-                                padding: 16px 16px;
+                                padding: 16px 0px;
                             }
                         }
                         th {
@@ -204,6 +208,7 @@
                             line-height: 20px;
                             letter-spacing: 0.04em;
                             color: #8f8f8f;
+                            font-weight: normal;
                         }
                         td {
                             font-size: 18px;
@@ -211,12 +216,14 @@
                             color: white;
                         }
                         tbody {
-                            padding-left: 24px;
-                            padding-right: 24px;
                             tr {
+                                margin-bottom: 23px;
                                 border-bottom: 2px solid #464646;
                                 td {
-                                    padding: 16px 8px;
+                                    padding: 16px 0;
+                                }
+                                &:hover {
+                                    background-color: #242424;
                                 }
                             }
                         }
@@ -251,6 +258,8 @@
                             font-size: 15px;
                             line-height: 18px;
                             text-align: right;
+                            color: #959595;
+                            margin-top: 3px;
                         }
                         &-status {
                             position: relative;
@@ -285,7 +294,7 @@
                         }
                         &-operations {
                             display: flex;
-                            justify-content: space-around;
+                            justify-content: flex-end;
                             @include mq("laptop", max) {
                                 flex-direction: column;
                             }
@@ -444,6 +453,12 @@
                         font-size: 14px;
                     }
                 }
+            }
+            .connect-external {
+                position: absolute;
+                top: calc(100% - 150px);
+                width: 100%;
+                text-align: center;
             }
         }
     }
