@@ -301,7 +301,7 @@ export const figures = [
             },
             {
                 type: "Memory",
-                rates: 4,
+                rates: 5,
             },
             {
                 type: "Resources",
@@ -322,7 +322,7 @@ export const figures = [
     {
         id: 1,
         avatar: Volta,
-        firstname: "Nikola",
+        firstname: "Alessandro",
         lastname: "Volta",
         stars: [
             {
@@ -335,11 +335,11 @@ export const figures = [
             },
             {
                 type: "Resources",
-                rates: 2,
+                rates: 4,
             },
             {
                 type: "Charsima",
-                rates: 1,
+                rates: 3,
             },
         ],
         abilities: [
@@ -352,7 +352,7 @@ export const figures = [
     {
         id: 2,
         avatar: Johnson,
-        firstname: "Nikola",
+        firstname: "Katherine",
         lastname: "Johnson",
         stars: [
             {
@@ -361,15 +361,15 @@ export const figures = [
             },
             {
                 type: "Memory",
-                rates: 4,
+                rates: 5,
             },
             {
                 type: "Resources",
-                rates: 2,
+                rates: 5,
             },
             {
                 type: "Charsima",
-                rates: 1,
+                rates: 3,
             },
         ],
         abilities: [
@@ -382,7 +382,7 @@ export const figures = [
     {
         id: 3,
         avatar: Cruto,
-        firstname: "Nikola",
+        firstname: "Alessandro",
         lastname: "Cruto",
         stars: [
             {
@@ -395,11 +395,11 @@ export const figures = [
             },
             {
                 type: "Resources",
-                rates: 2,
+                rates: 4,
             },
             {
                 type: "Charsima",
-                rates: 1,
+                rates: 3,
             },
         ],
         abilities: [
@@ -412,7 +412,7 @@ export const figures = [
     {
         id: 4,
         avatar: Fermi,
-        firstname: "Nikola",
+        firstname: "Enrico",
         lastname: "Fermi",
         stars: [
             {
@@ -425,7 +425,7 @@ export const figures = [
             },
             {
                 type: "Resources",
-                rates: 2,
+                rates: 5,
             },
             {
                 type: "Charsima",
@@ -442,7 +442,7 @@ export const figures = [
     {
         id: 5,
         avatar: Meitner,
-        firstname: "Nikola",
+        firstname: "Lise",
         lastname: "Meitner",
         stars: [
             {
@@ -451,11 +451,11 @@ export const figures = [
             },
             {
                 type: "Memory",
-                rates: 4,
+                rates: 5,
             },
             {
                 type: "Resources",
-                rates: 2,
+                rates: 5,
             },
             {
                 type: "Charsima",
@@ -472,7 +472,7 @@ export const figures = [
     {
         id: 6,
         avatar: Failla,
-        firstname: "Nikola",
+        firstname: "Gioacchino",
         lastname: "Failla",
         stars: [
             {
@@ -481,15 +481,15 @@ export const figures = [
             },
             {
                 type: "Memory",
-                rates: 4,
+                rates: 5,
             },
             {
                 type: "Resources",
-                rates: 2,
+                rates: 4,
             },
             {
                 type: "Charsima",
-                rates: 1,
+                rates: 3,
             },
         ],
         abilities: [
@@ -502,7 +502,7 @@ export const figures = [
     {
         id: 7,
         avatar: Curie,
-        firstname: "Nikola",
+        firstname: "Marie",
         lastname: "Curie",
         stars: [
             {
@@ -511,11 +511,11 @@ export const figures = [
             },
             {
                 type: "Memory",
-                rates: 4,
+                rates: 5,
             },
             {
                 type: "Resources",
-                rates: 2,
+                rates: 4,
             },
             {
                 type: "Charsima",
