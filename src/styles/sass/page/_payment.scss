@@ -124,9 +124,6 @@
             .css-319lph-ValueContainer {
                 padding: 0;
             }
-            .css-tlfecz-indicatorContainer {
-                padding: 0;
-            }
             .css-6j8wv5-Input {
                 display: none;
             }
@@ -135,25 +132,21 @@
             .cryptocoin-select {
                 margin-bottom: 8px;
                 margin-right: 8px;
+
                 .css-26l3qy-menu {
                     background-color: $black;
                     border: 1px solid #ffffff;
                     border-radius: unset;
-                    .css-4ljt47-MenuList {
-                        max-height: unset;
-                        & > div {
-                            display: flex;
-                            align-items: center;
-                            justify-content: start;
-                            .coin-label {
-                                font-weight: bold;
-                                font-size: 18px;
-                                line-height: 22px;
-                                text-transform: uppercase;
-                                color: white;
-                                margin-left: 11px;
-                            }
-                        }
+                    & > div {
+                        max-height: unset !important;
+                    }
+                    .coin-label {
+                        font-weight: bold !important;
+                        font-size: 18px !important;
+                        line-height: 22px !important;
+                        text-transform: uppercase !important;
+                        color: white !important;
+                        margin-left: 11px !important;
                     }
                 }
             }
@@ -201,7 +194,7 @@
                     @include mq("laptop", max) {
                         border: 1px solid white;
                     }
-                    .css-qc6sy-singleValue {
+                    .wallet-select__value {
                         color: white;
                         text-transform: uppercase;
                         font-weight: bold;
@@ -211,12 +204,15 @@
                 }
                 .css-1pahdxg-control {
                     border: none;
+                    @include mq("laptop", max) {
+                        border: 1px solid white;
+                    }
                 }
                 .css-26l3qy-menu {
                     border-radius: unset;
                     background-color: $black;
                     width: calc(100% - 24px);
-                    .css-4ljt47-MenuList {
+                    & > div {
                         padding: 0;
                         & > div {
                             background-color: $black;
@@ -400,8 +396,8 @@
     margin: auto !important;
 }
 .css-14el2xx-placeholder {
-    color: white;
+    color: white !important;
+    font-weight: bold;
     font-size: 18px;
-    margin-top: 0px;
-    text-align: center;
+    line-height: 22px;
 }
