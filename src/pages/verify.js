@@ -190,7 +190,7 @@ const VerificationPage = () => {
                     {step === 1 && (
                         <div className="verify-step2">
                             <h5 className="text-center">Identity document</h5>
-                            <div className="d-flex flex-wrap justify-content-center">
+                            <div className="d-flex flex-wrap justify-content-center my-xl-5">
                                 <div className="upload-doc me-lg-5">
                                     <div className="mb-3">
                                         <div
@@ -311,7 +311,7 @@ const VerificationPage = () => {
                         </div>
                     )}
                     {step > -1 && (
-                        <div className="text-center continue-on-mobile-button">
+                        <div className="text-center continue-on-mobile-button my-xl-5">
                             <button
                                 className="btn-link"
                                 onClick={() => setState({ phoneModal: true })}
