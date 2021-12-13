@@ -12,6 +12,7 @@ import Modal from "react-modal"
 const Profile = () => {
     const [selectedId, setSelectId] = useState(0)
     const [selected, setSelect] = useState(false)
+    const [searchValue, setSearchValue] = useState("")
     const [randomName, setRandomName] = useState("Tesla")
     const [modalIsOpen, setIsOpen] = useState(false)
 
@@ -32,21 +33,33 @@ const Profile = () => {
                     <h3 className="header-text">Select one Historical Figure</h3>
                     <div className="row">
                         <div className="figure-select col-md-5 col-lg-6">
-                            <input type="search" className="figure-search" placeholder="Search" />
+                            <input
+                                type="text"
+                                className="figure-search"
+                                placeholder="Search"
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                            />
                             <div className="row">
-                                {figures.map((item, idx) => (
-                                    <div
-                                        className="col-lg-3 col-6 mb-3"
-                                        key={idx}
-                                        style={{ opacity: idx === selectedId ? "1" : "0.5" }}
-                                    >
-                                        <FigureItem
-                                            figure={item}
-                                            active={idx === selectedId}
-                                            onFigureSelect={handleFigure}
-                                        ></FigureItem>
-                                    </div>
-                                ))}
+                                {figures
+                                    .filter((item) =>
+                                        (item.firstname + item.lastname)
+                                            .toLowerCase()
+                                            .includes(searchValue.toLowerCase())
+                                    )
+                                    .map((item, idx) => (
+                                        <div
+                                            className="col-lg-3 col-6 mb-3"
+                                            key={idx}
+                                            style={{ opacity: idx === selectedId ? "1" : "0.5" }}
+                                        >
+                                            <FigureItem
+                                                figure={item}
+                                                active={idx === selectedId}
+                                                onFigureSelect={handleFigure}
+                                            ></FigureItem>
+                                        </div>
+                                    ))}
                             </div>
                         </div>
                         <div className="figure-intro col-md-7 col-lg-6">
