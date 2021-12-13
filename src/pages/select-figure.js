@@ -115,8 +115,8 @@ const Profile = () => {
                                                     tabIndex="0"
                                                 />
                                             </p>
-                                            <div className="d-flex align-items-end justify-content-between">
-                                                <h3 className="random-display mb-0">
+                                            <div className="d-flex align-items-end justify-content-start">
+                                                <h3 className="random-display mb-0 fw-bold me-4">
                                                     {randomName}.
                                                 </h3>
                                                 <div className="random-generate">
