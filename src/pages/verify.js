@@ -250,7 +250,7 @@ const VerificationPage = () => {
                                         </button>
                                     </div>
                                 )}
-                                <div className="upload-rule ms-lg-3">
+                                <div className="upload-rule">
                                     <p>Take a photo of your document. </p>
                                     <p>The photo should be:</p>
                                     <ul>
@@ -262,7 +262,7 @@ const VerificationPage = () => {
                                             should be visible).
                                         </li>
                                     </ul>
-                                    <div className="upload-rule__img mt-3">
+                                    <div className="upload-rule__img">
                                         <img src={Pass} alt="pass" />
                                         <img className="mx-3" src={Unpass1} alt="pass" />
                                         <img src={Unpass2} alt="pass" />
@@ -311,7 +311,7 @@ const VerificationPage = () => {
                         </div>
                     )}
                     {step > -1 && (
-                        <div className="text-center">
+                        <div className="text-center continue-on-mobile-button">
                             <button
                                 className="btn-link"
                                 onClick={() => setState({ phoneModal: true })}

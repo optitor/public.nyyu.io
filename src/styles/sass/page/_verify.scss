@@ -119,7 +119,7 @@
             }
         }
         &-step2 {
-            margin-bottom: 24px;
+            margin-bottom: -30px;
             .upload {
                 &-doc {
                     @include mq("phone", max) {
@@ -170,7 +170,7 @@
                     }
                 }
                 &-rule {
-                    max-width: 455px;
+                    max-width: 555px;
                     p,
                     li {
                         font-size: 16px;
@@ -197,6 +197,7 @@
                     }
                     &__img {
                         display: flex;
+                        margin-top: 1.7rem;
                         @include mq("phone", max) {
                             justify-content: space-between;
                         }
@@ -367,6 +368,7 @@
         }
         &-step3 {
             text-align: center;
+
             &__heading {
                 font-weight: 600;
                 font-size: 20px;
@@ -412,7 +414,8 @@
     .btn-group {
         display: flex;
         justify-content: center;
-        margin: 50px 0;
+        margin-bottom: 50px;
+        margin-top: 20px;
         .btn-primary,
         .btn-green,
         .btn-ready {
