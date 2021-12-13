@@ -2,8 +2,7 @@
 
 import React, { useEffect, useMemo } from "react"
 import { navigate } from "gatsby"
-import { useDispatch, useSelector } from "../../context/store"
-import * as Actions from "../../context/actions"
+import { useAuthTempToken } from "../../config/auth-config"
 
 const OAuth2RedirectHandler = (props) => {
     const getUrlParameter = (name) => {
@@ -14,14 +13,12 @@ const OAuth2RedirectHandler = (props) => {
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "))
     }
 
-    const dispatch = useDispatch()
-    const userData = useSelector((state) => state?.user)
     const token = useMemo(() => getUrlParameter("token"), [])
+    const [, setAuthTempToken] = useAuthTempToken()
 
-    console.log("user: ", userData)
     useEffect(() => {
         if (token) {
-            dispatch(Actions.setUserInfo({ ...userData, token }))
+            setAuthTempToken(token)
             navigate("/onetime-pwd")
         } else {
             navigate("/signin")

@@ -9,7 +9,7 @@ uri: `http://localhost:5000/graphql`,
 */
 
 const httpLink = createHttpLink({
-    uri: 'http://auction.us-east-1.elasticbeanstalk.com/graphql',
+    uri: 'https://auction.us-east-1.elasticbeanstalk.com/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
