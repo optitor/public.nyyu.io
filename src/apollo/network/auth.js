@@ -19,7 +19,7 @@ export const useSigninMutation = () => {
           ...user,
           tempToken: data.signin.token,
         })
-        navigate("/onetime-pwd")
+        navigate("/app/onetime-pwd")
       }
     }
   });
@@ -27,7 +27,7 @@ export const useSigninMutation = () => {
   const signin = (email, password) => {
     setUser({
       ...user,
-      tempToken: "",
+      tempToken: null,
       email: email
     })
     return mutation({
@@ -45,7 +45,7 @@ export const useSignupMutation = () => {
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNUP, {
     onCompleted: (data) => {
-      navigate("/verify-email")
+      navigate("/app/verify-email")
       console.log("Signup result", data) 
     }
   });

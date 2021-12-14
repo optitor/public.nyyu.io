@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react"
 import { Link, navigate } from "gatsby"
-import { Input } from "../components/common/FormControl"
-import AuthLayout from "../components/common/AuthLayout"
+import { Input } from "../common/FormControl"
+import AuthLayout from "../common/AuthLayout"
 import Modal from "react-modal"
-import { CloseIcon } from "../utilities/imgImport"
+import { CloseIcon } from "../../utilities/imgImport"
 import { useMutation } from "@apollo/client"
 import { 
     VERIFY_ACCOUNT, 
     RESEND_VERIFY_CODE, 
     REQUEST_2FA,
     CONFIRM_REQUEST_2FA 
-} from "../apollo/graghqls/mutations/Auth"
-import { useUser } from "../hooks/useUser"
+} from "../../apollo/graghqls/mutations/Auth"
+import { useUser } from "../../hooks/useUser"
 
 const two_factors = [
     { label: "Authenticator App", method: "app" },

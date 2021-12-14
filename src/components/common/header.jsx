@@ -70,7 +70,7 @@ const Menu = () => {
                         {!auth?.isLoggedIn() ? (
                             <Link
                                 className="btn-primary text-uppercase d-inline-block"
-                                to="/signin"
+                                to="/app/signin"
                             >
                                 Sign In
                             </Link>

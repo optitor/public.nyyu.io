@@ -10,8 +10,8 @@ let inMemoryAuthToken = inMemoryAuthTokenDefault
 
 
 // Local Storage Key
-export const REFRESH_TOKEN_KEY = `REFRESH_TOKEN`
 export const LOGGED_OUT_KEY = `LOGGED_OUT_TIME`
+export const ACCESS_TOKEN = `ACCESS_TOKEN`
 
 
 // Helper
@@ -32,6 +32,7 @@ export const isLoggedOut = () => {
 
 export const logout = (callback) => {
   inMemoryAuthToken = inMemoryAuthTokenDefault
+  localStorage.removeItem(ACCESS_TOKEN)
   setLoggedOutTime()
 
   if (callback) {
@@ -48,6 +49,7 @@ export const setAuthToken = (authToken) => {
     console.log("[setAuthToken]", `Auth Token or Auth Expiration shouldn't be ${authToken}.`)
     return
   }
+  localStorage.setItem(ACCESS_TOKEN, authToken)
   inMemoryAuthToken = {authToken, authExpiration: decode(authToken).exp}
 }
 
@@ -56,16 +58,25 @@ export const setLoggedOutTime = () => {
   localStorage.setItem(LOGGED_OUT_KEY, JSON.stringify(Date.now()))
 }
 
+const checkInMemoryAuthToken = () => {
+  if(inMemoryAuthToken === inMemoryAuthTokenDefault) {
+    const authToken = localStorage.getItem(ACCESS_TOKEN)
+    if(!authToken) return
+    inMemoryAuthToken = {authToken, authExpiration: decode(authToken).exp}
+  }
+}
 
 // Getter
 
 export const getInMemoryAuthToken = () => {
   if (!isBrowser) return null
+  checkInMemoryAuthToken()
   return inMemoryAuthToken.authToken
 }
 
 export const getAuthTokenExpiration = () => {
   if (!isBrowser) return null
+  checkInMemoryAuthToken()
   return inMemoryAuthToken.authExpiration
 }
 

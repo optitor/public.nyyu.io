@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
-import AuthLayout from "../components/common/AuthLayout"
+import AuthLayout from "../common/AuthLayout"
 import { Failed } from "../utilities/imgImport"
 
 const ForgetPassword = () => {

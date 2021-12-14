@@ -1,8 +1,8 @@
 import React, { useCallback, useReducer } from "react"
 import { Link } from "gatsby"
-import { FormInput } from "../components/common/FormControl"
+import { FormInput } from "../common/FormControl"
 import validator from "validator"
-import AuthLayout from "../components/common/AuthLayout"
+import AuthLayout from "../common/AuthLayout"
 
 const ForgetPassword = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
