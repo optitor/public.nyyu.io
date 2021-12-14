@@ -1,13 +1,18 @@
-import React, { useCallback, useState } from "react"
-import { Link } from "gatsby"
-import { Input } from "../components/common/FormControl"
-import AuthLayout from "../components/common/AuthLayout"
-import { useSignIn2FA } from "../apollo/network/auth"
-import { useUser } from "../hooks/useUser"
+import React, { useCallback, useEffect, useState } from "react"
+import { Link, navigate } from "gatsby"
+import { Input } from "../common/FormControl"
+import AuthLayout from "../common/AuthLayout"
+import { useSignIn2FA } from "../../apollo/network/auth"
+import { useUser } from "../../hooks/useUser"
 
 const OnetimePassword = () => {
     const [code, setCode] = useState("")
     const [user] = useUser()
+
+    useEffect(() => {
+        if(!user.tempToken)
+            navigate("/app/signin")
+    }, [])
 
     const handleCodeChange = useCallback((e) => {
         setCode(e.target.value)

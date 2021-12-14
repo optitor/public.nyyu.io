@@ -14,12 +14,11 @@ export const useSigninMutation = () => {
         return
       }
       else if (data.signin.status === "Success") {
-        console.log("success login", data.signin.token)
         setUser({
           ...user,
           tempToken: data.signin.token,
         })
-        navigate("/onetime-pwd")
+        navigate("/app/onetime-pwd")
       }
     }
   });
@@ -27,7 +26,7 @@ export const useSigninMutation = () => {
   const signin = (email, password) => {
     setUser({
       ...user,
-      tempToken: "",
+      tempToken: null,
       email: email
     })
     return mutation({
@@ -45,8 +44,7 @@ export const useSignupMutation = () => {
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNUP, {
     onCompleted: (data) => {
-      navigate("/verify-email")
-      console.log("Signup result", data) 
+      navigate("/app/verify-email")
     }
   });
 
@@ -71,7 +69,6 @@ export const useSignIn2FA = () => {
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
     onCompleted: (data) => {
-      console.log("confirm2faresult", data)
       if (data.confirm2FA.status === "Failed") {
         // do something
         return

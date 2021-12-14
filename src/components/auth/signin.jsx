@@ -1,13 +1,20 @@
-import React, { useCallback, useReducer } from "react"
+import React, { useCallback, useReducer, useEffect } from "react"
 import { Link, navigate } from "gatsby"
 import validator from "validator"
-import { social_links } from "../utilities/staticData"
-import { FormInput, CheckBox } from "../components/common/FormControl"
-import AuthLayout from "../components/common/AuthLayout"
-import { useSigninMutation } from "../apollo/network/auth"
-import { User } from "../utilities/user-data"
+import { social_links } from "../../utilities/staticData"
+import { FormInput, CheckBox } from "../common/FormControl"
+import AuthLayout from "../common/AuthLayout"
+import { useSigninMutation } from "../../apollo/network/auth"
+import { useAuth } from "../../hooks/useAuth"
 
 const Signin = () => {
+    const auth = useAuth();
+
+    useEffect(() => {
+        if(auth?.isLoggedIn())
+            navigate("/app/profile")
+    }, [])
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
         pwd: { value: "", error: "" },
@@ -42,11 +49,6 @@ const Signin = () => {
 
     const disableForm = signinMutationResults.loading;
 
-    const signUserIn = (e) => {
-        e.preventDefault()
-        User.loggedIn = true
-        navigate("/profile")
-    }
     return (
         <AuthLayout>
             <h3 className="signup-head">Sign in</h3>
@@ -88,11 +90,11 @@ const Signin = () => {
                     >
                         Keep me signed in in this device
                     </CheckBox>
-                    <Link className="txt-green forget-pwd" to="/password-reset">
+                    <Link className="txt-green forget-pwd" to="/app/password-reset">
                         Forgot password?
                     </Link>
                 </div>
-                <button type="submit" onClick={signUserIn} className="btn-primary w-100 text-uppercase" disabled={disableForm}>
+                <button type="submit" className="btn-primary w-100 text-uppercase" disabled={disableForm}>
                     sign In
                 </button>
             </form>
@@ -107,7 +109,7 @@ const Signin = () => {
             </ul>
             <p className="text-white text-center">
                 Do not have an account?{" "}
-                <Link to="/signup" className="signup-link">
+                <Link to="/app/signup" className="signup-link">
                     Sign up
                 </Link>
             </p>

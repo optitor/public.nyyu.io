@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react"
 import { Link, navigate } from "gatsby"
-import { Input } from "../components/common/FormControl"
-import AuthLayout from "../components/common/AuthLayout"
+import { Input } from "../common/FormControl"
+import AuthLayout from "../common/AuthLayout"
 import Modal from "react-modal"
-import { CloseIcon } from "../utilities/imgImport"
+import { CloseIcon } from "../../utilities/imgImport"
 import { useMutation } from "@apollo/client"
 import { 
     VERIFY_ACCOUNT, 
     RESEND_VERIFY_CODE, 
     REQUEST_2FA,
     CONFIRM_REQUEST_2FA 
-} from "../apollo/graghqls/mutations/Auth"
-import { useUser } from "../hooks/useUser"
+} from "../../apollo/graghqls/mutations/Auth"
+import { useUser } from "../../hooks/useUser"
 
 const two_factors = [
     { label: "Authenticator App", method: "app" },
@@ -23,7 +23,7 @@ const VerifyEmail = () => {
     const [user] = useUser();
     
     useEffect(() => {
-        if (!user.email) navigate("/signup")
+        if (!user.email) navigate("/app/signup")
     }, [user])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -46,7 +46,7 @@ const VerifyEmail = () => {
     // possible code: [verifyAccount, { data, loading, error }]
     const [verifyAccount] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
-            if (data.verifyAccount === "Failed") navigate("/verify-failed")
+            if (data.verifyAccount === "Failed") navigate("/app/verify-failed")
             else if (data.verifyAccount === "Success") setState({ tfaModal: true })
         },
     })
@@ -65,8 +65,8 @@ const VerifyEmail = () => {
     })
     const [confirmRequest2FA] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
-            if (data.confirmRequest2FA === "Failed") navigate("/verify-failed")
-            else if (data.confirmRequest2FA === "Success") navigate("/signin")
+            if (data.confirmRequest2FA === "Failed") navigate("/app/verify-failed")
+            else if (data.confirmRequest2FA === "Success") navigate("/app/signin")
         },
     })
     return (
@@ -115,7 +115,7 @@ const VerifyEmail = () => {
             </form>
             <p className="text-white text-center">
                 Return to{" "}
-                <Link to="/signup" className="signup-link">
+                <Link to="/app/signup" className="signup-link">
                     Sign up
                 </Link>
             </p>

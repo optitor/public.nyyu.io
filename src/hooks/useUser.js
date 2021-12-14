@@ -13,9 +13,9 @@ export const useUser = () => useContext(UserContext)
 
 const useProvideUser = () => {
   const [user, setUser] = useState({
-    name: "",
-    email: "",
-    tempToken: ""
+    name: null,
+    email: null,
+    tempToken: null
   })
 
   return [
