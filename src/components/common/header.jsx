@@ -51,43 +51,48 @@ const Menu = () => {
 
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
-            <div className="px-4 d-flex align-items-center justify-content-between">
-                <Link to="/" className="menu__logo d-flex" title="Logo">
-                    <img src={Logo} alt="NDB Brand Logo" />
-                </Link>
+            <div className="container">
+                <div className="d-flex align-items-center justify-content-between">
+                    <Link to="/" className="menu__logo d-flex" title="Logo">
+                        <img src={Logo} alt="NDB Brand Logo" />
+                    </Link>
 
-                <div className="d-flex align-items-center">
-                    <div className="sign-in">
-                        <Link className="btn-primary text-uppercase d-inline-block" to="/signin">
-                            sign in
-                        </Link>
+                    <div className="d-flex align-items-center">
+                        <div className="sign-in">
+                            <Link
+                                className="btn-primary text-uppercase d-inline-block"
+                                to="/signin"
+                            >
+                                sign in
+                            </Link>
+                        </div>
+                        <button
+                            type="button"
+                            className="menu__toggler"
+                            onClick={() => setActive(!active)}
+                        >
+                            <span />
+                            <span />
+                            <span />
+                        </button>
                     </div>
-                    <button
-                        type="button"
-                        className="menu__toggler"
-                        onClick={() => setActive(!active)}
-                    >
-                        <span />
-                        <span />
-                        <span />
-                    </button>
-                </div>
 
-                <div className="menu__content">
-                    <div className="content d-md-flex align-items-center">
-                        <ul className="content__section menu__items">
-                            {navigationLinks.map((link) => (
-                                <li className="menu__item" key={link.label}>
-                                    <Link
-                                        to={link.url}
-                                        className="d-inline-block"
-                                        onClick={() => setActive(false)}
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                    <div className="menu__content">
+                        <div className="content d-md-flex align-items-center">
+                            <ul className="content__section menu__items">
+                                {navigationLinks.map((link) => (
+                                    <li className="menu__item" key={link.label}>
+                                        <Link
+                                            to={link.url}
+                                            className="d-inline-block"
+                                            onClick={() => setActive(false)}
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

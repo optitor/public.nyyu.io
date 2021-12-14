@@ -1,14 +1,13 @@
 .history-page {
     background-color: $black;
-    @extend %setHeight;
+    @extend %set-height;
+    overflow: hidden !important;
     .menu {
         border-bottom: 2px solid #464646;
     }
     .section-history {
-        width: 100%;
-        @extend %setHeight2;
-        display: flex;
-        flex-wrap: wrap;
+        @extend %set-height2;
+
         .verify-link {
             font-weight: 500;
             font-size: 16px;
@@ -23,11 +22,7 @@
         &__left {
             padding-right: 24px;
             border-right: 2px solid #464646;
-            @include mq("laptop", max) {
-                border: none;
-                padding: 0;
-                width: 100%;
-            }
+            height: 100%;
             .verify-link {
                 display: none;
                 @include mq("laptop", max) {
@@ -35,12 +30,12 @@
                 }
             }
             .react-tabs {
-                margin-top: 24px;
                 &__tab-list {
-                    display: flex;
-                    justify-content: space-between;
                     border-bottom: 2px solid #464646;
+                    display: flex;
+                    width: 100%;
                     .react-tabs__tab {
+                        padding: 21px 0 9px;
                         font-weight: bold;
                         font-size: 28px;
                         line-height: 37px;
@@ -60,6 +55,7 @@
                 &__tab-panel {
                     margin-top: 24px;
                     .bid-activity {
+                        @include custom-scroll(250px);
                         li {
                             padding: 19px 0;
                             border-bottom: 1px solid $green;
@@ -115,7 +111,7 @@
                         border-bottom: 2px solid #464646;
                         padding: 16px 0;
                         &-history {
-                            margin-top: 32px;
+                            @include custom-scroll(550px);
                         }
                         &-date {
                             font-weight: 500;
@@ -142,9 +138,7 @@
         }
         &__right {
             position: relative;
-            @include mq("laptop", max) {
-                width: 100%;
-            }
+            height: 100%;
             .verify-link {
                 @include mq("laptop", max) {
                     display: none;
@@ -165,7 +159,25 @@
                 }
             }
             .react-tabs {
-                height: 100%;
+                // --scrollbar-width: 0.5rem;
+                // --mask-height: 78px;
+                // overflow-y: auto;
+                // padding-bottom: var(--mask-height);
+                // --mask-image-content: linear-gradient(
+                //     to bottom,
+                //     transparent,
+                //     0,
+                //     #1e1e1e calc(100% - var(--mask-height)),
+                //     transparent
+                // );
+                // --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
+                // --mask-image-scrollbar: linear-gradient(#1e1e1e, #1e1e1e);
+                // --mask-size-scrollbar: var(--scrollbar-width) 100%;
+                // -webkit-mask-image: var(--mask-image-content), var(--mask-image-scrollbar);
+                // -webkit-mask-size: var(--mask-size-content), var(--mask-size-scrollbar);
+                // -webkit-mask-position: 0 0, 100% 0;
+                // -webkit-mask-repeat: no-repeat, no-repeat;
+
                 &__tab-list {
                     margin: 0;
                     padding: 24px;
@@ -190,15 +202,22 @@
                     }
                 }
                 &__tab-panel {
-                    padding: 0 32px;
+                    padding: 0 20px;
                     &--selected {
                         height: 100%;
                         border-top: 2px solid #464646;
                     }
                     table {
                         width: 100%;
+                        thead,
+                        tbody tr {
+                            display: table;
+                            width: 100%;
+                            table-layout: fixed;
+                        }
                         thead {
                             border-bottom: 2px solid #464646;
+                            width: calc(100% - 32px);
                             th {
                                 padding: 16px 0px;
                             }
@@ -216,6 +235,8 @@
                             color: white;
                         }
                         tbody {
+                            @include custom-scroll(250px);
+                            display: block;
                             tr {
                                 margin-bottom: 23px;
                                 border-bottom: 2px solid #464646;
@@ -229,6 +250,11 @@
                         }
                         .mobile-not {
                             @include mq("phone", max) {
+                                display: none;
+                            }
+                        }
+                        .laptop-not {
+                            @include mq("laptop", max) {
                                 display: none;
                             }
                         }
@@ -303,141 +329,6 @@
                     .airdrop-link {
                         cursor: pointer;
                     }
-                    .airdrop-detail {
-                        display: flex;
-                        flex-wrap: wrap;
-                        width: 100%;
-                        height: 100%;
-                        &__left {
-                            padding: 16px;
-                            border-right: 2px solid #464646;
-                            @include mq("tablet", max) {
-                                border: none;
-                            }
-                            .detail-header {
-                                display: flex;
-                                align-items: center;
-                                background: #242424;
-                                padding: 14px 16px;
-                                &__icon {
-                                    width: 35.5px;
-                                    height: 35.5px;
-                                    margin-right: 12px;
-                                }
-                                &__name {
-                                    font-weight: bold;
-                                    font-size: 22px;
-                                    line-height: 27px;
-                                    letter-spacing: 0.04em;
-                                    color: white;
-                                }
-                                &__end {
-                                    font-weight: 300;
-                                    font-size: 14px;
-                                    line-height: 17px;
-                                    letter-spacing: 0.04em;
-                                    color: #757575;
-                                }
-                            }
-                            .detail-body {
-                                margin-top: 16px;
-                                li {
-                                    display: flex;
-                                    justify-content: space-between;
-                                    padding: 14px;
-                                    border-bottom: 2px solid #464646;
-                                    .value {
-                                        font-weight: 500;
-                                        font-size: 18px;
-                                        line-height: 22px;
-                                        letter-spacing: 0.04em;
-                                        color: #ffffff;
-                                    }
-                                }
-                            }
-                            .detail-footer {
-                                margin-top: 16px;
-                                padding: 14px;
-                                h6 {
-                                    font-weight: 600;
-                                    font-size: 16px;
-                                    line-height: 20px;
-                                    letter-spacing: 0.04em;
-                                    color: white;
-                                    margin-bottom: 16px;
-                                }
-                                ul {
-                                    list-style: disc;
-                                    li {
-                                        font-weight: 500;
-                                        font-size: 14px;
-                                        line-height: 15px;
-                                        letter-spacing: 0.04em;
-                                        color: #787878;
-                                        padding-bottom: 16px;
-                                        list-style-position: inside;
-                                    }
-                                }
-                            }
-                        }
-                        &__right {
-                            padding: 16px;
-                            .time-remaining {
-                                background: #242424;
-                                text-align: center;
-                                h5 {
-                                    font-weight: bold;
-                                    font-size: 18px;
-                                    line-height: 22px;
-                                    text-align: center;
-                                    letter-spacing: 0.04em;
-                                    text-transform: uppercase;
-                                }
-                                .countdown-wrapper {
-                                    margin: 16px 0;
-                                    .time {
-                                        font-size: 48px;
-                                        line-height: 59px;
-                                        &-text {
-                                            font-size: 9.3198px;
-                                            line-height: 11px;
-                                        }
-                                    }
-                                }
-                                .btn-primary {
-                                    background: #1e1e1e;
-                                    text-transform: uppercase;
-                                    font-weight: bold;
-                                    font-size: 14.6601px;
-                                    line-height: 18px;
-                                    letter-spacing: 0.04em;
-                                }
-                            }
-                            .about-company {
-                                margin-top: 16px;
-                                padding: 22px 19px;
-                                background-color: #242424;
-                                h6 {
-                                    font-weight: 500;
-                                    font-size: 14px;
-                                    line-height: 17px;
-                                    letter-spacing: 0.04em;
-                                }
-                                p {
-                                    font-size: 14px;
-                                    line-height: 17px;
-                                    letter-spacing: 0.04em;
-                                }
-                            }
-                        }
-                        .read-more {
-                            font-weight: 500;
-                            font-size: 15px;
-                            line-height: 18px;
-                            letter-spacing: 0.04em;
-                            color: #ffffff;
-                        }
-                    }
                 }
 
                 .operation-link {
@@ -456,9 +347,22 @@
             }
             .connect-external {
                 position: absolute;
-                top: calc(100% - 150px);
+                top: calc(100% - 100px);
                 width: 100%;
                 text-align: center;
+
+                .btn-primary {
+                    font-size: 22px;
+                    line-height: 27px;
+                }
+                @include mq("phone", max) {
+                    top: calc(100% - 24px);
+                    .btn-primary {
+                        font-size: 18px;
+                        line-height: 22px;
+                        padding: 13px 23px;
+                    }
+                }
             }
         }
     }
@@ -472,7 +376,7 @@
         width: 100%;
         .css-1s2u09g-control,
         .css-1pahdxg-control {
-            @extend %selectStyle;
+            @extend %select-style;
         }
         .css-1okebmr-indicatorSeparator {
             display: none;
@@ -576,5 +480,141 @@
                 border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             }
         }
+    }
+}
+
+.airdrop-detail {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    &__left {
+        padding: 16px;
+        border-right: 2px solid #464646;
+        @include mq("tablet", max) {
+            border: none;
+        }
+        .detail-header {
+            display: flex;
+            align-items: center;
+            background: #242424;
+            padding: 14px 16px;
+            &__icon {
+                width: 35.5px;
+                height: 35.5px;
+                margin-right: 12px;
+            }
+            &__name {
+                font-weight: bold;
+                font-size: 22px;
+                line-height: 27px;
+                letter-spacing: 0.04em;
+                color: white;
+            }
+            &__end {
+                font-weight: 300;
+                font-size: 14px;
+                line-height: 17px;
+                letter-spacing: 0.04em;
+                color: #757575;
+            }
+        }
+        .detail-body {
+            margin-top: 16px;
+            li {
+                display: flex;
+                justify-content: space-between;
+                padding: 14px;
+                border-bottom: 2px solid #464646;
+                .value {
+                    font-weight: 500;
+                    font-size: 18px;
+                    line-height: 22px;
+                    letter-spacing: 0.04em;
+                    color: #ffffff;
+                }
+            }
+        }
+        .detail-footer {
+            margin-top: 16px;
+            padding: 14px;
+            h6 {
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 20px;
+                letter-spacing: 0.04em;
+                color: white;
+                margin-bottom: 16px;
+            }
+            ul {
+                list-style: disc;
+                li {
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 15px;
+                    letter-spacing: 0.04em;
+                    color: #787878;
+                    padding-bottom: 16px;
+                    list-style-position: inside;
+                }
+            }
+        }
+    }
+    &__right {
+        padding: 16px;
+        .time-remaining {
+            background: #242424;
+            text-align: center;
+            h5 {
+                font-weight: bold;
+                font-size: 18px;
+                line-height: 22px;
+                text-align: center;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+            }
+            .countdown-wrapper {
+                margin: 16px 0;
+                .time {
+                    font-size: 48px;
+                    line-height: 59px;
+                    &-text {
+                        font-size: 9.3198px;
+                        line-height: 11px;
+                    }
+                }
+            }
+            .btn-primary {
+                background: #1e1e1e;
+                text-transform: uppercase;
+                font-weight: bold;
+                font-size: 14.6601px;
+                line-height: 18px;
+                letter-spacing: 0.04em;
+            }
+        }
+        .about-company {
+            margin-top: 16px;
+            padding: 22px 19px;
+            background-color: #242424;
+            h6 {
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 17px;
+                letter-spacing: 0.04em;
+            }
+            p {
+                font-size: 14px;
+                line-height: 17px;
+                letter-spacing: 0.04em;
+            }
+        }
+    }
+    .read-more {
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 18px;
+        letter-spacing: 0.04em;
+        color: #ffffff;
     }
 }

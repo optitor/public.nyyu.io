@@ -1,6 +1,6 @@
 .verify-page {
     section {
-        @extend %setHeight2;
+        @extend %set-height2;
         overflow: auto;
         .trees-img {
             display: block;

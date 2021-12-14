@@ -38,6 +38,46 @@ const transactions = [
     {
         name: "Transaction Name",
         date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
+        price: 3500,
+    },
+    {
+        name: "Transaction Name",
+        date: "10.06.2021 11:05",
         price: -3500,
     },
     {
@@ -89,6 +129,24 @@ const market_data = [
         name: "Dogecoin",
         price: 282004.43,
         percent: -1.9,
+        chart: "",
+        volume: "$28,6B",
+    },
+    {
+        icon: USDC,
+        abbr: "USDC",
+        name: "USD Coin",
+        price: 282004.43,
+        percent: 1.9,
+        chart: "",
+        volume: "$28,6B",
+    },
+    {
+        icon: LTC,
+        abbr: "LTC",
+        name: "Litecoin",
+        price: 282004.43,
+        percent: 1.9,
         chart: "",
         volume: "$28,6B",
     },
@@ -173,6 +231,46 @@ const bids = [
         bid: 4500,
     },
     {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
+        name: "NDB Presale round 80",
+        date: "2021.05.02",
+        bid: 4500,
+    },
+    {
         name: "NDB Presale round 55",
         date: "2021.04.30",
         bid: 360000,
@@ -241,190 +339,88 @@ const History = () => {
     return (
         <main className="history-page">
             <Header />
-            <section className="section-history container">
-                <div className="section-history__left col-lg-4">
-                    <Tabs>
-                        <TabList>
-                            <Tab>Bid activity</Tab>
-                            <Tab>WALLET</Tab>
-                        </TabList>
-                        <TabPanel>
-                            <ul className="bid-activity">
-                                {bids.map((item, idx) => (
-                                    <li
-                                        className="d-flex align-items-center justify-content-between"
-                                        key={idx}
-                                    >
-                                        <div>
-                                            <p className="bid-name">{item.name}</p>
-                                            <p className="bid-date">{item.date}</p>
+            <section className="container">
+                <div className="section-history row">
+                    <div className="section-history__left col-lg-4 col-md-5">
+                        <Tabs>
+                            <TabList>
+                                <Tab>Bid activity</Tab>
+                                <Tab className="react-tabs__tab ms-auto">WALLET</Tab>
+                            </TabList>
+                            <TabPanel>
+                                <ul className="bid-activity">
+                                    {bids.map((item, idx) => (
+                                        <li
+                                            className="d-flex align-items-center justify-content-between"
+                                            key={idx}
+                                        >
+                                            <div>
+                                                <p className="bid-name">{item.name}</p>
+                                                <p className="bid-date">{item.date}</p>
+                                            </div>
+                                            <p className="bid-price">
+                                                {numberWithCommas(item.bid)}
+                                                <span className="txt-green"> T</span>
+                                            </p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </TabPanel>
+                            <TabPanel>
+                                <div className="d-flex justify-content-end">
+                                    <Link to="/" className="verify-link">
+                                        Get verified
+                                    </Link>
+                                </div>
+                                <div className="profile-value">
+                                    <h5>Portfolio value </h5>
+                                    <div className="value-box">
+                                        <p className="value-label">Equity Value (BTC)</p>
+                                        <p className="value">6.00</p>
+                                        <p className="max-value">~ $282,004.43</p>
+                                    </div>
+                                </div>
+                                <h5 className="my-4">Transactions history</h5>
+                                <div className="transaction-history">
+                                    {transactions.map((item, idx) => (
+                                        <div className="transaction" key={idx}>
+                                            <p className="transaction-date">{item.date}</p>
+                                            <div className="d-flex justify-content-between">
+                                                <p className="transaction-name">{item.name}</p>
+                                                <p className="transaction-price">
+                                                    {numberSign(item.price) + item.price}$
+                                                </p>
+                                            </div>
                                         </div>
-                                        <p className="bid-price">
-                                            {numberWithCommas(item.bid)}
-                                            <span className="txt-green"> T</span>
-                                        </p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </TabPanel>
-                        <TabPanel>
-                            <div className="d-flex justify-content-end">
+                                    ))}
+                                </div>
+                            </TabPanel>
+                        </Tabs>
+                    </div>
+                    <div className="section-history__right col-lg-8 col-md-7">
+                        <Tabs onSelect={() => setShow(false)}>
+                            <div className="tab-top">
+                                <TabList>
+                                    <Tab>MY ASSETS</Tab>
+                                    <Tab>market</Tab>
+                                    <Tab className="react-tabs__tab ms-auto">AirdropS</Tab>
+                                </TabList>
                                 <Link to="/" className="verify-link">
                                     Get verified
                                 </Link>
                             </div>
-                            <div className="profile-value">
-                                <h5>Portfolio value </h5>
-                                <div className="value-box">
-                                    <p className="value-label">Equity Value (BTC)</p>
-                                    <p className="value">6.00</p>
-                                    <p className="max-value">~ $282,004.43</p>
-                                </div>
-                            </div>
-                            <div className="transaction-history">
-                                <h5>Transactions history</h5>
-                                {transactions.map((item, idx) => (
-                                    <div className="transaction" key={idx}>
-                                        <p className="transaction-date">{item.date}</p>
-                                        <div className="d-flex justify-content-between">
-                                            <p className="transaction-name">{item.name}</p>
-                                            <p className="transaction-price">
-                                                {numberSign(item.price) + item.price}$
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </TabPanel>
-                    </Tabs>
-                </div>
-                <div className="section-history__right col-lg-8">
-                    <Tabs onSelect={() => setShow(false)}>
-                        <div className="tab-top">
-                            <TabList>
-                                <Tab>MY ASSETS</Tab>
-                                <Tab>market</Tab>
-                                <Tab className="react-tabs__tab ms-auto">AirdropS</Tab>
-                            </TabList>
-                            <Link to="/" className="verify-link">
-                                Get verified
-                            </Link>
-                        </div>
-                        <TabPanel>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Crypto Assets</th>
-                                        <th className="text-end">Amount</th>
-                                        <th className="text-end">Operations</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {my_assets.map((item, idx) => (
-                                        <tr key={idx}>
-                                            <td className="d-flex align-items-start ps-2">
-                                                <img
-                                                    src={item.icon}
-                                                    alt="coin icon"
-                                                    className="me-2"
-                                                />
-                                                <div>
-                                                    <p className="coin-abbr">{item.abbr}</p>
-                                                    <p className="coin-name">{item.name}</p>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p className="coin-price">{item.amount}</p>
-                                                <p className="coin-percent">
-                                                    ${numberWithCommas(item.price)}
-                                                </p>
-                                            </td>
-                                            <td className="coin-operations">
-                                                <p
-                                                    onClick={() => setIsOpen(true)}
-                                                    onKeyDown={() => setIsOpen(true)}
-                                                    role="presentation"
-                                                    className="operation-link"
-                                                >
-                                                    Deposit
-                                                </p>
-                                                <p
-                                                    onClick={() => setIsOpen(true)}
-                                                    onKeyDown={() => setIsOpen(true)}
-                                                    role="presentation"
-                                                    className="operation-link ms-5"
-                                                >
-                                                    Withdraw
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </TabPanel>
-                        <TabPanel>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th className="text-end">Price</th>
-                                        <th className="mobile-not text-center">Price Chart</th>
-                                        <th className="mobile-not">Volume (24h)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {market_data.map((item, idx) => (
-                                        <tr key={idx}>
-                                            <td className="d-flex align-items-start ps-2">
-                                                <img
-                                                    src={item.icon}
-                                                    alt="coin icon"
-                                                    className="me-2"
-                                                />
-                                                <div>
-                                                    <p className="coin-abbr">{item.abbr}</p>
-                                                    <p className="coin-name">{item.name}</p>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p className="coin-price">
-                                                    ${numberWithCommas(item.price)}
-                                                </p>
-                                                <p
-                                                    className={
-                                                        numberSign(item.percent) === "+"
-                                                            ? "coin-percent txt-green"
-                                                            : "coin-percent txt-red"
-                                                    }
-                                                >
-                                                    {numberSign(item.percent) + item.percent}%
-                                                </p>
-                                            </td>
-                                            <td className="mobile-not price-chart"> </td>
-                                            <td className="mobile-not">{item.volume}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </TabPanel>
-                        <TabPanel>
-                            {!detail_show ? (
+                            <TabPanel>
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Airdrop</th>
-                                            <th>Status</th>
-                                            <th className="mobile-not">End</th>
-                                            <th>Reward</th>
+                                            <th>Crypto Assets</th>
+                                            <th className="text-end">Amount</th>
+                                            <th className="text-end">Operations</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {airdrops.map((item, idx) => (
-                                            <tr
-                                                key={idx}
-                                                className="airdrop-link"
-                                                onClick={() => handleClick(idx)}
-                                            >
+                                        {my_assets.map((item, idx) => (
+                                            <tr key={idx}>
                                                 <td className="d-flex align-items-start ps-2">
                                                     <img
                                                         src={item.icon}
@@ -432,113 +428,225 @@ const History = () => {
                                                         className="me-2"
                                                     />
                                                     <div>
-                                                        <p className="coin-abbr">{item.name}</p>
-                                                        <p className="coin-name mobile-not">
-                                                            {item.desc}
-                                                        </p>
+                                                        <p className="coin-abbr">{item.abbr}</p>
+                                                        <p className="coin-name">{item.name}</p>
                                                     </div>
                                                 </td>
-                                                <td
-                                                    className={
-                                                        item.status === "Active"
-                                                            ? "coin-status active"
-                                                            : "coin-status deactive"
-                                                    }
-                                                >
-                                                    {item.status}
+                                                <td>
+                                                    <p className="coin-price">{item.amount}</p>
+                                                    <p className="coin-percent">
+                                                        ${numberWithCommas(item.price)}
+                                                    </p>
                                                 </td>
-                                                <td className="mobile-not">{item.end}</td>
-                                                <td className="coin-reward">={item.reward} USD</td>
+                                                <td className="coin-operations">
+                                                    <p
+                                                        onClick={() => setIsOpen(true)}
+                                                        onKeyDown={() => setIsOpen(true)}
+                                                        role="presentation"
+                                                        className="operation-link"
+                                                    >
+                                                        Deposit
+                                                    </p>
+                                                    <p
+                                                        onClick={() => setIsOpen(true)}
+                                                        onKeyDown={() => setIsOpen(true)}
+                                                        role="presentation"
+                                                        className="operation-link ms-5"
+                                                    >
+                                                        Withdraw
+                                                    </p>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            ) : (
-                                <div className=" airdrop-detail">
-                                    <div className="col-md-7 airdrop-detail__left">
-                                        <div className="detail-header">
-                                            <img
-                                                src={airdrops[index].icon}
-                                                alt="coin icon"
-                                                className="detail-header__icon"
-                                            />
-                                            <div>
-                                                <p className="detail-header__name">
-                                                    {airdrops[index].name}
-                                                </p>
-                                                <p className="detail-header__end">
-                                                    {airdrops[index].end}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <ul className="detail-body">
-                                            <li>
-                                                <p>Participants</p>
-                                                <p className="value">
-                                                    {airdrops[index].participants}
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <p>Number of winners</p>
-                                                <p className="value">{airdrops[index].winners}</p>
-                                            </li>
-                                            <li>
-                                                <p>Airdrop amount</p>
-                                                <p className="coin-reward">
-                                                    = {airdrops[index].participants} USD
-                                                </p>
-                                            </li>
-                                        </ul>
-                                        <div className="detail-footer">
-                                            <h6>How to participate?</h6>
-                                            <ul>
-                                                <li>Connect your MetaMask wallet</li>
-                                                <li>
-                                                    Connect your BitMEX API key via{" "}
-                                                    <a
-                                                        className="txt-green"
-                                                        href="https://aluna.social/my/account/api_keys"
+                            </TabPanel>
+                            <TabPanel>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th className="text-end">Price</th>
+                                            <th className="laptop-not text-center">Price Chart</th>
+                                            <th className="mobile-not">Volume (24h)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {market_data.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="d-flex align-items-start ps-2">
+                                                    <img
+                                                        src={item.icon}
+                                                        alt="coin icon"
+                                                        className="me-2"
+                                                    />
+                                                    <div>
+                                                        <p className="coin-abbr">{item.abbr}</p>
+                                                        <p className="coin-name">{item.name}</p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p className="coin-price">
+                                                        ${numberWithCommas(item.price)}
+                                                    </p>
+                                                    <p
+                                                        className={
+                                                            numberSign(item.percent) === "+"
+                                                                ? "coin-percent txt-green"
+                                                                : "coin-percent txt-red"
+                                                        }
                                                     >
-                                                        https://aluna.social/my/account/api_keys
-                                                    </a>
+                                                        {numberSign(item.percent) + item.percent}%
+                                                    </p>
+                                                </td>
+                                                <td className="laptop-not price-chart"> </td>
+                                                <td className="mobile-not">{item.volume}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </TabPanel>
+                            <TabPanel>
+                                {!detail_show ? (
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th className="w-50">Airdrop</th>
+                                                <th>Status</th>
+                                                <th className="laptop-not">End</th>
+                                                <th>Reward</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {airdrops.map((item, idx) => (
+                                                <tr
+                                                    key={idx}
+                                                    className="airdrop-link"
+                                                    onClick={() => handleClick(idx)}
+                                                >
+                                                    <td className="w-50">
+                                                        <div className="d-flex align-items-start ps-2">
+                                                            <img
+                                                                src={item.icon}
+                                                                alt="coin icon"
+                                                                className="me-2"
+                                                            />
+                                                            <div>
+                                                                <p className="coin-abbr">
+                                                                    {item.name}
+                                                                </p>
+                                                                <p className="coin-name mobile-not">
+                                                                    {item.desc}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td
+                                                        className={
+                                                            item.status === "Active"
+                                                                ? "coin-status active"
+                                                                : "coin-status deactive"
+                                                        }
+                                                    >
+                                                        {item.status}
+                                                    </td>
+                                                    <td className="laptop-not">{item.end}</td>
+                                                    <td className="coin-reward">
+                                                        ={item.reward} USD
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <div className="airdrop-detail d-lg-flex d-md-none">
+                                        <div className="col-md-7 airdrop-detail__left">
+                                            <div className="detail-header">
+                                                <img
+                                                    src={airdrops[index].icon}
+                                                    alt="coin icon"
+                                                    className="detail-header__icon"
+                                                />
+                                                <div>
+                                                    <p className="detail-header__name">
+                                                        {airdrops[index].name}
+                                                    </p>
+                                                    <p className="detail-header__end">
+                                                        {airdrops[index].end}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <ul className="detail-body">
+                                                <li>
+                                                    <p>Participants</p>
+                                                    <p className="value">
+                                                        {airdrops[index].participants}
+                                                    </p>
                                                 </li>
                                                 <li>
-                                                    Trade with at least $1,000 volume to qualify
+                                                    <p>Number of winners</p>
+                                                    <p className="value">
+                                                        {airdrops[index].winners}
+                                                    </p>
                                                 </li>
-                                                <li>Follow Facebook account</li>
+                                                <li>
+                                                    <p>Airdrop amount</p>
+                                                    <p className="coin-reward">
+                                                        = {airdrops[index].participants} USD
+                                                    </p>
+                                                </li>
                                             </ul>
-                                        </div>
-                                        <Link className="read-more" to="/">
-                                            Read more
-                                        </Link>
-                                    </div>
-                                    <div className="col-md-5 airdrop-detail__right">
-                                        <div className="time-remaining">
-                                            <h5 className="pt-4">Time remaining</h5>
-                                            <CountDown />
-                                            <button className="btn-primary mb-4">
-                                                Join airdrop
-                                            </button>
-                                        </div>
-                                        <div className="about-company">
-                                            <h6>About the company</h6>
-                                            <p>
-                                                ICON Foundation is leading ICON project, one of the
-                                                largest blockchain networks in the world, launched
-                                                in 2017 with the vision of ‘Hyperconnect the
-                                                World’...
-                                            </p>
+                                            <div className="detail-footer">
+                                                <h6>How to participate?</h6>
+                                                <ul>
+                                                    <li>Connect your MetaMask wallet</li>
+                                                    <li>
+                                                        Connect your BitMEX API key via{" "}
+                                                        <a
+                                                            className="txt-green"
+                                                            href="https://aluna.social/my/account/api_keys"
+                                                        >
+                                                            https://aluna.social/my/account/api_keys
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        Trade with at least $1,000 volume to qualify
+                                                    </li>
+                                                    <li>Follow Facebook account</li>
+                                                </ul>
+                                            </div>
                                             <Link className="read-more" to="/">
                                                 Read more
                                             </Link>
                                         </div>
+                                        <div className="col-md-5 airdrop-detail__right">
+                                            <div className="time-remaining">
+                                                <h5 className="pt-4">Time remaining</h5>
+                                                <CountDown />
+                                                <button className="btn-primary mb-4">
+                                                    Join airdrop
+                                                </button>
+                                            </div>
+                                            <div className="about-company">
+                                                <h6>About the company</h6>
+                                                <p>
+                                                    ICON Foundation is leading ICON project, one of
+                                                    the largest blockchain networks in the world,
+                                                    launched in 2017 with the vision of
+                                                    ‘Hyperconnect the World’...
+                                                </p>
+                                                <Link className="read-more" to="/">
+                                                    Read more
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </TabPanel>
-                    </Tabs>
-                    <div className="connect-external">
-                        <button className="btn-primary">CONNECT TO EXTERNAL WALLET</button>
+                                )}
+                            </TabPanel>
+                        </Tabs>
+                        <div className="connect-external">
+                            <button className="btn-primary">CONNECT TO EXTERNAL WALLET</button>
+                        </div>
                     </div>
                 </div>
             </section>
