@@ -67,7 +67,7 @@ const Menu = () => {
 
                 <div className="d-flex align-items-center">
                     <div className="sign-in">
-                        {!auth.isLoggedIn() ? (
+                        {!auth?.isLoggedIn() ? (
                             <Link
                                 className="btn-primary text-uppercase d-inline-block"
                                 to="/signin"
