@@ -1,11 +1,11 @@
 import * as GraphQL from "../graghqls/mutations/Auth"
-import { useAuthTempToken, useAuthToken, useAuthEmail } from "../../config/auth-config"
 import { useMutation } from "@apollo/client"
 import { navigate} from "gatsby"
+import { useUser } from "../../hooks/useUser"
+import { setAuthToken } from "../../utilities/auth"
 
 export const useSigninMutation = () => {
-  const [, setAuthTempToken] = useAuthTempToken();
-  const [, setAuthEmail] = useAuthEmail();
+  const [user, setUser] = useUser();
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN, {
     onCompleted: (data) => {
@@ -14,15 +14,21 @@ export const useSigninMutation = () => {
         return
       }
       else if (data.signin.status === "Success") {
-        setAuthTempToken(data.signin.token);
+        setUser({
+          ...user,
+          tempToken: data.signin.token,
+        })
         navigate("/onetime-pwd")
       }
     }
   });
 
   const signin = (email, password) => {
-    setAuthTempToken('');
-    setAuthEmail(email);
+    setUser({
+      ...user,
+      tempToken: null,
+      email: email
+    })
     return mutation({
       variables: {
         email,
@@ -34,7 +40,7 @@ export const useSigninMutation = () => {
 }
 
 export const useSignupMutation = () => {
-  const [, setAuthEmail] = useAuthEmail();
+  const [user, setUser] = useUser();
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNUP, {
     onCompleted: (data) => {
@@ -44,7 +50,10 @@ export const useSignupMutation = () => {
   });
 
   const signup = (email, password, country) => {
-    setAuthEmail(email)
+    setUser({
+      ...user,
+      email: email,
+    })
     return mutation({
       variables: {
         email,
@@ -57,8 +66,7 @@ export const useSignupMutation = () => {
 }
 
 export const useSignIn2FA = () => {
-  const [, setAuthToken] = useAuthToken();
-  const [, setAuthTempToken] = useAuthTempToken();
+  const [user, setUser] = useUser();
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
     onCompleted: (data) => {
@@ -69,7 +77,10 @@ export const useSignIn2FA = () => {
       }
       else if (data.confirm2FA.status === "Success") {
         setAuthToken(data.confirm2FA.token)
-        setAuthTempToken("")
+        setUser({
+          ...user,
+          tempToken: null
+        })
         navigate("/profile")
       }
     }

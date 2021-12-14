@@ -2,15 +2,12 @@ import React, { useCallback, useState } from "react"
 import { Link } from "gatsby"
 import { Input } from "../components/common/FormControl"
 import AuthLayout from "../components/common/AuthLayout"
-import { useAuthEmail, useAuthTempToken } from "../config/auth-config"
 import { useSignIn2FA } from "../apollo/network/auth"
+import { useUser } from "../hooks/useUser"
 
 const OnetimePassword = () => {
     const [code, setCode] = useState("")
-
-    const [token] = useAuthTempToken()
-
-    const [email] = useAuthEmail()
+    const [user] = useUser()
 
     const handleCodeChange = useCallback((e) => {
         setCode(e.target.value)
@@ -27,7 +24,7 @@ const OnetimePassword = () => {
                 className="form"
                 onSubmit={(e) => {
                     e.preventDefault()
-                    signin2faMutation(email, token, code)
+                    signin2faMutation(user.email, user.tempToken, code)
                 }}
             >
                 <div className="form-group">
@@ -41,7 +38,7 @@ const OnetimePassword = () => {
                 </div>
                 <div className="form-group text-white">
                     Didn’t receive your code?{" "}
-                    <Link className="signup-link" to="/verify-email">
+                    <Link className="signup-link" to="#">
                         Send again
                     </Link>
                 </div>
