@@ -5,13 +5,28 @@ import Modal from "react-modal"
 import { Link } from "gatsby"
 
 // Icons
-import { Bell, CloseIcon, DownArrow, Logo, Tesla } from "../../utilities/imgImport"
+import {
+    Bell,
+    CloseIcon,
+    DownArrow,
+    HairColor1,
+    HairColor2,
+    HairColor3,
+    HairColor4,
+    HairStyle1,
+    HairStyle2,
+    HairStyle3,
+    Logo,
+    Tesla,
+} from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 const Menu = () => {
     // State
     const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
+    const [selectedHairStyle, setSelectedHairStyle] = useState(0)
+    const [selectedHairColor, setSelectedHairColor] = useState(0)
     const [selectedTab, setSelectedTab] = useState(0)
     const [active, setActive] = useState(false)
 
@@ -67,6 +82,54 @@ const Menu = () => {
         {
             index: 2,
             title: "accessories",
+        },
+    ]
+
+    const hairStyles = [
+        {
+            index: 0,
+            icon: HairStyle1,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 1,
+            icon: HairStyle2,
+            price: "0.01",
+            unit: "ndb",
+        },
+        {
+            index: 2,
+            icon: HairStyle3,
+            price: "0.01",
+            unit: "ndb",
+        },
+    ]
+
+    const hairColors = [
+        {
+            index: 0,
+            icon: HairColor1,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 1,
+            icon: HairColor2,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 2,
+            icon: HairColor3,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 3,
+            icon: HairColor4,
+            price: "100",
+            unit: "t",
         },
     ]
 
@@ -126,6 +189,7 @@ const Menu = () => {
                                                 width="14px"
                                                 height="14px"
                                                 src={CloseIcon}
+                                                className="mt-3 me-3"
                                                 alt="close"
                                             />
                                         </div>
@@ -160,7 +224,86 @@ const Menu = () => {
                                                 <div className="btn-save">save</div>
                                             </div>
                                         </div>
-                                        <div className="col-8 border-start">Mohammad</div>
+                                        <div className="col-8 border-start">
+                                            {selectedTab == 0 && (
+                                                <div className="dressup-modal-hair-section">
+                                                    <div className="row m-0">
+                                                        <div className="mb-2 ps-0">hair style</div>
+                                                        <div className="row m-0 p-0 me-4 border-top border-bottom border-start">
+                                                            {hairStyles.map((item) => {
+                                                                return (
+                                                                    <div
+                                                                        onClick={() =>
+                                                                            setSelectedHairStyle(
+                                                                                item.index
+                                                                            )
+                                                                        }
+                                                                        style={{
+                                                                            margin: "-1px",
+                                                                        }}
+                                                                        className={`col-3 p-3 border border-2 text-center cursor-pointer ${
+                                                                            selectedHairStyle ==
+                                                                            item.index
+                                                                                ? "border-success"
+                                                                                : "border-transparent"
+                                                                        }`}
+                                                                    >
+                                                                        <img
+                                                                            src={item.icon}
+                                                                            className="img-fluid"
+                                                                            alt="Avatar"
+                                                                        />
+                                                                        <div className="pt-3">
+                                                                            {item.price}
+                                                                            <span className="text-success">
+                                                                                {item.unit}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                    <div className="row m-0 my-3">
+                                                        <div className="mb-2 ps-0">hair style</div>
+                                                        <div className="row m-0 p-0 me-4 border-top border-start">
+                                                            {hairColors.map((item) => {
+                                                                return (
+                                                                    <div
+                                                                        onClick={() =>
+                                                                            setSelectedHairColor(
+                                                                                item.index
+                                                                            )
+                                                                        }
+                                                                        style={{
+                                                                            margin: "-1px",
+                                                                        }}
+                                                                        className={`col-3 p-3 border border-2 text-center cursor-pointer ${
+                                                                            selectedHairColor ==
+                                                                            item.index
+                                                                                ? "border-success"
+                                                                                : "border-transparent"
+                                                                        }`}
+                                                                    >
+                                                                        <img
+                                                                            src={item.icon}
+                                                                            className="img-fluid"
+                                                                            alt="Avatar"
+                                                                        />
+                                                                        <div className="pt-3">
+                                                                            {item.price}
+                                                                            <span className="text-success">
+                                                                                {item.unit}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </Modal>
                             </div>

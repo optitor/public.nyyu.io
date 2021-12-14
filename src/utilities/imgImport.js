@@ -57,6 +57,16 @@ import selfieImg from "../images/selfie-img.svg"
 import bell from "../images/icons/bell.svg"
 import downArrow from "../images/icons/down-arrow.svg"
 
+//dressup
+import hairStyle1 from "../images/dressup/hair-style-1.svg"
+import hairStyle2 from "../images/dressup/hair-style-2.svg"
+import hairStyle3 from "../images/dressup/hair-style-3.svg"
+
+import hairColor1 from "../images/dressup/hair-color-1.svg"
+import hairColor2 from "../images/dressup/hair-color-2.svg"
+import hairColor3 from "../images/dressup/hair-color-3.svg"
+import hairColor4 from "../images/dressup/hair-color-4.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const DownArrow = downArrow
@@ -111,4 +121,14 @@ export const Unpass2 = unpass2
 export const NewDoc = newDoc
 export const PhotoIcon = photoIcon
 export const SelfieImg = selfieImg
+
+//DressUP
+export const HairStyle1 = hairStyle1
+export const HairStyle2 = hairStyle2
+export const HairStyle3 = hairStyle3
+
+export const HairColor1 = hairColor1
+export const HairColor2 = hairColor2
+export const HairColor3 = hairColor3
+export const HairColor4 = hairColor4
 

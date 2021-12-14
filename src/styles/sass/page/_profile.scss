@@ -435,7 +435,7 @@
 }
 
 .dressup-modal {
-    max-width: 800px;
+    max-width: 950px;
     padding: 0px;
     &__header {
         display: flex;
@@ -485,6 +485,14 @@
             background-color: white;
             color: $black;
         }
+    }
+    &-hair-section {
+        color: white;
+        font-variant: small-caps;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.04em;
     }
 }
 
