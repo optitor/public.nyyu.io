@@ -121,8 +121,8 @@ const VerificationPage = () => {
     return (
         <main className="verify-page">
             <Header />
-            <section className="d-flex align-items-center">
-                <div className="container h-100">
+            <section className="d-flex align-items-start align-items-xl-center">
+                <div className="container">
                     {step < 3 && <h4 className="text-center mt-2 mb-4">Verify your identity</h4>}
                     {step !== -1 && step < 3 && (
                         <div className="d-flex mt-4">
@@ -133,9 +133,8 @@ const VerificationPage = () => {
                                     style={{ width: step * 50 + "%" }}
                                 ></div>
                                 <div
-                                    className={`right-circle ${
-                                        step === 2 ? "bg-green" : "bg-white"
-                                    }`}
+                                    className={`right-circle ${step === 2 ? "bg-green" : "bg-white"
+                                        }`}
                                 ></div>
                             </div>
                         </div>
@@ -191,13 +190,12 @@ const VerificationPage = () => {
                     {step === 1 && (
                         <div className="verify-step2">
                             <h5 className="text-center">Identity document</h5>
-                            <div className="d-flex flex-wrap justify-content-center">
+                            <div className="d-flex flex-wrap justify-content-center my-0 my-xxl-5">
                                 <div className="upload-doc me-lg-5">
                                     <div className="mb-3">
                                         <div
-                                            className={`file-upload ${
-                                                files.length > 0 && "uploaded"
-                                            }`}
+                                            className={`file-upload ${files.length > 0 && "uploaded"
+                                                }`}
                                             onDragEnter={handleDragDropEvent}
                                             onDragOver={handleDragDropEvent}
                                             onDrop={(e) => {
@@ -252,7 +250,7 @@ const VerificationPage = () => {
                                         </button>
                                     </div>
                                 )}
-                                <div className="upload-rule ms-lg-3">
+                                <div className="upload-rule">
                                     <p>Take a photo of your document. </p>
                                     <p>The photo should be:</p>
                                     <ul>
@@ -264,7 +262,7 @@ const VerificationPage = () => {
                                             should be visible).
                                         </li>
                                     </ul>
-                                    <div className="upload-rule__img mt-3">
+                                    <div className="upload-rule__img">
                                         <img src={Pass} alt="pass" />
                                         <img className="mx-3" src={Unpass1} alt="pass" />
                                         <img src={Unpass2} alt="pass" />
@@ -313,7 +311,7 @@ const VerificationPage = () => {
                         </div>
                     )}
                     {step > -1 && (
-                        <div className="text-center">
+                        <div className="text-center continue-on-mobile-button my-0 my-xxl-5">
                             <button
                                 className="btn-link"
                                 onClick={() => setState({ phoneModal: true })}

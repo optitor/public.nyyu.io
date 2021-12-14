@@ -54,7 +54,12 @@ import newDoc from "../images/new_doc.png"
 import photoIcon from "../images/photo-icon.svg"
 import selfieImg from "../images/selfie-img.svg"
 
+import bell from "../images/icons/bell.svg"
+import downArrow from "../images/icons/down-arrow.svg"
+
 export const Logo = logo
+export const Bell = bell
+export const DownArrow = downArrow
 export const Hero1 = hero1
 export const Hero2 = hero2
 export const ChartIcon = chart
@@ -106,3 +111,4 @@ export const Unpass2 = unpass2
 export const NewDoc = newDoc
 export const PhotoIcon = photoIcon
 export const SelfieImg = selfieImg
+
