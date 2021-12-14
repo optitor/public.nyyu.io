@@ -46,3 +46,10 @@ input[type="number"]::-webkit-outer-spin-button {
 .border-transparent {
     border-color: transparent !important;
 }
+.overflow-x-auto {
+    overflow-x: auto !important;
+    white-space: nowrap;
+}
+.overflow-y-hidden {
+    overflow-y: hidden !important;
+}

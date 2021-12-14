@@ -61,6 +61,8 @@ import downArrow from "../images/icons/down-arrow.svg"
 import hairStyle1 from "../images/dressup/hair-style-1.svg"
 import hairStyle2 from "../images/dressup/hair-style-2.svg"
 import hairStyle3 from "../images/dressup/hair-style-3.svg"
+import hairStyle4 from "../images/dressup/hair-style-4.svg"
+import hairStyle5 from "../images/dressup/hair-style-5.svg"
 
 import hairColor1 from "../images/dressup/hair-color-1.svg"
 import hairColor2 from "../images/dressup/hair-color-2.svg"
@@ -126,6 +128,8 @@ export const SelfieImg = selfieImg
 export const HairStyle1 = hairStyle1
 export const HairStyle2 = hairStyle2
 export const HairStyle3 = hairStyle3
+export const HairStyle4 = hairStyle4
+export const HairStyle5 = hairStyle5
 
 export const HairColor1 = hairColor1
 export const HairColor2 = hairColor2

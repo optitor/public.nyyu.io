@@ -494,6 +494,29 @@
         line-height: 22px;
         letter-spacing: 0.04em;
     }
+    &-items-horizontal-list {
+        display: inline-block !important;
+        float: none;
+        overflow-x: auto !important;
+        white-space: nowrap;
+        overflow-y: hidden;
+        padding: 0px;
+        margin: 0px;
+        /* width */
+        &::-webkit-scrollbar {
+            height: 1px !important;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #666666 !important;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #ffffff !important;
+        }
+    }
 }
 
 .tfa-modal {

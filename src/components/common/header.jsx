@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import Modal from "react-modal"
+import DressupHorizontalList from "../dressup-horizontal-list"
 
 // Libraries
 import { Link } from "gatsby"
@@ -16,6 +17,8 @@ import {
     HairStyle1,
     HairStyle2,
     HairStyle3,
+    HairStyle4,
+    HairStyle5,
     Logo,
     Tesla,
 } from "../../utilities/imgImport"
@@ -104,6 +107,18 @@ const Menu = () => {
             price: "0.01",
             unit: "ndb",
         },
+        // {
+        //     index: 3,
+        //     icon: HairStyle4,
+        //     price: "unavailable",
+        //     unit: "",
+        // },
+        // {
+        //     index: 4,
+        //     icon: HairStyle5,
+        //     price: "unavailable",
+        //     unit: "",
+        // },
     ]
 
     const hairColors = [
@@ -194,7 +209,7 @@ const Menu = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="row m-0 my-3 text-white">
+                                    <div className="row m-0 py-4 text-white">
                                         <div className="col-4">
                                             <div className="row">
                                                 <img
@@ -224,83 +239,22 @@ const Menu = () => {
                                                 <div className="btn-save">save</div>
                                             </div>
                                         </div>
-                                        <div className="col-8 border-start">
+                                        <div className="col-8 border-start px-5 py-3">
                                             {selectedTab == 0 && (
                                                 <div className="dressup-modal-hair-section">
-                                                    <div className="row m-0">
-                                                        <div className="mb-2 ps-0">hair style</div>
-                                                        <div className="row m-0 p-0 me-4 border-top border-bottom border-start">
-                                                            {hairStyles.map((item) => {
-                                                                return (
-                                                                    <div
-                                                                        onClick={() =>
-                                                                            setSelectedHairStyle(
-                                                                                item.index
-                                                                            )
-                                                                        }
-                                                                        style={{
-                                                                            margin: "-1px",
-                                                                        }}
-                                                                        className={`col-3 p-3 border border-2 text-center cursor-pointer ${
-                                                                            selectedHairStyle ==
-                                                                            item.index
-                                                                                ? "border-success"
-                                                                                : "border-transparent"
-                                                                        }`}
-                                                                    >
-                                                                        <img
-                                                                            src={item.icon}
-                                                                            className="img-fluid"
-                                                                            alt="Avatar"
-                                                                        />
-                                                                        <div className="pt-3">
-                                                                            {item.price}
-                                                                            <span className="text-success">
-                                                                                {item.unit}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                )
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                    <div className="row m-0 my-3">
-                                                        <div className="mb-2 ps-0">hair style</div>
-                                                        <div className="row m-0 p-0 me-4 border-top border-start">
-                                                            {hairColors.map((item) => {
-                                                                return (
-                                                                    <div
-                                                                        onClick={() =>
-                                                                            setSelectedHairColor(
-                                                                                item.index
-                                                                            )
-                                                                        }
-                                                                        style={{
-                                                                            margin: "-1px",
-                                                                        }}
-                                                                        className={`col-3 p-3 border border-2 text-center cursor-pointer ${
-                                                                            selectedHairColor ==
-                                                                            item.index
-                                                                                ? "border-success"
-                                                                                : "border-transparent"
-                                                                        }`}
-                                                                    >
-                                                                        <img
-                                                                            src={item.icon}
-                                                                            className="img-fluid"
-                                                                            alt="Avatar"
-                                                                        />
-                                                                        <div className="pt-3">
-                                                                            {item.price}
-                                                                            <span className="text-success">
-                                                                                {item.unit}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                )
-                                                            })}
-                                                        </div>
-                                                    </div>
+                                                    <DressupHorizontalList
+                                                        title={"hair style"}
+                                                        list={hairStyles}
+                                                        selectedItem={selectedHairStyle}
+                                                        setSelectedItem={setSelectedHairStyle}
+                                                    />
+                                                    <div className="mt-4"></div>
+                                                    <DressupHorizontalList
+                                                        title={"hair color"}
+                                                        list={hairColors}
+                                                        selectedItem={selectedHairColor}
+                                                        setSelectedItem={setSelectedHairColor}
+                                                    />
                                                 </div>
                                             )}
                                         </div>
