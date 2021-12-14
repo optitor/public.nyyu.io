@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react"
+import Modal from "react-modal"
 
 // Libraries
 import { Link } from "gatsby"
 
 // Icons
-import { Bell, DownArrow, Logo } from "../../utilities/imgImport"
+import { Bell, CloseIcon, DownArrow, Logo } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 const Menu = () => {
     // State
     const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
+    const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
     const [active, setActive] = useState(false)
 
     // Navigation Links
@@ -82,10 +84,38 @@ const Menu = () => {
                                     <div className="user-dropdown-menu">
                                         <div>dashboard</div>
                                         <div>profile</div>
-                                        <div>dressup</div>
+                                        <div onClick={() => setIsDressUPModalOpen(true)}>
+                                            dressup
+                                        </div>
                                         <div>faq</div>
                                     </div>
                                 )}
+                                <Modal
+                                    isOpen={isDressUPModalOpen}
+                                    onRequestClose={() => {
+                                        setIsDressUPModalOpen(false)
+                                    }}
+                                    ariaHideApp={false}
+                                    className="pwd-modal"
+                                    overlayClassName="pwd-modal__overlay"
+                                >
+                                    <div className="pwd-modal__header">
+                                        Change your password
+                                        <div
+                                            onClick={() => setIsDressUPModalOpen(false)}
+                                            onKeyDown={() => setIsDressUPModalOpen(false)}
+                                            role="button"
+                                            tabIndex="0"
+                                        >
+                                            <img
+                                                width="14px"
+                                                height="14px"
+                                                src={CloseIcon}
+                                                alt="close"
+                                            />
+                                        </div>
+                                    </div>
+                                </Modal>
                             </div>
                         )}
                     </div>

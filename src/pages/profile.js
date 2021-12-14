@@ -138,7 +138,6 @@ const Profile = () => {
         <main className="profile-page">
             <Header />
             <section className="container position-relative h-100">
-                {/* <div className="d-flex align-items-center justify-content-center w-100"> */}
                 <div className="row mt-lg-5">
                     <div className="col-lg-3 profile-page__left">
                         <div className="user-info">
@@ -398,7 +397,6 @@ const Profile = () => {
                             </div>
                         )}
                     </div>
-                    {/* </div> */}
                 </div>
             </section>
             <Modal
