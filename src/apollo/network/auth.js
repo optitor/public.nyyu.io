@@ -14,7 +14,6 @@ export const useSigninMutation = () => {
         return
       }
       else if (data.signin.status === "Success") {
-        console.log("success login", data.signin.token)
         setUser({
           ...user,
           tempToken: data.signin.token,
@@ -46,7 +45,6 @@ export const useSignupMutation = () => {
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNUP, {
     onCompleted: (data) => {
       navigate("/app/verify-email")
-      console.log("Signup result", data) 
     }
   });
 
@@ -71,7 +69,6 @@ export const useSignIn2FA = () => {
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
     onCompleted: (data) => {
-      console.log("confirm2faresult", data)
       if (data.confirm2FA.status === "Failed") {
         // do something
         return

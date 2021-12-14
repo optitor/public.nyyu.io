@@ -10,11 +10,10 @@ import { useAuth } from "../../hooks/useAuth"
 const Signin = () => {
     const auth = useAuth();
 
-    if(auth?.isLoggedIn())
-        navigate("/app/profile")
-    // useEffect(() => {
-    //     console.log("check user logged in", auth?.isLoggedIn())
-    // }, [])
+    useEffect(() => {
+        if(auth?.isLoggedIn())
+            navigate("/app/profile")
+    }, [])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
@@ -91,7 +90,7 @@ const Signin = () => {
                     >
                         Keep me signed in in this device
                     </CheckBox>
-                    <Link className="txt-green forget-pwd" to="/password-reset">
+                    <Link className="txt-green forget-pwd" to="/app/password-reset">
                         Forgot password?
                     </Link>
                 </div>
@@ -110,7 +109,7 @@ const Signin = () => {
             </ul>
             <p className="text-white text-center">
                 Do not have an account?{" "}
-                <Link to="/signup" className="signup-link">
+                <Link to="/app/signup" className="signup-link">
                     Sign up
                 </Link>
             </p>

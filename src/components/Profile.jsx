@@ -84,7 +84,6 @@ const wallets = [
 ]
 
 const Profile = () => {
-    console.log("get token", getInMemoryAuthToken());
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         bid_rank: true,
         round_start: false,
