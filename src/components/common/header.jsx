@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react"
+import Modal from "react-modal"
 
 // Libraries
 import { Link } from "gatsby"
 
 // Icons
-import { Logo } from "../../utilities/imgImport"
+import { Bell, CloseIcon, DownArrow, Logo } from "../../utilities/imgImport"
+import { User } from "../../utilities/user-data"
 
 const Menu = () => {
     // State
+    const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
+    const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
     const [active, setActive] = useState(false)
 
     // Navigation Links
@@ -34,9 +38,10 @@ const Menu = () => {
         },
     ]
 
-    /**
-     * Handles 'ESC' key pressing.
-     */
+    //DropDown Menu.
+    const toggleDropDownMenu = () => setIsDropDownMenuOpen(!isDropDownMenuOpen)
+
+    // Handles 'ESC' key pressing.
     useEffect(() => {
         const handleEscKeyPress = (event) => {
             if (event.key === "Escape" && active) {
@@ -58,9 +63,61 @@ const Menu = () => {
 
                 <div className="d-flex align-items-center">
                     <div className="sign-in">
-                        <Link className="btn-primary text-uppercase d-inline-block" to="/signin">
-                            sign in
-                        </Link>
+                        {User.loggedIn == false ? (
+                            <Link
+                                className="btn-primary text-uppercase d-inline-block"
+                                to="/signin"
+                            >
+                                Sign In
+                            </Link>
+                        ) : (
+                            <div className="d-flex align-items-center justify-content-end">
+                                <img src={Bell} alt="Bell Icon" />
+                                <img src={User.avatar} className="w-50 px-4" alt="Tesla Icon" />
+                                <img
+                                    src={DownArrow}
+                                    alt="Down Arrow Icon"
+                                    className="cursor-pointer"
+                                    onClick={toggleDropDownMenu}
+                                />
+                                {isDropDownMenuOpen && (
+                                    <div className="user-dropdown-menu">
+                                        <div>dashboard</div>
+                                        <div>profile</div>
+                                        <div onClick={() => setIsDressUPModalOpen(true)}>
+                                            dressup
+                                        </div>
+                                        <div>faq</div>
+                                    </div>
+                                )}
+                                <Modal
+                                    isOpen={isDressUPModalOpen}
+                                    onRequestClose={() => {
+                                        setIsDressUPModalOpen(false)
+                                    }}
+                                    ariaHideApp={false}
+                                    className="pwd-modal"
+                                    overlayClassName="pwd-modal__overlay"
+                                >
+                                    <div className="pwd-modal__header">
+                                        Change your password
+                                        <div
+                                            onClick={() => setIsDressUPModalOpen(false)}
+                                            onKeyDown={() => setIsDressUPModalOpen(false)}
+                                            role="button"
+                                            tabIndex="0"
+                                        >
+                                            <img
+                                                width="14px"
+                                                height="14px"
+                                                src={CloseIcon}
+                                                alt="close"
+                                            />
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </div>
+                        )}
                     </div>
                     <button
                         type="button"
