@@ -8,7 +8,6 @@ import { useSigninMutation } from "../apollo/network/auth"
 import { User } from "../utilities/user-data"
 
 const Signin = () => {
-    navigate
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
         pwd: { value: "", error: "" },

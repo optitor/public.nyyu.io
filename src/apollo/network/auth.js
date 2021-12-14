@@ -14,6 +14,7 @@ export const useSigninMutation = () => {
         return
       }
       else if (data.signin.status === "Success") {
+        console.log("success login", data.signin.token)
         setUser({
           ...user,
           tempToken: data.signin.token,
@@ -26,7 +27,7 @@ export const useSigninMutation = () => {
   const signin = (email, password) => {
     setUser({
       ...user,
-      tempToken: null,
+      tempToken: "",
       email: email
     })
     return mutation({
@@ -81,7 +82,7 @@ export const useSignIn2FA = () => {
           ...user,
           tempToken: null
         })
-        navigate("/profile")
+        navigate("/app/profile")
       }
     }
   });
