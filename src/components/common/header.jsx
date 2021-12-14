@@ -24,7 +24,11 @@ import {
 } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
+import { useAuth } from "../../hooks/useAuth"
+
 const Menu = () => {
+    const auth = useAuth()
+
     // State
     const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
@@ -157,7 +161,7 @@ const Menu = () => {
 
                 <div className="d-flex align-items-center">
                     <div className="sign-in">
-                        {User.loggedIn == false ? (
+                        {!auth?.isLoggedIn() ? (
                             <Link
                                 className="btn-primary text-uppercase d-inline-block"
                                 to="/signin"

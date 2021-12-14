@@ -8,8 +8,17 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import "react-tabs/style/react-tabs.css"
 import "rc-slider/assets/index.css"
 
-import { ApplicationContext } from "./src/context/store"
+import { AuthProvider } from "./src/hooks/useAuth"
+import { ApolloProvider } from "@apollo/client"
+import { client } from "./src/apollo/client"
+import { UserProvider } from "./src/hooks/useUser"
 
-// export { wrapRootElement } from "./src/apollo/provider"
-
-export const wrapRootElement = ({ element }) => <ApplicationContext>{element}</ApplicationContext>
+export const wrapRootElement = ({ element }) => {
+  return <ApolloProvider client={client}>
+    <AuthProvider>
+      <UserProvider>
+        {element}
+      </UserProvider>
+    </AuthProvider>
+  </ApolloProvider>
+}
