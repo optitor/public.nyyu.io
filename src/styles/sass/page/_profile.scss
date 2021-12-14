@@ -434,6 +434,60 @@
     }
 }
 
+.dressup-modal {
+    max-width: 800px;
+    padding: 0px;
+    &__header {
+        display: flex;
+        justify-content: end;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
+        text-transform: uppercase;
+        color: white;
+    }
+    &-avatar-name {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 23px;
+    }
+    &-sections-list {
+        color: #464646;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 29px;
+        margin-top: 30px;
+        margin-left: 30px;
+        margin-bottom: 30px;
+        font-variant: small-caps;
+        & > div {
+            cursor: pointer;
+            &.active {
+                color: white;
+            }
+        }
+    }
+    .btn-save {
+        color: white;
+        font-variant: small-caps;
+        font-weight: bold;
+        font-size: 24px;
+        text-align: center;
+        width: auto;
+        border: 1px solid white;
+        padding: 3px 43px;
+        margin-left: 45px;
+        margin-bottom: 30px;
+        vertical-align: middle;
+        transition: 500ms;
+        cursor: pointer;
+        &:hover {
+            background-color: white;
+            color: $black;
+        }
+    }
+}
+
 .tfa-modal {
     max-width: 539px;
     &__header {

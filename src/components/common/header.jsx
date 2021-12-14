@@ -5,13 +5,14 @@ import Modal from "react-modal"
 import { Link } from "gatsby"
 
 // Icons
-import { Bell, CloseIcon, DownArrow, Logo } from "../../utilities/imgImport"
+import { Bell, CloseIcon, DownArrow, Logo, Tesla } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 const Menu = () => {
     // State
     const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
+    const [selectedTab, setSelectedTab] = useState(0)
     const [active, setActive] = useState(false)
 
     // Navigation Links
@@ -53,6 +54,21 @@ const Menu = () => {
 
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
+
+    const tabs = [
+        {
+            index: 0,
+            title: "hair",
+        },
+        {
+            index: 1,
+            title: "face",
+        },
+        {
+            index: 2,
+            title: "accessories",
+        },
+    ]
 
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
@@ -96,11 +112,10 @@ const Menu = () => {
                                         setIsDressUPModalOpen(false)
                                     }}
                                     ariaHideApp={false}
-                                    className="pwd-modal"
-                                    overlayClassName="pwd-modal__overlay"
+                                    className="dressup-modal"
+                                    overlayClassName="dressup-modal__overlay"
                                 >
-                                    <div className="pwd-modal__header">
-                                        Change your password
+                                    <div className="dressup-modal__header">
                                         <div
                                             onClick={() => setIsDressUPModalOpen(false)}
                                             onKeyDown={() => setIsDressUPModalOpen(false)}
@@ -114,6 +129,38 @@ const Menu = () => {
                                                 alt="close"
                                             />
                                         </div>
+                                    </div>
+                                    <div className="row m-0 my-3 text-white">
+                                        <div className="col-4">
+                                            <div className="row">
+                                                <img
+                                                    src={Tesla}
+                                                    alt="Avatar"
+                                                    className="w-75 px-5 mx-auto"
+                                                />
+                                                <span className="text-center dressup-modal-avatar-name">
+                                                    Tesla
+                                                </span>
+                                                <div className="dressup-modal-sections-list">
+                                                    {tabs.map((item) => (
+                                                        <div
+                                                            onClick={() =>
+                                                                setSelectedTab(item.index)
+                                                            }
+                                                            key={item.index}
+                                                            className={`${
+                                                                item.index == selectedTab &&
+                                                                "active"
+                                                            }`}
+                                                        >
+                                                            {item.title}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="btn-save">save</div>
+                                            </div>
+                                        </div>
+                                        <div className="col-8 border-start">Mohammad</div>
                                     </div>
                                 </Modal>
                             </div>
