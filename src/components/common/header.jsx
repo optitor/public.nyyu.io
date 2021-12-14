@@ -4,11 +4,12 @@ import React, { useEffect, useState } from "react"
 import { Link } from "gatsby"
 
 // Icons
-import { Logo } from "../../utilities/imgImport"
+import { Bell, DownArrow, Logo } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 const Menu = () => {
     // State
+    const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
     const [active, setActive] = useState(false)
 
     // Navigation Links
@@ -35,9 +36,10 @@ const Menu = () => {
         },
     ]
 
-    /**
-     * Handles 'ESC' key pressing.
-     */
+    //DropDown Menu.
+    const toggleDropDownMenu = () => setIsDropDownMenuOpen(!isDropDownMenuOpen)
+
+    // Handles 'ESC' key pressing.
     useEffect(() => {
         const handleEscKeyPress = (event) => {
             if (event.key === "Escape" && active) {
@@ -67,7 +69,24 @@ const Menu = () => {
                                 Sign In
                             </Link>
                         ) : (
-                            <></>
+                            <div className="d-flex align-items-center justify-content-end">
+                                <img src={Bell} alt="Bell Icon" />
+                                <img src={User.avatar} className="w-50 px-4" alt="Tesla Icon" />
+                                <img
+                                    src={DownArrow}
+                                    alt="Down Arrow Icon"
+                                    className="cursor-pointer"
+                                    onClick={toggleDropDownMenu}
+                                />
+                                {isDropDownMenuOpen && (
+                                    <div className="user-dropdown-menu">
+                                        <div>dashboard</div>
+                                        <div>profile</div>
+                                        <div>dressup</div>
+                                        <div>faq</div>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                     <button

@@ -7,6 +7,26 @@
     z-index: 9999;
     margin-bottom: 25px;
 
+    .user-dropdown-menu {
+        position: absolute;
+        top: 80px;
+        background-color: black;
+        border-radius: 5px;
+        z-index: 999;
+        font-variant: small-caps;
+        color: white;
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 37px;
+        & > div {
+            border-bottom: 1px solid white;
+            padding: 12px 25px;
+            &:last-child {
+                border: none;
+            }
+        }
+    }
+
     .sign-in {
         margin-right: 30px;
         @include mq("phone", max) {
