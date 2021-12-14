@@ -19,10 +19,15 @@
         font-size: 30px;
         line-height: 37px;
         & > div {
+            cursor: pointer;
             border-bottom: 1px solid white;
             padding: 12px 25px;
+            transition: 500ms;
             &:last-child {
                 border: none;
+            }
+            &:hover {
+                color: rgba(white, 0.5) !important;
             }
         }
     }
