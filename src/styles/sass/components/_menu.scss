@@ -10,7 +10,7 @@
     .user-dropdown-menu {
         position: absolute;
         top: 80px;
-        background-color: black;
+        background-color: darken($black, 3%);
         border-radius: 5px;
         z-index: 999;
         font-variant: small-caps;
