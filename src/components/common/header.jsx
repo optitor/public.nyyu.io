@@ -5,6 +5,7 @@ import { Link } from "gatsby"
 
 // Icons
 import { Logo } from "../../utilities/imgImport"
+import { User } from "../../utilities/user-data"
 
 const Menu = () => {
     // State
@@ -58,9 +59,16 @@ const Menu = () => {
 
                 <div className="d-flex align-items-center">
                     <div className="sign-in">
-                        <Link className="btn-primary text-uppercase d-inline-block" to="/signin">
-                            sign in
-                        </Link>
+                        {User.loggedIn == false ? (
+                            <Link
+                                className="btn-primary text-uppercase d-inline-block"
+                                to="/signin"
+                            >
+                                Sign In
+                            </Link>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                     <button
                         type="button"
