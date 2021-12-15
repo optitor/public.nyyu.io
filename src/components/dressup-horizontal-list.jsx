@@ -4,16 +4,16 @@ export default function DressupHorizontalList({ list, title, selectedItem, setSe
     return (
         <div className="row m-0">
             <div className="mb-2 ps-0">{title}</div>
-            <div className="row me-4 dressup-modal-items-horizontal-list border-top border-start border-bottom">
+            <div
+                className={`row me-4 dressup-modal-items-horizontal-list border-top border-bottom border-secondary border-2 ${
+                    list.length > 4 ? "d-inline-block" : "d-auto"
+                }`}
+            >
                 {list.map((item) => {
                     return (
                         <div
                             onClick={() => setSelectedItem(item.index)}
-                            style={{
-                                marginTop: "-1px",
-                                marginBottom: "-1px",
-                            }}
-                            className={`col-3 p-3 d-inline-block float-none border border-3 text-center cursor-pointer ${
+                            className={`col-3 p-3 d-inline-block float-none border border-4 text-center cursor-pointer ${
                                 selectedItem == item.index ? "border-success" : "border-transparent"
                             }`}
                         >

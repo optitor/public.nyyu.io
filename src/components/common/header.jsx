@@ -138,6 +138,18 @@ const Menu = () => {
             price: "100",
             unit: "t",
         },
+        {
+            index: 4,
+            icon: HairColor4,
+            price: "100",
+            unit: "t",
+        },
+        {
+            index: 5,
+            icon: HairColor4,
+            price: "100",
+            unit: "t",
+        },
     ]
 
     return (
