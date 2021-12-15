@@ -1,7 +1,7 @@
 import { Tesla } from "./imgImport"
 
 const User = {
-    loggedIn: true,
+    loggedIn: false,
     avatar: Tesla
 }
 export {
