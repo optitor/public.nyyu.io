@@ -84,6 +84,24 @@ import expression5 from "../images/dressup/expressions-5.svg"
 import expression6 from "../images/dressup/expressions-6.svg"
 import expression7 from "../images/dressup/expressions-7.svg"
 
+import hat1 from "../images/dressup/hat-1.svg"
+import hat2 from "../images/dressup/hat-2.svg"
+import hat3 from "../images/dressup/hat-3.svg"
+import hat4 from "../images/dressup/hat-4.svg"
+import hat5 from "../images/dressup/hat-5.svg"
+import hat6 from "../images/dressup/hat-6.svg"
+import hat7 from "../images/dressup/hat-7.svg"
+import hat8 from "../images/dressup/hat-8.svg"
+import hat9 from "../images/dressup/hat-9.svg"
+
+import other1 from "../images/dressup/other-1.svg"
+import other2 from "../images/dressup/other-2.svg"
+import other3 from "../images/dressup/other-3.svg"
+import other4 from "../images/dressup/other-4.svg"
+import other5 from "../images/dressup/other-5.svg"
+import other6 from "../images/dressup/other-6.svg"
+
+
 export const Logo = logo
 export const Bell = bell
 export const DownArrow = downArrow
@@ -166,3 +184,19 @@ export const Expression5 = expression5
 export const Expression6 = expression6
 export const Expression7 = expression7
 
+export const Hat1 = hat1
+export const Hat2 = hat2
+export const Hat3 = hat3
+export const Hat4 = hat4
+export const Hat5 = hat5
+export const Hat6 = hat6
+export const Hat7 = hat7
+export const Hat8 = hat8
+export const Hat9 = hat9
+
+export const Other1 = other1
+export const Other2 = other2
+export const Other3 = other3
+export const Other4 = other4
+export const Other5 = other5
+export const Other6 = other6

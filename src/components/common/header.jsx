@@ -6,38 +6,11 @@ import DressupHorizontalList from "../dressup-horizontal-list"
 import { Link } from "gatsby"
 
 // Icons
-import {
-    Bell,
-    CloseIcon,
-    DownArrow,
-    Expression1,
-    Expression2,
-    Expression3,
-    Expression4,
-    Expression5,
-    Expression6,
-    Expression7,
-    FacialStyle1,
-    FacialStyle2,
-    FacialStyle3,
-    FacialStyle4,
-    FacialStyle5,
-    FacialStyle6,
-    HairColor1,
-    HairColor2,
-    HairColor3,
-    HairColor4,
-    HairStyle1,
-    HairStyle2,
-    HairStyle3,
-    HairStyle4,
-    HairStyle5,
-    Logo,
-    Tesla,
-} from "../../utilities/imgImport"
+import { Bell, CloseIcon, DownArrow, Logo, Tesla } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 import { useAuth } from "../../hooks/useAuth"
+import { DressupData } from "../../utilities/dressup-data"
 
 const Menu = () => {
     const auth = useAuth()
@@ -49,6 +22,8 @@ const Menu = () => {
     const [selectedHairColor, setSelectedHairColor] = useState(0)
     const [selectedFacialStyle, setSelectedFacialStyle] = useState(0)
     const [selectedExpression, setSelectedExpression] = useState(0)
+    const [selectedHat, setSelectedHat] = useState(0)
+    const [selectedOther, setSelectedOther] = useState(0)
     const [selectedTab, setSelectedTab] = useState(0)
     const [active, setActive] = useState(false)
 
@@ -91,152 +66,6 @@ const Menu = () => {
 
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
-
-    const tabs = [
-        {
-            index: 0,
-            title: "hair",
-        },
-        {
-            index: 1,
-            title: "face",
-        },
-        {
-            index: 2,
-            title: "accessories",
-        },
-    ]
-
-    const hairStyles = [
-        {
-            index: 0,
-            icon: HairStyle1,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 1,
-            icon: HairStyle2,
-            price: "0.01",
-            unit: "ndb",
-        },
-        {
-            index: 2,
-            icon: HairStyle3,
-            price: "0.01",
-            unit: "ndb",
-        },
-    ]
-
-    const hairColors = [
-        {
-            index: 0,
-            icon: HairColor1,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 1,
-            icon: HairColor2,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 2,
-            icon: HairColor3,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 3,
-            icon: HairColor4,
-            price: "100",
-            unit: "t",
-        },
-    ]
-
-    const facialStyles = [
-        {
-            index: 0,
-            icon: FacialStyle1,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 1,
-            icon: FacialStyle2,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 2,
-            icon: FacialStyle3,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 3,
-            icon: FacialStyle4,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 4,
-            icon: FacialStyle5,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 5,
-            icon: FacialStyle6,
-            price: "owned",
-            unit: "",
-        },
-    ]
-    const expressions = [
-        {
-            index: 0,
-            icon: Expression1,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 1,
-            icon: Expression2,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 2,
-            icon: Expression3,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 3,
-            icon: Expression4,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 4,
-            icon: Expression5,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 5,
-            icon: Expression6,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 6,
-            icon: Expression7,
-            price: "owned",
-            unit: "",
-        },
-    ]
 
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
@@ -311,7 +140,7 @@ const Menu = () => {
                                                     Tesla
                                                 </span>
                                                 <div className="dressup-modal-sections-list">
-                                                    {tabs.map((item) => (
+                                                    {DressupData.tabs.map((item) => (
                                                         <div
                                                             onClick={() =>
                                                                 setSelectedTab(item.index)
@@ -334,14 +163,14 @@ const Menu = () => {
                                                 <div className="dressup-modal-hair-section">
                                                     <DressupHorizontalList
                                                         title={"hair style"}
-                                                        list={hairStyles}
+                                                        list={DressupData.hairStyles}
                                                         selectedItem={selectedHairStyle}
                                                         setSelectedItem={setSelectedHairStyle}
                                                     />
                                                     <div className="mt-4"></div>
                                                     <DressupHorizontalList
                                                         title={"hair color"}
-                                                        list={hairColors}
+                                                        list={DressupData.hairColors}
                                                         selectedItem={selectedHairColor}
                                                         setSelectedItem={setSelectedHairColor}
                                                         secondRow
@@ -352,16 +181,34 @@ const Menu = () => {
                                                 <div className="dressup-modal-hair-section">
                                                     <DressupHorizontalList
                                                         title={"facial style"}
-                                                        list={facialStyles}
+                                                        list={DressupData.facialStyles}
                                                         selectedItem={selectedFacialStyle}
                                                         setSelectedItem={setSelectedFacialStyle}
                                                     />
                                                     <div className="mt-4"></div>
                                                     <DressupHorizontalList
                                                         title={"expressions"}
-                                                        list={expressions}
+                                                        list={DressupData.expressions}
                                                         selectedItem={selectedExpression}
                                                         setSelectedItem={setSelectedExpression}
+                                                        secondRow
+                                                    />
+                                                </div>
+                                            )}
+                                            {selectedTab == 2 && (
+                                                <div className="dressup-modal-hair-section">
+                                                    <DressupHorizontalList
+                                                        title={"hats"}
+                                                        list={DressupData.hats}
+                                                        selectedItem={selectedHat}
+                                                        setSelectedItem={setSelectedHat}
+                                                    />
+                                                    <div className="mt-4"></div>
+                                                    <DressupHorizontalList
+                                                        title={"other"}
+                                                        list={DressupData.others}
+                                                        selectedItem={selectedOther}
+                                                        setSelectedItem={setSelectedOther}
                                                         secondRow
                                                     />
                                                 </div>
