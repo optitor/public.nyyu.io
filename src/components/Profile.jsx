@@ -5,8 +5,10 @@ import { Link } from "gatsby"
 import Switch from "react-switch"
 import Select from "react-select"
 import Modal from "react-modal"
+import { useQuery } from "@apollo/client"
 import { FormInput } from "../components/common/FormControl"
-import { getInMemoryAuthToken } from "../utilities/auth"
+// import { getInMemoryAuthToken } from "../utilities/auth"
+import { GET_USER } from "../apollo/graghqls/querys/Auth"
 import {
     Coinbase,
     MetaMask,
@@ -84,6 +86,10 @@ const wallets = [
 ]
 
 const Profile = () => {
+    const { loading, error, data } = useQuery(GET_USER);
+
+    console.log("GET USER", loading, error, data)
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         bid_rank: true,
         round_start: false,

@@ -1,5 +1,5 @@
 import * as GraphQL from "../graghqls/mutations/Auth"
-import { useMutation, useQuery } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import { navigate} from "gatsby"
 import { useUser } from "../../hooks/useUser"
 import { setAuthToken } from "../../utilities/auth"
@@ -78,6 +78,7 @@ export const useSignIn2FA = () => {
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
     onCompleted: (data) => {
+      console.log("2fa result", data)
       if (data.confirm2FA.status === "Failed") {
         // do something
         return
