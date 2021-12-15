@@ -69,6 +69,21 @@ import hairColor2 from "../images/dressup/hair-color-2.svg"
 import hairColor3 from "../images/dressup/hair-color-3.svg"
 import hairColor4 from "../images/dressup/hair-color-4.svg"
 
+import facialStyle1 from "../images/dressup/facial-style-1.svg"
+import facialStyle2 from "../images/dressup/facial-style-2.svg"
+import facialStyle3 from "../images/dressup/facial-style-3.svg"
+import facialStyle4 from "../images/dressup/facial-style-4.svg"
+import facialStyle5 from "../images/dressup/facial-style-5.svg"
+import facialStyle6 from "../images/dressup/facial-style-6.svg"
+
+import expression1 from "../images/dressup/expressions-1.svg"
+import expression2 from "../images/dressup/expressions-2.svg"
+import expression3 from "../images/dressup/expressions-3.svg"
+import expression4 from "../images/dressup/expressions-4.svg"
+import expression5 from "../images/dressup/expressions-5.svg"
+import expression6 from "../images/dressup/expressions-6.svg"
+import expression7 from "../images/dressup/expressions-7.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const DownArrow = downArrow
@@ -135,4 +150,19 @@ export const HairColor1 = hairColor1
 export const HairColor2 = hairColor2
 export const HairColor3 = hairColor3
 export const HairColor4 = hairColor4
+
+export const FacialStyle1 = facialStyle1
+export const FacialStyle2 = facialStyle2
+export const FacialStyle3 = facialStyle3
+export const FacialStyle4 = facialStyle4
+export const FacialStyle5 = facialStyle5
+export const FacialStyle6 = facialStyle6
+
+export const Expression1 = expression1
+export const Expression2 = expression2
+export const Expression3 = expression3
+export const Expression4 = expression4
+export const Expression5 = expression5
+export const Expression6 = expression6
+export const Expression7 = expression7
 

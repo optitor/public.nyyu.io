@@ -10,6 +10,19 @@ import {
     Bell,
     CloseIcon,
     DownArrow,
+    Expression1,
+    Expression2,
+    Expression3,
+    Expression4,
+    Expression5,
+    Expression6,
+    Expression7,
+    FacialStyle1,
+    FacialStyle2,
+    FacialStyle3,
+    FacialStyle4,
+    FacialStyle5,
+    FacialStyle6,
     HairColor1,
     HairColor2,
     HairColor3,
@@ -34,6 +47,8 @@ const Menu = () => {
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
     const [selectedHairStyle, setSelectedHairStyle] = useState(0)
     const [selectedHairColor, setSelectedHairColor] = useState(0)
+    const [selectedFacialStyle, setSelectedFacialStyle] = useState(0)
+    const [selectedExpression, setSelectedExpression] = useState(0)
     const [selectedTab, setSelectedTab] = useState(0)
     const [active, setActive] = useState(false)
 
@@ -138,17 +153,88 @@ const Menu = () => {
             price: "100",
             unit: "t",
         },
+    ]
+
+    const facialStyles = [
+        {
+            index: 0,
+            icon: FacialStyle1,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 1,
+            icon: FacialStyle2,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 2,
+            icon: FacialStyle3,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 3,
+            icon: FacialStyle4,
+            price: "owned",
+            unit: "",
+        },
         {
             index: 4,
-            icon: HairColor4,
-            price: "100",
-            unit: "t",
+            icon: FacialStyle5,
+            price: "owned",
+            unit: "",
         },
         {
             index: 5,
-            icon: HairColor4,
-            price: "100",
-            unit: "t",
+            icon: FacialStyle6,
+            price: "owned",
+            unit: "",
+        },
+    ]
+    const expressions = [
+        {
+            index: 0,
+            icon: Expression1,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 1,
+            icon: Expression2,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 2,
+            icon: Expression3,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 3,
+            icon: Expression4,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 4,
+            icon: Expression5,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 5,
+            icon: Expression6,
+            price: "owned",
+            unit: "",
+        },
+        {
+            index: 6,
+            icon: Expression7,
+            price: "owned",
+            unit: "",
         },
     ]
 
@@ -258,6 +344,25 @@ const Menu = () => {
                                                         list={hairColors}
                                                         selectedItem={selectedHairColor}
                                                         setSelectedItem={setSelectedHairColor}
+                                                        secondRow
+                                                    />
+                                                </div>
+                                            )}
+                                            {selectedTab == 1 && (
+                                                <div className="dressup-modal-hair-section">
+                                                    <DressupHorizontalList
+                                                        title={"facial style"}
+                                                        list={facialStyles}
+                                                        selectedItem={selectedFacialStyle}
+                                                        setSelectedItem={setSelectedFacialStyle}
+                                                    />
+                                                    <div className="mt-4"></div>
+                                                    <DressupHorizontalList
+                                                        title={"expressions"}
+                                                        list={expressions}
+                                                        selectedItem={selectedExpression}
+                                                        setSelectedItem={setSelectedExpression}
+                                                        secondRow
                                                     />
                                                 </div>
                                             )}
