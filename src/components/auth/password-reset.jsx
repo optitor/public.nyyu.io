@@ -7,14 +7,12 @@ import { useForgotPassword } from "../../apollo/network/auth"
 import { useAuth } from "../../hooks/useAuth"
 
 const ForgetPassword = () => {
-    const auth = useAuth();
+    const auth = useAuth()
 
     useEffect(() => {
-        if(auth?.isLoggedIn())
-            navigate("/app/profile")
+        if (auth?.isLoggedIn()) navigate("/app/profile")
     }, [])
 
-    
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
     })
@@ -28,12 +26,12 @@ const ForgetPassword = () => {
         })
     }, [])
 
-    const [forgotPwdMutation, forgotPwdMutationResults] = useForgotPassword();
+    const [forgotPwdMutation, forgotPwdMutationResults] = useForgotPassword()
 
     return (
         <AuthLayout>
             <h3 className="signup-head mb-5">Forgot password</h3>
-            <form 
+            <form
                 className="form"
                 onSubmit={(e) => {
                     e.preventDefault()
@@ -62,7 +60,7 @@ const ForgetPassword = () => {
             </form>
             <p className="text-white text-center">
                 Return to{" "}
-                <Link to="/signin" className="signup-link">
+                <Link to="/app/signin" className="signup-link">
                     Sign in
                 </Link>
             </p>
