@@ -101,6 +101,12 @@ import other4 from "../images/dressup/other-4.svg"
 import other5 from "../images/dressup/other-5.svg"
 import other6 from "../images/dressup/other-6.svg"
 
+import emptyAvatar from "../images/dressup/empty-avatar.svg"
+
+import hairStyleIsolatedIcon1 from "../images/dressup/isolated-icons/hair-style-isolated-icon-1.svg"
+import hairStyleIsolatedIcon2 from "../images/dressup/isolated-icons/hair-style-isolated-icon-2.svg"
+import hairStyleIsolatedIcon3 from "../images/dressup/isolated-icons/hair-style-isolated-icon-3.svg"
+
 
 export const Logo = logo
 export const Bell = bell
@@ -200,3 +206,10 @@ export const Other3 = other3
 export const Other4 = other4
 export const Other5 = other5
 export const Other6 = other6
+
+export const EmptyAvatar = emptyAvatar
+
+//Isolated Icons
+export const HairStyleIsolatedIcon1 = hairStyleIsolatedIcon1
+export const HairStyleIsolatedIcon2 = hairStyleIsolatedIcon2
+export const HairStyleIsolatedIcon3 = hairStyleIsolatedIcon3

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import Modal from "react-modal"
 import { DressupData } from "../../utilities/dressup-data"
-import { CloseIcon, Tesla } from "../../utilities/imgImport"
+import { CloseIcon, EmptyAvatar } from "../../utilities/imgImport"
 import DressupHorizontalList from "./dressup-horizontal-list"
 
 export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen }) {
@@ -41,7 +41,15 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
             <div className="row m-0 py-4 text-white">
                 <div className="col-4">
                     <div className="row">
-                        <img src={Tesla} alt="Avatar" className="w-75 px-5 mx-auto" />
+                        <div className="dressup-modal-avatar">
+                            <img
+                                src={DressupData.hairStyles[selectedHairStyle].isolatedIcon}
+                                className="isolated-hair-style"
+                                alt="Hair Isolated Icon"
+                            />
+                            <img src={EmptyAvatar} className="empty-avatar" alt="Avatar" />
+                        </div>
+
                         <span className="text-center dressup-modal-avatar-name">Tesla</span>
                         <div className="dressup-modal-sections-list">
                             {DressupData.tabs.map((item) => (

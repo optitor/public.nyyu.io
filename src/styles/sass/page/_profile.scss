@@ -437,6 +437,21 @@
 .dressup-modal {
     max-width: 950px;
     padding: 0px;
+    &-avatar {
+        position: relative;
+        margin: auto;
+        text-align: center;
+        .empty-avatar {
+            width: 107.69px;
+            height: 82.28px;
+        }
+        .isolated-hair-style {
+            width: 77.44px;
+            height: auto;
+            position: absolute;
+            // left: 15.73px;
+        }
+    }
     &__header {
         display: flex;
         justify-content: end;
@@ -494,6 +509,7 @@
         line-height: 22px;
         letter-spacing: 0.04em;
     }
+
     &-items-horizontal-list {
         float: none;
         overflow-x: auto !important;

@@ -1,4 +1,4 @@
-import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
+import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
 
 const DressupData = {
     tabs: [
@@ -21,18 +21,21 @@ const DressupData = {
             icon: HairStyle1,
             price: "owned",
             unit: "",
+            isolatedIcon: HairStyleIsolatedIcon1,
         },
         {
             index: 1,
             icon: HairStyle2,
             price: "0.01",
             unit: "ndb",
+            isolatedIcon: HairStyleIsolatedIcon2,
         },
         {
             index: 2,
             icon: HairStyle3,
             price: "0.01",
             unit: "ndb",
+            isolatedIcon: HairStyleIsolatedIcon3,
         },
     ],
     hairColors: [
