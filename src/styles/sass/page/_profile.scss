@@ -500,18 +500,28 @@
         white-space: nowrap;
         overflow-y: hidden;
         padding: 0px;
+        display: flex;
+        justify-content: start;
+        align-items: center;
         margin: 0px;
-        /* width */
-        &::-webkit-scrollbar {
-            height: 1px !important;
+        height: 200px;
+        & > div {
+            height: 200px;
+            width: 149px;
+            display: inline-block;
+            float: none;
+            & > img {
+                // width: 118.92px;
+                width: auto;
+                height: 92.28px;
+            }
         }
-
-        /* Track */
+        &::-webkit-scrollbar {
+            height: 0px !important;
+        }
         &::-webkit-scrollbar-track {
             background: #666666 !important;
         }
-
-        /* Handle */
         &::-webkit-scrollbar-thumb {
             background: #ffffff !important;
         }

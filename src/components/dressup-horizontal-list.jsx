@@ -20,14 +20,14 @@ export default function DressupHorizontalList({
                     return (
                         <div
                             style={{
-                                marginTop: isScrollable && !secondRow ? "-4px" : "0px",
+                                marginTop: "-1px",
                             }}
                             onClick={() => setSelectedItem(item.index)}
-                            className={`col-3 p-3 d-inline-block float-none border border-4 text-center cursor-pointer ${
+                            className={`p-3 border border-4 text-center cursor-pointer ${
                                 selectedItem == item.index ? "border-success" : "border-transparent"
                             }`}
                         >
-                            <img src={item.icon} className="img-fluid" alt="Avatar" />
+                            <img src={item.icon} alt="Avatar" />
                             <div className="pt-3">
                                 {item.price}
                                 <span className="text-success">{item.unit}</span>
