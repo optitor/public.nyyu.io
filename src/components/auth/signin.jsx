@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useEffect } from "react"
+import React, { useCallback, useReducer } from "react"
 import { Link, navigate } from "gatsby"
 import validator from "validator"
 import { social_links } from "../../utilities/staticData"
