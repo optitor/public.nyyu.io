@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback } from "react"
+import React, { useReducer, useCallback } from "react"
 import Header from "../components/common/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
@@ -18,10 +18,11 @@ import {
     CloseIcon,
 } from "../utilities/imgImport"
 import { Link } from "gatsby"
-import CountDown from "../components/common/countdown"
 import Modal from "react-modal"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Input } from "../components/common/FormControl"
+import { useWindowSize } from "../utilities/customHook"
+import AirdropDetail from "../components/AirdropDetail"
 // import ReactECharts from "echarts-for-react"
 
 const transactions = [
@@ -296,8 +297,27 @@ const coins = [
     { value: "btc", label: "Bitcoin", icon: BTC },
     { value: "doge", label: "Dogecoin", icon: DOGE },
 ]
-const { Option, SingleValue } = components
+const joins = [
+    {
+        label: "Connect your MetaMask wallet",
+        btnName: "Connect metamask wallet",
+    },
+    {
+        label: "Connect your BitMEX API key",
+        btnName: "Connect ",
+    },
+    {
+        label: "Follow Facebook account",
+        btnName: "Follow",
+    },
+    {
+        label: "Join Telegram channel",
+        btnName: "Join",
+    },
+]
 
+// Select option customization
+const { Option, SingleValue } = components
 const IconOption = (props) => (
     <Option {...props}>
         <img
@@ -316,26 +336,47 @@ const SelectedValue = (props) => {
         </SingleValue>
     )
 }
+
 const History = () => {
     const copyText = "kjY602GgjsKP23mhs09oOp63bd3n34fsla"
+    const size = useWindowSize()
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         amount: "",
+        detail_show: false,
+        index: 0,
+        coin: coins[0],
+        copied: false,
+        modalIsOpen: false,
+        airdropModal: false,
+        joinAirdrop: false,
+        facebook_handle: "",
+        telegram_handle: "",
     })
-    const { amount } = state
-    const [detail_show, setShow] = useState(false)
-    const [index, setIndex] = useState(0)
-    const [modalIsOpen, setIsOpen] = useState(false)
-    const [coin, setCoin] = useState(coins[0])
-    const [copied, setCopied] = useState(false)
+    const {
+        amount,
+        detail_show,
+        index,
+        coin,
+        copied,
+        modalIsOpen,
+        airdropModal,
+        joinAirdrop,
+        facebook_handle,
+        telegram_handle,
+    } = state
 
     const handleClick = (idx) => {
-        setShow(true)
-        setIndex(idx)
+        setState({ detail_show: true })
+        setState({ index: idx })
     }
     const handleInput = useCallback((e) => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
     }, [])
+    const handleJoinAirdrop = () => {
+        setState({ joinAirdrop: true })
+    }
+
     return (
         <main className="history-page">
             <Header />
@@ -398,12 +439,12 @@ const History = () => {
                         </Tabs>
                     </div>
                     <div className="section-history__right col-lg-8 col-md-7">
-                        <Tabs onSelect={() => setShow(false)}>
+                        <Tabs onSelect={() => setState({ detail_show: false })}>
                             <div className="tab-top">
                                 <TabList>
                                     <Tab>MY ASSETS</Tab>
                                     <Tab>market</Tab>
-                                    <Tab className="react-tabs__tab ms-auto">AirdropS</Tab>
+                                    <Tab className="react-tabs__tab ms-md-auto">AirdropS</Tab>
                                 </TabList>
                                 <Link to="/" className="verify-link">
                                     Get verified
@@ -440,16 +481,24 @@ const History = () => {
                                                 </td>
                                                 <td className="coin-operations">
                                                     <p
-                                                        onClick={() => setIsOpen(true)}
-                                                        onKeyDown={() => setIsOpen(true)}
+                                                        onClick={() =>
+                                                            setState({ modalIsOpen: true })
+                                                        }
+                                                        onKeyDown={() =>
+                                                            setState({ modalIsOpen: true })
+                                                        }
                                                         role="presentation"
                                                         className="operation-link"
                                                     >
                                                         Deposit
                                                     </p>
                                                     <p
-                                                        onClick={() => setIsOpen(true)}
-                                                        onKeyDown={() => setIsOpen(true)}
+                                                        onClick={() =>
+                                                            setState({ modalIsOpen: true })
+                                                        }
+                                                        onKeyDown={() =>
+                                                            setState({ modalIsOpen: true })
+                                                        }
                                                         role="presentation"
                                                         className="operation-link ms-5"
                                                     >
@@ -468,7 +517,7 @@ const History = () => {
                                             <th>Name</th>
                                             <th className="text-end">Price</th>
                                             <th className="laptop-not text-center">Price Chart</th>
-                                            <th className="mobile-not">Volume (24h)</th>
+                                            <th className="mobile-not text-end">Volume (24h)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -500,148 +549,79 @@ const History = () => {
                                                     </p>
                                                 </td>
                                                 <td className="laptop-not price-chart"> </td>
-                                                <td className="mobile-not">{item.volume}</td>
+                                                <td className="mobile-not text-end">
+                                                    {item.volume}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </TabPanel>
                             <TabPanel>
-                                {!detail_show ? (
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th className="w-50">Airdrop</th>
-                                                <th>Status</th>
-                                                <th className="laptop-not">End</th>
-                                                <th>Reward</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {airdrops.map((item, idx) => (
-                                                <tr
-                                                    key={idx}
-                                                    className="airdrop-link"
-                                                    onClick={() => handleClick(idx)}
-                                                >
-                                                    <td className="w-50">
-                                                        <div className="d-flex align-items-start ps-2">
-                                                            <img
-                                                                src={item.icon}
-                                                                alt="coin icon"
-                                                                className="me-2"
-                                                            />
-                                                            <div>
-                                                                <p className="coin-abbr">
-                                                                    {item.name}
-                                                                </p>
-                                                                <p className="coin-name mobile-not">
-                                                                    {item.desc}
-                                                                </p>
-                                                            </div>
+                                <table
+                                    className={`${
+                                        detail_show &&
+                                        (size.width > 1024 || size.width <= 576) &&
+                                        "d-none"
+                                    }`}
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th className="w-50">Airdrop</th>
+                                            <th>Status</th>
+                                            <th className="laptop-not">End</th>
+                                            <th>Reward</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {airdrops.map((item, idx) => (
+                                            <tr
+                                                key={idx}
+                                                className="airdrop-link"
+                                                onClick={() => {
+                                                    handleClick(idx)
+                                                    setState({ airdropModal: true })
+                                                }}
+                                            >
+                                                <td className="w-50">
+                                                    <div className="d-flex align-items-start ps-2">
+                                                        <img
+                                                            src={item.icon}
+                                                            alt="coin icon"
+                                                            className="me-2"
+                                                        />
+                                                        <div>
+                                                            <p className="coin-abbr">{item.name}</p>
+                                                            <p className="coin-name mobile-not">
+                                                                {item.desc}
+                                                            </p>
                                                         </div>
-                                                    </td>
-                                                    <td
-                                                        className={
-                                                            item.status === "Active"
-                                                                ? "coin-status active"
-                                                                : "coin-status deactive"
-                                                        }
-                                                    >
-                                                        {item.status}
-                                                    </td>
-                                                    <td className="laptop-not">{item.end}</td>
-                                                    <td className="coin-reward">
-                                                        ={item.reward} USD
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : (
-                                    <div className="airdrop-detail d-lg-flex d-md-none">
-                                        <div className="col-md-7 airdrop-detail__left">
-                                            <div className="detail-header">
-                                                <img
-                                                    src={airdrops[index].icon}
-                                                    alt="coin icon"
-                                                    className="detail-header__icon"
-                                                />
-                                                <div>
-                                                    <p className="detail-header__name">
-                                                        {airdrops[index].name}
-                                                    </p>
-                                                    <p className="detail-header__end">
-                                                        {airdrops[index].end}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <ul className="detail-body">
-                                                <li>
-                                                    <p>Participants</p>
-                                                    <p className="value">
-                                                        {airdrops[index].participants}
-                                                    </p>
-                                                </li>
-                                                <li>
-                                                    <p>Number of winners</p>
-                                                    <p className="value">
-                                                        {airdrops[index].winners}
-                                                    </p>
-                                                </li>
-                                                <li>
-                                                    <p>Airdrop amount</p>
-                                                    <p className="coin-reward">
-                                                        = {airdrops[index].participants} USD
-                                                    </p>
-                                                </li>
-                                            </ul>
-                                            <div className="detail-footer">
-                                                <h6>How to participate?</h6>
-                                                <ul>
-                                                    <li>Connect your MetaMask wallet</li>
-                                                    <li>
-                                                        Connect your BitMEX API key via{" "}
-                                                        <a
-                                                            className="txt-green"
-                                                            href="https://aluna.social/my/account/api_keys"
-                                                        >
-                                                            https://aluna.social/my/account/api_keys
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        Trade with at least $1,000 volume to qualify
-                                                    </li>
-                                                    <li>Follow Facebook account</li>
-                                                </ul>
-                                            </div>
-                                            <Link className="read-more" to="/">
-                                                Read more
-                                            </Link>
-                                        </div>
-                                        <div className="col-md-5 airdrop-detail__right">
-                                            <div className="time-remaining">
-                                                <h5 className="pt-4">Time remaining</h5>
-                                                <CountDown />
-                                                <button className="btn-primary mb-4">
-                                                    Join airdrop
-                                                </button>
-                                            </div>
-                                            <div className="about-company">
-                                                <h6>About the company</h6>
-                                                <p>
-                                                    ICON Foundation is leading ICON project, one of
-                                                    the largest blockchain networks in the world,
-                                                    launched in 2017 with the vision of
-                                                    ‘Hyperconnect the World’...
-                                                </p>
-                                                <Link className="read-more" to="/">
-                                                    Read more
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    className={
+                                                        item.status === "Active"
+                                                            ? "coin-status active"
+                                                            : "coin-status deactive"
+                                                    }
+                                                >
+                                                    {item.status}
+                                                </td>
+                                                <td className="laptop-not">{item.end}</td>
+                                                <td className="coin-reward">={item.reward} USD</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <AirdropDetail
+                                    clsName={
+                                        (size.width > 1024 || size.width <= 576) && detail_show
+                                            ? "d-block"
+                                            : "d-none"
+                                    }
+                                    airdrop={airdrops[index]}
+                                    onJoinClick={handleJoinAirdrop}
+                                />
                             </TabPanel>
                         </Tabs>
                         <div className="connect-external">
@@ -652,16 +632,16 @@ const History = () => {
             </section>
             <Modal
                 isOpen={modalIsOpen}
-                onRequestClose={() => setIsOpen(false)}
+                onRequestClose={() => setState({ modalIsOpen: false })}
                 ariaHideApp={false}
                 className="deposit-modal"
-                overlayClassName="doposit-modal__overlay"
+                overlayClassName="deposit-modal__overlay"
             >
                 <div className="pwd-modal__header">
                     Desposits and withdrawals
                     <div
-                        onClick={() => setIsOpen(false)}
-                        onKeyDown={() => setIsOpen(false)}
+                        onClick={() => setState({ modalIsOpen: false })}
+                        onKeyDown={() => setState({ modalIsOpen: false })}
                         role="button"
                         tabIndex="0"
                     >
@@ -672,7 +652,7 @@ const History = () => {
                     className="cryptocoin-select"
                     options={coins}
                     value={coin}
-                    onChange={(v) => setCoin(v)}
+                    onChange={(v) => setState({ coin: v })}
                     components={{
                         Option: IconOption,
                         SingleValue: SelectedValue,
@@ -685,14 +665,14 @@ const History = () => {
                     </TabList>
                     <TabPanel className="deposit-panel">
                         <CopyToClipboard
-                            onCopy={() => setCopied(true)}
+                            onCopy={() => setState({ copied: true })}
                             text={copyText}
                             options={{ message: "copied" }}
                         >
                             <div
                                 className="clipboard"
-                                onClick={() => setCopied(true)}
-                                onKeyDown={() => setCopied(true)}
+                                onClick={() => setState({ copied: true })}
+                                onKeyDown={() => setState({ copied: true })}
                                 role="presentation"
                             >
                                 <div>
@@ -731,7 +711,7 @@ const History = () => {
                             className="cryptocoin-select"
                             options={coins}
                             value={coin}
-                            onChange={(v) => setCoin(v)}
+                            onChange={(v) => setState({ coin: v })}
                             components={{
                                 Option: IconOption,
                                 SingleValue: SelectedValue,
@@ -740,6 +720,87 @@ const History = () => {
                         <button className="btn-second w-100">Withdraw</button>
                     </TabPanel>
                 </Tabs>
+            </Modal>
+            <Modal
+                isOpen={airdropModal}
+                onRequestClose={() => setState({ airdropModal: false })}
+                ariaHideApp={false}
+                className="airdrop-modal"
+                overlayClassName="airdrop-modal__overlay"
+            >
+                <div className="tfa-modal__header">
+                    <div
+                        onClick={() => setState({ airdropModal: false })}
+                        onKeyDown={() => setState({ airdropModal: false })}
+                        role="button"
+                        tabIndex="0"
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
+                </div>
+                <AirdropDetail
+                    clsName={size.width <= 1024 && airdropModal ? "d-block" : "d-none"}
+                    airdrop={airdrops[index]}
+                    onJoinClick={handleJoinAirdrop}
+                />
+            </Modal>
+            <Modal
+                isOpen={joinAirdrop}
+                onRequestClose={() => setState({ joinAirdrop: false })}
+                ariaHideApp={false}
+                className="join-modal"
+                overlayClassName="join-modal__overlay"
+            >
+                <div className="pwd-modal__header">
+                    <div className="d-flex align-items-center">
+                        <img
+                            src={airdrops[index].icon}
+                            alt="coin icon"
+                            className="detail-header__icon me-2"
+                        />
+                        <p className="detail-header__name">{airdrops[index].name}</p>
+                    </div>
+
+                    <div
+                        onClick={() => setState({ joinAirdrop: false })}
+                        onKeyDown={() => setState({ joinAirdrop: false })}
+                        role="button"
+                        tabIndex="0"
+                    >
+                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    </div>
+                </div>
+                <div className="join-airdrop">
+                    <ul className="join-list">
+                        {joins.map((item, idx) => (
+                            <li key={idx}>
+                                <p>{item.label}</p>
+                                <button className="btn-green">{item.btnName}</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="my-3">
+                        <Input
+                            type="text"
+                            name="facebook_handle"
+                            label="Facebook handle "
+                            value={facebook_handle}
+                            onChange={handleInput}
+                            placeholder="Enter Facebook handle"
+                        />
+                        <Input
+                            type="text"
+                            name="telegram_handle"
+                            label="Facebook handle "
+                            value={telegram_handle}
+                            onChange={handleInput}
+                            placeholder="Enter Telegram"
+                        />
+                    </div>
+                    <div className="text-center">
+                        <button className="btn-primary">Join Airdrop</button>
+                    </div>
+                </div>
             </Modal>
         </main>
     )

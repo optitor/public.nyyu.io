@@ -1,13 +1,14 @@
 .history-page {
     background-color: $black;
     @extend %set-height;
-    overflow: hidden !important;
     .menu {
         border-bottom: 2px solid #464646;
     }
     .section-history {
-        @extend %set-height2;
-
+        height: calc(100vh - 97px);
+        @include mq("tablet", max) {
+            height: auto;
+        }
         .verify-link {
             font-weight: 500;
             font-size: 16px;
@@ -23,6 +24,9 @@
             padding-right: 24px;
             border-right: 2px solid #464646;
             height: 100%;
+            @include mq("tablet", max) {
+                border-right: unset;
+            }
             .verify-link {
                 display: none;
                 @include mq("laptop", max) {
@@ -43,6 +47,8 @@
                         color: $grey;
                         @include mq("laptop", max) {
                             font-size: 22px;
+                            width: 50%;
+                            text-align: center;
                         }
                         &--selected {
                             background: none;
@@ -112,6 +118,9 @@
                         padding: 16px 0;
                         &-history {
                             @include custom-scroll(550px);
+                            @include mq("tablet", max) {
+                                max-height: 350px;
+                            }
                         }
                         &-date {
                             font-weight: 500;
@@ -139,6 +148,7 @@
         &__right {
             position: relative;
             height: 100%;
+            padding: 0;
             .verify-link {
                 @include mq("laptop", max) {
                     display: none;
@@ -178,13 +188,14 @@
                 // -webkit-mask-position: 0 0, 100% 0;
                 // -webkit-mask-repeat: no-repeat, no-repeat;
 
+                height: 100%;
                 &__tab-list {
+                    display: flex;
+                    justify-content: space-between;
                     margin: 0;
                     padding: 24px;
+                    width: 100%;
                     border: none;
-                    width: 100%;
-                    display: flex;
-                    width: 100%;
                     @include mq("phone", max) {
                         justify-content: space-between;
                     }
@@ -217,7 +228,7 @@
                         }
                         thead {
                             border-bottom: 2px solid #464646;
-                            width: calc(100% - 32px);
+                            width: calc(100% - 26px);
                             th {
                                 padding: 16px 0px;
                             }
@@ -236,6 +247,9 @@
                         }
                         tbody {
                             @include custom-scroll(250px);
+                            @include mq("tablet", max) {
+                                max-height: 350px;
+                            }
                             display: block;
                             tr {
                                 margin-bottom: 23px;
@@ -323,6 +337,7 @@
                             justify-content: flex-end;
                             @include mq("laptop", max) {
                                 flex-direction: column;
+                                align-items: flex-end;
                             }
                         }
                     }
@@ -484,8 +499,7 @@
 }
 
 .airdrop-detail {
-    display: flex;
-    flex-wrap: wrap;
+    display: none;
     width: 100%;
     height: 100%;
     &__left {
@@ -503,6 +517,10 @@
                 width: 35.5px;
                 height: 35.5px;
                 margin-right: 12px;
+                @include mq("phone", max) {
+                    width: 23px;
+                    height: 23px;
+                }
             }
             &__name {
                 font-weight: bold;
@@ -510,6 +528,10 @@
                 line-height: 27px;
                 letter-spacing: 0.04em;
                 color: white;
+                @include mq("phone", max) {
+                    font-size: 14px;
+                    line-height: 17px;
+                }
             }
             &__end {
                 font-weight: 300;
@@ -517,6 +539,9 @@
                 line-height: 17px;
                 letter-spacing: 0.04em;
                 color: #757575;
+                @include mq("phone", max) {
+                    display: none;
+                }
             }
         }
         .detail-body {
@@ -526,6 +551,12 @@
                 justify-content: space-between;
                 padding: 14px;
                 border-bottom: 2px solid #464646;
+                p {
+                    color: #959595;
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 17px;
+                }
                 .value {
                     font-weight: 500;
                     font-size: 18px;
@@ -537,7 +568,7 @@
         }
         .detail-footer {
             margin-top: 16px;
-            padding: 14px;
+            padding: 14px 16px;
             h6 {
                 font-weight: 600;
                 font-size: 16px;
@@ -555,7 +586,8 @@
                     letter-spacing: 0.04em;
                     color: #787878;
                     padding-bottom: 16px;
-                    list-style-position: inside;
+                    list-style-position: outside;
+                    line-break: anywhere;
                 }
             }
         }
@@ -591,6 +623,9 @@
                 font-size: 14.6601px;
                 line-height: 18px;
                 letter-spacing: 0.04em;
+                @include mq("phone", max) {
+                    padding: 12px 40px;
+                }
             }
         }
         .about-company {
@@ -608,6 +643,9 @@
                 line-height: 17px;
                 letter-spacing: 0.04em;
             }
+            @include mq("phone", max) {
+                display: none;
+            }
         }
     }
     .read-more {
@@ -616,5 +654,65 @@
         line-height: 18px;
         letter-spacing: 0.04em;
         color: #ffffff;
+    }
+}
+
+.airdrop-modal {
+    border: 2px solid #464646;
+    max-width: 859px;
+    @include mq("phone", max) {
+        display: none;
+    }
+    &__overlay {
+        @include mq("laptop") {
+            display: none;
+        }
+        @include mq("phone", max) {
+            display: none;
+        }
+    }
+}
+
+.join-modal {
+    max-width: 612px;
+    .join-airdrop {
+        .join-list {
+            li {
+                padding: 14px 0;
+                border-bottom: 2px solid #464646;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                @include mq("phone", max) {
+                    flex-direction: column;
+                    p {
+                        margin-bottom: 13px;
+                    }
+                }
+                p {
+                    font-size: 14px;
+                    line-height: 17px;
+                    color: #f2f2f2;
+                }
+                .btn-green {
+                    border: 1px solid #ffffff;
+                    font-size: 12px;
+                    line-height: 15px;
+                    width: 205px;
+                    padding: 10px 0;
+                }
+            }
+        }
+        .form-label {
+            font-size: 14px;
+            line-height: 17px;
+            letter-spacing: 0.04em;
+            color: #f2f2f2;
+        }
+        .btn-primary {
+            font-size: 14.6601px;
+            line-height: 18px;
+            padding: 12px 40px;
+        }
     }
 }
