@@ -1,7 +1,7 @@
 .signup-page {
-    @extend %setHeight;
+    @extend %set-height;
     section {
-        @extend %setHeight2;
+        @extend %set-height2;
     }
     .signup {
         position: relative;
