@@ -139,7 +139,7 @@ const SingupPage = () => {
             </ul>
             <p className="text-white text-center">
                 Already have an account?{" "}
-                <Link to="/signin" className="signup-link">
+                <Link to="/app/signin" className="signup-link">
                     Sign In
                 </Link>
             </p>

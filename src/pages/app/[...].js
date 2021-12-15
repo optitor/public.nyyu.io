@@ -9,6 +9,7 @@ import SignUp from "../../components/auth/signup"
 import VerifyEmail from "../../components/auth/verify-email"
 import VerifyFailed from "../../components/auth/verify-failed"
 import OneTimePassword from "../../components/auth/onetime-pwd"
+import PasswordReset from "../../components/auth/password-reset"
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <VerifyEmail path="verify-email" />
       <VerifyFailed path="verify-failed" />
       <OneTimePassword path="onetime-pwd" />
+      <PasswordReset path="password-reset" />
     </Router>
   )
 }

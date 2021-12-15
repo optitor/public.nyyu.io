@@ -1,8 +1,11 @@
 import * as GraphQL from "../graghqls/mutations/Auth"
-import { useMutation } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { navigate} from "gatsby"
 import { useUser } from "../../hooks/useUser"
 import { setAuthToken } from "../../utilities/auth"
+
+
+// Sign In
 
 export const useSigninMutation = () => {
   const [user, setUser] = useUser();
@@ -39,6 +42,9 @@ export const useSigninMutation = () => {
   return [signin, mutationResults]
 }
 
+
+// Sine Up
+
 export const useSignupMutation = () => {
   const [user, setUser] = useUser();
 
@@ -63,6 +69,9 @@ export const useSignupMutation = () => {
   }
   return [signup, mutationResults]
 }
+
+
+// Signin with 2FA
 
 export const useSignIn2FA = () => {
   const [user, setUser] = useUser();
@@ -94,4 +103,37 @@ export const useSignIn2FA = () => {
     })
   }
   return [signin2fa, mutationResults]
+}
+
+
+// Forgot Password
+
+export const useForgotPassword = () => {
+
+  const [mutation, mutationResults] = useMutation(GraphQL.FORGOT_PASSWORD, {
+    onCompleted: (data) => {
+      console.log("Forgot Password result", data);
+      // if (data.forgotPassword.status === "Failed") {
+      //   // do something
+      //   return
+      // }
+      // else if (data.confirm2FA.status === "Success") {
+      //   setAuthToken(data.confirm2FA.token)
+      //   setUser({
+      //     ...user,
+      //     tempToken: null
+      //   })
+      //   navigate("/app/profile")
+      // }
+    }
+  });
+
+  const forgotPassword = (email) => {
+    return mutation({
+      variables: {
+        email
+      },
+    })
+  }
+  return [forgotPassword, mutationResults]
 }
