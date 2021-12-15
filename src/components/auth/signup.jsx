@@ -2,10 +2,10 @@ import React, { useCallback, useReducer, useState } from "react"
 import { Link } from "gatsby"
 import Select from "react-select"
 import validator from "validator"
-import { countries, social_links } from "../utilities/staticData"
-import { FormInput, CheckBox } from "../components/common/FormControl"
-import AuthLayout from "../components/common/AuthLayout"
-import { useSignupMutation } from "../apollo/network/auth"
+import { countries, social_links } from "../../utilities/staticData"
+import { FormInput, CheckBox } from "../common/FormControl"
+import AuthLayout from "../common/AuthLayout"
+import { useSignupMutation } from "../../apollo/network/auth"
 
 const SingupPage = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -139,7 +139,7 @@ const SingupPage = () => {
             </ul>
             <p className="text-white text-center">
                 Already have an account?{" "}
-                <Link to="/signin" className="signup-link">
+                <Link to="/app/signin" className="signup-link">
                     Sign In
                 </Link>
             </p>

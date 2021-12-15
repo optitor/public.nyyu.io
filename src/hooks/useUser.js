@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react"
 
-const UserContext = createContext(null)
+const UserContext = createContext([[],() => {}])
 
 export const UserProvider = ({ children }) => (
   <UserContext.Provider value={useProvideUser()}>
@@ -13,9 +13,9 @@ export const useUser = () => useContext(UserContext)
 
 const useProvideUser = () => {
   const [user, setUser] = useState({
-    name: "",
-    email: "",
-    tempToken: ""
+    name: null,
+    email: null,
+    tempToken: null
   })
 
   return [

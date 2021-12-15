@@ -7,7 +7,7 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const auth = useAuth()
 
   if (!auth.isLoggedIn() && isBrowser && window.location.pathname !== `/signin/`) {
-    navigate(`/signin/`, {replace: true})
+    navigate(`/app/signin/`, {replace: true})
     return null
   }
 

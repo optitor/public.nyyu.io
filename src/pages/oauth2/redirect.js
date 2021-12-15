@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo } from "react"
 import { navigate } from "gatsby"
+import { useUser } from "../../hooks/useUser"
 
 const OAuth2RedirectHandler = (props) => {
     const getUrlParameter = (name) => {
