@@ -6,6 +6,7 @@ import Switch from "react-switch"
 import Select from "react-select"
 import Modal from "react-modal"
 import { FormInput } from "../components/common/FormControl"
+import { getInMemoryAuthToken } from "../utilities/auth"
 import {
     Coinbase,
     MetaMask,

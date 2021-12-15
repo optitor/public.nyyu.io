@@ -1,13 +1,13 @@
 import { Link } from "gatsby"
 import React, { useReducer, useCallback, useRef } from "react"
-import Header from "../components/common/header"
 import Select from "react-select"
 import useFileUpload from "react-use-file-upload"
-import { CheckBox } from "../components/common/FormControl"
 import Modal from "react-modal"
 import Webcam from "react-webcam"
-import { formatBytes } from "../utilities/number"
-import { countries } from "../utilities/staticData"
+import Header from "../common/header"
+import { CheckBox } from "../common/FormControl"
+import { formatBytes } from "../../utilities/number"
+import { countries } from "../../utilities/staticData"
 import {
     NewDoc,
     Pass,
@@ -18,7 +18,7 @@ import {
     Unpass1,
     Unpass2,
     CloseIcon,
-} from "../utilities/imgImport"
+} from "../../utilities/imgImport"
 
 const content = `Before we start, please prepare your identity document and make sure it is valid.
 
