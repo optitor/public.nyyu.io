@@ -111,18 +111,6 @@ const Menu = () => {
             price: "0.01",
             unit: "ndb",
         },
-        // {
-        //     index: 3,
-        //     icon: HairStyle4,
-        //     price: "unavailable",
-        //     unit: "",
-        // },
-        // {
-        //     index: 4,
-        //     icon: HairStyle5,
-        //     price: "unavailable",
-        //     unit: "",
-        // },
     ]
 
     const hairColors = [
