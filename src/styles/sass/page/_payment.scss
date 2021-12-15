@@ -116,7 +116,7 @@
             }
             .css-1s2u09g-control,
             .css-1pahdxg-control {
-                @extend %selectStyle;
+                @extend %select-style;
             }
             .css-1okebmr-indicatorSeparator {
                 display: none;
@@ -260,7 +260,7 @@
         }
         .css-1s2u09g-control,
         .css-1pahdxg-control {
-            @extend %selectStyle;
+            @extend %select-style;
             .css-qc6sy-singleValue {
                 font-weight: 600;
                 font-size: 16px;
