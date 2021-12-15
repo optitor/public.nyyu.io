@@ -10,10 +10,10 @@ import { useAuth } from "../../hooks/useAuth"
 const Signin = () => {
     const auth = useAuth();
 
-    useEffect(() => {
-        if(auth?.isLoggedIn())
-            navigate("/app/profile")
-    }, [])
+    if(auth?.isLoggedIn()) {
+        console.log("ehlo")
+        navigate("/app/profile")
+    }
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
