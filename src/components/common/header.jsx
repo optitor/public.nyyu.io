@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react"
-import Modal from "react-modal"
-import DressupHorizontalList from "../dressup-horizontal-list"
 
 // Libraries
 import { Link } from "gatsby"
 
 // Icons
-import { Bell, CloseIcon, DownArrow, Logo, Tesla } from "../../utilities/imgImport"
+import { Bell, DownArrow, Logo } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 import { useAuth } from "../../hooks/useAuth"
-import { DressupData } from "../../utilities/dressup-data"
+import DressupModal from "../dressup/dressup-modal"
 
 const Menu = () => {
     const auth = useAuth()
@@ -18,13 +16,7 @@ const Menu = () => {
     // State
     const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
-    const [selectedHairStyle, setSelectedHairStyle] = useState(0)
-    const [selectedHairColor, setSelectedHairColor] = useState(0)
-    const [selectedFacialStyle, setSelectedFacialStyle] = useState(0)
-    const [selectedExpression, setSelectedExpression] = useState(0)
-    const [selectedHat, setSelectedHat] = useState(0)
-    const [selectedOther, setSelectedOther] = useState(0)
-    const [selectedTab, setSelectedTab] = useState(0)
+
     const [active, setActive] = useState(false)
 
     // Navigation Links
@@ -103,119 +95,10 @@ const Menu = () => {
                                         <div>faq</div>
                                     </div>
                                 )}
-                                <Modal
-                                    isOpen={isDressUPModalOpen}
-                                    onRequestClose={() => {
-                                        setIsDressUPModalOpen(false)
-                                    }}
-                                    ariaHideApp={false}
-                                    className="dressup-modal"
-                                    overlayClassName="dressup-modal__overlay"
-                                >
-                                    <div className="dressup-modal__header">
-                                        <div
-                                            onClick={() => setIsDressUPModalOpen(false)}
-                                            onKeyDown={() => setIsDressUPModalOpen(false)}
-                                            role="button"
-                                            tabIndex="0"
-                                        >
-                                            <img
-                                                width="14px"
-                                                height="14px"
-                                                src={CloseIcon}
-                                                className="mt-3 me-3"
-                                                alt="close"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row m-0 py-4 text-white">
-                                        <div className="col-4">
-                                            <div className="row">
-                                                <img
-                                                    src={Tesla}
-                                                    alt="Avatar"
-                                                    className="w-75 px-5 mx-auto"
-                                                />
-                                                <span className="text-center dressup-modal-avatar-name">
-                                                    Tesla
-                                                </span>
-                                                <div className="dressup-modal-sections-list">
-                                                    {DressupData.tabs.map((item) => (
-                                                        <div
-                                                            onClick={() =>
-                                                                setSelectedTab(item.index)
-                                                            }
-                                                            key={item.index}
-                                                            className={`${
-                                                                item.index == selectedTab &&
-                                                                "active"
-                                                            }`}
-                                                        >
-                                                            {item.title}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                <div className="btn-save">save</div>
-                                            </div>
-                                        </div>
-                                        <div className="col-8 border-start px-5 py-3">
-                                            {selectedTab == 0 && (
-                                                <div className="dressup-modal-hair-section">
-                                                    <DressupHorizontalList
-                                                        title={"hair style"}
-                                                        list={DressupData.hairStyles}
-                                                        selectedItem={selectedHairStyle}
-                                                        setSelectedItem={setSelectedHairStyle}
-                                                    />
-                                                    <div className="mt-4"></div>
-                                                    <DressupHorizontalList
-                                                        title={"hair color"}
-                                                        list={DressupData.hairColors}
-                                                        selectedItem={selectedHairColor}
-                                                        setSelectedItem={setSelectedHairColor}
-                                                        secondRow
-                                                    />
-                                                </div>
-                                            )}
-                                            {selectedTab == 1 && (
-                                                <div className="dressup-modal-hair-section">
-                                                    <DressupHorizontalList
-                                                        title={"facial style"}
-                                                        list={DressupData.facialStyles}
-                                                        selectedItem={selectedFacialStyle}
-                                                        setSelectedItem={setSelectedFacialStyle}
-                                                    />
-                                                    <div className="mt-4"></div>
-                                                    <DressupHorizontalList
-                                                        title={"expressions"}
-                                                        list={DressupData.expressions}
-                                                        selectedItem={selectedExpression}
-                                                        setSelectedItem={setSelectedExpression}
-                                                        secondRow
-                                                    />
-                                                </div>
-                                            )}
-                                            {selectedTab == 2 && (
-                                                <div className="dressup-modal-hair-section">
-                                                    <DressupHorizontalList
-                                                        title={"hats"}
-                                                        list={DressupData.hats}
-                                                        selectedItem={selectedHat}
-                                                        setSelectedItem={setSelectedHat}
-                                                    />
-                                                    <div className="mt-4"></div>
-                                                    <DressupHorizontalList
-                                                        title={"other"}
-                                                        list={DressupData.others}
-                                                        selectedItem={selectedOther}
-                                                        setSelectedItem={setSelectedOther}
-                                                        secondRow
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </Modal>
+                                <DressupModal
+                                    setIsDressUPModalOpen={setIsDressUPModalOpen}
+                                    isDressUPModalOpen={isDressUPModalOpen}
+                                />
                             </div>
                         )}
                     </div>
