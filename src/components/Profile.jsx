@@ -1,7 +1,7 @@
 import React, { useReducer, useCallback } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import Switch from "react-switch"
 import Select from "react-select"
 import Modal from "react-modal"
@@ -9,6 +9,7 @@ import { useQuery } from "@apollo/client"
 import { FormInput } from "../components/common/FormControl"
 // import { getInMemoryAuthToken } from "../utilities/auth"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
+import { logout } from "../utilities/auth"
 import {
     Coinbase,
     MetaMask,
@@ -86,9 +87,9 @@ const wallets = [
 ]
 
 const Profile = () => {
-    const { loading, error, data } = useQuery(GET_USER);
+    const { loading, data } = useQuery(GET_USER);
 
-    console.log("GET USER", loading, error, data)
+    console.log("GET USER", loading, data)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         bid_rank: true,
@@ -141,6 +142,13 @@ const Profile = () => {
         })
     }, [])
 
+    const signOut = () => {
+        logout(() => {
+            console.log("signout")
+            navigate("/")
+        })
+    }
+
     return (
         <main className="profile-page">
             <Header />
@@ -187,7 +195,7 @@ const Profile = () => {
                                     <div className="row w-100 mx-auto">
                                         <div className="col-6 br">email</div>
                                         <div className="col-6 text-end text-sm-start">
-                                            exAmple@mail
+                                            {data && data.getUser.email}
                                         </div>
                                     </div>
                                     <div className="row w-100 mx-auto change-password">
@@ -399,7 +407,7 @@ const Profile = () => {
                                 <h4>confirm sign out</h4>
                                 <div className="h-100 d-flex flex-column align-items-center justify-content-center">
                                     <p>Are you sure you want to sign out?</p>
-                                    <button className="btn-primary">sign out</button>
+                                    <button className="btn-primary" onClick={e => signOut()}>sign out</button>
                                 </div>
                             </div>
                         )}
