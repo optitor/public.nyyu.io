@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { Link, navigate } from "gatsby"
 import { Input } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
@@ -9,10 +9,8 @@ const OnetimePassword = () => {
     const [code, setCode] = useState("")
     const [user] = useUser()
 
-    useEffect(() => {
-        if(!user.tempToken)
-            navigate("/app/signin")
-    }, [])
+    if(!user.tempToken)
+        navigate("/app/signin")
 
     const handleCodeChange = useCallback((e) => {
         setCode(e.target.value)

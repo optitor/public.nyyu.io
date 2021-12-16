@@ -1,12 +1,11 @@
 import { gql } from "@apollo/client"
 
 export const GET_USER = gql`
-    {
+    query getUser {
         getUser {
             id,
             name,
             surname,
-            googleSecret,
             role,
             birthDate,
             email,
@@ -18,7 +17,6 @@ export const GET_USER = gql`
             tos,
             notifySetting,
             lastLogin,
-            googleSecret,
             avatar {
                 groupId,
                 compId
