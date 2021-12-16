@@ -1,5 +1,6 @@
 @import "utils/variables";
 @import "utils/mixins";
+@import "utils/placeholders";
 
 @import "../../../node_modules/bootstrap/scss/bootstrap";
 
@@ -11,6 +12,7 @@
 @import "components/composition";
 @import "components/modal";
 @import "components/menu";
+@import "components/accordion";
 
 @import "layout/layout";
 
@@ -22,6 +24,7 @@
 @import "page/history";
 @import "page/profile";
 @import "page/verify";
+@import "page/faq";
 @import "page/purchase/auction.scss";
 @import "page/purchase/home.scss";
 @import "page/purchase/homeWithSign.scss";
