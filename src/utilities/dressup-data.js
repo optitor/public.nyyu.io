@@ -85,8 +85,8 @@ const DressupData = {
             price: "owned",
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon1,
-            iconTop: "-10px",
-            iconLeft: "-4px"
+            iconTop: "50px",
+            iconLeft: "18px"
         },
         {
             index: 2,
@@ -94,8 +94,8 @@ const DressupData = {
             price: "owned",
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon2,
-            iconTop: "-10px",
-            iconLeft: "-4px"
+            iconTop: "50px",
+            iconLeft: "21px"
         },
         {
             index: 3,
@@ -103,8 +103,8 @@ const DressupData = {
             price: "owned",
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon3,
-            iconTop: "-10px",
-            iconLeft: "-4px"
+            iconTop: "10px",
+            iconLeft: "22px"
         },
         {
             index: 4,
