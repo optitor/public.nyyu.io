@@ -100,6 +100,7 @@ import other3 from "../images/dressup/other-3.svg"
 import other4 from "../images/dressup/other-4.svg"
 import other5 from "../images/dressup/other-5.svg"
 import other6 from "../images/dressup/other-6.svg"
+import other7 from "../images/dressup/other-7.svg"
 
 import emptyAvatar from "../images/dressup/empty-avatar.svg"
 
@@ -129,6 +130,13 @@ import hatIsolatedIcon5 from "../images/dressup/isolated-icons/hat-isolated-icon
 import hatIsolatedIcon6 from "../images/dressup/isolated-icons/hat-isolated-icon-6.svg"
 import hatIsolatedIcon7 from "../images/dressup/isolated-icons/hat-isolated-icon-7.svg"
 import hatIsolatedIcon8 from "../images/dressup/isolated-icons/hat-isolated-icon-8.svg"
+
+import otherIsolatedIcon1 from "../images/dressup/isolated-icons/other-isolated-icon-1.svg"
+import otherIsolatedIcon2 from "../images/dressup/isolated-icons/other-isolated-icon-2.svg"
+import otherIsolatedIcon3 from "../images/dressup/isolated-icons/other-isolated-icon-3.svg"
+import otherIsolatedIcon4 from "../images/dressup/isolated-icons/other-isolated-icon-4.svg"
+import otherIsolatedIcon5 from "../images/dressup/isolated-icons/other-isolated-icon-5.svg"
+import otherIsolatedIcon6 from "../images/dressup/isolated-icons/other-isolated-icon-6.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -228,6 +236,7 @@ export const Other3 = other3
 export const Other4 = other4
 export const Other5 = other5
 export const Other6 = other6
+export const Other7 = other7
 
 export const EmptyAvatar = emptyAvatar
 
@@ -258,3 +267,10 @@ export const HatIsolatedIcon5 = hatIsolatedIcon5
 export const HatIsolatedIcon6 = hatIsolatedIcon6
 export const HatIsolatedIcon7 = hatIsolatedIcon7
 export const HatIsolatedIcon8 = hatIsolatedIcon8
+
+export const OtherIsolatedIcon1 = otherIsolatedIcon1
+export const OtherIsolatedIcon2 = otherIsolatedIcon2
+export const OtherIsolatedIcon3 = otherIsolatedIcon3
+export const OtherIsolatedIcon4 = otherIsolatedIcon4
+export const OtherIsolatedIcon5 = otherIsolatedIcon5
+export const OtherIsolatedIcon6 = otherIsolatedIcon6
