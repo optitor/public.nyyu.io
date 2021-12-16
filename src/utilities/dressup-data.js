@@ -1,4 +1,4 @@
-import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
+import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, ExpressionIsolatedIcon1, ExpressionIsolatedIcon2, ExpressionIsolatedIcon3, ExpressionIsolatedIcon4, ExpressionIsolatedIcon5, ExpressionIsolatedIcon6, ExpressionIsolatedIcon7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
 
 const DressupData = {
     tabs: [
@@ -131,42 +131,63 @@ const DressupData = {
             icon: Expression1,
             price: "owned",
             unit: "",
+            isolatedIcon: ExpressionIsolatedIcon1,
+            iconTop: "19px",
+            iconLeft: "25px"
         },
         {
             index: 1,
             icon: Expression2,
             price: "owned",
             unit: "",
+            isolatedIcon: ExpressionIsolatedIcon2,
+            iconTop: "19px",
+            iconLeft: "25px"
         },
         {
             index: 2,
             icon: Expression3,
             price: "owned",
             unit: "",
+            isolatedIcon: ExpressionIsolatedIcon3,
+            iconTop: "19px",
+            iconLeft: "25px"
         },
         {
             index: 3,
             icon: Expression4,
             price: "owned",
             unit: "",
+            isolatedIcon: ExpressionIsolatedIcon4,
+            iconTop: "19px",
+            iconLeft: "25px"
         },
         {
             index: 4,
             icon: Expression5,
             price: "owned",
             unit: "",
+            isolatedIcon: ExpressionIsolatedIcon5,
+            iconTop: "19px",
+            iconLeft: "25px"
         },
         {
             index: 5,
             icon: Expression6,
             price: "owned",
             unit: "",
+            isolatedIcon: ExpressionIsolatedIcon6,
+            iconTop: "19px",
+            iconLeft: "25px"
         },
         {
             index: 6,
             icon: Expression7,
             price: "owned",
             unit: "",
+            isolatedIcon: ExpressionIsolatedIcon7,
+            iconTop: "19px",
+            iconLeft: "25px"
         },
     ],
     hats: [

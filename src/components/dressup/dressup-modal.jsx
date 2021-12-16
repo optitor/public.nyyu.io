@@ -14,6 +14,7 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
     const [selectedTab, setSelectedTab] = useState(0)
 
     const selectedFacialStyleItem = DressupData.facialStyles[selectedFacialStyle]
+    const selectedExpressionItem = DressupData.expressions[selectedExpression]
     return (
         <Modal
             isOpen={isDressUPModalOpen}
@@ -61,6 +62,17 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                                     style={{
                                         left: selectedFacialStyleItem.iconLeft,
                                         top: selectedFacialStyleItem.iconTop,
+                                    }}
+                                />
+                            )}
+                            {selectedExpressionItem?.isolatedIcon && (
+                                <img
+                                    src={selectedExpressionItem.isolatedIcon}
+                                    className="isolated-expression"
+                                    alt="Expression Isolated Icon"
+                                    style={{
+                                        left: selectedExpressionItem.iconLeft,
+                                        top: selectedExpressionItem.iconTop,
                                     }}
                                 />
                             )}

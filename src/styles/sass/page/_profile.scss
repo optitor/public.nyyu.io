@@ -441,12 +441,9 @@
             width: max-content;
             height: auto;
         }
-        .isolated-hair-style {
-            width: max-content;
-            height: auto;
-            position: absolute;
-        }
-        .isolated-facial-style {
+        .isolated-hair-style,
+        .isolated-facial-style,
+        .isolated-expression {
             width: max-content;
             height: auto;
             position: absolute;
