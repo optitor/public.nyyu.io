@@ -131,11 +131,6 @@ const faqs = [
 ]
 
 const FAQ = () => {
-    // const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-    //     faq_tab: faq_tabs[0],
-    // })
-    // const { faq_tab } = state
-
     return (
         <main className="faq-page">
             <Header />
