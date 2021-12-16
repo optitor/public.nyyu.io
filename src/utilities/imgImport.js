@@ -1,4 +1,3 @@
-import React from "react"
 import logo from "../images/logo.svg"
 import hero1 from "../images/hero1.png"
 import hero2 from "../images/hero2.svg"
@@ -36,7 +35,7 @@ import ltc from "../images/ltc.svg"
 import doge from "../images/doge.svg"
 import usdc from "../images/usdc.svg"
 
-import ndb from "../images/ndb.png"
+import ndb from "../images/ndb.svg"
 import copy from "../images/copy.png"
 import copy2 from "../images/copy2.png"
 import airdrop from "../images/airdrop.png"
@@ -130,7 +129,6 @@ import hatIsolatedIcon5 from "../images/dressup/isolated-icons/hat-isolated-icon
 import hatIsolatedIcon6 from "../images/dressup/isolated-icons/hat-isolated-icon-6.svg"
 import hatIsolatedIcon7 from "../images/dressup/isolated-icons/hat-isolated-icon-7.svg"
 import hatIsolatedIcon8 from "../images/dressup/isolated-icons/hat-isolated-icon-8.svg"
-
 
 export const Logo = logo
 export const Bell = bell

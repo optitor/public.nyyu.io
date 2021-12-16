@@ -23,8 +23,12 @@ export default function DressupHorizontalList({
                                 marginTop: "-1px",
                             }}
                             onClick={() => setSelectedItem(item.index)}
+                            onKeyDown={() => setSelectedItem(item.index)}
+                            role="presentation"
                             className={`border border-4 text-center cursor-pointer ${
-                                selectedItem == item.index ? "border-success" : "border-transparent"
+                                selectedItem === item.index
+                                    ? "border-success"
+                                    : "border-transparent"
                             }`}
                         >
                             <img src={item.icon} alt="Avatar" />
