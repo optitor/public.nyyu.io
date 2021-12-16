@@ -131,6 +131,12 @@ import hatIsolatedIcon6 from "../images/dressup/isolated-icons/hat-isolated-icon
 import hatIsolatedIcon7 from "../images/dressup/isolated-icons/hat-isolated-icon-7.svg"
 import hatIsolatedIcon8 from "../images/dressup/isolated-icons/hat-isolated-icon-8.svg"
 
+import otherIsolatedIcon1 from "../images/dressup/isolated-icons/other-isolated-icon-1.svg"
+import otherIsolatedIcon2 from "../images/dressup/isolated-icons/other-isolated-icon-2.svg"
+import otherIsolatedIcon3 from "../images/dressup/isolated-icons/other-isolated-icon-3.svg"
+import otherIsolatedIcon4 from "../images/dressup/isolated-icons/other-isolated-icon-4.svg"
+import otherIsolatedIcon5 from "../images/dressup/isolated-icons/other-isolated-icon-5.svg"
+import otherIsolatedIcon6 from "../images/dressup/isolated-icons/other-isolated-icon-6.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -260,3 +266,10 @@ export const HatIsolatedIcon5 = hatIsolatedIcon5
 export const HatIsolatedIcon6 = hatIsolatedIcon6
 export const HatIsolatedIcon7 = hatIsolatedIcon7
 export const HatIsolatedIcon8 = hatIsolatedIcon8
+
+export const OtherIsolatedIcon1 = otherIsolatedIcon1
+export const OtherIsolatedIcon2 = otherIsolatedIcon2
+export const OtherIsolatedIcon3 = otherIsolatedIcon3
+export const OtherIsolatedIcon4 = otherIsolatedIcon4
+export const OtherIsolatedIcon5 = otherIsolatedIcon5
+export const OtherIsolatedIcon6 = otherIsolatedIcon6

@@ -16,6 +16,7 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
     const selectedFacialStyleItem = DressupData.facialStyles[selectedFacialStyle]
     const selectedExpressionItem = DressupData.expressions[selectedExpression]
     const selectedHatItem = DressupData.hats[selectedHat]
+    const selectedOtherItem = DressupData.others[selectedOther]
     return (
         <Modal
             isOpen={isDressUPModalOpen}
@@ -58,8 +59,8 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             {selectedFacialStyleItem?.isolatedIcon && (
                                 <img
                                     src={selectedFacialStyleItem.isolatedIcon}
-                                    className="isolated-facial-style"
-                                    alt="Facial Style Isolated Icon"
+                                    className="isolated-icons"
+                                    alt="Isolated Icon"
                                     style={{
                                         left: selectedFacialStyleItem.iconLeft,
                                         top: selectedFacialStyleItem.iconTop,
@@ -69,8 +70,8 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             {selectedExpressionItem?.isolatedIcon && (
                                 <img
                                     src={selectedExpressionItem.isolatedIcon}
-                                    className="isolated-expression"
-                                    alt="Expression Isolated Icon"
+                                    className="isolated-icons"
+                                    alt="Isolated Icon"
                                     style={{
                                         left: selectedExpressionItem.iconLeft,
                                         top: selectedExpressionItem.iconTop,
@@ -80,11 +81,22 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             {selectedHatItem?.isolatedIcon && (
                                 <img
                                     src={selectedHatItem.isolatedIcon}
-                                    className="isolated-expression"
-                                    alt="Expression Isolated Icon"
+                                    className="isolated-icons"
+                                    alt="Isolated Icon"
                                     style={{
                                         left: selectedHatItem.iconLeft,
                                         top: selectedHatItem.iconTop,
+                                    }}
+                                />
+                            )}
+                            {selectedOtherItem?.isolatedIcon && (
+                                <img
+                                    src={selectedOtherItem.isolatedIcon}
+                                    className="isolated-icons"
+                                    alt="Isolated Icon"
+                                    style={{
+                                        left: selectedOtherItem.iconLeft,
+                                        top: selectedOtherItem.iconTop,
                                     }}
                                 />
                             )}

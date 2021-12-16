@@ -1,4 +1,4 @@
-import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, ExpressionIsolatedIcon1, ExpressionIsolatedIcon2, ExpressionIsolatedIcon3, ExpressionIsolatedIcon4, ExpressionIsolatedIcon5, ExpressionIsolatedIcon6, ExpressionIsolatedIcon7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, HatIsolatedIcon1, HatIsolatedIcon2, HatIsolatedIcon3, HatIsolatedIcon4, HatIsolatedIcon5, HatIsolatedIcon6, HatIsolatedIcon7, HatIsolatedIcon8, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
+import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, ExpressionIsolatedIcon1, ExpressionIsolatedIcon2, ExpressionIsolatedIcon3, ExpressionIsolatedIcon4, ExpressionIsolatedIcon5, ExpressionIsolatedIcon6, ExpressionIsolatedIcon7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, HatIsolatedIcon1, HatIsolatedIcon2, HatIsolatedIcon3, HatIsolatedIcon4, HatIsolatedIcon5, HatIsolatedIcon6, HatIsolatedIcon7, HatIsolatedIcon8, Other1, Other2, Other3, Other4, Other5, Other6, OtherIsolatedIcon1, OtherIsolatedIcon2, OtherIsolatedIcon3, OtherIsolatedIcon4, OtherIsolatedIcon5, OtherIsolatedIcon6 } from "./imgImport";
 
 const DressupData = {
     tabs: [
@@ -278,36 +278,54 @@ const DressupData = {
             icon: Other1,
             price: "owned",
             unit: "",
+            isolatedIcon: OtherIsolatedIcon1,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 1,
             icon: Other2,
             price: "owned",
             unit: "",
+            isolatedIcon: OtherIsolatedIcon2,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 2,
             icon: Other3,
             price: "owned",
             unit: "",
+            isolatedIcon: OtherIsolatedIcon3,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 3,
             icon: Other4,
             price: "0.01",
             unit: "ndb",
+            isolatedIcon: OtherIsolatedIcon4,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 4,
             icon: Other5,
             price: "unavailable",
             unit: "",
+            isolatedIcon: OtherIsolatedIcon5,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 5,
             icon: Other6,
             price: "unavailable",
             unit: "",
+            isolatedIcon: OtherIsolatedIcon6,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
     ],
 }
