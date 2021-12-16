@@ -149,6 +149,14 @@ const Profile = () => {
         })
     }
 
+    const getSecurityStatus = (key) => {
+        try {
+            return data.getUser.userSecurity.find(f => f.key === key).value
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return (
         <main className="profile-page">
             <Header />
@@ -194,7 +202,7 @@ const Profile = () => {
                                     </div>
                                     <div className="row w-100 mx-auto">
                                         <div className="col-6 br">email</div>
-                                        <div className="col-6 text-end text-sm-start">
+                                        <div className="col-6 text-end text-sm-start text-lowercase">
                                             {data && data.getUser.email}
                                         </div>
                                     </div>
@@ -223,11 +231,13 @@ const Profile = () => {
                                     <div className="row w-100 mx-auto">
                                         <h4>
                                             Increase your account security&nbsp;
-                                            <span className="txt-green">2</span>/4
+                                            <span className="txt-green">
+                                                {data && data.getUser.userSecurity.filter(s => s.value).length}
+                                            </span>/4
                                         </h4>
 
                                         <div className="col-sm-6 br">
-                                            <div className="status active"></div>
+                                            <div className={`status ${getSecurityStatus("2FA") ? "active" : "deactive"}`}></div>
                                             <div className="security-item">
                                                 <p className="security-name">Enable 2FA</p>
                                                 <p
@@ -242,10 +252,10 @@ const Profile = () => {
                                         </div>
 
                                         <div className="col-sm-6">
-                                            <div className="status active"></div>
+                                            <div className={`status ${getSecurityStatus("KYC") ? "active" : "deactive"}`}></div>
                                             <div className="security-item">
                                                 <p className="security-name">
-                                                    KYC Identity Verificatoin less than 100k CHF
+                                                    KYC Identity Verification less than 100k CHF
                                                     withdraw
                                                 </p>
                                                 <p className="txt-green security-link">Verified</p>
@@ -253,7 +263,7 @@ const Profile = () => {
                                         </div>
 
                                         <div className="col-sm-6 br">
-                                            <div className="status deactive"></div>
+                                            <div className={`status ${getSecurityStatus("mobile") ? "active" : "deactive"}`}></div>
                                             <div className="security-item">
                                                 <p className="security-name">Mobile Verification</p>
                                                 <p className="txt-cyan security-link">Setup</p>
@@ -261,10 +271,10 @@ const Profile = () => {
                                         </div>
 
                                         <div className="col-sm-6">
-                                            <div className="status deactive"></div>
+                                            <div className={`status ${getSecurityStatus("AML") ? "active" : "deactive"}`}></div>
                                             <div className="security-item">
                                                 <p className="security-name">
-                                                    AML Identity Verificatoin more than 100k CHF
+                                                    AML Identity Verification more than 100k CHF
                                                     withdraw
                                                 </p>
                                                 <p className="txt-cyan security-link">Setup</p>
