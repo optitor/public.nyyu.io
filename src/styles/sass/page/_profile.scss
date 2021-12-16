@@ -507,7 +507,18 @@
             overflow: hidden;
             display: inline-block;
             float: none;
+            position: relative;
+            & > div {
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                left: 0px;
+                bottom: 10px;
+            }
             & > img {
+                bottom: 55px;
+                left: 13px;
+                position: absolute;
                 min-width: 118.92px;
                 min-height: 92.28px;
                 object-fit: cover;

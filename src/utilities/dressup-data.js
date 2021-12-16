@@ -1,4 +1,4 @@
-import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, ExpressionIsolatedIcon1, ExpressionIsolatedIcon2, ExpressionIsolatedIcon3, ExpressionIsolatedIcon4, ExpressionIsolatedIcon5, ExpressionIsolatedIcon6, ExpressionIsolatedIcon7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
+import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, ExpressionIsolatedIcon1, ExpressionIsolatedIcon2, ExpressionIsolatedIcon3, ExpressionIsolatedIcon4, ExpressionIsolatedIcon5, ExpressionIsolatedIcon6, ExpressionIsolatedIcon7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, HatIsolatedIcon1, HatIsolatedIcon2, HatIsolatedIcon3, HatIsolatedIcon4, HatIsolatedIcon5, HatIsolatedIcon6, HatIsolatedIcon7, HatIsolatedIcon8, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
 
 const DressupData = {
     tabs: [
@@ -76,8 +76,8 @@ const DressupData = {
             icon: FacialStyle1,
             price: "owned",
             unit: "",
-            iconTop: "-10px",
-            iconLeft: "-4px"
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 1,
@@ -196,54 +196,80 @@ const DressupData = {
             icon: Hat1,
             price: "owned",
             unit: "",
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 1,
             icon: Hat2,
             price: "owned",
             unit: "",
+            isolatedIcon: HatIsolatedIcon1,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 2,
             icon: Hat3,
             price: "0.01",
-            unit: "ndb"
+            unit: "ndb",
+            isolatedIcon: HatIsolatedIcon2,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 3,
             icon: Hat4,
             price: "0.01",
-            unit: "ndb"
+            unit: "ndb",
+            isolatedIcon: HatIsolatedIcon3,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 4,
             icon: Hat5,
             price: "0.01",
-            unit: "ndb"
+            unit: "ndb",
+            isolatedIcon: HatIsolatedIcon4,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 5,
             icon: Hat6,
             price: "0.01",
-            unit: "ndb"
+            unit: "ndb",
+            isolatedIcon: HatIsolatedIcon5,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 6,
             icon: Hat7,
             price: "0.01",
-            unit: "ndb"
+            unit: "ndb",
+            isolatedIcon: HatIsolatedIcon6,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 7,
             icon: Hat8,
             price: "0.01",
-            unit: "ndb"
+            unit: "ndb",
+            isolatedIcon: HatIsolatedIcon7,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
         {
             index: 8,
             icon: Hat9,
             price: "0.01",
-            unit: "ndb"
+            unit: "ndb",
+            isolatedIcon: HatIsolatedIcon8,
+            iconTop: "0px",
+            iconLeft: "0px"
         },
     ],
     others: [

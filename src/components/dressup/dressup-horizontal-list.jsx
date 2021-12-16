@@ -23,12 +23,12 @@ export default function DressupHorizontalList({
                                 marginTop: "-1px",
                             }}
                             onClick={() => setSelectedItem(item.index)}
-                            className={`p-3 border border-4 text-center cursor-pointer ${
+                            className={`border border-4 text-center cursor-pointer ${
                                 selectedItem == item.index ? "border-success" : "border-transparent"
                             }`}
                         >
                             <img src={item.icon} alt="Avatar" />
-                            <div className="pt-3">
+                            <div>
                                 {item.price}
                                 <span className="text-success">{item.unit}</span>
                             </div>
