@@ -5,28 +5,42 @@
     padding: 22px;
     background-color: $black;
     z-index: 9999;
-
-    .user-dropdown-menu {
-        position: absolute;
-        top: 80px;
-        background-color: darken($black, 3%);
-        border-radius: 5px;
-        z-index: 999;
-        font-variant: small-caps;
-        color: white;
-        font-weight: bold;
-        font-size: 30px;
-        line-height: 37px;
-        & > div {
-            cursor: pointer;
-            border-bottom: 1px solid white;
-            padding: 12px 25px;
-            transition: 500ms;
-            &:last-child {
-                border: none;
+    .user-avatar {
+        width: 56px;
+        height: 51px;
+    }
+    .user-dropdown {
+        position: relative;
+        &:hover {
+            .user-dropdown-menu {
+                display: block;
             }
-            &:hover {
-                color: rgba(white, 0.5) !important;
+        }
+        &-menu {
+            position: absolute;
+            right: 0;
+            top: 51px;
+            background-color: $black;
+            border: 1px solid white;
+            z-index: 999;
+            font-variant: small-caps;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            line-height: 37px;
+            display: none;
+            & > li {
+                cursor: pointer;
+                border-bottom: 1px solid white;
+                padding: 12px 25px;
+                transition: 500ms;
+                &:last-child {
+                    border: none;
+                }
+                &:hover,
+                a:hover {
+                    color: rgba(white, 0.5) !important;
+                }
             }
         }
     }

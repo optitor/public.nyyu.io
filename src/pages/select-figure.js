@@ -1,11 +1,9 @@
 import React, { useState } from "react"
 import Header from "../components/common/header"
 import FigureItem from "../components/FigureItem"
-import { Trees } from "../utilities/imgImport"
+import { CloseIcon, Trees } from "../utilities/imgImport"
 import { figures } from "../utilities/staticData"
 import StarRatings from "react-star-ratings"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes } from "@fortawesome/free-solid-svg-icons"
 import names from "random-names-generator"
 import Modal from "react-modal"
 
@@ -119,14 +117,19 @@ const Profile = () => {
                                     ) : (
                                         <>
                                             <p className="text-end">
-                                                <FontAwesomeIcon
-                                                    icon={faTimes}
-                                                    className="text-white fa-2x"
+                                                <div
                                                     onClick={() => setSelect(false)}
                                                     onKeyDown={() => setSelect(false)}
                                                     role="button"
                                                     tabIndex="0"
-                                                />
+                                                >
+                                                    <img
+                                                        width="29px"
+                                                        height="29px"
+                                                        src={CloseIcon}
+                                                        alt="close"
+                                                    />
+                                                </div>
                                             </p>
                                             <div className="d-flex align-items-end justify-content-start">
                                                 <h3 className="random-display mb-0 fw-bold me-4">
@@ -187,14 +190,15 @@ const Profile = () => {
                 <div className="figure-intro__box">
                     <p className="mobile-figure-header">
                         {figures[selectedId].firstname + " " + figures[selectedId].lastname}
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                            className="text-white modal-close"
+
+                        <div
                             onClick={() => closeModal()}
                             onKeyDown={() => closeModal()}
                             role="button"
                             tabIndex="0"
-                        />
+                        >
+                            <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                        </div>
                     </p>
                     <div className="figure-intro__box--body">
                         {!selected ? (

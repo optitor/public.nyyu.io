@@ -14,7 +14,6 @@ const Menu = () => {
     const auth = useAuth()
 
     // State
-    const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
 
     const [active, setActive] = useState(false)
@@ -42,9 +41,6 @@ const Menu = () => {
             url: "https://ndb.money/#contactUs",
         },
     ]
-
-    //DropDown Menu.
-    const toggleDropDownMenu = () => setIsDropDownMenuOpen(!isDropDownMenuOpen)
 
     // Handles 'ESC' key pressing.
     useEffect(() => {
@@ -76,36 +72,48 @@ const Menu = () => {
                                 Sign In
                             </Link>
                         ) : (
-                            <div className="d-flex align-items-center justify-content-end">
-                                <img src={Bell} alt="Bell Icon" />
-                                <img src={User.avatar} className="w-50 px-4" alt="Tesla Icon" />
-                                <img
-                                    src={DownArrow}
-                                    alt="Down Arrow Icon"
-                                    className="cursor-pointer"
-                                    onClick={toggleDropDownMenu}
-                                    onKeyDown={toggleDropDownMenu}
-                                    role="presentation"
-                                />
-                                {isDropDownMenuOpen && (
-                                    <div className="user-dropdown-menu">
-                                        <div>dashboard</div>
-                                        <div>profile</div>
-                                        <div
+                            <ul className="">
+                                <li className="d-flex">
+                                    <img src={Bell} alt="Bell Icon" />
+                                </li>
+                                <li className="px-4">
+                                    <img
+                                        src={User.avatar}
+                                        className="user-avatar"
+                                        alt="Tesla Icon"
+                                    />
+                                </li>
+                                <li className="user-dropdown">
+                                    <img
+                                        src={DownArrow}
+                                        alt="Down Arrow Icon"
+                                        className="cursor-pointer"
+                                    />
+                                    <ul className="user-dropdown-menu">
+                                        <li>
+                                            <Link to="/auction">dashboard</Link>
+                                        </li>
+                                        <li>
+                                            <Link to="/profile">profile</Link>
+                                        </li>
+                                        <li
                                             onClick={() => setIsDressUPModalOpen(true)}
                                             onKeyDown={() => setIsDressUPModalOpen(true)}
                                             role="presentation"
                                         >
                                             dressup
-                                        </div>
-                                        <div>faq</div>
-                                    </div>
-                                )}
+                                        </li>
+                                        <li>
+                                            <Link to="/faq">faq</Link>
+                                        </li>
+                                    </ul>
+                                </li>
+
                                 <DressupModal
                                     setIsDressUPModalOpen={setIsDressUPModalOpen}
                                     isDressUPModalOpen={isDressUPModalOpen}
                                 />
-                            </div>
+                            </ul>
                         )}
                     </div>
                     <button
