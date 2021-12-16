@@ -2,16 +2,10 @@ import fetch from "isomorphic-fetch"
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client"
 import { setContext } from '@apollo/client/link/context';
 import { getInMemoryAuthToken } from "../utilities/auth"
-
-/*
-uri: `http://auction.us-east-1.elasticbeanstalk.com/graphql`,
-uri: `http://localhost:5000/graphql`,
-*/
-
-const API_URL = "https://auction.us-east-1.elasticbeanstalk.com/graphql";
+import { API_BASE_URL } from "../utilities/staticData"
 
 const httpLink = createHttpLink({
-    uri: API_URL,
+    uri: API_BASE_URL + "/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
