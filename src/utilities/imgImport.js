@@ -101,6 +101,7 @@ import other3 from "../images/dressup/other-3.svg"
 import other4 from "../images/dressup/other-4.svg"
 import other5 from "../images/dressup/other-5.svg"
 import other6 from "../images/dressup/other-6.svg"
+import other7 from "../images/dressup/other-7.svg"
 
 import emptyAvatar from "../images/dressup/empty-avatar.svg"
 
@@ -236,6 +237,7 @@ export const Other3 = other3
 export const Other4 = other4
 export const Other5 = other5
 export const Other6 = other6
+export const Other7 = other7
 
 export const EmptyAvatar = emptyAvatar
 

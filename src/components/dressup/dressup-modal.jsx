@@ -49,8 +49,8 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                         <div className="dressup-modal-avatar">
                             <img
                                 src={DressupData.hairStyles[selectedHairStyle].isolatedIcon}
-                                className="isolated-hair-style"
-                                alt="Hair Isolated Icon"
+                                className="isolated-icons"
+                                alt=" Isolated Icon"
                                 style={{
                                     left: DressupData.hairStyles[selectedHairStyle].iconLeft,
                                     top: DressupData.hairStyles[selectedHairStyle].iconTop,
