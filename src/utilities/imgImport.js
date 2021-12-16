@@ -1,3 +1,4 @@
+import React from "react"
 import logo from "../images/logo.svg"
 import hero1 from "../images/hero1.png"
 import hero2 from "../images/hero2.svg"

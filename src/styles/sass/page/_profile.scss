@@ -445,6 +445,9 @@
             width: max-content;
             height: auto;
             position: absolute;
+            path {
+                display: none;
+            }
         }
     }
     &__header {
