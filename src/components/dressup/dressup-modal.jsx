@@ -109,8 +109,10 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             {DressupData.tabs.map((item) => (
                                 <div
                                     onClick={() => setSelectedTab(item.index)}
+                                    onKeyDown={() => setSelectedTab(item.index)}
+                                    role="presentation"
                                     key={item.index}
-                                    className={`${item.index == selectedTab && "active"}`}
+                                    className={`${item.index === selectedTab && "active"}`}
                                 >
                                     {item.title}
                                 </div>
@@ -120,7 +122,7 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                     </div>
                 </div>
                 <div className="col-8 border-start px-5 py-3">
-                    {selectedTab == 0 && (
+                    {selectedTab === 0 && (
                         <div className="dressup-modal-hair-section">
                             <DressupHorizontalList
                                 title={"hair style"}
@@ -138,7 +140,7 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             />
                         </div>
                     )}
-                    {selectedTab == 1 && (
+                    {selectedTab === 1 && (
                         <div className="dressup-modal-hair-section">
                             <DressupHorizontalList
                                 title={"facial style"}
@@ -156,7 +158,7 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             />
                         </div>
                     )}
-                    {selectedTab == 2 && (
+                    {selectedTab === 2 && (
                         <div className="dressup-modal-hair-section">
                             <DressupHorizontalList
                                 title={"hats"}

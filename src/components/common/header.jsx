@@ -84,12 +84,18 @@ const Menu = () => {
                                     alt="Down Arrow Icon"
                                     className="cursor-pointer"
                                     onClick={toggleDropDownMenu}
+                                    onKeyDown={toggleDropDownMenu}
+                                    role="presentation"
                                 />
                                 {isDropDownMenuOpen && (
                                     <div className="user-dropdown-menu">
                                         <div>dashboard</div>
                                         <div>profile</div>
-                                        <div onClick={() => setIsDressUPModalOpen(true)}>
+                                        <div
+                                            onClick={() => setIsDressUPModalOpen(true)}
+                                            onKeyDown={() => setIsDressUPModalOpen(true)}
+                                            role="presentation"
+                                        >
                                             dressup
                                         </div>
                                         <div>faq</div>
