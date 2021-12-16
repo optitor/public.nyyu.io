@@ -7,7 +7,7 @@ export default function DressupHorizontalList({
     setSelectedItem,
     secondRow,
 }) {
-    const isScrollable = list.length > 4
+    const isScrollable = list.length > 3
     return (
         <div className="row m-0">
             <div className="mb-2 ps-0">{title}</div>
