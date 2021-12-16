@@ -35,13 +35,5 @@ module.exports = {
                 fonts: [`Montserrat\:300,400,500,700,800`],
             },
         },
-        {
-            resolve: "gatsby-plugin-apollo",
-            options: {
-                // uri: "https://ndb-auction.herokuapp.com/graphql",
-                // uri: "http://localhost:5000/graphql",
-                uri: "https://auction.us-east-1.elasticbeanstalk.com/graphql",
-            },
-        },
     ],
 }

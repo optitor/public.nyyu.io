@@ -1,30 +1,14 @@
 import React, { useEffect, useState } from "react"
-import Modal from "react-modal"
-import DressupHorizontalList from "../dressup-horizontal-list"
 
 // Libraries
 import { Link } from "gatsby"
 
 // Icons
-import {
-    Bell,
-    CloseIcon,
-    DownArrow,
-    HairColor1,
-    HairColor2,
-    HairColor3,
-    HairColor4,
-    HairStyle1,
-    HairStyle2,
-    HairStyle3,
-    HairStyle4,
-    HairStyle5,
-    Logo,
-    Tesla,
-} from "../../utilities/imgImport"
+import { Bell, DownArrow, Logo } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 import { useAuth } from "../../hooks/useAuth"
+import DressupModal from "../dressup/dressup-modal"
 
 const Menu = () => {
     const auth = useAuth()
@@ -32,9 +16,7 @@ const Menu = () => {
     // State
     const [isDropDownMenuOpen, setIsDropDownMenuOpen] = useState(false)
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
-    const [selectedHairStyle, setSelectedHairStyle] = useState(0)
-    const [selectedHairColor, setSelectedHairColor] = useState(0)
-    const [selectedTab, setSelectedTab] = useState(0)
+
     const [active, setActive] = useState(false)
 
     // Navigation Links
@@ -77,69 +59,6 @@ const Menu = () => {
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
 
-    const tabs = [
-        {
-            index: 0,
-            title: "hair",
-        },
-        {
-            index: 1,
-            title: "face",
-        },
-        {
-            index: 2,
-            title: "accessories",
-        },
-    ]
-
-    const hairStyles = [
-        {
-            index: 0,
-            icon: HairStyle1,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 1,
-            icon: HairStyle2,
-            price: "0.01",
-            unit: "ndb",
-        },
-        {
-            index: 2,
-            icon: HairStyle3,
-            price: "0.01",
-            unit: "ndb",
-        },
-    ]
-
-    const hairColors = [
-        {
-            index: 0,
-            icon: HairColor1,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 1,
-            icon: HairColor2,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 2,
-            icon: HairColor3,
-            price: "owned",
-            unit: "",
-        },
-        {
-            index: 3,
-            icon: HairColor4,
-            price: "100",
-            unit: "t",
-        },
-    ]
-
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
             <div className="px-4 d-flex align-items-center justify-content-between">
@@ -176,82 +95,10 @@ const Menu = () => {
                                         <div>faq</div>
                                     </div>
                                 )}
-                                <Modal
-                                    isOpen={isDressUPModalOpen}
-                                    onRequestClose={() => {
-                                        setIsDressUPModalOpen(false)
-                                    }}
-                                    ariaHideApp={false}
-                                    className="dressup-modal"
-                                    overlayClassName="dressup-modal__overlay"
-                                >
-                                    <div className="dressup-modal__header">
-                                        <div
-                                            onClick={() => setIsDressUPModalOpen(false)}
-                                            onKeyDown={() => setIsDressUPModalOpen(false)}
-                                            role="button"
-                                            tabIndex="0"
-                                        >
-                                            <img
-                                                width="14px"
-                                                height="14px"
-                                                src={CloseIcon}
-                                                className="mt-3 me-3"
-                                                alt="close"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row m-0 py-4 text-white">
-                                        <div className="col-4">
-                                            <div className="row">
-                                                <img
-                                                    src={Tesla}
-                                                    alt="Avatar"
-                                                    className="w-75 px-5 mx-auto"
-                                                />
-                                                <span className="text-center dressup-modal-avatar-name">
-                                                    Tesla
-                                                </span>
-                                                <div className="dressup-modal-sections-list">
-                                                    {tabs.map((item) => (
-                                                        <div
-                                                            onClick={() =>
-                                                                setSelectedTab(item.index)
-                                                            }
-                                                            key={item.index}
-                                                            className={`${
-                                                                item.index == selectedTab &&
-                                                                "active"
-                                                            }`}
-                                                        >
-                                                            {item.title}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                <div className="btn-save">save</div>
-                                            </div>
-                                        </div>
-                                        <div className="col-8 border-start px-5 py-3">
-                                            {selectedTab == 0 && (
-                                                <div className="dressup-modal-hair-section">
-                                                    <DressupHorizontalList
-                                                        title={"hair style"}
-                                                        list={hairStyles}
-                                                        selectedItem={selectedHairStyle}
-                                                        setSelectedItem={setSelectedHairStyle}
-                                                    />
-                                                    <div className="mt-4"></div>
-                                                    <DressupHorizontalList
-                                                        title={"hair color"}
-                                                        list={hairColors}
-                                                        selectedItem={selectedHairColor}
-                                                        setSelectedItem={setSelectedHairColor}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </Modal>
+                                <DressupModal
+                                    setIsDressUPModalOpen={setIsDressUPModalOpen}
+                                    isDressUPModalOpen={isDressUPModalOpen}
+                                />
                             </div>
                         )}
                     </div>

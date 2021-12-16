@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useEffect } from "react"
+import React, { useCallback, useReducer } from "react"
 import { Link, navigate } from "gatsby"
 import { FormInput } from "../common/FormControl"
 import validator from "validator"
@@ -9,10 +9,9 @@ import { useAuth } from "../../hooks/useAuth"
 const ForgetPassword = () => {
     const auth = useAuth()
 
-    useEffect(() => {
-        if (auth?.isLoggedIn()) navigate("/app/profile")
-    }, [])
-
+    if(auth?.isLoggedIn())
+        navigate("/app/profile")
+    
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
     })
@@ -27,6 +26,8 @@ const ForgetPassword = () => {
     }, [])
 
     const [forgotPwdMutation, forgotPwdMutationResults] = useForgotPassword()
+
+    const disableForm = forgotPwdMutationResults.loading;
 
     return (
         <AuthLayout>
@@ -54,7 +55,7 @@ const ForgetPassword = () => {
                         Send again
                     </Link>
                 </div>
-                <button type="submit" className="btn-primary w-100 text-uppercase my-5">
+                <button type="submit" className="btn-primary w-100 text-uppercase my-5" disabled={disableForm}>
                     Reset password
                 </button>
             </form>

@@ -1,3 +1,4 @@
+import React from "react"
 import logo from "../images/logo.svg"
 import hero1 from "../images/hero1.png"
 import hero2 from "../images/hero2.svg"
@@ -69,6 +70,68 @@ import hairColor2 from "../images/dressup/hair-color-2.svg"
 import hairColor3 from "../images/dressup/hair-color-3.svg"
 import hairColor4 from "../images/dressup/hair-color-4.svg"
 
+import facialStyle1 from "../images/dressup/facial-style-1.svg"
+import facialStyle2 from "../images/dressup/facial-style-2.svg"
+import facialStyle3 from "../images/dressup/facial-style-3.svg"
+import facialStyle4 from "../images/dressup/facial-style-4.svg"
+import facialStyle5 from "../images/dressup/facial-style-5.svg"
+import facialStyle6 from "../images/dressup/facial-style-6.svg"
+
+import expression1 from "../images/dressup/expressions-1.svg"
+import expression2 from "../images/dressup/expressions-2.svg"
+import expression3 from "../images/dressup/expressions-3.svg"
+import expression4 from "../images/dressup/expressions-4.svg"
+import expression5 from "../images/dressup/expressions-5.svg"
+import expression6 from "../images/dressup/expressions-6.svg"
+import expression7 from "../images/dressup/expressions-7.svg"
+
+import hat1 from "../images/dressup/hat-1.svg"
+import hat2 from "../images/dressup/hat-2.svg"
+import hat3 from "../images/dressup/hat-3.svg"
+import hat4 from "../images/dressup/hat-4.svg"
+import hat5 from "../images/dressup/hat-5.svg"
+import hat6 from "../images/dressup/hat-6.svg"
+import hat7 from "../images/dressup/hat-7.svg"
+import hat8 from "../images/dressup/hat-8.svg"
+import hat9 from "../images/dressup/hat-9.svg"
+
+import other1 from "../images/dressup/other-1.svg"
+import other2 from "../images/dressup/other-2.svg"
+import other3 from "../images/dressup/other-3.svg"
+import other4 from "../images/dressup/other-4.svg"
+import other5 from "../images/dressup/other-5.svg"
+import other6 from "../images/dressup/other-6.svg"
+
+import emptyAvatar from "../images/dressup/empty-avatar.svg"
+
+import hairStyleIsolatedIcon1 from "../images/dressup/isolated-icons/hair-style-isolated-icon-1.svg"
+import hairStyleIsolatedIcon2 from "../images/dressup/isolated-icons/hair-style-isolated-icon-2.svg"
+import hairStyleIsolatedIcon3 from "../images/dressup/isolated-icons/hair-style-isolated-icon-3.svg"
+
+import facialStyleIsolatedIcon1 from "../images/dressup/isolated-icons/facial-style-isolated-icon-1.svg"
+import facialStyleIsolatedIcon2 from "../images/dressup/isolated-icons/facial-style-isolated-icon-2.svg"
+import facialStyleIsolatedIcon3 from "../images/dressup/isolated-icons/facial-style-isolated-icon-3.svg"
+import facialStyleIsolatedIcon4 from "../images/dressup/isolated-icons/facial-style-isolated-icon-4.svg"
+import facialStyleIsolatedIcon5 from "../images/dressup/isolated-icons/facial-style-isolated-icon-5.svg"
+
+import expressionIsolatedIcon1 from "../images/dressup/isolated-icons/expression-isolated-icon-1.svg"
+import expressionIsolatedIcon2 from "../images/dressup/isolated-icons/expression-isolated-icon-2.svg"
+import expressionIsolatedIcon3 from "../images/dressup/isolated-icons/expression-isolated-icon-3.svg"
+import expressionIsolatedIcon4 from "../images/dressup/isolated-icons/expression-isolated-icon-4.svg"
+import expressionIsolatedIcon5 from "../images/dressup/isolated-icons/expression-isolated-icon-5.svg"
+import expressionIsolatedIcon6 from "../images/dressup/isolated-icons/expression-isolated-icon-6.svg"
+import expressionIsolatedIcon7 from "../images/dressup/isolated-icons/expression-isolated-icon-7.svg"
+
+import hatIsolatedIcon1 from "../images/dressup/isolated-icons/hat-isolated-icon-1.svg"
+import hatIsolatedIcon2 from "../images/dressup/isolated-icons/hat-isolated-icon-2.svg"
+import hatIsolatedIcon3 from "../images/dressup/isolated-icons/hat-isolated-icon-3.svg"
+import hatIsolatedIcon4 from "../images/dressup/isolated-icons/hat-isolated-icon-4.svg"
+import hatIsolatedIcon5 from "../images/dressup/isolated-icons/hat-isolated-icon-5.svg"
+import hatIsolatedIcon6 from "../images/dressup/isolated-icons/hat-isolated-icon-6.svg"
+import hatIsolatedIcon7 from "../images/dressup/isolated-icons/hat-isolated-icon-7.svg"
+import hatIsolatedIcon8 from "../images/dressup/isolated-icons/hat-isolated-icon-8.svg"
+
+
 export const Logo = logo
 export const Bell = bell
 export const DownArrow = downArrow
@@ -136,3 +199,64 @@ export const HairColor2 = hairColor2
 export const HairColor3 = hairColor3
 export const HairColor4 = hairColor4
 
+export const FacialStyle1 = facialStyle1
+export const FacialStyle2 = facialStyle2
+export const FacialStyle3 = facialStyle3
+export const FacialStyle4 = facialStyle4
+export const FacialStyle5 = facialStyle5
+export const FacialStyle6 = facialStyle6
+
+export const Expression1 = expression1
+export const Expression2 = expression2
+export const Expression3 = expression3
+export const Expression4 = expression4
+export const Expression5 = expression5
+export const Expression6 = expression6
+export const Expression7 = expression7
+
+export const Hat1 = hat1
+export const Hat2 = hat2
+export const Hat3 = hat3
+export const Hat4 = hat4
+export const Hat5 = hat5
+export const Hat6 = hat6
+export const Hat7 = hat7
+export const Hat8 = hat8
+export const Hat9 = hat9
+
+export const Other1 = other1
+export const Other2 = other2
+export const Other3 = other3
+export const Other4 = other4
+export const Other5 = other5
+export const Other6 = other6
+
+export const EmptyAvatar = emptyAvatar
+
+//Isolated Icons
+export const HairStyleIsolatedIcon1 = hairStyleIsolatedIcon1
+export const HairStyleIsolatedIcon2 = hairStyleIsolatedIcon2
+export const HairStyleIsolatedIcon3 = hairStyleIsolatedIcon3
+
+export const FacialStyleIsolatedIcon1 = facialStyleIsolatedIcon1
+export const FacialStyleIsolatedIcon2 = facialStyleIsolatedIcon2
+export const FacialStyleIsolatedIcon3 = facialStyleIsolatedIcon3
+export const FacialStyleIsolatedIcon4 = facialStyleIsolatedIcon4
+export const FacialStyleIsolatedIcon5 = facialStyleIsolatedIcon5
+
+export const ExpressionIsolatedIcon1 = expressionIsolatedIcon1
+export const ExpressionIsolatedIcon2 = expressionIsolatedIcon2
+export const ExpressionIsolatedIcon3 = expressionIsolatedIcon3
+export const ExpressionIsolatedIcon4 = expressionIsolatedIcon4
+export const ExpressionIsolatedIcon5 = expressionIsolatedIcon5
+export const ExpressionIsolatedIcon6 = expressionIsolatedIcon6
+export const ExpressionIsolatedIcon7 = expressionIsolatedIcon7
+
+export const HatIsolatedIcon1 = hatIsolatedIcon1
+export const HatIsolatedIcon2 = hatIsolatedIcon2
+export const HatIsolatedIcon3 = hatIsolatedIcon3
+export const HatIsolatedIcon4 = hatIsolatedIcon4
+export const HatIsolatedIcon5 = hatIsolatedIcon5
+export const HatIsolatedIcon6 = hatIsolatedIcon6
+export const HatIsolatedIcon7 = hatIsolatedIcon7
+export const HatIsolatedIcon8 = hatIsolatedIcon8
