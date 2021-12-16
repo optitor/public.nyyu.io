@@ -22,6 +22,8 @@ const DressupData = {
             price: "owned",
             unit: "",
             isolatedIcon: HairStyleIsolatedIcon1,
+            iconTop: "-10px",
+            iconLeft: "-4px"
         },
         {
             index: 1,
@@ -29,6 +31,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HairStyleIsolatedIcon2,
+            iconTop: "-5px",
+            iconLeft: "16px"
         },
         {
             index: 2,
@@ -36,6 +40,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HairStyleIsolatedIcon3,
+            iconTop: "-5px",
+            iconLeft: "16px"
         },
     ],
     hairColors: [

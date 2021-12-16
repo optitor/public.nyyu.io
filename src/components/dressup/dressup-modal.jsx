@@ -46,11 +46,15 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                                 src={DressupData.hairStyles[selectedHairStyle].isolatedIcon}
                                 className="isolated-hair-style"
                                 alt="Hair Isolated Icon"
+                                style={{
+                                    left: DressupData.hairStyles[selectedHairStyle].iconLeft,
+                                    top: DressupData.hairStyles[selectedHairStyle].iconTop,
+                                }}
                             />
                             <img src={EmptyAvatar} className="empty-avatar" alt="Avatar" />
                         </div>
 
-                        <span className="text-center dressup-modal-avatar-name">Tesla</span>
+                        <span className="text-center dressup-modal-avatar-name mt-3">Tesla</span>
                         <div className="dressup-modal-sections-list">
                             {DressupData.tabs.map((item) => (
                                 <div

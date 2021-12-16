@@ -1,12 +1,5 @@
+@use "sass:math";
 .profile-page {
-    // section > div {
-    //     @include mq("laptop") {
-    //         height: 100%;
-    //     }
-    //     @media screen and (max-height: 745px) {
-    //         height: auto;
-    //     }
-    // }
     &__left {
         padding: 8px 32px;
         border-right: 1px solid #ffffff;
@@ -438,18 +431,20 @@
     max-width: 950px;
     padding: 0px;
     &-avatar {
+        width: 107.69px;
+        height: 82.28px;
         position: relative;
-        margin: auto;
         text-align: center;
+        margin: auto;
+        padding: 0px;
         .empty-avatar {
-            width: 107.69px;
-            height: 82.28px;
+            width: max-content;
+            height: auto;
         }
         .isolated-hair-style {
-            width: 77.44px;
+            width: max-content;
             height: auto;
             position: absolute;
-            // left: 15.73px;
         }
     }
     &__header {
@@ -465,6 +460,7 @@
         font-weight: 600;
         font-size: 24px;
         line-height: 23px;
+        margin-top: 30px;
     }
     &-sections-list {
         color: #464646;
