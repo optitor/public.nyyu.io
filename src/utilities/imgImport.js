@@ -108,6 +108,12 @@ import hairStyleIsolatedIcon1 from "../images/dressup/isolated-icons/hair-style-
 import hairStyleIsolatedIcon2 from "../images/dressup/isolated-icons/hair-style-isolated-icon-2.svg"
 import hairStyleIsolatedIcon3 from "../images/dressup/isolated-icons/hair-style-isolated-icon-3.svg"
 
+import facialStyleIsolatedIcon1 from "../images/dressup/isolated-icons/facial-style-isolated-icon-1.svg"
+import facialStyleIsolatedIcon2 from "../images/dressup/isolated-icons/facial-style-isolated-icon-2.svg"
+import facialStyleIsolatedIcon3 from "../images/dressup/isolated-icons/facial-style-isolated-icon-3.svg"
+import facialStyleIsolatedIcon4 from "../images/dressup/isolated-icons/facial-style-isolated-icon-4.svg"
+import facialStyleIsolatedIcon5 from "../images/dressup/isolated-icons/facial-style-isolated-icon-5.svg"
+
 
 export const Logo = logo
 export const Bell = bell
@@ -214,3 +220,9 @@ export const EmptyAvatar = emptyAvatar
 export const HairStyleIsolatedIcon1 = hairStyleIsolatedIcon1
 export const HairStyleIsolatedIcon2 = hairStyleIsolatedIcon2
 export const HairStyleIsolatedIcon3 = hairStyleIsolatedIcon3
+
+export const FacialStyleIsolatedIcon1 = facialStyleIsolatedIcon1
+export const FacialStyleIsolatedIcon2 = facialStyleIsolatedIcon2
+export const FacialStyleIsolatedIcon3 = facialStyleIsolatedIcon3
+export const FacialStyleIsolatedIcon4 = facialStyleIsolatedIcon4
+export const FacialStyleIsolatedIcon5 = facialStyleIsolatedIcon5

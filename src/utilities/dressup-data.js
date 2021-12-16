@@ -1,4 +1,4 @@
-import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
+import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, Other1, Other2, Other3, Other4, Other5, Other6 } from "./imgImport";
 
 const DressupData = {
     tabs: [
@@ -76,36 +76,53 @@ const DressupData = {
             icon: FacialStyle1,
             price: "owned",
             unit: "",
+            iconTop: "-10px",
+            iconLeft: "-4px"
         },
         {
             index: 1,
             icon: FacialStyle2,
             price: "owned",
             unit: "",
+            isolatedIcon: FacialStyleIsolatedIcon1,
+            iconTop: "-10px",
+            iconLeft: "-4px"
         },
         {
             index: 2,
             icon: FacialStyle3,
             price: "owned",
             unit: "",
+            isolatedIcon: FacialStyleIsolatedIcon2,
+            iconTop: "-10px",
+            iconLeft: "-4px"
         },
         {
             index: 3,
             icon: FacialStyle4,
             price: "owned",
             unit: "",
+            isolatedIcon: FacialStyleIsolatedIcon3,
+            iconTop: "-10px",
+            iconLeft: "-4px"
         },
         {
             index: 4,
             icon: FacialStyle5,
             price: "owned",
             unit: "",
+            isolatedIcon: FacialStyleIsolatedIcon4,
+            iconTop: "53px",
+            iconLeft: "32px"
         },
         {
             index: 5,
             icon: FacialStyle6,
             price: "owned",
             unit: "",
+            isolatedIcon: FacialStyleIsolatedIcon5,
+            iconTop: "65px",
+            iconLeft: "36px"
         },
     ],
     expressions: [

@@ -12,6 +12,8 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
     const [selectedHat, setSelectedHat] = useState(0)
     const [selectedOther, setSelectedOther] = useState(0)
     const [selectedTab, setSelectedTab] = useState(0)
+
+    const selectedFacialStyleItem = DressupData.facialStyles[selectedFacialStyle]
     return (
         <Modal
             isOpen={isDressUPModalOpen}
@@ -51,6 +53,18 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                                     top: DressupData.hairStyles[selectedHairStyle].iconTop,
                                 }}
                             />
+                            {selectedFacialStyleItem?.isolatedIcon && (
+                                <img
+                                    src={selectedFacialStyleItem.isolatedIcon}
+                                    className="isolated-facial-style"
+                                    alt="Facial Style Isolated Icon"
+                                    style={{
+                                        left: selectedFacialStyleItem.iconLeft,
+                                        top: selectedFacialStyleItem.iconTop,
+                                    }}
+                                />
+                            )}
+
                             <img src={EmptyAvatar} className="empty-avatar" alt="Avatar" />
                         </div>
 

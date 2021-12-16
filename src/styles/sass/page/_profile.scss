@@ -445,9 +445,11 @@
             width: max-content;
             height: auto;
             position: absolute;
-            path {
-                display: none;
-            }
+        }
+        .isolated-facial-style {
+            width: max-content;
+            height: auto;
+            position: absolute;
         }
     }
     &__header {
