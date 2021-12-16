@@ -133,7 +133,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon1,
             iconTop: "19px",
-            iconLeft: "25px"
+            iconLeft: "24px"
         },
         {
             index: 1,
@@ -205,8 +205,8 @@ const DressupData = {
             price: "owned",
             unit: "",
             isolatedIcon: HatIsolatedIcon1,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-43px",
+            iconLeft: "24px"
         },
         {
             index: 2,
@@ -214,8 +214,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon2,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-49px",
+            iconLeft: "8.5px"
         },
         {
             index: 3,
@@ -223,8 +223,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon3,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-47px",
+            iconLeft: "30px"
         },
         {
             index: 4,
@@ -232,8 +232,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon4,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-57px",
+            iconLeft: "-2px"
         },
         {
             index: 5,
@@ -241,8 +241,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon5,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-15px",
+            iconLeft: "28px"
         },
         {
             index: 6,
@@ -250,8 +250,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon6,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-35px",
+            iconLeft: "26px"
         },
         {
             index: 7,
@@ -259,8 +259,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon7,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-50px",
+            iconLeft: "-10px"
         },
         {
             index: 8,
@@ -268,8 +268,8 @@ const DressupData = {
             price: "0.01",
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon8,
-            iconTop: "0px",
-            iconLeft: "0px"
+            iconTop: "-35px",
+            iconLeft: "2px"
         },
     ],
     others: [
