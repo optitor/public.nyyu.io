@@ -9,7 +9,6 @@ import React, { useCallback, useReducer, useState } from "react"
 import { countries, social_links } from "../../utilities/staticData"
 
 const SingupPage = () => {
-    const [pending, setPending] = useState(false)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
         pwd: { value: "", error: "" },
@@ -52,7 +51,7 @@ const SingupPage = () => {
 
     const [signupMutation, signupMutationResults] = useSignupMutation()
 
-    const disableForm = signupMutationResults.loading
+    const pending = signupMutationResults.loading
 
     return (
         <AuthLayout>
@@ -128,11 +127,13 @@ const SingupPage = () => {
                 </div>
                 <button
                     type="submit"
-                    className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-3"
-                    disabled={disableForm}
+                    className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2 mt-3"
+                    disabled={pending}
                 >
-                    {pending && <CustomSpinner />}
-                    <div className="ms-3">sign up with email</div>
+                    <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
+                        <CustomSpinner />
+                    </div>
+                    <div className={`${pending ? "ms-3" : "pe-4"}`}>sign up with email</div>
                 </button>
             </form>
             <ul className="social-links">
