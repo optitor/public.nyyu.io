@@ -1,11 +1,12 @@
-import React, { useCallback, useReducer, useState } from "react"
 import { Link } from "gatsby"
-import Select from "react-select"
 import validator from "validator"
-import { countries, social_links } from "../../utilities/staticData"
-import { FormInput, CheckBox } from "../common/FormControl"
+import Select from "react-select"
 import AuthLayout from "../common/AuthLayout"
+import CustomSpinner from "../common/custom-spinner"
+import { FormInput, CheckBox } from "../common/FormControl"
 import { useSignupMutation } from "../../apollo/network/auth"
+import React, { useCallback, useReducer, useState } from "react"
+import { countries, social_links } from "../../utilities/staticData"
 
 const SingupPage = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -48,9 +49,9 @@ const SingupPage = () => {
         [remember]
     )
 
-    const [signupMutation, signupMutationResults] = useSignupMutation();
+    const [signupMutation, signupMutationResults] = useSignupMutation()
 
-    const disableForm = signupMutationResults.loading;
+    const pending = signupMutationResults.loading
 
     return (
         <AuthLayout>
@@ -124,8 +125,15 @@ const SingupPage = () => {
                         </Link>
                     </CheckBox>
                 </div>
-                <button type="submit" className="btn-primary w-100 text-uppercase" disabled={disableForm}>
-                    sign up with email
+                <button
+                    type="submit"
+                    className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2 mt-3"
+                    disabled={pending}
+                >
+                    <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
+                        <CustomSpinner />
+                    </div>
+                    <div className={`${pending ? "ms-3" : "pe-4"}`}>sign up with email</div>
                 </button>
             </form>
             <ul className="social-links">
