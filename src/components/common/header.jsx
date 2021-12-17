@@ -72,7 +72,7 @@ const Menu = () => {
                                 Sign In
                             </Link>
                         ) : (
-                            <ul className="">
+                            <ul className="d-flex">
                                 <li className="d-flex">
                                     <img src={Bell} alt="Bell Icon" />
                                 </li>
