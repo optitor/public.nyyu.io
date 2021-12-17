@@ -1,4 +1,79 @@
-import { Expression1, Expression2, Expression3, Expression4, Expression5, Expression6, Expression7, ExpressionIsolatedIcon1, ExpressionIsolatedIcon2, ExpressionIsolatedIcon3, ExpressionIsolatedIcon4, ExpressionIsolatedIcon5, ExpressionIsolatedIcon6, ExpressionIsolatedIcon7, FacialStyle1, FacialStyle2, FacialStyle3, FacialStyle4, FacialStyle5, FacialStyle6, FacialStyleIsolatedIcon1, FacialStyleIsolatedIcon2, FacialStyleIsolatedIcon3, FacialStyleIsolatedIcon4, FacialStyleIsolatedIcon5, HairColor1, HairColor2, HairColor3, HairColor4, HairStyle1, HairStyle2, HairStyle3, HairStyleIsolatedIcon1, HairStyleIsolatedIcon2, HairStyleIsolatedIcon3, Hat1, Hat2, Hat3, Hat4, Hat5, Hat6, Hat7, Hat8, Hat9, HatIsolatedIcon1, HatIsolatedIcon2, HatIsolatedIcon3, HatIsolatedIcon4, HatIsolatedIcon5, HatIsolatedIcon6, HatIsolatedIcon7, HatIsolatedIcon8, Other1, Other2, Other3, Other4, Other5, Other6, Other7, OtherIsolatedIcon1, OtherIsolatedIcon2, OtherIsolatedIcon3, OtherIsolatedIcon4, OtherIsolatedIcon5, OtherIsolatedIcon6 } from "./imgImport";
+import {
+    Expression1,
+    Expression2,
+    Expression3,
+    Expression4,
+    Expression5,
+    Expression6,
+    Expression7,
+    ExpressionIsolatedIcon1,
+    ExpressionIsolatedIcon2,
+    ExpressionIsolatedIcon3,
+    ExpressionIsolatedIcon4,
+    ExpressionIsolatedIcon5,
+    ExpressionIsolatedIcon6,
+    ExpressionIsolatedIcon7,
+    FacialStyle1,
+    FacialStyle2,
+    FacialStyle3,
+    FacialStyle4,
+    FacialStyle5,
+    FacialStyle6,
+    FacialStyleIsolatedIcon1,
+    FacialStyleIsolatedIcon2,
+    FacialStyleIsolatedIcon3,
+    FacialStyleIsolatedIcon4,
+    FacialStyleIsolatedIcon5,
+    HairColor1,
+    HairColor2,
+    HairColor3,
+    HairColor4,
+    HairStyle1,
+    HairStyle1Color1IsolatedIcon,
+    HairStyle1Color2IsolatedIcon,
+    HairStyle1Color3IsolatedIcon,
+    HairStyle1Color4IsolatedIcon,
+    HairStyle2,
+    HairStyle2Color1IsolatedIcon,
+    HairStyle2Color2IsolatedIcon,
+    HairStyle2Color3IsolatedIcon,
+    HairStyle2Color4IsolatedIcon,
+    HairStyle3,
+    HairStyle3Color1IsolatedIcon,
+    HairStyle3Color2IsolatedIcon,
+    HairStyle3Color3IsolatedIcon,
+    HairStyle3Color4IsolatedIcon,
+    Hat1,
+    Hat2,
+    Hat3,
+    Hat4,
+    Hat5,
+    Hat6,
+    Hat7,
+    Hat8,
+    Hat9,
+    HatIsolatedIcon1,
+    HatIsolatedIcon2,
+    HatIsolatedIcon3,
+    HatIsolatedIcon4,
+    HatIsolatedIcon5,
+    HatIsolatedIcon6,
+    HatIsolatedIcon7,
+    HatIsolatedIcon8,
+    Other1,
+    Other2,
+    Other3,
+    Other4,
+    Other5,
+    Other6,
+    Other7,
+    OtherIsolatedIcon1,
+    OtherIsolatedIcon2,
+    OtherIsolatedIcon3,
+    OtherIsolatedIcon4,
+    OtherIsolatedIcon5,
+    OtherIsolatedIcon6,
+} from "./imgImport"
 
 const DressupData = {
     tabs: [
@@ -21,27 +96,42 @@ const DressupData = {
             icon: HairStyle1,
             price: "owned",
             unit: "",
-            isolatedIcon: HairStyleIsolatedIcon1,
+            isolatedIcon: {
+                "light-gray": HairStyle1Color1IsolatedIcon,
+                black: HairStyle1Color2IsolatedIcon,
+                white: HairStyle1Color3IsolatedIcon,
+                "dark-gray": HairStyle1Color4IsolatedIcon,
+            },
             iconTop: "-10px",
-            iconLeft: "-4px"
+            iconLeft: "-4px",
         },
         {
             index: 1,
             icon: HairStyle2,
             price: "0.01",
             unit: "ndb",
-            isolatedIcon: HairStyleIsolatedIcon2,
+            isolatedIcon: {
+                "light-gray": HairStyle2Color1IsolatedIcon,
+                black: HairStyle2Color2IsolatedIcon,
+                white: HairStyle2Color3IsolatedIcon,
+                "dark-gray": HairStyle2Color4IsolatedIcon,
+            },
             iconTop: "-5px",
-            iconLeft: "16px"
+            iconLeft: "16px",
         },
         {
             index: 2,
             icon: HairStyle3,
             price: "0.01",
             unit: "ndb",
-            isolatedIcon: HairStyleIsolatedIcon3,
+            isolatedIcon: {
+                "light-gray": HairStyle3Color1IsolatedIcon,
+                black: HairStyle3Color2IsolatedIcon,
+                white: HairStyle3Color3IsolatedIcon,
+                "dark-gray": HairStyle3Color4IsolatedIcon,
+            },
             iconTop: "-5px",
-            iconLeft: "16px"
+            iconLeft: "16px",
         },
     ],
     hairColors: [
@@ -50,24 +140,28 @@ const DressupData = {
             icon: HairColor1,
             price: "owned",
             unit: "",
+            color: "light-gray",
         },
         {
             index: 1,
             icon: HairColor2,
             price: "owned",
             unit: "",
+            color: "black",
         },
         {
             index: 2,
             icon: HairColor3,
             price: "owned",
             unit: "",
+            color: "white",
         },
         {
             index: 3,
             icon: HairColor4,
             price: "100",
             unit: "t",
+            color: "dark-gray",
         },
     ],
     facialStyles: [
@@ -77,7 +171,7 @@ const DressupData = {
             price: "owned",
             unit: "",
             iconTop: "0px",
-            iconLeft: "0px"
+            iconLeft: "0px",
         },
         {
             index: 1,
@@ -86,7 +180,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon1,
             iconTop: "55px",
-            iconLeft: "18px"
+            iconLeft: "18px",
         },
         {
             index: 2,
@@ -95,7 +189,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon2,
             iconTop: "55px",
-            iconLeft: "21px"
+            iconLeft: "21px",
         },
         {
             index: 3,
@@ -104,7 +198,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon3,
             iconTop: "10px",
-            iconLeft: "22px"
+            iconLeft: "22px",
         },
         {
             index: 4,
@@ -113,7 +207,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon4,
             iconTop: "58px",
-            iconLeft: "32px"
+            iconLeft: "32px",
         },
         {
             index: 5,
@@ -122,7 +216,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: FacialStyleIsolatedIcon5,
             iconTop: "70px",
-            iconLeft: "36px"
+            iconLeft: "36px",
         },
     ],
     expressions: [
@@ -133,7 +227,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon1,
             iconTop: "23px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
         {
             index: 1,
@@ -142,7 +236,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon2,
             iconTop: "23px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
         {
             index: 2,
@@ -151,7 +245,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon3,
             iconTop: "23px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
         {
             index: 3,
@@ -160,7 +254,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon4,
             iconTop: "23px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
         {
             index: 4,
@@ -169,7 +263,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon5,
             iconTop: "23px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
         {
             index: 5,
@@ -178,7 +272,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon6,
             iconTop: "23px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
         {
             index: 6,
@@ -187,7 +281,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: ExpressionIsolatedIcon7,
             iconTop: "23px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
     ],
     hats: [
@@ -197,7 +291,7 @@ const DressupData = {
             price: "owned",
             unit: "",
             iconTop: "0px",
-            iconLeft: "0px"
+            iconLeft: "0px",
         },
         {
             index: 1,
@@ -206,7 +300,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: HatIsolatedIcon1,
             iconTop: "-43px",
-            iconLeft: "24px"
+            iconLeft: "24px",
         },
         {
             index: 2,
@@ -215,7 +309,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon2,
             iconTop: "-49px",
-            iconLeft: "8.5px"
+            iconLeft: "8.5px",
         },
         {
             index: 3,
@@ -224,7 +318,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon3,
             iconTop: "-47px",
-            iconLeft: "30px"
+            iconLeft: "30px",
         },
         {
             index: 4,
@@ -233,7 +327,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon4,
             iconTop: "-57px",
-            iconLeft: "-2px"
+            iconLeft: "-2px",
         },
         {
             index: 5,
@@ -242,7 +336,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon5,
             iconTop: "-15px",
-            iconLeft: "28px"
+            iconLeft: "28px",
         },
         {
             index: 6,
@@ -251,7 +345,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon6,
             iconTop: "-35px",
-            iconLeft: "26px"
+            iconLeft: "26px",
         },
         {
             index: 7,
@@ -260,7 +354,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon7,
             iconTop: "-50px",
-            iconLeft: "-10px"
+            iconLeft: "-10px",
         },
         {
             index: 8,
@@ -269,7 +363,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: HatIsolatedIcon8,
             iconTop: "-35px",
-            iconLeft: "2px"
+            iconLeft: "2px",
         },
     ],
     others: [
@@ -286,7 +380,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: OtherIsolatedIcon1,
             iconTop: "52px",
-            iconLeft: "7px"
+            iconLeft: "7px",
         },
         {
             index: 2,
@@ -295,7 +389,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: OtherIsolatedIcon2,
             iconTop: "27px",
-            iconLeft: "15px"
+            iconLeft: "15px",
         },
         {
             index: 3,
@@ -304,7 +398,7 @@ const DressupData = {
             unit: "ndb",
             isolatedIcon: OtherIsolatedIcon3,
             iconTop: "27px",
-            iconLeft: "15px"
+            iconLeft: "15px",
         },
         {
             index: 4,
@@ -313,7 +407,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: OtherIsolatedIcon4,
             iconTop: "70px",
-            iconLeft: "28px"
+            iconLeft: "28px",
         },
         {
             index: 5,
@@ -322,7 +416,7 @@ const DressupData = {
             unit: "",
             isolatedIcon: OtherIsolatedIcon5,
             iconTop: "20px",
-            iconLeft: "10px"
+            iconLeft: "10px",
         },
         {
             index: 6,
@@ -331,10 +425,8 @@ const DressupData = {
             unit: "",
             isolatedIcon: OtherIsolatedIcon6,
             iconTop: "20px",
-            iconLeft: "55px"
+            iconLeft: "55px",
         },
     ],
 }
-export {
-    DressupData
-}
+export { DressupData }

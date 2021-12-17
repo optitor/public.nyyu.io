@@ -104,9 +104,21 @@ import other7 from "../images/dressup/other-7.svg"
 
 import emptyAvatar from "../images/dressup/empty-avatar.svg"
 
-import hairStyleIsolatedIcon1 from "../images/dressup/isolated-icons/hair-style-isolated-icon-1.svg"
-import hairStyleIsolatedIcon2 from "../images/dressup/isolated-icons/hair-style-isolated-icon-2.svg"
-import hairStyleIsolatedIcon3 from "../images/dressup/isolated-icons/hair-style-isolated-icon-3.svg"
+import hairStyle1Color1IsolatedIcon from "../images/dressup/isolated-icons/hair-style-1-color-1-isolated-icon.svg"
+import hairStyle1Color2IsolatedIcon from "../images/dressup/isolated-icons/hair-style-1-color-2-isolated-icon.svg"
+import hairStyle1Color3IsolatedIcon from "../images/dressup/isolated-icons/hair-style-1-color-3-isolated-icon.svg"
+import hairStyle1Color4IsolatedIcon from "../images/dressup/isolated-icons/hair-style-1-color-4-isolated-icon.svg"
+
+import hairStyle2Color1IsolatedIcon from "../images/dressup/isolated-icons/hair-style-2-color-1-isolated-icon.svg"
+import hairStyle2Color2IsolatedIcon from "../images/dressup/isolated-icons/hair-style-2-color-2-isolated-icon.svg"
+import hairStyle2Color3IsolatedIcon from "../images/dressup/isolated-icons/hair-style-2-color-3-isolated-icon.svg"
+import hairStyle2Color4IsolatedIcon from "../images/dressup/isolated-icons/hair-style-2-color-4-isolated-icon.svg"
+
+import hairStyle3Color1IsolatedIcon from "../images/dressup/isolated-icons/hair-style-3-color-1-isolated-icon.svg"
+import hairStyle3Color2IsolatedIcon from "../images/dressup/isolated-icons/hair-style-3-color-2-isolated-icon.svg"
+import hairStyle3Color3IsolatedIcon from "../images/dressup/isolated-icons/hair-style-3-color-3-isolated-icon.svg"
+import hairStyle3Color4IsolatedIcon from "../images/dressup/isolated-icons/hair-style-3-color-4-isolated-icon.svg"
+
 
 import facialStyleIsolatedIcon1 from "../images/dressup/isolated-icons/facial-style-isolated-icon-1.svg"
 import facialStyleIsolatedIcon2 from "../images/dressup/isolated-icons/facial-style-isolated-icon-2.svg"
@@ -241,9 +253,21 @@ export const Other7 = other7
 export const EmptyAvatar = emptyAvatar
 
 //Isolated Icons
-export const HairStyleIsolatedIcon1 = hairStyleIsolatedIcon1
-export const HairStyleIsolatedIcon2 = hairStyleIsolatedIcon2
-export const HairStyleIsolatedIcon3 = hairStyleIsolatedIcon3
+export const HairStyle1Color1IsolatedIcon = hairStyle1Color1IsolatedIcon
+export const HairStyle1Color2IsolatedIcon = hairStyle1Color2IsolatedIcon
+export const HairStyle1Color3IsolatedIcon = hairStyle1Color3IsolatedIcon
+export const HairStyle1Color4IsolatedIcon = hairStyle1Color4IsolatedIcon
+
+export const HairStyle2Color1IsolatedIcon = hairStyle2Color1IsolatedIcon
+export const HairStyle2Color2IsolatedIcon = hairStyle2Color2IsolatedIcon
+export const HairStyle2Color3IsolatedIcon = hairStyle2Color3IsolatedIcon
+export const HairStyle2Color4IsolatedIcon = hairStyle2Color4IsolatedIcon
+
+export const HairStyle3Color1IsolatedIcon = hairStyle3Color1IsolatedIcon
+export const HairStyle3Color2IsolatedIcon = hairStyle3Color2IsolatedIcon
+export const HairStyle3Color3IsolatedIcon = hairStyle3Color3IsolatedIcon
+export const HairStyle3Color4IsolatedIcon = hairStyle3Color4IsolatedIcon
+
 
 export const FacialStyleIsolatedIcon1 = facialStyleIsolatedIcon1
 export const FacialStyleIsolatedIcon2 = facialStyleIsolatedIcon2
