@@ -525,7 +525,10 @@
             }
         }
         &::-webkit-scrollbar {
-            height: 0px !important;
+            position: relative;
+            height: 3px !important;
+            bottom: -20px;
+            z-index: -999;
         }
         &::-webkit-scrollbar-track {
             background: #666666 !important;
