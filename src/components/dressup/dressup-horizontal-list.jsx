@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 export default function DressupHorizontalList({
     list,
@@ -8,10 +8,17 @@ export default function DressupHorizontalList({
     secondRow,
 }) {
     const isScrollable = list.length > 3
+
+    const onItemClick = (index) => {
+        setSelectedItem(index)
+        let item = document.getElementById(`items-list-view-${secondRow ? "2" : "1"}`)
+        item.scrollLeft = index * 149 - 49
+    }
     return (
         <div className="row m-0">
             <div className="mb-2 ps-0">{title}</div>
             <div
+                id={`items-list-view-${secondRow ? "2" : "1"}`}
                 className={`row me-4 dressup-modal-items-horizontal-list border-top border-bottom border-secondary border-1 ${
                     isScrollable ? "d-inline-block" : "d-auto"
                 }`}
@@ -22,8 +29,7 @@ export default function DressupHorizontalList({
                             style={{
                                 marginTop: "-1px",
                             }}
-                            onClick={() => setSelectedItem(item.index)}
-                            onKeyDown={() => setSelectedItem(item.index)}
+                            onClick={() => onItemClick(item.index)}
                             role="presentation"
                             className={`border border-4 text-center cursor-pointer ${
                                 selectedItem === item.index
