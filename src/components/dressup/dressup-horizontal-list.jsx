@@ -9,11 +9,11 @@ export default function DressupHorizontalList({
 }) {
     const isScrollable = list.length > 3
 
-    const onItemClick = (index) => {
-        setSelectedItem(index)
+    useEffect(() => {
         let item = document.getElementById(`items-list-view-${secondRow ? "2" : "1"}`)
-        item.scrollLeft = index * 149 - 49
-    }
+        item.scrollLeft = selectedItem * 149 - 100
+    }, [selectedItem])
+
     return (
         <div className="row m-0">
             <div className="mb-2 ps-0">{title}</div>
@@ -29,7 +29,7 @@ export default function DressupHorizontalList({
                             style={{
                                 marginTop: "-1px",
                             }}
-                            onClick={() => onItemClick(item.index)}
+                            onClick={() => setSelectedItem(item.index)}
                             role="presentation"
                             className={`border border-4 text-center cursor-pointer ${
                                 selectedItem === item.index
