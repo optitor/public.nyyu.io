@@ -132,13 +132,13 @@ const Menu = () => {
                         <ul className="content__section menu__items">
                             {navigationLinks.map((link) => (
                                 <li className="menu__item" key={link.label}>
-                                    <Link
-                                        to={link.url}
+                                    <a
+                                        href={link.url}
                                         className="d-inline-block"
                                         onClick={() => setActive(false)}
                                     >
                                         {link.label}
-                                    </Link>
+                                    </a>
                                 </li>
                             ))}
                         </ul>
