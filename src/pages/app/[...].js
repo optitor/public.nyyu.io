@@ -10,19 +10,21 @@ import VerifyEmail from "../../components/auth/verify-email"
 import VerifyFailed from "../../components/auth/verify-failed"
 import OneTimePassword from "../../components/auth/onetime-pwd"
 import PasswordReset from "../../components/auth/password-reset"
+import NewPassword from "../../components/auth/new-password"
 
 const App = () => {
-  return (
-    <Router basepath="app">
-      {/* <PageNotFound default /> */}
-      <PrivateRoute path="/profile" component={Profile} />
-      <SignIn path="signin" />
-      <SignUp path="signup" />
-      <VerifyEmail path="verify-email" />
-      <VerifyFailed path="verify-failed" />
-      <OneTimePassword path="onetime-pwd" />
-      <PasswordReset path="password-reset" />
-    </Router>
-  )
+    return (
+        <Router basepath="app">
+            {/* <PageNotFound default /> */}
+            <PrivateRoute path="/profile" component={Profile} />
+            <SignIn path="signin" />
+            <SignUp path="signup" />
+            <VerifyEmail path="verify-email" />
+            <VerifyFailed path="verify-failed" />
+            <OneTimePassword path="onetime-pwd" />
+            <PasswordReset path="password-reset" />
+            <NewPassword path="new-password" />
+        </Router>
+    )
 }
 export default App
