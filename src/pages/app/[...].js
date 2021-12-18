@@ -11,6 +11,8 @@ import VerifyFailed from "../../components/auth/verify-failed"
 import OneTimePassword from "../../components/auth/onetime-pwd"
 import PasswordReset from "../../components/auth/password-reset"
 import NewPassword from "../../components/auth/new-password"
+import VerifyID from "../../components/auth/verify-id"
+import VerifyCompany from "../../components/auth/verify-company"
 
 const App = () => {
     return (
@@ -24,6 +26,8 @@ const App = () => {
             <OneTimePassword path="onetime-pwd" />
             <PasswordReset path="password-reset" />
             <NewPassword path="new-password" />
+            <VerifyID path="verify-id" />
+            <VerifyCompany path="verify-company" />
         </Router>
     )
 }
