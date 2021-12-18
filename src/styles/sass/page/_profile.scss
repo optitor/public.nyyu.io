@@ -491,6 +491,7 @@
     }
 
     &-items-horizontal-list {
+        scroll-behavior: smooth;
         float: none;
         overflow-x: auto !important;
         white-space: nowrap;

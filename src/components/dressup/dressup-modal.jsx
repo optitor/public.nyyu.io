@@ -13,6 +13,8 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
     const [selectedOther, setSelectedOther] = useState(0)
     const [selectedTab, setSelectedTab] = useState(0)
 
+    const selectedHairStyleItem = DressupData.hairStyles[selectedHairStyle]
+    const selectedHairColorItem = DressupData.hairColors[selectedHairColor]
     const selectedFacialStyleItem = DressupData.facialStyles[selectedFacialStyle]
     const selectedExpressionItem = DressupData.expressions[selectedExpression]
     const selectedHatItem = DressupData.hats[selectedHat]
@@ -47,15 +49,21 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                 <div className="col-4">
                     <div className="row">
                         <div className="dressup-modal-avatar">
-                            <img
-                                src={DressupData.hairStyles[selectedHairStyle].isolatedIcon}
-                                className="isolated-icons"
-                                alt=" Isolated Icon"
-                                style={{
-                                    left: DressupData.hairStyles[selectedHairStyle].iconLeft,
-                                    top: DressupData.hairStyles[selectedHairStyle].iconTop,
-                                }}
-                            />
+                            {selectedHairStyleItem.isolatedIcon && (
+                                <img
+                                    src={
+                                        selectedHairStyleItem.isolatedIcon[
+                                            selectedHairColorItem.color
+                                        ]
+                                    }
+                                    className="isolated-icons"
+                                    alt=" Isolated Icon"
+                                    style={{
+                                        left: selectedHairStyleItem.iconLeft,
+                                        top: selectedHairStyleItem.iconTop,
+                                    }}
+                                />
+                            )}
                             {selectedFacialStyleItem?.isolatedIcon && (
                                 <img
                                     src={selectedFacialStyleItem.isolatedIcon}
