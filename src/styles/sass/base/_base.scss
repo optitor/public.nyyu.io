@@ -10,7 +10,7 @@
 body {
     background-color: $black;
     main {
-        overflow-x: hidden !important;
+        @extend %set-height;
     }
 }
 

@@ -1,5 +1,4 @@
 .profile-page {
-    @extend %set-height2;
     .figure-section {
         max-width: 992px;
         margin: 0 auto;
@@ -34,6 +33,7 @@
                 cursor: pointer;
                 &__avatar {
                     padding: 30px 10px;
+                    background-color: $black;
                 }
                 &__name {
                     padding: 8px 0;
@@ -45,6 +45,9 @@
                 }
                 &.active {
                     border: 1px solid white;
+                    .figure-item__avatar {
+                        background-color: $black;
+                    }
                     .figure-item__name {
                         background-color: white;
                         color: $black;
