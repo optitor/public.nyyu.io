@@ -28,6 +28,25 @@
                 font-size: 24px;
                 line-height: 23px;
                 color: white;
+                @include mq("phone", max) {
+                    justify-content: center;
+                }
+            }
+            .silver-cnt {
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 15px;
+                text-align: end;
+                margin-top: 16px;
+            }
+            .timeframe-bar {
+                background-color: #464646;
+                height: 6px;
+                margin-top: 0;
+                .timeleft {
+                    background: #23c865;
+                    left: 0;
+                }
             }
         }
         @include mq("laptop", max) {

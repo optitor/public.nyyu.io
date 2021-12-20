@@ -159,9 +159,18 @@ const Profile = () => {
                         <div className="user-info">
                             <img className="user-info__avatar" src={Tesla} alt="tesla" />
                             <p className="user-info__name">
-                                <img src={Bronze} alt="bronze" />
+                                <img src={Bronze} alt="bronze" className="me-3" />
                                 Tesla.12
                             </p>
+                            <p className="silver-cnt">500p to Silver</p>
+                            <div className="timeframe-bar mt-1">
+                                <div
+                                    className="timeleft"
+                                    style={{
+                                        width: "25%",
+                                    }}
+                                ></div>
+                            </div>
                         </div>
                         <Tabs
                             className="profile-tab"

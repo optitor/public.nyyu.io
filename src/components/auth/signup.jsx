@@ -3,19 +3,18 @@ import validator from "validator"
 import Select from "react-select"
 import AuthLayout from "../common/AuthLayout"
 import CustomSpinner from "../common/custom-spinner"
-import { FormInput, CheckBox } from "../common/FormControl"
+import { FormInput } from "../common/FormControl"
 import { useSignupMutation } from "../../apollo/network/auth"
-import React, { useCallback, useReducer, useState } from "react"
+import React, { useState } from "react"
 import { countries, social_links } from "../../utilities/staticData"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const SingupPage = () => {
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        email: { value: "", error: "" },
-        pwd: { value: "", error: "" },
-        pwd_confirm: { value: "", error: "" },
-        remember: false,
-    })
-    const { email, pwd, pwd_confirm, remember } = state
+    const [email, setEmail] = useState("")
+    const [pwd, setPwd] = useState("")
+    const [pwdConfirm, setPwdConfirm] = useState("")
+    const [remember, setRemember] = useState("")
     const [country, setCountry] = useState(countries[0])
 
     const [emailError, setEmailError] = useState("")
@@ -24,7 +23,45 @@ const SingupPage = () => {
 
     const [signupMutation, signupMutationResults] = useSignupMutation()
 
+    const signUserUp = (e) => {
+        e.preventDefault()
+        setEmailError("")
+        setPwdError("")
+        setPwdConfirmError("")
+        let error = false
+        if (!email || !validator.isEmail(email)) {
+            setEmailError("Invalid email address")
+            error = true
+        }
+        if (
+            !pwd ||
+            !validator.isStrongPassword(pwd, {
+                minLength: 8,
+                minLowercase: 1,
+                minUppercase: 1,
+                minNumbers: 1,
+                minSymbols: 0,
+                returnScore: false,
+                pointsPerUnique: 1,
+                pointsPerRepeat: 0.5,
+                pointsForContainingLower: 10,
+                pointsForContainingUpper: 10,
+                pointsForContainingNumber: 10,
+                pointsForContainingSymbol: 10,
+            })
+        ) {
+            setPwdError(
+                "Password must contain at least 6 characters, including UPPER/lowercase and numbers!"
+            )
+            error = true
+        }
+        if (!pwdConfirm || pwd !== pwdConfirm)
+            setPwdConfirmError("Password doest not match it's repeat!")
+        if (!error) signupMutation(email, pwd, country)
+    }
+
     const pending = signupMutationResults.loading
+    const webserviceError = signupMutationResults?.data?.signup.status === "Failed"
 
     return (
         <AuthLayout>
@@ -32,49 +69,51 @@ const SingupPage = () => {
             <p className="signup-subhead">
                 Create an account to participate in the auction and to start bidding!
             </p>
-            <form
-                className="form"
-                onSubmit={(e) => {
-                    e.preventDefault()
-                    signupMutation(email.value, pwd.value, country.value)
-                }}
-            >
+            <form className="form" onSubmit={signUserUp}>
                 <div className="form-group">
                     <FormInput
                         name="email"
                         type="text"
                         label="Email"
-                        value={email.value}
-                        onChange={handleEmailChange}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter email"
-                        error={email.error}
+                        error={emailError}
                     />
                 </div>
                 <div className="row">
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-6 mb-0">
                         <FormInput
                             name="password"
                             type="password"
                             label="Password"
-                            value={pwd.value}
-                            onChange={handlePasswordChange}
+                            value={pwd}
+                            onChange={(e) => setPwd(e.target.value)}
                             placeholder="Enter password"
-                            error={pwd.error}
                         />
                     </div>
-                    <div className="form-group col-md-6">
+                    <div className="form-group col-md-6 mb-0">
                         <FormInput
                             name="pwd_confirm"
                             type="password"
                             label="Password Confirmation"
-                            value={pwd_confirm.value}
-                            onChange={handlePwdConfirmChange}
+                            value={pwdConfirm}
+                            onChange={(e) => setPwdConfirm(e.target.value)}
                             placeholder="Enter password"
-                            error={pwd_confirm.error}
                         />
                     </div>
+                    {pwdError && (
+                        <span className="errorsapn">
+                            <FontAwesomeIcon icon={faExclamationCircle} /> {pwdError}
+                        </span>
+                    )}
+                    {!pwdError && pwdConfirmError && (
+                        <span className="errorsapn">
+                            <FontAwesomeIcon icon={faExclamationCircle} /> {pwdConfirmError}
+                        </span>
+                    )}
                 </div>
-                <div className="form-group">
+                <div className="form-group mt-3">
                     <p className="form-label">Country of residence</p>
                     <Select
                         options={countries}
@@ -86,18 +125,28 @@ const SingupPage = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <CheckBox
-                        name="remember"
-                        type="checkbox"
-                        value={remember}
-                        onChange={handleRememberChange}
-                    >
-                        Agree to{" "}
-                        <Link to="/" className="text-info terms-link">
-                            Terms & Conditions
-                        </Link>
-                    </CheckBox>
+                    <label className="d-flex align-items-center gap-2">
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            value={remember}
+                            className="form-check-input"
+                            onChange={() => setRemember(!remember)}
+                        />
+                        <div className="keep-me-signed-in-text">
+                            Agree to{" "}
+                            <Link to="/" className="text-info terms-link">
+                                Terms & Conditions
+                            </Link>
+                        </div>
+                    </label>
                 </div>
+                {webserviceError && (
+                    <span className="errorsapn">
+                        <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                        {"Your email and password do not match!"}
+                    </span>
+                )}
                 <button
                     type="submit"
                     className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2 mt-3"
