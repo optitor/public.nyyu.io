@@ -13,14 +13,13 @@ let inMemoryAuthToken = inMemoryAuthTokenDefault
 export const LOGGED_OUT_KEY = `LOGGED_OUT_TIME`
 export const ACCESS_TOKEN = `ACCESS_TOKEN`
 
-
 // Helper
 export const isBrowser = typeof window !== `undefined`
 
 // TODO: Check if these work as expected
 export const isTokenExpired = authToken => {
-  return authToken ? Date.now() - decode(authToken).exp  < 1000 : true
-}
+  return authToken ? (Date.now() - decode(authToken).exp * 1000  > 0) : true
+} 
 
 export const isLoggedOut = () => {
   const loggedOutTime = getLoggedOutTime()

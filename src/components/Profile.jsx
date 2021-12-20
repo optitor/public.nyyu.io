@@ -153,7 +153,6 @@ const Profile = () => {
         try {
             return data.getUser.userSecurity.find(f => f.key === key).value
         } catch (e) {
-            console.log(e)
         }
     }
 

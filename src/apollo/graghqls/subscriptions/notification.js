@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-const NOTIFICATION_SUBSCRIPTION = gql`
+export const NOTIFICATION_SUBSCRIPTION = gql`
   subscription notifications {
     notifications {
       id,

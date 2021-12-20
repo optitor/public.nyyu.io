@@ -2,7 +2,7 @@ import fetch from "isomorphic-fetch"
 import { ApolloClient, InMemoryCache, createHttpLink, split } from "@apollo/client"
 import { setContext } from '@apollo/client/link/context';
 import { getInMemoryAuthToken } from "../utilities/auth"
-import { API_BASE_URL } from "../utilities/staticData"
+import { API_BASE_URL, SUBSCRIPTION_BASE_URL } from "../utilities/staticData"
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
@@ -15,7 +15,7 @@ const wsLink = new WebSocketLink({
     options: {
         reconnect: true,
         connectionParams: {
-            authToken: user.authToken,
+            Authorization: `Bearer ${getInMemoryAuthToken()}`,
         },
     }
 });
