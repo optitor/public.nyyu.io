@@ -111,6 +111,10 @@
                 font-weight: bold;
                 font-size: 20px;
                 line-height: 24px;
+                &:disabled {
+                    background-color: $black !important;
+                    border: 1px solid white !important;
+                }
             }
         }
         .social-links {
@@ -211,4 +215,13 @@
     svg {
         color: black !important;
     }
+}
+
+.keep-me-signed-in-text {
+    font-size: 14px;
+}
+
+.errorsapn {
+    color: rgb(231, 54, 54);
+    font-size: 14px;
 }
