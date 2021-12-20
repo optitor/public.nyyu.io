@@ -119,7 +119,6 @@ import hairStyle3Color2IsolatedIcon from "../images/dressup/isolated-icons/hair-
 import hairStyle3Color3IsolatedIcon from "../images/dressup/isolated-icons/hair-style-3-color-3-isolated-icon.svg"
 import hairStyle3Color4IsolatedIcon from "../images/dressup/isolated-icons/hair-style-3-color-4-isolated-icon.svg"
 
-
 import facialStyleIsolatedIcon1 from "../images/dressup/isolated-icons/facial-style-isolated-icon-1.svg"
 import facialStyleIsolatedIcon2 from "../images/dressup/isolated-icons/facial-style-isolated-icon-2.svg"
 import facialStyleIsolatedIcon3 from "../images/dressup/isolated-icons/facial-style-isolated-icon-3.svg"
@@ -267,7 +266,6 @@ export const HairStyle3Color1IsolatedIcon = hairStyle3Color1IsolatedIcon
 export const HairStyle3Color2IsolatedIcon = hairStyle3Color2IsolatedIcon
 export const HairStyle3Color3IsolatedIcon = hairStyle3Color3IsolatedIcon
 export const HairStyle3Color4IsolatedIcon = hairStyle3Color4IsolatedIcon
-
 
 export const FacialStyleIsolatedIcon1 = facialStyleIsolatedIcon1
 export const FacialStyleIsolatedIcon2 = facialStyleIsolatedIcon2

@@ -11,8 +11,10 @@ const IndexPage = () => {
     return (
         <div
             style={{
-                background: "radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%)",
-            }}>
+                background:
+                    "radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%)",
+            }}
+        >
             <Seo title="Home" />
             <main className="home-page">
                 <Header />

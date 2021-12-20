@@ -94,7 +94,7 @@ const Menu = () => {
                                             <Link to="/auction">dashboard</Link>
                                         </li>
                                         <li>
-                                            <Link to="/profile">profile</Link>
+                                            <Link to="/app/profile">profile</Link>
                                         </li>
                                         <li
                                             onClick={() => setIsDressUPModalOpen(true)}

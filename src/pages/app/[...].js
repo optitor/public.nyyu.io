@@ -1,34 +1,40 @@
-import React from "react"
+import React, { Suspense, lazy } from "react"
 import { Router } from "@reach/router"
-// import Layout from "../../components/common/layout"
-import Profile from "../../components/Profile"
-import PrivateRoute from "../../components/common/PrivateRoute"
-// import PageNotFound from "../../components/common/PageNotFound"
-import SignIn from "../../components/auth/signin"
-import SignUp from "../../components/auth/signup"
-import VerifyEmail from "../../components/auth/verify-email"
-import VerifyFailed from "../../components/auth/verify-failed"
-import OneTimePassword from "../../components/auth/onetime-pwd"
-import PasswordReset from "../../components/auth/password-reset"
-import NewPassword from "../../components/auth/new-password"
-import VerifyID from "../../components/auth/verify-id"
-import VerifyCompany from "../../components/auth/verify-company"
+import Loading from "../../components/common/Loading"
+
+const Profile = lazy(() => import("../../components/Profile"))
+const PrivateRoute = lazy(() => import("../../components/common/PrivateRoute"))
+const SignIn = lazy(() => import("../../components/auth/signin"))
+const SignUp = lazy(() => import("../../components/auth/signup"))
+const VerifyEmail = lazy(() => import("../../components/auth/verify-email"))
+const VerifyFailed = lazy(() => import("../../components/auth/verify-failed"))
+const OneTimePassword = lazy(() => import("../../components/auth/onetime-pwd"))
+const PasswordReset = lazy(() => import("../../components/auth/password-reset"))
+const NewPassword = lazy(() => import("../../components/auth/new-password"))
+const VerifyID = lazy(() => import("../../components/auth/verify-id"))
+const VerifyCompany = lazy(() => import("../../components/auth/verify-company"))
 
 const App = () => {
+    const isSSR = typeof window === "undefined"
     return (
-        <Router basepath="app">
-            {/* <PageNotFound default /> */}
-            <PrivateRoute path="/profile" component={Profile} />
-            <SignIn path="signin" />
-            <SignUp path="signup" />
-            <VerifyEmail path="verify-email" />
-            <VerifyFailed path="verify-failed" />
-            <OneTimePassword path="onetime-pwd" />
-            <PasswordReset path="password-reset" />
-            <NewPassword path="new-password" />
-            <VerifyID path="verify-id" />
-            <VerifyCompany path="verify-company" />
-        </Router>
+        <>
+            {!isSSR && (
+                <Suspense fallback={<Loading />}>
+                    <Router basepath="app">
+                        <PrivateRoute path="/profile" component={Profile} />
+                        <SignIn path="signin" />
+                        <SignUp path="signup" />
+                        <VerifyEmail path="verify-email" />
+                        <VerifyFailed path="verify-failed" />
+                        <OneTimePassword path="onetime-pwd" />
+                        <PasswordReset path="password-reset" />
+                        <NewPassword path="new-password" />
+                        <VerifyID path="verify-id" />
+                        <VerifyCompany path="verify-company" />
+                    </Router>
+                </Suspense>
+            )}
+        </>
     )
 }
 export default App
