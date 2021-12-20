@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 
-const KycComponent = () => {
+const KycComponent = ({icon, topic, content}) => {
     return (
         <Container className='component'>
             <div className='icon'>
-                <p><span><Icon icon="fe:upload" /></span></p>
+                <p><span><Icon icon={icon} /></span></p>
             </div>
             <div className='topic'>
-                <p>Withdraw</p>
+                <p>{topic}</p>
             </div>
             <div className='content'>
-                <p>Threshold: 1000</p>
+                <p>{content}</p>
             </div>
             <div className='edit'>
                 <p><span><Icon icon="clarity:note-edit-line" /></span></p>
@@ -62,10 +62,19 @@ const Container = styled.div`
     }
     @media screen and (max-width: ${device['tablet']}){
         &>div.icon {
-            width: 10%;}
+            width: 10%;
+            p span {
+                font-size: 24px;
+            }
+        }
         &>div.topic {width: 50%}
         &>div.content {width: 30%}
-        &>div.edit {width: 10%}
+        &>div.edit {
+            width: 10%
+            p span {
+                font-size: 18px;
+            }
+        }
     }
     @media screen and (max-width: ${device['phone']}){
         border-left: 1px solid #464646;
