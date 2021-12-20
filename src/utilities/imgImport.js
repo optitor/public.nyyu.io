@@ -149,6 +149,8 @@ import otherIsolatedIcon4 from "../images/dressup/isolated-icons/other-isolated-
 import otherIsolatedIcon5 from "../images/dressup/isolated-icons/other-isolated-icon-5.svg"
 import otherIsolatedIcon6 from "../images/dressup/isolated-icons/other-isolated-icon-6.svg"
 
+import bronze from "../images/bronze.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const DownArrow = downArrow
@@ -296,3 +298,5 @@ export const OtherIsolatedIcon3 = otherIsolatedIcon3
 export const OtherIsolatedIcon4 = otherIsolatedIcon4
 export const OtherIsolatedIcon5 = otherIsolatedIcon5
 export const OtherIsolatedIcon6 = otherIsolatedIcon6
+
+export const Bronze = bronze

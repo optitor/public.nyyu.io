@@ -4,7 +4,7 @@ import { Logo } from "../../utilities/imgImport"
 
 const AdminHeader = () => {
     const [show, setShow] = useState(false)
-    
+
     let navMenuClsName = "menu "
     if (show) {
         navMenuClsName += "active"
@@ -17,7 +17,10 @@ const AdminHeader = () => {
                 </Link>
                 <div className="d-flex">
                     <div className="admin">
-                        <span className="btn-primary d-inline-block" style={{border: 'none', padding: 7, textTransform: 'unset'}}>
+                        <span
+                            className="btn-primary d-inline-block"
+                            style={{ border: "none", padding: 7, textTransform: "unset" }}
+                        >
                             Admin
                         </span>
                     </div>

@@ -3,9 +3,9 @@ import validator from "validator"
 import Select from "react-select"
 import AuthLayout from "../common/AuthLayout"
 import CustomSpinner from "../common/custom-spinner"
-import { FormInput, CheckBox } from "../common/FormControl"
+import { FormInput } from "../common/FormControl"
 import { useSignupMutation } from "../../apollo/network/auth"
-import React, { useCallback, useReducer, useState } from "react"
+import React, { useState } from "react"
 import { countries, social_links } from "../../utilities/staticData"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -55,13 +55,13 @@ const SingupPage = () => {
             )
             error = true
         }
-        if (!pwdConfirm || pwd != pwdConfirm)
+        if (!pwdConfirm || pwd !== pwdConfirm)
             setPwdConfirmError("Password doest not match it's repeat!")
         if (!error) signupMutation(email, pwd, country)
     }
 
     const pending = signupMutationResults.loading
-    const webserviceError = signupMutationResults?.data?.signup.status == "Failed"
+    const webserviceError = signupMutationResults?.data?.signup.status === "Failed"
 
     return (
         <AuthLayout>

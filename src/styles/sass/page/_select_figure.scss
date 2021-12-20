@@ -55,57 +55,70 @@
                 }
             }
         }
-        .figure-intro {
-            @include mq("phone", max) {
-                display: none;
-            }
-            &__box {
-                width: 100%;
-                border: 1px solid #ffffff;
-                .figure-name {
-                    border-bottom: 1px solid white;
-                    padding: 14px 0;
-                    font-weight: 600;
-                    font-size: 20px;
-                    line-height: 24px;
-                    text-align: center;
-                }
-                &--body {
-                    padding: 30px;
-                    p {
-                        font-size: 14px;
-                        line-height: 17px;
-                    }
-                    .star-container {
-                        vertical-align: unset !important;
-                    }
-                    .star-ratings {
-                        display: flex !important;
-                        flex-shrink: 1;
-                    }
-                    .form-label {
-                        font-size: 18px;
-                        line-height: 23px;
-                    }
-                    .form-control {
-                        font-size: 16px;
-                    }
-                    .random-text {
-                        font-size: 14px;
-                        line-height: 23px;
-                        text-decoration: underline;
-                        text-align: end;
-                    }
-                    svg {
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
     }
     .trees-img {
         @include mq("tablet", max) {
             display: none;
+        }
+    }
+}
+
+.figure-intro {
+    @include mq("phone", max) {
+        display: none;
+    }
+    &__box {
+        width: 100%;
+        border: 1px solid #ffffff;
+        @include mq("phone", max) {
+            border: none;
+        }
+        .figure-name {
+            border-bottom: 1px solid white;
+            padding: 14px 0;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 24px;
+            text-align: center;
+        }
+        &--body {
+            padding: 30px;
+            .main-content {
+                display: flex;
+                height: 350px;
+                flex-direction: column;
+                justify-content: center;
+                @include mq("phone", max) {
+                    height: 250px;
+                }
+            }
+            p {
+                font-size: 14px;
+                line-height: 17px;
+            }
+            .star-container {
+                vertical-align: unset !important;
+            }
+            .star-ratings {
+                display: flex !important;
+                flex-shrink: 1;
+            }
+            .form-label {
+                font-size: 18px;
+                line-height: 23px;
+            }
+            .form-control {
+                font-size: 16px;
+            }
+            .random-text {
+                font-size: 14px;
+                line-height: 23px;
+                text-decoration: underline;
+                text-align: end;
+            }
+            svg {
+                cursor: pointer;
+            }
         }
     }
 }
@@ -129,6 +142,8 @@
     font-weight: bold;
     line-height: 24px;
     text-align: center;
+    display: flex;
+    justify-content: center;
     svg {
         width: 17.5px !important;
         height: 17.5px;
