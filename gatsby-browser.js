@@ -10,13 +10,19 @@ import { AuthProvider } from "./src/hooks/useAuth"
 import { ApolloProvider } from "@apollo/client"
 import { client } from "./src/apollo/client"
 import { UserProvider } from "./src/hooks/useUser"
+import { Provider as ReduxProvider } from "react-redux";
+import store from './src/redux/store';
 
 export const wrapRootElement = ({ element }) => {
-  return <ApolloProvider client={client}>
-    <AuthProvider>
-      <UserProvider>
-        {element}
-      </UserProvider>
-    </AuthProvider>
-  </ApolloProvider>
+  return (
+    <ReduxProvider store={store}>
+      <ApolloProvider client={client}>
+        <AuthProvider>
+          <UserProvider>
+            {element}
+          </UserProvider>
+        </AuthProvider>
+      </ApolloProvider>
+    </ReduxProvider>    
+  )
 }
