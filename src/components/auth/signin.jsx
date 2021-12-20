@@ -1,4 +1,4 @@
-import React, { useReducer } from "react"
+import React, { useState } from "react"
 import { Link, navigate } from "gatsby"
 import validator from "validator"
 import { social_links } from "../../utilities/staticData"
@@ -14,36 +14,31 @@ const Signin = () => {
     if (auth?.isLoggedIn()) navigate("/app/profile")
 
     // Containers
+    const [email, setEmail] = useState("")
+    const [pwd, setPwd] = useState("")
+    const [remember, setRemember] = useState(false)
+
+    const [emailError, setEmailError] = useState("")
+    const [pwdError, setPwdError] = useState("")
+
     const [signinMutation, signinMutationResults] = useSigninMutation()
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        email: { value: "", error: "" },
-        pwd: { value: "", error: "" },
-        remember: false,
-    })
-    const { email, pwd, remember } = state
 
     // Methods
     const signUserIn = (e) => {
         e.preventDefault()
+        setEmailError("")
+        setPwdError("")
         let error = false
-        if (!email.value || !validator.isEmail(email.value)) {
-            setState({
-                email: {
-                    error: "Invalid email address",
-                },
-            })
+        if (!email || !validator.isEmail(email)) {
+            setEmailError("Invalid email address")
             error = true
         }
-        if (!pwd.value || pwd.value?.length < 6) {
-            setState({
-                pwd: {
-                    error: "Password length must be at least 6",
-                },
-            })
+        if (!pwd || pwd.length < 6) {
+            setPwdError("Password length must be at least 6")
             error = true
         }
 
-        if (!error) signinMutation(email.value, pwd.value)
+        if (!error) signinMutation(email, pwd)
     }
 
     const pending = signinMutationResults.loading
@@ -58,15 +53,9 @@ const Signin = () => {
                         type="text"
                         label="Email"
                         value={email.value}
-                        onChange={(e) => {
-                            setState({
-                                email: {
-                                    value: e.target.value,
-                                },
-                            })
-                        }}
+                        onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter email"
-                        error={email.error}
+                        error={emailError}
                     />
                 </div>
                 <div className="form-group ">
@@ -75,15 +64,9 @@ const Signin = () => {
                         type="password"
                         label="Password"
                         value={pwd.value}
-                        onChange={(e) => {
-                            setState({
-                                pwd: {
-                                    value: e.target.value,
-                                },
-                            })
-                        }}
+                        onChange={(e) => setPwd(e.target.value)}
                         placeholder="Enter password"
-                        error={pwd.error}
+                        error={pwdError}
                     />
                 </div>
                 <div className="form-group d-flex justify-content-between align-items-center mb-5">
@@ -93,7 +76,7 @@ const Signin = () => {
                             name="remember"
                             value={remember}
                             className="form-check-input"
-                            onChange={() => setState({ remember: !remember })}
+                            onChange={() => setRemember(!remember)}
                         />
                         <div className="keep-me-signed-in-text">
                             Keep me signed in in this device
