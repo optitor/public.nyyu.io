@@ -249,30 +249,23 @@ const VerifyCompany = () => {
                                     </div>
                                 )}
                                 <div className="upload-rule">
-                                    <p className="form-label px-0 mt-lg-4">
-                                        <span className="txt-green">We accept</span>
+                                    <p className="form-label px-0">Company Document</p>
+                                    <Select
+                                        options={accept_docs}
+                                        value={accept_doc}
+                                        onChange={(v) => setState({ accept_doc: v })}
+                                        placeholder="Company Document"
+                                        components={{
+                                            Option: CompanyDoc,
+                                        }}
+                                        className="doc-select"
+                                    />
+                                    <p className="doc-rule">
+                                        We accept registration certificate, Sales and income tax
+                                        returns, IEC (Importer Exporter Code), Transparency Registry
+                                        Extract, Utility bills such as electricity, water, and
+                                        landline telephone bills.
                                     </p>
-                                    <Select
-                                        options={accept_docs}
-                                        value={accept_doc}
-                                        onChange={(v) => setState({ accept_doc: v })}
-                                        placeholder="Company Document"
-                                        components={{
-                                            Option: CompanyDoc,
-                                        }}
-                                        className="doc-select"
-                                    />
-                                    <p className="form-label px-0 mt-4 mt-lg-5">Company Document</p>
-                                    <Select
-                                        options={accept_docs}
-                                        value={accept_doc}
-                                        onChange={(v) => setState({ accept_doc: v })}
-                                        placeholder="Company Document"
-                                        components={{
-                                            Option: CompanyDoc,
-                                        }}
-                                        className="doc-select"
-                                    />
                                 </div>
                             </div>
                         </div>
