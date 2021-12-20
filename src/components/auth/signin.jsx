@@ -8,18 +8,16 @@ import { useSigninMutation } from "../../apollo/network/auth"
 import { useAuth } from "../../hooks/useAuth"
 
 const Signin = () => {
-    const auth = useAuth();
+    const auth = useAuth()
 
-    if(auth?.isLoggedIn()) {
-        console.log("ehlo")
-        navigate("/app/profile")
-    }
+    if (auth?.isLoggedIn()) navigate("/app/profile")
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: { value: "", error: "" },
         pwd: { value: "", error: "" },
         remember: false,
     })
+
     const { email, pwd, remember } = state
     const handleEmailChange = useCallback((e) => {
         setState({
@@ -45,9 +43,9 @@ const Signin = () => {
         [remember]
     )
 
-    const [signinMutation, signinMutationResults] = useSigninMutation();
+    const [signinMutation, signinMutationResults] = useSigninMutation()
 
-    const disableForm = signinMutationResults.loading;
+    const disableForm = signinMutationResults.loading
 
     return (
         <AuthLayout>
@@ -82,19 +80,27 @@ const Signin = () => {
                     />
                 </div>
                 <div className="form-group d-flex justify-content-between align-items-center mb-5">
-                    <CheckBox
-                        name="remember"
-                        type="checkbox"
-                        value={remember}
-                        onChange={handleRememberChange}
-                    >
-                        Keep me signed in in this device
-                    </CheckBox>
+                    <label className="d-flex align-items-center gap-2">
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            value={remember}
+                            className="form-check-input"
+                            onChange={handleRememberChange}
+                        />
+                        <div className="keep-me-signed-in-text">
+                            Keep me signed in in this device
+                        </div>
+                    </label>
                     <Link className="txt-green forget-pwd" to="/app/password-reset">
                         Forgot password?
                     </Link>
                 </div>
-                <button type="submit" className="btn-primary w-100 text-uppercase" disabled={disableForm}>
+                <button
+                    type="submit"
+                    className="btn-primary w-100 text-uppercase"
+                    disabled={disableForm}
+                >
                     sign In
                 </button>
             </form>
