@@ -244,6 +244,17 @@
                             }
                         }
                     }
+                    .doc-rule {
+                        width: 365px;
+                        @include mq("phone", max) {
+                            width: 100%;
+                        }
+                        font-size: 12px;
+                        line-height: 19px;
+                        color: #8f8f8f;
+                        padding: 0;
+                        margin-top: 24px;
+                    }
                 }
             }
             .uploaded-list {
