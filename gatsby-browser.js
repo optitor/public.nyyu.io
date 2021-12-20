@@ -1,6 +1,4 @@
 import React from "react"
-
-// import "bootstrap/scss/bootstrap.scss"
 import "./src/styles/sass/app.scss"
 import "jquery/dist/jquery.min.js"
 import "popper.js/dist/popper.min"
