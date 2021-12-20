@@ -7,6 +7,8 @@ import AuthLayout from "../common/AuthLayout"
 import { useSigninMutation } from "../../apollo/network/auth"
 import { useAuth } from "../../hooks/useAuth"
 import CustomSpinner from "../common/custom-spinner"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 
 const Signin = () => {
     // Auth Check
@@ -41,8 +43,8 @@ const Signin = () => {
         if (!error) signinMutation(email, pwd)
     }
 
-    const pending = signinMutationResults.loading
-
+    const pending = signinMutationResults?.loading
+    const webserviceError = signinMutationResults?.data?.signin.status == "Failed"
     return (
         <AuthLayout>
             <h3 className="signup-head">Sign in</h3>
@@ -86,7 +88,12 @@ const Signin = () => {
                         Forgot password?
                     </Link>
                 </div>
-
+                {webserviceError && (
+                    <span className="errorsapn">
+                        <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                        {"Your email and password do not match!"}
+                    </span>
+                )}
                 <button
                     type="submit"
                     className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
