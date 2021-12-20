@@ -1,6 +1,6 @@
 import * as GraphQL from "../graghqls/mutations/Auth"
 import { useMutation } from "@apollo/client"
-import { navigate} from "gatsby"
+import { navigate } from "gatsby"
 import { useUser } from "../../hooks/useUser"
 import { setAuthToken } from "../../utilities/auth"
 
@@ -11,6 +11,7 @@ export const useSigninMutation = () => {
   const [user, setUser] = useUser();
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN, {
+    retry: 1,
     onCompleted: (data) => {
       if (data.signin.status === "Failed") {
         // do something

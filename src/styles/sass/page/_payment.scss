@@ -132,7 +132,18 @@
             .cryptocoin-select {
                 margin-bottom: 8px;
                 margin-right: 8px;
-
+                .css-1s2u09g-control,
+                .css-1pahdxg-control {
+                    .css-1d8n9bt {
+                        padding-top: 0;
+                        padding-bottom: 0;
+                    }
+                    .css-ackcql {
+                        input {
+                            caret-color: transparent;
+                        }
+                    }
+                }
                 .css-26l3qy-menu {
                     background-color: $black;
                     border: 1px solid #ffffff;
@@ -376,12 +387,8 @@
 }
 
 .css-4ljt47-MenuList {
-    text-align: center !important;
     padding-top: 0px !important;
     padding-bottom: 0px !important;
-}
-.css-1s2u09g-control {
-    padding: 0px 4px !important;
 }
 
 .payment-type__tab-list {
