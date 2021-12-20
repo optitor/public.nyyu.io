@@ -5,23 +5,23 @@ import AuthLayout from "../common/AuthLayout"
 import Modal from "react-modal"
 import { CloseIcon } from "../../utilities/imgImport"
 import { useMutation } from "@apollo/client"
-import { 
-    VERIFY_ACCOUNT, 
-    RESEND_VERIFY_CODE, 
+import {
+    VERIFY_ACCOUNT,
+    RESEND_VERIFY_CODE,
     REQUEST_2FA,
-    CONFIRM_REQUEST_2FA 
+    CONFIRM_REQUEST_2FA,
 } from "../../apollo/graghqls/mutations/Auth"
 import { useUser } from "../../hooks/useUser"
 
 const two_factors = [
     { label: "Authenticator App", method: "app" },
     { label: "SMS", method: "phone" },
-    { label: "Email", method: "email" }
+    { label: "Email", method: "email" },
 ]
 
 const VerifyEmail = () => {
-    const [user] = useUser();
-    
+    const [user] = useUser()
+
     useEffect(() => {
         if (!user.email) navigate("/app/signup")
     }, [user])
@@ -42,8 +42,6 @@ const VerifyEmail = () => {
         setState({ [e.target.name]: e.target.value })
     }, [])
 
-
-    // possible code: [verifyAccount, { data, loading, error }]
     const [verifyAccount] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
             if (data.verifyAccount === "Failed") navigate("/app/verify-failed")
@@ -59,7 +57,7 @@ const VerifyEmail = () => {
 
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
-            setQRCode(data.request2FA);
+            setQRCode(data.request2FA)
             setState({ set_type: choose_type })
         },
     })
@@ -149,8 +147,9 @@ const VerifyEmail = () => {
                                 {two_factors.map((item, idx) => (
                                     <button
                                         key={idx}
-                                        className={`btn-primary mb-2 select-tfa ${choose_type === idx && "active"
-                                            }`}
+                                        className={`btn-primary mb-2 select-tfa ${
+                                            choose_type === idx && "active"
+                                        }`}
                                         onClick={() => setState({ choose_type: idx })}
                                     >
                                         {item.label}
@@ -164,7 +163,7 @@ const VerifyEmail = () => {
                                             variables: {
                                                 email: user.email,
                                                 method: two_factors[choose_type].method,
-                                                phone: "123456789"
+                                                phone: "123456789",
                                             },
                                         })
                                     }
@@ -181,8 +180,8 @@ const VerifyEmail = () => {
                                     <div className="mt-3">
                                         <p className="fw-bolder">STEP 1</p>
                                         <p className="step1-label">
-                                            Scan the QR code below or mannually type the secret key into
-                                            your authenticator app.
+                                            Scan the QR code below or mannually type the secret key
+                                            into your authenticator app.
                                         </p>
                                         <img src={qrcode} alt="qr code" />
                                         <p>
@@ -210,10 +209,12 @@ const VerifyEmail = () => {
                             {set_type === 2 && (
                                 <>
                                     <h3>Get codes via Email</h3>
-                                    <p className="mt-3 pb-3">Enter 6-digit code you got via email</p>
+                                    <p className="mt-3 pb-3">
+                                        Enter 6-digit code you got via email
+                                    </p>
                                 </>
                             )}
-                            
+
                             <div className="mt-5">
                                 <Input
                                     type="text"
@@ -222,21 +223,22 @@ const VerifyEmail = () => {
                                     onChange={handleInput}
                                     placeholder="000-000"
                                 />
-                                <button 
+                                <button
                                     className="btn-primary next-step"
                                     onClick={() =>
                                         confirmRequest2FA({
                                             variables: {
                                                 email: user.email,
-                                                code: result_code
+                                                code: result_code,
                                             },
                                         })
                                     }
-                                >Confirm</button>
+                                >
+                                    Confirm
+                                </button>
                             </div>
                         </div>
                     )}
-
                 </div>
             </Modal>
         </AuthLayout>
