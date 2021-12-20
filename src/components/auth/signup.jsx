@@ -156,17 +156,21 @@ const SingupPage = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <CheckBox
-                        name="remember"
-                        type="checkbox"
-                        value={remember}
-                        onChange={(e) => setRemember(e.target.check)}
-                    >
-                        Agree to{" "}
-                        <Link to="/" className="text-info terms-link">
-                            Terms & Conditions
-                        </Link>
-                    </CheckBox>
+                    <label className="d-flex align-items-center gap-2">
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            value={remember}
+                            className="form-check-input"
+                            onChange={() => setRemember(!remember)}
+                        />
+                        <div className="keep-me-signed-in-text">
+                            Agree to{" "}
+                            <Link to="/" className="text-info terms-link">
+                                Terms & Conditions
+                            </Link>
+                        </div>
+                    </label>
                 </div>
                 {webserviceError && (
                     <span className="errorsapn">
