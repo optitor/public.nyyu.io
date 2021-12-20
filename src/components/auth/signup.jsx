@@ -21,37 +21,6 @@ const SingupPage = () => {
     const [pwdError, setPwdError] = useState("")
     const [pwdConfirmError, setPwdConfirmError] = useState("")
 
-    const handleEmailChange = useCallback((e) => {
-        setState({
-            email: {
-                value: e.target.value,
-                error: validator.isEmail(e.target.value) ? "" : "Invalid email address",
-            },
-        })
-    }, [])
-    const handlePasswordChange = useCallback((e) => {
-        setState({
-            pwd: {
-                value: e.target.value,
-                error: e.target.value.length >= 6 ? "" : "Password length must be at least 6",
-            },
-        })
-    }, [])
-    const handlePwdConfirmChange = useCallback((e) => {
-        setState({
-            pwd_confirm: {
-                value: e.target.value,
-                error: e.target.value.length >= 6 ? "" : "Password length must be at least 6",
-            },
-        })
-    }, [])
-    const handleRememberChange = useCallback(
-        (e) => {
-            setState({ remember: !remember })
-        },
-        [remember]
-    )
-
     const [signupMutation, signupMutationResults] = useSignupMutation()
 
     const signUserUp = (e) => {
