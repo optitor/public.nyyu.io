@@ -132,7 +132,18 @@
             .cryptocoin-select {
                 margin-bottom: 8px;
                 margin-right: 8px;
-
+                .css-1s2u09g-control,
+                .css-1pahdxg-control {
+                    .css-1d8n9bt {
+                        padding-top: 0;
+                        padding-bottom: 0;
+                    }
+                    .css-ackcql {
+                        input {
+                            caret-color: transparent;
+                        }
+                    }
+                }
                 .css-26l3qy-menu {
                     background-color: $black;
                     border: 1px solid #ffffff;
