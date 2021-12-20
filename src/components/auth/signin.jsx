@@ -1,63 +1,71 @@
-import React, { useState } from "react"
+import React, { useCallback, useReducer } from "react"
 import { Link, navigate } from "gatsby"
 import validator from "validator"
 import { social_links } from "../../utilities/staticData"
-import { FormInput } from "../common/FormControl"
+import { FormInput, CheckBox } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
 import { useSigninMutation } from "../../apollo/network/auth"
 import { useAuth } from "../../hooks/useAuth"
-import CustomSpinner from "../common/custom-spinner"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 
 const Signin = () => {
-    // Auth Check
     const auth = useAuth()
+
     if (auth?.isLoggedIn()) navigate("/app/profile")
 
-    // Containers
-    const [email, setEmail] = useState("")
-    const [pwd, setPwd] = useState("")
-    const [remember, setRemember] = useState(false)
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
+        email: { value: "", error: "" },
+        pwd: { value: "", error: "" },
+        remember: false,
+    })
 
-    const [emailError, setEmailError] = useState("")
-    const [pwdError, setPwdError] = useState("")
+    const { email, pwd, remember } = state
+    const handleEmailChange = useCallback((e) => {
+        setState({
+            email: {
+                value: e.target.value,
+                error: validator.isEmail(e.target.value) ? "" : "Invalid email address",
+            },
+        })
+    }, [])
+    const handlePasswordChange = useCallback((e) => {
+        setState({
+            pwd: {
+                value: e.target.value,
+                error: e.target.value.length >= 6 ? "" : "Password length must be at least 6",
+            },
+        })
+    }, [])
+
+    const handleRememberChange = useCallback(
+        (e) => {
+            setState({ remember: !remember })
+        },
+        [remember]
+    )
 
     const [signinMutation, signinMutationResults] = useSigninMutation()
 
-    // Methods
-    const signUserIn = (e) => {
-        e.preventDefault()
-        setEmailError("")
-        setPwdError("")
-        let error = false
-        if (!email || !validator.isEmail(email)) {
-            setEmailError("Invalid email address")
-            error = true
-        }
-        if (!pwd || pwd.length < 6) {
-            setPwdError("Password length must be at least 6")
-            error = true
-        }
+    const disableForm = signinMutationResults.loading
 
-        if (!error) signinMutation(email, pwd)
-    }
-
-    const pending = signinMutationResults?.loading
-    const webserviceError = signinMutationResults?.data?.signin.status == "Failed"
     return (
         <AuthLayout>
             <h3 className="signup-head">Sign in</h3>
-            <form className="form">
+            <form
+                className="form"
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    signinMutation(email.value, pwd.value)
+                }}
+            >
                 <div className="form-group">
                     <FormInput
                         name="email"
                         type="text"
                         label="Email"
                         value={email.value}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={handleEmailChange}
                         placeholder="Enter email"
-                        error={emailError}
+                        error={email.error}
                     />
                 </div>
                 <div className="form-group ">
@@ -66,9 +74,9 @@ const Signin = () => {
                         type="password"
                         label="Password"
                         value={pwd.value}
-                        onChange={(e) => setPwd(e.target.value)}
+                        onChange={handlePasswordChange}
                         placeholder="Enter password"
-                        error={pwdError}
+                        error={pwd.error}
                     />
                 </div>
                 <div className="form-group d-flex justify-content-between align-items-center mb-5">
@@ -78,7 +86,7 @@ const Signin = () => {
                             name="remember"
                             value={remember}
                             className="form-check-input"
-                            onChange={() => setRemember(!remember)}
+                            onChange={handleRememberChange}
                         />
                         <div className="keep-me-signed-in-text">
                             Keep me signed in in this device
@@ -88,22 +96,12 @@ const Signin = () => {
                         Forgot password?
                     </Link>
                 </div>
-                {webserviceError && (
-                    <span className="errorsapn">
-                        <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                        {"Your email and password do not match!"}
-                    </span>
-                )}
                 <button
                     type="submit"
-                    className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
-                    disabled={pending}
-                    onClick={signUserIn}
+                    className="btn-primary w-100 text-uppercase"
+                    disabled={disableForm}
                 >
-                    <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
-                        <CustomSpinner />
-                    </div>
-                    <div className={`${pending ? "ms-3" : "pe-4"}`}>sign in</div>
+                    sign In
                 </button>
             </form>
             <ul className="social-links">

@@ -21,6 +21,8 @@
                 height: 93.17px;
             }
             &__name {
+                display: flex;
+                align-items: center;
                 margin-top: 24px;
                 font-weight: 600;
                 font-size: 24px;
@@ -69,12 +71,6 @@
                     @extend %select-style;
                     padding-top: 7px;
                     padding-bottom: 7px;
-                }
-                .css-1okebmr-indicatorSeparator {
-                    display: none;
-                }
-                .css-319lph-ValueContainer {
-                    padding: 0;
                     .css-qc6sy-singleValue {
                         text-align: center;
                         font-weight: bold;
@@ -83,6 +79,12 @@
                         color: white;
                         text-transform: uppercase;
                     }
+                }
+                .css-1okebmr-indicatorSeparator {
+                    display: none;
+                }
+                .css-319lph-ValueContainer {
+                    padding: 0;
                 }
                 .css-tlfecz-indicatorContainer {
                     padding: 0;
@@ -120,10 +122,34 @@
                 border: none;
             }
         }
-        .account-details {
+        .detail-tab {
+            .react-tabs {
+                &__tab-list {
+                    border: none;
+                    margin-bottom: 24px;
+                }
+                &__tab {
+                    font-weight: bold;
+                    font-size: 18px;
+                    line-height: 22px;
+                    letter-spacing: 0.04em;
+                    color: white;
+                    opacity: 0.3;
+                    text-transform: uppercase;
+                    &--selected {
+                        opacity: 1;
+                        background: none;
+                        border: none;
+                    }
+                }
+            }
+        }
+        .account-details,
+        .tier-details {
             h4 {
                 border-bottom: 2px solid #464646;
                 padding-bottom: 15px;
+                padding-left: 12px;
                 margin-bottom: 0;
                 @include mq("phone", max) {
                     padding-top: 35px;
@@ -131,51 +157,52 @@
                     padding-right: 0;
                 }
             }
-            .account-detail {
-                .row {
-                    border-bottom: 2px solid #464646;
-                    .col-6 {
-                        font-family: "Montserrat";
+            .row {
+                border-bottom: 2px solid #464646;
+                &:first-child {
+                    border-top: 2px solid #464646;
+                }
+                .col-6 {
+                    font-family: "Montserrat";
+                    font-weight: bold;
+                    font-size: 18px;
+                    line-height: 22px;
+                    letter-spacing: 0.04em;
+                    color: white;
+                    text-transform: uppercase;
+                    padding: 25px 12px;
+                    @include mq("phone", max) {
+                        font-size: 16px;
+                        font-weight: normal;
+                        line-height: 19.5px;
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                    .btn-primary {
                         font-weight: bold;
                         font-size: 18px;
                         line-height: 22px;
                         letter-spacing: 0.04em;
-                        color: white;
                         text-transform: uppercase;
-                        padding: 25px 12px;
-                        @include mq("phone", max) {
-                            font-size: 16px;
-                            font-weight: normal;
-                            line-height: 19.5px;
-                            padding-left: 0;
-                            padding-right: 0;
-                        }
-                        .btn-primary {
-                            font-weight: bold;
-                            font-size: 18px;
-                            line-height: 22px;
-                            letter-spacing: 0.04em;
-                            text-transform: uppercase;
-                            padding: 15px 26px;
-                            background: #1e1e1e;
-                            @include mq("tablet", max) {
-                                display: none;
-                            }
+                        padding: 15px 26px;
+                        background: #1e1e1e;
+                        @include mq("tablet", max) {
+                            display: none;
                         }
                     }
                 }
-                .change-password {
-                    .col-6 {
-                        padding: 9px 12px;
-                        display: flex;
-                        align-items: center;
-                        @include mq("tablet", max) {
-                            padding: 25px 12px;
-                        }
-                        @include mq("phone", max) {
-                            padding-left: 0;
-                            padding-right: 0;
-                        }
+            }
+            .change-password {
+                .col-6 {
+                    padding: 9px 12px;
+                    display: flex;
+                    align-items: center;
+                    @include mq("tablet", max) {
+                        padding: 25px 12px;
+                    }
+                    @include mq("phone", max) {
+                        padding-left: 0;
+                        padding-right: 0;
                     }
                 }
             }
