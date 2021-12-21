@@ -11,7 +11,6 @@ main.admin-setting-page {
         @include mq("phone", max) {
             max-width: 100%;
         }
-        
         .row {
             .col-sm-10 {
                 @include mq("phone", max) {
@@ -21,7 +20,7 @@ main.admin-setting-page {
                     }
                 }
                 .react-tabs__tab-panel {
-                    color: #ffffff;                
+                    color: #ffffff;
                 }
                 div.tabs_container {
                     .react-tabs {
@@ -29,7 +28,7 @@ main.admin-setting-page {
                             padding-bottom: 10px;
                             border-bottom: 2px solid #464646;
                             margin: 0;
-                            @include mq('phone', max) {
+                            @include mq("phone", max) {
                                 display: flex;
                                 justify-content: space-between;
                             }
@@ -42,10 +41,10 @@ main.admin-setting-page {
                                 margin-right: 4vw;
                                 text-transform: uppercase;
                                 transition: 0.3s;
-                                @include mq('laptop', max) {
+                                @include mq("laptop", max) {
                                     font-size: 12px;
                                 }
-                                @include mq('tablet', max) {
+                                @include mq("tablet", max) {
                                     font-size: 10px;
                                     margin-right: 2vw;
                                 }
@@ -56,7 +55,7 @@ main.admin-setting-page {
                                     background: transparent;
                                     border: none;
                                     color: #ffffff;
-                                }                                
+                                }
                             }
                         }
                     }
@@ -71,10 +70,10 @@ main.admin-setting-page {
                     &:hover {
                         overflow: visible;
                     }
-                    @include mq('laptop-wide', max) {
+                    @include mq("laptop-wide", max) {
                         font-size: 14px;
                     }
-                    @include mq('tablet', max) {
+                    @include mq("tablet", max) {
                         font-size: 12px;
                         font-weight: 500;
                     }
@@ -85,14 +84,14 @@ main.admin-setting-page {
                         font-weight: 700;
                         color: white;
                         text-transform: uppercase;
-                        @include mq('laptop-wide', max) {
+                        @include mq("laptop-wide", max) {
                             font-size: 16px;
                         }
-                        @include mq('tablet', max) {
+                        @include mq("tablet", max) {
                             font-size: 14px;
                         }
                     }
-                }                
+                }
             }
         }
     }
@@ -109,15 +108,15 @@ main.admin-setting-page {
         p {
             font-size: 20px;
             font-weight: 500;
-        }        
-        @include mq('phone', max) {
+        }
+        @include mq("phone", max) {
             margin-bottom: 20px;
         }
     }
     form {
         input.black_input {
             height: 37px;
-            border: 1px solid hsl(0, 0, 80%);
+            border: 1px solid rgba(0, 0, 0, 80%);
         }
         p {
             margin-top: 15px;
@@ -132,18 +131,18 @@ main.admin-setting-page {
             div.input {
                 width: 49%;
             }
-            @include mq('tablet', max) {
-                width: 100%;         
+            @include mq("tablet", max) {
+                width: 100%;
             }
-            @include mq('phone', max) {
+            @include mq("phone", max) {
                 flex-direction: column;
                 margin-top: 0;
                 div.input {
                     width: 100%;
-                }            
+                }
             }
         }
-    }    
+    }
     .pwd-modal__footer {
         display: flex;
         flex-direction: row;
