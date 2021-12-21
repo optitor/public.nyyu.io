@@ -142,7 +142,7 @@ const CreateAvatar = () => {
                                     </div>
                                     <div className="preview">
                                         <p>Preview</p>
-                                        <img src="/avatars/fermi.png" alt="fermi" />
+                                        <img src="/avatars/fermi.svg" alt="fermi" />
                                     </div>
                                 </div>
                             </div>
@@ -320,7 +320,7 @@ const CreateAvatar = () => {
                                     </p>
                                     <div className="row avatarStats">
                                         <div className="col-sm-4">
-                                            <img src="/avatars/failla.png" alt="avatar" />
+                                            <img src="/avatars/failla.svg" alt="avatar" />
                                         </div>
                                         <div className="col-sm-8">
                                             {stats.map((stat, index) => {
