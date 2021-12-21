@@ -3,13 +3,16 @@ import { Link, navigate } from "gatsby"
 import { Input } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
 import { useSignIn2FA } from "../../apollo/network/auth"
-import { useUser } from "../../hooks/useUser"
+import { 
+    getUser,
+} from "../../utilities/auth"
 
 const OnetimePassword = () => {
     const [code, setCode] = useState("")
-    const [user] = useUser()
+    const user = getUser();
 
-    if(!user.tempToken || !user.email)
+    console.log("user-onetime", user);
+    if(!user.tempToken)
         navigate("/app/signin")
 
     const handleCodeChange = useCallback((e) => {

@@ -1,25 +1,27 @@
 import * as GraphQL from "../graghqls/mutations/Auth"
 import { useMutation } from "@apollo/client"
 import { navigate } from "gatsby"
-import { useUser } from "../../hooks/useUser"
-import { setAuthToken } from "../../utilities/auth"
+import { 
+  setAuthToken,
+  getUser,
+  setUser
+} from "../../utilities/auth"
 
 
 // Sign In
 
 export const useSigninMutation = () => {
-  const [user, setUser] = useUser();
-
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN, {
     retry: 1,
     onCompleted: (data) => {
+      console.log("signin data", data)
       if (data.signin.status === "Failed") {
         // do something
         return
       }
       else if (data.signin.status === "Success") {
         setUser({
-          ...user,
+          ...getUser(),
           tempToken: data.signin.token,
         })
         navigate("/app/onetime-pwd")
@@ -29,7 +31,7 @@ export const useSigninMutation = () => {
 
   const signin = (email, password) => {
     setUser({
-      ...user,
+      ...getUser(),
       tempToken: null,
       email: email
     })
@@ -47,17 +49,17 @@ export const useSigninMutation = () => {
 // Sine Up
 
 export const useSignupMutation = () => {
-  const [user, setUser] = useUser();
 
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNUP, {
     onCompleted: (data) => {
+      console.log("signup data", data)
       navigate("/app/verify-email")
     }
   });
 
   const signup = (email, password, country) => {
     setUser({
-      ...user,
+      ...getUser(),
       email: email,
     })
     return mutation({
@@ -75,8 +77,6 @@ export const useSignupMutation = () => {
 // Signin with 2FA
 
 export const useSignIn2FA = () => {
-  const [user, setUser] = useUser();
-
   const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
     onCompleted: (data) => {
       console.log("2fa result", data)
@@ -87,7 +87,7 @@ export const useSignIn2FA = () => {
       else if (data.confirm2FA.status === "Success") {
         setAuthToken(data.confirm2FA.token)
         setUser({
-          ...user,
+          ...getUser(),
           tempToken: null
         })
         navigate("/app/profile")
