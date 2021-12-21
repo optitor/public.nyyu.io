@@ -19,7 +19,7 @@ const IndexPage = () => {
             <main className="home-page">
                 <Header />
                 <section className="home-section">
-                    <div className="container h-100">
+                    <div className="container h-100 d-flex  flex-column justify-content-center">
                         <div className="row">
                             <div className="left-part col-md-6">
                                 <h3 className="home-title ">

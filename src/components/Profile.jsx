@@ -150,13 +150,6 @@ const Profile = () => {
         })
     }
 
-    const getSecurityStatus = (key) => {
-        try {
-            return data.getUser.userSecurity.find(f => f.key === key).value
-        } catch (e) {
-        }
-    }
-
     return (
         <main className="profile-page">
             <Header />
@@ -219,7 +212,7 @@ const Profile = () => {
                                                 </div>
                                                 <div className="row w-100 mx-auto">
                                                     <div className="col-6 br">email</div>
-                                                    <div className="col-6 text-end text-sm-start text-lowercase">
+                                                    <div className="col-6 text-end text-sm-start">
                                                         {data && data.getUser.email}
                                                     </div>
                                                 </div>
@@ -249,11 +242,11 @@ const Profile = () => {
                                             <div className="account-security">
                                                 <h4>
                                                     Increase your account security&nbsp;
-                                                    <span className="txt-green">{data && data.getUser.userSecurity.filter(s => s.value).length}</span>/4
+                                                    <span className="txt-green">2</span>/4
                                                 </h4>
                                                 <div className="row w-100 mx-auto">
                                                     <div className="col-sm-6 br">
-                                                        <div className={`status ${getSecurityStatus("2FA") ? "active" : "deactive"}`}></div>
+                                                        <div className="status active"></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 Enable 2FA
@@ -274,7 +267,7 @@ const Profile = () => {
                                                     </div>
 
                                                     <div className="col-sm-6">
-                                                        <div className={`status ${getSecurityStatus("KYC") ? "active" : "deactive"}`}></div>
+                                                        <div className="status active"></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 KYC Identity Verificatoin less than
@@ -287,7 +280,7 @@ const Profile = () => {
                                                     </div>
 
                                                     <div className="col-sm-6 br">
-                                                        <div className={`status ${getSecurityStatus("mobile") ? "active" : "deactive"}`}></div>
+                                                        <div className="status deactive"></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 Mobile Verification
@@ -299,7 +292,7 @@ const Profile = () => {
                                                     </div>
 
                                                     <div className="col-sm-6">
-                                                        <div className={`status ${getSecurityStatus("AML") ? "active" : "deactive"}`}></div>
+                                                        <div className="status deactive"></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 AML Identity Verificatoin more than
