@@ -11,7 +11,9 @@ import {
     REQUEST_2FA,
     CONFIRM_REQUEST_2FA,
 } from "../../apollo/graghqls/mutations/Auth"
-import { useUser } from "../../hooks/useUser"
+import { 
+    getUser
+} from "../../utilities/auth"
 
 const two_factors = [
     { label: "Authenticator App", method: "app" },
@@ -20,10 +22,10 @@ const two_factors = [
 ]
 
 const VerifyEmail = () => {
-    const [user] = useUser()
+    const user = getUser()
 
     useEffect(() => {
-        if (!user.email) navigate("/app/signup")
+        if (!user?.email) navigate("/app/signup")
     }, [user])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -63,6 +65,7 @@ const VerifyEmail = () => {
     })
     const [confirmRequest2FA] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
+            console.log("confirm2FA", data)
             if (data.confirmRequest2FA === "Failed") navigate("/app/verify-failed")
             else if (data.confirmRequest2FA === "Success") navigate("/app/signin")
         },
@@ -95,7 +98,7 @@ const VerifyEmail = () => {
                     Didn’t receive your code?{" "}
                     <Link
                         className="txt-green signup-link"
-                        to="#send-again"
+                        to="#"
                         onClick={() =>
                             resendVerifyCode({
                                 variables: {

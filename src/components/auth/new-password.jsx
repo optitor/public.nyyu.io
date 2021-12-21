@@ -9,7 +9,6 @@ const NewPassword = () => {
     const auth = useAuth()
 
     if (auth?.isLoggedIn()) {
-        console.log("ehlo")
         navigate("/app/profile")
     }
 

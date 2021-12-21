@@ -45,6 +45,7 @@ const Signin = () => {
 
     const pending = signinMutationResults?.loading
     const webserviceError = signinMutationResults?.data?.signin.status === "Failed"
+
     return (
         <AuthLayout>
             <h3 className="signup-head">Sign in</h3>
@@ -91,7 +92,7 @@ const Signin = () => {
                 {webserviceError && (
                     <span className="errorsapn">
                         <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                        {"Your email and password do not match!"}
+                        {signinMutationResults?.data?.signin.token}
                     </span>
                 )}
                 <button

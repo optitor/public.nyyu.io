@@ -262,6 +262,7 @@ export const countries = [
 
 // export const API_BASE_URL = "http://localhost:5000";
 export const API_BASE_URL = "https://auction.us-east-1.elasticbeanstalk.com"
+
 // export const SUBSCRIPTION_BASE_URL = "ws://localhost:5000/subscriptions";
 export const SUBSCRIPTION_BASE_URL = "wss://auction.us-east-1.elasticbeanstalk.com/subscriptions";
 
@@ -289,6 +290,10 @@ export const social_links = [
     {
         icon: Apple,
         to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
+    },
+    {
+        icon: Facebook,
+        to: API_BASE_URL + "/oauth2/authorize/amazon?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
 ]
 
