@@ -1,5 +1,5 @@
 import React from 'react';
-import AMLComponent from './AMLComponent';
+import AMLComponent from './AML_Component';
 
 const contents = {
     withdraw: 'not required',

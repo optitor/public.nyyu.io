@@ -25,12 +25,12 @@ const Menu = () => {
             url: "/",
         },
         {
-            label: "Technology",
-            url: "https://ndb.technology",
-        },
-        {
             label: "Vision",
             url: "https://ndb.city",
+        },
+        {
+            label: "Technology",
+            url: "https://ndb.money/technology",
         },
         {
             label: "Learn",

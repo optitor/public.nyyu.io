@@ -14,7 +14,7 @@ const requirementsList = [
 const KYCComponent = ({icon, topic, content}) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [requirement, setRequirement] = useState({item: {}, content: ''});
-    console.log(requirement)
+    // console.log(requirement)
     return (
         <>
             <Container className='component'>
