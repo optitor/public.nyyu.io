@@ -110,7 +110,7 @@ const Signin = () => {
             <ul className="social-links">
                 {social_links.map((item, idx) => (
                     <li key={idx}>
-                        <a href={item.to}>
+                        <a href={`${item.to}/signin`}>
                             <img src={item.icon} alt="icon" />
                         </a>
                     </li>

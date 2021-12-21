@@ -30,7 +30,7 @@ const VerifyEmail = () => {
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
-        tfaModal: false,
+        tfaModal: user?.isVerify,
         result_code: "",
         choose_type: 0,
         set_type: -1,
