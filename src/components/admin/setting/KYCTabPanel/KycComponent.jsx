@@ -50,7 +50,7 @@ const Container = styled.div`
         p {
             text-align: center;
             span {
-                font-size: 25px;
+                font-size: 22px;
                 color: #23c865;
                 cursor: pointer;
             }
@@ -62,10 +62,10 @@ const Container = styled.div`
     }
     @media screen and (max-width: ${device['tablet']}){
         &>div.icon {
-            width: 7%;}
+            width: 10%;}
         &>div.topic {width: 50%}
-        &>div.content {width: 35%}
-        &>div.edit {width: 17%}
+        &>div.content {width: 30%}
+        &>div.edit {width: 10%}
     }
     @media screen and (max-width: ${device['phone']}){
         border-left: 1px solid #464646;

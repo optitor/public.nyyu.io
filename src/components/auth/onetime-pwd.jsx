@@ -9,7 +9,8 @@ const OnetimePassword = () => {
     const [code, setCode] = useState("")
     const [user] = useUser()
 
-    if (!user.tempToken) navigate("/app/signin")
+    if(!user.tempToken || !user.email)
+        navigate("/app/signin")
 
     const handleCodeChange = useCallback((e) => {
         setCode(e.target.value)
