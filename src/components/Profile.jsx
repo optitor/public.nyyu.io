@@ -7,7 +7,6 @@ import Select from "react-select"
 import Modal from "react-modal"
 import { useQuery } from "@apollo/client"
 import { FormInput } from "../components/common/FormControl"
-// import { getInMemoryAuthToken } from "../utilities/auth"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
 import { logout } from "../utilities/auth"
 import {
@@ -89,8 +88,7 @@ const wallets = [
 const Profile = () => {
     const { loading, data } = useQuery(GET_USER)
 
-    console.log("GET USER", loading, data)
-
+    console.log(data)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         bid_rank: true,
         round_start: false,
@@ -144,11 +142,9 @@ const Profile = () => {
 
     const signOut = () => {
         logout(() => {
-            console.log("signout")
             navigate("/")
         })
     }
-
     return (
         <main className="profile-page">
             <Header />
