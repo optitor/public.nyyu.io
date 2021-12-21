@@ -7,6 +7,7 @@ import SocialTable from '../../components/admin/setting/SocialTable';
 import GeoTable from "../../components/admin/setting/GeoTable";
 import KYCTabPanel from "../../components/admin/setting/KYCTabPanel";
 import AMLTabPanel from "../../components/admin/setting/AMLTabPanel";
+import AvatarTabPanel from "../../components/admin/setting/AvatarTabPanel";
 
 const socials = [
     {social: 'Facebook'},
@@ -55,7 +56,7 @@ const IndexPage = () => {
                                 <AMLTabPanel />
                             </TabPanel>
                             <TabPanel>
-                            Avatar
+                                <AvatarTabPanel />
                             </TabPanel>
                             <TabPanel>
                             User Tiers
