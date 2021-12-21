@@ -1,5 +1,5 @@
-import React from "react"
-import KYCComponent from "./KycComponent"
+import React from 'react';
+import KYCComponent from './KYC_Component';
 
 const contents = {
     withdraw: "threshold: 1 000",

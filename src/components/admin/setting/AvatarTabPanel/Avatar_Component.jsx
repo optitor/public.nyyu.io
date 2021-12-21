@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import Modal from 'react-modal';
-import Select from 'react-select';
 import { device } from '../../../../utilities/device';
 
 const AvatarComponent = ({avatar = {}}) => {
-    const [modalIsOpen, setModalIsOpen] = useState(false);
     return (
         <>
             <Container className='component'>
                 <div className='image'>
-                    <img src={`/avatars/${avatar.image}`} />
+                    <img src={`/avatars/${avatar.image}`} alt={avatar.name} />
                 </div>
                 <div className='name'>
                     <p>{avatar.name}</p>
                 </div>
                 <div className='edit'>
-                    <p><span><Icon icon="clarity:note-edit-line" onClick={() => setModalIsOpen(true)}/></span></p>
+                    <p><span><Icon icon="clarity:note-edit-line" /></span></p>
                 </div>
             </Container>
         </>
