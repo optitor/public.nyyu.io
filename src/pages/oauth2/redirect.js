@@ -2,6 +2,10 @@
 
 import React, { useEffect, useMemo } from "react"
 import { navigate } from "gatsby"
+import { 
+    setUser,
+    getUser,
+} from "../../utilities/auth"
 
 const OAuth2RedirectHandler = (props) => {
     const getUrlParameter = (name) => {
@@ -13,12 +17,11 @@ const OAuth2RedirectHandler = (props) => {
     }
 
     const token = useMemo(() => getUrlParameter("token"), [])
-    const user = getUser();
 
     useEffect(() => {
         if (token) {
             setUser({
-                ...user,
+                ...getUser(),
                 tempToken: token,
             })
             navigate("/app/onetime-pwd")
