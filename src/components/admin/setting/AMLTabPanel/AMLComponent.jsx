@@ -11,10 +11,9 @@ const requirementsList = [
     { value: "not_required", label: "Not required" },
 ];
 
-const KYCComponent = ({icon, topic, content}) => {
+const AMLComponent = ({icon, topic, content}) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [requirement, setRequirement] = useState({item: {}, content: ''});
-    console.log(requirement)
     return (
         <>
             <Container className='component'>
@@ -28,7 +27,7 @@ const KYCComponent = ({icon, topic, content}) => {
                     <p>{content}</p>
                 </div>
                 <div className='edit'>
-                    <p><span><Icon icon="clarity:note-edit-line" onClick={() => setModalIsOpen(true)}/></span></p>
+                    <p><span><Icon icon="clarity:note-edit-line" onClick={() => setModalIsOpen(true)} /></span></p>
                 </div>
             </Container>
             <Modal
@@ -39,7 +38,7 @@ const KYCComponent = ({icon, topic, content}) => {
                 overlayClassName="pwd-modal__overlay"
             >
                 <div className="pwd-modal__header">
-                    <p>KYC {topic}</p>
+                    <p>AML {topic}</p>
                     <div
                         onClick={() => setModalIsOpen(false)}
                         onKeyDown={() => setModalIsOpen(false)}
@@ -83,11 +82,11 @@ const KYCComponent = ({icon, topic, content}) => {
                     </div>
                 </form>
             </Modal>
-        </>        
-    );
+        </>
+    )
 };
 
-export default KYCComponent;
+export default AMLComponent;
 
 const Container = styled.div`
     min-height: 75px;
@@ -171,4 +170,4 @@ const customSelectStyles = {
         ...provided,
         color: "white",
     }),
-}
+};

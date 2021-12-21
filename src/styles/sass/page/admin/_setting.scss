@@ -42,8 +42,12 @@ main.admin-setting-page {
                                 margin-right: 4vw;
                                 text-transform: uppercase;
                                 transition: 0.3s;
+                                @include mq('laptop', max) {
+                                    font-size: 12px;
+                                }
                                 @include mq('tablet', max) {
-                                    font-size: 14px;
+                                    font-size: 10px;
+                                    margin-right: 2vw;
                                 }
                                 &:hover {
                                     color: $green;
@@ -94,8 +98,8 @@ main.admin-setting-page {
     }
 }
 
-.pwd-reset-modal {
-    max-width: 800px;
+.kyc-aml-modal {
+    max-width: 1000px;
     .pwd-modal__header {
         text-transform: unset;
         margin-bottom: 30px;
@@ -111,23 +115,33 @@ main.admin-setting-page {
         }
     }
     form {
+        input.black_input {
+            height: 37px;
+            border: 1px solid hsl(0, 0, 80%);
+        }
         p {
-            color: lightgray;
-        }        
-        div.description {
-            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 1px;
         }
-        div.input {
-            width: 60%;
+        div.input_div {
+            width: 86%;
             margin: auto;
-        }
-        @include mq('phone', max) {
-            div.description {
-                text-align: left;
-            }
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
             div.input {
-                width: 100%;
-            }            
+                width: 49%;
+            }
+            @include mq('tablet', max) {
+                width: 100%;         
+            }
+            @include mq('phone', max) {
+                flex-direction: column;
+                margin-top: 0;
+                div.input {
+                    width: 100%;
+                }            
+            }
         }
     }    
     .pwd-modal__footer {

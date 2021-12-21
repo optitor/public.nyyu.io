@@ -10,7 +10,7 @@ export default function PaginationControlled() {
   };
 
   return (
-    <Stack spacing={2} mt={2}>
+    <Stack spacing={2} mt={2} mb={2}>
       <Pagination count={10} page={page} onChange={handleChange} siblingCount={1} boundaryCount={1} showFirstButton showLastButton />
     </Stack>
   );

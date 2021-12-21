@@ -6,6 +6,7 @@ import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
 import SocialTable from '../../components/admin/setting/SocialTable';
 import GeoTable from "../../components/admin/setting/GeoTable";
 import KYCTabPanel from "../../components/admin/setting/KYCTabPanel";
+import AMLTabPanel from "../../components/admin/setting/AMLTabPanel";
 
 const socials = [
     {social: 'Facebook'},
@@ -38,6 +39,8 @@ const IndexPage = () => {
                                 <Tab>KYC</Tab>
                                 <Tab>AML</Tab>
                                 <Tab>Avatar</Tab>
+                                <Tab>User Tiers</Tab>
+                                <Tab>Tasks</Tab>
                             </TabList>
                             <TabPanel>
                                 <SocialTable data={socials} />
@@ -49,10 +52,16 @@ const IndexPage = () => {
                                 <KYCTabPanel />
                             </TabPanel>
                             <TabPanel>
-                            AML
+                                <AMLTabPanel />
                             </TabPanel>
                             <TabPanel>
                             Avatar
+                            </TabPanel>
+                            <TabPanel>
+                            User Tiers
+                            </TabPanel>
+                            <TabPanel>
+                            Tasks
                             </TabPanel>
                         </Tabs>
                     </div>
