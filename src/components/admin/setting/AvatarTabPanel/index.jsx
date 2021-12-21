@@ -1,5 +1,5 @@
 import React from 'react';
-import AvatarComponent from './AvatarComponent';
+import AvatarComponent from './Avatar_Component';
 
 const avatars = [
     { image: 'tesla.svg', name: 'Tesla' },
