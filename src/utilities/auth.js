@@ -80,6 +80,8 @@ const checkInMemoryAuthToken = () => {
 
 // Getter
 
+export const getEmailfromTempToken = (tempToken) => decode(tempToken).sub
+
 export const getInMemoryAuthToken = () => {
   if (!isBrowser) return null
   checkInMemoryAuthToken()
