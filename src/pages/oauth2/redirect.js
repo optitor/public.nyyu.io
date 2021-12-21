@@ -22,9 +22,9 @@ const OAuth2RedirectHandler = (props) => {
                 ...user,
                 tempToken: token,
             })
-            navigate("/onetime-pwd")
+            navigate("/app/onetime-pwd")
         } else {
-            navigate("/signin")
+            navigate("/app/signin")
         }
     }, [token])
 
