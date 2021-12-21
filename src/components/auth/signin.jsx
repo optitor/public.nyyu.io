@@ -44,7 +44,7 @@ const Signin = () => {
     }
 
     const pending = signinMutationResults?.loading
-    const webserviceError = signinMutationResults?.data?.signin.status == "Failed"
+    const webserviceError = signinMutationResults?.data?.signin.status === "Failed"
     return (
         <AuthLayout>
             <h3 className="signup-head">Sign in</h3>

@@ -124,41 +124,49 @@ const Profile = () => {
                                                     tabIndex="0"
                                                 >
                                                     <img
-                                                        width="29px"
-                                                        height="29px"
+                                                        width="27px"
+                                                        height="27px"
                                                         src={CloseIcon}
                                                         alt="close"
                                                     />
                                                 </div>
                                             </p>
-                                            <div className="d-flex align-items-end justify-content-start">
-                                                <h3 className="random-display mb-0 fw-bold me-4">
-                                                    {randomName}.
-                                                </h3>
-                                                <div className="random-generate">
-                                                    <p className="form-label">Your display name</p>
-                                                    <input
-                                                        className="form-control"
-                                                        type="text"
-                                                        value={randomName}
-                                                        onChange={(e) =>
-                                                            setRandomName(e.target.value)
-                                                        }
-                                                    />
+                                            <div className="main-content">
+                                                <div className="d-flex align-items-end justify-content-start">
+                                                    <h3 className="random-display mb-0 fw-bold me-4">
+                                                        {randomName}.
+                                                    </h3>
+                                                    <div className="random-generate">
+                                                        <p className="form-label">
+                                                            Your display name
+                                                        </p>
+                                                        <input
+                                                            className="form-control"
+                                                            type="text"
+                                                            value={randomName}
+                                                            onChange={(e) =>
+                                                                setRandomName(e.target.value)
+                                                            }
+                                                        />
+                                                    </div>
                                                 </div>
+                                                <p
+                                                    className="random-text"
+                                                    onClick={() =>
+                                                        setRandomName(
+                                                            names.random().substring(0, 7)
+                                                        )
+                                                    }
+                                                    onKeyDown={() =>
+                                                        setRandomName(
+                                                            names.random().substring(0, 7)
+                                                        )
+                                                    }
+                                                    role="presentation"
+                                                >
+                                                    Random generate
+                                                </p>
                                             </div>
-                                            <p
-                                                className="random-text"
-                                                onClick={() =>
-                                                    setRandomName(names.random().substring(0, 7))
-                                                }
-                                                onKeyDown={() =>
-                                                    setRandomName(names.random().substring(0, 7))
-                                                }
-                                                role="presentation"
-                                            >
-                                                Random generate
-                                            </p>
                                         </>
                                     )}
                                 </div>
@@ -196,6 +204,7 @@ const Profile = () => {
                             onKeyDown={() => closeModal()}
                             role="button"
                             tabIndex="0"
+                            className="ms-auto"
                         >
                             <img width="14px" height="14px" src={CloseIcon} alt="close" />
                         </div>
@@ -236,26 +245,34 @@ const Profile = () => {
                             </>
                         ) : (
                             <>
-                                <div className="d-flex align-items-end justify-content-between">
-                                    <h3 className="me-3 mb-0">{randomName}.</h3>
-                                    <div className="form-group w-100">
-                                        <p className="form-label">Your display name</p>
-                                        <input
-                                            className="form-control"
-                                            type="text"
-                                            value={randomName}
-                                            onChange={(e) => setRandomName(e.target.value)}
-                                        />
+                                <div className="main-content">
+                                    <div className="d-flex align-items-end justify-content-start">
+                                        <h3 className="random-display mb-0 fw-bold me-4">
+                                            {randomName}.
+                                        </h3>
+                                        <div className="random-generate">
+                                            <p className="form-label">Your display name</p>
+                                            <input
+                                                className="form-control"
+                                                type="text"
+                                                value={randomName}
+                                                onChange={(e) => setRandomName(e.target.value)}
+                                            />
+                                        </div>
                                     </div>
+                                    <p
+                                        className="random-text"
+                                        onClick={() =>
+                                            setRandomName(names.random().substring(0, 7))
+                                        }
+                                        onKeyDown={() =>
+                                            setRandomName(names.random().substring(0, 7))
+                                        }
+                                        role="presentation"
+                                    >
+                                        Random generate
+                                    </p>
                                 </div>
-                                <p
-                                    className="text-end txt-underline"
-                                    onClick={() => setRandomName(names.random().substring(0, 7))}
-                                    onKeyDown={() => setRandomName(names.random().substring(0, 7))}
-                                    role="presentation"
-                                >
-                                    Random generate
-                                </p>
                             </>
                         )}
                     </div>

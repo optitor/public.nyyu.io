@@ -17,6 +17,7 @@ import {
     TrustWallet,
     WalletConnect,
     CloseIcon,
+    Bronze,
 } from "../utilities/imgImport"
 
 const recent = [
@@ -87,7 +88,7 @@ const wallets = [
 ]
 
 const Profile = () => {
-    const { loading, data } = useQuery(GET_USER);
+    const { loading, data } = useQuery(GET_USER)
 
     console.log("GET USER", loading, data)
 
@@ -165,7 +166,19 @@ const Profile = () => {
                     <div className="col-lg-3 profile-page__left">
                         <div className="user-info">
                             <img className="user-info__avatar" src={Tesla} alt="tesla" />
-                            <p className="user-info__name">Tesla.12</p>
+                            <p className="user-info__name">
+                                <img src={Bronze} alt="bronze" className="me-3" />
+                                Tesla.12
+                            </p>
+                            <p className="silver-cnt">500p to Silver</p>
+                            <div className="timeframe-bar mt-1">
+                                <div
+                                    className="timeleft"
+                                    style={{
+                                        width: "25%",
+                                    }}
+                                ></div>
+                            </div>
                         </div>
                         <Tabs
                             className="profile-tab"
@@ -180,7 +193,7 @@ const Profile = () => {
                                 options={profile_tabs}
                                 value={profile_tab}
                                 onChange={(v) => handleProfileTab(v)}
-                                className="profile-tab__select"
+                                className="profile-tab__select mb-3"
                             />
                             <TabPanel>0</TabPanel>
                             <TabPanel>1</TabPanel>
@@ -190,105 +203,180 @@ const Profile = () => {
                     </div>
                     <div className="col-lg-9 profile-page__right">
                         {tabIndex === 0 && (
-                            <div className="account-details">
-                                <div className="account-detail">
-                                    <div className="row w-100 mx-auto">
-                                        <h4>
-                                            <span className="txt-green">a</span>
-                                            ccount Details
-                                        </h4>
-                                        <div className="col-6 br">Display name</div>
-                                        <div className="col-6 text-end text-sm-start">tesla.12</div>
-                                    </div>
-                                    <div className="row w-100 mx-auto">
-                                        <div className="col-6 br">email</div>
-                                        <div className="col-6 text-end text-sm-start text-lowercase">
-                                            {data && data.getUser.email}
-                                        </div>
-                                    </div>
-                                    <div className="row w-100 mx-auto change-password">
-                                        <div className="col-6 br">Password</div>
-                                        <div className="col-6 justify-content-sm-between justify-content-end">
-                                            <p>********</p>
-                                            <button
-                                                className="btn-primary"
-                                                onClick={() => setState({ pwdModal: true })}
-                                            >
-                                                Change Password
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="d-flex justify-content-center mt-3">
-                                    <button
-                                        className="btn-primary btn-pwd"
-                                        onClick={() => setState({ pwdModal: true })}
-                                    >
-                                        Change Pasword
-                                    </button>
-                                </div>
-                                <div className="account-security">
-                                    <div className="row w-100 mx-auto">
-                                        <h4>
-                                            Increase your account security&nbsp;
-                                            <span className="txt-green">
-                                                {data && data.getUser.userSecurity.filter(s => s.value).length}
-                                            </span>/4
-                                        </h4>
-
-                                        <div className="col-sm-6 br">
-                                            <div className={`status ${getSecurityStatus("2FA") ? "active" : "deactive"}`}></div>
-                                            <div className="security-item">
-                                                <p className="security-name">Enable 2FA</p>
-                                                <p
-                                                    className="txt-green security-link"
-                                                    onClick={() => setState({ tfaModal: true })}
-                                                    onKeyDown={() => setState({ tfaModal: true })}
-                                                    role="presentation"
+                            <>
+                                <Tabs className="detail-tab">
+                                    <TabList>
+                                        <Tab>Account detaiLs</Tab>
+                                        <Tab>Tier Details</Tab>
+                                    </TabList>
+                                    <TabPanel>
+                                        <div className="account-details">
+                                            <div className="account-detail">
+                                                <div className="row w-100 mx-auto">
+                                                    <div className="col-6 br">Display name</div>
+                                                    <div className="col-6 text-end text-sm-start">
+                                                        tesla.12
+                                                    </div>
+                                                </div>
+                                                <div className="row w-100 mx-auto">
+                                                    <div className="col-6 br">email</div>
+                                                    <div className="col-6 text-end text-sm-start">
+                                                        {data && data.getUser.email}
+                                                    </div>
+                                                </div>
+                                                <div className="row w-100 mx-auto change-password">
+                                                    <div className="col-6 br">Password</div>
+                                                    <div className="col-6 justify-content-sm-between justify-content-end">
+                                                        <p>********</p>
+                                                        <button
+                                                            className="btn-primary"
+                                                            onClick={() =>
+                                                                setState({ pwdModal: true })
+                                                            }
+                                                        >
+                                                            Change Password
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="d-flex justify-content-center mt-3">
+                                                <button
+                                                    className="btn-primary btn-pwd"
+                                                    onClick={() => setState({ pwdModal: true })}
                                                 >
-                                                    Enabled
-                                                </p>
+                                                    Change Pasword
+                                                </button>
                                             </div>
-                                        </div>
+                                            <div className="account-security">
+                                                <h4>
+                                                    Increase your account security&nbsp;
+                                                    <span className="txt-green">2</span>/4
+                                                </h4>
+                                                <div className="row w-100 mx-auto">
+                                                    <div className="col-sm-6 br">
+                                                        <div className="status active"></div>
+                                                        <div className="security-item">
+                                                            <p className="security-name">
+                                                                Enable 2FA
+                                                            </p>
+                                                            <p
+                                                                className="txt-green security-link"
+                                                                onClick={() =>
+                                                                    setState({ tfaModal: true })
+                                                                }
+                                                                onKeyDown={() =>
+                                                                    setState({ tfaModal: true })
+                                                                }
+                                                                role="presentation"
+                                                            >
+                                                                Enabled
+                                                            </p>
+                                                        </div>
+                                                    </div>
 
-                                        <div className="col-sm-6">
-                                            <div className={`status ${getSecurityStatus("KYC") ? "active" : "deactive"}`}></div>
-                                            <div className="security-item">
-                                                <p className="security-name">
-                                                    KYC Identity Verification less than 100k CHF
-                                                    withdraw
-                                                </p>
-                                                <p className="txt-green security-link">Verified</p>
-                                            </div>
-                                        </div>
+                                                    <div className="col-sm-6">
+                                                        <div className="status active"></div>
+                                                        <div className="security-item">
+                                                            <p className="security-name">
+                                                                KYC Identity Verificatoin less than
+                                                                100k CHF withdraw
+                                                            </p>
+                                                            <p className="txt-green security-link">
+                                                                Verified
+                                                            </p>
+                                                        </div>
+                                                    </div>
 
-                                        <div className="col-sm-6 br">
-                                            <div className={`status ${getSecurityStatus("mobile") ? "active" : "deactive"}`}></div>
-                                            <div className="security-item">
-                                                <p className="security-name">Mobile Verification</p>
-                                                <p className="txt-cyan security-link">Setup</p>
-                                            </div>
-                                        </div>
+                                                    <div className="col-sm-6 br">
+                                                        <div className="status deactive"></div>
+                                                        <div className="security-item">
+                                                            <p className="security-name">
+                                                                Mobile Verification
+                                                            </p>
+                                                            <p className="txt-cyan security-link">
+                                                                Setup
+                                                            </p>
+                                                        </div>
+                                                    </div>
 
-                                        <div className="col-sm-6">
-                                            <div className={`status ${getSecurityStatus("AML") ? "active" : "deactive"}`}></div>
-                                            <div className="security-item">
-                                                <p className="security-name">
-                                                    AML Identity Verification more than 100k CHF
-                                                    withdraw
-                                                </p>
-                                                <p className="txt-cyan security-link">Setup</p>
+                                                    <div className="col-sm-6">
+                                                        <div className="status deactive"></div>
+                                                        <div className="security-item">
+                                                            <p className="security-name">
+                                                                AML Identity Verificatoin more than
+                                                                100k CHF withdraw
+                                                            </p>
+                                                            <p className="txt-cyan security-link">
+                                                                Setup
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <div className="tier-details">
+                                            <div className="row w-100 mx-auto">
+                                                <div className="col-6 br">Tier</div>
+                                                <div className="col-6 text-end text-sm-start d-flex align-items-center justify-content-end justify-content-sm-start">
+                                                    <img
+                                                        src={Bronze}
+                                                        alt="brozne"
+                                                        className="me-3"
+                                                    />
+                                                    Bronze
+                                                </div>
+                                            </div>
+                                            <div className="row w-100 mx-auto">
+                                                <div className="col-6 br">Point to next tier</div>
+                                                <div className="col-6 text-end text-sm-start">
+                                                    500
+                                                </div>
+                                            </div>
+                                            <div className="row w-100 mx-auto pt-5">
+                                                <h4>
+                                                    <span className="txt-green">G</span>
+                                                    ain Points
+                                                </h4>
+                                                <div className="col-6 d-flex align-items-center br">
+                                                    <div className="status me-2 active"></div>
+                                                    KYC/AML completion
+                                                </div>
+                                                <div className="col-6 text-end text-sm-start">
+                                                    500
+                                                </div>
+                                            </div>
+
+                                            <div className="row mx-0">
+                                                <div className="col-6 d-flex align-items-center br">
+                                                    <div className="status me-2 deactive"></div>
+                                                    Wallet balance
+                                                </div>
+                                                <div className="col-6 text-end text-sm-start">
+                                                    500
+                                                </div>
+                                            </div>
+
+                                            <div className="row mx-0">
+                                                <div className="col-6 d-flex align-items-center br">
+                                                    <div className="status me-2 active"></div>
+                                                    Auction participation
+                                                </div>
+                                                <div className="col-6 text-end text-sm-start">
+                                                    50
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </TabPanel>
+                                </Tabs>
                                 <p className="mt-3 pb-5">
                                     <Link to="/" className="get-verify">
                                         Get verified
                                     </Link>
                                     &nbsp; to collect over 2,000 USD the account should be verified.
                                 </p>
-                            </div>
+                            </>
                         )}
                         {tabIndex === 1 && (
                             <div className="notification-set">
@@ -400,8 +488,9 @@ const Profile = () => {
                                             role="presentation"
                                         >
                                             <div
-                                                className={`wallet-item ${idx === walletId && "active"
-                                                    }`}
+                                                className={`wallet-item ${
+                                                    idx === walletId && "active"
+                                                }`}
                                             >
                                                 <img src={item.icon} alt="wallet icon" />
                                                 <p>{item.desc}</p>
@@ -417,7 +506,9 @@ const Profile = () => {
                                 <h4>confirm sign out</h4>
                                 <div className="h-100 d-flex flex-column align-items-center justify-content-center">
                                     <p>Are you sure you want to sign out?</p>
-                                    <button className="btn-primary" onClick={e => signOut()}>sign out</button>
+                                    <button className="btn-primary" onClick={(e) => signOut()}>
+                                        sign out
+                                    </button>
                                 </div>
                             </div>
                         )}
