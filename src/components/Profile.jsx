@@ -145,7 +145,6 @@ const Profile = () => {
 
     const signOut = () => {
         logout(() => {
-            console.log("signout")
             navigate("/")
         })
     }

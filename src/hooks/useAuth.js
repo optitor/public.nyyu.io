@@ -6,6 +6,8 @@ import {
   LOGGED_OUT_KEY,
   logout,
 } from "../utilities/auth"
+// import {NOTIFICATION_SUBSCRIPTION} from "../apollo/graghqls/subscriptions/notification"
+// import { useSubscription } from "@apollo/client"
 import { navigate } from "gatsby"
 
 const AuthContext = createContext(null)
@@ -28,6 +30,9 @@ const useProvideAuth = () => {
 
   const isLoggedIn = () =>
     getInMemoryAuthToken() && !isTokenExpired(getInMemoryAuthToken())
+
+  // const { data, error } = useSubscription(NOTIFICATION_SUBSCRIPTION)
+  // console.log("subscription Data", data, error)
 
   /**
    * Make sure, User is logged out on all Tabs
