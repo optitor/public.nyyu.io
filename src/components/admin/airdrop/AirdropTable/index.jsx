@@ -46,7 +46,7 @@ const TableHead = styled.div`
 
     @media screen and (max-width: ${device['laptop-md']}){
         div.airdrop_status {
-            width: 8%;
+            width: 10%;
         }
     }
 

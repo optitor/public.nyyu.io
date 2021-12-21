@@ -11,6 +11,7 @@ const SocialTable = ({data}) => {
                 <div className='social'>Social</div>
                 <div className='key'>Key</div>
                 <div className='secret'>Secret</div>
+                <div className='edit'> </div>
             </TableHead>
             <TableHeadForMobile>
                 <div className='name'>Social Data</div>
@@ -41,6 +42,7 @@ const TableHead = styled.div`
     &>div.social {width: ${width.social}; padding-left: 16px;}
     &>div.key {width: ${width.key};}
     &>div.secret {width: ${width.secret};}
+    &>div.edit {width: ${width.edit};}
 
     @media screen and (max-width: ${device['laptop-md']}){
         div.bid_status {
