@@ -118,6 +118,14 @@ input.error, div.error, textarea.error {
     border: 1px solid #e17070;
 }
 
+p.disabled {
+    color: dimgray;
+}
+
+input.disabled {
+    border: 1px solid dimgray!important;
+}
+
 .previous {
     font-size: 14px;
     font-weight: 500;

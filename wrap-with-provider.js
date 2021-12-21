@@ -10,7 +10,7 @@ export const wrapRootElement = ({ element }) => {
 
   return (
     <Provider store={store}>
-        {element}        
+      {element}
     </Provider>
   )
 }

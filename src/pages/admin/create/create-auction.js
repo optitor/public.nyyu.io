@@ -62,14 +62,14 @@ const IndexPage = () => {
 
     //--------- Avatar Data
     const avatars = [
-        { value: 'tesla.png', label: 'Tesla' },
-        { value: 'volta.png', label: 'Volta' },
-        { value: 'meitner.png', label: 'Meitner' },
-        { value: 'johnson.png', label: 'Johnson' },
-        { value: 'fermi.png', label: 'Fermi' },
-        { value: 'failla.png', label: 'failla' },
-        { value: 'curie.png', label: 'Curie' },
-        { value: 'cruto.png', label: 'Cruto' },
+        { value: 'tesla.svg', label: 'Tesla' },
+        { value: 'volta.svg', label: 'Volta' },
+        { value: 'meitner.svg', label: 'Meitner' },
+        { value: 'johnson.svg', label: 'Johnson' },
+        { value: 'fermi.svg', label: 'Fermi' },
+        { value: 'failla.svg', label: 'Failla' },
+        { value: 'curie.svg', label: 'Curie' },
+        { value: 'cruto.svg', label: 'Cruto' },
     ];
     const [avatar, setAuctionAvatar] = useState(avatars[0]);
     
