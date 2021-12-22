@@ -19,6 +19,8 @@ const OAuth2RedirectHandler = (props) => {
 
     const token = useMemo(() => getUrlParameter("token"), [])
 
+    console.log("signup token", token)
+
     useEffect(() => {
         if (token) {
             setUser({
