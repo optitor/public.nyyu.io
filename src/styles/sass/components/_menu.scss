@@ -33,14 +33,19 @@
             & > li {
                 cursor: pointer;
                 border-bottom: 1px solid white;
-                padding: 12px 25px;
                 transition: 500ms;
+                a {
+                    display: inline-block;
+                    padding: 12px 25px;
+                }
                 &:last-child {
                     border: none;
                 }
                 &:hover,
-                a:hover {
-                    color: rgba(white, 0.5) !important;
+                &:hover {
+                    a {
+                        color: rgba(white, 0.5) !important;
+                    }
                 }
             }
         }

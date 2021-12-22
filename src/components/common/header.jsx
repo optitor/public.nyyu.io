@@ -91,7 +91,9 @@ const Menu = () => {
                                     />
                                     <ul className="user-dropdown-menu">
                                         <li>
-                                            <Link to="/auction">dashboard</Link>
+                                            <Link to="/auction">
+                                                <div>dashboard</div>
+                                            </Link>
                                         </li>
                                         <li>
                                             <Link to="/app/profile">profile</Link>
@@ -101,7 +103,7 @@ const Menu = () => {
                                             onKeyDown={() => setIsDressUPModalOpen(true)}
                                             role="presentation"
                                         >
-                                            dressup
+                                            <a>dressup</a>
                                         </li>
                                         <li>
                                             <Link to="/faq">faq</Link>
