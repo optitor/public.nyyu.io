@@ -7,7 +7,7 @@ import { Alert } from '@mui/material';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 
-const KYC_AML_Component = () => {
+const DirectPurchase = () => {
     const [show, setShow] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [points, setPoints] = useState(null);
@@ -27,19 +27,24 @@ const KYC_AML_Component = () => {
         setModalIsOpen(false);
         setShowError(false);
     };
+    
 
     return (
         <>
             <DataRow>
                 <div className='task'>
                     <Main>
-                        <p>KYC/AML COMPLETION</p>
+                        <p>Direct Purchase</p>
                     </Main>
                 </div>
-                <div className='threshold'></div>
+                <div className='threshold'>
+                    <Main>
+                        <p>Points per direct purchase</p>
+                    </Main>
+                </div>
                 <div className='points'>
                     <Main>
-                        <p>500</p>
+                        <p>0.1 point/USD</p>
                     </Main>
                 </div>
                 <div className='edit'>
@@ -52,7 +57,7 @@ const KYC_AML_Component = () => {
                 <div>
                     <LayoutForMobile>
                         <div className='left' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                            <p>KYC/AML COMPLETION</p>
+                            <p>Direct Purchase</p>
                         </div>
                         <div className='right'>
                             <p>
@@ -69,10 +74,10 @@ const KYC_AML_Component = () => {
                 <ToggleForMobile show={show}>
                     <LayoutForMobile>
                         <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Points</p>
+                            <p style={{color: 'dimgrey'}}>Point per direct purchase</p>
                         </div>
                         <div className='right'>
-                            <p>500</p>
+                            <p>0.1 point/USD</p>
                         </div>
                     </LayoutForMobile>
                 </ToggleForMobile>
@@ -86,7 +91,7 @@ const KYC_AML_Component = () => {
             >
                 <div className="pwd-modal__header">
                     <div className='d-flex justify-content-center align-items-center'>
-                        <p>KYC/AML Completion</p>
+                        <p>Direct Purchase</p>
                     </div>
                     <div
                         onClick={() => setModalIsOpen(false)}
@@ -100,7 +105,7 @@ const KYC_AML_Component = () => {
                 <form className="form" onSubmit={(e) => e.preventDefault()}>
                     <div className='input'>
                         {showError? (error? <Alert severity="error">{error}</Alert>: <Alert severity="success">Success! Please click Save Button</Alert>): ''}
-                        <p className='mt-2' style={{fontSize: 12}}>Points</p>
+                        <p className='mt-2' style={{fontSize: 12}}>Points per USD</p>
                         <NumberFormat className={`black_input ${showError && error? 'error': ''}`}
                             placeholder='Enter number'
                             thousandSeparator={true}
@@ -126,7 +131,7 @@ const KYC_AML_Component = () => {
     );
 };
 
-export default KYC_AML_Component;
+export default DirectPurchase;
 
 const DataRow = styled.div`
     min-height: 60px;

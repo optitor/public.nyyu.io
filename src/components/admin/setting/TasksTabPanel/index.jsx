@@ -4,6 +4,9 @@ import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import KYCAMLComponent from './KYC_AML_Component';
 import WalletBalance from './WalletBalance';
+import AuctionRound from './AuctionRound';
+import DirectPurchase from './DirectPurchase';
+import NDBTokenStaking from './NDBTokenStaking';
 
 const UserTiersPanel = () => {
     return (
@@ -14,10 +17,13 @@ const UserTiersPanel = () => {
                 <div className='points'>POINTS</div>
                 <div className='edit'></div>
             </TableHead>
-            <TableBody className='task_table'>
+            <div className='task_table'>
                 <KYCAMLComponent />
                 <WalletBalance />
-            </TableBody>
+                <AuctionRound />
+                <DirectPurchase />
+                <NDBTokenStaking />
+            </div>
         </>
     );
 };
@@ -43,9 +49,4 @@ const TableHead = styled.div`
     @media screen and (max-width: ${device['phone']}){
         &>div.threshold, &>div.points {display: none;}
     }
-`;
-
-const TableBody = styled.div`
-    border-left: 1px solid #464646;
-    border-right: 1px solid #464646;
 `;

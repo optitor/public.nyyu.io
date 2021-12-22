@@ -7,33 +7,32 @@ import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import NumberFormat from 'react-number-format';
 
-const BalancesData = [
-    {threshold: '50', points: 500},
-    {threshold: '1k', points: 1000},
-    {threshold: '50k', points: 1500},
-    {threshold: '100k', points: 2000},
-    {threshold: '300k', points: 3000},
-    {threshold: '500k', points: 6000},
+const StakingData = [
+    {threshold: 30, points: 0.0001},
+    {threshold: 60, points: 0.0001},
+    {threshold: 90, points: 0.0001},
+    {threshold: 180, points: 0.0001},
+    {threshold: 365, points: 0.0001},
 ];
 
 const WalletBalance = () => {
     const [show, setShow] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [balances, setBalances] = useState([]);
+    const [stakings, setStakings] = useState([]);
     const [showError, setShowError] = useState(false);
 
     // Balance Data Validation
     const error = useMemo(() => {
-        if(!balances.length) return {item: 'noData', desc: 'One Balance is required at least'};
-        for(let i = 0; i < balances.length; i++) {
-            if(!balances[i].threshold) return {index: i, item: 'threshold', desc: 'Input is required'};
-            if(!balances[i].points) return {index: i, item: 'points', desc: 'Input is required'};
+        if(!stakings.length) return {item: 'noData', desc: 'One Balance is required at least'};
+        for(let i = 0; i < stakings.length; i++) {
+            if(!stakings[i].threshold) return {index: i, item: 'threshold', desc: 'Input is required'};
+            if(!stakings[i].points) return {index: i, item: 'points', desc: 'Input is required'};
         }
         return {};
-    }, [balances]);
+    }, [stakings]);
 
     const openEditModal = () => {
-        setBalances(BalancesData);
+        setStakings(StakingData);
         setModalIsOpen(true);
     };
 
@@ -52,28 +51,28 @@ const WalletBalance = () => {
             <DataRow>
                 <div className='task' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
                     <Main>
-                        <p>Wallet Balance <span style={{marginLeft: 15}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} /></span></p>
+                        <p>Ndb token staking in the wallet <span style={{marginLeft: 15}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} /></span></p>
                     </Main>
                 </div>
                 <div className='threshold' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
                     <Main>
-                        <p>{BalancesData[0].threshold}</p>
+                        <p>{StakingData[0].threshold} Days</p>
                     </Main>
                     <Toggle show={show}>
-                        {BalancesData.map((value, index) => {
+                        {StakingData.map((value, index) => {
                             if(index === 0) return null;
-                            return <p key={index}>{value.threshold}</p>;
+                            return <p key={index}>{value.threshold} Days</p>;
                         })}
                     </Toggle>
                 </div>
                 <div className='points' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
                     <Main>
-                        <p>{BalancesData[0].points}</p>
+                        <p>{StakingData[0].points} * x tokens * {StakingData[0].threshold}</p>
                     </Main>
                     <Toggle show={show}>
-                        {BalancesData.map((value, index) => {
+                        {StakingData.map((value, index) => {
                             if(index === 0) return null;
-                            return <p key={index}>{value.points}</p>;
+                            return <p key={index}>{value.points} * x tokens * {value.threshold}</p>;
                         })}
                     </Toggle>           
                 </div>
@@ -88,7 +87,7 @@ const WalletBalance = () => {
                 <div>
                     <LayoutForMobile>
                         <div className='left' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                            <p>Ballance Wallet</p>
+                            <p>Ndb token staking in the wallet</p>
                         </div>
                         <div className='right'>
                             <p>
@@ -105,20 +104,15 @@ const WalletBalance = () => {
                 <ToggleForMobile show={show}>
                     <LayoutForMobile>
                         <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Threshold</p>
-                        </div>
-                        <div className='right'>
-                            <p style={{color: 'dimgray'}}>Points</p>
+                            <p style={{color: 'dimgrey'}}>Threshold {'&'} Points</p>
                         </div>
                     </LayoutForMobile>
-                    {BalancesData.map((value, index) => {
+                    {StakingData.map((value, index) => {
                         return (
                             <LayoutForMobile key={index}>
                                 <div className='left'>
-                                    <p style={{fontWeight: 400}}>{value.threshold}</p>
-                                </div>
-                                <div className='right'>
-                                    <p style={{fontWeight: 400}}>{value.points}</p>
+                                    <p style={{fontWeight: 400, textTransform: 'unset'}}>X tokens in {value.threshold} days staking</p>
+                                    <p style={{fontWeight: 400, color: 'dimgrey', textTransform: 'unset'}}>{value.points} * X tokens * {value.threshold}</p>
                                 </div>
                             </LayoutForMobile>
                         );
@@ -133,7 +127,7 @@ const WalletBalance = () => {
                 overlayClassName="pwd-modal__overlay"
             >
                 <div className="pwd-modal__header">
-                    <p>Wallet Balance</p>
+                    <p>Ndb token staking in the wallet</p>
                     <div
                         onClick={() => setModalIsOpen(false)}
                         onKeyDown={() => setModalIsOpen(false)}
@@ -155,13 +149,19 @@ const WalletBalance = () => {
                             <p style={{fontSize: 12}}>Points</p>
                         </div>
                     </div>
-                    {balances.map((value, index) => {
+                    {stakings.map((value, index) => {
                         return (
                             <div key={index} className='input'>
                                 <div className='input_div'>
-                                    <input className={`black_input ${showError && error.index === index && error.item === 'threshold'? 'error': ''}`}
+                                    <NumberFormat className={`black_input ${showError && error.index === index && error.item === 'threshold'? 'error': ''}`}
+                                        placeholder='Enter number'
+                                        thousandSeparator={true}
+                                        allowNegative={false}
                                         value={value.threshold}
-                                        onChange={e => {balances[index].threshold = e.target.value; setBalances([...balances]);}}
+                                        onValueChange={values => {
+                                            stakings[index].threshold = values.value;
+                                            setStakings([...stakings]);
+                                        }}
                                     />
                                 </div>
                                 <div className='input_div'>
@@ -171,23 +171,23 @@ const WalletBalance = () => {
                                         allowNegative={false}
                                         value={value.points}
                                         onValueChange={values => {
-                                            balances[index].points = values.value;
-                                            setBalances([...balances]);
+                                            stakings[index].points = values.value;
+                                            setStakings([...stakings]);
                                         }}
                                     />
                                 </div>
                                 <div className='trash_btn'>
                                     <Icon icon="bytesize:trash" onClick={() => {
-                                        let array = [...balances]; 
+                                        let array = [...stakings]; 
                                         array.splice(index, 1);
-                                        setBalances([...array]);
+                                        setStakings([...array]);
                                     }}/>
                                 </div>
                             </div>
                         );
                     })}
                     <div className='input'>
-                        <span className='add_balance'><Icon className={error.item === 'noData'? 'error': ''} icon='akar-icons:plus' onClick={() => setBalances([...balances, {threshold: '', points: ''}])}/></span>
+                        <span className='add_balance'><Icon className={error.item === 'noData'? 'error': ''} icon='akar-icons:plus' onClick={() => setStakings([...stakings, {threshold: '', points: ''}])}/></span>
                     </div>
                 </form>
                 <div className="pwd-modal__footer mt-4">
