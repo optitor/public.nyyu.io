@@ -86,7 +86,7 @@ const Menu = () => {
                                     </Link>
                                 </li>
                                 <li className="user-dropdown">
-                                    {window.location.pathname == "/app/profile" && (
+                                    {window.location.pathname === "/app/profile" && (
                                         <img
                                             src={DownArrow}
                                             alt="Down Arrow Icon"

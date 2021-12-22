@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
+import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import { device } from '../../../../utilities/device';
 
 const TierComponent = ({tier = {}}) => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [threshold, setThreshold] = useState(tier.threshold);
     return (
         <>
             <Container className='component'>
@@ -21,9 +24,54 @@ const TierComponent = ({tier = {}}) => {
                         thousandSeparator={true}
                         renderText={(value, props) => <p {...props}>{value}</p>}
                     />
-                    <p><span><Icon icon="clarity:note-edit-line" /></span></p>
+                    <p><span><Icon icon="clarity:note-edit-line" onClick={() => setModalIsOpen(true)}/></span></p>
                 </div>
             </Container>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                ariaHideApp={false}
+                className="pwd-reset-modal"
+                overlayClassName="pwd-modal__overlay"
+            >
+                <div className="pwd-modal__header">
+                    <div className='d-flex justify-content-center align-items-center'>
+                        <img src={tier.image} alt={tier.name} style={{width: 30, marginRight: 10}} />
+                        <p className='text-uppercase'>{tier.name} Tier</p>
+                    </div>
+                    <div
+                        onClick={() => setModalIsOpen(false)}
+                        onKeyDown={() => setModalIsOpen(false)}
+                        role="button"
+                        tabIndex="0"
+                    >
+                        <Icon icon="ep:close-bold" />
+                    </div>
+                </div>
+                <form className="form" onSubmit={(e) => e.preventDefault()}>
+                    <div className='input'>
+                        <p className='mt-4' style={{fontSize: 12}}>Threshold</p>
+                        <NumberFormat className='black_input'
+                            placeholder='Enter number'
+                            thousandSeparator={true}
+                            allowNegative={false}
+                            value={threshold}
+                            onValueChange={values => setThreshold(values.value)}
+                        />
+                    </div>                  
+                    <div className="pwd-modal__footer mt-5">
+                        <button
+                            className="btn previous"
+                            onClick={() => setModalIsOpen(false)}
+                        >
+                            Cancel
+                        </button>
+                        <button className='btn next'>
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </Modal>
         </>
     );
 };
@@ -32,7 +80,8 @@ export default TierComponent;
 
 const Container = styled.div`
     min-height: 75px;
-    border-bottom: 1px solid #464646;
+    border: 1px solid #464646;
+    border-top: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -75,8 +124,6 @@ const Container = styled.div`
         &>div.name {width: 38%}
     }
     @media screen and (max-width: ${device['phone']}){
-        border-left: 1px solid #464646;
-        border-right: 1px solid #464646;
         &>div.image {
             width: 15%;
             img {

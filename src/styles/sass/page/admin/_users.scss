@@ -90,6 +90,9 @@ main.admin-users-page {
         p {
             font-size: 20px;
             font-weight: 500;
+            @include mq('phone', max) {
+                font-size: 14px;
+            }
         }        
         @include mq('phone', max) {
             margin-bottom: 20px;
@@ -98,6 +101,7 @@ main.admin-users-page {
     form {
         p {
             color: lightgray;
+            margin-bottom: 1px;
         }        
         div.description {
             text-align: center;

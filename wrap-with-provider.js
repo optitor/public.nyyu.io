@@ -13,4 +13,4 @@ export const wrapRootElement = ({ element }) => {
       {element}
     </Provider>
   )
-}
+};

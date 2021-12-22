@@ -9,6 +9,7 @@ import KYCTabPanel from "../../components/admin/setting/KYCTabPanel";
 import AMLTabPanel from "../../components/admin/setting/AMLTabPanel";
 import AvatarTabPanel from "../../components/admin/setting/AvatarTabPanel";
 import UserTiersPanel from "../../components/admin/setting/UserTiersPanel";
+import TasksTabPanel from "../../components/admin/setting/TasksTabPanel";
 
 const socials = [
     {social: 'Facebook'},
@@ -63,7 +64,7 @@ const IndexPage = () => {
                                 <UserTiersPanel />
                             </TabPanel>
                             <TabPanel>
-                            Tasks
+                                <TasksTabPanel />
                             </TabPanel>
                         </Tabs>
                     </div>
