@@ -48,7 +48,7 @@ const WalletDataRow = ({datum}) => {
             </DataRow>
             <DataRowForMobile>
                 <div onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.name}</p>
                             <p style={{color: 'dimgrey'}}>{datum.avatar}</p>
@@ -58,49 +58,49 @@ const WalletDataRow = ({datum}) => {
                                 {show? <span><Icon icon="ant-design:caret-up-filled" /></span>: <span><Icon icon="ant-design:caret-down-filled" /></span>}
                             </p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </div>
                 <ToggleForMobile show={show}>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Currency 1</p>
                         </div>
                         <div className='right'>
                             <p>1032 NDB</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Currency 2</p>
                         </div>
                         <div className='right'>
                             <p>1200 BIT</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Currency 3</p>
                         </div>
                         <div className='right'>
                             <p>200 ETH</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Currency 4</p>
                         </div>
                         <div className='right'>
                             <p>30 000 USD</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Currency 5</p>
                         </div>
                         <div className='right'>
                             <p>30 000 DAI</p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </ToggleForMobile>
             </DataRowForMobile>
         </>
@@ -160,7 +160,7 @@ const ToggleForMobile = styled.div`
     }};
 `;
 
-const LayoutForMobile = styled.div`
+const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     &>div.left {

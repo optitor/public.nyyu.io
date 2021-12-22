@@ -55,7 +55,7 @@ const DirectPurchase = () => {
             </DataRow>
             <DataRowForMobile>
                 <div>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
                             <p>Direct Purchase</p>
                         </div>
@@ -69,17 +69,17 @@ const DirectPurchase = () => {
                                 <span><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} onClick={() => setShow(!show)} /></span>
                             </p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </div>
                 <ToggleForMobile show={show}>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Point per direct purchase</p>
                         </div>
                         <div className='right'>
                             <p>0.1 point/USD</p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </ToggleForMobile>
             </DataRowForMobile>
             <Modal
@@ -191,7 +191,7 @@ const ToggleForMobile = styled.div`
     }};
 `;
 
-const LayoutForMobile = styled.div`
+const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     &>div.left {
