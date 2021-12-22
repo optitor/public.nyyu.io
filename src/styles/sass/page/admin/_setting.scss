@@ -23,6 +23,12 @@ main.admin-setting-page {
                     color: #ffffff;
                 }
                 div.tabs_container {
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    max-height: 80vh;
+                    @include mq('phone', max) {
+                        max-height: unset;
+                    }
                     .react-tabs {
                         .react-tabs__tab-list {
                             padding-bottom: 10px;
@@ -96,12 +102,10 @@ main.admin-setting-page {
                     p {
                         font-size: 18px;
                         font-weight: 700;
+                        padding: 0 5px;
                         color: white;
                         text-transform: uppercase;
                         @include mq("laptop-wide", max) {
-                            font-size: 16px;
-                        }
-                        @include mq("tablet", max) {
                             font-size: 14px;
                         }
                         @include mq("tablet", max) {
@@ -111,139 +115,5 @@ main.admin-setting-page {
                 }
             }
         }
-    }
-}
-
-.kyc-aml-modal {
-    max-width: 1000px;
-    .pwd-modal__header {
-        text-transform: unset;
-        margin-bottom: 30px;
-        svg {
-            color: #ffffff;
-        }
-        p {
-            font-size: 20px;
-            font-weight: 500;
-        }
-        @include mq("phone", max) {
-            margin-bottom: 20px;
-        }
-    }
-    form {
-        input.black_input {
-            height: 37px;
-            border: 1px solid #cccccc;
-        }
-        p {
-            margin-top: 15px;
-            margin-bottom: 1px;
-        }
-        div.input_div {
-            width: 86%;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 50px;
-            div.input {
-                width: 49%;
-            }
-            @include mq("tablet", max) {
-                width: 100%;
-            }
-            @include mq("phone", max) {
-                flex-direction: column;
-                margin-top: 0;
-                div.input {
-                    width: 100%;
-                }
-            }
-        }
-    }
-    .pwd-modal__footer {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-}
-
-.wallet-balance-modal {
-    max-width: 800px;
-    .pwd-modal__header {
-        text-transform: unset;
-        margin-bottom: 30px;
-        svg {
-            color: #ffffff;
-        }
-        p {
-            font-size: 20px;
-            font-weight: 500;
-        }
-        @include mq("phone", max) {
-            margin-bottom: 20px;
-        }
-    }
-    form {
-        margin-top: 50px;
-        max-height: 300px;
-        overflow: auto;
-        p {
-            margin-top: 15px;
-            margin-bottom: 1px;
-        }
-        div.input {
-            width: 80%;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 7px;
-            &>div>input {
-                width: 95%;
-            } 
-            div.threshold_input {
-                width: 48%;
-            }
-            div.points_input {
-                width: 48%;
-            }
-            div.trash_btn {
-                width: 4%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                svg {
-                    color: #f32d2d;
-                    font-size: 22px;
-                    cursor: pointer;
-                }
-            }
-            @include mq("tablet", max) {
-                width: 100%;
-            }
-            @include mq("tablet", max) {
-                div.threshold_input {
-                    width: 46%;
-                }
-                div.points_input {
-                    width: 46%;
-                }
-                div.trash_btn {
-                    width: 8%;
-                }
-            }
-    
-            span.add_balance {
-                color: white;
-                font-size: 25px;
-                cursor: pointer;
-            }
-        }
-    }
-    .pwd-modal__footer {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
     }
 }
