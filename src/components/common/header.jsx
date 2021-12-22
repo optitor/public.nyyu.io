@@ -77,18 +77,22 @@ const Menu = () => {
                                     <img src={Bell} alt="Bell Icon" />
                                 </li>
                                 <li className="px-4">
-                                    <img
-                                        src={User.avatar}
-                                        className="user-avatar"
-                                        alt="Tesla Icon"
-                                    />
+                                    <Link to="/app/profile">
+                                        <img
+                                            src={User.avatar}
+                                            className="user-avatar"
+                                            alt="Tesla Icon"
+                                        />
+                                    </Link>
                                 </li>
                                 <li className="user-dropdown">
-                                    <img
-                                        src={DownArrow}
-                                        alt="Down Arrow Icon"
-                                        className="cursor-pointer"
-                                    />
+                                    {window.location.pathname == "/app/profile" && (
+                                        <img
+                                            src={DownArrow}
+                                            alt="Down Arrow Icon"
+                                            className="cursor-pointer"
+                                        />
+                                    )}
                                     <ul className="user-dropdown-menu">
                                         <li>
                                             <Link to="/auction">
