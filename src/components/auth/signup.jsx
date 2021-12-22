@@ -6,7 +6,7 @@ import CustomSpinner from "../common/custom-spinner"
 import { FormInput } from "../common/FormControl"
 import { useSignupMutation } from "../../apollo/network/auth"
 import React, { useState } from "react"
-import { countries, social_links } from "../../utilities/staticData"
+import { countries, passwordValidatorOptions, social_links } from "../../utilities/staticData"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
@@ -33,25 +33,9 @@ const SingupPage = () => {
             setEmailError("Invalid email address")
             error = true
         }
-        if (
-            !pwd ||
-            !validator.isStrongPassword(pwd, {
-                minLength: 8,
-                minLowercase: 1,
-                minUppercase: 1,
-                minNumbers: 1,
-                minSymbols: 0,
-                returnScore: false,
-                pointsPerUnique: 1,
-                pointsPerRepeat: 0.5,
-                pointsForContainingLower: 10,
-                pointsForContainingUpper: 10,
-                pointsForContainingNumber: 10,
-                pointsForContainingSymbol: 10,
-            })
-        ) {
+        if (!pwd || !validator.isStrongPassword(pwd, passwordValidatorOptions)) {
             setPwdError(
-                "Password must contain at least 6 characters, including UPPER/lowercase and numbers!"
+                "Password must contain at least 8 characters, including UPPER/lowercase and numbers!"
             )
             error = true
         }
