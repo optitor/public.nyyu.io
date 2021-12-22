@@ -216,8 +216,7 @@ const DataRow = styled.div`
     flex-flow: row wrap;
     svg {
         cursor: pointer;
-    }
-    
+    }    
     @media screen and (max-width: ${device['phone']}){
         display: none;
     }
