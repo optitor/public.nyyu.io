@@ -3,6 +3,7 @@ import {
     Cruto,
     Curie,
     Facebook,
+    Amazon,
     Failla,
     Fermi,
     Google,
@@ -1057,7 +1058,7 @@ export const social_links = [
         to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
     {
-        icon: Facebook,
+        icon: Amazon,
         to: API_BASE_URL + "/oauth2/authorize/amazon?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
 ]
