@@ -73,7 +73,7 @@ const KYCComponent = ({icon, topic, content}) => {
                                 allowNegative={false}
                             />
                         </div>  
-                    </div>                                    
+                    </div>
                     <div className="pwd-modal__footer mt-4">
                         <button
                             className="btn previous"
