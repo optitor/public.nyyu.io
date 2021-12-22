@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import TierComponent from './Tier_Component';
 import { device } from '../../../../utilities/device';
 import { Bronze, SilverCoin, GoldCoin, Platinum, Diamond } from '../../../../utilities/imgImport';
+
 const tiers = [
     { image: Bronze, name: 'Bronze', threshold: 500 },
     { image: SilverCoin, name: 'Silver', threshold: 1500 },
