@@ -1,13 +1,17 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 
 import Seo from "../components/seo"
 import { Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
 import Header from "../components/common/header"
 import { numberWithCommas } from "../utilities/number"
+import { useAuth } from "../hooks/useAuth"
 
 const IndexPage = () => {
+    const auth = useAuth()
+    const placeABidButtonClick = () =>
+        auth?.isLoggedIn() ? navigate("/payment") : navigate("/app/signin")
     return (
         <div
             style={{
@@ -30,7 +34,9 @@ const IndexPage = () => {
                                 </div>
                                 <p className="token-left text-uppercase mt-4">Token Left</p>
                                 <p className="token-value">{numberWithCommas(604800, " ")}</p>
-                                <button className="btn btn-green">Place a bid</button>
+                                <button className="btn btn-green" onClick={placeABidButtonClick}>
+                                    Place a bid
+                                </button>
                                 <br />
                                 <Link to="/" className="learn-more">
                                     Learn more

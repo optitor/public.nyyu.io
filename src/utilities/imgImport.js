@@ -11,6 +11,7 @@ import google from "../images/google.svg"
 import twitter from "../images/twitter.svg"
 import linkedin from "../images/linkedin.svg"
 import apple from "../images/apple.svg"
+import amazon from "../images/amazon.svg"
 
 import failed from "../images/failed.png"
 import closeIcon from "../images/close.svg"
@@ -170,6 +171,7 @@ export const Google = google
 export const Twitter = twitter
 export const Linkedin = linkedin
 export const Apple = apple
+export const Amazon = amazon
 
 export const Failed = failed
 export const CloseIcon = closeIcon

@@ -12,7 +12,8 @@ import {
     CONFIRM_REQUEST_2FA,
 } from "../../apollo/graghqls/mutations/Auth"
 import { 
-    getUser
+    getUser,
+    setUser
 } from "../../utilities/auth"
 
 const two_factors = [
@@ -29,9 +30,18 @@ const VerifyEmail = () => {
         if (!user?.email) navigate("/app/signup")
     }, [user])
 
+    const getVerify = () => {
+        const temp = user?.isVerify
+        setUser({
+            ...getUser(),
+            isVerify: null
+        })
+        return temp;
+    }
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
-        tfaModal: user?.isVerify,
+        tfaModal: getVerify(),
         result_code: "",
         choose_type: 0,
         set_type: -1,

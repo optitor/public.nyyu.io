@@ -3,6 +3,7 @@ import {
     Cruto,
     Curie,
     Facebook,
+    Amazon,
     Failla,
     Fermi,
     Google,
@@ -1057,7 +1058,7 @@ export const social_links = [
         to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
     {
-        icon: Facebook,
+        icon: Amazon,
         to: API_BASE_URL + "/oauth2/authorize/amazon?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
 ]
@@ -1304,3 +1305,19 @@ export const figures = [
         intro: "Born Maria Sklodowska, Marie Curie was the first woman to win a Nobel Prize. Addint to her first win in physics, she later earned one in chemistry making her the first person to claim Nobel honors twice. She also became the first female professor at Sorbonne.",
     },
 ]
+
+
+export const passwordValidatorOptions = {
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 0,
+    returnScore: false,
+    pointsPerUnique: 1,
+    pointsPerRepeat: 0.5,
+    pointsForContainingLower: 10,
+    pointsForContainingUpper: 10,
+    pointsForContainingNumber: 10,
+    pointsForContainingSymbol: 10,
+}
