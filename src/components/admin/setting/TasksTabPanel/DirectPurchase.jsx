@@ -27,6 +27,7 @@ const DirectPurchase = () => {
         setModalIsOpen(false);
         setShowError(false);
     };
+    
 
     return (
         <>
