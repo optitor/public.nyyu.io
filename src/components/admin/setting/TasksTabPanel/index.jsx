@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
+import KYCAMLComponent from './KYC_AML_Component';
+import WalletBalance from './WalletBalance';
 
 const UserTiersPanel = () => {
     return (
@@ -12,8 +14,9 @@ const UserTiersPanel = () => {
                 <div className='points'>POINTS</div>
                 <div className='edit'></div>
             </TableHead>
-            <TableBody>
-                
+            <TableBody className='task_table'>
+                <KYCAMLComponent />
+                <WalletBalance />
             </TableBody>
         </>
     );
