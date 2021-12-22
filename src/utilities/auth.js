@@ -90,7 +90,8 @@ export const getInMemoryAuthToken = () => {
 }
 
 export const getUser = () => {
-  if (!isBrowser) return null
+  console.log("isBrowser", isBrowser)
+  if (!isBrowser) return inMemoryUserDefault
   try {
     inMemoryUser = JSON.parse(localStorage.getItem(USER_DATA))
   } catch(e) {

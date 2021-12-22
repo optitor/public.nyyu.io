@@ -25,6 +25,7 @@ const VerifyEmail = () => {
     const user = getUser()
 
     useEffect(() => {
+        console.log("verify_email user", user)
         if (!user?.email) navigate("/app/signup")
     }, [user])
 
