@@ -3,6 +3,7 @@ import {
     Cruto,
     Curie,
     Facebook,
+    Amazon,
     Failla,
     Fermi,
     Google,
@@ -1032,8 +1033,8 @@ export const API_BASE_URL = "https://auction.us-east-1.elasticbeanstalk.com"
 export const SUBSCRIPTION_BASE_URL = "wss://auction.us-east-1.elasticbeanstalk.com/subscriptions"
 
 // export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2"
-// export const OAUTH2_REDIRECT_URI = "https://sale.ndb.money/oauth2"
-export const OAUTH2_REDIRECT_URI = "https://ndbsale.gatsbyjs.io/oauth2"
+export const OAUTH2_REDIRECT_URI = "https://sale.ndb.money/oauth2"
+// export const OAUTH2_REDIRECT_URI = "https://ndbsale.gatsbyjs.io/oauth2"
 
 export const social_links = [
     {
@@ -1057,7 +1058,7 @@ export const social_links = [
         to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
     {
-        icon: Facebook,
+        icon: Amazon,
         to: API_BASE_URL + "/oauth2/authorize/amazon?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
 ]
