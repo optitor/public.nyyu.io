@@ -50,43 +50,44 @@ const WalletBalance = () => {
     return (
         <>
             <DataRow>
-                <div className='task' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <Main>
-                        <p>Wallet Balance <span style={{marginLeft: 15}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} /></span></p>
-                    </Main>
-                </div>
-                <div className='threshold' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <Main>
-                        <p>{BalancesData[0].threshold}</p>
-                    </Main>
-                    <Toggle show={show}>
-                        {BalancesData.map((value, index) => {
-                            if(index === 0) return null;
-                            return <p key={index}>{value.threshold}</p>;
-                        })}
-                    </Toggle>
-                </div>
-                <div className='points' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <Main>
-                        <p>{BalancesData[0].points}</p>
-                    </Main>
-                    <Toggle show={show}>
-                        {BalancesData.map((value, index) => {
-                            if(index === 0) return null;
-                            return <p key={index}>{value.points}</p>;
-                        })}
-                    </Toggle>           
-                </div>
-                <div className='edit'>
-                    <Main>
-                        <p><span className='edit'><Icon icon="clarity:note-edit-line" onClick={openEditModal} /></span></p>
-                    </Main>
-                </div>
+                <Main>
+                    <UnitRow>
+                        <div className='task' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
+                            <p>Wallet Balance <span style={{marginLeft: 15}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} /></span></p>
+                        </div>
+                        <div className='threshold' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
+                            <p>{BalancesData[0].threshold}</p>
+                        </div>
+                        <div className='points' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
+                            <p>{BalancesData[0].points}</p>
+                        </div>
+                        <div className='edit'>
+                            <p><span className='edit'><Icon icon="clarity:note-edit-line" onClick={openEditModal} /></span></p>
+                        </div>
+                    </UnitRow>                    
+                </Main>
+                <Toggle show={show}>
+                    {BalancesData.map((value, index) => {
+                        if(index === 0) return null;
+                        return (
+                            <UnitRow>
+                                <div className='task'></div>
+                                <div className='threshold'>
+                                    <p key={index}>{value.threshold}</p>
+                                </div>
+                                <div className='points'>
+                                    <p key={index}>{value.points}</p>
+                                </div>
+                                <div className='edit'></div>
+                            </UnitRow>
+                        )
+                    })}
+                </Toggle>                
             </DataRow>
 
             <DataRowForMobile>
                 <div>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left' onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
                             <p>Ballance Wallet</p>
                         </div>
@@ -100,27 +101,27 @@ const WalletBalance = () => {
                                 <span><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} onClick={() => setShow(!show)} /></span>
                             </p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </div>
                 <ToggleForMobile show={show}>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Threshold</p>
                         </div>
                         <div className='right'>
                             <p style={{color: 'dimgray'}}>Points</p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                     {BalancesData.map((value, index) => {
                         return (
-                            <LayoutForMobile key={index}>
+                            <UnitRowForMobile key={index}>
                                 <div className='left'>
                                     <p style={{fontWeight: 400}}>{value.threshold}</p>
                                 </div>
                                 <div className='right'>
                                     <p style={{fontWeight: 400}}>{value.points}</p>
                                 </div>
-                            </LayoutForMobile>
+                            </UnitRowForMobile>
                         );
                     })}
                 </ToggleForMobile>
@@ -212,26 +213,11 @@ const DataRow = styled.div`
     min-height: 60px;
     border: 1px solid #464646;
     border-top: none;
-    display: flex;
-    justify-content: space-between;
     flex-flow: row wrap;
     svg {
         cursor: pointer;
     }
-
-    &>div.task {width: ${width.task}; padding-left: 16px}
-    &>div.threshold {width: ${width.threshold};}
-    &>div.points {width: ${width.points};}
-    &>div.edit {
-        width: ${width.edit};
-        display: flex;
-        justify-content: center;
-        p span {
-            font-size: 22px;
-            color: #23c865;
-        }
-    }
-
+    
     @media screen and (max-width: ${device['phone']}){
         display: none;
     }
@@ -240,8 +226,10 @@ const DataRow = styled.div`
 const Main = styled.div`
     height: 60px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
+    p {
+        padding: 10px 0!important;
+    }
 `;
 
 const Toggle = styled.div`
@@ -257,7 +245,23 @@ const Toggle = styled.div`
     }
 `;
 
-
+const UnitRow = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    &>div.task {width: ${width.task}; padding-left: 16px}
+    &>div.threshold {width: ${width.threshold};}
+    &>div.points {width: ${width.points};}
+    &>div.edit {
+        width: ${width.edit};
+        display: flex;
+        justify-content: center;
+        p span {
+            font-size: 22px;
+            color: #23c865;
+        }
+    }
+`;
 
 // For Mobile
 const DataRowForMobile = styled.div`
@@ -281,7 +285,7 @@ const ToggleForMobile = styled.div`
     }};
 `;
 
-const LayoutForMobile = styled.div`
+const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     &>div.left {
