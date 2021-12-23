@@ -34,7 +34,7 @@ const Menu = () => {
         },
         {
             label: "Learn",
-            url: "/learn",
+            url: "https://ndb.money/learn",
         },
         {
             label: "Contact Us",
