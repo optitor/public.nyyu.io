@@ -9,7 +9,6 @@ export const useSigninMutation = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN, {
         retry: 1,
         onCompleted: (data) => {
-            console.log("signin data", data)
             if (data.signin.status === "Failed") {
                 // do something
                 return
@@ -44,7 +43,6 @@ export const useSigninMutation = () => {
 export const useSignupMutation = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNUP, {
         onCompleted: (data) => {
-            console.log("signup data", data)
             navigate("/app/verify-email")
         },
     })
@@ -70,7 +68,6 @@ export const useSignupMutation = () => {
 export const useSignIn2FA = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
         onCompleted: (data) => {
-            console.log("2fa result", data)
             if (data.confirm2FA.status === "Failed") {
                 // do something
                 return
@@ -102,7 +99,6 @@ export const useSignIn2FA = () => {
 export const useForgotPassword = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.FORGOT_PASSWORD, {
         onCompleted: (data) => {
-            console.log("Forgot Password result", data)
             // if (data.forgotPassword.status === "Failed") {
             //   // do something
             //   return

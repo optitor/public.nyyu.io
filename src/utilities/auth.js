@@ -12,7 +12,6 @@ let inMemoryUserDefault = {
   name: null,
   email: null,
   tempToken: null,
-  isVerify: null,
 }
 
 let inMemoryUser = inMemoryUserDefault
@@ -54,7 +53,6 @@ export const logout = (callback) => {
 export const setAuthToken = (authToken) => {
   if (!isBrowser) return
   if (!authToken) {
-    console.log("[setAuthToken]", `Auth Token or Auth Expiration shouldn't be ${authToken}.`)
     return
   }
   localStorage.setItem(ACCESS_TOKEN, authToken)
@@ -90,7 +88,6 @@ export const getInMemoryAuthToken = () => {
 }
 
 export const getUser = () => {
-  console.log("isBrowser", isBrowser)
   if (!isBrowser) return inMemoryUserDefault
   try {
     inMemoryUser = JSON.parse(localStorage.getItem(USER_DATA))

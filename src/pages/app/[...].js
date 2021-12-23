@@ -24,7 +24,9 @@ const App = () => {
                         <PrivateRoute path="/profile" component={Profile} />
                         <SignIn path="signin" />
                         <SignUp path="signup" />
+                        <SignIn path="signin/:error" />
                         <VerifyEmail path="verify-email" />
+                        <VerifyEmail path="verify-email/:verified" />
                         <VerifyFailed path="verify-failed" />
                         <OneTimePassword path="onetime-pwd" />
                         <PasswordReset path="password-reset" />

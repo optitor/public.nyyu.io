@@ -145,7 +145,7 @@ const SingupPage = () => {
             <ul className="social-links">
                 {social_links.map((item, idx) => (
                     <li key={idx}>
-                        <a href={`${item.to}/signup`}>
+                        <a href={item.to}>
                             <img src={item.icon} alt="icon" />
                         </a>
                     </li>
