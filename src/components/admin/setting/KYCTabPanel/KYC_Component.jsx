@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
+import NumberFormat from 'react-number-format';
 import Modal from 'react-modal';
 import Select from 'react-select';
 import { device } from '../../../../utilities/device';
@@ -65,11 +66,14 @@ const KYCComponent = ({icon, topic, content}) => {
                         </div>  
                         <div className='input'>
                             <p className={requirement.item.value === 'not_required'? 'disabled': ''} style={{fontSize: 12}}>Threshold</p>
-                            <input className={`black_input ${requirement.item.value === 'not_required'? 'disabled': ''}`}
+                            <NumberFormat className={`black_input ${requirement.item.value === 'not_required'? 'disabled': ''}`}
                                 disabled={requirement.item.value === 'not_required'? true: false}
+                                placeholder='Enter number'
+                                thousandSeparator={true}
+                                allowNegative={false}
                             />
                         </div>  
-                    </div>                                    
+                    </div>
                     <div className="pwd-modal__footer mt-4">
                         <button
                             className="btn previous"

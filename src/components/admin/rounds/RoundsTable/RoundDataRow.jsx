@@ -42,7 +42,7 @@ const RoundDataRow = ({datum}) => {
             </DataRow>
             <DataRowForMobile>
                 <div onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>{datum.round_id}</p>
                             <p style={{color: 'dimgrey'}}>Voltapancake</p>
@@ -55,41 +55,41 @@ const RoundDataRow = ({datum}) => {
                                 {show? <span><Icon icon="ant-design:caret-up-filled" /></span>: <span><Icon icon="ant-design:caret-down-filled" /></span>}
                             </p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </div>
                 <ToggleForMobile show={show}>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p>Time</p>
                         </div>
                         <div className='right'>
                             <p>{datum.time}</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p>Amount</p>
                         </div>
                         <div className='right'>
                             <p>{datum.amount}</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p>Total</p>
                         </div>
                         <div className='right'>
                             <p>30 000 $</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p>Per Token</p>
                         </div>
                         <div className='right'>
                             <p>{datum.avg_price}</p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </ToggleForMobile>
             </DataRowForMobile>
         </>
@@ -108,6 +108,7 @@ const DataRow = styled.div`
     svg {
         cursor: pointer;
     }
+
 
     &>div.round {width: ${width.round}; padding-left: 16px;}
     &>div.time {width: ${width.time};}
@@ -148,7 +149,7 @@ const ToggleForMobile = styled.div`
     }};
 `;
 
-const LayoutForMobile = styled.div`
+const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     &>div.left {

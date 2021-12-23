@@ -24,37 +24,48 @@ const SocailDataRow = ({datum}) => {
                         <p>API Secret</p>
                     </Main>
                 </div>
+                <div className='edit'>
+                    <Main>
+                        <p><span><Icon icon="clarity:note-edit-line" /></span></p>
+                    </Main>
+                </div>
             </DataRow>
             <DataRowForMobile>
                 <div onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.social}</p>
                         </div>
                         <div className='right'>
                             <p style={{fontSize: 16}}>
-                                {show? <span><Icon icon="ant-design:caret-up-filled" /></span>: <span><Icon icon="ant-design:caret-down-filled" /></span>}
+                                <span><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} /></span>
                             </p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </div>
                 <ToggleForMobile show={show}>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Key</p>
                         </div>
                         <div className='right'>
                             <p>API Key</p>
                         </div>
-                    </LayoutForMobile>
-                    <LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Secret</p>
                         </div>
                         <div className='right'>
                             <p>API Secret</p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
+                        <div className='left'></div>
+                        <div className='right'>
+                            <p><span className='edit'><Icon icon="clarity:note-edit-line" /></span></p>
+                        </div>
+                    </UnitRowForMobile>
                 </ToggleForMobile>
             </DataRowForMobile>
         </>
@@ -76,7 +87,15 @@ const DataRow = styled.div`
 
     &>div.social {width: ${width.social}; padding-left: 16px;}
     &>div.key {width: ${width.key};}
-    &>div.secret {width: ${width.secret};}  
+    &>div.secret {width: ${width.secret};}
+    &>div.edit {
+        width: ${width.edit};
+
+        p span {
+            color: #23c865;
+            font-size: 22px;
+        }
+    }
 
     @media screen and (max-width: ${device['phone']}){
         display: none;
@@ -111,15 +130,19 @@ const ToggleForMobile = styled.div`
     }};
 `;
 
-const LayoutForMobile = styled.div`
+const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     &>div.left {
-        width: 60%;
+        width: 70%;
     }
     &>div.right {
         p {
-            text-align: right;            
+            text-align: right;   
+            span.edit {
+                color: #23c865;
+                font-size: 22px;
+            }
         }
     }
 `;

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Link, navigate } from "gatsby"
 import validator from "validator"
-import { social_links } from "../../utilities/staticData"
+import { passwordValidatorOptions, social_links } from "../../utilities/staticData"
 import { FormInput } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
 import { useSigninMutation } from "../../apollo/network/auth"
@@ -35,8 +35,10 @@ const Signin = () => {
             setEmailError("Invalid email address")
             error = true
         }
-        if (!pwd || pwd.length < 6) {
-            setPwdError("Password length must be at least 6")
+        if (!pwd || !validator.isStrongPassword(pwd, passwordValidatorOptions)) {
+            setPwdError(
+                "Password must contain at least 8 characters, including UPPER/lowercase and numbers!"
+            )
             error = true
         }
 

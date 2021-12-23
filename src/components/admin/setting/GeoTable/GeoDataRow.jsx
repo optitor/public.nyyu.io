@@ -22,26 +22,26 @@ const GeoDataRow = ({datum}) => {
             </DataRow>
             <DataRowForMobile>
                 <div onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.country}</p>
                         </div>
                         <div className='right'>
                             <p style={{fontSize: 16}}>
-                                {show? <span><Icon icon="ant-design:caret-up-filled" /></span>: <span><Icon icon="ant-design:caret-down-filled" /></span>}
+                                <span><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} /></span>
                             </p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </div>
                 <ToggleForMobile show={show}>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Note</p>
                         </div>
                         <div className='right'>
                             <p>Not allowed because ...</p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </ToggleForMobile>
             </DataRowForMobile>
         </>
@@ -97,7 +97,7 @@ const ToggleForMobile = styled.div`
     }};
 `;
 
-const LayoutForMobile = styled.div`
+const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     &>div.left {

@@ -9,4 +9,9 @@ exports.onCreatePage = async ({ page, actions }) => {
         // Update the page.
         createPage(page)
     }
+    else if (page.path.match(/^\/oauth2/)) {
+        page.matchPath = "/oauth2/*"
+        // Update the page.
+        createPage(page)
+    }
 }
