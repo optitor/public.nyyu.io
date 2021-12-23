@@ -132,40 +132,36 @@ const Profile = () => {
                                                 </div>
                                             </p>
                                             <div className="main-content">
-                                                <div className="d-flex align-items-end justify-content-start">
-                                                    <h3 className="random-display mb-0 fw-bold me-4">
-                                                        {randomName}.
-                                                    </h3>
-                                                    <div className="random-generate">
-                                                        <p className="form-label">
-                                                            Your display name
-                                                        </p>
-                                                        <input
-                                                            className="form-control"
-                                                            type="text"
-                                                            value={randomName}
-                                                            onChange={(e) =>
-                                                                setRandomName(e.target.value)
-                                                            }
-                                                        />
+                                                <div className="d-flex align-items-end flex-column">
+                                                    <div className="d-flex align-items-end justify-content-start">
+                                                        <h3 className="random-display mb-0 fw-bold me-4">
+                                                            {randomName}.
+                                                        </h3>
+                                                        <div className="random-generate">
+                                                            <p className="form-label">
+                                                                Your display name
+                                                            </p>
+                                                            <input
+                                                                className="form-control"
+                                                                type="text"
+                                                                value={randomName}
+                                                                onChange={(e) =>
+                                                                    setRandomName(e.target.value)
+                                                                }
+                                                            />
+                                                        </div>
                                                     </div>
+                                                    <p
+                                                        className="random-text"
+                                                        onClick={() =>
+                                                            setRandomName(
+                                                                names.random().substring(0, 7)
+                                                            )
+                                                        }
+                                                    >
+                                                        Random generate
+                                                    </p>
                                                 </div>
-                                                <p
-                                                    className="random-text"
-                                                    onClick={() =>
-                                                        setRandomName(
-                                                            names.random().substring(0, 7)
-                                                        )
-                                                    }
-                                                    onKeyDown={() =>
-                                                        setRandomName(
-                                                            names.random().substring(0, 7)
-                                                        )
-                                                    }
-                                                    role="presentation"
-                                                >
-                                                    Random generate
-                                                </p>
                                             </div>
                                         </>
                                     )}
