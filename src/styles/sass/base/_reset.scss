@@ -34,3 +34,7 @@ $enable-negative-margins: true;
         box-shadow: none !important;
     }
 }
+
+.form-control {
+    background-clip: unset !important;
+}
