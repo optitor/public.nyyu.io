@@ -114,6 +114,7 @@
         }
         &-invite-btn {
             font-size: 30px;
+            line-height: 40px;
             font-variant: small-caps;
             font-weight: bold;
             background-color: $green;
@@ -126,7 +127,7 @@
             cursor: pointer;
             margin-top: 45px;
             padding: 5px 64px;
-            padding-top: 3px;
+            padding-top: 2px;
         }
     }
     &__footer {
