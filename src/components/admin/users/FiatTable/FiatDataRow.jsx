@@ -42,7 +42,7 @@ const FiatDataRow = ({datum}) => {
             </DataRow>
             <DataRowForMobile>
                 <div onClick={() => setShow(!show)} onKeyDown={() => setShow(!show)} aria-hidden="true">
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.name}</p>
                             <p style={{color: 'dimgrey'}}>{datum.avatar}</p>
@@ -61,17 +61,17 @@ const FiatDataRow = ({datum}) => {
                                 {show? <span><Icon icon="ant-design:caret-up-filled" /></span>: <span><Icon icon="ant-design:caret-down-filled" /></span>}
                             </p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </div>
                 <ToggleForMobile show={show}>
-                    <LayoutForMobile>
+                    <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>Payment ID</p>
                         </div>
                         <div className='right'>
                             <p>1234567</p>
                         </div>
-                    </LayoutForMobile>
+                    </UnitRowForMobile>
                 </ToggleForMobile>
             </DataRowForMobile>            
         </>
@@ -149,7 +149,7 @@ const ToggleForMobile = styled.div`
     }};
 `;
 
-const LayoutForMobile = styled.div`
+const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     &>div.left {

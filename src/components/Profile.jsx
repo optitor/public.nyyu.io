@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from "react"
+import React, { useReducer, useState } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link, navigate } from "gatsby"
@@ -6,8 +6,6 @@ import Switch from "react-switch"
 import Select from "react-select"
 import Modal from "react-modal"
 import { useQuery } from "@apollo/client"
-import { FormInput } from "../components/common/FormControl"
-// import { getInMemoryAuthToken } from "../utilities/auth"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
 import { logout } from "../utilities/auth"
 import {
@@ -19,6 +17,7 @@ import {
     CloseIcon,
     Bronze,
 } from "../utilities/imgImport"
+import ProfileChangePasswordModal from "./profile/change-password-modal"
 
 const recent = [
     {
@@ -89,8 +88,7 @@ const wallets = [
 
 const Profile = () => {
     const { loading, data } = useQuery(GET_USER)
-
-    console.log("GET USER", loading, data)
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         bid_rank: true,
@@ -112,9 +110,6 @@ const Profile = () => {
         round_finish,
         bid_close,
         payment_result,
-        pwd,
-        pwd_confirm,
-        pwdModal,
         tfaModal,
         tabIndex,
         profile_tab,
@@ -126,23 +121,6 @@ const Profile = () => {
         setState({ tabIndex: value.index })
     }
 
-    const handlePasswordChange = useCallback((e) => {
-        setState({
-            pwd: {
-                value: e.target.value,
-                error: e.target.value.length >= 6 ? "" : "Password length must be at least 6",
-            },
-        })
-    }, [])
-    const handlePwdConfirmChange = useCallback((e) => {
-        setState({
-            pwd_confirm: {
-                value: e.target.value,
-                error: e.target.value.length >= 6 ? "" : "Password length must be at least 6",
-            },
-        })
-    }, [])
-
     const signOut = () => {
         logout(() => {
             navigate("/")
@@ -151,9 +129,8 @@ const Profile = () => {
 
     const getSecurityStatus = (key) => {
         try {
-            return data.getUser.userSecurity.find(f => f.key === key).value
-        } catch (e) {
-        }
+            return data.getUser.userSecurity.find((f) => f.key === key).value
+        } catch (e) {}
     }
 
     return (
@@ -229,7 +206,7 @@ const Profile = () => {
                                                         <button
                                                             className="btn-primary"
                                                             onClick={() =>
-                                                                setState({ pwdModal: true })
+                                                                setIsPasswordModalOpen(true)
                                                             }
                                                         >
                                                             Change Password
@@ -237,22 +214,26 @@ const Profile = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="d-flex justify-content-center mt-3">
-                                                <button
-                                                    className="btn-primary btn-pwd"
-                                                    onClick={() => setState({ pwdModal: true })}
-                                                >
-                                                    Change Pasword
-                                                </button>
-                                            </div>
                                             <div className="account-security">
                                                 <h4>
                                                     Increase your account security&nbsp;
-                                                    <span className="txt-green">{data && data.getUser.userSecurity.filter(s => s.value).length}</span>/4
+                                                    <span className="txt-green">
+                                                        {data &&
+                                                            data.getUser.userSecurity.filter(
+                                                                (s) => s.value
+                                                            ).length}
+                                                    </span>
+                                                    /4
                                                 </h4>
                                                 <div className="row w-100 mx-auto">
                                                     <div className="col-sm-6 br">
-                                                        <div className={`status ${getSecurityStatus("2FA") ? "active" : "deactive"}`}></div>
+                                                        <div
+                                                            className={`status ${
+                                                                getSecurityStatus("2FA")
+                                                                    ? "active"
+                                                                    : "deactive"
+                                                            }`}
+                                                        ></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 Enable 2FA
@@ -273,7 +254,13 @@ const Profile = () => {
                                                     </div>
 
                                                     <div className="col-sm-6">
-                                                        <div className={`status ${getSecurityStatus("KYC") ? "active" : "deactive"}`}></div>
+                                                        <div
+                                                            className={`status ${
+                                                                getSecurityStatus("KYC")
+                                                                    ? "active"
+                                                                    : "deactive"
+                                                            }`}
+                                                        ></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 KYC Identity Verificatoin less than
@@ -286,7 +273,13 @@ const Profile = () => {
                                                     </div>
 
                                                     <div className="col-sm-6 br">
-                                                        <div className={`status ${getSecurityStatus("mobile") ? "active" : "deactive"}`}></div>
+                                                        <div
+                                                            className={`status ${
+                                                                getSecurityStatus("mobile")
+                                                                    ? "active"
+                                                                    : "deactive"
+                                                            }`}
+                                                        ></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 Mobile Verification
@@ -298,7 +291,13 @@ const Profile = () => {
                                                     </div>
 
                                                     <div className="col-sm-6">
-                                                        <div className={`status ${getSecurityStatus("AML") ? "active" : "deactive"}`}></div>
+                                                        <div
+                                                            className={`status ${
+                                                                getSecurityStatus("AML")
+                                                                    ? "active"
+                                                                    : "deactive"
+                                                            }`}
+                                                        ></div>
                                                         <div className="security-item">
                                                             <p className="security-name">
                                                                 AML Identity Verificatoin more than
@@ -513,56 +512,10 @@ const Profile = () => {
                     </div>
                 </div>
             </section>
-            <Modal
-                isOpen={pwdModal}
-                onRequestClose={() => setState({ pwdModal: false })}
-                ariaHideApp={false}
-                className="pwd-modal"
-                overlayClassName="pwd-modal__overlay"
-            >
-                <div className="pwd-modal__header">
-                    Change your password
-                    <div
-                        onClick={() => setState({ pwdModal: false })}
-                        onKeyDown={() => setState({ pwdModal: false })}
-                        role="button"
-                        tabIndex="0"
-                    >
-                        <img width="14px" height="14px" src={CloseIcon} alt="close" />
-                    </div>
-                </div>
-                <form className="form" onSubmit={(e) => e.preventDefault()}>
-                    <FormInput
-                        name="password"
-                        type="password"
-                        label="New Password"
-                        value={pwd.value}
-                        onChange={handlePasswordChange}
-                        placeholder="Enter password"
-                        error={pwd.error}
-                    />
-                    <FormInput
-                        name="pwd_confirm"
-                        type="password"
-                        label="Confirm New Password"
-                        value={pwd_confirm.value}
-                        onChange={handlePwdConfirmChange}
-                        placeholder="Re-enter password"
-                        error={pwd_confirm.error}
-                    />
-                    <div className="pwd-modal__footer">
-                        <button type="submit" className="btn-primary">
-                            SAVE
-                        </button>
-                        <button
-                            className="btn-cancel"
-                            onClick={() => setState({ pwdModal: false })}
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </Modal>
+            <ProfileChangePasswordModal
+                isPasswordModalOpen={isPasswordModalOpen}
+                setIsPasswordModalOpen={setIsPasswordModalOpen}
+            />
             <Modal
                 isOpen={tfaModal}
                 onRequestClose={() => setState({ tfaModal: false })}

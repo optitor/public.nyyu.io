@@ -102,7 +102,6 @@ main.admin-setting-page {
                     p {
                         font-size: 18px;
                         font-weight: 700;
-                        padding: 0 5px;
                         color: white;
                         text-transform: uppercase;
                         @include mq("laptop-wide", max) {
