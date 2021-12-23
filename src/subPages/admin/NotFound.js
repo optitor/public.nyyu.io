@@ -21,9 +21,11 @@ const NotFoundDiv = styled.div`
     margin-top: 30vh;
     text-align: center;
     h3 {
+        padding: 5px;
         margin-bottom: 10px
     }
     p {
+        padding: 5px;
         margin-bottom: 20px;
         span {
             font-size: 25px;
