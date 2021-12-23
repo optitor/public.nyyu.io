@@ -13,6 +13,7 @@ const PasswordReset = lazy(() => import("../../components/auth/password-reset"))
 const NewPassword = lazy(() => import("../../components/auth/new-password"))
 const VerifyID = lazy(() => import("../../components/auth/verify-id"))
 const VerifyCompany = lazy(() => import("../../components/auth/verify-company"))
+const Auction = lazy(() => import("../../components/auction"))
 
 const App = () => {
     const isSSR = typeof window === "undefined"
@@ -31,6 +32,7 @@ const App = () => {
                         <NewPassword path="new-password" />
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
+                        <Auction path="auction" />
                     </Router>
                 </Suspense>
             )}

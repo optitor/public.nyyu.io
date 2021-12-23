@@ -30,7 +30,9 @@ const IndexPage = () => {
                                 </div>
                                 <p className="token-left text-uppercase mt-4">Token Left</p>
                                 <p className="token-value">{numberWithCommas(604800, " ")}</p>
-                                <button className="btn btn-green">Place a bid</button>
+                                <Link className="btn btn-green" to="/app/auction">
+                                    Place a bid
+                                </Link>
                                 <br />
                                 <Link to="/" className="learn-more">
                                     Learn more

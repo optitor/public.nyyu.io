@@ -1,13 +1,17 @@
 import React, { useReducer, useEffect } from "react"
-import Header from "../components/common/header"
+import { navigate } from "gatsby"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
 import Modal from "react-modal"
 import ReactECharts from "echarts-for-react"
-import { getSecTomorrow, numberWithLength } from "../utilities/number"
+import Header from "../components/common/header"
+import { useQuery, useMutation } from "@apollo/client"
+import { getSecTomorrow, numberWithCommas, numberWithLength } from "../utilities/number"
 import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
+import { GET_AUCTION_BY_NUMBER } from "../apollo/graghqls/querys/Auction"
+import { PLACE_BID } from "../apollo/graghqls/mutations/Bid"
 
 const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -64,8 +68,8 @@ const Auction = () => {
             minutes: 0,
             seconds: 0,
         },
-        amount: "",
-        price: "",
+        amount: 1,
+        price: 1,
         total: "",
         place_bid: false,
         bidModal: false,
@@ -122,6 +126,17 @@ const Auction = () => {
         bidChartData,
     } = state
 
+    const { data, loading, error } = useQuery(GET_AUCTION_BY_NUMBER, {
+        variables: { round: 1 },
+    })
+
+    const [PlaceBid] = useMutation(PLACE_BID, {
+        onCompleted: (data) => {
+            console.log("received Mutation data", data)
+        },
+    })
+
+    console.log("data round:", data, loading, error)
     useEffect(() => {
         const id = setInterval(() => {
             setState({
@@ -271,9 +286,9 @@ const Auction = () => {
                                 <Slider
                                     value={amount}
                                     onChange={(value) => setState({ amount: value })}
-                                    min={0}
-                                    max={10000}
-                                    step={100}
+                                    min={1}
+                                    max={1000}
+                                    step={1}
                                 />
                             </div>
                             <h3 className="range-label">Per token price</h3>
@@ -296,8 +311,8 @@ const Auction = () => {
                                 <span className="range-label">Total price</span>
                                 <input
                                     className="total-input"
-                                    type="number"
-                                    value={price * amount}
+                                    type="text"
+                                    value={numberWithCommas(price * amount, " ")}
                                     readOnly
                                 />
                             </div>
@@ -305,6 +320,16 @@ const Auction = () => {
                                 className="btn-primary text-uppercase w-100"
                                 onClick={() => {
                                     setState({ place_bid: true })
+                                    // navigate("/payment")
+                                    PlaceBid({
+                                        variables: {
+                                            roundId: "0e0b42a4-e433-49b6-ae5b-d5e0a8e07204",
+                                            tokenAmount: 1,
+                                            tokenPrice: 1,
+                                            payment: 1,
+                                            cryptoType: "String",
+                                        },
+                                    })
                                 }}
                             >
                                 {!place_bid ? "Place Bid" : "Increase Bid"}
@@ -432,6 +457,7 @@ const Auction = () => {
                             setState({ total: price * amount })
                             setState({ bidModal: false })
                             setState({ place_bid: true })
+                            // navigate("/payment")
                         }}
                     >
                         {!place_bid ? "Place Bid" : "Increase Bid"}

@@ -110,6 +110,8 @@
                         @include mq("phone", max) {
                             font-size: 14px;
                             line-height: 17px;
+                            width: 33.33%;
+                            text-align: center;
                         }
                         &--selected {
                             background: none;
