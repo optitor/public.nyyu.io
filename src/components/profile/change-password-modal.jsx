@@ -20,8 +20,8 @@ export default function ProfileChangePasswordModal({
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
     const [changePasswordMutation, changePasswordResults] = useChangePassword()
     const pending = changePasswordResults.loading
-    const webserviceError = changePasswordResults?.data?.changePassword == "Failed"
-    const successfullRequest = changePasswordResults?.data?.changePassword == "Success"
+    const webserviceError = changePasswordResults?.data?.changePassword === "Failed"
+    const successfullRequest = changePasswordResults?.data?.changePassword === "Success"
     // Methods
     const changeUserPassword = (e) => {
         e.preventDefault()
@@ -43,7 +43,7 @@ export default function ProfileChangePasswordModal({
             )
             error = true
         }
-        if (confirmPassword != password) {
+        if (confirmPassword !== password) {
             setConfirmPasswordError("Password does not match its repeate!")
             error = true
         }

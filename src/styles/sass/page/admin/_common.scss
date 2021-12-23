@@ -11,7 +11,7 @@ a:hover {
     color: $green;
 }
 
-nav.MuiPagination-root{
+nav.MuiPagination-root {
     display: flex;
     justify-content: end;
 
@@ -25,16 +25,16 @@ nav.MuiPagination-root{
         color: #ffffff;
         &:hover {
             background-color: #23c86573;
-            @include mq('phone', max) {
-                background-color: transparent;                      
-            } 
+            @include mq("phone", max) {
+                background-color: transparent;
+            }
         }
     }
     button.Mui-selected {
-        background-color: $green;            
+        background-color: $green;
         &:hover {
-            background-color: $green;           
-        }   
+            background-color: $green;
+        }
     }
     div.MuiPaginationItem-root {
         color: #ffffff;
@@ -53,26 +53,26 @@ div.MuiFormControl-root {
             color: white;
         }
         .MuiOutlinedInput-notchedOutline {
-            border-color: transparent!important;
+            border-color: transparent !important;
         }
-    }    
+    }
 }
 
 div.MuiPaper-root {
     padding: 5px 0;
     span.MuiTypography-caption {
-        color: black!important;
+        color: black !important;
     }
 }
 
 .MuiAlert-standardError {
-    background: transparent!important;
+    background: transparent !important;
     .MuiAlert-message {
         color: #e17070;
-    }    
+    }
 }
 .MuiAlert-standardSuccess {
-    background: transparent!important;
+    background: transparent !important;
     .MuiAlert-message {
         color: #3bc545;
     }
@@ -110,11 +110,14 @@ input.white_input {
     width: 100%;
 }
 
-p.error, svg.error {
-    color: #e17070!important;
+p.error,
+svg.error {
+    color: #e17070 !important;
 }
 
-input.error, div.error, textarea.error {
+input.error,
+div.error,
+textarea.error {
     border: 1px solid #e17070;
 }
 
@@ -123,7 +126,7 @@ p.disabled {
 }
 
 input.disabled {
-    border: 1px solid dimgray!important;
+    border: 1px solid dimgray !important;
 }
 
 .previous {
@@ -160,11 +163,11 @@ input.disabled {
         p {
             font-size: 20px;
             font-weight: 500;
-            @include mq('phone', max) {
+            @include mq("phone", max) {
                 font-size: 14px;
             }
-        }        
-        @include mq('phone', max) {
+        }
+        @include mq("phone", max) {
             margin-bottom: 20px;
         }
     }
@@ -172,7 +175,7 @@ input.disabled {
         p {
             color: lightgray;
             margin-bottom: 1px;
-        }        
+        }
         div.description {
             text-align: center;
         }
@@ -180,15 +183,15 @@ input.disabled {
             width: 60%;
             margin: auto;
         }
-        @include mq('phone', max) {
+        @include mq("phone", max) {
             div.description {
                 text-align: left;
             }
             div.input {
                 width: 100%;
-            }            
+            }
         }
-    }    
+    }
     .pwd-modal__footer {
         display: flex;
         flex-direction: row;
@@ -196,7 +199,6 @@ input.disabled {
         align-items: center;
     }
 }
-
 
 .kyc-aml-modal {
     max-width: 1000px;
@@ -263,7 +265,7 @@ input.disabled {
         p {
             font-size: 20px;
             font-weight: 500;
-            @include mq('phone', max) {
+            @include mq("phone", max) {
                 font-size: 14px;
             }
         }
@@ -285,9 +287,9 @@ input.disabled {
         margin: auto;
         display: flex;
         margin-bottom: 7px;
-        &>div>input {
+        & > div > input {
             width: 95%;
-        } 
+        }
         div.input_div {
             width: 48%;
         }

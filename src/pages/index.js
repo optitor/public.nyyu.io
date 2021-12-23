@@ -1,5 +1,5 @@
-import React from "react"
-import { Link, navigate } from "gatsby"
+import React, { useState } from "react"
+import { navigate } from "gatsby"
 
 import Seo from "../components/seo"
 import { Hero2 } from "../utilities/imgImport"
@@ -7,8 +7,10 @@ import CountDown from "../components/common/countdown"
 import Header from "../components/common/header"
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
+import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 
 const IndexPage = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const auth = useAuth()
     const placeABidButtonClick = () =>
         auth?.isLoggedIn() ? navigate("/payment") : navigate("/app/signin")
@@ -22,6 +24,7 @@ const IndexPage = () => {
             <Seo title="Home" />
             <main className="home-page">
                 <Header />
+                <ReferToFriendsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
                 <section className="home-section">
                     <div className="container h-100 d-flex  flex-column justify-content-center">
                         <div className="row">
@@ -38,9 +41,9 @@ const IndexPage = () => {
                                     Place a bid
                                 </button>
                                 <br />
-                                <Link to="/" className="learn-more">
-                                    Learn more
-                                </Link>
+                                <div className="learn-more" onClick={() => setIsModalOpen(true)}>
+                                    Refer to friends
+                                </div>
                             </div>
                             <div className="col-md-1"></div>
                             <div className="right-part col-md-5">

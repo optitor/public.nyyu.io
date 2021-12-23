@@ -67,7 +67,7 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             {selectedFacialStyleItem?.isolatedIcon && (
                                 <img
                                     src={selectedFacialStyleItem.isolatedIcon}
-                                    className="isolated-icons"
+                                    className="isolated-icons facial-style-icons"
                                     alt="Isolated Icon"
                                     style={{
                                         left: selectedFacialStyleItem.iconLeft,
@@ -78,7 +78,7 @@ export default function DressupModal({ isDressUPModalOpen, setIsDressUPModalOpen
                             {selectedExpressionItem?.isolatedIcon && (
                                 <img
                                     src={selectedExpressionItem.isolatedIcon}
-                                    className="isolated-icons"
+                                    className="isolated-icons expression-icons"
                                     alt="Isolated Icon"
                                     style={{
                                         left: selectedExpressionItem.iconLeft,
