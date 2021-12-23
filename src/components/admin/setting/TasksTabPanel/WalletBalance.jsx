@@ -70,7 +70,7 @@ const WalletBalance = () => {
                     {BalancesData.map((value, index) => {
                         if(index === 0) return null;
                         return (
-                            <UnitRow>
+                            <UnitRow key={index}>
                                 <div className='task'></div>
                                 <div className='threshold'>
                                     <p key={index}>{value.threshold}</p>
@@ -226,9 +226,6 @@ const Main = styled.div`
     height: 60px;
     display: flex;
     justify-content: center;
-    p {
-        padding: 10px 0!important;
-    }
 `;
 
 const Toggle = styled.div`
