@@ -11,12 +11,13 @@ const Profile = () => {
     const [selectedId, setSelectId] = useState(0)
     const [selected, setSelect] = useState(false)
     const [searchValue, setSearchValue] = useState("")
-    const [randomName, setRandomName] = useState("Tesla")
+    const [randomName, setRandomName] = useState(figures[selectedId].lastname)
     const [modalIsOpen, setIsOpen] = useState(false)
 
     const handleFigure = (id) => {
         setSelectId(id)
         setIsOpen(true)
+        setRandomName(figures[selectedId].lastname)
     }
     const closeModal = () => {
         setIsOpen(false)
