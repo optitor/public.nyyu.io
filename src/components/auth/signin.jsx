@@ -10,7 +10,7 @@ import CustomSpinner from "../common/custom-spinner"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 
-const Signin = () => {
+const Signin = (props) => {
     // Auth Check
     const auth = useAuth()
     if (auth?.isLoggedIn()) navigate("/app/profile")
@@ -46,7 +46,7 @@ const Signin = () => {
     }
 
     const pending = signinMutationResults?.loading
-    const webserviceError = signinMutationResults?.data?.signin.status === "Failed"
+    const webserviceError = signinMutationResults?.data?.signin.status === "Failed"  
 
     return (
         <AuthLayout>
@@ -97,6 +97,14 @@ const Signin = () => {
                         {signinMutationResults?.data?.signin.token}
                     </span>
                 )}
+                {props.error && props.error.split(".")[0] === "InvalidProvider" && (
+                    <span className="errorsapn">
+                        <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                        Your are already signed up with 
+                        <span className='text-uppercase errorsapn'>{props.error.split(".")[1]}</span>. 
+                        Please use it.
+                    </span>
+                )}
                 <button
                     type="submit"
                     className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
@@ -112,7 +120,7 @@ const Signin = () => {
             <ul className="social-links">
                 {social_links.map((item, idx) => (
                     <li key={idx}>
-                        <a href={`${item.to}/signin`}>
+                        <a href={item.to}>
                             <img src={item.icon} alt="icon" />
                         </a>
                     </li>

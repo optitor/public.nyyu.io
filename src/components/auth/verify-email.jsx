@@ -22,26 +22,16 @@ const two_factors = [
     { label: "Email", method: "email" },
 ]
 
-const VerifyEmail = () => {
+const VerifyEmail = (props) => {
     const user = getUser()
 
     useEffect(() => {
-        console.log("verify_email user", user)
         if (!user?.email) navigate("/app/signup")
     }, [user])
 
-    const getVerify = () => {
-        const temp = user?.isVerify
-        setUser({
-            ...getUser(),
-            isVerify: null
-        })
-        return temp;
-    }
-
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         code: "",
-        tfaModal: getVerify(),
+        tfaModal: props.verified,
         result_code: "",
         choose_type: 0,
         set_type: -1,
@@ -76,7 +66,6 @@ const VerifyEmail = () => {
     })
     const [confirmRequest2FA] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
-            console.log("confirm2FA", data)
             if (data.confirmRequest2FA === "Failed") navigate("/app/verify-failed")
             else if (data.confirmRequest2FA === "Success") navigate("/app/signin")
         },
