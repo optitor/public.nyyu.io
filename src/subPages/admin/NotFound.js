@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Icon } from '@iconify/react';
 
 const NotFound = () => {
     const goBackHistory = () => {
@@ -8,9 +9,12 @@ const NotFound = () => {
 
     return (
         <NotFoundDiv>
-            <h3>404: Not Found</h3>
-            <p>Sorry. There is no page that you are looking for. <span>&#128543;</span></p>
-            <Button onClick={goBackHistory}>Go back</Button>
+            <h3>Something went wrong! &#128543;</h3>
+            <p>Looks like you've followed a broken link or entered a URL that doesn't exist on this site.</p>
+            <Button onClick={goBackHistory}>
+                <Icon icon="akar-icons:arrow-back-thick" />
+                Go back
+            </Button>
         </NotFoundDiv>
     )
 };
@@ -41,6 +45,10 @@ const Button = styled.button`
     height: 60px;
     font-size: 20px;
     font-weight: 600;
+    svg {
+        font-size: 28px;
+        margin-right: 10px;
+    }
     &:hover {
         border: 3px solid #23c865;
     }
