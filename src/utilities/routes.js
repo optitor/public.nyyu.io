@@ -1,5 +1,6 @@
 export const ROUTES = {
     signIn: "/app/signin",
-    signOut: "/app/signup",
-    selectFigure: "/select-figure"
+    signUp: "/app/signup",
+    selectFigure: "/select-figure",
+    verifyFailed: "/app/verify-failed",
 }

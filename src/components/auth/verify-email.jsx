@@ -11,10 +11,8 @@ import {
     REQUEST_2FA,
     CONFIRM_REQUEST_2FA,
 } from "../../apollo/graghqls/mutations/Auth"
-import { 
-    getUser,
-    setUser
-} from "../../utilities/auth"
+import { getUser, setUser } from "../../utilities/auth"
+import { ROUTES } from "../../utilities/routes"
 
 const two_factors = [
     { label: "Authenticator App", method: "app" },
@@ -66,8 +64,15 @@ const VerifyEmail = (props) => {
     })
     const [confirmRequest2FA] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
-            if (data.confirmRequest2FA === "Failed") navigate("/app/verify-failed")
-            else if (data.confirmRequest2FA === "Success") navigate("/app/signin")
+            if (data.confirmRequest2FA === "Failed") {
+                user.isVerify = false
+                setUser(user)
+                navigate(ROUTES.verifyFailed)
+            } else if (data.confirmRequest2FA === "Success") {
+                user.isVerify = true
+                setUser(user)
+                navigate(ROUTES.selectFigure)
+            }
         },
     })
     return (
