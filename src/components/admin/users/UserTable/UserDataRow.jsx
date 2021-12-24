@@ -9,6 +9,7 @@ const UserDataRow = ({datum}) => {
     const [show, setShow] = useState(false);
     const [showBtns, setShowBtns] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [email, setEmail] = useState(datum.email);
 
     return (
         <>
@@ -33,7 +34,9 @@ const UserDataRow = ({datum}) => {
                 </div>
                 <div className='password'>
                     <Main>
-                        <p>{datum.password} <span style={{fontSize: 18, marginLeft: 20}}><Icon icon="clarity:refresh-line" onClick={() => setModalIsOpen(true)}/></span></p>
+                        <p>
+                            {datum.password} <span style={{fontSize: 18, marginLeft: 20}}><Icon icon="clarity:refresh-line" onClick={() => {setEmail(datum.email); setModalIsOpen(true);}}/></span>
+                        </p>
                     </Main>
                     <Toggle show={show}>
                         <p>{datum.terms_signed}</p>
@@ -200,7 +203,7 @@ const UserDataRow = ({datum}) => {
                     </div>
                     <div className='input'>
                         <p className='mt-4' style={{fontSize: 12}}>Email</p>
-                        <input className='black_input' />
+                        <input className='black_input' value={email} onChange={e => setEmail(e.target.value)} />
                     </div>                  
                     <div className="pwd-modal__footer mt-5">
                         <button
