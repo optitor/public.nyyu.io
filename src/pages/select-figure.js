@@ -17,9 +17,9 @@ const SelectFigure = () => {
     //Authentication
     const user = getUser()
     useEffect(() => {
-        // if (user?.isVerify) setPending(false)
+        // if (user?.isVerify && user?.email) setPending(false)
         // navigate(ROUTES.signUp)
-    }, [user])
+    }, [])
     // Containers
     const [pending, setPending] = useState(false)
     const [selected, setSelect] = useState(false)
@@ -55,8 +55,8 @@ const SelectFigure = () => {
         e.preventDefault()
         setAvatar({
             variables: {
-                prefix: "",
-                name: "",
+                prefix: "Failla",
+                name: "Neo",
             },
         })
     }
@@ -220,7 +220,10 @@ const SelectFigure = () => {
                                     </div>
                                 </div>
                                 {selected ? (
-                                    <button className="btn-primary text-uppercase w-100 mt-3">
+                                    <button
+                                        className="btn-primary text-uppercase w-100 mt-3"
+                                        onClick={handleOnConfirmButtonClick}
+                                    >
                                         confirm
                                     </button>
                                 ) : (
@@ -325,13 +328,8 @@ const SelectFigure = () => {
                             )}
                         </div>
                     </div>
-                    {selected ? (
-                        <button
-                            className="btn-primary text-uppercase w-100 mt-3"
-                            onClick={handleOnConfirmButtonClick}
-                        >
-                            confirm
-                        </button>
+                    {/* {selected ? (
+                        <button className="btn-primary text-uppercase w-100 mt-3">confirm</button>
                     ) : (
                         <button
                             className="btn-primary text-uppercase w-100 mt-3"
@@ -339,7 +337,7 @@ const SelectFigure = () => {
                         >
                             select
                         </button>
-                    )}
+                    )} */}
                 </Modal>
             </main>
         )

@@ -2,6 +2,7 @@ import * as GraphQL from "../graghqls/mutations/Auth"
 import { useMutation } from "@apollo/client"
 import { navigate } from "gatsby"
 import { setAuthToken, getUser, setUser } from "../../utilities/auth"
+import { ROUTES } from "../../utilities/routes"
 
 // Sign In
 
@@ -77,7 +78,11 @@ export const useSignIn2FA = () => {
                     ...getUser(),
                     tempToken: null,
                 })
-                navigate("/app/profile")
+                const user = getUser()
+                if (user?.avatar)
+                    navigate(ROUTES.profile)
+                else
+                    navigate(ROUTES.selectFigure)
             }
         },
     })

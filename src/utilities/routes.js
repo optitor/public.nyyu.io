@@ -3,4 +3,5 @@ export const ROUTES = {
     signUp: "/app/signup",
     selectFigure: "/select-figure",
     verifyFailed: "/app/verify-failed",
+    profile: "/app/profile",
 }

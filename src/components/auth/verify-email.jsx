@@ -24,7 +24,7 @@ const VerifyEmail = (props) => {
     const user = getUser()
 
     useEffect(() => {
-        if (!user?.email) navigate("/app/signup")
+        if (!user?.email) navigate(ROUTES.signUp)
     }, [user])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -45,7 +45,7 @@ const VerifyEmail = (props) => {
 
     const [verifyAccount] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
-            if (data.verifyAccount === "Failed") navigate("/app/verify-failed")
+            if (data.verifyAccount === "Failed") navigate(ROUTES.verifyFailed)
             else if (data.verifyAccount === "Success") setState({ tfaModal: true })
         },
     })
@@ -71,7 +71,7 @@ const VerifyEmail = (props) => {
             } else if (data.confirmRequest2FA === "Success") {
                 user.isVerify = true
                 setUser(user)
-                navigate(ROUTES.selectFigure)
+                navigate(ROUTES.signIn)
             }
         },
     })

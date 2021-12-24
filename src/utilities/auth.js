@@ -108,7 +108,3 @@ export const getLoggedOutTime = () => {
   if (!isBrowser) return null
   return JSON.parse(localStorage.getItem(LOGGED_OUT_KEY))
 }
-
-
-
-
