@@ -10,30 +10,55 @@ import { getUser } from "../utilities/auth"
 import { navigate } from "gatsby"
 import Loading from "../components/common/Loading"
 import { ROUTES } from "../utilities/routes"
+import { SET_AVATAR } from "../apollo/graghqls/mutations/Auth"
+import { useMutation } from "@apollo/client"
 
 const SelectFigure = () => {
     //Authentication
     const user = getUser()
     useEffect(() => {
-        if (user?.isVerify) setPending(false)
-        navigate(ROUTES.signUp)
+        // if (user?.isVerify) setPending(false)
+        // navigate(ROUTES.signUp)
     }, [user])
     // Containers
-    const [pending, setPending] = useState(true)
+    const [pending, setPending] = useState(false)
     const [selected, setSelect] = useState(false)
     const [selectedId, setSelectId] = useState(0)
     const [modalIsOpen, setIsOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [randomName, setRandomName] = useState(figures[selectedId].lastname)
+    const [setAvatar] = useMutation(SET_AVATAR, {
+        onCompleted: (data) => {
+            console.log(data)
+            // if (data.confirmRequest2FA === "Failed") {
+            //     user.isVerify = false
+            //     setUser(user)
+            //     navigate(ROUTES.verifyFailed)
+            // } else if (data.confirmRequest2FA === "Success") {
+            //     user.isVerify = true
+            //     setUser(user)
+            //     navigate(ROUTES.selectFigure)
+            // }
+        },
+    })
     // Methods
     const handleFigure = (id) => {
         setSelectId(id)
         setIsOpen(true)
-        setRandomName(figures[selectedId].lastname)
+        setRandomName(figures[id].lastname)
     }
     const closeModal = () => {
         setIsOpen(false)
         setSelect(false)
+    }
+    const handleOnConfirmButtonClick = (e) => {
+        e.preventDefault()
+        setAvatar({
+            variables: {
+                prefix: "",
+                name: "",
+            },
+        })
     }
 
     if (pending) return <Loading />
@@ -301,7 +326,12 @@ const SelectFigure = () => {
                         </div>
                     </div>
                     {selected ? (
-                        <button className="btn-primary text-uppercase w-100 mt-3">confirm</button>
+                        <button
+                            className="btn-primary text-uppercase w-100 mt-3"
+                            onClick={handleOnConfirmButtonClick}
+                        >
+                            confirm
+                        </button>
                     ) : (
                         <button
                             className="btn-primary text-uppercase w-100 mt-3"
