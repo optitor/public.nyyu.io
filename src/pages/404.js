@@ -90,6 +90,6 @@ const Button = styled.button`
         margin-right: 10px;
     }
     &:hover {
-        border: 3px solid #23c865;
+        border: 2px solid #23c865;
     }
 `;
