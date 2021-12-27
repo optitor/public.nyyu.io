@@ -54,6 +54,12 @@ export const FORGOT_PASSWORD = gql`
   }
 `;
 
+export const SET_AVATAR = gql`
+  mutation setAvatar($prefix: String!, $name: String!) {
+    setAvatar(prefix: $prefix, name: $name)
+  }
+`;
+
 export const CHANGE_PASSWORD = gql`
   mutation changePassword($newPassword: String!) {
     changePassword(newPassword: $newPassword)

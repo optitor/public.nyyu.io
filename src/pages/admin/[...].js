@@ -10,7 +10,7 @@ const Setting = lazy(() => import("./../../subPages/admin/setting"));
 const CreateAuction = lazy(() => import("./../../subPages/admin/create/create-auction"));
 const CreateDirectPurchase = lazy(() => import("./../../subPages/admin/create/create-direct-purchase"));
 const CreateAvatar = lazy(() => import("./../../subPages/admin/create/create-avatar"));
-const NotFound = lazy(() => import("./../../subPages/admin/NotFound"));
+const NotFound = lazy(() => import("./../404"));
 
 const App = () => {
     const isSSR = typeof window === "undefined";

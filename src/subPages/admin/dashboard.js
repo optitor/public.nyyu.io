@@ -38,7 +38,7 @@ const IndexPage = () => {
                             <Icon icon="clarity:avatar-line" />
                             Avatar
                         </Link>
-                    </div>   
+                    </div> 
                 </LayoutWithMenu>
             </main>
         </>
