@@ -11,7 +11,7 @@ const App = () => {
             {!isSSR && (
                 <Suspense fallback={<Loading />}>
                     <Router basepath="oauth2">
-                        <Redirect path="redirect/:type/:data" />
+                        <Redirect path="redirect/:type/:dataType/:data" />
                     </Router>
                 </Suspense>
             )}
