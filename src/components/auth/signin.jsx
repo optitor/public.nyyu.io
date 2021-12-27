@@ -100,7 +100,7 @@ const Signin = (props) => {
                 {props.error && props.error.split(".")[0] === "InvalidProvider" && (
                     <span className="errorsapn">
                         <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                        Your are already signed up with 
+                        Your are already signed up with {" "}
                         <span className='text-uppercase errorsapn'>{props.error.split(".")[1]}</span>. 
                         Please use it.
                     </span>
