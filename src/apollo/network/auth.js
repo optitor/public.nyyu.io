@@ -65,7 +65,6 @@ export const useSignupMutation = () => {
 }
 
 // Signin with 2FA
-
 export const useSignIn2FA = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
         onCompleted: (data) => {

@@ -27,7 +27,7 @@ const SelectFigure = () => {
     const [modalIsOpen, setIsOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [randomName, setRandomName] = useState(figures[selectedId].lastname)
-    const [setAvatar] = useMutation(SET_AVATAR, {
+    const [setAvatar, { data, loading, error }] = useMutation(SET_AVATAR, {
         onCompleted: (data) => {
             console.log(data)
             // if (data.confirmRequest2FA === "Failed") {
