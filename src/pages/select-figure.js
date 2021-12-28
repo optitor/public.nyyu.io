@@ -6,7 +6,7 @@ import { figures } from "../utilities/staticData"
 import StarRatings from "react-star-ratings"
 import names from "random-names-generator"
 import Modal from "react-modal"
-import { getUser, setUser } from "../utilities/auth"
+import { setUser } from "../utilities/auth"
 import { navigate } from "gatsby"
 import Loading from "../components/common/Loading"
 import { ROUTES } from "../utilities/routes"
@@ -16,7 +16,6 @@ import { GET_USER } from "../apollo/graghqls/querys/Auth"
 
 const SelectFigure = () => {
     // Containers
-    const user = getUser()
     const [pending, setPending] = useState(true)
     const [selected, setSelect] = useState(false)
     const [selectedId, setSelectId] = useState(0)
@@ -54,6 +53,7 @@ const SelectFigure = () => {
     //Authentication
     useEffect(() => {
         const getUser = userData?.getUser
+        console.log(userData)
         if (getUser) {
             if (getUser?.avatar === null) return setPending(false)
             setUser(getUser)
