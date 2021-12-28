@@ -9,10 +9,11 @@ import {
 
 const OAuth2RedirectHandler = (props) => {
     
-    const type = props.type;
-    const data = props.data;
+    const type = props.type
+    const dataType = props.dataType
+    const data = props.data
 
-    if (type === "token") {
+    if (type === "success" && dataType === "token") {
        if (data) {
             setUser({
                 ...getUser(),
@@ -24,11 +25,15 @@ const OAuth2RedirectHandler = (props) => {
             navigate("/app/signin")
         }
     } else {
-        if (data === "No2FA") {
+        if (dataType === "No2FA") {
+            setUser({
+                ...getUser(),
+                email: data,
+            })
             navigate(`/app/verify-email/1`)
         }
         else {
-            navigate(`/app/signin/${data}`)
+            navigate(`/app/signin/${dataType}.${data}`)
         }
     }
 
