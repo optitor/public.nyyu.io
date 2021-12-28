@@ -1,5 +1,5 @@
 import * as GraphQL from "../graghqls/mutations/Auth"
-import { useMutation } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { navigate } from "gatsby"
 import { setAuthToken, getUser, setUser } from "../../utilities/auth"
 import { ROUTES } from "../../utilities/routes"
@@ -73,15 +73,8 @@ export const useSignIn2FA = () => {
                 return
             } else if (data.confirm2FA.status === "Success") {
                 setAuthToken(data.confirm2FA.token)
-                setUser({
-                    ...getUser(),
-                    tempToken: null,
-                })
-                const user = getUser()
-                if (user?.avatar)
-                    navigate(ROUTES.profile)
-                else
-                    navigate(ROUTES.selectFigure)
+                localStorage.removeItem("USER_DATA")
+                navigate(ROUTES.selectFigure)
             }
         },
     })

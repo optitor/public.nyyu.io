@@ -6,41 +6,32 @@ import { figures } from "../utilities/staticData"
 import StarRatings from "react-star-ratings"
 import names from "random-names-generator"
 import Modal from "react-modal"
-import { getUser } from "../utilities/auth"
+import { getUser, setUser } from "../utilities/auth"
 import { navigate } from "gatsby"
 import Loading from "../components/common/Loading"
 import { ROUTES } from "../utilities/routes"
 import { SET_AVATAR } from "../apollo/graghqls/mutations/Auth"
-import { useMutation } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
+import { GET_USER } from "../apollo/graghqls/querys/Auth"
 
 const SelectFigure = () => {
-    //Authentication
-    const user = getUser()
-    useEffect(() => {
-        // if (user?.isVerify && user?.email) setPending(false)
-        // navigate(ROUTES.signUp)
-    }, [])
     // Containers
-    const [pending, setPending] = useState(false)
+    const user = getUser()
+    const [pending, setPending] = useState(true)
     const [selected, setSelect] = useState(false)
     const [selectedId, setSelectId] = useState(0)
     const [modalIsOpen, setIsOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [randomName, setRandomName] = useState(figures[selectedId].lastname)
-    const [setAvatar, { data, loading, error }] = useMutation(SET_AVATAR, {
+
+    // Queries and Mutations
+    const { data: userData } = useQuery(GET_USER)
+    const [setAvatar] = useMutation(SET_AVATAR, {
         onCompleted: (data) => {
             console.log(data)
-            // if (data.confirmRequest2FA === "Failed") {
-            //     user.isVerify = false
-            //     setUser(user)
-            //     navigate(ROUTES.verifyFailed)
-            // } else if (data.confirmRequest2FA === "Success") {
-            //     user.isVerify = true
-            //     setUser(user)
-            //     navigate(ROUTES.selectFigure)
-            // }
         },
     })
+
     // Methods
     const handleFigure = (id) => {
         setSelectId(id)
@@ -55,11 +46,20 @@ const SelectFigure = () => {
         e.preventDefault()
         setAvatar({
             variables: {
-                prefix: "Failla",
+                prefix: "Tesla",
                 name: "Neo",
             },
         })
     }
+    //Authentication
+    useEffect(() => {
+        const getUser = userData?.getUser
+        if (getUser) {
+            if (getUser?.avatar === null) return setPending(false)
+            setUser(getUser)
+            return navigate(ROUTES.profile)
+        }
+    }, [userData])
 
     if (pending) return <Loading />
     else
