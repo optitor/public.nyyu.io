@@ -3,7 +3,7 @@ import { FormInput } from "../common/FormControl"
 import Modal from "react-modal"
 import { CloseIcon } from "../../utilities/imgImport"
 import { passwordValidatorOptions } from "../../utilities/staticData"
-import { useChangePassword } from "../../apollo/network/auth"
+import { useChangePassword } from "../../apollo/model/auth"
 import validator from "validator"
 import CustomSpinner from "../common/custom-spinner"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
@@ -20,8 +20,8 @@ export default function ProfileChangePasswordModal({
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
     const [changePasswordMutation, changePasswordResults] = useChangePassword()
     const pending = changePasswordResults.loading
-    const webserviceError = changePasswordResults?.data?.changePassword == "Failed"
-    const successfullRequest = changePasswordResults?.data?.changePassword == "Success"
+    const webserviceError = changePasswordResults?.data?.changePassword === "Failed"
+    const successfullRequest = changePasswordResults?.data?.changePassword === "Success"
     // Methods
     const changeUserPassword = (e) => {
         e.preventDefault()
@@ -43,7 +43,7 @@ export default function ProfileChangePasswordModal({
             )
             error = true
         }
-        if (confirmPassword != password) {
+        if (confirmPassword !== password) {
             setConfirmPasswordError("Password does not match its repeate!")
             error = true
         }
@@ -58,7 +58,12 @@ export default function ProfileChangePasswordModal({
         >
             <div className="pwd-modal__header">
                 change your password
-                <div onClick={() => setIsPasswordModalOpen(false)} role="button" tabIndex="0">
+                <div
+                    onClick={() => setIsPasswordModalOpen(false)}
+                    onKeyDown={() => setIsPasswordModalOpen(false)}
+                    role="button"
+                    tabIndex="0"
+                >
                     <img width="14px" height="14px" src={CloseIcon} alt="close" />
                 </div>
             </div>

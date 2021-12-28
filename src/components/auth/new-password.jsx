@@ -2,7 +2,7 @@ import React, { useCallback, useReducer } from "react"
 import { Link, navigate } from "gatsby"
 import { FormInput, CheckBox } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
-// import { useSigninMutation } from "../../apollo/network/auth"
+// import { useSigninMutation } from "../../apollo/model/auth"
 import { useAuth } from "../../hooks/useAuth"
 
 const NewPassword = () => {

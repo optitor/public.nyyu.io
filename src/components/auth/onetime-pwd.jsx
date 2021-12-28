@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Link, navigate } from "gatsby"
 import { Input } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
-import { useSignIn2FA } from "../../apollo/network/auth"
+import { useSignIn2FA } from "../../apollo/model/auth"
 import { getUser } from "../../utilities/auth"
 import CustomSpinner from "../common/custom-spinner"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -22,7 +22,7 @@ const OnetimePassword = () => {
         let error = false
         setCodeError("")
 
-        if (!code || code.length == 0) {
+        if (!code || code.length === 0) {
             setCodeError("Invalid Code.")
             error = true
         }
@@ -30,7 +30,7 @@ const OnetimePassword = () => {
     }
 
     const pending = signin2faMutationResults.loading
-    const webserviceError = signin2faMutationResults?.data?.confirm2FA?.status == "Failed"
+    const webserviceError = signin2faMutationResults?.data?.confirm2FA?.status === "Failed"
 
     return (
         <AuthLayout>

@@ -1,5 +1,5 @@
-import React, { useReducer, useEffect } from "react"
-import { navigate } from "gatsby"
+import React, { useReducer, useEffect, useState } from "react"
+// import { navigate } from "gatsby"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
@@ -7,11 +7,20 @@ import Modal from "react-modal"
 import ReactECharts from "echarts-for-react"
 import Header from "../components/common/header"
 import { useQuery, useMutation } from "@apollo/client"
-import { getSecTomorrow, numberWithCommas, numberWithLength } from "../utilities/number"
+import {
+    // getSecTomorrow,
+    numberWithCommas,
+    numberWithLength,
+    getTimeDiffOverall,
+    getDiffOverall,
+} from "../utilities/number"
 import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
-import { GET_AUCTION_BY_NUMBER } from "../apollo/graghqls/querys/Auction"
 import { PLACE_BID } from "../apollo/graghqls/mutations/Bid"
+import { GET_AUCTION, GET_AUCTION_BY_NUMBER } from "../apollo/graghqls/querys/Auction"
+
+// import { AuctionService } from "../apollo/model/AuctionService"
+// import * as GraphQL from "../apollo/graghqls/querys/Auction"
 
 const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -57,17 +66,14 @@ const options = [
 
 const Auction = () => {
     const size = useWindowSize()
-    const duration = 86400
-    const distanceToDate = getSecTomorrow()
-    const percentage = (distanceToDate / duration) * 100
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         tabIndex: 0,
-        curTime: {
-            hours: 0,
-            minutes: 0,
-            seconds: 0,
-        },
+        // curTime: {
+        //     hours: 0,
+        //     minutes: 0,
+        //     seconds: 0,
+        // },
         amount: 1,
         price: 1,
         total: "",
@@ -112,11 +118,12 @@ const Auction = () => {
                 },
             ],
         },
+        round,
     })
 
     const {
         tabIndex,
-        curTime,
+        // curTime,
         amount,
         price,
         place_bid,
@@ -124,45 +131,131 @@ const Auction = () => {
         show_chart,
         selectLabel,
         bidChartData,
+        round,
     } = state
+    const [selectedData, setSelectedData] = useState(1)
 
-    const { data, loading, error } = useQuery(GET_AUCTION_BY_NUMBER, {
-        variables: { round: 1 },
+    const { data } = useQuery(GET_AUCTION)
+
+    const roundData = data?.getAuctions?.filter(
+        (item) => (item.status === 2 || item.status === 0) && item
+    )
+
+    // get round based data
+    const { data: roundM } = useQuery(GET_AUCTION_BY_NUMBER, {
+        variables: { round: roundData ? roundData[0].number : -1 },
     })
+    const { data: roundH } = useQuery(GET_AUCTION_BY_NUMBER, {
+        variables: { round: roundData ? roundData[0]?.number + 1 : -1 },
+    })
+    const { data: roundL } = useQuery(GET_AUCTION_BY_NUMBER, {
+        variables: { round: roundData ? roundData[0]?.number - 1 : -1 },
+    })
+
+    // get history bids
+    // const {
+    //     data: historyBidListM,
+    //     loading: loadingHistoryBidListM,
+    //     error: errorHistoryBidListM,
+    // } = useQuery(GET_BIDLIST_BY_ROUND, {
+    //     variables: { round: roundData ? roundData[0].number : -1 },
+    // })
+
+    // const {
+    //     data: historyBidListH,
+    //     loading: loadingHistoryBidListH,
+    //     error: errorHistoryBidListH,
+    // } = useQuery(GET_BIDLIST_BY_ROUND, {
+    //     variables: { round: roundData ? roundData[0]?.number + 1 : -1 },
+    // })
+
+    // const {
+    //     data: historyBidListL,
+    //     loading: loadingHistoryBidListL,
+    //     error: errorHistoryBidListL,
+    // } = useQuery(GET_BIDLIST_BY_ROUND, {
+    //     variables: { round: roundData ? roundData[0]?.number - 1 : -1 },
+    // })
+
+    const fnSelectedRoundData = () => {
+        if (selectedData === 0) {
+            return roundL?.getAuctionByNumber
+        } else if (selectedData === 1) {
+            return roundM?.getAuctionByNumber
+        } else {
+            return roundH?.getAuctionByNumber
+        }
+    }
+
+    // console.log(new Date(fnSelectedRoundData()?.startedAt))
+    // console.log(new Date(fnSelectedRoundData()?.endedAt))
+
+    const distanceToDate = getTimeDiffOverall(
+        fnSelectedRoundData()?.startedAt,
+        fnSelectedRoundData()?.endedAt
+    ) // 86400
+    const duration = getDiffOverall(
+        fnSelectedRoundData()?.startedAt,
+        fnSelectedRoundData()?.endedAt
+    ) //getSecTomorrow()
+    const percentage = (distanceToDate / duration) * 100
 
     const [PlaceBid] = useMutation(PLACE_BID, {
         onCompleted: (data) => {
             console.log("received Mutation data", data)
+            setState({ place_bid: true })
+        },
+        onError: (err) => {
+            console.log("received Mutation data", err)
+            setState({ place_bid: true })
         },
     })
 
-    console.log("data round:", data, loading, error)
-    useEffect(() => {
-        const id = setInterval(() => {
-            setState({
-                curTime: {
-                    hours: parseInt(getSecTomorrow() / (60 * 60)),
-                    minutes: parseInt((getSecTomorrow() % (60 * 60)) / 60),
-                    seconds: parseInt(getSecTomorrow() % 60),
-                },
-            })
-        }, 1000)
-        return () => {
-            clearInterval(id)
-        }
-    }, [])
-
+    // useEffect(() => {
+    //     // console.log(new Date(fnSelectedRoundData()?.endedAt))
+    //     // console.log(new Date(fnSelectedRoundData()?.startedAt))
+    //     const id = setInterval(() => {
+    //         setState({
+    //             curTime: {
+    //                 hours: parseInt(
+    //                     getTimeDiffOverall(
+    //                         fnSelectedRoundData()?.startedAt,
+    //                         fnSelectedRoundData()?.endedAt
+    //                     ) /
+    //                         (60 * 60)
+    //                 ),
+    //                 minutes: parseInt(
+    //                     (getTimeDiffOverall(
+    //                         fnSelectedRoundData()?.startedAt,
+    //                         fnSelectedRoundData()?.endedAt
+    //                     ) %
+    //                         (60 * 60)) /
+    //                         60
+    //                 ),
+    //                 seconds: parseInt(
+    //                     getTimeDiffOverall(
+    //                         fnSelectedRoundData()?.startedAt,
+    //                         fnSelectedRoundData()?.endedAt
+    //                     ) % 60
+    //                 ),
+    //             },
+    //         })
+    //     }, 1000)
+    //     return () => {
+    //         clearInterval(id)
+    //     }
+    // }, [])
     return (
         <main className="auction-page">
             <Header />
             <section className="section-auction container">
                 <div className="current-round">
-                    <div>
-                        <h4>Round 20</h4>
+                    {/* <div>
+                        <h4>Round {data?.getAuctions[selectedData]?.number}</h4>
                         <p>
-                            Token Available <span>8000</span>
+                            Token Available <span>{data?.getAuctions[selectedData].token}</span>
                         </p>
-                    </div>
+                    </div> */}
                     <img
                         src={ChartIcon}
                         alt="chart"
@@ -178,20 +271,35 @@ const Auction = () => {
                             show_chart ? "d-none" : "d-block"
                         }`}
                     >
-                        <Tabs className="round-tab">
+                        <Tabs
+                            className="round-tab"
+                            forceRenderTabPanel
+                            defaultIndex={1}
+                            onSelect={(k) => setSelectedData(k)}
+                        >
                             <TabList>
-                                <Tab>Round 19</Tab>
-                                <Tab>Round 20</Tab>
-                                <Tab>Round 21</Tab>
+                                <Tab>Round {roundL?.getAuctionByNumber?.number}</Tab>
+                                <Tab>Round {roundM?.getAuctionByNumber?.number}</Tab>
+                                <Tab>Round {roundH?.getAuctionByNumber?.number}</Tab>
                             </TabList>
+
                             <TabPanel>
-                                Token Available <span className="fw-bold">8000</span>
+                                Token Available{" "}
+                                <span className="fw-bold">
+                                    {roundL?.getAuctionByNumber?.totalToken}
+                                </span>
                             </TabPanel>
                             <TabPanel>
-                                Token Available <span className="fw-bold">7000</span>
+                                Token Available{" "}
+                                <span className="fw-bold">
+                                    {roundM?.getAuctionByNumber?.totalToken}
+                                </span>
                             </TabPanel>
                             <TabPanel>
-                                Token Available <span className="fw-bold">6000</span>
+                                Token Available{" "}
+                                <span className="fw-bold">
+                                    {roundH?.getAuctionByNumber?.totalToken}
+                                </span>
                             </TabPanel>
                         </Tabs>
                         <Tabs
@@ -229,21 +337,67 @@ const Auction = () => {
                                 </table>
                             </TabPanel>
                             <TabPanel>
-                                <p className="text">{ndb_token}</p>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Placement</th>
+                                            <th>Highest bid per token</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {statistics.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td>{item.rank + ". " + item.placement}</td>
+                                                <td>
+                                                    {item.bid}
+                                                    <span className="txt-green"> $</span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </TabPanel>
                         </Tabs>
                         <div className="timeframe-bar">
                             <div
                                 className="timeleft"
                                 style={{
-                                    width: 100 - percentage + "%",
+                                    width:
+                                        (percentage > 0 && percentage < 101 ? percentage : 0) + "%",
                                     background: "#464646",
                                 }}
                             >
                                 <div className="timeleft__value">
-                                    {numberWithLength(curTime.hours, 2)}:
-                                    {numberWithLength(curTime.minutes, 2)}:
-                                    {numberWithLength(curTime.seconds, 2)}
+                                    {numberWithLength(
+                                        parseInt(
+                                            getTimeDiffOverall(
+                                                fnSelectedRoundData()?.startedAt,
+                                                fnSelectedRoundData()?.endedAt
+                                            ) /
+                                                (60 * 60),
+                                            2
+                                        )
+                                    )}
+                                    :
+                                    {numberWithLength(
+                                        parseInt(
+                                            (getTimeDiffOverall(
+                                                fnSelectedRoundData()?.startedAt,
+                                                fnSelectedRoundData()?.endedAt
+                                            ) %
+                                                (60 * 60)) /
+                                                60
+                                        )
+                                    )}
+                                    :
+                                    {numberWithLength(
+                                        parseInt(
+                                            getTimeDiffOverall(
+                                                fnSelectedRoundData()?.startedAt,
+                                                fnSelectedRoundData()?.endedAt
+                                            ) % 60
+                                        )
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -254,11 +408,36 @@ const Auction = () => {
                             </div>
                             <div>
                                 <p className="caption">Available Until</p>
-                                <p className="value">
-                                    {numberWithLength(curTime.hours, 2)}:
-                                    {numberWithLength(curTime.minutes, 2)}:
-                                    {numberWithLength(curTime.seconds, 2)}
-                                </p>
+                                {getTimeDiffOverall(
+                                    fnSelectedRoundData()?.startedAt,
+                                    fnSelectedRoundData()?.endedAt
+                                ) < 0 ? (
+                                    <p className="value"> No Data</p>
+                                ) : (
+                                    <p className="value">
+                                        {numberWithLength(
+                                            parseInt(
+                                                new Date(fnSelectedRoundData()?.endedAt).getHours()
+                                            )
+                                        )}
+                                        :
+                                        {numberWithLength(
+                                            parseInt(
+                                                new Date(
+                                                    fnSelectedRoundData()?.endedAt
+                                                ).getMinutes()
+                                            )
+                                        )}
+                                        :
+                                        {numberWithLength(
+                                            parseInt(
+                                                new Date(
+                                                    fnSelectedRoundData()?.endedAt
+                                                ).getSeconds()
+                                            )
+                                        )}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         {place_bid && (
@@ -287,7 +466,7 @@ const Auction = () => {
                                     value={amount}
                                     onChange={(value) => setState({ amount: value })}
                                     min={1}
-                                    max={1000}
+                                    max={fnSelectedRoundData()?.totalToken}
                                     step={1}
                                 />
                             </div>
@@ -302,7 +481,7 @@ const Auction = () => {
                                 <Slider
                                     value={price}
                                     onChange={(value) => setState({ price: value })}
-                                    min={0}
+                                    min={fnSelectedRoundData()?.minPrice}
                                     max={10000}
                                     step={100}
                                 />
@@ -319,13 +498,13 @@ const Auction = () => {
                             <button
                                 className="btn-primary text-uppercase w-100"
                                 onClick={() => {
-                                    setState({ place_bid: true })
+                                    // setState({ place_bid: true })
                                     // navigate("/payment")
                                     PlaceBid({
                                         variables: {
-                                            roundId: "0e0b42a4-e433-49b6-ae5b-d5e0a8e07204",
-                                            tokenAmount: 1,
-                                            tokenPrice: 1,
+                                            roundId: fnSelectedRoundData()?.number,
+                                            tokenAmount: amount,
+                                            tokenPrice: price,
                                             payment: 1,
                                             cryptoType: "String",
                                         },
