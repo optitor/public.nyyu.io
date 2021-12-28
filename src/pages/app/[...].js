@@ -13,6 +13,7 @@ const ForgotPassword = lazy(() => import("../../components/auth/forgot-password"
 const NewPassword = lazy(() => import("../../components/auth/new-password"))
 const VerifyID = lazy(() => import("../../components/auth/verify-id"))
 const VerifyCompany = lazy(() => import("../../components/auth/verify-company"))
+const Auction = lazy(() => import("../../components/auction"))
 const ChangePassword = lazy(() => import("../../components/auth/change-password"))
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
                         <NewPassword path="new-password" />
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
+                        <Auction path="auction" />
                         <ChangePassword path="change-password" />
                     </Router>
                 </Suspense>
