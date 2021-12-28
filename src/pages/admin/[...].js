@@ -10,6 +10,7 @@ const Setting = lazy(() => import("./../../subPages/admin/setting"));
 const CreateAuction = lazy(() => import("./../../subPages/admin/create/create-auction"));
 const CreateDirectPurchase = lazy(() => import("./../../subPages/admin/create/create-direct-purchase"));
 const CreateAvatar = lazy(() => import("./../../subPages/admin/create/create-avatar"));
+const CreateEmail = lazy(() => import("./../../subPages/admin/create/create-email"));
 const NotFound = lazy(() => import("./../404"));
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
                         <CreateAuction path="/create/auction" />
                         <CreateDirectPurchase path="/create/direct-purchase" />
                         <CreateAvatar path="/create/avatar" />
+                        <CreateEmail path="/create/email" />
                         <NotFound default />
                     </Router>
                 </Suspense>

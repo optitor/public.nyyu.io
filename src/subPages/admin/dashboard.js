@@ -38,6 +38,10 @@ const IndexPage = () => {
                             <Icon icon="clarity:avatar-line" />
                             Avatar
                         </Link>
+                        <Link className="select-item" to="/admin/create/email">
+                            <Icon icon="ant-design:mail-outlined" />
+                            Email
+                        </Link>
                     </div> 
                 </LayoutWithMenu>
             </main>
