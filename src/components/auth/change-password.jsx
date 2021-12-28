@@ -9,7 +9,7 @@ const ForgetPassword = () => {
     const pending = false
     return (
         <AuthLayout>
-            <h3 className="signup-head mb-0">Change Password</h3>
+            <h3 className="signup-head mb-0">Change password</h3>
             <form className="form">
                 <div className="form-group">
                     <FormInput name="text" type="text" placeholder="Activation Code" />

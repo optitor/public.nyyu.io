@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from "react"
+import React from "react"
 import { Link, navigate } from "gatsby"
 import { FormInput } from "../common/FormControl"
 import validator from "validator"
@@ -32,10 +32,7 @@ const ForgetPassword = () => {
             setEmailError("Invalid email address")
             error = true
         }
-        if (!error) {
-            const string = forgotPwdMutation(email)
-            console.log(string)
-        }
+        if (!error) forgotPwdMutation(email)
     }
 
     return (
@@ -55,6 +52,12 @@ const ForgetPassword = () => {
                     {emailError && (
                         <span className="errorsapn">
                             <FontAwesomeIcon icon={faExclamationCircle} /> {emailError}
+                        </span>
+                    )}
+                    {forgotPwdMutationResults?.data === null && (
+                        <span className="errorsapn">
+                            <FontAwesomeIcon icon={faExclamationCircle} /> We were unable to find
+                            the user.
                         </span>
                     )}
                     <button

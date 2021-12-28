@@ -95,8 +95,9 @@ export const useSignIn2FA = () => {
 
 export const useForgotPassword = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.FORGOT_PASSWORD, {
+        errorPolicy: "ignore",
         onCompleted: (data) => {
-            if (data.forgotPassword === "Success")
+            if (data?.forgotPassword === "Success")
                 navigate(ROUTES.changePassword)
         },
     })
