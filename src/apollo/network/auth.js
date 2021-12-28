@@ -97,12 +97,14 @@ export const useForgotPassword = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.FORGOT_PASSWORD, {
         errorPolicy: "ignore",
         onCompleted: (data) => {
-            if (data?.forgotPassword === "Success")
+            if (data?.forgotPassword === "Success") {
                 navigate(ROUTES.changePassword)
+            }
         },
     })
 
     const forgotPassword = (email) => {
+        localStorage.setItem("FORGOT_PASSWORD_EMAIL", email)
         return mutation({
             variables: {
                 email,
@@ -123,4 +125,17 @@ export const useChangePassword = () => {
         })
     }
     return [changePassword, mutationResults]
+}
+
+export const useResetPassword = () => {
+    const [mutation, mutationResults] = useMutation(GraphQL.RESET_PASSWORD)
+
+    const resetPassword = (email, code, newPassword) => {
+        return mutation({
+            variables: {
+                email, code, newPassword
+            },
+        })
+    }
+    return [resetPassword, mutationResults]
 }
