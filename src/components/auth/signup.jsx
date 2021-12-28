@@ -1,14 +1,15 @@
 import { Link } from "gatsby"
-import validator from "validator"
 import Select from "react-select"
-import AuthLayout from "../common/AuthLayout"
-import CustomSpinner from "../common/custom-spinner"
-import { FormInput } from "../common/FormControl"
-import { useSignupMutation } from "../../apollo/network/auth"
+import validator from "validator"
 import React, { useState } from "react"
-import { countries, passwordValidatorOptions, social_links } from "../../utilities/staticData"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import AuthLayout from "../common/AuthLayout"
+import { FormInput } from "../common/FormControl"
+import CustomSpinner from "../common/custom-spinner"
+import { useSignupMutation } from "../../apollo/network/auth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { countries, passwordValidatorOptions, social_links } from "../../utilities/staticData"
+import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf"
 
 const SingupPage = () => {
     const [email, setEmail] = useState("")
@@ -119,9 +120,13 @@ const SingupPage = () => {
                         />
                         <div className="keep-me-signed-in-text">
                             Agree to{" "}
-                            <Link to="/" className="text-info terms-link">
+                            <a
+                                target="_blank"
+                                href={termsAndConditionsFile}
+                                className="text-info terms-link"
+                            >
                                 Terms & Conditions
-                            </Link>
+                            </a>
                         </div>
                     </label>
                 </div>
