@@ -96,18 +96,8 @@ export const useSignIn2FA = () => {
 export const useForgotPassword = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.FORGOT_PASSWORD, {
         onCompleted: (data) => {
-            // if (data.forgotPassword.status === "Failed") {
-            //   // do something
-            //   return
-            // }
-            // else if (data.confirm2FA.status === "Success") {
-            //   setAuthToken(data.confirm2FA.token)
-            //   setUser({
-            //     ...user,
-            //     tempToken: null
-            //   })
-            //   navigate("/app/profile")
-            // }
+            if (data.forgotPassword === "Success")
+                navigate(ROUTES.changePassword)
         },
     })
 

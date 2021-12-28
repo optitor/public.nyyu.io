@@ -9,6 +9,7 @@ import { useAuth } from "../../hooks/useAuth"
 import CustomSpinner from "../common/custom-spinner"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { ROUTES } from "../../utilities/routes"
 
 const Signin = (props) => {
     // Auth Check
@@ -46,7 +47,7 @@ const Signin = (props) => {
     }
 
     const pending = signinMutationResults?.loading
-    const webserviceError = signinMutationResults?.data?.signin.status === "Failed"  
+    const webserviceError = signinMutationResults?.data?.signin.status === "Failed"
 
     return (
         <AuthLayout>
@@ -87,7 +88,7 @@ const Signin = (props) => {
                             Keep me signed in in this device
                         </div>
                     </label>
-                    <Link className="txt-green forget-pwd" to="/app/password-reset">
+                    <Link className="txt-green forget-pwd" to={ROUTES.forgotPassword}>
                         Forgot password?
                     </Link>
                 </div>
@@ -99,10 +100,12 @@ const Signin = (props) => {
                 )}
                 {props.error && props.error.split(".")[0] === "InvalidProvider" && (
                     <span className="errorsapn">
-                        <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                        Your are already signed up with {" "}
-                        <span className='text-uppercase errorsapn'>{props.error.split(".")[1]}</span>. 
-                        Please use it.
+                        <FontAwesomeIcon icon={faExclamationCircle} /> Your are already signed up
+                        with{" "}
+                        <span className="text-uppercase errorsapn">
+                            {props.error.split(".")[1]}
+                        </span>
+                        . Please use it.
                     </span>
                 )}
                 <button

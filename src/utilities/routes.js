@@ -4,4 +4,6 @@ export const ROUTES = {
     selectFigure: "/select-figure",
     verifyFailed: "/app/verify-failed",
     profile: "/app/profile",
+    changePassword: "/app/change-password",
+    forgotPassword: "/app/forgot-password",
 }
