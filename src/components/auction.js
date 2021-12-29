@@ -13,6 +13,7 @@ import {
     getTimeDiffOverall,
     getDiffOverall,
     getFormatedDate,
+    isInbetween,
 } from "../utilities/number"
 import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
@@ -39,11 +40,6 @@ const Auction = () => {
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         tabIndex: 0,
-        // curTime: {
-        //     hours: 0,
-        //     minutes: 0,
-        //     seconds: 0,
-        // },
         amount: 1,
         price: 1,
         total: "",
@@ -90,17 +86,8 @@ const Auction = () => {
         },
     })
 
-    const {
-        tabIndex,
-        // curTime,
-        amount,
-        price,
-        place_bid,
-        bidModal,
-        show_chart,
-        selectLabel,
-        bidChartData,
-    } = state
+    const { tabIndex, amount, price, place_bid, bidModal, show_chart, selectLabel, bidChartData } =
+        state
     const [selectedData, setSelectedData] = useState(1)
 
     const { data } = useQuery(GET_AUCTION)
@@ -222,37 +209,38 @@ const Auction = () => {
                             show_chart ? "d-none" : "d-block"
                         }`}
                     >
-                        <Tabs
-                            className="round-tab"
-                            selectedIndex={selectedData}
-                            onSelect={(index) => {
-                                if (index !== selectedData) {
-                                    setState({ price: 0, amount: 0 })
-                                    setSelectedData(index)
-                                }
-                            }}
-                        >
-                            {roundM?.getAuctionByNumber && (
+                        {roundM?.getAuctionByNumber && (
+                            <Tabs
+                                className="round-tab"
+                                selectedIndex={selectedData}
+                                onSelect={(index) => {
+                                    if (index !== selectedData) {
+                                        setState({ price: 0, amount: 0 })
+                                        setSelectedData(index)
+                                    }
+                                }}
+                            >
+                                (
                                 <TabList>
                                     <Tab>Round {roundL?.getAuctionByNumber?.number}</Tab>
                                     <Tab>Round {roundM?.getAuctionByNumber?.number}</Tab>
                                     <Tab>Round {roundH?.getAuctionByNumber?.number}</Tab>
                                 </TabList>
-                            )}
-
-                            <TabPanel>
-                                Token Available{" "}
-                                <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
-                            </TabPanel>
-                            <TabPanel>
-                                Token Available{" "}
-                                <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
-                            </TabPanel>
-                            <TabPanel>
-                                Token Available{" "}
-                                <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
-                            </TabPanel>
-                        </Tabs>
+                                )
+                                <TabPanel>
+                                    Token Available{" "}
+                                    <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
+                                </TabPanel>
+                                <TabPanel>
+                                    Token Available{" "}
+                                    <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
+                                </TabPanel>
+                                <TabPanel>
+                                    Token Available{" "}
+                                    <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
+                                </TabPanel>
+                            </Tabs>
+                        )}
                         <Tabs
                             className="statistics-tab"
                             selectedIndex={tabIndex}
@@ -309,49 +297,54 @@ const Auction = () => {
                                 </table>
                             </TabPanel>
                         </Tabs>
-                        <div className="timeframe-bar">
-                            <div
-                                className="timeleft"
-                                style={{
-                                    width:
-                                        (percentage > 0 && percentage < 101 ? percentage : 0) + "%",
-                                    background: "#464646",
-                                }}
-                            >
-                                <div className="timeleft__value">
-                                    {numberWithLength(
-                                        parseInt(
-                                            getTimeDiffOverall(
-                                                fnSelectedRoundData()?.startedAt,
-                                                fnSelectedRoundData()?.endedAt
-                                            ) /
-                                                (60 * 60),
-                                            2
-                                        )
-                                    )}
-                                    :
-                                    {numberWithLength(
-                                        parseInt(
-                                            (getTimeDiffOverall(
-                                                fnSelectedRoundData()?.startedAt,
-                                                fnSelectedRoundData()?.endedAt
-                                            ) %
-                                                (60 * 60)) /
-                                                60
-                                        )
-                                    )}
-                                    :
-                                    {numberWithLength(
-                                        parseInt(
-                                            getTimeDiffOverall(
-                                                fnSelectedRoundData()?.startedAt,
-                                                fnSelectedRoundData()?.endedAt
-                                            ) % 60
-                                        )
-                                    )}
+                        {isInbetween(
+                            fnSelectedRoundData()?.startedAt,
+                            fnSelectedRoundData()?.endedAt
+                        ) && (
+                            <div className="timeframe-bar">
+                                <div
+                                    className="timeleft"
+                                    style={{
+                                        width:
+                                            (percentage > 0 && percentage < 101 ? percentage : 0) +
+                                            "%",
+                                        background: "#464646",
+                                    }}
+                                >
+                                    <div className="timeleft__value">
+                                        {numberWithLength(
+                                            parseInt(
+                                                getTimeDiffOverall(
+                                                    fnSelectedRoundData()?.startedAt,
+                                                    fnSelectedRoundData()?.endedAt
+                                                ) /
+                                                    (60 * 60)
+                                            )
+                                        )}
+                                        :
+                                        {numberWithLength(
+                                            parseInt(
+                                                (getTimeDiffOverall(
+                                                    fnSelectedRoundData()?.startedAt,
+                                                    fnSelectedRoundData()?.endedAt
+                                                ) %
+                                                    (60 * 60)) /
+                                                    60
+                                            )
+                                        )}
+                                        :
+                                        {numberWithLength(
+                                            parseInt(
+                                                getTimeDiffOverall(
+                                                    fnSelectedRoundData()?.startedAt,
+                                                    fnSelectedRoundData()?.endedAt
+                                                ) % 60
+                                            )
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                         <div className="d-flex justify-content-between mt-4">
                             {fnAverateMinBid() !== 0 ? (
                                 <div>
@@ -366,12 +359,7 @@ const Auction = () => {
                             )}
                             <div>
                                 <p className="caption">Available Until</p>
-                                {/* {getTimeDiffOverall(
-                                    fnSelectedRoundData()?.startedAt,
-                                    fnSelectedRoundData()?.endedAt
-                                ) < 0 ? (
-                                    <p className="value"> No Data</p>
-                                ) : ( */}
+
                                 <p className="value">
                                     {numberWithLength(
                                         parseInt(
@@ -391,7 +379,6 @@ const Auction = () => {
                                         )
                                     )}
                                 </p>
-                                {/* )} */}
                             </div>
                         </div>
                         {place_bid && (
