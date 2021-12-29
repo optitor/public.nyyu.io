@@ -1,19 +1,19 @@
 import React, { useState } from "react"
 import { navigate } from "gatsby"
-
 import Seo from "../components/seo"
 import { Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
 import Header from "../components/common/header"
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
+import { ROUTES } from "../utilities/routes"
 import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 
 const IndexPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const auth = useAuth()
     const placeABidButtonClick = () =>
-        auth?.isLoggedIn() ? navigate("/payment") : navigate("/app/signin")
+        auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
     return (
         <div
             style={{
