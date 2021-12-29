@@ -13,7 +13,6 @@ export default function NotificationTab({setting}) {
 
     const [changeNotifySetting] = useMutation(USER_NOTIFICATION_SETTING, {
         onCompleted: (data) => {           
-            console.log("notify setting result", data.changeNotifySetting)
             resetLoading(data.changeNotifySetting)
         },
         onError : (error)=> {
