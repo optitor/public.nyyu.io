@@ -141,7 +141,7 @@ const Payment = () => {
                                     <div className="d-flex flex-column justify-content-between col-lg-9">
                                         <div className="d-flex justify-content-between w-100">
                                             <Select
-                                                className="cryptocoin-select col-lg-3"
+                                                className="cryptocoin-select col-3"
                                                 options={coins}
                                                 value={coin}
                                                 onChange={(v) => setCoin(v)}
