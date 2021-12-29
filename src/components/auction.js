@@ -23,6 +23,7 @@ import {
     GET_AUCTION_BY_NUMBER,
     GET_BIDLIST_BY_ROUND,
 } from "../apollo/graghqls/querys/Auction"
+import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
 
 const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -30,9 +31,8 @@ By using NDB token you will be able to contribute to the development of our tech
 `
 
 const options = [
-    { value: "bid_performance", label: "Bid performance" },
-    { value: "round_performance", label: "Round performance" },
-    { value: "ndb_token", label: "NDB Token Value" },
+    { value: "round_performance2", label: "Round Performance2" },
+    { value: "round_change", label: "Round Chance" },
 ]
 
 const Auction = () => {
@@ -47,47 +47,9 @@ const Auction = () => {
         bidModal: false,
         show_chart: false,
         selectLabel: options[0],
-        bidChartData: {
-            tooltip: {
-                trigger: "axis",
-                axisPointer: {
-                    type: "shadow",
-                },
-            },
-            color: "#23C865",
-            grid: {
-                left: "3%",
-                right: "4%",
-                bottom: "3%",
-                containLabel: true,
-            },
-            xAxis: [
-                {
-                    type: "category",
-                    data: [0, 100, 200, 300, 400, 500],
-                    axisTick: {
-                        alignWithLabel: true,
-                    },
-                },
-            ],
-            yAxis: [
-                {
-                    type: "value",
-                },
-            ],
-            series: [
-                {
-                    name: "Bid",
-                    type: "bar",
-                    barWidth: "30%",
-                    data: [330, 252, 200, 334, 390, 330, 220],
-                },
-            ],
-        },
     })
 
-    const { tabIndex, amount, price, place_bid, bidModal, show_chart, selectLabel, bidChartData } =
-        state
+    const { tabIndex, amount, price, place_bid, bidModal, show_chart, selectLabel } = state
     const [selectedData, setSelectedData] = useState(1)
 
     const { data } = useQuery(GET_AUCTION)
@@ -116,6 +78,20 @@ const Auction = () => {
     })
     const { data: historyBidListL } = useQuery(GET_BIDLIST_BY_ROUND, {
         variables: { round: roundData && roundData[0]?.number - 1 },
+    })
+
+    // get round performance 2
+    const { data: roundPerformance2 } = useQuery(GET_ROUND_PERFORMANCE2)
+    const { data: roundChance } = useQuery(GET_ROUND_CHANCE)
+    const round_perform2 = roundPerformance2?.getRoundPerform2.map((item) => {
+        let newArr = []
+        newArr.push("Round " + item.roundNumber, item.min, item.max, item.std)
+        return newArr
+    })
+    const round_chance = roundChance?.getRoundChance.map((item) => {
+        let newArr = []
+        newArr.push("Round " + item.roundNumber, item.winRate, item.failedRate)
+        return newArr
     })
 
     const fnSelectedRoundData = () =>
@@ -474,11 +450,36 @@ const Auction = () => {
                                 <img src={Qmark} alt="question" className="ms-3" />
                             </div>
                             <p className="select-label">{selectLabel.label}</p>
-                            <ReactECharts
-                                option={bidChartData}
-                                style={{ height: "450px", width: "100%" }}
-                                className="echarts-for-echarts"
-                            />
+                            {selectLabel.value === "round_performance2" && (
+                                <ReactECharts
+                                    option={{
+                                        tooltip: {},
+                                        dataset: {
+                                            source: round_perform2,
+                                        },
+                                        xAxis: { type: "category" },
+                                        yAxis: {},
+                                        series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }],
+                                    }}
+                                    style={{ height: "450px", width: "100%" }}
+                                    className="echarts-for-echarts"
+                                />
+                            )}
+                            {selectLabel.value === "round_change" && (
+                                <ReactECharts
+                                    option={{
+                                        tooltip: {},
+                                        dataset: {
+                                            source: round_chance,
+                                        },
+                                        xAxis: { type: "category" },
+                                        yAxis: {},
+                                        series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }],
+                                    }}
+                                    style={{ height: "450px", width: "100%" }}
+                                    className="echarts-for-echarts"
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
