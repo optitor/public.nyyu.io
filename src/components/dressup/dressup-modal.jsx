@@ -12,7 +12,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen }) {
     const [selectedHat, setSelectedHat] = useState(0)
     const [selectedOther, setSelectedOther] = useState(0)
     const [selectedTab, setSelectedTab] = useState(0)
-    
+
     const selectedHairStyleItem = DressupData.hairStyles[selectedHairStyle]
     const selectedHairColorItem = DressupData.hairColors[selectedHairColor]
     const selectedFacialStyleItem = DressupData.facialStyles[selectedFacialStyle]
@@ -125,7 +125,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen }) {
                                     {item.title}
                                 </div>
                             ))}
-                          </div>
+                        </div>
                         <div className="btn-save">save</div>
                     </div>
                 </div>

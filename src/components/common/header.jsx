@@ -106,11 +106,7 @@ const Menu = () => {
                                         <li>
                                             <Link to="/app/profile">profile</Link>
                                         </li>
-                                        <li
-                                            onClick={() => setIsDressUPModalOpen(true)}
-                                            onKeyDown={() => setIsDressUPModalOpen(true)}
-                                            role="presentation"
-                                        >
+                                        <li onClick={() => setIsDressUPModalOpen(true)}>
                                             <a>dressup</a>
                                         </li>
                                         <li>
@@ -120,8 +116,8 @@ const Menu = () => {
                                 </li>
 
                                 <DressupModal
-                                    setIsDressUPModalOpen={setIsDressUPModalOpen}
-                                    isDressUPModalOpen={isDressUPModalOpen}
+                                    setIsModalOpen={setIsDressUPModalOpen}
+                                    isModalOpen={isDressUPModalOpen}
                                 />
                             </ul>
                         )}
