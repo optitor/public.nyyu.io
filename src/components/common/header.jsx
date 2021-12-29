@@ -106,8 +106,12 @@ const Menu = () => {
                                         <li>
                                             <Link to="/app/profile">profile</Link>
                                         </li>
-                                        <li onClick={() => setIsDressUPModalOpen(true)}>
-                                            <a>dressup</a>
+                                        <li
+                                            onClick={() => setIsDressUPModalOpen(true)}
+                                            onKeyDown={() => setIsDressUPModalOpen(true)}
+                                            role="presentation"
+                                        >
+                                            <a href="#dressup">dressup</a>
                                         </li>
                                         <li>
                                             <Link to="/faq">faq</Link>
