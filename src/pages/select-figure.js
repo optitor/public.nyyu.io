@@ -16,7 +16,8 @@ import { GET_USER } from "../apollo/graghqls/querys/Auth"
 
 const SelectFigure = () => {
     // Containers
-    const [pending, setPending] = useState(true)
+    const [loading, setLoading] = useState(true)
+    const [pending, setPending] = useState(false)
     const [selected, setSelect] = useState(false)
     const [selectedId, setSelectId] = useState(0)
     const [modalIsOpen, setIsOpen] = useState(false)
@@ -26,8 +27,11 @@ const SelectFigure = () => {
     // Queries and Mutations
     const { data: userData } = useQuery(GET_USER)
     const [setAvatar] = useMutation(SET_AVATAR, {
+        errorPolicy: "ignore",
         onCompleted: (data) => {
-            console.log(data)
+            setPending(false)
+            if (data?.setAvatar === "Success")
+                navigate(ROUTES.profile)
         },
     })
 
@@ -43,25 +47,25 @@ const SelectFigure = () => {
     }
     const handleOnConfirmButtonClick = (e) => {
         e.preventDefault()
+        setPending(true)
         setAvatar({
             variables: {
-                prefix: "Tesla",
-                name: "Neo",
+                prefix: figures[selectedId].lastname,
+                name: randomName,
             },
         })
     }
     //Authentication
     useEffect(() => {
         const getUser = userData?.getUser
-        console.log(userData)
         if (getUser) {
-            if (getUser?.avatar === null) return setPending(false)
+            if (getUser?.avatar === null) return setLoading(false)
             setUser(getUser)
             return navigate(ROUTES.profile)
         }
     }, [userData])
 
-    if (pending) return <Loading />
+    if (loading) return <Loading />
     else
         return (
             <main className="profile-page">
@@ -223,6 +227,7 @@ const SelectFigure = () => {
                                     <button
                                         className="btn-primary text-uppercase w-100 mt-3"
                                         onClick={handleOnConfirmButtonClick}
+                                        disabled={pending}
                                     >
                                         confirm
                                     </button>
