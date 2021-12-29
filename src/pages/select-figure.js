@@ -13,6 +13,7 @@ import { ROUTES } from "../utilities/routes"
 import { SET_AVATAR } from "../apollo/graghqls/mutations/Auth"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
+import CustomSpinner from "../components/common/custom-spinner"
 
 const SelectFigure = () => {
     // Containers
@@ -225,7 +226,7 @@ const SelectFigure = () => {
                                 </div>
                                 {selected ? (
                                     <button
-                                        className="btn-primary text-uppercase w-100 mt-3"
+                                        className="btn-primary text-uppercase w-100 mt-3 d-flex align-items-center justify-content-center"
                                         disabled={pending}
                                         onClick={handleOnConfirmButtonClick}
                                     >
