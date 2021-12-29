@@ -26,15 +26,13 @@ const IndexPage = () => {
                 <Header />
                 <ReferToFriendsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
                 <section className="home-section">
-                    <div className="container h-100 d-flex  flex-column justify-content-center">
-                        <div className="row">
+                    <div className="container h-100 d-flex flex-column justify-content-center">
+                        <div className="row m-0">
                             <div className="left-part col-md-6">
                                 <h3 className="home-title ">
-                                    <span className="txt-green">Round 20</span> Ends in
-                                </h3>
-                                <div className="d-flex justify-content-end">
+                                    <span className="txt-green">round 20</span> ends in
                                     <CountDown />
-                                </div>
+                                </h3>
                                 <p className="token-left text-uppercase mt-4">
                                     tokens left in this round
                                 </p>
