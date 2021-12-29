@@ -27,7 +27,7 @@
         .token {
             &-left {
                 font-weight: 900;
-                font-size: 34px;
+                font-size: 30px;
                 line-height: 44px;
                 text-align: left;
                 @include mq("tablet", max) {

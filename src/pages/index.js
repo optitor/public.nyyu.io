@@ -35,7 +35,9 @@ const IndexPage = () => {
                                 <div className="d-flex justify-content-end">
                                     <CountDown />
                                 </div>
-                                <p className="token-left text-uppercase mt-4">Token Left</p>
+                                <p className="token-left text-uppercase mt-4">
+                                    tokens left in this round
+                                </p>
                                 <p className="token-value">{numberWithCommas(604800, " ")}</p>
                                 <button className="btn btn-green" onClick={placeABidButtonClick}>
                                     Place a bid
