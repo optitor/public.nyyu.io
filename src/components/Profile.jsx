@@ -1,106 +1,28 @@
 import React, { useEffect, useReducer, useState } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { Link, navigate } from "gatsby"
+import { Link } from "gatsby"
 import Switch from "react-switch"
 import Select from "react-select"
 import Modal from "react-modal"
-import { useQuery } from "@apollo/client"
-import { GET_USER } from "../apollo/graghqls/querys/Auth"
-import { getUser, logout, setUser } from "../utilities/auth"
-import {
-    Coinbase,
-    MetaMask,
-    Tesla,
-    TrustWallet,
-    WalletConnect,
-    CloseIcon,
-    Bronze,
-} from "../utilities/imgImport"
+import { Tesla, CloseIcon, Bronze } from "../utilities/imgImport"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
-import Loading from "./common/Loading"
-import { ROUTES } from "../utilities/routes"
 import DeleteAccountTab from "./profile/delete-account-tab"
 import SignOutTab from "./profile/sign-out-tab"
-
-const recent = [
-    {
-        status: true,
-        act: "Failla.987 Placed a higher bid ",
-    },
-    {
-        status: false,
-        act: "Round 2 has just started",
-    },
-    {
-        status: false,
-        act: "round 1 ended",
-    },
-    {
-        status: false,
-        act: "Token has pumped in 23% since your last bid",
-    },
-    {
-        status: true,
-        act: "There are only 40 tokens left",
-    },
-]
-const profile_tabs = [
-    {
-        value: "account details",
-        label: "account details",
-        index: 0,
-    },
-    {
-        value: "notifications",
-        label: "notifications",
-        index: 1,
-    },
-    {
-        value: "connect wallet",
-        label: "connect wallet",
-        index: 2,
-    },
-    {
-        value: "delete account",
-        label: "delete account",
-        index: 3,
-    },
-    {
-        value: "sign out",
-        label: "sign out",
-        index: 4,
-    },
-]
-const wallets = [
-    {
-        icon: MetaMask,
-        desc: "Connect to your MetaMask wallet",
-        href: "https://metamask.io/",
-    },
-    {
-        icon: WalletConnect,
-        desc: "Scan with WalletConnect to connect",
-        href: "https://walletconnect.com/",
-    },
-    {
-        icon: Coinbase,
-        desc: "Connect to your Coinbase Account",
-        href: "https://www.coinbase.com/",
-    },
-    {
-        icon: TrustWallet,
-        desc: "Connect to your Trust wallet",
-        href: "https://trustwallet.com/",
-    },
-]
+import { profile_tabs, recentNotifications, wallets } from "../utilities/staticData"
+import { GET_USER } from "../apollo/graghqls/querys/Auth"
+import { useQuery } from "@apollo/client"
+import Loading from "./common/Loading"
 
 const Profile = () => {
-    const user = getUser()
-    const displayName = user?.avatarPrefix + "." + user?.avatarName
-    const { data: userData, loading } = useQuery(GET_USER)
-    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
+    // Queries and Mutations
+    const { data: userData } = useQuery(GET_USER)
+
+    // Containers
+    const [user, setUser] = useState({})
     const [pending, setPending] = useState(true)
+    const displayName = user?.avatarPrefix + ". " + user?.avatarName
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         bid_rank: true,
         round_start: false,
@@ -115,6 +37,7 @@ const Profile = () => {
         profile_tab: profile_tabs[0],
         walletId: 0,
     })
+
     const {
         bid_rank,
         round_start,
@@ -126,24 +49,16 @@ const Profile = () => {
         profile_tab,
         walletId,
     } = state
-
+    // Methods
     const handleProfileTab = (value) => {
         setState({ profile_tab: value })
         setState({ tabIndex: value.index })
     }
 
-    const getSecurityStatus = (key) => {
-        try {
-            return user?.userSecurity.find((f) => f.key === key).value
-        } catch (e) {}
-    }
-
-    //Authentication
+    const getSecurityStatus = (key) => user?.userSecurity?.find((f) => f?.key === key)?.value
     useEffect(() => {
-        const getUser = userData?.getUser
-        if (getUser) {
-            setUser(getUser)
-            if (getUser?.avatar === null) return navigate(ROUTES.selectFigure)
+        if (userData?.getUser) {
+            setUser(userData.getUser)
             return setPending(false)
         }
     }, [userData])
@@ -404,7 +319,7 @@ const Profile = () => {
                                             <Tab>Setup</Tab>
                                         </TabList>
                                         <TabPanel>
-                                            {recent.map((item, idx) => (
+                                            {recentNotifications.map((item, idx) => (
                                                 <div className="recent-item" key={idx}>
                                                     <div
                                                         className={

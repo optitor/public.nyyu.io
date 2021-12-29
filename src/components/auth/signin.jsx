@@ -14,7 +14,7 @@ import { ROUTES } from "../../utilities/routes"
 const Signin = (props) => {
     // Auth Check
     const auth = useAuth()
-    if (auth?.isLoggedIn()) navigate("/app/profile")
+    if (auth?.isLoggedIn()) navigate(ROUTES.profile)
 
     // Containers
     const [email, setEmail] = useState("")
