@@ -1,34 +1,28 @@
-import React, { useEffect, useReducer, useState } from "react"
+import React, { useReducer, useState } from "react"
 import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link } from "gatsby"
-import Switch from "react-switch"
 import Select from "react-select"
 import Modal from "react-modal"
 import { Tesla, CloseIcon, Bronze } from "../utilities/imgImport"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
 import DeleteAccountTab from "./profile/delete-account-tab"
+import NotificationTab from "./profile/notification-tab"
 import SignOutTab from "./profile/sign-out-tab"
-import { profile_tabs, recentNotifications, wallets } from "../utilities/staticData"
+import { profile_tabs, wallets } from "../utilities/staticData"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
 import { useQuery } from "@apollo/client"
 import Loading from "./common/Loading"
 
 const Profile = () => {
     // Queries and Mutations
-    const { data: userData } = useQuery(GET_USER)
+    const { data: user_data, loading } = useQuery(GET_USER)
+    const user = user_data?.getUser
 
     // Containers
-    const [user, setUser] = useState({})
-    const [pending, setPending] = useState(true)
     const displayName = user?.avatarPrefix + ". " + user?.avatarName
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        bid_rank: true,
-        round_start: false,
-        round_finish: false,
-        bid_close: true,
-        payment_result: true,
         pwd: { value: "", error: "" },
         pwd_confirm: { value: "", error: "" },
         pwdModal: false,
@@ -39,11 +33,6 @@ const Profile = () => {
     })
 
     const {
-        bid_rank,
-        round_start,
-        round_finish,
-        bid_close,
-        payment_result,
         tfaModal,
         tabIndex,
         profile_tab,
@@ -56,14 +45,8 @@ const Profile = () => {
     }
 
     const getSecurityStatus = (key) => user?.userSecurity?.find((f) => f?.key === key)?.value
-    useEffect(() => {
-        if (userData?.getUser) {
-            setUser(userData.getUser)
-            return setPending(false)
-        }
-    }, [userData])
 
-    if (pending) return <Loading />
+    if (loading) return <Loading />
     else
         return (
             <main className="profile-page">
@@ -312,107 +295,7 @@ const Profile = () => {
                                 </>
                             )}
                             {tabIndex === 1 && (
-                                <div className="notification-set">
-                                    <Tabs className="notification-tab">
-                                        <TabList>
-                                            <Tab>Recent</Tab>
-                                            <Tab>Setup</Tab>
-                                        </TabList>
-                                        <TabPanel>
-                                            {recentNotifications.map((item, idx) => (
-                                                <div className="recent-item" key={idx}>
-                                                    <div
-                                                        className={
-                                                            item.status
-                                                                ? "status active"
-                                                                : "status deactive"
-                                                        }
-                                                    ></div>
-                                                    <p>{item.act}</p>
-                                                </div>
-                                            ))}
-                                        </TabPanel>
-                                        <TabPanel>
-                                            <div className="notification-item">
-                                                <p>BID ranking updated</p>
-                                                <Switch
-                                                    onColor="#23c865"
-                                                    offColor="#ffffff"
-                                                    height={3}
-                                                    width={35}
-                                                    handleDiameter={12}
-                                                    onHandleColor="#23c865"
-                                                    onChange={() =>
-                                                        setState({ bid_rank: !bid_rank })
-                                                    }
-                                                    checked={bid_rank}
-                                                />
-                                            </div>
-                                            <div className="notification-item">
-                                                <p>new round started</p>
-                                                <Switch
-                                                    onColor="#23c865"
-                                                    offColor="#ffffff"
-                                                    height={3}
-                                                    width={35}
-                                                    handleDiameter={12}
-                                                    onHandleColor="#23c865"
-                                                    onChange={() =>
-                                                        setState({ round_start: !round_start })
-                                                    }
-                                                    checked={round_start}
-                                                />
-                                            </div>
-                                            <div className="notification-item">
-                                                <p>round finished</p>
-                                                <Switch
-                                                    onColor="#23c865"
-                                                    offColor="#ffffff"
-                                                    height={3}
-                                                    width={35}
-                                                    handleDiameter={12}
-                                                    onHandleColor="#23c865"
-                                                    onChange={() =>
-                                                        setState({ round_finish: !round_finish })
-                                                    }
-                                                    checked={round_finish}
-                                                />
-                                            </div>
-                                            <div className="notification-item">
-                                                <p>bid closed</p>
-                                                <Switch
-                                                    onColor="#23c865"
-                                                    offColor="#ffffff"
-                                                    height={3}
-                                                    width={35}
-                                                    handleDiameter={12}
-                                                    onHandleColor="#23c865"
-                                                    onChange={() =>
-                                                        setState({ bid_close: !bid_close })
-                                                    }
-                                                    checked={bid_close}
-                                                />
-                                            </div>
-                                            <div className="notification-item">
-                                                <p>payment result</p>
-                                                <Switch
-                                                    onColor="#23c865"
-                                                    offColor="#ffffff"
-                                                    height={3}
-                                                    width={35}
-                                                    handleDiameter={12}
-                                                    onHandleColor="#23c865"
-                                                    onChange={() =>
-                                                        setState({
-                                                            payment_result: !payment_result,
-                                                        })
-                                                    }
-                                                    checked={payment_result}
-                                                />
-                                            </div>
-                                        </TabPanel>
-                                    </Tabs>
-                                </div>
+                                <NotificationTab setting={user.notifySetting}/>
                             )}
                             {tabIndex === 2 && (
                                 <div className="connect-wallet">
