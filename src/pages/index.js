@@ -33,16 +33,26 @@ const IndexPage = () => {
                                     <span className="txt-green">round 20</span> ends in
                                     <CountDown />
                                 </h3>
-                                <p className="token-left text-uppercase mt-4">
-                                    tokens left in this round
-                                </p>
-                                <p className="token-value">{numberWithCommas(604800, " ")}</p>
-                                <button className="btn btn-green" onClick={placeABidButtonClick}>
-                                    Place a bid
-                                </button>
-                                <br />
-                                <div className="learn-more" onClick={() => setIsModalOpen(true)}>
-                                    Refer to friends
+                                <div className="tokens-lower-part">
+                                    <p className="token-left text-uppercase mt-4">
+                                        tokens left in this round
+                                    </p>
+                                    <p className="token-value">{numberWithCommas(604800, " ")}</p>
+                                    <div className="cta">
+                                        <button
+                                            className="btn btn-green"
+                                            onClick={placeABidButtonClick}
+                                        >
+                                            Place a bid
+                                        </button>
+                                        <br />
+                                        <div
+                                            className="learn-more"
+                                            onClick={() => setIsModalOpen(true)}
+                                        >
+                                            Refer to friends
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-md-1"></div>

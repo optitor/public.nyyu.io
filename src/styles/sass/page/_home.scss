@@ -10,8 +10,15 @@
         display: flex;
         align-items: center;
         text-align: center;
+        height: auto !important;
         .left-part {
             padding-left: 8%;
+            .tokens-lower-part {
+                width: max-content;
+                .cta {
+                    margin-top: -20px;
+                }
+            }
         }
         .home-title {
             font-weight: bold;
