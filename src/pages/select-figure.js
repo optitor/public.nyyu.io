@@ -185,7 +185,7 @@ const SelectFigure = () => {
                                                     <div className="d-flex align-items-end flex-column">
                                                         <div className="d-flex align-items-end justify-content-start">
                                                             <h3 className="random-display mb-0 fw-bold me-4">
-                                                                {randomName}.
+                                                                {figures[selectedId].lastname}.
                                                             </h3>
                                                             <div className="random-generate">
                                                                 <p className="form-label">
@@ -328,16 +328,6 @@ const SelectFigure = () => {
                             )}
                         </div>
                     </div>
-                    {/* {selected ? (
-                        <button className="btn-primary text-uppercase w-100 mt-3">confirm</button>
-                    ) : (
-                        <button
-                            className="btn-primary text-uppercase w-100 mt-3"
-                            onClick={() => setSelect(true)}
-                        >
-                            select
-                        </button>
-                    )} */}
                 </Modal>
             </main>
         )
