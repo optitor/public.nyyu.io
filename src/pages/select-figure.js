@@ -59,8 +59,8 @@ const SelectFigure = () => {
     useEffect(() => {
         const getUser = userData?.getUser
         if (getUser) {
-            if (getUser?.avatar === null) return setLoading(false)
             setUser(getUser)
+            if (getUser?.avatar === null) return setLoading(false)
             return navigate(ROUTES.profile)
         }
     }, [userData])
@@ -226,10 +226,13 @@ const SelectFigure = () => {
                                 {selected ? (
                                     <button
                                         className="btn-primary text-uppercase w-100 mt-3"
-                                        onClick={handleOnConfirmButtonClick}
                                         disabled={pending}
+                                        onClick={handleOnConfirmButtonClick}
                                     >
-                                        confirm
+                                        <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
+                                            <CustomSpinner />
+                                        </div>
+                                        <div className={`${pending ? "ms-3" : "pe-4"}`}>confirm</div>
                                     </button>
                                 ) : (
                                     <button

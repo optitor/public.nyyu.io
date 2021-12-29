@@ -8,4 +8,5 @@ export const ROUTES = {
     forgotPassword: "/app/forgot-password",
     payment: "/payment",
     auction: "/app/auction",
+    home: "/",
 }
