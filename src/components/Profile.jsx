@@ -20,6 +20,8 @@ import {
 import ProfileChangePasswordModal from "./profile/change-password-modal"
 import Loading from "./common/Loading"
 import { ROUTES } from "../utilities/routes"
+import DeleteAccountTab from "./profile/delete-account-tab"
+import SignOutTab from "./profile/sign-out-tab"
 
 const recent = [
     {
@@ -45,24 +47,29 @@ const recent = [
 ]
 const profile_tabs = [
     {
-        value: "Account details",
-        label: "Account details",
+        value: "account details",
+        label: "account details",
         index: 0,
     },
     {
-        value: "Notifications",
-        label: "Notifications",
+        value: "notifications",
+        label: "notifications",
         index: 1,
     },
     {
-        value: "Connect wallet",
-        label: "Connect wallet",
+        value: "connect wallet",
+        label: "connect wallet",
         index: 2,
     },
     {
-        value: "Sign out",
-        label: "Sign out",
+        value: "delete account",
+        label: "delete account",
         index: 3,
+    },
+    {
+        value: "sign out",
+        label: "sign out",
+        index: 4,
     },
 ]
 const wallets = [
@@ -125,12 +132,6 @@ const Profile = () => {
         setState({ tabIndex: value.index })
     }
 
-    const signOut = () => {
-        logout(() => {
-            navigate(ROUTES.home)
-        })
-    }
-
     const getSecurityStatus = (key) => {
         try {
             return user?.userSecurity.find((f) => f.key === key).value
@@ -190,6 +191,7 @@ const Profile = () => {
                                 <TabPanel>1</TabPanel>
                                 <TabPanel>2</TabPanel>
                                 <TabPanel>3</TabPanel>
+                                <TabPanel>4</TabPanel>
                             </Tabs>
                         </div>
                         <div className="col-lg-9 profile-page__right">
@@ -523,17 +525,8 @@ const Profile = () => {
                                     <button className="btn-primary">CONNECT</button>
                                 </div>
                             )}
-                            {tabIndex === 3 && (
-                                <div className="sign-out">
-                                    <h4>confirm sign out</h4>
-                                    <div className="h-100 d-flex flex-column align-items-center justify-content-center">
-                                        <p>Are you sure you want to sign out?</p>
-                                        <button className="btn-primary" onClick={(e) => signOut()}>
-                                            sign out
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
+                            {tabIndex === 3 && <DeleteAccountTab />}
+                            {tabIndex === 4 && <SignOutTab />}
                         </div>
                     </div>
                 </section>
