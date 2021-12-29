@@ -450,7 +450,7 @@ const Auction = () => {
                                 <img src={Qmark} alt="question" className="ms-3" />
                             </div>
                             <p className="select-label">{selectLabel.label}</p>
-                            {selectLabel.value === "round_performance2" && (
+                            {selectLabel.value === "round_performance2" && round_perform2 && (
                                 <ReactECharts
                                     option={{
                                         tooltip: {},
@@ -465,7 +465,7 @@ const Auction = () => {
                                     className="echarts-for-echarts"
                                 />
                             )}
-                            {selectLabel.value === "round_change" && (
+                            {selectLabel.value === "round_change" && round_chance && (
                                 <ReactECharts
                                     option={{
                                         tooltip: {},
