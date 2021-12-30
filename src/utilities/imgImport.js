@@ -105,8 +105,6 @@ import other5 from "../images/dressup/other-5.svg"
 import other6 from "../images/dressup/other-6.svg"
 import other7 from "../images/dressup/other-7.svg"
 
-import emptyAvatar from "../images/dressup/empty-avatar.svg"
-
 import hairStyle1Color1IsolatedIcon from "../images/dressup/isolated-icons/hair-style-1-color-1-isolated-icon.svg"
 import hairStyle1Color2IsolatedIcon from "../images/dressup/isolated-icons/hair-style-1-color-2-isolated-icon.svg"
 import hairStyle1Color3IsolatedIcon from "../images/dressup/isolated-icons/hair-style-1-color-3-isolated-icon.svg"
@@ -157,6 +155,10 @@ import silver from "../images/tiers/silver.svg";
 import gold from "../images/tiers/gold.svg";
 import platinum from "../images/tiers/platinum.svg";
 import diamond from "../images/tiers/diamond.svg";
+
+import emptyAvatar from './../images/dressup/customizeAvatar/empty.svg';
+import baseExpression from './../images/dressup/customizeAvatar/expression.svg';
+import baseHair from './../images/dressup/customizeAvatar/hair.svg';
 
 export const Logo = logo
 export const Bell = bell
@@ -261,8 +263,6 @@ export const Other5 = other5
 export const Other6 = other6
 export const Other7 = other7
 
-export const EmptyAvatar = emptyAvatar
-
 //Isolated Icons
 export const HairStyle1Color1IsolatedIcon = hairStyle1Color1IsolatedIcon
 export const HairStyle1Color2IsolatedIcon = hairStyle1Color2IsolatedIcon
@@ -314,3 +314,7 @@ export const SilverCoin = silver;
 export const GoldCoin = gold;
 export const Platinum = platinum;
 export const Diamond = diamond;
+
+export const EmptyAvatar = emptyAvatar;
+export const BaseExpression = baseExpression;
+export const BaseHair = baseHair;
