@@ -9,4 +9,6 @@ export const ROUTES = {
     payment: "/payment",
     auction: "/app/auction",
     home: "/",
+    faq: "/faq",
+    wallet: "/history"
 }

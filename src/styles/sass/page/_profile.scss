@@ -2,7 +2,6 @@
 .profile-page {
     &__left {
         padding: 8px 32px;
-        border-right: 1px solid #ffffff;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -694,17 +693,17 @@
             display: inline-block;
             float: none;
             position: relative;
-            &>div.image_div {
+            & > div.image_div {
                 margin-top: 30%;
                 img {
                     width: 100%;
                 }
             }
-            &>div.price_div {
+            & > div.price_div {
                 width: 100%;
                 position: absolute;
                 bottom: 10%;
-            }        
+            }
         }
         &::-webkit-scrollbar {
             height: 0px !important;

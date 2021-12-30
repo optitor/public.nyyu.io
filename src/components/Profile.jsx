@@ -32,12 +32,7 @@ const Profile = () => {
         walletId: 0,
     })
 
-    const {
-        tfaModal,
-        tabIndex,
-        profile_tab,
-        walletId,
-    } = state
+    const { tfaModal, tabIndex, profile_tab, walletId } = state
     // Methods
     const handleProfileTab = (value) => {
         setState({ profile_tab: value })
@@ -92,7 +87,7 @@ const Profile = () => {
                                 <TabPanel>4</TabPanel>
                             </Tabs>
                         </div>
-                        <div className="col-lg-9 profile-page__right">
+                        <div className="col-lg-9 profile-page__right border-start border-white">
                             {tabIndex === 0 && (
                                 <>
                                     <Tabs className="detail-tab">
@@ -294,9 +289,7 @@ const Profile = () => {
                                     </p>
                                 </>
                             )}
-                            {tabIndex === 1 && (
-                                <NotificationTab setting={user.notifySetting}/>
-                            )}
+                            {tabIndex === 1 && <NotificationTab setting={user.notifySetting} />}
                             {tabIndex === 2 && (
                                 <div className="connect-wallet">
                                     <h4>select wallet</h4>
