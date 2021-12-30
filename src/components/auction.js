@@ -83,16 +83,18 @@ const Auction = () => {
     // get round performance 2
     const { data: roundPerformance2 } = useQuery(GET_ROUND_PERFORMANCE2)
     const { data: roundChance } = useQuery(GET_ROUND_CHANCE)
-    const round_perform2 = roundPerformance2?.getRoundPerform2.map((item) => {
+    let round_perform2 = roundPerformance2?.getRoundPerform2.map((item) => {
         let newArr = []
         newArr.push("Round " + item.roundNumber, item.min, item.max, item.std)
         return newArr
     })
-    const round_chance = roundChance?.getRoundChance.map((item) => {
+    let round_chance = roundChance?.getRoundChance.map((item) => {
         let newArr = []
         newArr.push("Round " + item.roundNumber, item.winRate, item.failedRate)
         return newArr
     })
+    round_chance?.unshift(["Category", "Win Rate", "Failed Rate"])
+    round_perform2?.unshift(["Category", "Max", "Min", "Std"])
 
     const fnSelectedRoundData = () =>
         selectedData === 0
@@ -453,9 +455,20 @@ const Auction = () => {
                             {selectLabel.value === "round_performance2" && round_perform2 && (
                                 <ReactECharts
                                     option={{
-                                        tooltip: {},
+                                        tooltip: {
+                                            className: "echarts-tooltip",
+                                        },
+                                        color: ["#23C865", "#8F8F8F", "#FFFFFF"],
                                         dataset: {
-                                            source: round_perform2,
+                                            source: [
+                                                ["Category", "Max", "Min", "Std"],
+                                                ["Round 5", 1.79, 0, 0],
+                                                ["Round 4", 30, 45, 10.606601717798213],
+                                                ["Round 3", 30, 55, 10],
+                                                ["Round 2", 15, 55, 10],
+                                                ["Round 1", 15, 425, 0],
+                                                ["Round 6", 65, 65, 0],
+                                            ],
                                         },
                                         xAxis: { type: "category" },
                                         yAxis: {},
@@ -469,12 +482,13 @@ const Auction = () => {
                                 <ReactECharts
                                     option={{
                                         tooltip: {},
+                                        color: ["#23C865", "#E8503A"],
                                         dataset: {
                                             source: round_chance,
                                         },
                                         xAxis: { type: "category" },
                                         yAxis: {},
-                                        series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }],
+                                        series: [{ type: "bar" }, { type: "bar" }],
                                     }}
                                     style={{ height: "450px", width: "100%" }}
                                     className="echarts-for-echarts"
