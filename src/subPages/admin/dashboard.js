@@ -30,7 +30,7 @@ const IndexPage = () => {
                             <Icon icon="ic:sharp-pin-drop" />
                             Airdrop
                         </Link>
-                        <Link className="select-item" to="/admin/avatar">
+                        <Link className="select-item" to="/admin/create/customize-avatar">
                             <Icon icon="clarity:avatar-outline-badged" />
                             Avatar customization
                         </Link>

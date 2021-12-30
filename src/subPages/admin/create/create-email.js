@@ -40,8 +40,7 @@ const IndexPage = () => {
     // SendTo Data
     const [sendTo, setSendTo] = useState({userGroup: {}, time: Date.now()});
 
-    console.log(email, sendTo)
-    // Token Data Validation
+    // SendTo Data Validation
     const sendToError = useMemo(() => {
         if(!sendTo.userGroup.value) return {userGroup: 'User Group is required'};
         return {};
@@ -111,8 +110,8 @@ const IndexPage = () => {
                     {currentStep === 2 && (
                         <>
                             <div className="input_div row">
-                                <div className="col-lg-2"></div>
-                                <div className="col-lg-8">
+                                <div className="col-lg-3"></div>
+                                <div className="col-lg-6">
                                     {showError? (Object.values(sendToError)[0]? <Alert severity="error">{Object.values(sendToError)[0]}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
                                     <div>
                                         <p>Send To</p>
@@ -142,7 +141,7 @@ const IndexPage = () => {
                                         </LocalizationProvider>
                                     </div>
                                 </div>
-                                <div className="col-lg-2"></div>
+                                <div className="col-lg-3"></div>
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(1)}>Previous</button>
