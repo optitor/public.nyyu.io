@@ -9,3 +9,22 @@ query {
     }
 }
 `
+
+export const GET_NOTIFICATIONS = gql`
+query getNotifications (
+    $stamp: Float
+    $limit: Int!
+) {
+    getNotifications(
+        stamp: $stamp
+        limit: $limit
+    ) {
+        userId
+        timeStamp
+        nType
+        read
+        title
+        msg
+    }
+}
+`

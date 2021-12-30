@@ -7,11 +7,12 @@ import Modal from "react-modal"
 import { Tesla, CloseIcon, Bronze } from "../utilities/imgImport"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
 import DeleteAccountTab from "./profile/delete-account-tab"
-import NotificationTab from "./profile/notification-tab"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs, wallets } from "../utilities/staticData"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
 import { useQuery } from "@apollo/client"
+import NotificationSetting from "./profile/notification-setting-switch"
+import NotificationRecent from "./profile/notification-recent-switch"
 import Loading from "./common/Loading"
 
 const Profile = () => {
@@ -295,7 +296,20 @@ const Profile = () => {
                                 </>
                             )}
                             {tabIndex === 1 && (
-                                <NotificationTab setting={user.notifySetting}/>
+                                <div className="notification-set">
+                                    <Tabs className="notification-tab">
+                                        <TabList>
+                                            <Tab>Recent</Tab>
+                                            <Tab>Setup</Tab>
+                                        </TabList>
+                                        <TabPanel>
+                                            <NotificationRecent />
+                                        </TabPanel>
+                                        <TabPanel>
+                                            <NotificationSetting />
+                                        </TabPanel>                                        
+                                    </Tabs>
+                                </div>
                             )}
                             {tabIndex === 2 && (
                                 <div className="connect-wallet">
