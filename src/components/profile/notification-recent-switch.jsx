@@ -62,7 +62,14 @@ export default function NotificationRecent() {
             <div className="recent-notification-wrapper">
                 {NTList &&
                     NTList.map((item, idx) => (
-                        <div className="recent-item" key={idx} onClick={() => setRead(item)}>
+                        <div
+                            className="recent-item"
+                            key={idx}
+                            tabIndex={0}
+                            role="button"
+                            onClick={() => setRead(item)}
+                            onKeyDown={() => setRead(item)}
+                        >
                             <div
                                 className={`status ${
                                     item?.pending ? "pending" : item?.read ? "deactive" : "active"
