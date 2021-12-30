@@ -1329,9 +1329,9 @@ export const passwordValidatorOptions = {
     pointsForContainingSymbol: 10,
 }
 
-export const COLOR_LOAD = "#ffc107"
+export const COLOR_LOAD = "#ffffff"
 export const COLOR_ON = "#23c865"
-export const COLOR_OFF = "#ffffff"
+export const COLOR_OFF = "#626161"
 
 export const wallets = [
     {
