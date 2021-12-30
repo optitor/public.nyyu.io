@@ -48,7 +48,7 @@ const Profile = () => {
             <main className="profile-page">
                 <Header />
                 <section className="container position-relative h-100">
-                    <div className="row mt-lg-5">
+                    <div className="row mt-lg-2">
                         <div className="col-lg-3 profile-page__left">
                             <div className="user-info">
                                 <img className="user-info__avatar" src={Tesla} alt="tesla" />
