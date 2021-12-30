@@ -11,3 +11,20 @@ export const USER_NOTIFICATION_SETTING = gql`
         )  
     }
 `
+
+export const SET_NOTIFICATION_READ_FLAG = gql`
+    mutation setNotificationReadFlag(
+        $stamp: Float!
+    ) {
+        setNotificationReadFlag(
+            stamp: $stamp
+        ){
+            userId
+            timeStamp
+            nType
+            read
+            title
+            msg
+        }
+    }
+`
