@@ -87,7 +87,12 @@ const Menu = () => {
                             >
                                 profile
                             </Link>
-                            <Link onClick={() => setIsDressUPModalOpen(true)}>dressup</Link>
+                            <div
+                                onClick={() => setIsDressUPModalOpen(true)}
+                                className="cursor-pointer hover:text-green"
+                            >
+                                dressup
+                            </div>
                             <Link
                                 to={ROUTES.faq}
                                 className={`${

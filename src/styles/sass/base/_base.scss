@@ -68,3 +68,10 @@ input[type="number"]::-webkit-outer-spin-button {
 .bg-clip-unset {
     background-clip: unset !important;
 }
+
+.hover\:text-green {
+    transition: 500ms;
+    &:hover {
+        color: $green;
+    }
+}
