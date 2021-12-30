@@ -67,42 +67,43 @@ const Menu = () => {
                     <Link to="/" className="menu__logo d-flex" title="Logo">
                         <img src={Logo} alt="NDB Brand Logo" />
                     </Link>
-                    {(window.location.pathname === ROUTES.profile ||
-                        window.location.pathname === ROUTES.faq ||
-                        window.location.pathname === ROUTES.wallet) && (
-                        <>
-                            <Link
-                                to={ROUTES.wallet}
-                                className={`${
-                                    window.location.pathname === ROUTES.wallet && "txt-green"
-                                }`}
-                            >
-                                wallet
-                            </Link>
-                            <Link
-                                to={ROUTES.profile}
-                                className={`${
-                                    window.location.pathname === ROUTES.profile && "txt-green"
-                                }`}
-                            >
-                                profile
-                            </Link>
-                            <div
-                                onClick={() => setIsDressUPModalOpen(true)}
-                                className="cursor-pointer hover:text-green"
-                            >
-                                dressup
-                            </div>
-                            <Link
-                                to={ROUTES.faq}
-                                className={`${
-                                    window.location.pathname === ROUTES.faq && "txt-green"
-                                }`}
-                            >
-                                faq
-                            </Link>
-                        </>
-                    )}
+                    {typeof window !== `undefined` &&
+                        (window.location.pathname === ROUTES.profile ||
+                            window.location.pathname === ROUTES.faq ||
+                            window.location.pathname === ROUTES.wallet) && (
+                            <>
+                                <Link
+                                    to={ROUTES.wallet}
+                                    className={`${
+                                        window.location.pathname === ROUTES.wallet && "txt-green"
+                                    }`}
+                                >
+                                    wallet
+                                </Link>
+                                <Link
+                                    to={ROUTES.profile}
+                                    className={`${
+                                        window.location.pathname === ROUTES.profile && "txt-green"
+                                    }`}
+                                >
+                                    profile
+                                </Link>
+                                <div
+                                    onClick={() => setIsDressUPModalOpen(true)}
+                                    className="cursor-pointer hover:text-green"
+                                >
+                                    dressup
+                                </div>
+                                <Link
+                                    to={ROUTES.faq}
+                                    className={`${
+                                        window.location.pathname === ROUTES.faq && "txt-green"
+                                    }`}
+                                >
+                                    faq
+                                </Link>
+                            </>
+                        )}
                 </div>
                 <div className="d-flex align-items-center">
                     <div className="sign-in">
