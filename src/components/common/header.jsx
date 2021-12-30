@@ -90,7 +90,9 @@ const Menu = () => {
                                 </Link>
                                 <div
                                     onClick={() => setIsDressUPModalOpen(true)}
+                                    onKeyDown={() => setIsDressUPModalOpen(true)}
                                     className="cursor-pointer hover:text-green"
+                                    role="presentation"
                                 >
                                     dressup
                                 </div>
