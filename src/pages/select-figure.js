@@ -31,8 +31,7 @@ const SelectFigure = () => {
         errorPolicy: "ignore",
         onCompleted: (data) => {
             setPending(false)
-            if (data?.setAvatar === "Success")
-                navigate(ROUTES.profile)
+            if (data?.setAvatar === "Success") navigate(ROUTES.profile)
         },
     })
 
@@ -215,6 +214,12 @@ const SelectFigure = () => {
                                                                     names.random().substring(0, 7)
                                                                 )
                                                             }
+                                                            onKeyDown={() =>
+                                                                setRandomName(
+                                                                    names.random().substring(0, 7)
+                                                                )
+                                                            }
+                                                            role="presentation"
                                                         >
                                                             Random generate
                                                         </p>
@@ -233,7 +238,9 @@ const SelectFigure = () => {
                                         <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
                                             <CustomSpinner />
                                         </div>
-                                        <div className={`${pending ? "ms-3" : "pe-4"}`}>confirm</div>
+                                        <div className={`${pending ? "ms-3" : "pe-4"}`}>
+                                            confirm
+                                        </div>
                                     </button>
                                 ) : (
                                     <button

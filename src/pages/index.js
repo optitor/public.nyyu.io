@@ -49,6 +49,8 @@ const IndexPage = () => {
                                         <div
                                             className="learn-more"
                                             onClick={() => setIsModalOpen(true)}
+                                            onKeyDown={() => setIsModalOpen(true)}
+                                            role="presentation"
                                         >
                                             Refer to friends
                                         </div>

@@ -33,12 +33,7 @@ const Profile = () => {
         walletId: 0,
     })
 
-    const {
-        tfaModal,
-        tabIndex,
-        profile_tab,
-        walletId,
-    } = state
+    const { tfaModal, tabIndex, profile_tab, walletId } = state
     // Methods
     const handleProfileTab = (value) => {
         setState({ profile_tab: value })
@@ -53,7 +48,7 @@ const Profile = () => {
             <main className="profile-page">
                 <Header />
                 <section className="container position-relative h-100">
-                    <div className="row mt-lg-5">
+                    <div className="row mt-lg-2">
                         <div className="col-lg-3 profile-page__left">
                             <div className="user-info">
                                 <img className="user-info__avatar" src={Tesla} alt="tesla" />
@@ -93,7 +88,7 @@ const Profile = () => {
                                 <TabPanel>4</TabPanel>
                             </Tabs>
                         </div>
-                        <div className="col-lg-9 profile-page__right position-relative">
+                        <div className="col-lg-9 profile-page__right border-start border-white">
                             {tabIndex === 0 && (
                                 <>
                                     <Tabs className="detail-tab">
@@ -307,7 +302,7 @@ const Profile = () => {
                                         </TabPanel>
                                         <TabPanel>
                                             <NotificationSetting />
-                                        </TabPanel>                                        
+                                        </TabPanel>
                                     </Tabs>
                                 </div>
                             )}
