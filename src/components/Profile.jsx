@@ -93,7 +93,7 @@ const Profile = () => {
                                 <TabPanel>4</TabPanel>
                             </Tabs>
                         </div>
-                        <div className="col-lg-9 profile-page__right">
+                        <div className="col-lg-9 profile-page__right position-relative">
                             {tabIndex === 0 && (
                                 <>
                                     <Tabs className="detail-tab">

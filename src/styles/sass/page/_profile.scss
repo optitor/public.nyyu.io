@@ -6,7 +6,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        max-height: 507px;
+        max-height: 500px;
         .user-info {
             margin: 48px 0 105px;
             text-align: center;
@@ -297,6 +297,12 @@
                         background-color: unset;
                         border: unset;
                     }
+                }
+                .recent-notification-wrapper {
+                    @include custom-scroll(250px);
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    height: 520px;
                 }
                 .recent-item,
                 .notification-item {
@@ -694,17 +700,17 @@
             display: inline-block;
             float: none;
             position: relative;
-            &>div.image_div {
+            & > div.image_div {
                 margin-top: 30%;
                 img {
                     width: 100%;
                 }
             }
-            &>div.price_div {
+            & > div.price_div {
                 width: 100%;
                 position: absolute;
                 bottom: 10%;
-            }        
+            }
         }
         &::-webkit-scrollbar {
             height: 0px !important;

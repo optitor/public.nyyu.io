@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react"
-import { TabPanel } from "react-tabs"
 import { useQuery, useMutation } from "@apollo/client"
 import Switch from "react-switch"
 import { GET_NOTICATION_TYPES } from "../../apollo/graghqls/querys/Notification"
@@ -12,8 +11,6 @@ export default function NotificationSetting() {
 
     const { data: user_data, refetch } = useQuery(GET_USER)
     const setting = user_data?.getUser.notifySetting
-
-    console.log("userData", setting  )
 
     const { data : ntf_type_result } = useQuery(GET_NOTICATION_TYPES)
 
