@@ -1,9 +1,10 @@
 import React from "react"
 
-export default function PasswordEyeIcon({ passwordVisible, setPasswordVisible }) {
+export default function PasswordEyeIcon({ passwordVisible, setPasswordVisible, styles }) {
     return passwordVisible ? (
         <svg
             className="password-eye-icon"
+            style={styles}
             onClick={() => setPasswordVisible(false)}
             fill="none"
             stroke="currentColor"
@@ -20,6 +21,7 @@ export default function PasswordEyeIcon({ passwordVisible, setPasswordVisible })
     ) : (
         <svg
             className="password-eye-icon"
+            style={styles}
             onClick={() => setPasswordVisible(true)}
             fill="none"
             stroke="currentColor"
