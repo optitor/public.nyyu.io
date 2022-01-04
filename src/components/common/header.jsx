@@ -10,10 +10,10 @@ import { User } from "../../utilities/user-data"
 import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
+import { Currencies } from "../../utilities/staticData"
 
 const Menu = () => {
     const auth = useAuth()
-
     // State
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
 
@@ -47,7 +47,6 @@ const Menu = () => {
         },
     ]
 
-    // Handles 'ESC' key pressing.
     useEffect(() => {
         const handleEscKeyPress = (event) => {
             if (event.key === "Escape" && active) {
@@ -108,6 +107,21 @@ const Menu = () => {
                         )}
                 </div>
                 <div className="d-flex align-items-center">
+                    <div>
+                        {typeof window !== `undefined` &&
+                            window.location.pathname === ROUTES.auction && (
+                                <div className="header-currencies-dropdown">
+                                    <select
+                                        value={Currencies[User.selectedCurrencyId].id}
+                                        onChange={(e) => (User.selectedCurrencyId = e.target.value)}
+                                    >
+                                        {Currencies?.map((item) => {
+                                            return <option value={item.id}>{item.label}</option>
+                                        })}
+                                    </select>
+                                </div>
+                            )}
+                    </div>
                     <div className="sign-in">
                         {!auth?.isLoggedIn() ? (
                             <Link
@@ -137,6 +151,7 @@ const Menu = () => {
                             </ul>
                         )}
                     </div>
+
                     <button
                         type="button"
                         className="menu__toggler"
