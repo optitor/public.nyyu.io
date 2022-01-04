@@ -33,8 +33,10 @@ const VerifyEmail = (props) => {
         result_code: "",
         choose_type: 0,
         set_type: -1,
+        input_mobile: false,
+        mobile: "",
     })
-    const { code, tfaModal, result_code, choose_type, set_type } = state
+    const { code, tfaModal, result_code, choose_type, set_type, input_mobile, mobile } = state
 
     const [qrcode, setQRCode] = useState("")
 
@@ -75,6 +77,31 @@ const VerifyEmail = (props) => {
             }
         },
     })
+
+    const handleMethodClicked = () => {
+        const method = two_factors[choose_type].method
+        if (method === "phone") {
+            setState({ input_mobile: true })
+        } else {
+            request2FA({
+                variables: {
+                    email: user.email,
+                    method: two_factors[choose_type].method,
+                    phone: mobile,
+                },
+            })
+        }
+    }
+
+    const sendRequest2FA = () => {
+        request2FA({
+            variables: {
+                email: user.email,
+                method: two_factors[choose_type].method,
+                phone: mobile,
+            },
+        })
+    }
     return (
         <AuthLayout>
             <h3 className="signup-head mb-5">Verify email</h3>
@@ -144,42 +171,63 @@ const VerifyEmail = (props) => {
                 </div>
                 <div className="twoFA-modal__body">
                     {set_type === -1 ? (
-                        <div className="tfa-select">
-                            <h3>Protect your account with 2-step verification</h3>
-                            <p className="mt-4 mb-5">
-                                Each time you log in, in addition to your password, you will enter a
-                                one-time code you receive via text message or generate using an
-                                authenticator app.
-                            </p>
-                            <div className="d-flex flex-column justify-content-center align-items-center">
-                                {two_factors.map((item, idx) => (
+                        input_mobile ? (
+                            <div className="input_mobile">
+                                <h3>Connect Mobile</h3>
+                                <p className="mt-3 pb-3">
+                                    You will recive a sms code to the number
+                                </p>
+                                <div className="form-group">
+                                    <Input
+                                        type="text"
+                                        value={mobile}
+                                        onChange={(e) => setState({ mobile: e.target.value })}
+                                        placeholder="Enter Mobile Number"
+                                    />
                                     <button
-                                        key={idx}
-                                        className={`btn-primary mb-2 select-tfa ${
-                                            choose_type === idx && "active"
-                                        }`}
-                                        onClick={() => setState({ choose_type: idx })}
+                                        className="btn-primary next-step mt-4"
+                                        onClick={() => sendRequest2FA()}
                                     >
-                                        {item.label}
+                                        Confirm
                                     </button>
-                                ))}
-
-                                <button
-                                    className="btn-primary next-step mt-4"
-                                    onClick={() =>
-                                        request2FA({
-                                            variables: {
-                                                email: user.email,
-                                                method: two_factors[choose_type].method,
-                                                phone: "123456789",
-                                            },
-                                        })
-                                    }
-                                >
-                                    Next
-                                </button>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="tfa-select">
+                                <h3>Protect your account with 2-step verification</h3>
+                                <p className="mt-4 mb-5">
+                                    Each time you log in, in addition to your password, you will
+                                    enter a one-time code you receive via text message or generate
+                                    using an authenticator app.
+                                </p>
+                                <div className="d-flex flex-column justify-content-center align-items-center">
+                                    {two_factors.map((item, idx) => (
+                                        <button
+                                            key={idx}
+                                            className={`btn-primary mb-2 select-tfa ${
+                                                choose_type === idx && "active"
+                                            }`}
+                                            onClick={() => setState({ choose_type: idx })}
+                                        >
+                                            {item.label}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        className="btn-primary next-step mt-4"
+                                        onClick={() => {
+                                            if (two_factors[choose_type].method === "phone") {
+                                                setState({ input_mobile: true })
+                                            } else {
+                                                sendRequest2FA()
+                                            }
+                                        }}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        )
                     ) : (
                         <div className="get-code">
                             {set_type === 0 && (
