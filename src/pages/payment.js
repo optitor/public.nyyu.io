@@ -29,7 +29,7 @@ const payment_types = [
     { value: "cryptocoin", label: "Cryptocoin", index: 0 },
     { value: "creditcard", label: "Card Payment", index: 1 },
     { value: "wallet", label: "Ndb wallet", index: 2 },
-    { value: "externalwallets", label: "Wallets", index: 3 },
+    { value: "externalwallets", label: "External Wallets", index: 3 },
 ]
 
 const IconOption = (props) => (
