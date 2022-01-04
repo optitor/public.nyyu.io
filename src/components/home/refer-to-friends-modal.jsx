@@ -16,7 +16,12 @@ export default function ReferToFriendsModal({ isModalOpen, setIsModalOpen }) {
         >
             <div className="refer-modal__header">
                 Invite friends
-                <div onClick={() => setIsModalOpen(false)} role="button" tabIndex="0">
+                <div
+                    onClick={() => setIsModalOpen(false)}
+                    onKeyDown={() => setIsModalOpen(false)}
+                    role="button"
+                    tabIndex="0"
+                >
                     <img width="14px" height="14px" src={CloseIcon} alt="close" />
                 </div>
             </div>

@@ -120,6 +120,8 @@ const Menu = () => {
                                     <div
                                         className="currencies-dropdown-indicator"
                                         onClick={toggleCurrenciesMenuContent}
+                                        onKeyDown={toggleCurrenciesMenuContent}
+                                        role="presentation"
                                     >
                                         <span>USD</span>
                                         <svg
@@ -149,6 +151,11 @@ const Menu = () => {
                                                         User.selectedCurrencyId = item.id
                                                         toggleCurrenciesMenuContent()
                                                     }}
+                                                    onKeyDown={() => {
+                                                        User.selectedCurrencyId = item.id
+                                                        toggleCurrenciesMenuContent()
+                                                    }}
+                                                    role="presentation"
                                                 >
                                                     {item.label}
                                                 </li>
