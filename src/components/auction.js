@@ -1,5 +1,4 @@
 import React, { useReducer, useEffect, useState } from "react"
-// import { navigate } from "gatsby"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
@@ -24,8 +23,10 @@ import {
     GET_BIDLIST_BY_ROUND,
 } from "../apollo/graghqls/querys/Auction"
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
+import { Currencies } from "../utilities/staticData"
+import { User } from "../utilities/user-data"
 
-const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
+const ndb_token = `Since the beginning of NDB's project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
 By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 
 `
@@ -51,7 +52,6 @@ const Auction = () => {
 
     const { tabIndex, amount, price, place_bid, bidModal, show_chart, selectLabel } = state
     const [selectedData, setSelectedData] = useState(1)
-
     const { data } = useQuery(GET_AUCTION)
 
     const roundData = data?.getAuctions?.filter(
@@ -226,55 +226,117 @@ const Auction = () => {
                             onSelect={(index) => setState({ tabIndex: index })}
                         >
                             <TabList>
-                                <Tab>Ndb token</Tab>
-                                <Tab>StatiStics</Tab>
-                                <Tab>Bids history</Tab>
+                                {fnSelectedRoundData()?.status === 2 ? (
+                                    <>
+                                        <Tab>statistics</Tab>
+                                        <Tab>bids history</Tab>
+                                        <Tab>ndb token</Tab>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Tab>ndb token</Tab>
+                                        <Tab>bids history</Tab>
+                                        <Tab>statistics</Tab>
+                                    </>
+                                )}
                             </TabList>
-                            <TabPanel>
-                                <p className="text">{ndb_token}</p>
-                            </TabPanel>
-                            <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Highest Bid Per Token</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td>{getFormatedDate(item.placedAt)}</td>
-                                                <td>
-                                                    {item.totalPrice}
-                                                    <span className="txt-green"> $</span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </TabPanel>
-                            <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Placement</th>
-                                            <th>Highest Bid Per Token</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td>{idx + 1}</td>
-                                                <td>
-                                                    {item.totalPrice}
-                                                    <span className="txt-green"> $</span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </TabPanel>
+                            {fnSelectedRoundData()?.status === 2 ? (
+                                <>
+                                    <TabPanel>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Highest Bid Per Token</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{getFormatedDate(item.placedAt)}</td>
+                                                        <td>
+                                                            {item.totalPrice}
+                                                            <span className="txt-green"> $</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Placement</th>
+                                                    <th>Highest Bid Per Token</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{idx + 1}</td>
+                                                        <td>
+                                                            {item.totalPrice}
+                                                            <span className="txt-green"> $</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <p className="text">{ndb_token}</p>
+                                    </TabPanel>
+                                </>
+                            ) : (
+                                <>
+                                    <TabPanel>
+                                        <p className="text">{ndb_token}</p>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Placement</th>
+                                                    <th>Highest Bid Per Token</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{idx + 1}</td>
+                                                        <td>
+                                                            {item.totalPrice}
+                                                            <span className="txt-green"> $</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Highest Bid Per Token</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{getFormatedDate(item.placedAt)}</td>
+                                                        <td>
+                                                            {item.totalPrice}
+                                                            <span className="txt-green"> $</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </TabPanel>
+                                </>
+                            )}
                         </Tabs>
                         {isInbetween(
                             fnSelectedRoundData()?.startedAt,
@@ -374,7 +436,7 @@ const Auction = () => {
 
                     <div className="auction-right col-lg-8 col-md-7">
                         <div className={`place-bid ${place_bid && "d-none"}`}>
-                            <h3 className="range-label">amount of Token</h3>
+                            <h3 className="range-label">amount of token</h3>
                             <div className="d-flex align-items-center mb-4">
                                 <input
                                     type="number"
@@ -414,12 +476,13 @@ const Auction = () => {
                                     value={numberWithCommas(price * amount, " ")}
                                     readOnly
                                 />
+                                <h3 className="symbol-label">
+                                    {Currencies[User.selectedCurrencyId].symbol}
+                                </h3>
                             </div>
                             <button
                                 className="btn-primary text-uppercase w-100"
                                 onClick={() => {
-                                    // setState({ place_bid: true })
-                                    // navigate("/payment")
                                     PlaceBid({
                                         variables: {
                                             roundId: fnSelectedRoundData()?.auctionId,
@@ -593,7 +656,6 @@ const Auction = () => {
                             setState({ total: price * amount })
                             setState({ bidModal: false })
                             setState({ place_bid: true })
-                            // navigate("/payment")
                         }}
                     >
                         {!place_bid ? "Place Bid" : "Increase Bid"}

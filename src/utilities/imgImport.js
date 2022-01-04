@@ -160,6 +160,8 @@ import emptyAvatar from "./../images/dressup/customizeAvatar/empty.svg"
 import baseExpression from "./../images/dressup/customizeAvatar/expression.svg"
 import baseHair from "./../images/dressup/customizeAvatar/hair.svg"
 
+import ndbToken from "../images/ndb-token.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const DownArrow = downArrow
@@ -318,3 +320,5 @@ export const Diamond = diamond
 export const EmptyAvatar = emptyAvatar
 export const BaseExpression = baseExpression
 export const BaseHair = baseHair
+
+export const NdbToken = ndbToken

@@ -29,7 +29,7 @@ const IndexPage = () => {
                     <div className="container h-100 d-flex flex-column justify-content-center">
                         <div className="row m-0">
                             <div className="left-part col-md-6">
-                                <h3 className="home-title ">
+                                <h3 className="home-title">
                                     <span className="txt-green">round 20</span> ends in
                                     <CountDown />
                                 </h3>
