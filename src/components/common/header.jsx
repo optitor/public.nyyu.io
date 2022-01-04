@@ -63,7 +63,7 @@ const Menu = () => {
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
             <div className="px-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-end gap-5 text-white text-uppercase fw-bold">
+                <div className="d-flex align-items-end gap-5 text-white text-uppercase fw-bold">
                     <Link to="/" className="menu__logo d-flex" title="Logo">
                         <img src={Logo} alt="NDB Brand Logo" />
                     </Link>

@@ -161,6 +161,7 @@ const Auction = () => {
             clearInterval(id)
         }
     }, [])
+
     return (
         <main className="auction-page">
             <Header />
@@ -421,7 +422,7 @@ const Auction = () => {
                                     // navigate("/payment")
                                     PlaceBid({
                                         variables: {
-                                            roundId: fnSelectedRoundData()?.number,
+                                            roundId: fnSelectedRoundData()?.auctionId,
                                             tokenAmount: amount,
                                             tokenPrice: price,
                                             payment: 1,
