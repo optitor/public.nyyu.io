@@ -1406,3 +1406,48 @@ export const recentNotifications = [
         act: "There are only 40 tokens left",
     },
 ]
+
+export const Currencies = [
+    {
+        id: 0,
+        label: "USD",
+        value: "USD",
+        symbol: "$"
+    },
+    {
+        id: 1,
+        label: "EUR",
+        value: "EUR",
+        symbol: "£"
+    },
+    {
+        id: 2,
+        label: "GBP",
+        value: "GBP",
+        symbol: "€"
+    },
+    {
+        id: 3,
+        label: "INR",
+        value: "INR",
+        symbol: "¥"
+    },
+    {
+        id: 4,
+        label: "SEK",
+        value: "SEK",
+        symbol: "KR"
+    },
+    {
+        id: 5,
+        label: "RUB",
+        value: "RUB",
+        symbol: "₽"
+    },
+    {
+        id: 6,
+        label: "CHF",
+        value: "CHF",
+        symbol: "CHF"
+    },
+]

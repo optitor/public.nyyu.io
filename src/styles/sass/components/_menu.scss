@@ -246,3 +246,23 @@
         }
     }
 }
+
+.header-currencies-dropdown {
+    & > select,
+    option {
+        color: white;
+        padding: 5px 10px;
+        font-weight: bold;
+        font-variant: small-caps;
+        font-size: 20px;
+        line-height: 29px;
+        text-align: center;
+        border: 1px solid white;
+        background-color: $black;
+        margin-right: 15px;
+    }
+    option {
+        text-align: left;
+        appearance: none;
+    }
+}

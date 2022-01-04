@@ -23,6 +23,8 @@ import {
     GET_BIDLIST_BY_ROUND,
 } from "../apollo/graghqls/querys/Auction"
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
+import { Currencies } from "../utilities/staticData"
+import { User } from "../utilities/user-data"
 
 const ndb_token = `Since the beginning of NDB's project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -434,7 +436,7 @@ const Auction = () => {
 
                     <div className="auction-right col-lg-8 col-md-7">
                         <div className={`place-bid ${place_bid && "d-none"}`}>
-                            <h3 className="range-label">amount of Token</h3>
+                            <h3 className="range-label">amount of token</h3>
                             <div className="d-flex align-items-center mb-4">
                                 <input
                                     type="number"
@@ -474,12 +476,13 @@ const Auction = () => {
                                     value={numberWithCommas(price * amount, " ")}
                                     readOnly
                                 />
+                                <h3 className="symbol-label">
+                                    {Currencies[User.selectedCurrencyId].symbol}
+                                </h3>
                             </div>
                             <button
                                 className="btn-primary text-uppercase w-100"
                                 onClick={() => {
-                                    // setState({ place_bid: true })
-                                    // navigate("/payment")
                                     PlaceBid({
                                         variables: {
                                             roundId: fnSelectedRoundData()?.number,
