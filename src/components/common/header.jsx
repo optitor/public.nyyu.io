@@ -59,6 +59,12 @@ const Menu = () => {
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
 
+    const toggleCurrenciesMenuContent = () => {
+        const menuItem = document.querySelector(".currencies-dropdown-content")
+        menuItem.classList.toggle("d-none")
+        menuItem.classList.toggle("d-block")
+    }
+
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
             <div className="px-4 d-flex align-items-center justify-content-between">
@@ -111,14 +117,44 @@ const Menu = () => {
                         {typeof window !== `undefined` &&
                             window.location.pathname === ROUTES.auction && (
                                 <div className="header-currencies-dropdown">
-                                    <select
-                                        value={Currencies[User.selectedCurrencyId].id}
-                                        onChange={(e) => (User.selectedCurrencyId = e.target.value)}
+                                    <div
+                                        className="currencies-dropdown-indicator"
+                                        onClick={toggleCurrenciesMenuContent}
                                     >
+                                        <span>USD</span>
+                                        <svg
+                                            class="down-arrow"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M19 9l-7 7-7-7"
+                                            ></path>
+                                        </svg>
+                                    </div>
+                                    <ul className="currencies-dropdown-content d-none">
                                         {Currencies?.map((item) => {
-                                            return <option value={item.id}>{item.label}</option>
+                                            return (
+                                                <li
+                                                    className={
+                                                        Currencies[User.selectedCurrencyId].id ===
+                                                            item.id && "text-secondary"
+                                                    }
+                                                    onClick={() => {
+                                                        User.selectedCurrencyId = item.id
+                                                        toggleCurrenciesMenuContent()
+                                                    }}
+                                                >
+                                                    {item.label}
+                                                </li>
+                                            )
                                         })}
-                                    </select>
+                                    </ul>
                                 </div>
                             )}
                     </div>
