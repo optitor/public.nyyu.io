@@ -41,7 +41,7 @@ import copy from "../images/copy.png"
 import copy2 from "../images/copy2.png"
 import airdrop from "../images/airdrop.png"
 
-import notFound from "../images/notFound.svg";
+import notFound from "../images/notFound.svg"
 
 //Wallets
 import metamask from "../images/wallets/metamask.svg"
@@ -150,15 +150,17 @@ import otherIsolatedIcon4 from "../images/dressup/isolated-icons/other-isolated-
 import otherIsolatedIcon5 from "../images/dressup/isolated-icons/other-isolated-icon-5.svg"
 import otherIsolatedIcon6 from "../images/dressup/isolated-icons/other-isolated-icon-6.svg"
 
-import bronze from "../images/tiers/bronze.svg";
-import silver from "../images/tiers/silver.svg";
-import gold from "../images/tiers/gold.svg";
-import platinum from "../images/tiers/platinum.svg";
-import diamond from "../images/tiers/diamond.svg";
+import bronze from "../images/tiers/bronze.svg"
+import silver from "../images/tiers/silver.svg"
+import gold from "../images/tiers/gold.svg"
+import platinum from "../images/tiers/platinum.svg"
+import diamond from "../images/tiers/diamond.svg"
 
-import emptyAvatar from './../images/dressup/customizeAvatar/empty.svg';
-import baseExpression from './../images/dressup/customizeAvatar/expression.svg';
-import baseHair from './../images/dressup/customizeAvatar/hair.svg';
+import emptyAvatar from "./../images/dressup/customizeAvatar/empty.svg"
+import baseExpression from "./../images/dressup/customizeAvatar/expression.svg"
+import baseHair from "./../images/dressup/customizeAvatar/hair.svg"
+
+import ndbToken from "../images/ndb-token.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -216,7 +218,7 @@ export const NewDoc = newDoc
 export const PhotoIcon = photoIcon
 export const SelfieImg = selfieImg
 
-export const NotFound = notFound;
+export const NotFound = notFound
 
 //DressUP
 export const HairStyle1 = hairStyle1
@@ -310,11 +312,13 @@ export const OtherIsolatedIcon5 = otherIsolatedIcon5
 export const OtherIsolatedIcon6 = otherIsolatedIcon6
 
 export const Bronze = bronze
-export const SilverCoin = silver;
-export const GoldCoin = gold;
-export const Platinum = platinum;
-export const Diamond = diamond;
+export const SilverCoin = silver
+export const GoldCoin = gold
+export const Platinum = platinum
+export const Diamond = diamond
 
-export const EmptyAvatar = emptyAvatar;
-export const BaseExpression = baseExpression;
-export const BaseHair = baseHair;
+export const EmptyAvatar = emptyAvatar
+export const BaseExpression = baseExpression
+export const BaseHair = baseHair
+
+export const NdbToken = ndbToken

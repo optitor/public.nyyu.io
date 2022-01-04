@@ -1,6 +1,7 @@
 import React from "react"
 import Seo from "../components/seo"
 import Header from "../components/common/header"
+import { NdbToken } from "../utilities/imgImport"
 
 const IndexPage = () => {
     return (
@@ -14,7 +15,15 @@ const IndexPage = () => {
             <main className="home-page">
                 <Header />
                 <div className="container col-lg-10 mx-auto gap-5">
-                    <div className="direct-purchase">
+                    <div
+                        className="direct-purchase"
+                        style={{
+                            backgroundImage: `url(${NdbToken})`,
+                            backgroundSize: "contain",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "left center",
+                        }}
+                    >
                         <div className="d-flex align-items-center">
                             <div className="col-md-6 d-xl-flex flex-xl-column align-items-xl-center">
                                 <div className="next-auction-label">
