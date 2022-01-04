@@ -68,7 +68,7 @@ const Menu = () => {
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
             <div className="px-4 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-end gap-5 text-white text-uppercase fw-bold">
+                <div className="d-flex align-items-end gap-5 text-white text-uppercase fw-bold">
                     <Link to="/" className="menu__logo d-flex" title="Logo">
                         <img src={Logo} alt="NDB Brand Logo" />
                     </Link>
@@ -120,6 +120,8 @@ const Menu = () => {
                                     <div
                                         className="currencies-dropdown-indicator"
                                         onClick={toggleCurrenciesMenuContent}
+                                        onKeyDown={toggleCurrenciesMenuContent}
+                                        role="presentation"
                                     >
                                         <span>USD</span>
                                         <svg
@@ -149,6 +151,11 @@ const Menu = () => {
                                                         User.selectedCurrencyId = item.id
                                                         toggleCurrenciesMenuContent()
                                                     }}
+                                                    onKeyDown={() => {
+                                                        User.selectedCurrencyId = item.id
+                                                        toggleCurrenciesMenuContent()
+                                                    }}
+                                                    role="presentation"
                                                 >
                                                     {item.label}
                                                 </li>

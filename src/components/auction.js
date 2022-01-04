@@ -485,7 +485,7 @@ const Auction = () => {
                                 onClick={() => {
                                     PlaceBid({
                                         variables: {
-                                            roundId: fnSelectedRoundData()?.number,
+                                            roundId: fnSelectedRoundData()?.auctionId,
                                             tokenAmount: amount,
                                             tokenPrice: price,
                                             payment: 1,
