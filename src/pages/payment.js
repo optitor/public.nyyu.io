@@ -432,7 +432,7 @@ const Payment = () => {
                             </TabPanel>
                         </Tabs>
                     </div>
-                    <div className="col-md-4 order-summary">
+                    <div className="col-md-4 order-summary d-flex flex-column justify-content-between">
                         <h3>Order Summary</h3>
                         <p>
                             The token will be paid to your wallet at ndb Will be hold based on the
@@ -451,7 +451,9 @@ const Payment = () => {
                             payment expires in
                             <span className="txt-green">10 minutes</span>
                         </p>
-                        <button className="btn-primary text-uppercase">Confirm Payment</button>
+                        <button className="btn-primary text-uppercase width-max-content">
+                            Confirm Payment
+                        </button>
                     </div>
                 </div>
                 <div className="remain-token__value col-md-12 mx-auto">
