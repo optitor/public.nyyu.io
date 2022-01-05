@@ -615,11 +615,9 @@
     padding: 0px;
     border: unset;
 
-    .expression-icons {
-        z-index: 0;
-    }
-    .facial-style-icons {
-        z-index: 1;
+    div.profile {
+        margin: auto;
+        border: none;
     }
 
     &__header {
@@ -700,9 +698,10 @@
             float: none;
             position: relative;
             & > div.image_div {
-                margin-top: 30%;
-                img {
-                    width: 100%;
+                margin-top: 50%;
+                position: relative;
+                div {
+                    position: absolute;
                 }
             }
             & > div.price_div {
