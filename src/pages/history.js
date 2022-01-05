@@ -23,7 +23,6 @@ import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Input } from "../components/common/FormControl"
 import { useWindowSize } from "../utilities/customHook"
 import AirdropDetail from "../components/AirdropDetail"
-// import ReactECharts from "echarts-for-react"
 
 const transactions = [
     {
@@ -385,8 +384,10 @@ const History = () => {
                     <div className="section-history__left col-lg-4 col-md-5">
                         <Tabs>
                             <TabList>
-                                <Tab>Bid activity</Tab>
-                                <Tab className="react-tabs__tab ms-auto">WALLET</Tab>
+                                <Tab className="react-tabs__tab col-6 text-center">
+                                    Bid activity
+                                </Tab>
+                                <Tab className="react-tabs__tab col-6 text-center">WALLET</Tab>
                             </TabList>
                             <TabPanel>
                                 <ul className="bid-activity">
@@ -414,11 +415,23 @@ const History = () => {
                                     </Link>
                                 </div>
                                 <div className="profile-value">
-                                    <h5>Portfolio value </h5>
+                                    <h5>portfolio value </h5>
                                     <div className="value-box">
                                         <p className="value-label">Equity Value (BTC)</p>
-                                        <p className="value">6.00</p>
+                                        <p className="value">12.003.877</p>
                                         <p className="max-value">~ $282,004.43</p>
+                                    </div>
+                                    <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
+                                        <div className="col-sm-6 pe-2">
+                                            <button className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4">
+                                                deposit
+                                            </button>
+                                        </div>
+                                        <div className="col-sm-6 ps-2">
+                                            <button className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4">
+                                                withdraw
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <h5 className="my-4">Transactions history</h5>
