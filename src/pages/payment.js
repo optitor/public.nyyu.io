@@ -387,47 +387,52 @@ const Payment = () => {
                                 </div>
                             </TabPanel>
                             <TabPanel className="externalwallets-tab">
-                                <div className="row mt-5">
-                                    {wallets.map((item, idx) => (
-                                        <div
-                                            className="col-sm-6"
-                                            key={idx}
-                                            onClick={() => setState({ walletId: idx })}
-                                            onKeyDown={() => setState({ walletId: idx })}
-                                            role="presentation"
-                                        >
+                                <div className="payment-content">
+                                    <div className="row">
+                                        {wallets.map((item, idx) => (
                                             <div
-                                                className={`wallet-item ${
-                                                    idx === walletId && "active"
+                                                className={`col-sm-6 ${
+                                                    idx % 2 === 0 ? "pe-1" : "ps-1"
                                                 }`}
+                                                key={idx}
+                                                onClick={() => setState({ walletId: idx })}
+                                                onKeyDown={() => setState({ walletId: idx })}
+                                                role="presentation"
                                             >
-                                                <img src={item.icon} alt="wallet icon" />
-                                                <p>{item.desc}</p>
+                                                <div
+                                                    className={`wallet-item ${
+                                                        idx === walletId && "active"
+                                                    }`}
+                                                >
+                                                    <img src={item.icon} alt="wallet icon" />
+                                                    <p>{item.desc}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="mt-3 d-flex">
-                                    <p className="d-flex flex-row">
-                                        <CheckBox
-                                            type="checkbox"
-                                            name="allow_fraction"
-                                            value={allow_fraction}
-                                            onChange={handleAllowFraction}
-                                            className="text-uppercase"
-                                        ></CheckBox>
-                                        <div className="allow-text">
-                                            Do you allow fraction of order compleation?
-                                        </div>
-                                        <FontAwesomeIcon
-                                            icon={faQuestionCircle}
-                                            className="fa-2x ms-2"
-                                        />
-                                    </p>
-                                    <p className="payment-expire my-auto">
-                                        payment expires in{" "}
-                                        <span className="txt-green">10 minutes</span>
-                                    </p>
+                                        ))}
+                                    </div>
+
+                                    <div className="mt-1 d-flex">
+                                        <p className="d-flex flex-row">
+                                            <CheckBox
+                                                type="checkbox"
+                                                name="allow_fraction"
+                                                value={allow_fraction}
+                                                onChange={handleAllowFraction}
+                                                className="text-uppercase"
+                                            ></CheckBox>
+                                            <div className="allow-text">
+                                                Do you allow fraction of order compleation?
+                                            </div>
+                                            <FontAwesomeIcon
+                                                icon={faQuestionCircle}
+                                                className="fa-2x ms-2"
+                                            />
+                                        </p>
+                                        <p className="payment-expire my-auto">
+                                            payment expires in{" "}
+                                            <span className="txt-green">10 minutes</span>
+                                        </p>
+                                    </div>
                                 </div>
                             </TabPanel>
                         </Tabs>
