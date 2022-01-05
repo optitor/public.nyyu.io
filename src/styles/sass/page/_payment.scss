@@ -39,6 +39,7 @@
             }
             display: flex;
             justify-content: space-between;
+            align-items: center;
             border: none;
             margin-bottom: 55px;
         }
@@ -46,7 +47,7 @@
             font-weight: 600;
             font-size: 18px;
             line-height: 29px;
-            padding: 8px 30px;
+            padding: 8px;
             border: 1px solid white;
             &[aria-selected="false"] {
                 color: rgba(255, 255, 255, 0.5);
