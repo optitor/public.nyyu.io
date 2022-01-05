@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 import { ROUTES } from "../../utilities/routes"
 import { Currencies } from "../../utilities/staticData"
 import { User } from "../../utilities/user-data"
 
 export default function CurrencyChoice() {
+    const [selectedCurrency, setSelectedCurrency] = useState(0)
     const toggleCurrenciesMenuContent = () => {
         const menuItem = document.querySelector(".currencies-dropdown-content")
         menuItem.classList.toggle("d-none")
@@ -21,7 +22,7 @@ export default function CurrencyChoice() {
                             onKeyDown={toggleCurrenciesMenuContent}
                             role="presentation"
                         >
-                            <span>USD</span>
+                            <span>{Currencies[User.selectedCurrencyId].label}</span>
                             <svg
                                 class="down-arrow"
                                 fill="none"
@@ -48,10 +49,12 @@ export default function CurrencyChoice() {
                                         onClick={() => {
                                             User.selectedCurrencyId = item.id
                                             toggleCurrenciesMenuContent()
+                                            setSelectedCurrency(item.id)
                                         }}
                                         onKeyDown={() => {
                                             User.selectedCurrencyId = item.id
                                             toggleCurrenciesMenuContent()
+                                            setSelectedCurrency(item.id)
                                         }}
                                         role="presentation"
                                     >
