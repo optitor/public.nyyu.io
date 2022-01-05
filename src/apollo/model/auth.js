@@ -16,7 +16,7 @@ export const useSigninMutation = () => {
             } else if (data.signin.status === "Success") {
                 setUser({
                     ...getUser(),
-                    tempToken: data.signin.token,
+                    tempToken: data.signin.token
                 })
                 navigate("/app/onetime-pwd")
             }
@@ -73,7 +73,8 @@ export const useSignIn2FA = () => {
                 return
             } else if (data.confirm2FA.status === "Success") {
                 setAuthToken(data.confirm2FA.token)
-                localStorage.removeItem("USER_DATA")
+                // localStorage.removeItem("USER_DATA")
+                console.log(getUser());
                 navigate(ROUTES.selectFigure)
             }
         },
