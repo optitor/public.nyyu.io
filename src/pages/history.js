@@ -191,6 +191,48 @@ const my_assets = [
         amount: 12.0865,
         price: 282004.43,
     },
+    {
+        icon: NDB,
+        abbr: "NDB",
+        name: "NDB Token",
+        amount: 12.0865,
+        price: 282004.43,
+    },
+    {
+        icon: ETH,
+        abbr: "ETH",
+        name: "Ethereum",
+        amount: 12.0865,
+        price: 282004.43,
+    },
+    {
+        icon: BTC,
+        abbr: "BTC",
+        name: "Bitcoin",
+        amount: 12.0865,
+        price: 282004.43,
+    },
+    {
+        icon: NDB,
+        abbr: "NDB",
+        name: "NDB Token",
+        amount: 12.0865,
+        price: 282004.43,
+    },
+    {
+        icon: ETH,
+        abbr: "ETH",
+        name: "Ethereum",
+        amount: 12.0865,
+        price: 282004.43,
+    },
+    {
+        icon: BTC,
+        abbr: "BTC",
+        name: "Bitcoin",
+        amount: 12.0865,
+        price: 282004.43,
+    },
 ]
 const airdrops = [
     {
@@ -419,7 +461,7 @@ const History = () => {
                                     <div className="value-box">
                                         <p className="value-label">Equity Value (BTC)</p>
                                         <p className="value">12.003.877</p>
-                                        <p className="max-value">~ $282,004.43</p>
+                                        <p className="max-value mt-3">~ $282,004.43</p>
                                     </div>
                                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                                         <div className="col-sm-6 pe-2">
@@ -434,8 +476,8 @@ const History = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <h5 className="my-4">Transactions history</h5>
-                                <div className="transaction-history">
+                                {/* <h5 className="my-4">Transactions history</h5> */}
+                                {/* <div className="transaction-history">
                                     {transactions.map((item, idx) => (
                                         <div className="transaction" key={idx}>
                                             <p className="transaction-date">{item.date}</p>
@@ -447,7 +489,35 @@ const History = () => {
                                             </div>
                                         </div>
                                     ))}
-                                </div>
+                                </div> */}
+                                <table className="mt-3">
+                                    <tbody>
+                                        {my_assets.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="d-flex align-items-center ps-2">
+                                                    <img
+                                                        src={item.icon}
+                                                        alt="coin icon"
+                                                        className="me-2"
+                                                    />
+                                                    <div>
+                                                        <p className="coin-abbr text-light">
+                                                            {item.name}
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p className="coin-price fw-bold">
+                                                        {item.amount} {item.abbr}
+                                                    </p>
+                                                    <p className="coin-percent">
+                                                        {numberWithCommas(item.price)}$
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </TabPanel>
                         </Tabs>
                     </div>
@@ -463,66 +533,7 @@ const History = () => {
                                     Get verified
                                 </Link>
                             </div>
-                            <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Crypto Assets</th>
-                                            <th className="text-end">Amount</th>
-                                            <th className="text-end">Operations</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {my_assets.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td className="d-flex align-items-start ps-2">
-                                                    <img
-                                                        src={item.icon}
-                                                        alt="coin icon"
-                                                        className="me-2"
-                                                    />
-                                                    <div>
-                                                        <p className="coin-abbr">{item.abbr}</p>
-                                                        <p className="coin-name">{item.name}</p>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="coin-price">{item.amount}</p>
-                                                    <p className="coin-percent">
-                                                        ${numberWithCommas(item.price)}
-                                                    </p>
-                                                </td>
-                                                <td className="coin-operations">
-                                                    <p
-                                                        onClick={() =>
-                                                            setState({ modalIsOpen: true })
-                                                        }
-                                                        onKeyDown={() =>
-                                                            setState({ modalIsOpen: true })
-                                                        }
-                                                        role="presentation"
-                                                        className="operation-link"
-                                                    >
-                                                        Deposit
-                                                    </p>
-                                                    <p
-                                                        onClick={() =>
-                                                            setState({ modalIsOpen: true })
-                                                        }
-                                                        onKeyDown={() =>
-                                                            setState({ modalIsOpen: true })
-                                                        }
-                                                        role="presentation"
-                                                        className="operation-link ms-5"
-                                                    >
-                                                        Withdraw
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </TabPanel>
+                            <TabPanel></TabPanel>
                             <TabPanel>
                                 <table>
                                     <thead>
