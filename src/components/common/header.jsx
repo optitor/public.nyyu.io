@@ -10,7 +10,7 @@ import { User } from "../../utilities/user-data"
 import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
-import { Currencies } from "../../utilities/staticData"
+import CurrencyChoice from "./currency-choice"
 
 const Menu = () => {
     const auth = useAuth()
@@ -53,17 +53,9 @@ const Menu = () => {
                 setActive(false)
             }
         }
-
         document.addEventListener("keydown", handleEscKeyPress)
-
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
-
-    const toggleCurrenciesMenuContent = () => {
-        const menuItem = document.querySelector(".currencies-dropdown-content")
-        menuItem.classList.toggle("d-none")
-        menuItem.classList.toggle("d-block")
-    }
 
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
@@ -113,58 +105,7 @@ const Menu = () => {
                         )}
                 </div>
                 <div className="d-flex align-items-center">
-                    <div>
-                        {typeof window !== `undefined` &&
-                            window.location.pathname === ROUTES.auction && (
-                                <div className="header-currencies-dropdown">
-                                    <div
-                                        className="currencies-dropdown-indicator"
-                                        onClick={toggleCurrenciesMenuContent}
-                                        onKeyDown={toggleCurrenciesMenuContent}
-                                        role="presentation"
-                                    >
-                                        <span>USD</span>
-                                        <svg
-                                            class="down-arrow"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M19 9l-7 7-7-7"
-                                            ></path>
-                                        </svg>
-                                    </div>
-                                    <ul className="currencies-dropdown-content d-none">
-                                        {Currencies?.map((item) => {
-                                            return (
-                                                <li
-                                                    className={
-                                                        Currencies[User.selectedCurrencyId].id ===
-                                                            item.id && "text-secondary"
-                                                    }
-                                                    onClick={() => {
-                                                        User.selectedCurrencyId = item.id
-                                                        toggleCurrenciesMenuContent()
-                                                    }}
-                                                    onKeyDown={() => {
-                                                        User.selectedCurrencyId = item.id
-                                                        toggleCurrenciesMenuContent()
-                                                    }}
-                                                    role="presentation"
-                                                >
-                                                    {item.label}
-                                                </li>
-                                            )
-                                        })}
-                                    </ul>
-                                </div>
-                            )}
-                    </div>
+                    <CurrencyChoice />
                     <div className="sign-in">
                         {!auth?.isLoggedIn() ? (
                             <Link
