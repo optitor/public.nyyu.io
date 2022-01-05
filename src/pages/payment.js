@@ -163,7 +163,7 @@ const Payment = () => {
                                         </div>
                                         {
                                             !getAddress ?
-                                                <button className="btn-primary" onClick={() => setState({ getAddress: true })}>Get deposit Adress</button>
+                                                <button className="btn-primary" onClick={() => setState({ getAddress: true })}>Get deposit Address</button>
                                                 :
                                                 <>
                                                     <CopyToClipboard
@@ -380,6 +380,28 @@ const Payment = () => {
                                             </div>
                                         </div>
                                     ))}
+                                </div>
+                                <div className="mt-3 d-flex">
+                                    <p className="d-flex flex-row">
+                                        <CheckBox
+                                            type="checkbox"
+                                            name="allow_fraction"
+                                            value={allow_fraction}
+                                            onChange={handleAllowFraction}
+                                            className="text-uppercase"
+                                        ></CheckBox>
+                                        <div className="allow-text">
+                                            Do you allow fraction of order compleation?
+                                        </div>
+                                        <FontAwesomeIcon
+                                            icon={faQuestionCircle}
+                                            className="fa-2x ms-2"
+                                        />
+                                    </p>
+                                    <p className="payment-expire my-auto">
+                                        payment expires in{" "}
+                                        <span className="txt-green">10 minutes</span>
+                                    </p>
                                 </div>
                             </TabPanel>
                         </Tabs>
