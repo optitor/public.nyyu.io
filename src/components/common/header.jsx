@@ -125,42 +125,43 @@ const Menu = () => {
                                     >
                                         <span>USD</span>
                                         <svg
-                                            class="down-arrow"
+                                            className="down-arrow"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
                                             xmlns="http://www.w3.org/2000/svg"
                                         >
                                             <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
                                                 d="M19 9l-7 7-7-7"
                                             ></path>
                                         </svg>
                                     </div>
                                     <ul className="currencies-dropdown-content d-none">
-                                        {Currencies?.map((item) => {
-                                            return (
-                                                <li
-                                                    className={
-                                                        Currencies[User.selectedCurrencyId].id ===
-                                                            item.id && "text-secondary"
-                                                    }
-                                                    onClick={() => {
-                                                        User.selectedCurrencyId = item.id
-                                                        toggleCurrenciesMenuContent()
-                                                    }}
-                                                    onKeyDown={() => {
-                                                        User.selectedCurrencyId = item.id
-                                                        toggleCurrenciesMenuContent()
-                                                    }}
-                                                    role="presentation"
-                                                >
-                                                    {item.label}
-                                                </li>
-                                            )
-                                        })}
+                                        {Currencies?.map((item, idx) => (
+                                            <li
+                                                className={
+                                                    Currencies[User.selectedCurrencyId].id ===
+                                                    item.id
+                                                        ? "text-secondary"
+                                                        : ""
+                                                }
+                                                onClick={() => {
+                                                    User.selectedCurrencyId = item.id
+                                                    toggleCurrenciesMenuContent()
+                                                }}
+                                                onKeyDown={() => {
+                                                    User.selectedCurrencyId = item.id
+                                                    toggleCurrenciesMenuContent()
+                                                }}
+                                                role="presentation"
+                                                key={idx}
+                                            >
+                                                {item.label}
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             )}
