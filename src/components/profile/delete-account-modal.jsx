@@ -42,6 +42,7 @@ export default function DeleteAccountModal({
         <Modal
             isOpen={isDeleteAccountModalOpen}
             onRequestClose={() => closeModal()}
+            ariaHideApp={false}
             className="delete-account-modal"
             overlayClassName="pwd-modal__overlay"
         >
