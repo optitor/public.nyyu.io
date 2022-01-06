@@ -1,5 +1,5 @@
 import React, { useReducer, useCallback } from "react"
-import Header from "../components/common/header"
+import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { numberSign, numberWithCommas } from "../utilities/number"
@@ -583,11 +583,10 @@ const History = () => {
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${
-                                        detail_show &&
+                                    className={`${detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                    }`}
+                                        }`}
                                 >
                                     <thead>
                                         <tr>
