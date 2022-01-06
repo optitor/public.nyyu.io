@@ -11,6 +11,7 @@ import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
+import SaleCTA from "./sale-cta"
 
 const Menu = () => {
     const auth = useAuth()
@@ -105,11 +106,11 @@ const Menu = () => {
                         )}
                 </div>
                 <div className="d-flex align-items-center">
-                    <CurrencyChoice />
-                    <div className="sign-in">
+                    <SaleCTA />
+                    <div>
                         {!auth?.isLoggedIn() ? (
                             <Link
-                                className="btn-primary text-uppercase d-inline-block"
+                                className="btn-primary text-uppercase d-inline-block sign-in"
                                 to="/app/signin"
                             >
                                 Sign In
@@ -135,7 +136,7 @@ const Menu = () => {
                             </ul>
                         )}
                     </div>
-
+                    <CurrencyChoice />
                     <button
                         type="button"
                         className="menu__toggler"

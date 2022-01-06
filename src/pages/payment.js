@@ -1,5 +1,5 @@
 import React, { useCallback, useReducer, useState } from "react"
-import Header from "../components/common/header"
+import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Input, CheckBox } from "../components/common/FormControl"
@@ -391,18 +391,16 @@ const Payment = () => {
                                     <div className="row">
                                         {wallets.map((item, idx) => (
                                             <div
-                                                className={`col-sm-6 ${
-                                                    idx % 2 === 0 ? "pe-1" : "ps-1"
-                                                }`}
+                                                className={`col-sm-6 ${idx % 2 === 0 ? "pe-1" : "ps-1"
+                                                    }`}
                                                 key={idx}
                                                 onClick={() => setState({ walletId: idx })}
                                                 onKeyDown={() => setState({ walletId: idx })}
                                                 role="presentation"
                                             >
                                                 <div
-                                                    className={`wallet-item ${
-                                                        idx === walletId && "active"
-                                                    }`}
+                                                    className={`wallet-item ${idx === walletId && "active"
+                                                        }`}
                                                 >
                                                     <img src={item.icon} alt="wallet icon" />
                                                     <p>{item.desc}</p>

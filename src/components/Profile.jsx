@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react"
-import Header from "../components/common/header"
+import Header from "../components/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link } from "gatsby"
 import Select from "react-select"
@@ -21,7 +21,7 @@ const Profile = () => {
     const user = user_data?.getUser
 
     // Containers
-    const displayName = user?.avatarPrefix + ". " + user?.avatarName
+    const displayName = user?.avatarPrefix + "." + user?.avatarName
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
@@ -173,8 +173,7 @@ const Profile = () => {
                                                             ></div>
                                                             <div className="security-item">
                                                                 <p className="security-name">
-                                                                    KYC Identity Verificatoin less
-                                                                    than 100k CHF withdraw
+                                                                    KYC/KYB Verificatoin
                                                                 </p>
                                                                 <p className="txt-green security-link">
                                                                     Verified
