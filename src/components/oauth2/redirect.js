@@ -1,24 +1,34 @@
 /* eslint-disable */
 import React from "react"
 import { navigate } from "gatsby"
-import { 
+import {
     setUser,
     getUser,
     getEmailfromTempToken
 } from "../../utilities/auth"
 
 const OAuth2RedirectHandler = (props) => {
-    
+
     const type = props.type
     const dataType = props.dataType
     const data = props.data
 
     if (type === "success") {
-       if (data) {
+        if (data) {
+            const email = data.split("*")[0];
+            const twoStep = [];
+            for (let i in data.split("*")) {
+                if (i === 0) continue
+                twoStep = [...twoStep, {
+                    key: data.split("*")[i],
+                    value: true
+                }]
+            }
             setUser({
                 ...getUser(),
                 tempToken: dataType,
-                email: data,
+                email: email,
+                twoStep: twoStep,
             })
             navigate("/app/onetime-pwd")
         } else {
