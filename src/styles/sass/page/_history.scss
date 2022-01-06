@@ -837,4 +837,11 @@
     max-width: 600px;
     background-color: $black;
     border: none;
+    .duplicate-icon {
+        width: 24px;
+        height: 24px;
+    }
+    .border-1-white {
+        border: 1px solid white;
+    }
 }
