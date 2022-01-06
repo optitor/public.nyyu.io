@@ -3,10 +3,10 @@ import Header from "../components/common/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link } from "gatsby"
 import Select from "react-select"
-import Modal from "react-modal"
-import { Tesla, CloseIcon, Bronze } from "../utilities/imgImport"
+import { Tesla, Bronze } from "../utilities/imgImport"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
 import DeleteAccountModal from "./profile/delete-account-modal"
+import TwoFactorModal from "./profile/two-factor-modal"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs, wallets } from "../utilities/staticData"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
@@ -24,17 +24,17 @@ const Profile = () => {
     const displayName = user?.avatarPrefix + ". " + user?.avatarName
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
+    const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         pwd: { value: "", error: "" },
         pwd_confirm: { value: "", error: "" },
         pwdModal: false,
-        tfaModal: false,
         tabIndex: 0,
         profile_tab: profile_tabs[0],
         walletId: 0,
     })
 
-    const { tfaModal, tabIndex, profile_tab, walletId } = state
+    const { tabIndex, profile_tab, walletId } = state
     // Methods
     const handleProfileTab = (value) => {
         setState({ profile_tab: value })
@@ -147,20 +147,18 @@ const Profile = () => {
                                                                 }`}
                                                             ></div>
                                                             <div className="security-item">
-                                                                <p className="security-name">
-                                                                    Enable 2FA
-                                                                </p>
+                                                                <p className="security-name">2FA</p>
                                                                 <p
                                                                     className="txt-green security-link"
                                                                     onClick={() =>
-                                                                        setState({ tfaModal: true })
+                                                                        setIs2FAModalOpen(true)
                                                                     }
                                                                     onKeyDown={() =>
-                                                                        setState({ tfaModal: true })
+                                                                        setIs2FAModalOpen(true)
                                                                     }
                                                                     role="presentation"
                                                                 >
-                                                                    Enabled
+                                                                    setup
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -354,38 +352,10 @@ const Profile = () => {
                     isDeleteAccountModalOpen={isDeleteAccountModalOpen}
                     setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
                 />
-                <Modal
-                    isOpen={tfaModal}
-                    onRequestClose={() => setState({ tfaModal: false })}
-                    ariaHideApp={false}
-                    className="tfa-modal"
-                    overlayClassName="tfa-modal__overlay"
-                >
-                    <div className="tfa-modal__header">
-                        <div
-                            onClick={() => setState({ tfaModal: false })}
-                            onKeyDown={() => setState({ tfaModal: false })}
-                            role="button"
-                            tabIndex="0"
-                        >
-                            <img width="14px" height="14px" src={CloseIcon} alt="close" />
-                        </div>
-                    </div>
-                    <p className="tfa-modal__body my-5">
-                        Are you sure you want to disable 2-step verifacation to email?
-                    </p>
-                    <div className="pwd-modal__footer">
-                        <button type="submit" className="btn-primary">
-                            Yes
-                        </button>
-                        <button
-                            className="btn-cancel"
-                            onClick={() => setState({ tfaModal: false })}
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </Modal>
+                <TwoFactorModal
+                    is2FAModalOpen={is2FAModalOpen}
+                    setIs2FAModalOpen={setIs2FAModalOpen}
+                />
             </main>
         )
 }
