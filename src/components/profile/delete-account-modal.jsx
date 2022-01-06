@@ -74,7 +74,7 @@ export default function DeleteAccountModal({
                     </>
                 ) : (
                     <>
-                        <h4 className="title">Confirm Account deletion</h4>
+                        <h4 className="title">Confirm Account Deletion</h4>
                         <p className="content-text">
                             Are you sure that you want to delete your account?
                             <br />
