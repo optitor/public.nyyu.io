@@ -47,13 +47,12 @@ const OnetimePassword = () => {
     const pending = signin2faMutationResults.loading
     const webserviceError = signin2faMutationResults?.data?.confirm2FA?.status === "Failed"
 
-    console.log("USER DATE", user.twoStep)
-
     return (
         <AuthLayout>
             <h3 className="signup-head mb-5">Authenticate</h3>
             <form className="form">
                 {user.twoStep &&
+                    Array.isArray(user.twoStep) &&
                     user.twoStep.map(
                         (step) =>
                             step.value && (
