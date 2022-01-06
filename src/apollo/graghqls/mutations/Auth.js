@@ -77,3 +77,9 @@ export const DELETE_ACCOUNT = gql`
         deleteAccount
     }
 `
+
+export const CONFIRM_DELETE_ACCOUNT = gql`
+    mutation confirmDeleteAccount($text: String!) {
+        confirmDeleteAccount(text: $text)
+    }
+`

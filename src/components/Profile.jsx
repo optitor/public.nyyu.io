@@ -6,7 +6,7 @@ import Select from "react-select"
 import Modal from "react-modal"
 import { Tesla, CloseIcon, Bronze } from "../utilities/imgImport"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
-import DeleteAccountTab from "./profile/delete-account-tab"
+import DeleteAccountModal from "./profile/delete-account-modal"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs, wallets } from "../utilities/staticData"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
@@ -23,6 +23,7 @@ const Profile = () => {
     // Containers
     const displayName = user?.avatarPrefix + ". " + user?.avatarName
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         pwd: { value: "", error: "" },
         pwd_confirm: { value: "", error: "" },
@@ -85,7 +86,6 @@ const Profile = () => {
                                 <TabPanel>1</TabPanel>
                                 <TabPanel>2</TabPanel>
                                 <TabPanel>3</TabPanel>
-                                <TabPanel>4</TabPanel>
                             </Tabs>
                         </div>
                         <div className="col-lg-9 profile-page__right border-start border-white">
@@ -281,13 +281,23 @@ const Profile = () => {
                                             </div>
                                         </TabPanel>
                                     </Tabs>
-                                    <p className="mt-3 pb-5">
-                                        <Link to="/" className="get-verify">
-                                            Get verified
-                                        </Link>
-                                        &nbsp; to collect over 2,000 USD the account should be
-                                        verified.
-                                    </p>
+                                    <div className="verify-delete mt-3 pb-5">
+                                        <p>
+                                            <Link to="/" className="get-verify">
+                                                Get verified
+                                            </Link>
+                                            &nbsp; to collect over 2,000 USD the account should be
+                                            verified.
+                                        </p>
+                                        <p
+                                            className="delete-account-link"
+                                            onClick={() => setIsDeleteAccountModalOpen(true)}
+                                            onKeyDown={() => setIsDeleteAccountModalOpen(true)}
+                                            role="presentation"
+                                        >
+                                            Delete account
+                                        </p>
+                                    </div>
                                 </>
                             )}
                             {tabIndex === 1 && (
@@ -332,14 +342,17 @@ const Profile = () => {
                                     <button className="btn-primary">CONNECT</button>
                                 </div>
                             )}
-                            {tabIndex === 3 && <DeleteAccountTab />}
-                            {tabIndex === 4 && <SignOutTab />}
+                            {tabIndex === 3 && <SignOutTab />}
                         </div>
                     </div>
                 </section>
                 <ProfileChangePasswordModal
                     isPasswordModalOpen={isPasswordModalOpen}
                     setIsPasswordModalOpen={setIsPasswordModalOpen}
+                />
+                <DeleteAccountModal
+                    isDeleteAccountModalOpen={isDeleteAccountModalOpen}
+                    setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
                 />
                 <Modal
                     isOpen={tfaModal}
