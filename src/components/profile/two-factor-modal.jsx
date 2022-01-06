@@ -190,6 +190,7 @@ export default function TwoFactorModal({ is2FAModalOpen, setIs2FAModalOpen }) {
                                     confirmRequest2FA({
                                         variables: {
                                             email: user.email,
+                                            method: two_factors[choose_type].method,
                                             code: result_code,
                                         },
                                     })
