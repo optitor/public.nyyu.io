@@ -43,8 +43,6 @@ export default function TwoFactorModal({ is2FAModalOpen, setIs2FAModalOpen }) {
 
     const { result_code, choose_type, set_type, input_mobile, mobile } = state
 
-    console.log("countrycode", country)
-
     const handleInput = useCallback((e) => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
@@ -123,9 +121,6 @@ export default function TwoFactorModal({ is2FAModalOpen, setIs2FAModalOpen }) {
                                     <Input
                                         type="text"
                                         value={mobile}
-                                        innerRef={(target) => {
-                                            target.value = country
-                                        }}
                                         onChange={(e) => {
                                             const input = e.target.value
                                             setState({
