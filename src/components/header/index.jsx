@@ -11,6 +11,7 @@ import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
+import SaleCTA from "./sale-cta"
 
 const Menu = () => {
     const auth = useAuth()
@@ -105,9 +106,7 @@ const Menu = () => {
                         )}
                 </div>
                 <div className="d-flex align-items-center">
-                    <Link to={ROUTES.auction} className="header-sale-cta">
-                        sale
-                    </Link>
+                    <SaleCTA />
                     <div>
                         {!auth?.isLoggedIn() ? (
                             <Link
