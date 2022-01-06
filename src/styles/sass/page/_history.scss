@@ -226,6 +226,17 @@
                         .value-label {
                             font-size: 17px;
                             color: #5e5e5e;
+                            .value-label-eye-icon {
+                                width: 22px;
+                                height: 22px;
+                                color: #666666;
+                                margin-left: 10px;
+                                cursor: pointer;
+                                transition: 500ms;
+                                &:hover {
+                                    color: #5e5e5e;
+                                }
+                            }
                         }
                         .value {
                             font-size: 40px;

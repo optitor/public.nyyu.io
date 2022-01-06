@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from "react"
+import React, { useReducer, useCallback, useState } from "react"
 import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
@@ -379,6 +379,10 @@ const SelectedValue = (props) => {
 }
 
 const History = () => {
+    const [hideValues, setHideValues] = useState(false)
+    const [btcEquityValue, setBtcEquityValue] = useState("12.003.877")
+    const [dollarEquityValue, setDollarEquityValue] = useState("~ $282,004.43")
+    const obscureValueString = "****"
     const copyText = "kjY602GgjsKP23mhs09oOp63bd3n34fsla"
     const size = useWindowSize()
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -459,9 +463,55 @@ const History = () => {
                                 <div className="profile-value">
                                     <h5>portfolio value </h5>
                                     <div className="value-box">
-                                        <p className="value-label">Equity Value (BTC)</p>
-                                        <p className="value">12.003.877</p>
-                                        <p className="max-value mt-3">~ $282,004.43</p>
+                                        <p className="value-label d-flex justify-content-start align-items-center">
+                                            <div>Equity Value (BTC)</div>
+                                            {!hideValues && (
+                                                <svg
+                                                    className="value-label-eye-icon"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    onClick={() => setHideValues(true)}
+                                                    viewBox="0 0 24 24"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                                                    ></path>
+                                                </svg>
+                                            )}
+                                            {hideValues && (
+                                                <svg
+                                                    className="value-label-eye-icon"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    onClick={() => setHideValues(false)}
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                                    ></path>
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                                    ></path>
+                                                </svg>
+                                            )}
+                                        </p>
+                                        <p className="value">
+                                            {hideValues ? obscureValueString : btcEquityValue}
+                                        </p>
+                                        <p className="max-value mt-3">
+                                            {hideValues ? obscureValueString : dollarEquityValue}
+                                        </p>
                                     </div>
                                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                                         <div className="col-sm-6 pe-2">
@@ -585,10 +635,11 @@ const History = () => {
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${detail_show &&
+                                    className={`${
+                                        detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                        }`}
+                                    }`}
                                 >
                                     <thead>
                                         <tr>
