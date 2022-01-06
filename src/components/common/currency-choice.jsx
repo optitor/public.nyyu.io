@@ -14,7 +14,8 @@ export default function CurrencyChoice() {
         <div>
             {typeof window !== `undefined` &&
                 (window.location.pathname === ROUTES.auction ||
-                    window.location.pathname === ROUTES.wallet) && (
+                    window.location.pathname === ROUTES.wallet ||
+                    window.location.pathname === ROUTES.profile) && (
                     <div className="header-currencies-dropdown">
                         <div
                             className="currencies-dropdown-indicator"
