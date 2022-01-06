@@ -525,9 +525,11 @@ const History = () => {
                         <Tabs onSelect={() => setState({ detail_show: false })}>
                             <div className="tab-top">
                                 <TabList>
-                                    <Tab>MY ASSETS</Tab>
+                                    <Tab>transaction</Tab>
                                     <Tab>market</Tab>
-                                    <Tab className="react-tabs__tab ms-md-auto">AirdropS</Tab>
+                                    <Tab>stake</Tab>
+                                    <Tab>referral</Tab>
+                                    <Tab>airdrops</Tab>
                                 </TabList>
                                 <Link to="/" className="verify-link">
                                     Get verified
