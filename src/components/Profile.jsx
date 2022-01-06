@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react"
-import Header from "../components/common/header"
+import Header from "../components/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link } from "gatsby"
 import Select from "react-select"

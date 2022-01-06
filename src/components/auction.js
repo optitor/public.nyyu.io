@@ -4,7 +4,7 @@ import Slider from "rc-slider"
 import Select from "react-select"
 import Modal from "react-modal"
 import ReactECharts from "echarts-for-react"
-import Header from "../components/common/header"
+import Header from "./header"
 import { useQuery, useMutation } from "@apollo/client"
 import {
     numberWithCommas,
@@ -100,15 +100,15 @@ const Auction = () => {
         selectedData === 0
             ? roundL?.getAuctionByNumber
             : selectedData === 1
-            ? roundM?.getAuctionByNumber
-            : roundH?.getAuctionByNumber
+                ? roundM?.getAuctionByNumber
+                : roundH?.getAuctionByNumber
 
     const fnSelectedBidhistoryData = () =>
         selectedData === 0
             ? historyBidListL?.getBidListByRound
             : selectedData === 1
-            ? historyBidListM?.getBidListByRound
-            : historyBidListH?.getBidListByRound
+                ? historyBidListM?.getBidListByRound
+                : historyBidListH?.getBidListByRound
 
     const fnAverateMinBid = () => {
         let hData = fnSelectedBidhistoryData()
@@ -184,9 +184,8 @@ const Auction = () => {
                 </div>
                 <div className="row h-100">
                     <div
-                        className={`auction-left col-lg-4 col-md-5 ${
-                            show_chart ? "d-none" : "d-block"
-                        }`}
+                        className={`auction-left col-lg-4 col-md-5 ${show_chart ? "d-none" : "d-block"
+                            }`}
                     >
                         {roundM?.getAuctionByNumber && (
                             <Tabs
@@ -342,50 +341,50 @@ const Auction = () => {
                             fnSelectedRoundData()?.startedAt,
                             fnSelectedRoundData()?.endedAt
                         ) && (
-                            <div className="timeframe-bar">
-                                <div
-                                    className="timeleft"
-                                    style={{
-                                        width:
-                                            (percentage > 0 && percentage < 101 ? percentage : 0) +
-                                            "%",
-                                        background: "#464646",
-                                    }}
-                                >
-                                    <div className="timeleft__value">
-                                        {numberWithLength(
-                                            parseInt(
-                                                getTimeDiffOverall(
-                                                    fnSelectedRoundData()?.startedAt,
-                                                    fnSelectedRoundData()?.endedAt
-                                                ) /
+                                <div className="timeframe-bar">
+                                    <div
+                                        className="timeleft"
+                                        style={{
+                                            width:
+                                                (percentage > 0 && percentage < 101 ? percentage : 0) +
+                                                "%",
+                                            background: "#464646",
+                                        }}
+                                    >
+                                        <div className="timeleft__value">
+                                            {numberWithLength(
+                                                parseInt(
+                                                    getTimeDiffOverall(
+                                                        fnSelectedRoundData()?.startedAt,
+                                                        fnSelectedRoundData()?.endedAt
+                                                    ) /
                                                     (60 * 60)
-                                            )
-                                        )}
-                                        :
-                                        {numberWithLength(
-                                            parseInt(
-                                                (getTimeDiffOverall(
-                                                    fnSelectedRoundData()?.startedAt,
-                                                    fnSelectedRoundData()?.endedAt
-                                                ) %
-                                                    (60 * 60)) /
+                                                )
+                                            )}
+                                            :
+                                            {numberWithLength(
+                                                parseInt(
+                                                    (getTimeDiffOverall(
+                                                        fnSelectedRoundData()?.startedAt,
+                                                        fnSelectedRoundData()?.endedAt
+                                                    ) %
+                                                        (60 * 60)) /
                                                     60
-                                            )
-                                        )}
-                                        :
-                                        {numberWithLength(
-                                            parseInt(
-                                                getTimeDiffOverall(
-                                                    fnSelectedRoundData()?.startedAt,
-                                                    fnSelectedRoundData()?.endedAt
-                                                ) % 60
-                                            )
-                                        )}
+                                                )
+                                            )}
+                                            :
+                                            {numberWithLength(
+                                                parseInt(
+                                                    getTimeDiffOverall(
+                                                        fnSelectedRoundData()?.startedAt,
+                                                        fnSelectedRoundData()?.endedAt
+                                                    ) % 60
+                                                )
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
                         <div className="d-flex justify-content-between mt-4">
                             {fnAverateMinBid() !== 0 ? (
                                 <div>
@@ -498,14 +497,13 @@ const Auction = () => {
                             </button>
                         </div>
                         <div
-                            className={`chart-area ${
-                                size.width <= 768
-                                    ? show_chart
-                                        ? "d-block"
-                                        : "d-none"
-                                    : (size.width <= 1024 && size.width > 768 && "d-block") ||
-                                      (place_bid && "d-block")
-                            }`}
+                            className={`chart-area ${size.width <= 768
+                                ? show_chart
+                                    ? "d-block"
+                                    : "d-none"
+                                : (size.width <= 1024 && size.width > 768 && "d-block") ||
+                                (place_bid && "d-block")
+                                }`}
                         >
                             <div className="d-flex align-items-center">
                                 <Select

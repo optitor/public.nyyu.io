@@ -105,6 +105,9 @@ const Menu = () => {
                         )}
                 </div>
                 <div className="d-flex align-items-center">
+                    <Link to={ROUTES.auction} className="header-sale-cta">
+                        sale
+                    </Link>
                     <div>
                         {!auth?.isLoggedIn() ? (
                             <Link
