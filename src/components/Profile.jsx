@@ -173,8 +173,7 @@ const Profile = () => {
                                                             ></div>
                                                             <div className="security-item">
                                                                 <p className="security-name">
-                                                                    KYC Identity Verificatoin less
-                                                                    than 100k CHF withdraw
+                                                                    KYC/KYB Verificatoin
                                                                 </p>
                                                                 <p className="txt-green security-link">
                                                                     Verified

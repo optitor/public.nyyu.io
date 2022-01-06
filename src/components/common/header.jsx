@@ -105,11 +105,10 @@ const Menu = () => {
                         )}
                 </div>
                 <div className="d-flex align-items-center">
-                    <CurrencyChoice />
-                    <div className="sign-in">
+                    <div>
                         {!auth?.isLoggedIn() ? (
                             <Link
-                                className="btn-primary text-uppercase d-inline-block"
+                                className="btn-primary text-uppercase d-inline-block sign-in"
                                 to="/app/signin"
                             >
                                 Sign In
@@ -135,7 +134,7 @@ const Menu = () => {
                             </ul>
                         )}
                     </div>
-
+                    <CurrencyChoice />
                     <button
                         type="button"
                         className="menu__toggler"
