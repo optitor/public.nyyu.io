@@ -92,7 +92,6 @@ export const getUser = () => {
   if (!isBrowser) return inMemoryUserDefault
   try {
     inMemoryUser = JSON.parse(localStorage.getItem(USER_DATA))
-    console.log(inMemoryUser)
   } catch (e) {
     inMemoryUser = inMemoryUserDefault
   }

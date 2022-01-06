@@ -31,7 +31,7 @@ const IndexPage = () => {
     //------- Avatar and Validation
     // Avatar
     const [category, setCategory] = useState({ value: 'hairStyle', label: 'Hair Style' });
-    const initialAvatarData = { filename: '', content: '', top: 0, left: 0, width: 100, groupId: ''};
+    const initialAvatarData = { filename: '', svg: '', top: 0, left: 0, width: 100, groupId: ''};
     const [svgFile, setSvgFile] = useState(initialAvatarData);
 
     // Avatar Data Validation
@@ -67,9 +67,9 @@ const IndexPage = () => {
         if(file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const content = e.target.result;
+                const svg = e.target.result;
                 if (file.type.indexOf('svg') > 0) {
-                    setSvgFile({ ...svgFile, content, filename: file.name, class: category.value });
+                    setSvgFile({ ...svgFile, svg, filename: file.name, groupId: category.value });
                     setError('');
                 } else {
                     setError('Only SVG file can be uploaded');
@@ -79,7 +79,7 @@ const IndexPage = () => {
             reader.readAsText(file);
         }
     };
-    // console.log(svgFile.content);
+    // console.log(svgFile.svg);
 
     const setAvatarData = () => {
         if(Object.values(avatarError)[0]) {
@@ -100,7 +100,7 @@ const IndexPage = () => {
     };
 
     const handleSubmit = () => {
-        alert('Avatar component saved Successfully')
+        console.log(svgFile)
     };
 
     return (
@@ -123,7 +123,8 @@ const IndexPage = () => {
                                             className="black_input mb-3"
                                             value={category}
                                             onChange={(selected) => {
-                                                setCategory(selected); setSvgFile({...initialAvatarData});
+                                                setCategory(selected);
+                                                setSvgFile({...initialAvatarData, groupId: selected.value});
                                             }}
                                             options={categories}
                                             styles={customSelectStyles}
@@ -187,9 +188,9 @@ const IndexPage = () => {
                                                         </div>
                                                     </>
                                                 ): ''}
-                                                {svgFile.content? (
+                                                {svgFile.svg? (
                                                     <div style={{top: `${svgFile.top}%`, left: `${svgFile.left}%`, width: `${svgFile.width}%`}}>
-                                                        {parse(svgFile.content)}
+                                                        {parse(svgFile.svg)}
                                                     </div>
                                                 ): ''}
                                             </div>
@@ -281,9 +282,9 @@ const IndexPage = () => {
                                                         </div>
                                                     </>
                                                 ): ''}
-                                                {svgFile.content? (
+                                                {svgFile.svg? (
                                                     <div style={{top: `${svgFile.top}%`, left: `${svgFile.left}%`, width: `${svgFile.width}%`}}>
-                                                        {parse(svgFile.content)}
+                                                        {parse(svgFile.svg)}
                                                     </div>
                                                 ): ''}
                                             </div>
