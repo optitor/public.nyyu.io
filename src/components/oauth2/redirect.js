@@ -16,7 +16,7 @@ const OAuth2RedirectHandler = (props) => {
     if (type === "success") {
         if (data) {
             const email = data.split("*")[0];
-            const twoStep = [];
+            let twoStep = [];
             for (let i in data.split("*")) {
                 if (i === 0) continue
                 twoStep = [...twoStep, {
