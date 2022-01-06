@@ -21,7 +21,7 @@ const Profile = () => {
     const user = user_data?.getUser
 
     // Containers
-    const displayName = user?.avatarPrefix + ". " + user?.avatarName
+    const displayName = user?.avatarPrefix + "." + user?.avatarName
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
