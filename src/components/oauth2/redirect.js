@@ -19,16 +19,8 @@ const OAuth2RedirectHandler = (props) => {
             let twoStep = [];
             for (let i in data.split("*")) {
                 const d = data.split("*")[i];
-                console.log("data", i, d)
-                if (i === "0") {
-                    email = d
-                }
-                else {
-                    twoStep.push({
-                        key: d,
-                        value: true
-                    })
-                }
+                if (i === "0") email = d
+                else twoStep.push({ key: d, value: true })
             }
             setUser({
                 ...getUser(),
