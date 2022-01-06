@@ -24,6 +24,7 @@ import { Input } from "../components/common/FormControl"
 import { useWindowSize } from "../utilities/customHook"
 import AirdropDetail from "../components/AirdropDetail"
 import DepositWithdrawModal from "../components/wallet/deposit-withdraw-modal"
+import { TRANSACTION_TYPES } from "../utilities/staticData"
 
 const transactions = [
     {
@@ -383,6 +384,7 @@ const History = () => {
     const [hideValues, setHideValues] = useState(false)
     const [btcEquityValue, setBtcEquityValue] = useState("12.003.877")
     const [dollarEquityValue, setDollarEquityValue] = useState("~ $282,004.43")
+    const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit)
     const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false)
     const obscureValueString = "****"
     const [btcOrUsd, setBtcOrUsd] = useState("USD")
@@ -542,9 +544,10 @@ const History = () => {
                                         <div className="col-sm-6 pe-2">
                                             <button
                                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
-                                                onClick={() =>
+                                                onClick={() => {
+                                                    setTransactionType(TRANSACTION_TYPES.deposit)
                                                     setShowDepositAndWidthdrawModal(true)
-                                                }
+                                                }}
                                             >
                                                 deposit
                                             </button>
@@ -552,17 +555,21 @@ const History = () => {
                                         <div className="col-sm-6 ps-2">
                                             <button
                                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
-                                                onClick={() =>
+                                                onClick={() => {
+                                                    setTransactionType(TRANSACTION_TYPES.withdraw)
                                                     setShowDepositAndWidthdrawModal(true)
-                                                }
+                                                }}
                                             >
                                                 withdraw
                                             </button>
                                         </div>
-                                        <DepositWithdrawModal
-                                            showModal={showDepositAndWidthdrawModal}
-                                            setShowModal={setShowDepositAndWidthdrawModal}
-                                        />
+                                        {showDepositAndWidthdrawModal && (
+                                            <DepositWithdrawModal
+                                                showModal={showDepositAndWidthdrawModal}
+                                                setShowModal={setShowDepositAndWidthdrawModal}
+                                                transactionType={transactionType}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                                 {/* <h5 className="my-4">Transactions history</h5> */}
