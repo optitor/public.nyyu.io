@@ -19,7 +19,7 @@ export default function Transactions() {
                         <td>
                             12 / 27 / 21
                             <br />
-                            <div className="text-secondary fs-15px">21 : 31 : 12</div>
+                            <div className="text-secondary fs-15px mt-1">21 : 31 : 12</div>
                         </td>
                         <td>Withdraw</td>
                         <td className="text-end">

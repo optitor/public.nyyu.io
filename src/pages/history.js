@@ -25,7 +25,8 @@ import { useWindowSize } from "../utilities/customHook"
 import AirdropDetail from "../components/AirdropDetail"
 import DepositWithdrawModal from "../components/wallet/deposit-withdraw-modal"
 import { TRANSACTION_TYPES } from "../utilities/staticData"
-import Transactions from "../components/wallet/transactions"
+import Transactions from "../components/wallet/transactions-tab"
+import ReferralTab from "../components/wallet/referral-tab"
 
 const transactions = [
     {
@@ -498,9 +499,8 @@ const History = () => {
 
                                             <div className="d-flex gap-2">
                                                 <div
-                                                    className={`cursor-pointer ${
-                                                        btcOrUsd === "BTC" && "fw-bold text-white"
-                                                    }`}
+                                                    className={`cursor-pointer ${btcOrUsd === "BTC" && "fw-bold text-white"
+                                                        }`}
                                                     onClick={() => setBtcOrUsd("BTC")}
                                                     onKeydown={() => setBtcOrUsd("BTC")}
                                                     role="presentation"
@@ -509,9 +509,8 @@ const History = () => {
                                                 </div>
                                                 <div>|</div>
                                                 <div
-                                                    className={`cursor-pointer ${
-                                                        btcOrUsd === "USD" && "fw-bold text-white"
-                                                    }`}
+                                                    className={`cursor-pointer ${btcOrUsd === "USD" && "fw-bold text-white"
+                                                        }`}
                                                     onClick={() => setBtcOrUsd("USD")}
                                                     onKeyDown={() => setBtcOrUsd("USD")}
                                                     role="presentation"
@@ -670,13 +669,17 @@ const History = () => {
                                     </tbody>
                                 </table>
                             </TabPanel>
+
+                            <TabPanel></TabPanel>
+                            <TabPanel>
+                                <ReferralTab />
+                            </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${
-                                        detail_show &&
+                                    className={`${detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                    }`}
+                                        }`}
                                 >
                                     <thead>
                                         <tr>
@@ -736,8 +739,6 @@ const History = () => {
                                     onJoinClick={handleJoinAirdrop}
                                 />
                             </TabPanel>
-                            <TabPanel></TabPanel>
-                            <TabPanel></TabPanel>
                             <TabPanel>
                                 <Transactions />
                             </TabPanel>

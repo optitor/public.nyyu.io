@@ -119,7 +119,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 // Begin: New Font Sizes
-@for $size from 12 to 16 {
+@for $size from 12 to 24 {
     .fs-#{$size}px {
         font-size: #{$size}px !important;
     }
