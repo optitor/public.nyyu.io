@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Modal from "react-modal"
-import { BTC, CloseIcon, DestinationWallet, WalletQRCode } from "../../utilities/imgImport"
+import { BTC, CloseIcon, DestinationWallet, ETH, WalletQRCode } from "../../utilities/imgImport"
 import { TRANSACTION_TYPES } from "../../utilities/staticData"
 
 export default function DepositWithdrawModal({ showModal, setShowModal, transactionType }) {
@@ -29,39 +29,45 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                     role="presentation"
                 />
             </div>
-            <div className="position-relative col-12 mt-3 bg-transparent text-white p-3 rounded-0 border-1-white">
-                <div className="d-flex justify-content-between align-items-center">
+            <div className="position-relative col-12 mt-3 bg-transparent text-white rounded-0">
+                <button
+                    className="d-flex justify-content-between align-items-center btn p-3 text-light w-100 rounded-0 border-1-white"
+                    onClick={() => toggleAssetsList()}
+                >
                     <div className="d-flex align-items-center">
                         <div>
                             <img src={BTC} className="me-2" alt="Bitcoin" />
                         </div>
                         <div>5.0054 Bitcoin</div>
                     </div>
-                    <button className="btn text-white p-0" onClick={() => toggleAssetsList()}>
-                        <svg
-                            className="duplicate-icon cursor-pointer"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                stroke-width="2"
-                                d="M19 9l-7 7-7-7"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <ul className="assets-list position-absolute col-12 z-999 start-0 mt-16px d-none">
-                    <li className="bg-black border-1-white p-3 d-flex align-items-center">
-                        <div>
-                            <img src={BTC} className="me-2" alt="Bitcoin" />
+                    <svg
+                        className="duplicate-icon cursor-pointer"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"
+                        ></path>
+                    </svg>
+                </button>
+                <div className="assets-list position-absolute col-12 z-999 start-0 d-none text-light">
+                    {[
+                        { label: "5.0054 Bitcoin", icon: BTC },
+                        { label: "13.1054 Ethereum", icon: ETH },
+                    ].map((item) => (
+                        <div className="bg-black border-1-white border-top-0 p-3 d-flex align-items-center hover:bg-dark">
+                            <div>
+                                <img src={item.icon} className="me-2" alt="Bitcoin" />
+                            </div>
+                            <div>{item.label}</div>
                         </div>
-                        <div>5.0054 Bitcoin</div>
-                    </li>
-                </ul>
+                    ))}
+                </div>
             </div>
             <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                 <div
