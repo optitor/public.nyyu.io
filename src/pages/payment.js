@@ -212,7 +212,7 @@ const Payment = () => {
                                         )}
                                     </div>
                                     <div className="mt-3 d-flex">
-                                        <p className="d-flex flex-row">
+                                        <div className="d-flex flex-row">
                                             <CheckBox
                                                 type="checkbox"
                                                 name="allow_fraction"
@@ -227,7 +227,7 @@ const Payment = () => {
                                                 icon={faQuestionCircle}
                                                 className="fa-2x ms-2"
                                             />
-                                        </p>
+                                        </div>
                                         <p className="payment-expire my-auto">
                                             payment expires in{" "}
                                             <span className="txt-green">10 minutes</span>
@@ -391,16 +391,18 @@ const Payment = () => {
                                     <div className="row">
                                         {wallets.map((item, idx) => (
                                             <div
-                                                className={`col-sm-6 ${idx % 2 === 0 ? "pe-1" : "ps-1"
-                                                    }`}
+                                                className={`col-sm-6 ${
+                                                    idx % 2 === 0 ? "pe-1" : "ps-1"
+                                                }`}
                                                 key={idx}
                                                 onClick={() => setState({ walletId: idx })}
                                                 onKeyDown={() => setState({ walletId: idx })}
                                                 role="presentation"
                                             >
                                                 <div
-                                                    className={`wallet-item ${idx === walletId && "active"
-                                                        }`}
+                                                    className={`wallet-item ${
+                                                        idx === walletId && "active"
+                                                    }`}
                                                 >
                                                     <img src={item.icon} alt="wallet icon" />
                                                     <p>{item.desc}</p>

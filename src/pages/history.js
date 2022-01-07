@@ -498,15 +498,15 @@ const History = () => {
                                                         xmlns="http://www.w3.org/2000/svg"
                                                     >
                                                         <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
                                                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                                                         ></path>
                                                         <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
                                                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                                                         ></path>
                                                     </svg>
@@ -515,19 +515,23 @@ const History = () => {
 
                                             <div className="d-flex gap-2">
                                                 <div
-                                                    onClick={() => setBtcOrUsd("BTC")}
                                                     className={`cursor-pointer ${
                                                         btcOrUsd === "BTC" && "fw-bold text-white"
                                                     }`}
+                                                    onClick={() => setBtcOrUsd("BTC")}
+                                                    onKeydown={() => setBtcOrUsd("BTC")}
+                                                    role="presentation"
                                                 >
                                                     BTC
                                                 </div>
                                                 <div>|</div>
                                                 <div
-                                                    onClick={() => setBtcOrUsd("USD")}
                                                     className={`cursor-pointer ${
                                                         btcOrUsd === "USD" && "fw-bold text-white"
                                                     }`}
+                                                    onClick={() => setBtcOrUsd("USD")}
+                                                    onKeyDown={() => setBtcOrUsd("USD")}
+                                                    role="presentation"
                                                 >
                                                     USD
                                                 </div>
