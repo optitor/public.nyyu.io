@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect, useState } from "react"
+import { navigate } from "gatsby"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
@@ -25,6 +26,8 @@ import {
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
 import { Currencies } from "../utilities/staticData"
 import { User } from "../utilities/user-data"
+import TimeframeBar from "./auction/TimeframeBar"
+import { ROUTES } from "../utilities/routes"
 
 const ndb_token = `Since the beginning of NDB's project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -100,15 +103,15 @@ const Auction = () => {
         selectedData === 0
             ? roundL?.getAuctionByNumber
             : selectedData === 1
-                ? roundM?.getAuctionByNumber
-                : roundH?.getAuctionByNumber
+            ? roundM?.getAuctionByNumber
+            : roundH?.getAuctionByNumber
 
     const fnSelectedBidhistoryData = () =>
         selectedData === 0
             ? historyBidListL?.getBidListByRound
             : selectedData === 1
-                ? historyBidListM?.getBidListByRound
-                : historyBidListH?.getBidListByRound
+            ? historyBidListM?.getBidListByRound
+            : historyBidListH?.getBidListByRound
 
     const fnAverateMinBid = () => {
         let hData = fnSelectedBidhistoryData()
@@ -184,8 +187,9 @@ const Auction = () => {
                 </div>
                 <div className="row h-100">
                     <div
-                        className={`auction-left col-lg-4 col-md-5 ${show_chart ? "d-none" : "d-block"
-                            }`}
+                        className={`auction-left col-lg-4 col-md-5 ${
+                            show_chart ? "d-none" : "d-block"
+                        }`}
                     >
                         {roundM?.getAuctionByNumber && (
                             <Tabs
@@ -337,54 +341,12 @@ const Auction = () => {
                                 </>
                             )}
                         </Tabs>
+
                         {isInbetween(
                             fnSelectedRoundData()?.startedAt,
                             fnSelectedRoundData()?.endedAt
-                        ) && (
-                                <div className="timeframe-bar">
-                                    <div
-                                        className="timeleft"
-                                        style={{
-                                            width:
-                                                (percentage > 0 && percentage < 101 ? percentage : 0) +
-                                                "%",
-                                            background: "#464646",
-                                        }}
-                                    >
-                                        <div className="timeleft__value">
-                                            {numberWithLength(
-                                                parseInt(
-                                                    getTimeDiffOverall(
-                                                        fnSelectedRoundData()?.startedAt,
-                                                        fnSelectedRoundData()?.endedAt
-                                                    ) /
-                                                    (60 * 60)
-                                                )
-                                            )}
-                                            :
-                                            {numberWithLength(
-                                                parseInt(
-                                                    (getTimeDiffOverall(
-                                                        fnSelectedRoundData()?.startedAt,
-                                                        fnSelectedRoundData()?.endedAt
-                                                    ) %
-                                                        (60 * 60)) /
-                                                    60
-                                                )
-                                            )}
-                                            :
-                                            {numberWithLength(
-                                                parseInt(
-                                                    getTimeDiffOverall(
-                                                        fnSelectedRoundData()?.startedAt,
-                                                        fnSelectedRoundData()?.endedAt
-                                                    ) % 60
-                                                )
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                        ) && <TimeframeBar percentage={percentage} round={fnSelectedRoundData()} />}
+
                         <div className="d-flex justify-content-between mt-4">
                             {fnAverateMinBid() !== 0 ? (
                                 <div>
@@ -399,7 +361,6 @@ const Auction = () => {
                             )}
                             <div>
                                 <p className="caption">Available Until</p>
-
                                 <p className="value">
                                     {numberWithLength(
                                         parseInt(
@@ -421,7 +382,7 @@ const Auction = () => {
                                 </p>
                             </div>
                         </div>
-                        {place_bid && (
+                        {size.width <= 1024 && (
                             <div className="text-center my-5">
                                 <button
                                     className="btn-primary btn-increase"
@@ -447,7 +408,7 @@ const Auction = () => {
                                     value={amount}
                                     onChange={(value) => setState({ amount: value })}
                                     min={1}
-                                    max={fnSelectedRoundData()?.totalToken}
+                                    max={fnSelectedRoundData()?.token}
                                     step={1}
                                 />
                             </div>
@@ -482,28 +443,30 @@ const Auction = () => {
                             <button
                                 className="btn-primary text-uppercase w-100"
                                 onClick={() => {
-                                    PlaceBid({
-                                        variables: {
-                                            roundId: fnSelectedRoundData()?.auctionId,
-                                            tokenAmount: amount,
-                                            tokenPrice: price,
-                                            payment: 1,
-                                            cryptoType: "String",
-                                        },
-                                    })
+                                    // PlaceBid({
+                                    //     variables: {
+                                    //         roundId: fnSelectedRoundData()?.auctionId,
+                                    //         tokenAmount: amount,
+                                    //         tokenPrice: price,
+                                    //         payment: 1,
+                                    //         cryptoType: "String",
+                                    //     },
+                                    // })
+                                    navigate(ROUTES.payment)
                                 }}
                             >
                                 {!place_bid ? "Place Bid" : "Increase Bid"}
                             </button>
                         </div>
                         <div
-                            className={`chart-area ${size.width <= 768
-                                ? show_chart
-                                    ? "d-block"
-                                    : "d-none"
-                                : (size.width <= 1024 && size.width > 768 && "d-block") ||
-                                (place_bid && "d-block")
-                                }`}
+                            className={`chart-area ${
+                                size.width <= 768
+                                    ? show_chart
+                                        ? "d-block"
+                                        : "d-none"
+                                    : (size.width <= 1024 && size.width > 768 && "d-block") ||
+                                      (place_bid && "d-block")
+                            }`}
                         >
                             <div className="d-flex align-items-center">
                                 <Select
@@ -589,9 +552,9 @@ const Auction = () => {
                         <Slider
                             value={amount}
                             onChange={(value) => setState({ amount: value })}
-                            min={0}
-                            max={10000}
-                            step={100}
+                            min={1}
+                            max={fnSelectedRoundData()?.token}
+                            step={1}
                         />
                     </div>
                     <h3 className="range-label">Per token price</h3>
@@ -605,7 +568,7 @@ const Auction = () => {
                         <Slider
                             value={price}
                             onChange={(value) => setState({ price: value })}
-                            min={0}
+                            min={fnSelectedRoundData()?.minPrice}
                             max={10000}
                             step={100}
                         />
@@ -624,6 +587,7 @@ const Auction = () => {
                         onClick={() => {
                             setState({ place_bid: true })
                             setState({ bidModal: false })
+                            navigate(ROUTES.payment)
                         }}
                     >
                         {!place_bid ? "Place Bid" : "Increase Bid"}
@@ -654,6 +618,7 @@ const Auction = () => {
                             setState({ total: price * amount })
                             setState({ bidModal: false })
                             setState({ place_bid: true })
+                            navigate(ROUTES.payment)
                         }}
                     >
                         {!place_bid ? "Place Bid" : "Increase Bid"}
