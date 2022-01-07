@@ -25,6 +25,7 @@ import { useWindowSize } from "../utilities/customHook"
 import AirdropDetail from "../components/AirdropDetail"
 import DepositWithdrawModal from "../components/wallet/deposit-withdraw-modal"
 import { TRANSACTION_TYPES } from "../utilities/staticData"
+import Transactions from "../components/wallet/transactions"
 
 const transactions = [
     {
@@ -497,8 +498,9 @@ const History = () => {
 
                                             <div className="d-flex gap-2">
                                                 <div
-                                                    className={`cursor-pointer ${btcOrUsd === "BTC" && "fw-bold text-white"
-                                                        }`}
+                                                    className={`cursor-pointer ${
+                                                        btcOrUsd === "BTC" && "fw-bold text-white"
+                                                    }`}
                                                     onClick={() => setBtcOrUsd("BTC")}
                                                     onKeydown={() => setBtcOrUsd("BTC")}
                                                     role="presentation"
@@ -507,8 +509,9 @@ const History = () => {
                                                 </div>
                                                 <div>|</div>
                                                 <div
-                                                    className={`cursor-pointer ${btcOrUsd === "USD" && "fw-bold text-white"
-                                                        }`}
+                                                    className={`cursor-pointer ${
+                                                        btcOrUsd === "USD" && "fw-bold text-white"
+                                                    }`}
                                                     onClick={() => setBtcOrUsd("USD")}
                                                     onKeyDown={() => setBtcOrUsd("USD")}
                                                     role="presentation"
@@ -556,20 +559,6 @@ const History = () => {
                                         )}
                                     </div>
                                 </div>
-                                {/* <h5 className="my-4">Transactions history</h5> */}
-                                {/* <div className="transaction-history">
-                                    {transactions.map((item, idx) => (
-                                        <div className="transaction" key={idx}>
-                                            <p className="transaction-date">{item.date}</p>
-                                            <div className="d-flex justify-content-between">
-                                                <p className="transaction-name">{item.name}</p>
-                                                <p className="transaction-price">
-                                                    {numberSign(item.price) + item.price}$
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div> */}
                                 <table className="mt-3">
                                     <tbody>
                                         {my_assets.map((item, idx) => (
@@ -624,17 +613,16 @@ const History = () => {
                         <Tabs onSelect={() => setState({ detail_show: false })}>
                             <div className="tab-top">
                                 <TabList>
-                                    <Tab>transaction</Tab>
                                     <Tab>market</Tab>
                                     <Tab>stake</Tab>
                                     <Tab>referral</Tab>
                                     <Tab>airdrops</Tab>
+                                    <Tab>transaction</Tab>
                                 </TabList>
                                 <Link to="/" className="verify-link">
                                     Get verified
                                 </Link>
                             </div>
-                            <TabPanel></TabPanel>
                             <TabPanel>
                                 <table>
                                     <thead>
@@ -684,10 +672,11 @@ const History = () => {
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${detail_show &&
+                                    className={`${
+                                        detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                        }`}
+                                    }`}
                                 >
                                     <thead>
                                         <tr>
@@ -746,6 +735,11 @@ const History = () => {
                                     airdrop={airdrops[index]}
                                     onJoinClick={handleJoinAirdrop}
                                 />
+                            </TabPanel>
+                            <TabPanel></TabPanel>
+                            <TabPanel></TabPanel>
+                            <TabPanel>
+                                <Transactions />
                             </TabPanel>
                         </Tabs>
                         <div className="connect-external">

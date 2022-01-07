@@ -845,3 +845,12 @@
         border: 1px solid white;
     }
 }
+
+.wallet-transaction-table {
+    .green-bullet {
+        width: 10px;
+        height: 10px;
+        background-color: $green;
+        border-radius: 100%;
+    }
+}
