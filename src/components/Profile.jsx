@@ -173,7 +173,9 @@ const Profile = () => {
                                                             ></div>
                                                             <div className="security-item">
                                                                 <p className="security-name">
-                                                                    KYC/KYB Verificatoin
+                                                                    Get verified. To buy, deposit or
+                                                                    withdraw the account should be
+                                                                    verified
                                                                 </p>
                                                                 <p className="txt-green security-link">
                                                                     Verified
