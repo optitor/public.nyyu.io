@@ -225,7 +225,7 @@ const Payment = () => {
                                             </div>
                                             <FontAwesomeIcon
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2"
+                                                className="fa-2x ms-2 text-light"
                                             />
                                         </div>
                                         <p className="payment-expire my-auto">

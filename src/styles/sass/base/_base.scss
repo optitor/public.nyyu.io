@@ -104,3 +104,13 @@ input[type="number"]::-webkit-outer-spin-button {
 .mt-16px {
     margin-top: 16px;
 }
+
+.placeholder\:text-light {
+    &::placeholder {
+        color: lightgrey !important;
+    }
+}
+.py-12px {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}

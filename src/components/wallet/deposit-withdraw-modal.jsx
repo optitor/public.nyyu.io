@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Modal from "react-modal"
-import { BTC, CloseIcon, WalletQRCode } from "../../utilities/imgImport"
+import { BTC, CloseIcon, DestinationWallet, WalletQRCode } from "../../utilities/imgImport"
 import { TRANSACTION_TYPES } from "../../utilities/staticData"
 
 export default function DepositWithdrawModal({ showModal, setShowModal, transactionType }) {
@@ -130,8 +130,63 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                             Send only Bitcoin to this deposit address
                         </div>
                     </div>
-                    <div className="btn btn-light col-12 rounded-0 mt-3 fw-bold py-3">
+                    <div className="btn btn-light col-12 rounded-0 mt-3 fw-bold py-12px">
                         Share Address
+                    </div>
+                </div>
+            )}
+            {type === TRANSACTION_TYPES.withdraw && (
+                <div>
+                    <div className="mt-3 text-light">
+                        <div className="border border-light d-flex justify-content-between align-items-center">
+                            <input
+                                type="text"
+                                placeholder="Withdraw amount"
+                                className="bg-transparent p-3 text-light placeholder:text-light border-0 w-100"
+                            />
+                            <div>
+                                <img src={BTC} alt="Destination Wallet" className="me-3" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="text-light d-flex justify-content-between text-center mt-3">
+                        {["25%", "50%", "75%", "100%"].map((item) => (
+                            <button className="border border-light py-1 px-5 bg-transparent">
+                                {item}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="text-light mt-3 fs-12px">
+                        <div className="d-flex justify-content-between border-bottom border-light">
+                            <div>Available balance</div>
+                            <div>5.0054 BTC</div>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                            <div>Minimum transfer</div>
+                            <div>0.00200 BTC</div>
+                        </div>
+                    </div>
+                    <div className="mt-3 text-light">
+                        <div className="border border-light p-3 d-flex justify-content-between">
+                            <div>Destination wallet</div>
+                            <div>
+                                <img src={DestinationWallet} alt="Destination Wallet" />
+                            </div>
+                        </div>
+                    </div>
+                    <select className="col-12 mt-3 bg-transparent text-white p-3 form-select rounded-0">
+                        <option className="bg-black" value="Network">
+                            Network
+                        </option>
+                        <option className="bg-black" value="Foo Network">
+                            Foo Network
+                        </option>
+                        <option className="bg-black" value="Bar Network">
+                            Bar Network
+                        </option>
+                    </select>
+                    <div className="btn btn-light col-12 rounded-0 mt-3 fw-bold py-12px">
+                        Withdraw
                     </div>
                 </div>
             )}
