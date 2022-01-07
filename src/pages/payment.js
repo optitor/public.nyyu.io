@@ -220,7 +220,7 @@ const Payment = () => {
                                                 onChange={handleAllowFraction}
                                                 className="text-uppercase"
                                             ></CheckBox>
-                                            <div className="allow-text">
+                                            <div className="allow-text text-light">
                                                 Do you allow fraction of order compleation?
                                             </div>
                                             <FontAwesomeIcon
@@ -391,18 +391,16 @@ const Payment = () => {
                                     <div className="row">
                                         {wallets.map((item, idx) => (
                                             <div
-                                                className={`col-sm-6 ${
-                                                    idx % 2 === 0 ? "pe-1" : "ps-1"
-                                                }`}
+                                                className={`col-sm-6 ${idx % 2 === 0 ? "pe-1" : "ps-1"
+                                                    }`}
                                                 key={idx}
                                                 onClick={() => setState({ walletId: idx })}
                                                 onKeyDown={() => setState({ walletId: idx })}
                                                 role="presentation"
                                             >
                                                 <div
-                                                    className={`wallet-item ${
-                                                        idx === walletId && "active"
-                                                    }`}
+                                                    className={`wallet-item ${idx === walletId && "active"
+                                                        }`}
                                                 >
                                                     <img src={item.icon} alt="wallet icon" />
                                                     <p>{item.desc}</p>
