@@ -435,30 +435,12 @@ const History = () => {
                     <div className="section-history__left col-lg-4 col-md-5">
                         <Tabs>
                             <TabList>
+                                <Tab className="react-tabs__tab col-6 text-center">wallet</Tab>
                                 <Tab className="react-tabs__tab col-6 text-center">
                                     bid activity
                                 </Tab>
-                                <Tab className="react-tabs__tab col-6 text-center">wallet</Tab>
                             </TabList>
-                            <TabPanel>
-                                <ul className="bid-activity">
-                                    {bids.map((item, idx) => (
-                                        <li
-                                            className="d-flex align-items-center justify-content-between"
-                                            key={idx}
-                                        >
-                                            <div>
-                                                <p className="bid-name">{item.name}</p>
-                                                <p className="bid-date">{item.date}</p>
-                                            </div>
-                                            <p className="bid-price">
-                                                {numberWithCommas(item.bid)}
-                                                <span className="txt-green"> T</span>
-                                            </p>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </TabPanel>
+
                             <TabPanel>
                                 <div className="d-flex justify-content-end">
                                     <Link to="/" className="verify-link">
@@ -515,9 +497,8 @@ const History = () => {
 
                                             <div className="d-flex gap-2">
                                                 <div
-                                                    className={`cursor-pointer ${
-                                                        btcOrUsd === "BTC" && "fw-bold text-white"
-                                                    }`}
+                                                    className={`cursor-pointer ${btcOrUsd === "BTC" && "fw-bold text-white"
+                                                        }`}
                                                     onClick={() => setBtcOrUsd("BTC")}
                                                     onKeydown={() => setBtcOrUsd("BTC")}
                                                     role="presentation"
@@ -526,9 +507,8 @@ const History = () => {
                                                 </div>
                                                 <div>|</div>
                                                 <div
-                                                    className={`cursor-pointer ${
-                                                        btcOrUsd === "USD" && "fw-bold text-white"
-                                                    }`}
+                                                    className={`cursor-pointer ${btcOrUsd === "USD" && "fw-bold text-white"
+                                                        }`}
                                                     onClick={() => setBtcOrUsd("USD")}
                                                     onKeyDown={() => setBtcOrUsd("USD")}
                                                     role="presentation"
@@ -619,6 +599,25 @@ const History = () => {
                                     </tbody>
                                 </table>
                             </TabPanel>
+                            <TabPanel>
+                                <ul className="bid-activity">
+                                    {bids.map((item, idx) => (
+                                        <li
+                                            className="d-flex align-items-center justify-content-between"
+                                            key={idx}
+                                        >
+                                            <div>
+                                                <p className="bid-name">{item.name}</p>
+                                                <p className="bid-date">{item.date}</p>
+                                            </div>
+                                            <p className="bid-price">
+                                                {numberWithCommas(item.bid)}
+                                                <span className="txt-green"> T</span>
+                                            </p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </TabPanel>
                         </Tabs>
                     </div>
                     <div className="section-history__right col-lg-8 col-md-7">
@@ -685,11 +684,10 @@ const History = () => {
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${
-                                        detail_show &&
+                                    className={`${detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                    }`}
+                                        }`}
                                 >
                                     <thead>
                                         <tr>
