@@ -11,23 +11,25 @@ const option = {
         },
     },
     grid: {
-        right: "20%",
+        left: "3%",
+        right: "3%",
+        bottom: "3%",
+        containLabel: true,
     },
     xAxis: [
         {
             type: "category",
+            // prettier-ignore
+            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             axisTick: {
                 alignWithLabel: true,
             },
-            // prettier-ignore
-            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         },
     ],
     yAxis: [
         {
             type: "value",
             min: 0,
-            position: "left",
             axisLabel: {
                 formatter: "{value}",
             },
