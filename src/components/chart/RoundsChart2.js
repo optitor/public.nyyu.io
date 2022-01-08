@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import ReactEcharts from "echarts-for-react"
-const Candlestick = ({ data }) => {
+
+const RoundsChart2 = ({ data }) => {
     const [chart, setChart] = useState([])
     const [rnd, setRnd] = useState([])
     useEffect(() => {
@@ -45,19 +46,12 @@ const Candlestick = ({ data }) => {
         ],
     }
     return (
-        <>
-            <div>
-                <li>MIN: </li>
-                <li>MAX: </li>
-                <li>STD: </li>
-                <li>RND: </li>
-            </div>
-            <ReactEcharts
-                option={option}
-                style={{ height: "500px", width: "100%" }}
-                className="echarts-for-echarts"
-            />
-        </>
+        <ReactEcharts
+            option={option}
+            style={{ height: "500px", width: "100%" }}
+            className="echarts-for-echarts"
+        />
     )
 }
-export default Candlestick
+
+export default RoundsChart2

@@ -26,11 +26,13 @@ import {
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
 import { Currencies } from "../utilities/staticData"
 import { User } from "../utilities/user-data"
-import Linechart from "./chart/Linechart"
-import Candlestick from "./chart/Candlestick"
+import BidsChart1 from "./chart/BidsChart1"
+import RoundsChart1 from "./chart/RoundsChart1"
+import RoundsChart2 from "./chart/RoundsChart2"
 
 import TimeframeBar from "./auction/TimeframeBar"
 import { ROUTES } from "../utilities/routes"
+import BidsChart2 from "./chart/BidsChart2"
 
 const ndb_token = `Since the beginning of NDB's project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -38,6 +40,7 @@ By using NDB token you will be able to contribute to the development of our tech
 `
 
 const options = [
+    { value: "bid_performance", label: "BIDS PERFORMANCE" },
     { value: "round_performance", label: "ROUNDS PERFORMANCE" },
     { value: "round_chance", label: "CHANCE" },
 ]
@@ -64,6 +67,10 @@ const Auction = () => {
     })
 
     // set chart type
+    const [pricce, setPrice] = useState(true)
+    const [volume, setVolume] = useState(true)
+    const [price_volume, setPriceVolume] = useState(false)
+
     const [reser_price, setReserPrice] = useState(true)
     const [sold_price, setSoldPrice] = useState(true)
     const [performance, setPerformance] = useState(false)
@@ -491,6 +498,48 @@ const Auction = () => {
                                     />
                                     <img src={Qmark} alt="question" className="ms-3" />
                                 </div>
+                                {selectLabel.value === "bid_performance" && (
+                                    <div className="d-flex align-items-center pt-3">
+                                        <button
+                                            className={`btn-small ${pricce ? "btn-disabled" : ""}`}
+                                            onClick={() => {
+                                                if (!pricce) {
+                                                    setPrice(true)
+                                                    setVolume(true)
+                                                    setPriceVolume(false)
+                                                }
+                                            }}
+                                        >
+                                            Price
+                                        </button>
+                                        <button
+                                            className={`btn-small ${volume ? "btn-disabled" : ""}`}
+                                            onClick={() => {
+                                                if (!volume) {
+                                                    setPrice(true)
+                                                    setVolume(true)
+                                                    setPriceVolume(false)
+                                                }
+                                            }}
+                                        >
+                                            Volume
+                                        </button>
+                                        <button
+                                            className={`btn-small ${
+                                                price_volume ? "btn-disabled" : ""
+                                            }`}
+                                            onClick={() => {
+                                                if (!price_volume) {
+                                                    setPrice(false)
+                                                    setVolume(false)
+                                                    setPriceVolume(true)
+                                                }
+                                            }}
+                                        >
+                                            Price Volume
+                                        </button>
+                                    </div>
+                                )}
                                 {selectLabel.value === "round_performance" && (
                                     <div className="d-flex align-items-center pt-3">
                                         <button
@@ -533,21 +582,29 @@ const Auction = () => {
                                                 }
                                             }}
                                         >
-                                            Round Histogram
+                                            Performance
                                         </button>
                                     </div>
                                 )}
                             </div>
                             {/* <p className="select-label">{selectLabel.label}</p> */}
+
+                            {selectLabel.value === "bid_performance" && pricce && volume && (
+                                <BidsChart1 />
+                            )}
+                            {selectLabel.value === "bid_performance" && price_volume && (
+                                <BidsChart2 />
+                            )}
+
                             {selectLabel.value === "round_performance" &&
                                 reser_price &&
                                 sold_price &&
                                 !chart1.loading &&
-                                !chart1.error && <Linechart data={chart1.data} />}
+                                !chart1.error && <RoundsChart1 data={chart1.data} />}
                             {selectLabel.value === "round_performance" &&
                                 performance &&
                                 !chart2.loading &&
-                                !chart2.error && <Candlestick data={chart2.data} />}
+                                !chart2.error && <RoundsChart2 data={chart2.data} />}
 
                             {selectLabel.value === "round_chance" && round_chance && (
                                 <ReactECharts

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import ReactEcharts from "echarts-for-react"
 
-const Linechart = ({ data }) => {
+const RoundsChart1 = ({ data }) => {
     console.log("data1", data.getAuctions)
 
     const [total, setTotal] = useState([])
@@ -95,4 +95,5 @@ const Linechart = ({ data }) => {
         />
     )
 }
-export default Linechart
+
+export default RoundsChart1
