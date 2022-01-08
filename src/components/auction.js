@@ -46,13 +46,6 @@ const options = [
 ]
 
 const Auction = () => {
-    const chart1 = useQuery(GET_AUCTION)
-    const chart2 = useQuery(GET_ROUND_PERFORMANCE2)
-
-    console.log("chart1", chart1.data)
-    // if (chart1.loading || chart2.loading) return <div>loading...</div>
-    // if (chart1.error || chart2.error) return <div>Error...</div>
-
     const size = useWindowSize()
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -106,20 +99,16 @@ const Auction = () => {
     })
 
     // get round performance 2
-    const { data: roundPerformance2 } = useQuery(GET_ROUND_PERFORMANCE2)
     const { data: roundChance } = useQuery(GET_ROUND_CHANCE)
-    let round_perform2 = roundPerformance2?.getRoundPerform2.map((item) => {
-        let newArr = []
-        newArr.push("Round " + item.roundNumber, item.min, item.max, item.std)
-        return newArr
-    })
+    const chart1 = useQuery(GET_AUCTION)
+    const chart2 = useQuery(GET_ROUND_PERFORMANCE2)
+
     let round_chance = roundChance?.getRoundChance.map((item) => {
         let newArr = []
         newArr.push("Round " + item.roundNumber, item.winRate, item.failedRate)
         return newArr
     })
     round_chance?.unshift(["Category", "Win Rate", "Failed Rate"])
-    round_perform2?.unshift(["Category", "Max", "Min", "Std"])
 
     const fnSelectedRoundData = () =>
         selectedData === 0

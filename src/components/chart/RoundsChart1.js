@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react"
 import ReactEcharts from "echarts-for-react"
+import { numFormatter } from "../../utilities/number"
 
 const RoundsChart1 = ({ data }) => {
-    console.log("data1", data.getAuctions)
-
     const [total, setTotal] = useState([])
     const [sold, setSold] = useState([])
-    const [min, setMin] = useState(0)
     useEffect(() => {
         let ttotal = []
         let tsold = []
-        let tmin = data.getAuctions.at(0).totalToken
-        console.log("data", data)
         data.getAuctions.forEach((ele) => {
-            if (ele.totalToken < tmin) tmin = ele.totalToken
             ttotal.push([ele.totalToken, ele.minPrice * ele.totalToken])
-            tsold.push([ele.totalToken, ele.minPrice * ele.sold])
+            tsold.push([ele.minPrice, ele.sold])
         })
         setTotal(
             ttotal.sort((a, b) => {
@@ -27,69 +22,91 @@ const RoundsChart1 = ({ data }) => {
                 return a[0] - b[0]
             })
         )
-        setMin(tmin)
-        // var tmp = [[],[],[]]
-        // rdata.sort((a, b) => {return a[0] - b[0]}).forEach((ele) => {
-        //     tmp[0].push(ele[0])
-        //     tmp[1].push(ele[1])
-        //     tmp[2].push(ele[2])
-        // })
-
-        // setChartdata(tmp.slice())
-        // console.log("rdata111", tmp[0])
     }, [])
 
+    const option = {
+        tooltip: {
+            trigger: "axis",
+            axisPointer: {
+                type: "cross",
+            },
+        },
+        grid: {
+            left: "3%",
+            right: "3%",
+            bottom: "3%",
+            containLabel: true,
+        },
+        xAxis: {
+            splitLine: {
+                show: false,
+            },
+            min: 0,
+            axisLabel: {
+                formatter: function (value) {
+                    return numFormatter(value, 0)
+                },
+            },
+            axisPointer: {
+                label: {
+                    backgroundColor: "#8F8F8F",
+                    formatter: function ({ value }) {
+                        return numFormatter(value, 0)
+                    },
+                },
+            },
+        },
+        yAxis: {
+            type: "value",
+            min: 0,
+            axisLine: {
+                show: false,
+            },
+            axisPointer: {
+                label: {
+                    backgroundColor: "#23C865",
+                    formatter: function ({ value }) {
+                        return numFormatter(value, 2)
+                    },
+                },
+            },
+            axisLabel: {
+                formatter: function (value) {
+                    return numFormatter(value, 2)
+                },
+            },
+        },
+        series: [
+            {
+                type: "line",
+                smooth: true,
+                data: sold,
+                color: "#23C865",
+                name: "sold",
+                showSymbol: false,
+                tooltip: {
+                    label: {
+                        backgroundColor: "#23C865",
+                    },
+                },
+            },
+            {
+                type: "line",
+                data: total,
+                color: "#FFB800",
+                name: "total",
+                showSymbol: false,
+                tooltip: {
+                    label: {
+                        backgroundColor: "#FFB800",
+                    },
+                },
+            },
+        ],
+    }
     return (
         <ReactEcharts
-            option={{
-                tooltip: {
-                    trigger: "axis",
-                    axisPointer: {
-                        axis: "x",
-                        type: "cross",
-                        // label: {
-                        //   backgroundColor: "#23C865"
-                        // }
-                    },
-                    triggerTooltip: true,
-                },
-                xAxis: {
-                    splitLine: {
-                        show: false,
-                    },
-                    min: min,
-                },
-                yAxis: {
-                    axisPointer: {
-                        label: {
-                            backgroundColor: "#23C865",
-                        },
-                    },
-                },
-                series: [
-                    {
-                        type: "line",
-                        smooth: true,
-                        data: total,
-                        color: "#23C865",
-                        name: "total",
-                        showSymbol: false,
-                        tooltip: {
-                            label: {
-                                backgroundColor: "#23C865",
-                            },
-                        },
-                    },
-                    {
-                        type: "line",
-                        smooth: "true",
-                        data: sold,
-                        color: "#FFB800",
-                        name: "sold",
-                        showSymbol: false,
-                    },
-                ],
-            }}
+            option={option}
             style={{ height: "500px", width: "100%" }}
             className="echarts-for-echarts"
         />
