@@ -3,6 +3,7 @@ import axios from "axios"
 
 import { numberSign, numberWithCommas, numFormatter } from "../../utilities/number"
 import icons from "base64-cryptocurrency-icons"
+import { Icon } from "@iconify/react"
 import ReactECharts from "echarts-for-react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
 
@@ -22,26 +23,32 @@ const market_data = [
     {
         abbr: "ETH",
         name: "Ethereum",
+        active: false,
     },
     {
         abbr: "BTC",
         name: "Bitcoin",
+        active: true,
     },
     {
         abbr: "BCH",
         name: "Bitcoin Cash",
+        active: false,
     },
     {
         abbr: "DOGE",
         name: "Dogecoin",
+        active: true,
     },
     {
         abbr: "USDC",
         name: "USD Coin",
+        active: false,
     },
     {
         abbr: "LTC",
         name: "Litecoin",
+        active: false,
     },
 ]
 const CryptoRow = ({ data }) => {
@@ -90,6 +97,10 @@ const CryptoRow = ({ data }) => {
     return (
         <tr>
             <td className="d-flex align-items-start ps-2">
+                <Icon
+                    icon="bx:bxs-star"
+                    className={`star-checkbox ${data.active ? "txt-green" : "txt-grey"}`}
+                />
                 <img src={icons[data.abbr]?.icon} alt="coin" className="me-2" width="30" />
                 <div>
                     <p className="coin-abbr">{data.abbr}</p>
@@ -105,7 +116,7 @@ const CryptoRow = ({ data }) => {
                             : "coin-percent txt-red"
                     }
                 >
-                    {numberSign(percent) + percent}%
+                    {numberSign(percent) + !percent ? 0 : percent}%
                 </p>
             </td>
             <td className="laptop-not price-chart">
@@ -142,7 +153,8 @@ const CryptoRow = ({ data }) => {
                     className="echarts-for-echarts"
                 />
             </td>
-            <td className="mobile-not text-end">{volume}</td>
+            <td className="mobile-not text-end">${!volume ? 0 : volume}</td>
+            <td className="mobile-not text-end"></td>
         </tr>
     )
 }
@@ -156,8 +168,12 @@ export default function MarketTab() {
                     <th className="text-end">Price</th>
                     <th className="laptop-not text-center">Price Chart</th>
                     <th className="mobile-not text-end">Volume (24h)</th>
+                    <th className="mobile-not text-end"></th>
                 </tr>
             </thead>
+            <div className="search">
+                <Icon icon="akar-icons:search" color="white" className="search-icon" />
+            </div>
             <tbody>
                 {market_data.map((item, idx) => (
                     <CryptoRow data={item} key={idx} />
