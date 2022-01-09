@@ -51,7 +51,11 @@ export const numberSign = (num) => {
     return Math.sign(num) >= 0 ? "+" : ""
 }
 export const numberWithCommas = (x, ch = ",") => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ch)
+    const n = Number(x)
+    if (n > 10)
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ch)
+    else
+        return x
 }
 
 export const formatBytes = (bytes, decimals = 0) => {
@@ -86,9 +90,9 @@ export const numFormatter = (value, fixed) => {
         ? (Math.abs(Number(value)) / 1.0e9).toFixed(fixed) + "B"
         : // Six Zeroes for Millions
         Math.abs(Number(value)) >= 1.0e6
-        ? (Math.abs(Number(value)) / 1.0e6).toFixed(fixed) + "M"
-        : // Three Zeroes for Thousands
-        Math.abs(Number(value)) >= 1.0e3
-        ? (Math.abs(Number(value)) / 1.0e3).toFixed(fixed) + "K"
-        : Math.abs(Number(value))
+            ? (Math.abs(Number(value)) / 1.0e6).toFixed(fixed) + "M"
+            : // Three Zeroes for Thousands
+            Math.abs(Number(value)) >= 1.0e3
+                ? (Math.abs(Number(value)) / 1.0e3).toFixed(fixed) + "K"
+                : Math.abs(Number(value))
 }
