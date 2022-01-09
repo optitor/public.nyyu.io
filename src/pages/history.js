@@ -24,6 +24,7 @@ import { Input } from "../components/common/FormControl"
 import { useWindowSize } from "../utilities/customHook"
 import AirdropDetail from "../components/AirdropDetail"
 import DepositWithdrawModal from "../components/wallet/deposit-withdraw-modal"
+import MarketTab from "../components/wallet/market-tab"
 import { TRANSACTION_TYPES } from "../utilities/staticData"
 
 const transactions = [
@@ -88,89 +89,7 @@ const transactions = [
         price: 3500,
     },
 ]
-const market_data = [
-    {
-        icon: ETH,
-        abbr: "ETH",
-        name: "Ethereum",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: BTC,
-        abbr: "BTC",
-        name: "Bitcoin",
-        price: 282004.43,
-        percent: -2.2,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: BCH,
-        abbr: "BCH",
-        name: "Bitcoin Cash",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: DAI,
-        abbr: "DAI",
-        name: "Dai",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$1,7B",
-    },
-    {
-        icon: DOGE,
-        abbr: "DOGE",
-        name: "Dogecoin",
-        price: 282004.43,
-        percent: -1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: USDC,
-        abbr: "USDC",
-        name: "USD Coin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: LTC,
-        abbr: "LTC",
-        name: "Litecoin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: USDC,
-        abbr: "USDC",
-        name: "USD Coin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: LTC,
-        abbr: "LTC",
-        name: "Litecoin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-]
+
 const my_assets = [
     {
         icon: NDB,
@@ -515,9 +434,8 @@ const History = () => {
 
                                             <div className="d-flex gap-2">
                                                 <div
-                                                    className={`cursor-pointer ${
-                                                        btcOrUsd === "BTC" && "fw-bold text-white"
-                                                    }`}
+                                                    className={`cursor-pointer ${btcOrUsd === "BTC" && "fw-bold text-white"
+                                                        }`}
                                                     onClick={() => setBtcOrUsd("BTC")}
                                                     onKeydown={() => setBtcOrUsd("BTC")}
                                                     role="presentation"
@@ -526,9 +444,8 @@ const History = () => {
                                                 </div>
                                                 <div>|</div>
                                                 <div
-                                                    className={`cursor-pointer ${
-                                                        btcOrUsd === "USD" && "fw-bold text-white"
-                                                    }`}
+                                                    className={`cursor-pointer ${btcOrUsd === "USD" && "fw-bold text-white"
+                                                        }`}
                                                     onClick={() => setBtcOrUsd("USD")}
                                                     onKeyDown={() => setBtcOrUsd("USD")}
                                                     role="presentation"
@@ -637,59 +554,14 @@ const History = () => {
                             </div>
                             <TabPanel></TabPanel>
                             <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th className="text-end">Price</th>
-                                            <th className="laptop-not text-center">Price Chart</th>
-                                            <th className="mobile-not text-end">Volume (24h)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {market_data.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td className="d-flex align-items-start ps-2">
-                                                    <img
-                                                        src={item.icon}
-                                                        alt="coin icon"
-                                                        className="me-2"
-                                                    />
-                                                    <div>
-                                                        <p className="coin-abbr">{item.abbr}</p>
-                                                        <p className="coin-name">{item.name}</p>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="coin-price">
-                                                        ${numberWithCommas(item.price)}
-                                                    </p>
-                                                    <p
-                                                        className={
-                                                            numberSign(item.percent) === "+"
-                                                                ? "coin-percent txt-green"
-                                                                : "coin-percent txt-red"
-                                                        }
-                                                    >
-                                                        {numberSign(item.percent) + item.percent}%
-                                                    </p>
-                                                </td>
-                                                <td className="laptop-not price-chart"> </td>
-                                                <td className="mobile-not text-end">
-                                                    {item.volume}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <MarketTab />
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${
-                                        detail_show &&
+                                    className={`${detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                    }`}
+                                        }`}
                                 >
                                     <thead>
                                         <tr>
