@@ -168,7 +168,7 @@ export default function MarketTab() {
                     <th className="text-end">Price</th>
                     <th className="laptop-not text-center">Price Chart</th>
                     <th className="mobile-not text-end">Volume (24h)</th>
-                    <th className="mobile-not text-end"></th>
+                    <th className="mobile-not text-end"> </th>
                 </tr>
             </thead>
             <div className="search">
