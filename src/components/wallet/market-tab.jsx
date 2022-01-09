@@ -83,7 +83,7 @@ const CryptoRow = ({ data }) => {
 
     const percent = lastJsonMessage?.data?.P
     const price = lastJsonMessage?.data?.c
-    const volume = numFormatter(lastJsonMessage?.data?.q)
+    const volume = numFormatter(lastJsonMessage?.data?.q, 2)
 
     useEffect(() => {
         if (readyState !== ReadyState.OPEN) return
@@ -116,7 +116,7 @@ const CryptoRow = ({ data }) => {
                             : "coin-percent txt-red"
                     }
                 >
-                    {numberSign(percent) + !percent ? 0 : percent}%
+                    {numberSign(percent) + percent === undefined ? "0" : percent}%
                 </p>
             </td>
             <td className="laptop-not price-chart">
