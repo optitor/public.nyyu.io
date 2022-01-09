@@ -8,7 +8,8 @@ import ProfileChangePasswordModal from "./profile/change-password-modal"
 import DeleteAccountModal from "./profile/delete-account-modal"
 import TwoFactorModal from "./profile/two-factor-modal"
 import SignOutTab from "./profile/sign-out-tab"
-import { profile_tabs, wallets } from "../utilities/staticData"
+import ConnectWalletTab from "./profile/connect-wallet-tab"
+import { profile_tabs } from "../utilities/staticData"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
 import { useQuery } from "@apollo/client"
 import NotificationSetting from "./profile/notification-setting-switch"
@@ -31,10 +32,9 @@ const Profile = () => {
         pwdModal: false,
         tabIndex: 0,
         profile_tab: profile_tabs[0],
-        walletId: 0,
     })
 
-    const { tabIndex, profile_tab, walletId } = state
+    const { tabIndex, profile_tab } = state
     // Methods
     const handleProfileTab = (value) => {
         setState({ profile_tab: value })
@@ -315,32 +315,7 @@ const Profile = () => {
                                     </Tabs>
                                 </div>
                             )}
-                            {tabIndex === 2 && (
-                                <div className="connect-wallet">
-                                    <h4>select wallet</h4>
-                                    <div className="row">
-                                        {wallets.map((item, idx) => (
-                                            <div
-                                                className="col-sm-6"
-                                                key={idx}
-                                                onClick={() => setState({ walletId: idx })}
-                                                onKeyDown={() => setState({ walletId: idx })}
-                                                role="presentation"
-                                            >
-                                                <div
-                                                    className={`wallet-item ${
-                                                        idx === walletId && "active"
-                                                    }`}
-                                                >
-                                                    <img src={item.icon} alt="wallet icon" />
-                                                    <p>{item.desc}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <button className="btn-primary">CONNECT</button>
-                                </div>
-                            )}
+                            {tabIndex === 2 && <ConnectWalletTab />}
                             {tabIndex === 3 && <SignOutTab />}
                         </div>
                     </div>
