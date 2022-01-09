@@ -1335,28 +1335,28 @@ export const COLOR_LOAD = "#ffffff"
 export const COLOR_ON = "#23c865"
 export const COLOR_OFF = "#626161"
 
-export const wallets = [
-    {
+export const wallets = {
+    "injected": {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
-        href: "https://metamask.io/",
+        warn: "MetaMask is not supported",
     },
-    {
+    "walletConnect": {
         icon: WalletConnect,
         desc: "Scan with WalletConnect to connect",
-        href: "https://walletconnect.com/",
+        warn: "WalletConnect is not supported",
     },
-    {
+    "walletLink": {
         icon: Coinbase,
         desc: "Connect to your Coinbase Account",
-        href: "https://www.coinbase.com/",
+        warn: "Coinbase Account is not supported",
     },
-    {
+    "Trust Wallet": {
         icon: TrustWallet,
         desc: "Connect to your Trust wallet",
-        href: "https://trustwallet.com/",
+        warn: "Trust wallet is not supported",
     },
-]
+}
 
 export const profile_tabs = [
     {
