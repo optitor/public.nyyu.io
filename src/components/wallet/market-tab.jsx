@@ -122,7 +122,7 @@ const CryptoRow = ({ data }) => {
             <td className="laptop-not price-chart">
                 <ReactECharts
                     option={{
-                        color: percent > 0 ? GREEN : RED,
+                        color: percent >= 0 ? GREEN : RED,
                         backgroundColor: "#242424",
                         xAxis: {
                             type: "category",
