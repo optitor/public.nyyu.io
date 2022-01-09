@@ -55,7 +55,7 @@ export const numberWithCommas = (x, ch = ",") => {
     if (n > 10)
         return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ch)
     else
-        return x
+        return parseFloat(x)
 }
 
 export const formatBytes = (bytes, decimals = 0) => {
