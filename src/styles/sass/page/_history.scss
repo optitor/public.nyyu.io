@@ -453,7 +453,6 @@
                     font-size: 13px;
                     line-height: 18px;
                     text-align: right;
-                    color: #959595;
                     margin-top: 3px;
                 }
                 &-status {
@@ -844,5 +843,70 @@
     }
     .border-1-white {
         border: 1px solid white;
+    }
+}
+
+.wallet-transaction-table {
+    .green-bullet {
+        width: 10px;
+        height: 10px;
+        background-color: $green;
+        border-radius: 100%;
+    }
+}
+
+.wallet-referral-tab {
+    .title {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+
+        letter-spacing: -0.025em;
+    }
+    .subtitle {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 30px;
+        letter-spacing: -0.01em;
+        word-spacing: 7px;
+    }
+    .rewards-box {
+        background-color: #242424;
+        padding: 20px;
+        margin-top: 23px;
+        margin-bottom: 15px;
+        .label {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 20px;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+            opacity: 0.4;
+        }
+        .value {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 20px;
+            letter-spacing: -0.01em;
+            margin-top: 10px;
+        }
+    }
+    .duplicate-icon {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        transition: 300ms;
+        &:hover {
+            color: lightgrey !important;
+        }
+    }
+    .btn-invite {
+        font-size: 24px;
+        padding: 10px 60px;
+        margin-top: 50px;
     }
 }

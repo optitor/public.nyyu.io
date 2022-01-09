@@ -27,6 +27,40 @@
             line-height: 24px;
         }
     }
+    &-small {
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 12px;
+        color: white;
+        padding: 7px 13px;
+        background: $black;
+        border: 1px solid #ffffff;
+        text-transform: none;
+        margin-right: 5px;
+        &:hover {
+            background: $black;
+            border: 1px solid #ffffff;
+            opacity: 0.65;
+        }
+        &:active {
+            background-color: $black;
+            border-color: white;
+        }
+        &:focus {
+            background-color: $black;
+            border-color: white;
+            box-shadow: unset;
+        }
+        @include mq("phone", max) {
+            font-size: 20px;
+            line-height: 24px;
+        }
+    }
+
+    &-disabled {
+        opacity: 0.65;
+    }
+
     &-second {
         font-weight: 500;
         font-size: 18px;

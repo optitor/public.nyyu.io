@@ -1,6 +1,7 @@
-import React, { useState, useRef, useMemo, useEffect, useCallback } from "react"
+import React, { useReducer, useEffect } from "react"
 import axios from "axios"
-import { numberSign, numberWithCommas } from "../../utilities/number"
+
+import { numberSign, numberWithCommas, numFormatter } from "../../utilities/number"
 import icons from "base64-cryptocurrency-icons"
 import ReactECharts from "echarts-for-react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
@@ -11,113 +12,80 @@ const SOCKET_ENDPOINT = "wss://stream.binance.com:9443/stream"
 
 const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines"
 
-const KLINE_INTERVAL = "15m"
+const KLINE_INTERVAL = "1h"
+
+const GREEN = "#23C865"
+
+const RED = "#F6361A"
 
 const market_data = [
-    // {
-    //     abbr: "ETH",
-    //     name: "Ethereum",
-    //     price: 282004.43,
-    //     percent: 1.9,
-    //     chart: "",
-    //     volume: "$28,6B",
-    // },
+    {
+        abbr: "ETH",
+        name: "Ethereum",
+    },
     {
         abbr: "BTC",
         name: "Bitcoin",
-        price: 282004.43,
-        percent: -2.2,
-        chart: "",
-        volume: "$28,6B",
     },
     {
         abbr: "BCH",
         name: "Bitcoin Cash",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
     },
     {
         abbr: "DOGE",
         name: "Dogecoin",
-        price: 282004.43,
-        percent: -1.9,
-        chart: "",
-        volume: "$28,6B",
     },
     {
         abbr: "USDC",
         name: "USD Coin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
     },
     {
         abbr: "LTC",
         name: "Litecoin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
     },
 ]
 const CryptoRow = ({ data }) => {
-    const [chart, setChart] = useState([])
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
+        chart: [],
+        min: 0,
+    })
+
+    const { chart, min } = state
 
     useEffect(() => {
         axios
             .get(KLINE_ENDPOINT, {
-                params: { symbol: data.abbr + QUOTE, interval: KLINE_INTERVAL },
+                params: {
+                    symbol: data.abbr + QUOTE,
+                    interval: KLINE_INTERVAL,
+                    startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
+                },
             })
             .then((res) => {
-                console.log(
-                    "KLINE DATA",
-                    res.data.map((c) => c[1])
-                )
-                setChart(res.data.map((c) => c[1]))
+                const data = res.data.map((c) => c[1])
+
+                setState({
+                    min: Math.min(data),
+                    max: Math.max(data),
+                    chart: data,
+                })
             })
-    }, [])
+    }, [data.abbr])
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(SOCKET_ENDPOINT)
 
-    useEffect(() => {
-        console.log("msg", lastJsonMessage)
-    }, [lastJsonMessage])
-
-    const handleClickSendMessage = useCallback(
-        () =>
-            sendJsonMessage({
-                method: "SUBSCRIBE",
-                params: [`${data.abbr.toLowerCase()}usdt@ticker`],
-                id: 1,
-            }),
-        [sendJsonMessage]
-    )
-
-    const handleClickUnSendMessage = useCallback(
-        () =>
-            sendJsonMessage({
-                method: "UNSUBSCRIBE",
-                params: ["dogeaud@ticker"],
-                id: 1,
-            }),
-        [sendJsonMessage]
-    )
-
-    const connectionStatus = {
-        [ReadyState.CONNECTING]: "Connecting",
-        [ReadyState.OPEN]: "Open",
-        [ReadyState.CLOSING]: "Closing",
-        [ReadyState.CLOSED]: "Closed",
-        [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-    }[readyState]
+    const percent = lastJsonMessage?.data?.P
+    const price = lastJsonMessage?.data?.c
+    const volume = numFormatter(lastJsonMessage?.data?.q)
 
     useEffect(() => {
         if (readyState !== ReadyState.OPEN) return
-        handleClickSendMessage()
-    }, [readyState])
+        sendJsonMessage({
+            method: "SUBSCRIBE",
+            params: [`${data.abbr.toLowerCase()}usdt@ticker`],
+            id: 1,
+        })
+    }, [readyState, sendJsonMessage, data.abbr])
 
     return (
         <tr>
@@ -129,20 +97,22 @@ const CryptoRow = ({ data }) => {
                 </div>
             </td>
             <td>
-                <p className="coin-price">${numberWithCommas(lastJsonMessage?.data?.c)}</p>
+                <p className="coin-price">${numberWithCommas(price)}</p>
                 <p
                     className={
-                        numberSign(data.percent) === "+"
+                        numberSign(percent) === "+"
                             ? "coin-percent txt-green"
                             : "coin-percent txt-red"
                     }
                 >
-                    {numberSign(data.percent) + data.percent}%
+                    {numberSign(percent) + percent}%
                 </p>
             </td>
             <td className="laptop-not price-chart">
                 <ReactECharts
                     option={{
+                        color: percent > 0 ? GREEN : RED,
+                        backgroundColor: "#242424",
                         xAxis: {
                             type: "category",
                             show: false,
@@ -150,34 +120,34 @@ const CryptoRow = ({ data }) => {
                         yAxis: {
                             type: "value",
                             show: false,
-                            min: Math.min(chart),
-                            max: Math.max(chart),
+                            min: min,
                         },
                         series: [
                             {
                                 data: chart,
                                 type: "line",
                                 smooth: true,
+                                showSymbol: false,
                             },
                         ],
+                        grid: {
+                            show: false,
+                            top: "10%",
+                            bottom: "10%",
+                            left: "0",
+                            right: "0",
+                        },
                     }}
-                    style={{ height: "50px", width: "100%" }}
+                    style={{ height: "50px", width: "150px", margin: "auto" }}
                     className="echarts-for-echarts"
                 />
             </td>
-            <td className="mobile-not text-end">{data.volume}</td>
+            <td className="mobile-not text-end">{volume}</td>
         </tr>
     )
 }
 
 export default function MarketTab() {
-    const [price, setPrice] = useState([])
-    // axios.get("https://api.binance.com/api/v3/ticker/price").then((res) => {
-    //     console.log("result", res.data)
-    //     setPrice(res.data)
-    // })
-
-    console.log("ICONS", icons)
     return (
         <table>
             <thead>

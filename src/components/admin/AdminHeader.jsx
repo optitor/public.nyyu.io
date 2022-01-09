@@ -1,14 +1,31 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "gatsby"
 import { Logo } from "../../utilities/imgImport"
 
+import { useGetAvatarComponentsQuery } from './../../apollo/model/avatarComponent';
+import { fetch_Avatar_Components } from "../../redux/actions/avatarAction";
+
 const AdminHeader = () => {
-    const [show, setShow] = useState(false)
+    const dispatch = useDispatch();
+    const [show, setShow] = useState(false);
 
     let navMenuClsName = "menu "
     if (show) {
         navMenuClsName += "active"
+    };
+
+    // Fetch avatarComponents Data from backend
+    let avatarComponents = [];
+    const queryResults = useGetAvatarComponentsQuery();
+    if(queryResults.data) {
+        avatarComponents = queryResults.data.getAvatarComponents;
     }
+    
+    useEffect(() => {
+        dispatch(fetch_Avatar_Components(avatarComponents));
+    }, [avatarComponents.length]);// eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <nav className={navMenuClsName}>
             <div className="container d-flex align-items-center justify-content-between">

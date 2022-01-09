@@ -25,7 +25,7 @@ export default function CurrencyChoice() {
                         >
                             <span>{Currencies[User.selectedCurrencyId].label}</span>
                             <svg
-                                class="down-arrow"
+                                className="down-arrow"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"

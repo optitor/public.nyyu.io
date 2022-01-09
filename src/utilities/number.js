@@ -27,13 +27,9 @@ export const getTimeDiffOverallDate = (start, end) => {
     }
 }
 
-
 export const isInbetween = (start, end) => {
-    if (end === undefined || start === undefined)
-        return false
-    else
-        if (new Date(start) <= new Date() && new Date(end) >= new Date())
-            return true
+    if (end === undefined || start === undefined) return false
+    else if (new Date(start) <= new Date() && new Date(end) >= new Date()) return true
     return false
 }
 
@@ -75,15 +71,28 @@ export const formatBytes = (bytes, decimals = 0) => {
 }
 
 export const secondsToDhms = (seconds) => {
-    seconds = Number(seconds);
-    var d = Math.floor(seconds / (3600 * 24));
-    var h = Math.floor(seconds % (3600 * 24) / 3600);
-    var m = Math.floor(seconds % 3600 / 60);
+    seconds = Number(seconds)
+    var d = Math.floor(seconds / (3600 * 24))
+    var h = Math.floor((seconds % (3600 * 24)) / 3600)
+    var m = Math.floor((seconds % 3600) / 60)
     // var s = Math.floor(seconds % 60);
 
-    var dDisplay = d > 0 ? d + (d === 1 ? "day " : "days ") : "";
-    var hDisplay = h > 0 ? h + (h === 1 ? "hour " : "hours ") : "";
-    var mDisplay = m > 0 ? m + (m === 1 ? "minute " : "minutes ") : "";
+    var dDisplay = d > 0 ? d + (d === 1 ? "day " : "days ") : ""
+    var hDisplay = h > 0 ? h + (h === 1 ? "hour " : "hours ") : ""
+    var mDisplay = m > 0 ? m + (m === 1 ? "minute " : "minutes ") : ""
     // var sDisplay = s > 0 ? s + (s === 1 ? "second" : "seconds") : "";
-    return dDisplay + hDisplay + mDisplay;
+    return dDisplay + hDisplay + mDisplay
+}
+
+export const numFormatter = (value, fixed) => {
+    // Nine Zeroes for Billions
+    return Math.abs(Number(value)) >= 1.0e9
+        ? (Math.abs(Number(value)) / 1.0e9).toFixed(fixed) + "B"
+        : // Six Zeroes for Millions
+        Math.abs(Number(value)) >= 1.0e6
+            ? (Math.abs(Number(value)) / 1.0e6).toFixed(fixed) + "M"
+            : // Three Zeroes for Thousands
+            Math.abs(Number(value)) >= 1.0e3
+                ? (Math.abs(Number(value)) / 1.0e3).toFixed(fixed) + "K"
+                : Math.abs(Number(value))
 }

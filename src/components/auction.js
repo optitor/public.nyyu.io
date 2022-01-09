@@ -26,8 +26,13 @@ import {
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
 import { Currencies } from "../utilities/staticData"
 import { User } from "../utilities/user-data"
+import BidsChart1 from "./chart/BidsChart1"
+import RoundsChart1 from "./chart/RoundsChart1"
+import RoundsChart2 from "./chart/RoundsChart2"
+
 import TimeframeBar from "./auction/TimeframeBar"
 import { ROUTES } from "../utilities/routes"
+import BidsChart2 from "./chart/BidsChart2"
 
 const ndb_token = `Since the beginning of NDB's project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -35,8 +40,9 @@ By using NDB token you will be able to contribute to the development of our tech
 `
 
 const options = [
-    { value: "round_performance2", label: "Round Performance2" },
-    { value: "round_change", label: "Round Chance" },
+    { value: "bid_performance", label: "BIDS PERFORMANCE" },
+    { value: "round_performance", label: "ROUNDS PERFORMANCE" },
+    { value: "round_chance", label: "CHANCE" },
 ]
 
 const Auction = () => {
@@ -47,11 +53,20 @@ const Auction = () => {
         amount: 1,
         price: 1,
         total: "",
-        place_bid: false,
+        place_bid: true,
         bidModal: false,
         show_chart: false,
         selectLabel: options[0],
     })
+
+    // set chart type
+    const [pricce, setPrice] = useState(true)
+    const [volume, setVolume] = useState(true)
+    const [price_volume, setPriceVolume] = useState(false)
+
+    const [reser_price, setReserPrice] = useState(true)
+    const [sold_price, setSoldPrice] = useState(true)
+    const [performance, setPerformance] = useState(false)
 
     const { tabIndex, amount, price, place_bid, bidModal, show_chart, selectLabel } = state
     const [selectedData, setSelectedData] = useState(1)
@@ -84,20 +99,16 @@ const Auction = () => {
     })
 
     // get round performance 2
-    const { data: roundPerformance2 } = useQuery(GET_ROUND_PERFORMANCE2)
     const { data: roundChance } = useQuery(GET_ROUND_CHANCE)
-    let round_perform2 = roundPerformance2?.getRoundPerform2.map((item) => {
-        let newArr = []
-        newArr.push("Round " + item.roundNumber, item.min, item.max, item.std)
-        return newArr
-    })
+    const chart1 = useQuery(GET_AUCTION)
+    const chart2 = useQuery(GET_ROUND_PERFORMANCE2)
+
     let round_chance = roundChance?.getRoundChance.map((item) => {
         let newArr = []
         newArr.push("Round " + item.roundNumber, item.winRate, item.failedRate)
         return newArr
     })
     round_chance?.unshift(["Category", "Win Rate", "Failed Rate"])
-    round_perform2?.unshift(["Category", "Max", "Min", "Std"])
 
     const fnSelectedRoundData = () =>
         selectedData === 0
@@ -341,12 +352,10 @@ const Auction = () => {
                                 </>
                             )}
                         </Tabs>
-
                         {isInbetween(
                             fnSelectedRoundData()?.startedAt,
                             fnSelectedRoundData()?.endedAt
                         ) && <TimeframeBar percentage={percentage} round={fnSelectedRoundData()} />}
-
                         <div className="d-flex justify-content-between mt-4">
                             {fnAverateMinBid() !== 0 ? (
                                 <div>
@@ -468,42 +477,125 @@ const Auction = () => {
                                       (place_bid && "d-block")
                             }`}
                         >
-                            <div className="d-flex align-items-center">
-                                <Select
-                                    options={options}
-                                    value={selectLabel}
-                                    onChange={(v) => setState({ selectLabel: v })}
-                                />
-                                <img src={Qmark} alt="question" className="ms-3" />
+                            <div className="">
+                                <div className="d-flex ">
+                                    <Select
+                                        className=""
+                                        options={options}
+                                        value={selectLabel}
+                                        onChange={(v) => setState({ selectLabel: v })}
+                                    />
+                                    <img src={Qmark} alt="question" className="ms-3" />
+                                </div>
+                                {selectLabel.value === "bid_performance" && (
+                                    <div className="d-flex align-items-center pt-3">
+                                        <button
+                                            className={`btn-small ${pricce ? "btn-disabled" : ""}`}
+                                            onClick={() => {
+                                                if (!pricce) {
+                                                    setPrice(true)
+                                                    setVolume(true)
+                                                    setPriceVolume(false)
+                                                }
+                                            }}
+                                        >
+                                            Price
+                                        </button>
+                                        <button
+                                            className={`btn-small ${volume ? "btn-disabled" : ""}`}
+                                            onClick={() => {
+                                                if (!volume) {
+                                                    setPrice(true)
+                                                    setVolume(true)
+                                                    setPriceVolume(false)
+                                                }
+                                            }}
+                                        >
+                                            Volume
+                                        </button>
+                                        <button
+                                            className={`btn-small ${
+                                                price_volume ? "btn-disabled" : ""
+                                            }`}
+                                            onClick={() => {
+                                                if (!price_volume) {
+                                                    setPrice(false)
+                                                    setVolume(false)
+                                                    setPriceVolume(true)
+                                                }
+                                            }}
+                                        >
+                                            Price Volume
+                                        </button>
+                                    </div>
+                                )}
+                                {selectLabel.value === "round_performance" && (
+                                    <div className="d-flex align-items-center pt-3">
+                                        <button
+                                            className={`btn-small ${
+                                                reser_price ? "btn-disabled" : ""
+                                            }`}
+                                            onClick={() => {
+                                                if (!reser_price) {
+                                                    setReserPrice(true)
+                                                    setSoldPrice(true)
+                                                    setPerformance(false)
+                                                }
+                                            }}
+                                        >
+                                            Reserved Price
+                                        </button>
+                                        <button
+                                            className={`btn-small ${
+                                                sold_price ? "btn-disabled" : ""
+                                            }`}
+                                            onClick={() => {
+                                                if (!sold_price) {
+                                                    setReserPrice(true)
+                                                    setSoldPrice(true)
+                                                    setPerformance(false)
+                                                }
+                                            }}
+                                        >
+                                            Price Sold
+                                        </button>
+                                        <button
+                                            className={`btn-small ${
+                                                performance ? "btn-disabled" : ""
+                                            }`}
+                                            onClick={() => {
+                                                if (!performance) {
+                                                    setReserPrice(false)
+                                                    setSoldPrice(false)
+                                                    setPerformance(true)
+                                                }
+                                            }}
+                                        >
+                                            Performance
+                                        </button>
+                                    </div>
+                                )}
                             </div>
-                            <p className="select-label">{selectLabel.label}</p>
-                            {selectLabel.value === "round_performance2" && round_perform2 && (
-                                <ReactECharts
-                                    option={{
-                                        tooltip: {
-                                            className: "echarts-tooltip",
-                                        },
-                                        color: ["#23C865", "#8F8F8F", "#FFFFFF"],
-                                        dataset: {
-                                            source: [
-                                                ["Category", "Max", "Min", "Std"],
-                                                ["Round 5", 1.79, 0, 0],
-                                                ["Round 4", 30, 45, 10.606601717798213],
-                                                ["Round 3", 30, 55, 10],
-                                                ["Round 2", 15, 55, 10],
-                                                ["Round 1", 15, 425, 0],
-                                                ["Round 6", 65, 65, 0],
-                                            ],
-                                        },
-                                        xAxis: { type: "category" },
-                                        yAxis: {},
-                                        series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }],
-                                    }}
-                                    style={{ height: "450px", width: "100%" }}
-                                    className="echarts-for-echarts"
-                                />
+                            {/* <p className="select-label">{selectLabel.label}</p> */}
+
+                            {selectLabel.value === "bid_performance" && pricce && volume && (
+                                <BidsChart1 />
                             )}
-                            {selectLabel.value === "round_change" && round_chance && (
+                            {selectLabel.value === "bid_performance" && price_volume && (
+                                <BidsChart2 />
+                            )}
+
+                            {selectLabel.value === "round_performance" &&
+                                reser_price &&
+                                sold_price &&
+                                !chart1.loading &&
+                                !chart1.error && <RoundsChart1 data={chart1.data} />}
+                            {selectLabel.value === "round_performance" &&
+                                performance &&
+                                !chart2.loading &&
+                                !chart2.error && <RoundsChart2 data={chart2.data} />}
+
+                            {selectLabel.value === "round_chance" && round_chance && (
                                 <ReactECharts
                                     option={{
                                         tooltip: {},
@@ -515,7 +607,7 @@ const Auction = () => {
                                         yAxis: {},
                                         series: [{ type: "bar" }, { type: "bar" }],
                                     }}
-                                    style={{ height: "450px", width: "100%" }}
+                                    style={{ height: "500px", width: "100%" }}
                                     className="echarts-for-echarts"
                                 />
                             )}

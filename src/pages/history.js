@@ -2,15 +2,11 @@ import React, { useReducer, useCallback, useState } from "react"
 import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { numberSign, numberWithCommas } from "../utilities/number"
+import { numberWithCommas } from "../utilities/number"
 import {
     BTC,
-    BCH,
-    DAI,
     DOGE,
     ETH,
-    LTC,
-    USDC,
     NDB,
     Airdrop,
     Address,
@@ -26,6 +22,8 @@ import AirdropDetail from "../components/AirdropDetail"
 import DepositWithdrawModal from "../components/wallet/deposit-withdraw-modal"
 import MarketTab from "../components/wallet/market-tab"
 import { TRANSACTION_TYPES } from "../utilities/staticData"
+import Transactions from "../components/wallet/transactions-tab"
+import ReferralTab from "../components/wallet/referral-tab"
 
 const transactions = [
     {
@@ -354,30 +352,12 @@ const History = () => {
                     <div className="section-history__left col-lg-4 col-md-5">
                         <Tabs>
                             <TabList>
+                                <Tab className="react-tabs__tab col-6 text-center">wallet</Tab>
                                 <Tab className="react-tabs__tab col-6 text-center">
                                     bid activity
                                 </Tab>
-                                <Tab className="react-tabs__tab col-6 text-center">wallet</Tab>
                             </TabList>
-                            <TabPanel>
-                                <ul className="bid-activity">
-                                    {bids.map((item, idx) => (
-                                        <li
-                                            className="d-flex align-items-center justify-content-between"
-                                            key={idx}
-                                        >
-                                            <div>
-                                                <p className="bid-name">{item.name}</p>
-                                                <p className="bid-date">{item.date}</p>
-                                            </div>
-                                            <p className="bid-price">
-                                                {numberWithCommas(item.bid)}
-                                                <span className="txt-green"> T</span>
-                                            </p>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </TabPanel>
+
                             <TabPanel>
                                 <div className="d-flex justify-content-end">
                                     <Link to="/" className="verify-link">
@@ -493,20 +473,6 @@ const History = () => {
                                         )}
                                     </div>
                                 </div>
-                                {/* <h5 className="my-4">Transactions history</h5> */}
-                                {/* <div className="transaction-history">
-                                    {transactions.map((item, idx) => (
-                                        <div className="transaction" key={idx}>
-                                            <p className="transaction-date">{item.date}</p>
-                                            <div className="d-flex justify-content-between">
-                                                <p className="transaction-name">{item.name}</p>
-                                                <p className="transaction-price">
-                                                    {numberSign(item.price) + item.price}$
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div> */}
                                 <table className="mt-3">
                                     <tbody>
                                         {my_assets.map((item, idx) => (
@@ -536,25 +502,48 @@ const History = () => {
                                     </tbody>
                                 </table>
                             </TabPanel>
+                            <TabPanel>
+                                <ul className="bid-activity">
+                                    {bids.map((item, idx) => (
+                                        <li
+                                            className="d-flex align-items-center justify-content-between"
+                                            key={idx}
+                                        >
+                                            <div>
+                                                <p className="bid-name">{item.name}</p>
+                                                <p className="bid-date">{item.date}</p>
+                                            </div>
+                                            <p className="bid-price">
+                                                {numberWithCommas(item.bid)}
+                                                <span className="txt-green"> T</span>
+                                            </p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </TabPanel>
                         </Tabs>
                     </div>
                     <div className="section-history__right col-lg-8 col-md-7">
                         <Tabs onSelect={() => setState({ detail_show: false })}>
                             <div className="tab-top">
                                 <TabList>
-                                    <Tab>transaction</Tab>
                                     <Tab>market</Tab>
                                     <Tab>stake</Tab>
                                     <Tab>referral</Tab>
                                     <Tab>airdrops</Tab>
+                                    <Tab>transaction</Tab>
                                 </TabList>
                                 <Link to="/" className="verify-link">
                                     Get verified
                                 </Link>
                             </div>
-                            <TabPanel></TabPanel>
                             <TabPanel>
                                 <MarketTab />
+                            </TabPanel>
+
+                            <TabPanel></TabPanel>
+                            <TabPanel>
+                                <ReferralTab />
                             </TabPanel>
                             <TabPanel>
                                 <table
@@ -620,6 +609,9 @@ const History = () => {
                                     airdrop={airdrops[index]}
                                     onJoinClick={handleJoinAirdrop}
                                 />
+                            </TabPanel>
+                            <TabPanel>
+                                <Transactions />
                             </TabPanel>
                         </Tabs>
                         <div className="connect-external">
