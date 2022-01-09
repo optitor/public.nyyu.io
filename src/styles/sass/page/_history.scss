@@ -414,6 +414,10 @@
                     font-size: 18px;
                     line-height: 22px;
                     color: white;
+                    .loading {
+                        display: flex;
+                        justify-content: flex-end;
+                    }
                 }
                 tbody {
                     @include custom-scroll(250px);

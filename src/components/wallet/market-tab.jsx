@@ -6,6 +6,7 @@ import icons from "base64-cryptocurrency-icons"
 import { Icon } from "@iconify/react"
 import ReactECharts from "echarts-for-react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
+import CustomSpinner from "../common/custom-spinner"
 
 const QUOTE = "USDT"
 
@@ -108,7 +109,13 @@ const CryptoRow = ({ data }) => {
                 </div>
             </td>
             <td>
-                <p className="coin-price">${numberWithCommas(price)}</p>
+                {!price ? (
+                    <div className="loading">
+                        <CustomSpinner />
+                    </div>
+                ) : (
+                    <p className="coin-price">${numberWithCommas(price)}</p>
+                )}
                 <p
                     className={
                         numberSign(percent) === "+"
