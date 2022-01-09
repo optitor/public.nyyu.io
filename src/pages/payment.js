@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { EditIcon, ETH, BTC, DOGE, LTC, BCH, DAI, USDC, QRCode, Copy } from "../utilities/imgImport"
 import { CopyToClipboard } from "react-copy-to-clipboard"
+import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { wallets } from "../utilities/staticData"
 
 const { Option, SingleValue } = components
@@ -388,26 +389,7 @@ const Payment = () => {
                             </TabPanel>
                             <TabPanel className="externalwallets-tab">
                                 <div className="payment-content">
-                                    <div className="row">
-                                        {wallets.map((item, idx) => (
-                                            <div
-                                                className={`col-sm-6 ${idx % 2 === 0 ? "pe-1" : "ps-1"
-                                                    }`}
-                                                key={idx}
-                                                onClick={() => setState({ walletId: idx })}
-                                                onKeyDown={() => setState({ walletId: idx })}
-                                                role="presentation"
-                                            >
-                                                <div
-                                                    className={`wallet-item ${idx === walletId && "active"
-                                                        }`}
-                                                >
-                                                    <img src={item.icon} alt="wallet icon" />
-                                                    <p>{item.desc}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    <ConnectWalletTab />
 
                                     <div className="mt-1 d-flex">
                                         <p className="d-flex flex-row">
