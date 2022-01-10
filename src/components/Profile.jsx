@@ -23,7 +23,7 @@ const Profile = () => {
     const user = user_data?.getUser
 
     // Containers
-    const [loadingPage, setLoadingPage] = useState(false)
+    const [loadingPage, setLoadingPage] = useState(true)
     const displayName = user?.avatarPrefix + "." + user?.avatarName
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
@@ -50,7 +50,7 @@ const Profile = () => {
                 if (user_data.getUser)
                     if (user_data.getUser.avatarPrefix && user_data.getUser.avatarName)
                         return setLoadingPage(false)
-        // else return navigate(ROUTES.selectFigure)
+                    else return navigate(ROUTES.selectFigure)
     }, [user_data])
     if (loadingPage) return <Loading />
     else
