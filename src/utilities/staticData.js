@@ -13,6 +13,13 @@ import {
     Tesla,
     Twitter,
     Volta,
+    ETH,
+    BTC,
+    BCH,
+    DOGE,
+    DAI,
+    USDC,
+    LTC,
 } from "./imgImport"
 
 import {
@@ -1454,3 +1461,13 @@ export const TRANSACTION_TYPES = {
     deposit: "DEPOSIT",
     withdraw: "WITHDRAW",
 }
+
+export const FOO_COINS = [
+    { value: "ETH", label: "ETH", icon: ETH, address: "9CQNH4YRb8GCSBhCK9YZbmkchvphpPf8JY6SJAJM" },
+    { value: "BTC", label: "BTC", icon: BTC, address: "EFAP9RyPVuAQajgrF8axC9FTNukkmreEX8kgMjcF" },
+    { value: "BCH", label: "BCH", icon: BCH, address: "HaA5Y5qLJTp8ZRUgkyLraWvZm6qX4F9LLDFTNXxZ" },
+    { value: "DOGE", label: "DOGE", icon: DOGE, address: "7QxMw5vyT5ZFYKCz6MNmAAeEWQBGA6TxRyVEZjeP" },
+    { value: "DAI", label: "DAI", icon: DAI, address: "BWFc2nfpjQW79TmUQ6nLkkTmKaMk2qpTfDE6BjSY" },
+    { value: "USDC", label: "USDC", icon: USDC, address: "p542WphWj7CJZG554M9RGRgAFg7FqFfhaVeEV6Jx" },
+    { value: "LTC", label: "LTC", icon: LTC, address: "DepKxnyTE9dFFCt6wkahVQCz275dQ9Sw9uq2fCnQ" },
+]
