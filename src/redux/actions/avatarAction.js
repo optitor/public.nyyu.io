@@ -47,14 +47,15 @@ export const fetch_Avatar_Components = () => async dispatch => {
 
 export const create_New_Avatar = createData => async dispatch => {
     try {
-        const { data, errors } = await client.mutate({
-            mutation: Mutation.CREATE_NEW_AVATAR,
-            variables: { ...createData }
-        });
-        if(errors) {
-            console.log(errors); return;
-        }
-        console.log(data);
+        console.log(createData)
+        // const { data, errors } = await client.mutate({
+        //     mutation: Mutation.CREATE_NEW_AVATAR,
+        //     variables: { ...createData }
+        // });
+        // if(errors) {
+        //     console.log(errors); return;
+        // }
+        // console.log(data);
     } catch(err) {
         console.log(err)
     }
