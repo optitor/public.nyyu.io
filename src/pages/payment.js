@@ -169,17 +169,16 @@ const Payment = () => {
                                                 />
                                                 <Input
                                                     type="number"
-                                                    name="amount"
-                                                    value={amount}
-                                                    onChange={handleInput}
+                                                    value={50.234}
+                                                    disabled
                                                 />
                                             </div>
                                             {!getAddress ? (
                                                 <button
-                                                    className="btn-primary"
+                                                    className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
                                                     onClick={() => setState({ getAddress: true })}
                                                 >
-                                                    Get deposit Address
+                                                    get deposit Address
                                                 </button>
                                             ) : (
                                                 <>
