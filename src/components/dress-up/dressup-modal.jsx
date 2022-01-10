@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Modal from "react-modal"
+import svgToDataURL from 'svg-to-dataurl';
 import parse from 'html-react-parser'
 import styled from "styled-components"
 import { DressupData } from "../../utilities/dressup-data"
@@ -67,7 +68,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                 </div>
             </div>
             <div className="row m-0 py-4 text-white">
-                <div className="col-4">
+                <div className="col-sm-4">
                     <div className="row">
                         <div className="profile">
                             <div className="image_div">
@@ -92,7 +93,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                             </div>
                         </div>
 
-                        <span className="text-center dress-up-modal-avatar-name mt-3">Tesla</span>
+                        {/* <span className="text-center dress-up-modal-avatar-name mt-3">Tesla</span> */}
                         <div className="dress-up-modal-sections-list">
                             {DressupData.tabs.map((item) => (
                                 <div
@@ -109,7 +110,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                         <div className="btn-save" onClick={saveAvatarItems}>save</div>
                     </div>
                 </div>
-                <div className="col-8 border-start px-5 py-3">
+                <div className="col-sm-8 components">
                     {loaded && selectedTab === 0 && (
                         <div className="dress-up-modal-hair-section">
                             <DressupHorizontalList

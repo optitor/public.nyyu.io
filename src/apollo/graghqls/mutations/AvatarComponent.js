@@ -33,3 +33,34 @@ export const CREATE_NEW_COMPONENT = gql`
         } 
     }
 `;
+
+export const CREATE_NEW_AVATAR = gql`
+    mutation CreateNewAvatar(
+        $name: String!
+        $surname: String!
+        $shortName: String!
+        $skillSet: [SkillSetInput]!
+        $avatarSet: [AvatarSetInput]!
+        $factsSet: [FactsInput]!
+        $hairColor: String!
+    ) {
+        createNewAvatar(
+            name: $name
+            surname: $surname
+            shortName: $shortName
+            skillSet: $skillSet
+            avatarSet: $avatarSet
+            factsSet: $factsSet
+            hairColor: $hairColor
+        ) {
+            id
+            name
+            surname
+            shortName
+            skillSet
+            avatarSet
+            factsSet
+            hairColor
+        }
+    }
+`;
