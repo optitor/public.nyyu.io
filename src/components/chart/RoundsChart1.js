@@ -22,7 +22,7 @@ const RoundsChart1 = ({ data }) => {
                 return a[0] - b[0]
             })
         )
-    }, [])
+    }, [data])
 
     const option = {
         tooltip: {

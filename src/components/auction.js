@@ -33,6 +33,7 @@ import RoundsChart2 from "./chart/RoundsChart2"
 import TimeframeBar from "./auction/TimeframeBar"
 import { ROUTES } from "../utilities/routes"
 import BidsChart2 from "./chart/BidsChart2"
+import ChanceChart from "./chart/ChanceChart"
 
 const ndb_token = `Since the beginning of NDB's project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
@@ -99,16 +100,9 @@ const Auction = () => {
     })
 
     // get round performance 2
-    const { data: roundChance } = useQuery(GET_ROUND_CHANCE)
-    const chart1 = useQuery(GET_AUCTION)
-    const chart2 = useQuery(GET_ROUND_PERFORMANCE2)
-
-    let round_chance = roundChance?.getRoundChance.map((item) => {
-        let newArr = []
-        newArr.push("Round " + item.roundNumber, item.winRate, item.failedRate)
-        return newArr
-    })
-    round_chance?.unshift(["Category", "Win Rate", "Failed Rate"])
+    const round_chance = useQuery(GET_ROUND_CHANCE)
+    const round_perform1 = useQuery(GET_AUCTION)
+    const round_perform2 = useQuery(GET_ROUND_PERFORMANCE2)
 
     const fnSelectedRoundData = () =>
         selectedData === 0
@@ -479,102 +473,113 @@ const Auction = () => {
                         >
                             <div className="">
                                 <div className="d-flex ">
-                                    <Select
-                                        className=""
-                                        options={options}
-                                        value={selectLabel}
-                                        onChange={(v) => setState({ selectLabel: v })}
+                                    <div className="w-100">
+                                        <Select
+                                            className="select-chart-type"
+                                            options={options}
+                                            value={selectLabel}
+                                            onChange={(v) => setState({ selectLabel: v })}
+                                        />
+                                        {selectLabel.value === "bid_performance" && (
+                                            <div className="d-flex align-items-center pt-3 w-100 ">
+                                                <button
+                                                    className={`btn-small ${
+                                                        pricce ? "btn-disabled" : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!pricce) {
+                                                            setPrice(true)
+                                                            setVolume(true)
+                                                            setPriceVolume(false)
+                                                        }
+                                                    }}
+                                                >
+                                                    Price
+                                                </button>
+                                                <button
+                                                    className={`btn-small ${
+                                                        volume ? "btn-disabled" : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!volume) {
+                                                            setPrice(true)
+                                                            setVolume(true)
+                                                            setPriceVolume(false)
+                                                        }
+                                                    }}
+                                                >
+                                                    Volume
+                                                </button>
+                                                <button
+                                                    className={`btn-small ${
+                                                        price_volume ? "btn-disabled" : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!price_volume) {
+                                                            setPrice(false)
+                                                            setVolume(false)
+                                                            setPriceVolume(true)
+                                                        }
+                                                    }}
+                                                >
+                                                    Price Volume
+                                                </button>
+                                            </div>
+                                        )}
+                                        {selectLabel.value === "round_performance" && (
+                                            <div className="d-flex align-items-center pt-3 w-100 ">
+                                                <button
+                                                    className={`btn-small ${
+                                                        reser_price ? "btn-disabled" : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!reser_price) {
+                                                            setReserPrice(true)
+                                                            setSoldPrice(true)
+                                                            setPerformance(false)
+                                                        }
+                                                    }}
+                                                >
+                                                    Reserved Price
+                                                </button>
+                                                <button
+                                                    className={`btn-small ${
+                                                        sold_price ? "btn-disabled" : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!sold_price) {
+                                                            setReserPrice(true)
+                                                            setSoldPrice(true)
+                                                            setPerformance(false)
+                                                        }
+                                                    }}
+                                                >
+                                                    Price Sold
+                                                </button>
+                                                <button
+                                                    className={`btn-small ${
+                                                        performance ? "btn-disabled" : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!performance) {
+                                                            setReserPrice(false)
+                                                            setSoldPrice(false)
+                                                            setPerformance(true)
+                                                        }
+                                                    }}
+                                                >
+                                                    Performance
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <img
+                                        src={Qmark}
+                                        alt="question"
+                                        className="ms-3 d-none d-sm-block"
                                     />
-                                    <img src={Qmark} alt="question" className="ms-3" />
                                 </div>
-                                {selectLabel.value === "bid_performance" && (
-                                    <div className="d-flex align-items-center pt-3">
-                                        <button
-                                            className={`btn-small ${pricce ? "btn-disabled" : ""}`}
-                                            onClick={() => {
-                                                if (!pricce) {
-                                                    setPrice(true)
-                                                    setVolume(true)
-                                                    setPriceVolume(false)
-                                                }
-                                            }}
-                                        >
-                                            Price
-                                        </button>
-                                        <button
-                                            className={`btn-small ${volume ? "btn-disabled" : ""}`}
-                                            onClick={() => {
-                                                if (!volume) {
-                                                    setPrice(true)
-                                                    setVolume(true)
-                                                    setPriceVolume(false)
-                                                }
-                                            }}
-                                        >
-                                            Volume
-                                        </button>
-                                        <button
-                                            className={`btn-small ${
-                                                price_volume ? "btn-disabled" : ""
-                                            }`}
-                                            onClick={() => {
-                                                if (!price_volume) {
-                                                    setPrice(false)
-                                                    setVolume(false)
-                                                    setPriceVolume(true)
-                                                }
-                                            }}
-                                        >
-                                            Price Volume
-                                        </button>
-                                    </div>
-                                )}
-                                {selectLabel.value === "round_performance" && (
-                                    <div className="d-flex align-items-center pt-3">
-                                        <button
-                                            className={`btn-small ${
-                                                reser_price ? "btn-disabled" : ""
-                                            }`}
-                                            onClick={() => {
-                                                if (!reser_price) {
-                                                    setReserPrice(true)
-                                                    setSoldPrice(true)
-                                                    setPerformance(false)
-                                                }
-                                            }}
-                                        >
-                                            Reserved Price
-                                        </button>
-                                        <button
-                                            className={`btn-small ${
-                                                sold_price ? "btn-disabled" : ""
-                                            }`}
-                                            onClick={() => {
-                                                if (!sold_price) {
-                                                    setReserPrice(true)
-                                                    setSoldPrice(true)
-                                                    setPerformance(false)
-                                                }
-                                            }}
-                                        >
-                                            Price Sold
-                                        </button>
-                                        <button
-                                            className={`btn-small ${
-                                                performance ? "btn-disabled" : ""
-                                            }`}
-                                            onClick={() => {
-                                                if (!performance) {
-                                                    setReserPrice(false)
-                                                    setSoldPrice(false)
-                                                    setPerformance(true)
-                                                }
-                                            }}
-                                        >
-                                            Performance
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                             {/* <p className="select-label">{selectLabel.label}</p> */}
 
@@ -588,29 +593,19 @@ const Auction = () => {
                             {selectLabel.value === "round_performance" &&
                                 reser_price &&
                                 sold_price &&
-                                !chart1.loading &&
-                                !chart1.error && <RoundsChart1 data={chart1.data} />}
+                                !round_perform1.loading &&
+                                !round_perform1.error && (
+                                    <RoundsChart1 data={round_perform1?.data} />
+                                )}
                             {selectLabel.value === "round_performance" &&
                                 performance &&
-                                !chart2.loading &&
-                                !chart2.error && <RoundsChart2 data={chart2.data} />}
-
-                            {selectLabel.value === "round_chance" && round_chance && (
-                                <ReactECharts
-                                    option={{
-                                        tooltip: {},
-                                        color: ["#23C865", "#E8503A"],
-                                        dataset: {
-                                            source: round_chance,
-                                        },
-                                        xAxis: { type: "category" },
-                                        yAxis: {},
-                                        series: [{ type: "bar" }, { type: "bar" }],
-                                    }}
-                                    style={{ height: "500px", width: "100%" }}
-                                    className="echarts-for-echarts"
-                                />
-                            )}
+                                !round_perform2.loading &&
+                                !round_perform2.error && (
+                                    <RoundsChart2 data={round_perform2?.data} />
+                                )}
+                            {selectLabel.value === "round_chance" &&
+                                !round_chance.loading &&
+                                !round_chance.error && <ChanceChart data={round_chance?.data} />}
                         </div>
                     </div>
                 </div>
