@@ -42,6 +42,7 @@ export const CREATE_NEW_AVATAR = gql`
         $skillSet: [SkillSetInput]!
         $avatarSet: [AvatarSetInput]!
         $factsSet: [FactsInput]!
+        $details: String
         $hairColor: String!
     ) {
         createNewAvatar(
@@ -51,15 +52,26 @@ export const CREATE_NEW_AVATAR = gql`
             skillSet: $skillSet
             avatarSet: $avatarSet
             factsSet: $factsSet
+            details: $details
             hairColor: $hairColor
         ) {
             id
             name
             surname
             shortName
-            skillSet
-            avatarSet
-            factsSet
+            skillSet {
+                skill
+                skillRate
+            }
+            avatarSet {
+                groupId
+                compId
+            }
+            factsSet {
+                topic
+                detail
+            }
+            details
             hairColor
         }
     }
