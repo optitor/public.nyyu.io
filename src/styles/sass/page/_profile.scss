@@ -351,6 +351,16 @@
         }
         .connect-wallet {
             text-align: center;
+            color: white;
+            button: {
+                max-width: 400px;
+            }
+            button:disabled,
+            button[disabled] {
+                border: 1px solid #999999;
+                background-color: #1d1d1d;
+                color: #666666;
+            }
             h4 {
                 padding-bottom: 16px;
                 border-bottom: 2px solid #464646;
@@ -753,6 +763,7 @@
         justify-content: start;
         align-items: center;
         margin: 0px;
+        height: 200px;
         & > div {
             height: 200px;
             width: 149px;
@@ -761,16 +772,24 @@
             float: none;
             position: relative;
             & > div.image_div {
+                width: 100px;
                 margin-top: 50%;
+                margin-bottom: 10%;
                 position: relative;
                 div {
                     position: absolute;
+                    svg {
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+                img {
+                    width: 100%;
                 }
             }
             & > div.price_div {
                 width: 100%;
-                position: absolute;
-                bottom: 10%;
+                text-align: center;
             }
         }
         &::-webkit-scrollbar {

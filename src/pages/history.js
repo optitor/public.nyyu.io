@@ -2,15 +2,11 @@ import React, { useReducer, useCallback, useState } from "react"
 import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { numberSign, numberWithCommas } from "../utilities/number"
+import { numberWithCommas } from "../utilities/number"
 import {
     BTC,
-    BCH,
-    DAI,
     DOGE,
     ETH,
-    LTC,
-    USDC,
     NDB,
     Airdrop,
     Address,
@@ -24,6 +20,7 @@ import { Input } from "../components/common/FormControl"
 import { useWindowSize } from "../utilities/customHook"
 import AirdropDetail from "../components/AirdropDetail"
 import DepositWithdrawModal from "../components/wallet/deposit-withdraw-modal"
+import MarketTab from "../components/wallet/market-tab"
 import { TRANSACTION_TYPES } from "../utilities/staticData"
 import Transactions from "../components/wallet/transactions-tab"
 import ReferralTab from "../components/wallet/referral-tab"
@@ -90,89 +87,7 @@ const transactions = [
         price: 3500,
     },
 ]
-const market_data = [
-    {
-        icon: ETH,
-        abbr: "ETH",
-        name: "Ethereum",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: BTC,
-        abbr: "BTC",
-        name: "Bitcoin",
-        price: 282004.43,
-        percent: -2.2,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: BCH,
-        abbr: "BCH",
-        name: "Bitcoin Cash",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: DAI,
-        abbr: "DAI",
-        name: "Dai",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$1,7B",
-    },
-    {
-        icon: DOGE,
-        abbr: "DOGE",
-        name: "Dogecoin",
-        price: 282004.43,
-        percent: -1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: USDC,
-        abbr: "USDC",
-        name: "USD Coin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: LTC,
-        abbr: "LTC",
-        name: "Litecoin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: USDC,
-        abbr: "USDC",
-        name: "USD Coin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-    {
-        icon: LTC,
-        abbr: "LTC",
-        name: "Litecoin",
-        price: 282004.43,
-        percent: 1.9,
-        chart: "",
-        volume: "$28,6B",
-    },
-]
+
 const my_assets = [
     {
         icon: NDB,
@@ -623,51 +538,7 @@ const History = () => {
                                 </Link>
                             </div>
                             <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th className="text-end">Price</th>
-                                            <th className="laptop-not text-center">Price Chart</th>
-                                            <th className="mobile-not text-end">Volume (24h)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {market_data.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td className="d-flex align-items-start ps-2">
-                                                    <img
-                                                        src={item.icon}
-                                                        alt="coin icon"
-                                                        className="me-2"
-                                                    />
-                                                    <div>
-                                                        <p className="coin-abbr">{item.abbr}</p>
-                                                        <p className="coin-name">{item.name}</p>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="coin-price">
-                                                        ${numberWithCommas(item.price)}
-                                                    </p>
-                                                    <p
-                                                        className={
-                                                            numberSign(item.percent) === "+"
-                                                                ? "coin-percent txt-green"
-                                                                : "coin-percent txt-red"
-                                                        }
-                                                    >
-                                                        {numberSign(item.percent) + item.percent}%
-                                                    </p>
-                                                </td>
-                                                <td className="laptop-not price-chart"> </td>
-                                                <td className="mobile-not text-end">
-                                                    {item.volume}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <MarketTab />
                             </TabPanel>
 
                             <TabPanel></TabPanel>

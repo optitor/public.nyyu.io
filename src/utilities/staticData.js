@@ -1043,6 +1043,8 @@ export const SUBSCRIPTION_BASE_URL = "wss://api.ndb.money/subscriptions"
 // export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2/redirect"
 export const OAUTH2_REDIRECT_URI = "https://sale.ndb.money/oauth2/redirect"
 
+export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
+
 export const social_links = [
     {
         icon: Facebook,
@@ -1333,28 +1335,28 @@ export const COLOR_LOAD = "#ffffff"
 export const COLOR_ON = "#23c865"
 export const COLOR_OFF = "#626161"
 
-export const wallets = [
-    {
+export const wallets = {
+    "injected": {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
-        href: "https://metamask.io/",
+        warn: "MetaMask is not supported",
     },
-    {
+    "walletConnect": {
         icon: WalletConnect,
         desc: "Scan with WalletConnect to connect",
-        href: "https://walletconnect.com/",
+        warn: "WalletConnect is not supported",
     },
-    {
+    "walletLink": {
         icon: Coinbase,
         desc: "Connect to your Coinbase Account",
-        href: "https://www.coinbase.com/",
+        warn: "Coinbase Account is not supported",
     },
-    {
+    "Trust Wallet": {
         icon: TrustWallet,
         desc: "Connect to your Trust wallet",
-        href: "https://trustwallet.com/",
+        warn: "Trust wallet is not supported",
     },
-]
+}
 
 export const profile_tabs = [
     {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 // Libraries
 import { Link } from "gatsby"
 
@@ -12,8 +12,22 @@ import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import SaleCTA from "./sale-cta"
+import { useGetAvatarComponentsQuery } from "../../apollo/model/avatarComponent";
+import { fetch_Avatar_Components } from './../../redux/actions/avatarAction';
 
 const Menu = () => {
+    const dispatch = useDispatch();
+    // Fetch avatarComponents Data from backend
+    let avatarComponents = [];
+    const queryResults = useGetAvatarComponentsQuery();
+    if(queryResults.data) {
+        avatarComponents = queryResults.data.getAvatarComponents;
+    }
+    
+    useEffect(() => {
+        dispatch(fetch_Avatar_Components(avatarComponents));
+    }, [avatarComponents.length]);// eslint-disable-line react-hooks/exhaustive-deps
+
     const auth = useAuth()
     const { user } = useSelector((state) => state.auth)
 

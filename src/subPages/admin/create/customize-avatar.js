@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react"
 import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
-
+import _ from 'lodash';
 import NumberFormat from "react-number-format";
 import parse from 'html-react-parser';
 
@@ -13,6 +13,7 @@ import Alert from '@mui/material/Alert';
 import Select from 'react-select';
 import { EmptyAvatar, BaseExpression, BaseHair } from "../../../utilities/imgImport";
 import { useGetUserTierQuery } from "../../../apollo/model/userTier";
+import { useCreateNewComponentMutation } from "./../../../apollo/model/avatarComponent";
 
 const categories = [
     { value: 'hairStyle', label: 'Hair Style' },
@@ -52,12 +53,14 @@ const IndexPage = () => {
         return {};
     }, [avatarInfo]);
 
+    // tiers from the backend
     let tiers = [];
     const userTiersResults = useGetUserTierQuery();
     if(userTiersResults.data) {
         tiers = userTiersResults.data.getUserTiers.map(item => {
-            return { value: item.level, label: item.level };
+            return { value: item.level, label: item.name };
         });
+        tiers = _.orderBy(tiers, ['value'], ['asc']);
     }
 
     const selectAvatarComponent = event => {
@@ -99,8 +102,20 @@ const IndexPage = () => {
         setShowError(false);
     };
 
+    const [createNewComponent, createMutationResults] = useCreateNewComponentMutation();
+    const pending = createMutationResults.loading;
+
     const handleSubmit = () => {
-        console.log(svgFile)
+        createNewComponent(
+            svgFile.groupId,
+            avatarInfo.tier.value,
+            avatarInfo.price,
+            avatarInfo.limitation,
+            svgFile.svg,
+            svgFile.width,
+            svgFile.top,
+            svgFile.left
+        );
     };
 
     return (
@@ -294,7 +309,7 @@ const IndexPage = () => {
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(2)}>Previous</button>
-                                <button className="btn next" onClick={handleSubmit}>Save</button>
+                                <button className="btn next" disabled={pending} onClick={handleSubmit}>{pending? 'Saving...': 'Save'}</button>
                             </div>
                         </>
                     )}
