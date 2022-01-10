@@ -5,22 +5,14 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Input, CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { EditIcon, ETH, BTC, DOGE, LTC, BCH, DAI, USDC, QRCode, Copy } from "../utilities/imgImport"
+import { EditIcon, ETH, BTC, DOGE, QRCode, Copy } from "../utilities/imgImport"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
-import { wallets } from "../utilities/staticData"
+import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
+import ReactTooltip from "react-tooltip"
 
 const { Option, SingleValue } = components
 
-const coins = [
-    { value: "ETH", label: "ETH", icon: ETH },
-    { value: "BTC", label: "BTC", icon: BTC },
-    { value: "BCH", label: "BCH", icon: BCH },
-    { value: "DOGE", label: "DOGE", icon: DOGE },
-    { value: "DAI", label: "DAI", icon: DAI },
-    { value: "USDC", label: "USDC", icon: USDC },
-    { value: "LTC", label: "LTC", icon: LTC },
-]
 const balances = [
     { value: "3,002,565", label: "ETH", icon: ETH },
     { value: "225,489", label: "BTC", icon: BTC },
@@ -73,7 +65,7 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
-    const copyText = "kjY602GgjsKP23mhs09oOp63bd3n34fsla"
+    const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         firstname: "",
         lastname: "",
@@ -99,7 +91,7 @@ const Payment = () => {
         getAddress,
     } = state
 
-    const [coin, setCoin] = useState(coins[0])
+    const [coin, setCoin] = useState(FOO_COINS[0])
     const [balance, setBalance] = useState(null)
     const [copied, setCopied] = useState(false)
     const [tabIndex, setTabIndex] = useState(0)
@@ -159,33 +151,31 @@ const Payment = () => {
                                             <div className="d-flex justify-content-between w-100">
                                                 <Select
                                                     className="cryptocoin-select col-3"
-                                                    options={coins}
+                                                    options={FOO_COINS}
                                                     value={coin}
-                                                    onChange={(v) => setCoin(v)}
+                                                    onChange={(v) => {
+                                                        setCoin(v)
+                                                        setCurrentCoinAddress(v.address)
+                                                    }}
                                                     components={{
                                                         Option: IconOption,
                                                         SingleValue: SelectedValue,
                                                     }}
                                                 />
-                                                <Input
-                                                    type="number"
-                                                    name="amount"
-                                                    value={amount}
-                                                    onChange={handleInput}
-                                                />
+                                                <Input type="number" value={50.234} disabled />
                                             </div>
                                             {!getAddress ? (
                                                 <button
-                                                    className="btn-primary"
+                                                    className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
                                                     onClick={() => setState({ getAddress: true })}
                                                 >
-                                                    Get deposit Address
+                                                    get deposit Address
                                                 </button>
                                             ) : (
                                                 <>
                                                     <CopyToClipboard
                                                         onCopy={() => setCopied(true)}
-                                                        text={copyText}
+                                                        text={currentCoinAddress}
                                                         options={{ message: "copied" }}
                                                     >
                                                         <p
@@ -194,15 +184,10 @@ const Payment = () => {
                                                             onKeyDown={() => setCopied(true)}
                                                             role="presentation"
                                                         >
-                                                            <code>{copyText}</code>
+                                                            <code>{currentCoinAddress}</code>
                                                             <img src={Copy} alt="copy" />
                                                         </p>
                                                     </CopyToClipboard>
-                                                    {copied ? (
-                                                        <span style={{ color: "white" }}>
-                                                            Copied.
-                                                        </span>
-                                                    ) : null}
                                                 </>
                                             )}
                                         </div>
@@ -224,9 +209,20 @@ const Payment = () => {
                                             <div className="allow-text text-light">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2 text-light"
+                                                className="fa-2x ms-2 cursor-pointer text-light"
                                             />
                                         </div>
                                         <p className="payment-expire my-auto">
@@ -308,9 +304,20 @@ const Payment = () => {
                                             <div className="allow-text">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2"
+                                                className="fa-2x ms-2 cursor-pointer"
                                             />
                                         </p>
                                         <p className="payment-expire my-auto">
@@ -338,7 +345,7 @@ const Payment = () => {
                                 <div className="payment-content">
                                     <div className="row">
                                         <Select
-                                            className="balance-select col-lg-4"
+                                            className="balance-select col-lg-4 pe-0"
                                             options={balances}
                                             value={balance}
                                             placeholder="YOUR BALANCE"
@@ -348,18 +355,17 @@ const Payment = () => {
                                                 SingleValue: CustomSingleValue,
                                             }}
                                         />
-                                        <div className="col-lg-8 d-flex">
+                                        <div className="col-lg-8 d-flex pl-8px">
                                             <div className="choosed-icon">
                                                 {balance?.icon && (
                                                     <img src={balance?.icon} alt="coin" />
                                                 )}
                                             </div>
                                             <input
-                                                className="form-control"
                                                 type="number"
-                                                name="amount"
-                                                value={amount}
-                                                onChange={handleInput}
+                                                className="form-control"
+                                                value={50.234}
+                                                disabled
                                             />
                                         </div>
                                     </div>
@@ -375,9 +381,20 @@ const Payment = () => {
                                             <div className="allow-text">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2"
+                                                className="fa-2x ms-2 cursor-pointer"
                                             />
                                         </p>
                                         <p className="payment-expire my-auto">
@@ -403,9 +420,20 @@ const Payment = () => {
                                             <div className="allow-text">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2"
+                                                className="fa-2x ms-2 cursor-pointer"
                                             />
                                         </p>
                                         <p className="payment-expire my-auto">

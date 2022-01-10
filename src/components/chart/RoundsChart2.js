@@ -22,7 +22,7 @@ const RoundsChart2 = ({ data }) => {
 
         setRnd(trnd)
         setChart(rdata)
-    }, [])
+    }, [data])
     const option = {
         tooltip: {
             trigger: "axis",
