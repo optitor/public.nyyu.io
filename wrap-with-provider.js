@@ -34,7 +34,6 @@ const connectors = ({ chainId }) => {
     chains.find((x) => x.id === chainId)?.rpcUrls?.[0] ??
     chain.mainnet.rpcUrls[0]
 
-  console.log("CONNECTERS", rpcUrl, chains)
   return [
     new InjectedConnector({ chains }),
     new WalletConnectConnector({
