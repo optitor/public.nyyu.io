@@ -13,7 +13,6 @@ import { setCurrentAuthInfo } from "./src/redux/actions/authAction";
 import { INFURA_ID } from "./src/utilities/staticData"
 import { isBrowser } from './src/utilities/auth';
 
-
 if (isBrowser) {
   if (localStorage.getItem('USER_DATA')) {
     const authInfo = JSON.parse(localStorage.getItem('USER_DATA'));
@@ -44,7 +43,7 @@ const connectors = ({ chainId }) => {
     }),
     new WalletLinkConnector({
       options: {
-        appName: 'NDB',
+        appName: 'Ndb sale',
         jsonRpcUrl: `${rpcUrl}/${infuraId}`,
       },
     }),

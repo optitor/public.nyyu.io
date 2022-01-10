@@ -8,6 +8,7 @@ export default function ConnectWalletTab() {
     const [{ data: accountData }, disconnect] = useAccount({
         fetchEns: true,
     })
+
     console.log("Connect Data", connectData)
     console.log("Account Data", accountData)
 
@@ -17,7 +18,7 @@ export default function ConnectWalletTab() {
             <div className="row">
                 {accountData ? (
                     <div>
-                        <img src={accountData.ens?.avatar} alt="ENS Avatar" />
+                        {/* <img src={accountData.ens?.avatar} alt="ENS Avatar" /> */}
                         <div>
                             {accountData.ens?.name
                                 ? `${accountData.ens?.name} (${accountData.address})`
