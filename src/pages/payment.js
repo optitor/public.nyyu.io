@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Input, CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { EditIcon, ETH, BTC, DOGE, QRCode, Copy } from "../utilities/imgImport"
+import { EditIcon, ETH, BTC, DOGE, QRCode, Copy, CloseIcon } from "../utilities/imgImport"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
@@ -65,6 +65,9 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
+    const [payAmount, setPayAmount] = useState(50.234)
+    const [fooPayAmount, setFooPayAmount] = useState("")
+    const [showEditPayAmountBox, setShowEditPayAmountBox] = useState(false)
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         firstname: "",
@@ -162,7 +165,7 @@ const Payment = () => {
                                                         SingleValue: SelectedValue,
                                                     }}
                                                 />
-                                                <Input type="number" value={50.234} disabled />
+                                                <Input type="number" value={payAmount} disabled />
                                             </div>
                                             {!getAddress ? (
                                                 <button
@@ -364,7 +367,7 @@ const Payment = () => {
                                             <input
                                                 type="number"
                                                 className="form-control"
-                                                value={50.234}
+                                                value={payAmount}
                                                 disabled
                                             />
                                         </div>
@@ -456,9 +459,36 @@ const Payment = () => {
                         <div className="total-amount">
                             <div className="d-flex align-items-start">
                                 <p className="amount-label">total amount</p>
-                                <img src={EditIcon} alt="edit" className="ms-3" />
+                                <img
+                                    src={showEditPayAmountBox ? CloseIcon : EditIcon}
+                                    alt="edit"
+                                    className="ms-3 cursor-pointer"
+                                    onClick={() => setShowEditPayAmountBox(!showEditPayAmountBox)}
+                                />
                             </div>
-                            <p className="amount">50.234 ETH</p>
+                            <p className="amount">
+                                {showEditPayAmountBox && (
+                                    <div className="my-2">
+                                        <input
+                                            type="number"
+                                            className="bg-transparent text-light border border-1 border-light p-2"
+                                            onChange={(e) => setFooPayAmount(e.target.value)}
+                                            value={fooPayAmount}
+                                        />
+                                        <div
+                                            class="btn text-decoration-underline text-uppercase rounded-0 py-2 px-4 ms-2 fw-bold text-light"
+                                            onClick={() => {
+                                                setPayAmount(fooPayAmount)
+                                                setShowEditPayAmountBox(!showEditPayAmountBox)
+                                            }}
+                                        >
+                                            save
+                                        </div>
+                                    </div>
+                                )}
+                                {payAmount}
+                                <span>ETH</span>
+                            </p>
                         </div>
                         <p className="payment-expire">
                             payment expires in
