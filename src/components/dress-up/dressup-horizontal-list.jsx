@@ -71,8 +71,12 @@ export default function DressupHorizontalList({
                                 )}
                             </div>     
                             <div className="price_div">
-                                {item.price}
-                                <span className="text-success"> ndb</span>
+                                {topic !== 'hairColors' && (
+                                    <>
+                                        {item.price}
+                                        <span className="text-success"> ndb</span>
+                                    </>                                    
+                                )}                                
                             </div>
                         </div>
                     )

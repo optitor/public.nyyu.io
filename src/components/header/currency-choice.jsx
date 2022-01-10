@@ -25,7 +25,7 @@ export default function CurrencyChoice() {
                         >
                             <span>{Currencies[User.selectedCurrencyId].label}</span>
                             <svg
-                                class="down-arrow"
+                                className="down-arrow"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -40,12 +40,13 @@ export default function CurrencyChoice() {
                             </svg>
                         </div>
                         <ul className="currencies-dropdown-content d-none">
-                            {Currencies?.map((item) => {
+                            {Currencies?.map((item, index) => {
                                 return (
                                     <li
+                                        key={index}
                                         className={
-                                            Currencies[User.selectedCurrencyId].id === item.id &&
-                                            "text-secondary"
+                                            Currencies[User.selectedCurrencyId].id === item.id?
+                                            "text-secondary": ""
                                         }
                                         onClick={() => {
                                             User.selectedCurrencyId = item.id

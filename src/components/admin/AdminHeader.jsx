@@ -3,11 +3,15 @@ import { useDispatch } from "react-redux";
 import { Link } from "gatsby"
 import { Logo } from "../../utilities/imgImport"
 
-import { useGetAvatarComponentsQuery } from './../../apollo/model/avatarComponent';
 import { fetch_Avatar_Components } from "../../redux/actions/avatarAction";
 
 const AdminHeader = () => {
     const dispatch = useDispatch();
+    // Fetch avatarComponents Data from backend    
+    useEffect(() => {
+        dispatch(fetch_Avatar_Components());
+    }, [dispatch]);
+    
     const [show, setShow] = useState(false);
 
     let navMenuClsName = "menu "
@@ -15,16 +19,6 @@ const AdminHeader = () => {
         navMenuClsName += "active"
     };
 
-    // Fetch avatarComponents Data from backend
-    let avatarComponents = [];
-    const queryResults = useGetAvatarComponentsQuery();
-    if(queryResults.data) {
-        avatarComponents = queryResults.data.getAvatarComponents;
-    }
-    
-    useEffect(() => {
-        dispatch(fetch_Avatar_Components(avatarComponents));
-    }, [avatarComponents.length]);// eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <nav className={navMenuClsName}>

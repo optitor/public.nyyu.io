@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "gatsby"
 import { Icon } from "@iconify/react"
 import parse from 'html-react-parser'
@@ -11,9 +11,11 @@ import LayoutForCreate from "../../../components/admin/LayoutForCreate"
 import { Alert, Rating } from "@mui/material"
 import { capitalizeFirstLetter } from "../../../utilities/string"
 import DressupModal from "../../../components/dress-up/dressup-modal"
-import { EmptyAvatar } from "../../../utilities/imgImport"
+import { EmptyAvatar } from "../../../utilities/imgImport";
+import { create_New_Avatar } from './../../../redux/actions/avatarAction';
 
 const CreateAvatar = () => {
+    const dispatch = useDispatch();
     const avatarComponents = useSelector(state => state.avatarComponents);
     const { hairStyles, facialStyles, expressions, hats, others } = avatarComponents;
 
@@ -107,7 +109,13 @@ const CreateAvatar = () => {
     }
 
     const handleSubmit = () => {
-        alert("Created Avatar Successfully")
+        // name: $name
+        //     surname: $surname
+        //     shortName: $shortName
+        //     skillSet: $skillSet
+        //     avatarSet: $avatarSet
+        //     factsSet: $factsSet
+        //     hairColor: $hairColor
     }
 
     return (
