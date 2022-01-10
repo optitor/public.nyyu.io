@@ -40,12 +40,13 @@ export default function CurrencyChoice() {
                             </svg>
                         </div>
                         <ul className="currencies-dropdown-content d-none">
-                            {Currencies?.map((item) => {
+                            {Currencies?.map((item, index) => {
                                 return (
                                     <li
+                                        key={index}
                                         className={
-                                            Currencies[User.selectedCurrencyId].id === item.id &&
-                                            "text-secondary"
+                                            Currencies[User.selectedCurrencyId].id === item.id?
+                                            "text-secondary": ""
                                         }
                                         onClick={() => {
                                             User.selectedCurrencyId = item.id

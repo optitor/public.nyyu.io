@@ -12,21 +12,14 @@ import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import SaleCTA from "./sale-cta"
-import { useGetAvatarComponentsQuery } from "../../apollo/model/avatarComponent";
 import { fetch_Avatar_Components } from './../../redux/actions/avatarAction';
 
 const Menu = () => {
     const dispatch = useDispatch();
-    // Fetch avatarComponents Data from backend
-    let avatarComponents = [];
-    const queryResults = useGetAvatarComponentsQuery();
-    if(queryResults.data) {
-        avatarComponents = queryResults.data.getAvatarComponents;
-    }
-    
+    // Fetch avatarComponents Data from backend    
     useEffect(() => {
-        dispatch(fetch_Avatar_Components(avatarComponents));
-    }, [avatarComponents.length]);// eslint-disable-line react-hooks/exhaustive-deps
+        dispatch(fetch_Avatar_Components());
+    }, [dispatch]);
 
     const auth = useAuth()
     const { user } = useSelector((state) => state.auth)

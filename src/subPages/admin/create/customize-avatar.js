@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react"
+import { useDispatch } from "react-redux";
 import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import _ from 'lodash';
@@ -13,11 +14,10 @@ import Alert from '@mui/material/Alert';
 import Select from 'react-select';
 import { EmptyAvatar, BaseExpression, BaseHair } from "../../../utilities/imgImport";
 import { useGetUserTierQuery } from "../../../apollo/model/userTier";
-import { useCreateNewComponentMutation } from "./../../../apollo/model/avatarComponent";
+import { create_Avatar_Component } from "../../../redux/actions/avatarAction";
 
 const categories = [
     { value: 'hairStyle', label: 'Hair Style' },
-    // { value: 'hairColor', label: 'Hair Color' },
     { value: 'facialStyle', label: 'Facial Style' },
     { value: 'expression', label: 'Expression' },
     { value: 'hat', label: 'Hat' },
@@ -25,9 +25,11 @@ const categories = [
 ];
 
 const IndexPage = () => {
+    const dispatch = useDispatch();
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
     const [error, setError] = useState('');
+    const [pending, setPending] = useState(false);
 
     //------- Avatar and Validation
     // Avatar
@@ -102,20 +104,19 @@ const IndexPage = () => {
         setShowError(false);
     };
 
-    const [createNewComponent, createMutationResults] = useCreateNewComponentMutation();
-    const pending = createMutationResults.loading;
-
-    const handleSubmit = () => {
-        createNewComponent(
-            svgFile.groupId,
-            avatarInfo.tier.value,
-            avatarInfo.price,
-            avatarInfo.limitation,
-            svgFile.svg,
-            svgFile.width,
-            svgFile.top,
-            svgFile.left
-        );
+    const handleSubmit = async () => {
+        setPending(true);
+        await dispatch(create_Avatar_Component({
+            groupId: svgFile.groupId,
+            tierLevel: avatarInfo.tier.value,
+            price: avatarInfo.price,
+            limited: avatarInfo.limitation,
+            svg: svgFile.svg,
+            width: svgFile.width,
+            top: svgFile.top,
+            left: svgFile.left
+        }));
+        setPending(false);
     };
 
     return (
