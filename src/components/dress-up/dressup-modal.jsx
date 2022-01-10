@@ -67,6 +67,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                     />
                 </div>
             </div>
+            
             <div className="row m-0 py-4 text-white">
                 <div className="col-sm-4">
                     <div className="row">
