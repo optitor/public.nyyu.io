@@ -207,7 +207,7 @@
                 .css-1s2u09g-control {
                     padding-top: 9px;
                     padding-bottom: 9px;
-                    border: none;
+                    padding-right: 0px !important;
                     @include mq("laptop", max) {
                         border: 1px solid white;
                     }

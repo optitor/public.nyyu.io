@@ -322,7 +322,7 @@ const Payment = () => {
                                 <div className="payment-content">
                                     <div className="row">
                                         <Select
-                                            className="balance-select col-lg-4"
+                                            className="balance-select col-lg-4 pe-0"
                                             options={balances}
                                             value={balance}
                                             placeholder="YOUR BALANCE"
@@ -332,18 +332,17 @@ const Payment = () => {
                                                 SingleValue: CustomSingleValue,
                                             }}
                                         />
-                                        <div className="col-lg-8 d-flex">
+                                        <div className="col-lg-8 d-flex pl-8px">
                                             <div className="choosed-icon">
                                                 {balance?.icon && (
                                                     <img src={balance?.icon} alt="coin" />
                                                 )}
                                             </div>
                                             <input
-                                                className="form-control"
                                                 type="number"
-                                                name="amount"
-                                                value={amount}
-                                                onChange={handleInput}
+                                                className="form-control"
+                                                value={50.234}
+                                                disabled
                                             />
                                         </div>
                                     </div>
