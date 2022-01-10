@@ -70,12 +70,10 @@ export const useSignIn2FA = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
         onCompleted: (data) => {
             if (data.confirm2FA.status === "Failed") {
-                // do something
                 return
             } else if (data.confirm2FA.status === "Success") {
                 setAuthToken(data.confirm2FA.token)
-                // localStorage.removeItem("USER_DATA")
-                navigate(ROUTES.selectFigure)
+                navigate(ROUTES.profile)
             }
         },
     })
