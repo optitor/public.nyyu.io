@@ -134,7 +134,7 @@ const Payment = () => {
                             <TabList>
                                 {payment_types.map((item, index) => (
                                     <Tab
-                                        className={`payment-type__tab-list text-center`}
+                                        className={`payment-type__tab-list text-center ${index === 3 && "px-0"}`}
                                         key={index}
                                     >
                                         {item.label}
