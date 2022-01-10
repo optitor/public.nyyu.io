@@ -1335,6 +1335,8 @@ export const COLOR_LOAD = "#ffffff"
 export const COLOR_ON = "#23c865"
 export const COLOR_OFF = "#626161"
 
+export const INFURA_ID = "b3926273acc243d1ab72dfe9f2be8539"
+
 export const wallets = {
     "injected": {
         icon: MetaMask,
