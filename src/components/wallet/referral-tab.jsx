@@ -1,5 +1,4 @@
 import React from "react"
-import { BTC } from "../../utilities/imgImport"
 
 export default function ReferralTab() {
     return (
