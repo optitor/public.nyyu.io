@@ -8,7 +8,8 @@ import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { EditIcon, ETH, BTC, DOGE, QRCode, Copy } from "../utilities/imgImport"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
-import { FOO_COINS } from "../utilities/staticData"
+import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
+import ReactTooltip from "react-tooltip"
 
 const { Option, SingleValue } = components
 
@@ -208,9 +209,20 @@ const Payment = () => {
                                             <div className="allow-text text-light">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2 text-light"
+                                                className="fa-2x ms-2 cursor-pointer text-light"
                                             />
                                         </div>
                                         <p className="payment-expire my-auto">
@@ -292,9 +304,20 @@ const Payment = () => {
                                             <div className="allow-text">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2"
+                                                className="fa-2x ms-2 cursor-pointer"
                                             />
                                         </p>
                                         <p className="payment-expire my-auto">
@@ -358,9 +381,20 @@ const Payment = () => {
                                             <div className="allow-text">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2"
+                                                className="fa-2x ms-2 cursor-pointer"
                                             />
                                         </p>
                                         <p className="payment-expire my-auto">
@@ -386,9 +420,20 @@ const Payment = () => {
                                             <div className="allow-text">
                                                 Do you allow fraction of order compleation?
                                             </div>
+                                            <ReactTooltip place="right" type="light" effect="solid">
+                                                <div
+                                                    className="text-justify"
+                                                    style={{
+                                                        width: "300px",
+                                                    }}
+                                                >
+                                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                </div>
+                                            </ReactTooltip>
                                             <FontAwesomeIcon
+                                                data-tip="React-tooltip"
                                                 icon={faQuestionCircle}
-                                                className="fa-2x ms-2"
+                                                className="fa-2x ms-2 cursor-pointer"
                                             />
                                         </p>
                                         <p className="payment-expire my-auto">

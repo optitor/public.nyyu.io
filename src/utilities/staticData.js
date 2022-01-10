@@ -22,12 +22,7 @@ import {
     LTC,
 } from "./imgImport"
 
-import {
-    Coinbase,
-    MetaMask,
-    TrustWallet,
-    WalletConnect,
-} from "./imgImport"
+import { Coinbase, MetaMask, TrustWallet, WalletConnect } from "./imgImport"
 
 export const countries = [
     {
@@ -1322,7 +1317,6 @@ export const figures = [
     },
 ]
 
-
 export const passwordValidatorOptions = {
     minLength: 8,
     minLowercase: 1,
@@ -1343,17 +1337,17 @@ export const COLOR_ON = "#23c865"
 export const COLOR_OFF = "#626161"
 
 export const wallets = {
-    "injected": {
+    injected: {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
         warn: "MetaMask is not supported",
     },
-    "walletConnect": {
+    walletConnect: {
         icon: WalletConnect,
         desc: "Scan with WalletConnect to connect",
         warn: "WalletConnect is not supported",
     },
-    "walletLink": {
+    walletLink: {
         icon: Coinbase,
         desc: "Connect to your Coinbase Account",
         warn: "Coinbase Account is not supported",
@@ -1416,46 +1410,45 @@ export const Currencies = [
         id: 0,
         label: "USD",
         value: "USD",
-        symbol: "$"
+        symbol: "$",
     },
     {
         id: 1,
         label: "EUR",
         value: "EUR",
-        symbol: "£"
+        symbol: "£",
     },
     {
         id: 2,
         label: "GBP",
         value: "GBP",
-        symbol: "€"
+        symbol: "€",
     },
     {
         id: 3,
         label: "INR",
         value: "INR",
-        symbol: "¥"
+        symbol: "¥",
     },
     {
         id: 4,
         label: "SEK",
         value: "SEK",
-        symbol: "KR"
+        symbol: "KR",
     },
     {
         id: 5,
         label: "RUB",
         value: "RUB",
-        symbol: "₽"
+        symbol: "₽",
     },
     {
         id: 6,
         label: "CHF",
         value: "CHF",
-        symbol: "CHF"
+        symbol: "CHF",
     },
 ]
-
 
 export const TRANSACTION_TYPES = {
     deposit: "DEPOSIT",
@@ -1466,8 +1459,21 @@ export const FOO_COINS = [
     { value: "ETH", label: "ETH", icon: ETH, address: "9CQNH4YRb8GCSBhCK9YZbmkchvphpPf8JY6SJAJM" },
     { value: "BTC", label: "BTC", icon: BTC, address: "EFAP9RyPVuAQajgrF8axC9FTNukkmreEX8kgMjcF" },
     { value: "BCH", label: "BCH", icon: BCH, address: "HaA5Y5qLJTp8ZRUgkyLraWvZm6qX4F9LLDFTNXxZ" },
-    { value: "DOGE", label: "DOGE", icon: DOGE, address: "7QxMw5vyT5ZFYKCz6MNmAAeEWQBGA6TxRyVEZjeP" },
+    {
+        value: "DOGE",
+        label: "DOGE",
+        icon: DOGE,
+        address: "7QxMw5vyT5ZFYKCz6MNmAAeEWQBGA6TxRyVEZjeP",
+    },
     { value: "DAI", label: "DAI", icon: DAI, address: "BWFc2nfpjQW79TmUQ6nLkkTmKaMk2qpTfDE6BjSY" },
-    { value: "USDC", label: "USDC", icon: USDC, address: "p542WphWj7CJZG554M9RGRgAFg7FqFfhaVeEV6Jx" },
+    {
+        value: "USDC",
+        label: "USDC",
+        icon: USDC,
+        address: "p542WphWj7CJZG554M9RGRgAFg7FqFfhaVeEV6Jx",
+    },
     { value: "LTC", label: "LTC", icon: LTC, address: "DepKxnyTE9dFFCt6wkahVQCz275dQ9Sw9uq2fCnQ" },
 ]
+
+export const PAYMENT_FRACTION_TOOLTIP_CONTENT =
+    "If your bid is the last one to be accepted and there are not enough tokens to fulfil your order, by checking this box you allow us to complete your order with the remaining tokens only."

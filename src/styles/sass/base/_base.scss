@@ -125,6 +125,13 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 }
 
+.text-justify {
+    text-align: justify !important;
+}
+
+.w-316px {
+    width: 316px !important;
+}
 // Begin: New Font Sizes
 @for $size from 12 to 24 {
     .fs-#{$size}px {
