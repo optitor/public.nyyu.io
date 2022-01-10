@@ -300,7 +300,7 @@ const SelectedValue = (props) => {
 const History = () => {
     const [hideValues, setHideValues] = useState(false)
     const [btcEquityValue, setBtcEquityValue] = useState("12.003.877")
-    const [dollarEquityValue, setDollarEquityValue] = useState("~ $282,004.43")
+    const [dollarEquityValue, setDollarEquityValue] = useState("282,004.43")
     const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit)
     const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false)
     const obscureValueString = "****"
@@ -435,10 +435,11 @@ const History = () => {
                                             </div>
                                         </p>
                                         <p className="value">
-                                            {hideValues ? obscureValueString : btcEquityValue}
+
+                                            {hideValues ? obscureValueString : (btcOrUsd === "USD" ? dollarEquityValue : btcEquityValue)}
                                         </p>
                                         <p className="max-value mt-3">
-                                            {hideValues ? obscureValueString : dollarEquityValue}
+                                            {hideValues ? obscureValueString : ("~ $ " + (btcOrUsd === "USD" ? btcEquityValue : dollarEquityValue))}
                                         </p>
                                     </div>
                                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">

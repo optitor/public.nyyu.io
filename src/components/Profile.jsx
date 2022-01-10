@@ -1,7 +1,7 @@
-import React, { useReducer, useState } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import Header from "../components/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import Select from "react-select"
 import { Tesla, Bronze } from "../utilities/imgImport"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
@@ -15,13 +15,15 @@ import { useQuery } from "@apollo/client"
 import NotificationSetting from "./profile/notification-setting-switch"
 import NotificationRecent from "./profile/notification-recent-switch"
 import Loading from "./common/Loading"
+import { ROUTES } from "../utilities/routes"
 
 const Profile = () => {
     // Queries and Mutations
-    const { data: user_data, loading } = useQuery(GET_USER)
+    const { data: user_data } = useQuery(GET_USER)
     const user = user_data?.getUser
 
     // Containers
+    const [loadingPage, setLoadingPage] = useState(true)
     const displayName = user?.avatarPrefix + "." + user?.avatarName
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
@@ -42,8 +44,15 @@ const Profile = () => {
     }
 
     const getSecurityStatus = (key) => user?.userSecurity?.find((f) => f?.key === key)?.value
-
-    if (loading) return <Loading />
+    useEffect(() => {
+        if (user_data)
+            if ("getUser" in user_data)
+                if (user_data.getUser)
+                    if (user_data.getUser.avatarPrefix && user_data.getUser.avatarName)
+                        return setLoadingPage(false)
+                    else return navigate(ROUTES.selectFigure)
+    }, [user_data])
+    if (loadingPage) return <Loading />
     else
         return (
             <main className="profile-page">
@@ -173,9 +182,7 @@ const Profile = () => {
                                                             ></div>
                                                             <div className="security-item">
                                                                 <p className="security-name">
-                                                                    Get verified. To buy, deposit or
-                                                                    withdraw the account should be
-                                                                    verified
+                                                                    KYC/KYB Verificatoin
                                                                 </p>
                                                                 <p className="txt-green security-link">
                                                                     Verified
@@ -283,10 +290,10 @@ const Profile = () => {
                                     <div className="verify-delete mt-3 pb-5">
                                         <p>
                                             <Link to="/" className="get-verify">
-                                                Get verified
-                                            </Link>
-                                            &nbsp; to collect over 2,000 USD the account should be
-                                            verified.
+                                                Get verified.
+                                            </Link>{" "}
+                                            To buy, deposit or withdraw the account should be
+                                            verified
                                         </p>
                                         <p
                                             className="delete-account-link"

@@ -56,11 +56,11 @@
             text-transform: uppercase;
             cursor: pointer;
             @include mq("laptop-wide", max) {
-                font-size: 14px;
-                padding: 8px;
+                font-size: 12px;
+                padding: 8px 0px;
             }
             @include mq("laptop", max) {
-                font-size: 14px;
+                font-size: 12px;
             }
         }
         .form-check-input {
