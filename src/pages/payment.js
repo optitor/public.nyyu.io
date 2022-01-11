@@ -408,7 +408,7 @@ const Payment = () => {
                                 </div>
                             </TabPanel>
                             <TabPanel className="externalwallets-tab">
-                                <div className="payment-content">
+                                <div className="payment-content" style={{display: 'block'}}>
                                     <ConnectWalletTab />
 
                                     <div className="mt-1 d-flex">
