@@ -74,6 +74,7 @@ const Menu = () => {
                         <img src={Logo} alt="NDB Brand Logo" />
                     </Link>
                     {typeof window !== `undefined` &&
+                        window.innerWidth > 576 &&
                         (window.location.pathname === ROUTES.profile ||
                             window.location.pathname === ROUTES.faq ||
                             window.location.pathname === ROUTES.wallet ||
@@ -166,7 +167,7 @@ const Menu = () => {
                             </ul>
                         )}
                     </div>
-                    <CurrencyChoice />
+                    {window.innerWidth > 576 && <CurrencyChoice />}
                     <button
                         type="button"
                         className="menu__toggler"
