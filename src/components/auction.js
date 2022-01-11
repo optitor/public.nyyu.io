@@ -202,51 +202,179 @@ const Auction = () => {
                             show_chart ? "d-none" : "d-block"
                         }`}
                     >
-                        {roundM?.getAuctionByNumber && (
-                            <Tabs
-                                className="round-tab"
-                                selectedIndex={selectedData}
-                                onSelect={(index) => {
-                                    if (index !== selectedData) {
-                                        setState({ price: 0, amount: 0 })
-                                        setSelectedData(index)
-                                    }
-                                }}
-                            >
-                                (
-                                <TabList>
-                                    <Tab>Round {roundL?.getAuctionByNumber?.number}</Tab>
-                                    <Tab>Round {roundM?.getAuctionByNumber?.number}</Tab>
-                                    <Tab>Round {roundH?.getAuctionByNumber?.number}</Tab>
-                                </TabList>
-                                )
-                                <TabPanel>
-                                    Token Available{" "}
-                                    <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
-                                </TabPanel>
-                                <TabPanel>
-                                    Token Available{" "}
-                                    <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
-                                </TabPanel>
-                                <TabPanel>
-                                    Token Available{" "}
-                                    <span className="fw-bold">{fnSelectedRoundData()?.token}</span>
-                                </TabPanel>
-                            </Tabs>
-                        )}
-                        <Tabs
-                            className="statistics-tab"
-                            selectedIndex={tabIndex}
-                            onSelect={(index) => setState({ tabIndex: index })}
-                        >
-                            <TabList>
-                                <Tab>bids</Tab>
-                                <Tab data-for="tooltip2">statistics</Tab>
+                        <div className="d-flex">
+                            <div className="w-100">
+                                {roundM?.getAuctionByNumber && (
+                                    <Tabs
+                                        className="round-tab"
+                                        selectedIndex={selectedData}
+                                        onSelect={(index) => {
+                                            if (index !== selectedData) {
+                                                setState({ price: 0, amount: 0 })
+                                                setSelectedData(index)
+                                            }
+                                        }}
+                                    >
+                                        <TabList>
+                                            <Tab>Round {roundL?.getAuctionByNumber?.number}</Tab>
+                                            <Tab>Round {roundM?.getAuctionByNumber?.number}</Tab>
+                                            <Tab>Round {roundH?.getAuctionByNumber?.number}</Tab>
+                                        </TabList>
+
+                                        <TabPanel>
+                                            Token Available{" "}
+                                            <span className="fw-bold">
+                                                {fnSelectedRoundData()?.token}
+                                            </span>
+                                        </TabPanel>
+                                        <TabPanel>
+                                            Token Available{" "}
+                                            <span className="fw-bold">
+                                                {fnSelectedRoundData()?.token}
+                                            </span>
+                                        </TabPanel>
+                                        <TabPanel>
+                                            Token Available{" "}
+                                            <span className="fw-bold">
+                                                {fnSelectedRoundData()?.token}
+                                            </span>
+                                        </TabPanel>
+                                    </Tabs>
+                                )}
+                                <Tabs
+                                    className="statistics-tab"
+                                    selectedIndex={tabIndex}
+                                    onSelect={(index) => setState({ tabIndex: index })}
+                                >
+                                    <TabList>
+                                        <Tab>bids</Tab>
+                                        <Tab data-for="tooltip2">statistics</Tab>
+                                        <ReactTooltip
+                                            place="right"
+                                            type="light"
+                                            effect="solid"
+                                            id="tooltip2"
+                                        >
+                                            <div
+                                                style={{
+                                                    width: "300px",
+                                                    color: "#000000",
+                                                }}
+                                            >
+                                                {AUCTION_TOOLTIP_CONTENT2}
+                                            </div>
+                                        </ReactTooltip>
+                                    </TabList>
+                                    <TabPanel>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Placement</th>
+                                                    <th>Highest Bid Per Token</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{idx + 1}</td>
+                                                        <td>
+                                                            {item.totalPrice}
+                                                            <span className="txt-green"> $</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Highest Bid Per Token</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                                    <tr key={idx}>
+                                                        <td>{getFormatedDate(item.placedAt)}</td>
+                                                        <td>
+                                                            {item.totalPrice}
+                                                            <span className="txt-green"> $</span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </TabPanel>
+                                </Tabs>
+                                {isInbetween(
+                                    fnSelectedRoundData()?.startedAt,
+                                    fnSelectedRoundData()?.endedAt
+                                ) && (
+                                    <TimeframeBar
+                                        percentage={percentage}
+                                        round={fnSelectedRoundData()}
+                                    />
+                                )}
+                                <div className="d-flex justify-content-between mt-4">
+                                    {fnAverateMinBid() !== 0 ? (
+                                        <div>
+                                            <p className="caption">Minimum bid</p>
+                                            <p className="value">
+                                                {fnAverateMinBid()}
+                                                <span className="txt-green"> $</span>{" "}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div></div>
+                                    )}
+                                    <div>
+                                        <p className="caption">Available Until</p>
+                                        <p className="value">
+                                            {numberWithLength(
+                                                parseInt(
+                                                    new Date(
+                                                        fnSelectedRoundData()?.endedAt
+                                                    ).getHours()
+                                                )
+                                            )}
+                                            :
+                                            {numberWithLength(
+                                                parseInt(
+                                                    new Date(
+                                                        fnSelectedRoundData()?.endedAt
+                                                    ).getMinutes()
+                                                )
+                                            )}
+                                            :
+                                            {numberWithLength(
+                                                parseInt(
+                                                    new Date(
+                                                        fnSelectedRoundData()?.endedAt
+                                                    ).getSeconds()
+                                                )
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                                {size.width <= 1024 && (
+                                    <div className="text-center my-5">
+                                        <button
+                                            className="btn-primary btn-increase"
+                                            onClick={() => setState({ bidModal: true })}
+                                        >
+                                            {!place_bid ? "Place Bid" : "Increase bid"}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="d-none d-md-block mt-5">
                                 <ReactTooltip
                                     place="right"
                                     type="light"
                                     effect="solid"
-                                    id="tooltip2"
+                                    id="tooltip3"
                                 >
                                     <div
                                         style={{
@@ -254,102 +382,20 @@ const Auction = () => {
                                             color: "#000000",
                                         }}
                                     >
-                                        {AUCTION_TOOLTIP_CONTENT2}
+                                        {AUCTION_TOOLTIP_CONTENT1}
                                     </div>
                                 </ReactTooltip>
-                            </TabList>
-                            <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Placement</th>
-                                            <th>Highest Bid Per Token</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td>{idx + 1}</td>
-                                                <td>
-                                                    {item.totalPrice}
-                                                    <span className="txt-green"> $</span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </TabPanel>
-                            <TabPanel>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Highest Bid Per Token</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td>{getFormatedDate(item.placedAt)}</td>
-                                                <td>
-                                                    {item.totalPrice}
-                                                    <span className="txt-green"> $</span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </TabPanel>
-                        </Tabs>
-                        {isInbetween(
-                            fnSelectedRoundData()?.startedAt,
-                            fnSelectedRoundData()?.endedAt
-                        ) && <TimeframeBar percentage={percentage} round={fnSelectedRoundData()} />}
-                        <div className="d-flex justify-content-between mt-4">
-                            {fnAverateMinBid() !== 0 ? (
-                                <div>
-                                    <p className="caption">Minimum bid</p>
-                                    <p className="value">
-                                        {fnAverateMinBid()}
-                                        <span className="txt-green"> $</span>{" "}
-                                    </p>
-                                </div>
-                            ) : (
-                                <div></div>
-                            )}
-                            <div>
-                                <p className="caption">Available Until</p>
-                                <p className="value">
-                                    {numberWithLength(
-                                        parseInt(
-                                            new Date(fnSelectedRoundData()?.endedAt).getHours()
-                                        )
-                                    )}
-                                    :
-                                    {numberWithLength(
-                                        parseInt(
-                                            new Date(fnSelectedRoundData()?.endedAt).getMinutes()
-                                        )
-                                    )}
-                                    :
-                                    {numberWithLength(
-                                        parseInt(
-                                            new Date(fnSelectedRoundData()?.endedAt).getSeconds()
-                                        )
-                                    )}
-                                </p>
+
+                                <img
+                                    src={Qmark}
+                                    alt="question"
+                                    className="ms-3 d-none d-sm-block"
+                                    data-for="tooltip3"
+                                    data-tip="tooltip3"
+                                    style={{ cursor: "pointer" }}
+                                />
                             </div>
                         </div>
-                        {size.width <= 1024 && (
-                            <div className="text-center my-5">
-                                <button
-                                    className="btn-primary btn-increase"
-                                    onClick={() => setState({ bidModal: true })}
-                                >
-                                    {!place_bid ? "Place Bid" : "Increase bid"}
-                                </button>
-                            </div>
-                        )}
                     </div>
 
                     <div className="auction-right col-lg-8 col-md-7">
