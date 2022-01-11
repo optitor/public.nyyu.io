@@ -10,8 +10,8 @@ import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
 
 import store from './src/redux/store';
 import { setCurrentAuthInfo } from "./src/redux/actions/authAction";
+import { INFURA_ID } from "./src/utilities/staticData"
 import { isBrowser } from './src/utilities/auth';
-
 
 if (isBrowser) {
   if (localStorage.getItem('USER_DATA')) {
@@ -22,8 +22,8 @@ if (isBrowser) {
 
 // API key for Ethereum node
 // Two popular services are Infura (infura.io) and Alchemy (alchemy.com)
-const infuraId = process.env.INFURA_ID
-
+// const infuraId = process.env.INFURA_ID
+const infuraId = INFURA_ID
 // Chains for connectors to support
 const chains = defaultChains
 
@@ -32,6 +32,7 @@ const connectors = ({ chainId }) => {
   const rpcUrl =
     chains.find((x) => x.id === chainId)?.rpcUrls?.[0] ??
     chain.mainnet.rpcUrls[0]
+
   return [
     new InjectedConnector({ chains }),
     new WalletConnectConnector({
@@ -42,7 +43,7 @@ const connectors = ({ chainId }) => {
     }),
     new WalletLinkConnector({
       options: {
-        appName: 'My wagmi app',
+        appName: 'Ndb sale',
         jsonRpcUrl: `${rpcUrl}/${infuraId}`,
       },
     }),
