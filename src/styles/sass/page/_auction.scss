@@ -103,6 +103,8 @@
                         line-height: 17px;
                         text-transform: uppercase;
                         color: $grey;
+                        width: 50%;
+                        text-align: center;
                         @include mq("tablet", max) {
                             font-size: 18px;
                             line-height: 22px;

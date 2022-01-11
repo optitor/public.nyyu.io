@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
 import Modal from "react-modal"
-import ReactECharts from "echarts-for-react"
+import ReactTooltip from "react-tooltip"
 import Header from "./header"
 import { useQuery, useMutation } from "@apollo/client"
 import {
@@ -22,9 +22,14 @@ import {
     GET_AUCTION,
     GET_AUCTION_BY_NUMBER,
     GET_BIDLIST_BY_ROUND,
+    GET_BID_LIST,
 } from "../apollo/graghqls/querys/Auction"
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
-import { Currencies } from "../utilities/staticData"
+import {
+    AUCTION_TOOLTIP_CONTENT1,
+    AUCTION_TOOLTIP_CONTENT2,
+    Currencies,
+} from "../utilities/staticData"
 import { User } from "../utilities/user-data"
 import BidsChart1 from "./chart/BidsChart1"
 import RoundsChart1 from "./chart/RoundsChart1"
@@ -99,10 +104,11 @@ const Auction = () => {
         variables: { round: roundData && roundData[0]?.number - 1 },
     })
 
-    // get round performance 2
+    // get chart data
     const round_chance = useQuery(GET_ROUND_CHANCE)
     const round_perform1 = useQuery(GET_AUCTION)
     const round_perform2 = useQuery(GET_ROUND_PERFORMANCE2)
+    const bid_perform = useQuery(GET_BID_LIST)
 
     const fnSelectedRoundData = () =>
         selectedData === 0
@@ -234,117 +240,66 @@ const Auction = () => {
                             onSelect={(index) => setState({ tabIndex: index })}
                         >
                             <TabList>
-                                {fnSelectedRoundData()?.status === 2 ? (
-                                    <>
-                                        <Tab>statistics</Tab>
-                                        <Tab>bids history</Tab>
-                                        <Tab>ndb token</Tab>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Tab>ndb token</Tab>
-                                        <Tab>bids history</Tab>
-                                        <Tab>statistics</Tab>
-                                    </>
-                                )}
+                                <Tab>bids</Tab>
+                                <Tab data-for="tooltip2">statistics</Tab>
+                                <ReactTooltip
+                                    place="right"
+                                    type="light"
+                                    effect="solid"
+                                    id="tooltip2"
+                                >
+                                    <div
+                                        style={{
+                                            width: "300px",
+                                            color: "#000000",
+                                        }}
+                                    >
+                                        {AUCTION_TOOLTIP_CONTENT2}
+                                    </div>
+                                </ReactTooltip>
                             </TabList>
-                            {fnSelectedRoundData()?.status === 2 ? (
-                                <>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{getFormatedDate(item.placedAt)}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Placement</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{idx + 1}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <p className="text">{ndb_token}</p>
-                                    </TabPanel>
-                                </>
-                            ) : (
-                                <>
-                                    <TabPanel>
-                                        <p className="text">{ndb_token}</p>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Placement</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{idx + 1}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{getFormatedDate(item.placedAt)}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                </>
-                            )}
+                            <TabPanel>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Placement</th>
+                                            <th>Highest Bid Per Token</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td>{idx + 1}</td>
+                                                <td>
+                                                    {item.totalPrice}
+                                                    <span className="txt-green"> $</span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </TabPanel>
+                            <TabPanel>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Highest Bid Per Token</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td>{getFormatedDate(item.placedAt)}</td>
+                                                <td>
+                                                    {item.totalPrice}
+                                                    <span className="txt-green"> $</span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </TabPanel>
                         </Tabs>
                         {isInbetween(
                             fnSelectedRoundData()?.startedAt,
@@ -471,124 +426,145 @@ const Auction = () => {
                                       (place_bid && "d-block")
                             }`}
                         >
-                            <div className="">
-                                <div className="d-flex ">
-                                    <div className="w-100">
+                            <div className="d-flex ">
+                                <div className="w-100">
+                                    <div className="d-flex">
                                         <Select
                                             className="select-chart-type"
                                             options={options}
                                             value={selectLabel}
                                             onChange={(v) => setState({ selectLabel: v })}
                                         />
-                                        {selectLabel.value === "bid_performance" && (
-                                            <div className="d-flex align-items-center pt-3 w-100 ">
-                                                <button
-                                                    className={`btn-small ${
-                                                        pricce ? "btn-disabled" : ""
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!pricce) {
-                                                            setPrice(true)
-                                                            setVolume(true)
-                                                            setPriceVolume(false)
-                                                        }
-                                                    }}
-                                                >
-                                                    Price
-                                                </button>
-                                                <button
-                                                    className={`btn-small ${
-                                                        volume ? "btn-disabled" : ""
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!volume) {
-                                                            setPrice(true)
-                                                            setVolume(true)
-                                                            setPriceVolume(false)
-                                                        }
-                                                    }}
-                                                >
-                                                    Volume
-                                                </button>
-                                                <button
-                                                    className={`btn-small ${
-                                                        price_volume ? "btn-disabled" : ""
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!price_volume) {
-                                                            setPrice(false)
-                                                            setVolume(false)
-                                                            setPriceVolume(true)
-                                                        }
-                                                    }}
-                                                >
-                                                    Price Volume
-                                                </button>
+                                        <ReactTooltip
+                                            place="right"
+                                            type="light"
+                                            effect="solid"
+                                            id="tooltip1"
+                                        >
+                                            <div
+                                                style={{
+                                                    width: "300px",
+                                                    color: "#000000",
+                                                }}
+                                            >
+                                                {AUCTION_TOOLTIP_CONTENT1}
                                             </div>
-                                        )}
-                                        {selectLabel.value === "round_performance" && (
-                                            <div className="d-flex align-items-center pt-3 w-100 ">
-                                                <button
-                                                    className={`btn-small ${
-                                                        reser_price ? "btn-disabled" : ""
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!reser_price) {
-                                                            setReserPrice(true)
-                                                            setSoldPrice(true)
-                                                            setPerformance(false)
-                                                        }
-                                                    }}
-                                                >
-                                                    Reserved Price
-                                                </button>
-                                                <button
-                                                    className={`btn-small ${
-                                                        sold_price ? "btn-disabled" : ""
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!sold_price) {
-                                                            setReserPrice(true)
-                                                            setSoldPrice(true)
-                                                            setPerformance(false)
-                                                        }
-                                                    }}
-                                                >
-                                                    Price Sold
-                                                </button>
-                                                <button
-                                                    className={`btn-small ${
-                                                        performance ? "btn-disabled" : ""
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!performance) {
-                                                            setReserPrice(false)
-                                                            setSoldPrice(false)
-                                                            setPerformance(true)
-                                                        }
-                                                    }}
-                                                >
-                                                    Performance
-                                                </button>
-                                            </div>
-                                        )}
+                                        </ReactTooltip>
+
+                                        <img
+                                            src={Qmark}
+                                            alt="question"
+                                            className="ms-3 d-none d-sm-block"
+                                            data-for="tooltip1"
+                                            data-tip="tooltip1"
+                                            style={{ cursor: "pointer" }}
+                                        />
                                     </div>
 
-                                    <img
-                                        src={Qmark}
-                                        alt="question"
-                                        className="ms-3 d-none d-sm-block"
-                                    />
+                                    {selectLabel.value === "bid_performance" && (
+                                        <div className="d-flex align-items-center pt-3 w-100 ">
+                                            <button
+                                                className={`btn-small ${
+                                                    pricce ? "btn-disabled" : ""
+                                                }`}
+                                                onClick={() => {
+                                                    if (!pricce) {
+                                                        setPrice(true)
+                                                        setVolume(true)
+                                                        setPriceVolume(false)
+                                                    }
+                                                }}
+                                            >
+                                                Price
+                                            </button>
+                                            <button
+                                                className={`btn-small ${
+                                                    volume ? "btn-disabled" : ""
+                                                }`}
+                                                onClick={() => {
+                                                    if (!volume) {
+                                                        setPrice(true)
+                                                        setVolume(true)
+                                                        setPriceVolume(false)
+                                                    }
+                                                }}
+                                            >
+                                                Volume
+                                            </button>
+                                            <button
+                                                className={`btn-small ${
+                                                    price_volume ? "btn-disabled" : ""
+                                                }`}
+                                                onClick={() => {
+                                                    if (!price_volume) {
+                                                        setPrice(false)
+                                                        setVolume(false)
+                                                        setPriceVolume(true)
+                                                    }
+                                                }}
+                                            >
+                                                Price Volume
+                                            </button>
+                                        </div>
+                                    )}
+                                    {selectLabel.value === "round_performance" && (
+                                        <div className="d-flex align-items-center pt-3 w-100 ">
+                                            <button
+                                                className={`btn-small ${
+                                                    reser_price ? "btn-disabled" : ""
+                                                }`}
+                                                onClick={() => {
+                                                    if (!reser_price) {
+                                                        setReserPrice(true)
+                                                        setSoldPrice(true)
+                                                        setPerformance(false)
+                                                    }
+                                                }}
+                                            >
+                                                Reserved Price
+                                            </button>
+                                            <button
+                                                className={`btn-small ${
+                                                    sold_price ? "btn-disabled" : ""
+                                                }`}
+                                                onClick={() => {
+                                                    if (!sold_price) {
+                                                        setReserPrice(true)
+                                                        setSoldPrice(true)
+                                                        setPerformance(false)
+                                                    }
+                                                }}
+                                            >
+                                                Price Sold
+                                            </button>
+                                            <button
+                                                className={`btn-small ${
+                                                    performance ? "btn-disabled" : ""
+                                                }`}
+                                                onClick={() => {
+                                                    if (!performance) {
+                                                        setReserPrice(false)
+                                                        setSoldPrice(false)
+                                                        setPerformance(true)
+                                                    }
+                                                }}
+                                            >
+                                                Performance
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                            {/* <p className="select-label">{selectLabel.label}</p> */}
 
-                            {selectLabel.value === "bid_performance" && pricce && volume && (
-                                <BidsChart1 />
-                            )}
-                            {selectLabel.value === "bid_performance" && price_volume && (
-                                <BidsChart2 />
-                            )}
+                            {selectLabel.value === "bid_performance" &&
+                                pricce &&
+                                volume &&
+                                !bid_perform.loading &&
+                                !bid_perform.error && <BidsChart1 data={bid_perform?.data} />}
+                            {selectLabel.value === "bid_performance" &&
+                                price_volume &&
+                                !bid_perform.loading &&
+                                !bid_perform.error && <BidsChart2 data={bid_perform?.data} />}
 
                             {selectLabel.value === "round_performance" &&
                                 reser_price &&
