@@ -142,4 +142,11 @@ input[type="number"]::-webkit-outer-spin-button {
         font-size: #{$size}px !important;
     }
 }
+
+.scale-75 {
+    transform: scale(0.75, 0.75);
+    @include mq("phone", min) {
+        transform: scale(1, 1);
+    }
+}
 // End: New Font Sizes
