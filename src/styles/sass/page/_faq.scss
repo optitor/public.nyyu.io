@@ -76,7 +76,7 @@
             }
             @include mq("tablet", max) {
                 display: flex;
-                justify-content: space-around;
+                justify-content: flex-start;
                 margin: 0;
             }
         }
@@ -110,7 +110,10 @@
             margin-top: 6px;
         }
         .faq-list {
-            padding-right: 32px;
+            padding-right: 0px;
+            @include mq("phone") {
+                padding-right: 32px;
+            }
             @include mq("tablet") {
                 @include custom-scroll(300px);
             }
