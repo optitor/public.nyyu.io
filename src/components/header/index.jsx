@@ -77,7 +77,8 @@ const Menu = () => {
                     {typeof window !== `undefined` &&
                         (window.location.pathname === ROUTES.profile ||
                             window.location.pathname === ROUTES.faq ||
-                            window.location.pathname === ROUTES.wallet) && (
+                            window.location.pathname === ROUTES.wallet ||
+                            window.location.pathname.includes(ROUTES.admin)) && (
                             <>
                                 <Link
                                     to={ROUTES.wallet}
@@ -111,16 +112,16 @@ const Menu = () => {
                                 >
                                     faq
                                 </Link>
-                                {user.role && user.role.includes("ROLE_ADMIN") && (
+                                {user.role && user.role.includes("ROLE_ADMIN")? (
                                     <Link
                                         to={ROUTES.admin}
                                         className={`${
-                                            window.location.pathname === ROUTES.admin && "txt-green"
+                                            window.location.pathname.includes(ROUTES.admin) && "txt-green"
                                         }`}
                                     >
                                         admin
                                     </Link>
-                                )}
+                                ): ''}
                             </>
                         )}
                 </div>
