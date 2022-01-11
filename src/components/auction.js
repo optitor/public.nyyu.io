@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { navigate } from "gatsby"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
@@ -6,15 +7,16 @@ import Select from "react-select"
 import Modal from "react-modal"
 import ReactTooltip from "react-tooltip"
 import Header from "./header"
+import BidsChart1 from "./chart/BidsChart1"
+import RoundsChart1 from "./chart/RoundsChart1"
+import RoundsChart2 from "./chart/RoundsChart2"
+import TimeframeBar from "./auction/TimeframeBar"
+import { ROUTES } from "../utilities/routes"
+import BidsChart2 from "./chart/BidsChart2"
+import ChanceChart from "./chart/ChanceChart"
 import { useQuery, useMutation } from "@apollo/client"
-import {
-    numberWithCommas,
-    numberWithLength,
-    getTimeDiffOverall,
-    getDiffOverall,
-    getFormatedDate,
-    isInbetween,
-} from "../utilities/number"
+import { setBidInfo } from "../redux/actions/bidAction"
+
 import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
 import { PLACE_BID } from "../apollo/graghqls/mutations/Bid"
@@ -30,17 +32,16 @@ import {
     AUCTION_TOOLTIP_CONTENT2,
     Currencies,
 } from "../utilities/staticData"
+import {
+    numberWithCommas,
+    numberWithLength,
+    getTimeDiffOverall,
+    getDiffOverall,
+    isInbetween,
+} from "../utilities/number"
 import { User } from "../utilities/user-data"
-import BidsChart1 from "./chart/BidsChart1"
-import RoundsChart1 from "./chart/RoundsChart1"
-import RoundsChart2 from "./chart/RoundsChart2"
 
-import TimeframeBar from "./auction/TimeframeBar"
-import { ROUTES } from "../utilities/routes"
-import BidsChart2 from "./chart/BidsChart2"
-import ChanceChart from "./chart/ChanceChart"
-
-const ndb_token = `Since the beginning of NDB's project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
+const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
 By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 
 `
@@ -52,14 +53,14 @@ const options = [
 ]
 
 const Auction = () => {
+    const dispatch = useDispatch()
     const size = useWindowSize()
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         tabIndex: 0,
         amount: 1,
         price: 1,
-        total: "",
-        place_bid: true,
+        isBid: false,
         bidModal: false,
         show_chart: false,
         selectLabel: options[0],
@@ -74,7 +75,7 @@ const Auction = () => {
     const [sold_price, setSoldPrice] = useState(true)
     const [performance, setPerformance] = useState(false)
 
-    const { tabIndex, amount, price, place_bid, bidModal, show_chart, selectLabel } = state
+    const { tabIndex, amount, price, isBid, bidModal, show_chart, selectLabel } = state
     const [selectedData, setSelectedData] = useState(1)
     const { data } = useQuery(GET_AUCTION)
 
@@ -153,11 +154,11 @@ const Auction = () => {
     const [PlaceBid] = useMutation(PLACE_BID, {
         onCompleted: (data) => {
             console.log("received Mutation data", data)
-            setState({ place_bid: true })
+            setState({ isBid: true })
         },
         onError: (err) => {
             console.log("received Mutation data", err)
-            setState({ place_bid: true })
+            setState({ isBid: true })
         },
     })
 
@@ -287,25 +288,7 @@ const Auction = () => {
                                         </table>
                                     </TabPanel>
                                     <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{getFormatedDate(item.placedAt)}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                        <p className="text">{ndb_token}</p>
                                     </TabPanel>
                                 </Tabs>
                                 {isInbetween(
@@ -362,9 +345,11 @@ const Auction = () => {
                                     <div className="text-center my-5">
                                         <button
                                             className="btn-primary btn-increase"
-                                            onClick={() => setState({ bidModal: true })}
+                                            onClick={() => {
+                                                setState({ bidModal: true })
+                                            }}
                                         >
-                                            {!place_bid ? "Place Bid" : "Increase bid"}
+                                            {!isBid ? "Place Bid" : "Increase bid"}
                                         </button>
                                     </div>
                                 )}
@@ -399,7 +384,7 @@ const Auction = () => {
                     </div>
 
                     <div className="auction-right col-lg-8 col-md-7">
-                        <div className={`place-bid ${place_bid && "d-none"}`}>
+                        <div className={`place-bid ${isBid && "d-none"}`}>
                             <h3 className="range-label">amount of token</h3>
                             <div className="d-flex align-items-center mb-4">
                                 <input
@@ -456,10 +441,11 @@ const Auction = () => {
                                     //         cryptoType: "String",
                                     //     },
                                     // })
+                                    dispatch(setBidInfo(price * amount))
                                     navigate(ROUTES.payment)
                                 }}
                             >
-                                {!place_bid ? "Place Bid" : "Increase Bid"}
+                                {!isBid ? "Place Bid" : "Increase Bid"}
                             </button>
                         </div>
                         <div
@@ -469,7 +455,7 @@ const Auction = () => {
                                         ? "d-block"
                                         : "d-none"
                                     : (size.width <= 1024 && size.width > 768 && "d-block") ||
-                                      (place_bid && "d-block")
+                                      (isBid && "d-block")
                             }`}
                         >
                             <div className="d-flex ">
@@ -694,12 +680,13 @@ const Auction = () => {
                     <button
                         className="btn-primary text-uppercase w-100"
                         onClick={() => {
-                            setState({ place_bid: true })
+                            dispatch(setBidInfo(price * amount))
+                            setState({ isBid: true })
                             setState({ bidModal: false })
                             navigate(ROUTES.payment)
                         }}
                     >
-                        {!place_bid ? "Place Bid" : "Increase Bid"}
+                        {!isBid ? "Place Bid" : "Increase Bid"}
                     </button>
                 </div>
                 <div className="tablet-view">
@@ -724,13 +711,13 @@ const Auction = () => {
                     <button
                         className="btn-primary text-uppercase"
                         onClick={() => {
-                            setState({ total: price * amount })
+                            dispatch(setBidInfo(price * amount))
                             setState({ bidModal: false })
-                            setState({ place_bid: true })
+                            setState({ isBid: true })
                             navigate(ROUTES.payment)
                         }}
                     >
-                        {!place_bid ? "Place Bid" : "Increase Bid"}
+                        {!isBid ? "Place Bid" : "Increase Bid"}
                     </button>
                 </div>
             </Modal>
