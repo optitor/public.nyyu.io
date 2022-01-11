@@ -134,7 +134,9 @@ const Payment = () => {
                             <TabList>
                                 {payment_types.map((item, index) => (
                                     <Tab
-                                        className={`payment-type__tab-list text-center ${index === 3 && "px-0"}`}
+                                        className={`payment-type__tab-list text-center ${
+                                            index === 3 && "px-0"
+                                        }`}
                                         key={index}
                                     >
                                         {item.label}
@@ -464,6 +466,8 @@ const Payment = () => {
                                     alt="edit"
                                     className="ms-3 cursor-pointer"
                                     onClick={() => setShowEditPayAmountBox(!showEditPayAmountBox)}
+                                    onKeyDown={() => setShowEditPayAmountBox(!showEditPayAmountBox)}
+                                    role="presentation"
                                 />
                             </div>
                             <p className="amount">
@@ -481,6 +485,11 @@ const Payment = () => {
                                                 setPayAmount(fooPayAmount)
                                                 setShowEditPayAmountBox(!showEditPayAmountBox)
                                             }}
+                                            onKeyDown={() => {
+                                                setPayAmount(fooPayAmount)
+                                                setShowEditPayAmountBox(!showEditPayAmountBox)
+                                            }}
+                                            role="presentation"
                                         >
                                             save
                                         </div>

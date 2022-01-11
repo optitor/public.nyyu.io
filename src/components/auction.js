@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Slider from "rc-slider"
 import Select from "react-select"
 import Modal from "react-modal"
+import ReactTooltip from "react-tooltip"
 import Header from "./header"
 import { useQuery, useMutation } from "@apollo/client"
 import {
@@ -24,7 +25,11 @@ import {
     GET_BID_LIST,
 } from "../apollo/graghqls/querys/Auction"
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
-import { Currencies } from "../utilities/staticData"
+import {
+    AUCTION_TOOLTIP_CONTENT1,
+    AUCTION_TOOLTIP_CONTENT2,
+    Currencies,
+} from "../utilities/staticData"
 import { User } from "../utilities/user-data"
 import BidsChart1 from "./chart/BidsChart1"
 import RoundsChart1 from "./chart/RoundsChart1"
@@ -235,117 +240,66 @@ const Auction = () => {
                             onSelect={(index) => setState({ tabIndex: index })}
                         >
                             <TabList>
-                                {fnSelectedRoundData()?.status === 2 ? (
-                                    <>
-                                        <Tab>statistics</Tab>
-                                        <Tab>bids history</Tab>
-                                        <Tab>ndb token</Tab>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Tab>ndb token</Tab>
-                                        <Tab>bids history</Tab>
-                                        <Tab>statistics</Tab>
-                                    </>
-                                )}
+                                <Tab>bids</Tab>
+                                <Tab data-for="tooltip2">statistics</Tab>
+                                <ReactTooltip
+                                    place="right"
+                                    type="light"
+                                    effect="solid"
+                                    id="tooltip2"
+                                >
+                                    <div
+                                        style={{
+                                            width: "300px",
+                                            color: "#000000",
+                                        }}
+                                    >
+                                        {AUCTION_TOOLTIP_CONTENT2}
+                                    </div>
+                                </ReactTooltip>
                             </TabList>
-                            {fnSelectedRoundData()?.status === 2 ? (
-                                <>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{getFormatedDate(item.placedAt)}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Placement</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{idx + 1}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <p className="text">{ndb_token}</p>
-                                    </TabPanel>
-                                </>
-                            ) : (
-                                <>
-                                    <TabPanel>
-                                        <p className="text">{ndb_token}</p>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Placement</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{idx + 1}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Highest Bid Per Token</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {fnSelectedBidhistoryData()?.map((item, idx) => (
-                                                    <tr key={idx}>
-                                                        <td>{getFormatedDate(item.placedAt)}</td>
-                                                        <td>
-                                                            {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </TabPanel>
-                                </>
-                            )}
+                            <TabPanel>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Placement</th>
+                                            <th>Highest Bid Per Token</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td>{idx + 1}</td>
+                                                <td>
+                                                    {item.totalPrice}
+                                                    <span className="txt-green"> $</span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </TabPanel>
+                            <TabPanel>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Highest Bid Per Token</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {fnSelectedBidhistoryData()?.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td>{getFormatedDate(item.placedAt)}</td>
+                                                <td>
+                                                    {item.totalPrice}
+                                                    <span className="txt-green"> $</span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </TabPanel>
                         </Tabs>
                         {isInbetween(
                             fnSelectedRoundData()?.startedAt,
@@ -481,12 +435,32 @@ const Auction = () => {
                                             value={selectLabel}
                                             onChange={(v) => setState({ selectLabel: v })}
                                         />
+                                        <ReactTooltip
+                                            place="right"
+                                            type="light"
+                                            effect="solid"
+                                            id="tooltip1"
+                                        >
+                                            <div
+                                                style={{
+                                                    width: "300px",
+                                                    color: "#000000",
+                                                }}
+                                            >
+                                                {AUCTION_TOOLTIP_CONTENT1}
+                                            </div>
+                                        </ReactTooltip>
+
                                         <img
                                             src={Qmark}
                                             alt="question"
                                             className="ms-3 d-none d-sm-block"
+                                            data-for="tooltip1"
+                                            data-tip="tooltip1"
+                                            style={{ cursor: "pointer" }}
                                         />
                                     </div>
+
                                     {selectLabel.value === "bid_performance" && (
                                         <div className="d-flex align-items-center pt-3 w-100 ">
                                             <button
