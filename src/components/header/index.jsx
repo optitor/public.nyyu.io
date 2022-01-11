@@ -11,15 +11,14 @@ import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
-import SaleCTA from "./sale-cta"
-import { fetch_Avatar_Components } from './../../redux/actions/avatarAction';
+import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction"
 
 const Menu = () => {
-    const dispatch = useDispatch();
-    // Fetch avatarComponents Data from backend    
+    const dispatch = useDispatch()
+    // Fetch avatarComponents Data from backend
     useEffect(() => {
-        dispatch(fetch_Avatar_Components());
-    }, [dispatch]);
+        dispatch(fetch_Avatar_Components())
+    }, [dispatch])
 
     const auth = useAuth()
     const { user } = useSelector((state) => state.auth)
@@ -78,8 +77,17 @@ const Menu = () => {
                         (window.location.pathname === ROUTES.profile ||
                             window.location.pathname === ROUTES.faq ||
                             window.location.pathname === ROUTES.wallet ||
+                            window.location.pathname === ROUTES.auction ||
                             window.location.pathname.includes(ROUTES.admin)) && (
                             <>
+                                <Link
+                                    to={ROUTES.auction}
+                                    className={`${
+                                        window.location.pathname === ROUTES.auction && "txt-green"
+                                    }`}
+                                >
+                                    sale
+                                </Link>
                                 <Link
                                     to={ROUTES.wallet}
                                     className={`${
@@ -112,21 +120,23 @@ const Menu = () => {
                                 >
                                     faq
                                 </Link>
-                                {user.role && user.role.includes("ROLE_ADMIN")? (
+                                {user.role && user.role.includes("ROLE_ADMIN") ? (
                                     <Link
                                         to={ROUTES.admin}
                                         className={`${
-                                            window.location.pathname.includes(ROUTES.admin) && "txt-green"
+                                            window.location.pathname.includes(ROUTES.admin) &&
+                                            "txt-green"
                                         }`}
                                     >
                                         admin
                                     </Link>
-                                ): ''}
+                                ) : (
+                                    ""
+                                )}
                             </>
                         )}
                 </div>
                 <div className="d-flex align-items-center">
-                    <SaleCTA />
                     <div>
                         {!auth?.isLoggedIn() ? (
                             <Link

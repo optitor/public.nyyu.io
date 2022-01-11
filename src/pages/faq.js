@@ -8,7 +8,7 @@ const FAQ = () => {
     return (
         <main className="faq-page">
             <Header />
-            <section className="container">
+            <section className="container px-55px">
                 <Tabs className="faq__tabs">
                     <TabList className="faq__tabs-list">
                         <Tab className="faq__tabs-tab">Auction FAQ</Tab>
