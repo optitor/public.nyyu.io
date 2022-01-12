@@ -24,7 +24,7 @@ main.create-user-page {
             padding: 24px;
             position: relative;
             margin-bottom: 20px;
-            height: 410px;
+            min-height: 410px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -44,7 +44,6 @@ main.create-user-page {
             }  
             @include mq("phone", max) {
                 width: 100%;
-                height: 100vh;
                 border: none;
                 display: block;
                 a.close {
@@ -55,7 +54,7 @@ main.create-user-page {
                 }
             }  
             div.input_div {
-                width: 60%;
+                width: 80%;
                 margin: auto;
                 div.div1 {
                     display: flex;
@@ -67,11 +66,6 @@ main.create-user-page {
                             height: 39px;
                         }
                     }
-                }
-                p {
-                    font-size: 12px;
-                    font-weight: 600;
-                    padding-bottom: 5px;
                 }
                 @include mq("laptop-md", max) {
                     width: 80%;
@@ -89,75 +83,28 @@ main.create-user-page {
                             margin-top: 20px;                     
                         }
                     }
-                }  
-                div.token_div {
-                    display: flex;
-                    justify-content: space-between;
-                    input {
-                        width: 35%;
-                    }
-                    div {
-                        width: 60%;
-                        display: flex;
-                        justify-content: space-between;
-                        button {
-                            width: 24%;
-                            background: transparent;
-                            border: 1px solid white;
-                            font-size: 14px;
-                            font-weight: 400;
-                            height: 32px;
-                            &:hover {
-                                color: $green;
-                            }
-                        }
-                    }
-                    @include mq('phone', max) {
-                        flex-direction: column;
-                        input {
-                            width: 45%;
-                        }
-                        div {
-                            width: 100%;
-                            margin-top: 7px;
-                        }
-                    }
                 }
-
-                div.image_div {
-                    justify-content: center;
-                    align-items: center;
-                    display: flex;
-                    height: 180px;
-                    img {
-                        width: 100px;
-                        height: 100px;
-                    }
-                    @include mq('phone', max) {
-                        height: 120px;
-                    }
-                }
-                div.select_div {
+                div.display-name {
+                    width: 60%;
+                    margin: auto;
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
-                    height: 180px;
-                    div#select_avatar {
-                        width: 80%;
-                        .css-1s2u09g-control {
-                            background-color: #1e1e1e;
-                        }
-                        .css-qc6sy-singleValue {
-                            color: #b5b5b5;
-                        }
+                    align-items: center;
+                    div {
+                        width: 100%;
+                    }
+                    p.random-text {
+                        text-decoration: underline;
+                        text-align: right;
+                        margin-top: 15px;
+                        font-size: 14px;
+                        cursor: pointer;
                     }
                     @include mq('phone', max) {
-                        div#select_avatar {
-                            width: 100%;
-                        }
+                        width: 100%;
+                        margin-top: 30px;
                     }
                 }
-                
                 div.item {
                     padding: 4px 0;
                     p {
@@ -188,10 +135,71 @@ main.create-user-page {
                     }
                 }
             }
+            div.avatar_div {
+                width: 100%;
+                margin: auto;
+                input.black_input {
+                    width: 33%;
+                    @include mq('phone', max) {
+                        width: 99%;
+                    }
+                }
+                div.avatars {
+                    display: flex;
+                    flex-wrap: wrap;
+                    div.avatar {
+                        width: 12%;
+                        margin-right: 0.5%;
+                        border: 1px solid white;
+                        cursor: pointer;
+                        opacity: 0.4;
+                        &--selected {
+                            opacity: 1;
+                            p {
+                                background-color: white;
+                                color: black!important;
+                            }
+                        }
+                        div.image {
+                            padding: 15% 0;
+                            img {
+                                width: 80%;
+                                height: auto;
+                                display: block;
+                                margin: auto;
+                            }
+                        }
+                        p {
+                            font-size: 14px;
+                            font-weight: 700;
+                            padding: 5%;
+                            border: 1px solid white;
+                            color: white;
+                            text-align: center;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            @include mq('laptop', max) {
+                                font-size: 12px;
+                            }
+                            @include mq('phone', max) {
+                                font-size: 14px;
+                            }
+                        }
+                        @include mq('phone', max) {
+                            width: 48%;
+                            margin-right: 2%;
+                            margin-bottom: 3%;
+                        }
+                    }
+                }
+                div.pagination {
+                    justify-content: center;
+                }
+            }
             div.button_div {
                 display: flex;
                 justify-content: space-between;
-                margin-top: 30px;
+                margin-top: 15px;
                 .previous {
                     font-size: 14px;
                     font-weight: 500;
@@ -214,7 +222,59 @@ main.create-user-page {
                         color: black;
                     }
                 }
+                @include mq('phone', max) {
+                    margin-top: 30px;
+                }
             }
         }        
     } 
+}
+
+.show-avatar-modal {
+    max-width: 600px;
+    div.preview_div {
+        div.profile {
+            border: none;
+            height: 130px;
+            width: unset;
+        }
+        p.name {
+            font-size: 20px;
+            font-weight: 600;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        div.avatarStats {
+            margin-top: 20px; 
+            padding: 0 10%;
+            .col-sm-4 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            p {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        div.facts {
+            margin-top: 2vh;
+            .col-4 {
+                p {
+                    font-weight: 700;
+                }                            
+            }
+        }
+        div.details {
+            margin-top: 2vh;
+        }
+        @include mq("phone", max) {
+            width: 100%;
+            border: none;
+            padding: 0;
+        }
+        span.MuiRating-icon {
+            margin: 2px;
+        }
+    }
 }

@@ -2,14 +2,20 @@ import React, { useState, useMemo } from "react"
 import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import validator from "validator";
+import Modal from 'react-modal';
+import names from 'random-names-generator';
 
 import Seo from "../../../components/seo"
 import Stepper from "../../../components/admin/Stepper";
 import LayoutForCreate from "../../../components/admin/LayoutForCreate";
 
-import Alert from '@mui/material/Alert';
+import {Alert, Rating} from '@mui/material';
 import Select from 'react-select';
 import { countryList } from "../../../utilities/countryAlpha2";
+import { capitalizeFirstLetter } from "../../../utilities/string";
+
+import { figures } from './../../../utilities/staticData';
+import PaginationBar from "../../../components/admin/PaginationBar";
 
 const Countries = countryList.map(item => {
     return {label: item.name, value: item["alpha-2"]};
@@ -23,6 +29,7 @@ const Roles = [
 const IndexPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     //------- Round Data and Validation
     // Round Data
@@ -42,61 +49,57 @@ const IndexPage = () => {
         return {};
     }, [details]);    
 
-    //-------- Token Data and Validation
-    // Token Data
-    const initialTokenData = { tokenAmount: '', ReservedPrice: '', totalTokenAmount: '', prevReservedPrice: '' };
-    const [tokenData, setTokenData] = useState(initialTokenData);
+    //-------- Avatar Data and Validation
+    // Avatar Data
+    const [avatar, setAvatar] = useState({});
 
-    // Token Data Validation
-    let tokenDataError = {};
-    tokenDataError = useMemo(() => {
-        if(!tokenData.tokenAmount) return {tokenAmount: 'Token Amount is required'};
-        if(!validator.isNumeric(tokenData.tokenAmount)) return {tokenAmount: 'Token Amount must be number'};
-        if(!tokenData.ReservedPrice) return {ReservedPrice: 'Reserved Price is required'};
-        if(!validator.isNumeric(tokenData.ReservedPrice)) return {ReservedPrice: 'Reserved Price must be number'};
-        return {};
-    }, [tokenData]);
+    // Avatar Data Validation
+    const avatarDataError = useMemo(() => {
+        if(Object.keys(avatar).length === 0) return 'Please select a avatar';
+        return '';
+    }, [avatar]);
 
-    //--------- Avatar Data
-    const avatars = [
-        { value: 'tesla.svg', label: 'Tesla' },
-        { value: 'volta.svg', label: 'Volta' },
-        { value: 'meitner.svg', label: 'Meitner' },
-        { value: 'johnson.svg', label: 'Johnson' },
-        { value: 'fermi.svg', label: 'Fermi' },
-        { value: 'failla.svg', label: 'Failla' },
-        { value: 'curie.svg', label: 'Curie' },
-        { value: 'cruto.svg', label: 'Cruto' },
-    ];
-    const [avatar, setAuctionAvatar] = useState(avatars[0]);
-    
+    //-------- User display name and Validation
+    const [userName, setUserName] = useState('');
+    const userNameError = useMemo(() => {
+        if(!userName) return 'User`s display name is required';
+        return '';
+    }, [userName]);
 
+    const selectAvatar = item => {
+        setAvatar(item);
+        setModalIsOpen(true);
+    };
 
     const setUserDetails = () => {
-        // if(Object.values(detailsDataError)[0]) {
-        //     setShowError(true);
-        //     return;
-        // }
-        console.log(details)
+        if(Object.values(detailsDataError)[0]) {
+            setShowError(true);
+            return;
+        }
         setCurrentStep(2);
         setShowError(false);
     };
 
-    const setAvatar = () => {
-        // if(Object.values(tokenDataError)[0]) {
-        //     setShowError(true);
-        //     return;
-        // }
+    const setAvatarData = () => {
+        if(avatarDataError) {
+            setShowError(true);
+            return;
+        }
         setCurrentStep(3);
         setShowError(false);
     };
 
-    const setUserName = () => {
+    const setUserDispalyName = () => {
+        if(userNameError) {
+            setShowError(true);
+            return;
+        }
         setCurrentStep(4);
+        setShowError(false);
     };
 
     const handleSubmit = () => {
-        alert('Created Auction Successfully')
+        alert('Created User Successfully');
     };
 
     return (
@@ -106,7 +109,7 @@ const IndexPage = () => {
                 <LayoutForCreate>
                     <Link className="close" to="/admin"><Icon icon="codicon:chrome-close" /></Link>
                     <p className="subtitle">Create a User</p>
-                    <Stepper currentStep={currentStep} texts={['User Details', 'Avatar', 'Name']}/>
+                    <Stepper currentStep={currentStep} texts={['Details', 'Avatar', 'Name']}/>
                     {currentStep === 1 && (
                         <>
                             <div className="input_div">
@@ -162,31 +165,155 @@ const IndexPage = () => {
                     )}
                     {currentStep === 2 && (
                         <>
-                            <div className="input_div">
-                            {showError? (Object.values(tokenDataError)[0]? <Alert severity="error">{Object.values(tokenDataError)[0]}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
-                                
+                            <div className="avatar_div">
+                                {showError? (avatarDataError? <Alert severity="error">{avatarDataError}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
+                                <div className="avatar_div">
+                                    <input className="black_input" placeholder="Search" />
+                                    <div className="avatars mt-3">
+                                        {figures.map((item, index) => {
+                                            return (
+                                                <div className={`avatar ${avatar.id === item.id? 'avatar--selected': ''}`}
+                                                    key={index} onClick={() => selectAvatar(item)} onKeyDown={() => selectAvatar(item)} role="button" tabIndex={0}
+                                                >
+                                                    <div className="image">
+                                                        <img src={item.avatar} alt="Avatar" />
+                                                    </div>
+                                                    <p title={item.lastname}>
+                                                        {item.lastname}
+                                                    </p>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                    <div className="pagination">
+                                        <PaginationBar />
+                                    </div>
+                                </div>
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(1)}>Previous</button>
-                                <button className="btn next" onClick={setAvatar}>Next</button>
+                                <button className="btn next" onClick={setAvatarData}>Next</button>
                             </div>
                         </>
                     )}
                     {currentStep === 3 && (
                         <>
                             <div className="input_div">
-                                
+                                {showError? (userNameError? <Alert severity="error">{userNameError}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
+                                <div className="display-name">
+                                    <div className="d-flex align-items-end justify-content-start">
+                                        <h5 className="random-display mb-0 fw-bold me-4">
+                                            {avatar.lastname}.
+                                        </h5>
+                                        <div>
+                                            <p className="form-label">Your display name</p>
+                                            <input
+                                                className="black_input"
+                                                type="text"
+                                                value={userName}
+                                                onChange={(e) => setUserName(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p
+                                            className="random-text"
+                                            onClick={() =>
+                                                setUserName(names.random().substring(0, 7))
+                                            }
+                                            onKeyDown={() =>
+                                                setUserName(names.random().substring(0, 7))
+                                            }
+                                            role="presentation"
+                                        >
+                                            Random generate
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(2)}>Previous</button>
-                                <button className="btn next" onClick={setUserName}>Next</button>
+                                <button className="btn next" onClick={setUserDispalyName}>Next</button>
                             </div>
                         </>
                     )}
                     {currentStep === 4 && (
                         <>
                             <div className="input_div">                               
-                                
+                                <div className="for_desktop">
+                                    <div className="row">
+                                        <div className="col-sm-4 col-6">
+                                            <div className="item">
+                                                <p>Display Name</p>
+                                                <p>{userName}</p>
+                                            </div>                                        
+                                            <div className="item">
+                                                <p>Country</p>
+                                                <p>{details.country.label}</p>
+                                            </div>                                        
+                                            <div className="item">
+                                                <p>Role</p>
+                                                <p>{details.role.label}</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-5 col-6">
+                                            <div className="item">
+                                                <p>Email</p>
+                                                <p>{details.email}</p>
+                                            </div>  
+                                            <div className="item">
+                                                <p>Password</p>
+                                                <p>********</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-3">
+                                            <div className="item">
+                                                <p>Avatar</p>
+                                                <p>{avatar.lastname}</p>
+                                            </div>  
+                                            <div className="item">
+                                                <img src={avatar.avatar} alt={avatar.label} /> 
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>                                
+                                <div className="for_phone">
+                                    <div className="row">
+                                        <div className="col-sm-3 mb-4">
+                                            <div className="item">
+                                                <img src={avatar.avatar} alt={avatar.label} /> 
+                                            </div>  
+                                            <div className="item text-center">
+                                                <p>Avatar</p>
+                                                <p>{avatar.lastname}</p>
+                                            </div>                                              
+                                        </div>
+                                        <div className="col-sm-4 col-6 mb-4">
+                                            <div className="item">
+                                                <p>Display Name</p>
+                                                <p>{userName}</p>
+                                            </div>                                        
+                                            <div className="item">
+                                                <p>Country</p>
+                                                <p>{details.country.label}</p>
+                                            </div>                                        
+                                            <div className="item">
+                                                <p>Role</p>
+                                                <p>{details.role.label}</p>
+                                            </div>                                     
+                                        </div>
+                                        <div className="col-sm-5 col-6">
+                                            <div className="item">
+                                                <p>Email</p>
+                                                <p>{details.email}</p>
+                                            </div>  
+                                            <div className="item">
+                                                <p>Password</p>
+                                                <p>********</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(3)}>Previous</button>
@@ -194,6 +321,98 @@ const IndexPage = () => {
                             </div>
                         </>
                     )}
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={() => setModalIsOpen(false)}
+                        ariaHideApp={false}
+                        className="show-avatar-modal"
+                        overlayClassName="pwd-modal__overlay"
+                    >
+                        <div className="pwd-modal__header">
+                            <p></p>
+                            <div
+                                onClick={() => setModalIsOpen(false)}
+                                onKeyDown={() => setModalIsOpen(false)}
+                                role="button"
+                                tabIndex="0"
+                            >
+                                <Icon icon="ep:close-bold" />
+                            </div>
+                        </div>
+                        {Object.keys(avatar).length !== 0 && (
+                            <div className="preview_div">
+                                <p className="name">
+                                    {avatar ? 
+                                        `${capitalizeFirstLetter(avatar.firstname)} ${capitalizeFirstLetter(avatar.lastname)}`:
+                                        "Nicolla Tesla"
+                                    }
+                                </p>
+                                <div className="row avatarStats">
+                                    <div className="col-sm-5">
+                                        <div className="profile">
+                                            <div className="image_div">
+                                                <img src={avatar?.avatar} alt="back" />
+                                                {/* {avatarItems.hairColor && (<>
+                                                    <Hair hairColor={avatarItems.hairColor} style={{top: `${hairStyles[avatarItems.hairStyle].top}%`, left: `${hairStyles[avatarItems.hairStyle].left}%`, width: `${hairStyles[avatarItems.hairStyle].width}%`}}>
+                                                        {parse(hairStyles[avatarItems.hairStyle].svg)}
+                                                    </Hair>
+                                                    <div style={{top: `${expressions[avatarItems.expression].top}%`, left: `${expressions[avatarItems.expression].left}%`, width: `${expressions[avatarItems.expression].width}%`}}>
+                                                        {parse(expressions[avatarItems.expression].svg)}
+                                                    </div>
+                                                    <div style={{top: `${facialStyles[avatarItems.facialStyle].top}%`, left: `${facialStyles[avatarItems.facialStyle].left}%`, width: `${facialStyles[avatarItems.facialStyle].width}%`}}>
+                                                        {parse(facialStyles[avatarItems.facialStyle].svg)}
+                                                    </div>
+                                                    <div style={{top: `${hats[avatarItems.hat].top}%`, left: `${hats[avatarItems.hat].left}%`, width: `${hats[avatarItems.hat].width}%`}}>
+                                                        {parse(hats[avatarItems.hat].svg)}
+                                                    </div>
+                                                    <div style={{top: `${others[avatarItems.other].top}%`, left: `${others[avatarItems.other].left}%`, width: `${others[avatarItems.other].width}%`}}>
+                                                        {parse(others[avatarItems.other].svg)}
+                                                    </div>
+                                                </>)} */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-7">
+                                        {avatar.stars.map((star, index) => {
+                                            return (
+                                                <div key={index} className="row">
+                                                    <div className="col-6">
+                                                        <p title={star.type}>{star.type}</p>
+                                                    </div>
+                                                    <div className="col-6">
+                                                        <Rating
+                                                            name="simple-controlled"
+                                                            value={star.rates}
+                                                            readOnly
+                                                            emptyIcon=" "
+                                                            size="small"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="facts">
+                                    {avatar.abilities.map((item, index) => {
+                                        return (
+                                            <div key={index} className="row">
+                                                <div className="col-4">
+                                                    <p>{item.title}</p>
+                                                </div>
+                                                <div className="col-8">
+                                                    <p>{item.text}</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                                <div className="details">
+                                    <p>{avatar.intro}</p>
+                                </div>
+                            </div>
+                        )}
+                    </Modal>
                 </LayoutForCreate>
             </main>
         </>

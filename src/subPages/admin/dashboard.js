@@ -42,6 +42,10 @@ const IndexPage = () => {
                             <Icon icon="ant-design:mail-outlined" />
                             Email
                         </Link>
+                        <Link className="select-item" to="/admin/create/token">
+                            <Icon icon="ic:outline-generating-tokens" />
+                            Token
+                        </Link>
                     </div> 
                 </LayoutWithMenu>
             </main>

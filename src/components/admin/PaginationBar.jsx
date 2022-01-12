@@ -3,7 +3,7 @@ import Pagination from '@mui/material/Pagination';
 // import PaginationItem from '@mui/material/PaginationItem';
 import Stack from '@mui/material/Stack';
 
-export default function PaginationControlled() {
+export default function PaginationBar() {
   const [page, setPage] = React.useState(1);
   const handleChange = (event, value) => {
     setPage(value);
