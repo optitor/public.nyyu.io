@@ -10,7 +10,6 @@ export default function StakeTab() {
         setLockedStakingAssets([
             {
                 id: 0,
-                icon: BTC,
                 label: "btc",
                 minAmount: "1 btc",
                 apy: "30.77%",
@@ -18,7 +17,6 @@ export default function StakeTab() {
             },
             {
                 id: 1,
-                icon: ETH,
                 label: "eth",
                 minAmount: "1 eth",
                 apy: "0.90%",
@@ -26,7 +24,6 @@ export default function StakeTab() {
             },
             {
                 id: 2,
-                icon: USDC,
                 label: "usdc",
                 minAmount: "1 usdc",
                 apy: "4.49%",
@@ -155,7 +152,7 @@ export default function StakeTab() {
                                 <tr>
                                     <td>
                                         <div className="d-flex align-items-center fs-16px gap-2">
-                                            <img src={asset.icon} alt="btc image" />
+                                            <div className="circle-light"></div>
                                             <div className="fs-16px fw-500 text-uppercase">
                                                 {asset.label}
                                             </div>
