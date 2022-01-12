@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { useQuery } from "@apollo/client";
 // Libraries
 import { Link } from "gatsby"
-
+import { isBrowser } from './../../utilities/auth';
 // Icons
 import { Bell, Logo } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
@@ -11,14 +12,24 @@ import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
-import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction"
+import { fetch_Avatar_Components } from './../../redux/actions/avatarAction';
+import { GET_USER } from "../../apollo/graghqls/querys/Auth";
+import { logInUser } from "../../redux/actions/authAction";
 
 const Menu = () => {
-    const dispatch = useDispatch()
-    // Fetch avatarComponents Data from backend
+    const dispatch = useDispatch();
+    const { data: user_data } = useQuery(GET_USER);
+    const userInfo = user_data?.getUser;
+    // Fetch avatarComponents Data from backend    
     useEffect(() => {
-        dispatch(fetch_Avatar_Components())
-    }, [dispatch])
+        if(userInfo) {
+            dispatch(logInUser(userInfo));
+        }
+    }, [dispatch, userInfo]);
+
+    useEffect(() => {
+        dispatch(fetch_Avatar_Components());
+    }, [dispatch]);
 
     const auth = useAuth()
     const { user } = useSelector((state) => state.auth)
@@ -166,7 +177,7 @@ const Menu = () => {
                             </ul>
                         )}
                     </div>
-                    {window.innerWidth > 576 && <CurrencyChoice />}
+                    {isBrowser && window.innerWidth > 576 && <CurrencyChoice />}
                     <button
                         type="button"
                         className="menu__toggler"
