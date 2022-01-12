@@ -1,6 +1,6 @@
 import React from "react"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
-import { BTC, DownArrow, ETH } from "../../utilities/imgImport"
+import { BTC, DownArrow, Equity, ETH } from "../../utilities/imgImport"
 
 export default function StakeTab() {
     return (
@@ -13,7 +13,10 @@ export default function StakeTab() {
             <TabPanel className="px-4 py-3">
                 <div className="d-flex justify-content-between px-2">
                     <div className="d-flex flex-column justify-content-center">
-                        <div className="fs-24px fw-500">Equity value(BTC)</div>
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="fs-24px fw-500">Equity value(BTC)</div>
+                            <img src={Equity} alt="equity icon" />
+                        </div>
                         <div className="txt-green fs-36px lh-25px mt-3">******</div>
                         <div className="text-secondary fs-24px">******</div>
                     </div>
