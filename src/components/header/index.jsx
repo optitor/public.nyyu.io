@@ -12,11 +12,10 @@ import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dressup/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
-<<<<<<< HEAD
-import SaleCTA from "./sale-cta"
 import { fetch_Avatar_Components } from './../../redux/actions/avatarAction';
 import { GET_USER } from "../../apollo/graghqls/querys/Auth";
 import { logInUser } from "../../redux/actions/authAction";
+
 const Menu = () => {
     const dispatch = useDispatch();
     const { data: user_data } = useQuery(GET_USER);
@@ -28,16 +27,6 @@ const Menu = () => {
             dispatch(logInUser(userInfo));
         }
     }, [dispatch, userInfo]);
-=======
-import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction"
-
-const Menu = () => {
-    const dispatch = useDispatch()
-    // Fetch avatarComponents Data from backend
-    useEffect(() => {
-        dispatch(fetch_Avatar_Components())
-    }, [dispatch])
->>>>>>> 17e1cf581bf2b3340bf5a8ce77af7cc62a55c961
 
     const auth = useAuth()
     const { user } = useSelector((state) => state.auth)
