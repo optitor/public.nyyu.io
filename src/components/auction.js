@@ -151,16 +151,16 @@ const Auction = () => {
     ) //getSecTomorrow()
     const percentage = (distanceToDate / duration) * 100
 
-    const [PlaceBid] = useMutation(PLACE_BID, {
-        onCompleted: (data) => {
-            console.log("received Mutation data", data)
-            setState({ isBid: true })
-        },
-        onError: (err) => {
-            console.log("received Mutation data", err)
-            setState({ isBid: true })
-        },
-    })
+    // const [PlaceBid] = useMutation(PLACE_BID, {
+    //     onCompleted: (data) => {
+    //         console.log("received Mutation data", data)
+    //         setState({ isBid: true })
+    //     },
+    //     onError: (err) => {
+    //         console.log("received Mutation data", err)
+    //         setState({ isBid: true })
+    //     },
+    // })
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -581,7 +581,7 @@ const Auction = () => {
                                                     }
                                                 }}
                                             >
-                                                Performance
+                                                Histogram
                                             </button>
                                         </div>
                                     )}
