@@ -79,7 +79,7 @@ const CreateAvatar = () => {
                 return { index: i, item: "detail", desc: "Detail is required" }
         }
         if (!factsDetail.details) return { item: "details", desc: "Details Data is required" }
-        return {}
+        return {};
     }, [factsDetail])
 
     const setAvatarData = () => {
