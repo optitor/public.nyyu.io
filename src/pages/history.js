@@ -3,16 +3,7 @@ import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { numberWithCommas } from "../utilities/number"
-import {
-    BTC,
-    DOGE,
-    ETH,
-    NDB,
-    Airdrop,
-    Address,
-    Copy2,
-    CloseIcon,
-} from "../utilities/imgImport"
+import { BTC, DOGE, ETH, NDB, Airdrop, Address, Copy2, CloseIcon } from "../utilities/imgImport"
 import { Link } from "gatsby"
 import Modal from "react-modal"
 import { CopyToClipboard } from "react-copy-to-clipboard"
@@ -24,6 +15,7 @@ import MarketTab from "../components/wallet/market-tab"
 import { TRANSACTION_TYPES } from "../utilities/staticData"
 import Transactions from "../components/wallet/transactions-tab"
 import ReferralTab from "../components/wallet/referral-tab"
+import StakeTab from "../components/wallet/stake-tab"
 
 const transactions = [
     {
@@ -435,11 +427,19 @@ const History = () => {
                                             </div>
                                         </p>
                                         <p className="value">
-
-                                            {hideValues ? obscureValueString : (btcOrUsd === "USD" ? dollarEquityValue : btcEquityValue)}
+                                            {hideValues
+                                                ? obscureValueString
+                                                : btcOrUsd === "USD"
+                                                    ? dollarEquityValue
+                                                    : btcEquityValue}
                                         </p>
                                         <p className="max-value mt-3">
-                                            {hideValues ? obscureValueString : ("~ $ " + (btcOrUsd === "USD" ? btcEquityValue : dollarEquityValue))}
+                                            {hideValues
+                                                ? obscureValueString
+                                                : "~ $ " +
+                                                (btcOrUsd === "USD"
+                                                    ? btcEquityValue
+                                                    : dollarEquityValue)}
                                         </p>
                                     </div>
                                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
@@ -541,8 +541,9 @@ const History = () => {
                             <TabPanel>
                                 <MarketTab />
                             </TabPanel>
-
-                            <TabPanel></TabPanel>
+                            <TabPanel className="px-0">
+                                <StakeTab />
+                            </TabPanel>
                             <TabPanel>
                                 <ReferralTab />
                             </TabPanel>
@@ -615,9 +616,9 @@ const History = () => {
                                 <Transactions />
                             </TabPanel>
                         </Tabs>
-                        <div className="connect-external">
+                        {/* <div className="connect-external">
                             <button className="btn-primary">CONNECT TO EXTERNAL WALLET</button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
