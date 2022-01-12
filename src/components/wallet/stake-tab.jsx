@@ -196,7 +196,69 @@ export default function StakeTab() {
                     </table>
                 </div>
             </TabPanel>
-            <TabPanel>C</TabPanel>
+            <TabPanel className="px-4">
+                <div className="d-flex py-3">
+                    <table>
+                        <thead className="border-bottom-1px">
+                            <tr className="text-center">
+                                <th className="text-start">Token</th>
+                                <th>Est. APY</th>
+                                <th>Duration</th>
+                                <th>Min. amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-center">
+                            {[
+                                {
+                                    id: 0,
+                                    label: "ndb",
+                                    minAmount: "1 btc",
+                                    apy: "30.77%",
+                                    duration: 0,
+                                },
+                            ].map((asset) => (
+                                <tr>
+                                    <td>
+                                        <div className="d-flex align-items-center fs-16px gap-2">
+                                            <div className="circle-light"></div>
+                                            <div className="fs-16px fw-500 text-uppercase">
+                                                {asset.label}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="fs-14px text-success">{asset.apy}</td>
+                                    <td className="fs-14px">
+                                        <div className="d-flex align-items-center gap-2 justify-content-center">
+                                            <svg
+                                                className="clock-icon text-success"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                ></path>
+                                            </svg>
+                                            <div>Flexible</div>
+                                        </div>
+                                    </td>
+                                    <td className="fs-14px text-uppercase">{asset.minAmount}</td>
+                                    <td>
+                                        <button className="btn btn-outline-light rounded-0 fw-bold text-uppercase w-100 py-1">
+                                            stake
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </TabPanel>
         </Tabs>
     )
 }
