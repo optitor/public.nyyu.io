@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { useQuery } from "@apollo/client";
 // Libraries
 import { Link } from "gatsby"
 
@@ -13,13 +14,19 @@ import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import SaleCTA from "./sale-cta"
 import { fetch_Avatar_Components } from './../../redux/actions/avatarAction';
-
+import { GET_USER } from "../../apollo/graghqls/querys/Auth";
+import { logInUser } from "../../redux/actions/authAction";
 const Menu = () => {
     const dispatch = useDispatch();
+    const { data: user_data } = useQuery(GET_USER);
+    const userInfo = user_data?.getUser;
     // Fetch avatarComponents Data from backend    
     useEffect(() => {
         dispatch(fetch_Avatar_Components());
-    }, [dispatch]);
+        if(userInfo) {
+            dispatch(logInUser(userInfo));
+        }
+    }, [dispatch, userInfo]);
 
     const auth = useAuth()
     const { user } = useSelector((state) => state.auth)

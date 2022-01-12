@@ -10,6 +10,7 @@ const Airdrop = lazy(() => import("./../../subPages/admin/airdrop"));
 const Setting = lazy(() => import("./../../subPages/admin/setting"));
 const CreateAuction = lazy(() => import("./../../subPages/admin/create/create-auction"));
 const CreateDirectPurchase = lazy(() => import("./../../subPages/admin/create/create-direct-purchase"));
+const CreateUser = lazy(() => import("./../../subPages/admin/create/create-user"));
 const CreateAvatar = lazy(() => import("./../../subPages/admin/create/create-avatar"));
 const CustomizeAvatar = lazy(() => import("./../../subPages/admin/create/customize-avatar"));
 const CreateEmail = lazy(() => import("./../../subPages/admin/create/create-email"));
@@ -30,6 +31,7 @@ const App = () => {
                         <Setting path="/setting" />
                         <CreateAuction path="/create/auction" />
                         <CreateDirectPurchase path="/create/direct-purchase" />
+                        <CreateUser path="/create/user" />
                         <CreateAvatar path="/create/avatar" />
                         <CustomizeAvatar path="/create/customize-avatar" />
                         <CreateEmail path="/create/email" />

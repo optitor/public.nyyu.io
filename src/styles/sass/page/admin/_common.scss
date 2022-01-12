@@ -110,6 +110,10 @@ input.white_input {
     width: 100%;
 }
 
+div.black_input {
+    border: 1px solid white;
+}
+
 p.error,
 svg.error {
     color: #e17070 !important;
@@ -118,7 +122,7 @@ svg.error {
 input.error,
 div.error,
 textarea.error {
-    border: 1px solid #e17070;
+    border: 1px solid #e17070!important;
 }
 
 p.disabled {

@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react"
+import { useDispatch } from 'react-redux';
 import Header from "../components/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link, navigate } from "gatsby"
@@ -15,13 +16,18 @@ import { useQuery } from "@apollo/client"
 import NotificationSetting from "./profile/notification-setting-switch"
 import NotificationRecent from "./profile/notification-recent-switch"
 import Loading from "./common/Loading"
-import { ROUTES } from "../utilities/routes"
+// import { ROUTES } from "../utilities/routes"
+import  { logInUser } from "../redux/actions/authAction";
 
 const Profile = () => {
+    const dispatch = useDispatch();
     // Queries and Mutations
     const { data: user_data } = useQuery(GET_USER)
     const user = user_data?.getUser
 
+    useEffect(() => {
+        dispatch(logInUser(user));
+    }, [dispatch, user]);
     // Containers
     const [loadingPage, setLoadingPage] = useState(true)
     const displayName = user?.avatarPrefix + "." + user?.avatarName
