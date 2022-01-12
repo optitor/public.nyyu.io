@@ -6,7 +6,7 @@ import { isMobile } from "react-device-detect"
 
 const TRUST_URL =
     "https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url="
-const currentURI = window.location.href
+const currentURI = typeof window === "undefined" ? "" : window.location.href
 const deepLink = `${TRUST_URL}${encodeURIComponent(currentURI)}`
 
 export default function ConnectWalletTab() {
