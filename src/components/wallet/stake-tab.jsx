@@ -82,7 +82,7 @@ export default function StakeTab() {
                                 <tr>
                                     <td>
                                         <div className="d-flex align-items-center fs-16px gap-2">
-                                            <img src={item.icon} alt="btc image" />
+                                            <img src={item.icon} alt="crypto" />
                                             <div className="fs-16px fw-500 text-uppercase">
                                                 {item.label}
                                             </div>

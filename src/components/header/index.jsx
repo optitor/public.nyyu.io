@@ -22,11 +22,14 @@ const Menu = () => {
     const userInfo = user_data?.getUser;
     // Fetch avatarComponents Data from backend    
     useEffect(() => {
-        dispatch(fetch_Avatar_Components());
         if(userInfo) {
             dispatch(logInUser(userInfo));
         }
     }, [dispatch, userInfo]);
+
+    useEffect(() => {
+        dispatch(fetch_Avatar_Components());
+    }, [dispatch]);
 
     const auth = useAuth()
     const { user } = useSelector((state) => state.auth)
