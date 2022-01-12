@@ -22,7 +22,7 @@ const IndexPage = () => {
                             <Icon icon="grommet-icons:basket" />
                             Direct purchase round
                         </Link>
-                        <Link className="select-item" to="/admin/create/auction">
+                        <Link className="select-item" to="/admin/create/user">
                             <Icon icon="ant-design:user-add-outlined" />
                             User
                         </Link>
