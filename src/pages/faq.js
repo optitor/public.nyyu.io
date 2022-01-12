@@ -8,10 +8,10 @@ const FAQ = () => {
     return (
         <main className="faq-page">
             <Header />
-            <section className="container px-55px">
+            <section className="container px-sm-5 px-4 pb-5 pb-sm-0">
                 <Tabs className="faq__tabs">
                     <TabList className="faq__tabs-list">
-                        <Tab className="faq__tabs-tab">Auction FAQ</Tab>
+                        <Tab className="faq__tabs-tab w-100 pb-2 pb-sm-0">Auction FAQ</Tab>
                     </TabList>
                     <TabPanel>
                         <Tabs className="sub-faq__tabs">
@@ -19,7 +19,7 @@ const FAQ = () => {
                                 <Tab className="sub-faq__tabs-tab">Auction</Tab>
                             </TabList>
                             <TabPanel>
-                                <p className="question-label">Question</p>
+                                <p className="question-label d-sm-block d-none">Question</p>
                                 <div className="faq-list">
                                     {FAQ_CONTENT?.map((question, idx) => (
                                         <Accordion {...question} key={idx} />

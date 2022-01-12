@@ -79,7 +79,7 @@ const Menu = () => {
                             window.location.pathname === ROUTES.wallet ||
                             window.location.pathname === ROUTES.auction ||
                             window.location.pathname.includes(ROUTES.admin)) && (
-                            <>
+                            <div className="d-none d-sm-flex justify-content-between gap-5">
                                 <Link
                                     to={ROUTES.auction}
                                     className={`${
@@ -133,7 +133,7 @@ const Menu = () => {
                                 ) : (
                                     ""
                                 )}
-                            </>
+                            </div>
                         )}
                 </div>
                 <div className="d-flex align-items-center">
@@ -147,10 +147,10 @@ const Menu = () => {
                             </Link>
                         ) : (
                             <ul className="d-flex align-items-center">
-                                <li className="">
+                                <li className="scale-75">
                                     <img src={Bell} alt="Bell Icon" />
                                 </li>
-                                <li className="px-3">
+                                <li className="px-sm-3 px-0 scale-75">
                                     <Link to={ROUTES.profile}>
                                         <img
                                             src={User.avatar}
@@ -166,7 +166,7 @@ const Menu = () => {
                             </ul>
                         )}
                     </div>
-                    <CurrencyChoice />
+                    {window.innerWidth > 576 && <CurrencyChoice />}
                     <button
                         type="button"
                         className="menu__toggler"
