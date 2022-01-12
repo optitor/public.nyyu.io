@@ -1,9 +1,15 @@
 import React, { useState } from "react"
+import { navigate } from "gatsby"
 import { wallets } from "../../utilities/staticData"
 import { useConnect, useAccount } from "wagmi"
+import { isMobile } from "react-device-detect"
+
+const TRUST_URL =
+    "https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url="
+const currentURI = window.location.href
+const deepLink = `${TRUST_URL}${encodeURIComponent(currentURI)}`
 
 export default function ConnectWalletTab() {
-    const [wallet, setWallet] = useState(null)
     const [{ data: connectData, error: connectError }, connect] = useConnect()
     const [{ data: accountData }, disconnect] = useAccount({
         fetchEns: true,
@@ -18,13 +24,10 @@ export default function ConnectWalletTab() {
             <div className="row">
                 {accountData ? (
                     <div>
-                        {/* <img src={accountData.ens?.avatar} alt="ENS Avatar" /> */}
-                        <div>
-                            {accountData.ens?.name
-                                ? `${accountData.ens?.name} (${accountData.address})`
-                                : accountData.address}
+                        <div className="connected">
+                            <img src={wallets[accountData.connector.id]?.icon} alt="wallet icon" />
+                            <p>{accountData.address}</p>
                         </div>
-                        <div>Connected to {accountData.connector.name}</div>
                         <button className="btn-primary" onClick={disconnect}>
                             Disconnect
                         </button>
@@ -35,24 +38,30 @@ export default function ConnectWalletTab() {
                             <div
                                 className="col-sm-6"
                                 key={idx}
-                                onClick={() => x.ready && setWallet(x)}
-                                onKeyDown={() => x.ready && setWallet(x)}
+                                onClick={() => x.ready && connect(x)}
+                                onKeyDown={() => x.ready && connect(x)}
                                 role="presentation"
                             >
-                                <div className={`wallet-item ${x === wallet && "active"}`}>
+                                <div className={`wallet-item  ${!x.ready && "inactive"}`}>
                                     <img src={wallets[x.id]?.icon} alt="wallet icon" />
                                     <p>{x.ready ? wallets[x.id]?.desc : wallets[x.id]?.warn}</p>
                                 </div>
                             </div>
                         ))}
-                        <div>
-                            <button
-                                className="btn-primary"
-                                disabled={!wallet}
-                                onClick={() => connect(wallet)}
-                            >
-                                CONNECT
-                            </button>
+                        <div
+                            className="col-sm-6"
+                            onClick={() => {
+                                navigate(deepLink)
+                            }}
+                            onKeyDown={() => {}}
+                            role="presentation"
+                        >
+                            <div className={`wallet-item  ${!isMobile && "inactive"}`}>
+                                <img src={wallets.trustWallet.icon} alt="wallet icon" />
+                                <p>
+                                    {isMobile ? wallets.trustWallet.desc : wallets.trustWallet.warn}
+                                </p>
+                            </div>
                         </div>
                     </>
                 )}
