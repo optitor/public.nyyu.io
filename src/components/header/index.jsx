@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { useQuery } from "@apollo/client";
 // Libraries
 import { Link } from "gatsby"
-
+import { isBrowser } from './../../utilities/auth';
 // Icons
 import { Bell, Logo } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
@@ -174,7 +174,7 @@ const Menu = () => {
                             </ul>
                         )}
                     </div>
-                    {window.innerWidth > 576 && <CurrencyChoice />}
+                    {isBrowser && window.innerWidth > 576 && <CurrencyChoice />}
                     <button
                         type="button"
                         className="menu__toggler"
