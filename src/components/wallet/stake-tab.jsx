@@ -1,6 +1,6 @@
 import React from "react"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
-import { BTC, DOGE, DownArrow, ETH, USDC } from "../../utilities/imgImport"
+import { BTC, DownArrow, Equity, ETH } from "../../utilities/imgImport"
 
 export default function StakeTab() {
     return (
@@ -13,8 +13,11 @@ export default function StakeTab() {
             <TabPanel className="px-4 py-3">
                 <div className="d-flex justify-content-between px-2">
                     <div className="d-flex flex-column justify-content-center">
-                        <div className="fs-24px fw-500">Equity value(BTC)</div>
-                        <div className="txt-green fs-36px">******</div>
+                        <div className="d-flex align-items-center gap-3">
+                            <div className="fs-24px fw-500">Equity value(BTC)</div>
+                            <img src={Equity} alt="equity icon" />
+                        </div>
+                        <div className="txt-green fs-36px lh-25px mt-3">******</div>
                         <div className="text-secondary fs-24px">******</div>
                     </div>
                     <div>
@@ -33,13 +36,13 @@ export default function StakeTab() {
                             </div>
                         </div>
                         <div className="mt-4">
-                            <button className="btn btn-outline-light rounded-0 w-100 fw-500 text-uppercase">
+                            <button className="btn btn-outline-light rounded-0 w-100 fw-bold text-uppercase">
                                 stake to earn
                             </button>
                         </div>
                     </div>
                 </div>
-                <div className="mt-5">
+                <div className="mt-5 overflow-auto">
                     <div className="d-flex gap-3 justify-content-start align-items-center">
                         <div className="d-flex justify-content-start align-items-center gap-2">
                             <div className="fs-14px">All holdings</div>
@@ -62,7 +65,7 @@ export default function StakeTab() {
                             </div>
                         </div>
                     </div>
-                    <table className="overflow-auto">
+                    <table>
                         <thead className="border-bottom-1px">
                             <tr>
                                 <th>Token</th>
@@ -75,16 +78,6 @@ export default function StakeTab() {
                             {[
                                 { icon: BTC, label: "btc" },
                                 { icon: ETH, label: "eth" },
-                                { icon: DOGE, label: "doge" },
-                                { icon: USDC, label: "usdc" },
-                                { icon: BTC, label: "btc" },
-                                { icon: ETH, label: "eth" },
-                                { icon: DOGE, label: "doge" },
-                                { icon: USDC, label: "usdc" },
-                                { icon: BTC, label: "btc" },
-                                { icon: ETH, label: "eth" },
-                                { icon: DOGE, label: "doge" },
-                                { icon: USDC, label: "usdc" },
                             ].map((item) => (
                                 <tr>
                                     <td>
