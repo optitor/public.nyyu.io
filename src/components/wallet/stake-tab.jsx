@@ -1,6 +1,6 @@
 import React from "react"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
-import { BTC, ETH } from "../../utilities/imgImport"
+import { BTC, DOGE, DownArrow, ETH, USDC } from "../../utilities/imgImport"
 
 export default function StakeTab() {
     return (
@@ -40,7 +40,29 @@ export default function StakeTab() {
                     </div>
                 </div>
                 <div className="mt-5">
-                    <table>
+                    <div className="d-flex gap-3 justify-content-start align-items-center">
+                        <div className="d-flex justify-content-start align-items-center gap-2">
+                            <div className="fs-14px">All holdings</div>
+                            <div>
+                                <img
+                                    src={DownArrow}
+                                    alt="down arrow"
+                                    className="cursor-pointer w-50"
+                                />
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-start align-items-center gap-2">
+                            <div className="fs-14px">All coins</div>
+                            <div>
+                                <img
+                                    src={DownArrow}
+                                    alt="down arrow"
+                                    className="cursor-pointer w-50"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <table className="overflow-auto">
                         <thead className="border-bottom-1px">
                             <tr>
                                 <th>Token</th>
@@ -53,6 +75,16 @@ export default function StakeTab() {
                             {[
                                 { icon: BTC, label: "btc" },
                                 { icon: ETH, label: "eth" },
+                                { icon: DOGE, label: "doge" },
+                                { icon: USDC, label: "usdc" },
+                                { icon: BTC, label: "btc" },
+                                { icon: ETH, label: "eth" },
+                                { icon: DOGE, label: "doge" },
+                                { icon: USDC, label: "usdc" },
+                                { icon: BTC, label: "btc" },
+                                { icon: ETH, label: "eth" },
+                                { icon: DOGE, label: "doge" },
+                                { icon: USDC, label: "usdc" },
                             ].map((item) => (
                                 <tr>
                                     <td>
