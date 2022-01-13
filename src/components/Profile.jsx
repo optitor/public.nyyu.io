@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react"
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux"
 import Header from "../components/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link, navigate } from "gatsby"
@@ -17,17 +17,17 @@ import NotificationSetting from "./profile/notification-setting-switch"
 import NotificationRecent from "./profile/notification-recent-switch"
 import Loading from "./common/Loading"
 // import { ROUTES } from "../utilities/routes"
-import  { setCurrentAuthInfo } from "../redux/actions/authAction";
+import { setCurrentAuthInfo } from "../redux/actions/authAction"
 
 const Profile = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     // Queries and Mutations
     const { data: user_data } = useQuery(GET_USER)
     const user = user_data?.getUser
 
     useEffect(() => {
-        dispatch(setCurrentAuthInfo(user));
-    }, [dispatch, user]);
+        dispatch(setCurrentAuthInfo(user))
+    }, [dispatch, user])
     // Containers
     const [loadingPage, setLoadingPage] = useState(true)
     const displayName = user?.avatarPrefix + "." + user?.avatarName
@@ -67,7 +67,7 @@ const Profile = () => {
                 <Header />
                 <section className="container position-relative h-100">
                     <div className="row mt-lg-2">
-                        <div className="col-lg-3 profile-page__left">
+                        <div className="col-lg-3 profile-page__left border-end border-white">
                             <div className="user-info">
                                 <img className="user-info__avatar" src={Tesla} alt="tesla" />
                                 <p className="user-info__name">
@@ -105,7 +105,7 @@ const Profile = () => {
                                 <TabPanel>3</TabPanel>
                             </Tabs>
                         </div>
-                        <div className="col-lg-9 profile-page__right border-start border-white">
+                        <div className="col-lg-9 profile-page__right">
                             {tabIndex === 0 && (
                                 <>
                                     <Tabs className="detail-tab">

@@ -1,11 +1,13 @@
 @use "sass:math";
 .profile-page {
+    margin-bottom: 1rem;
+    margin-top: -1rem;
     &__left {
-        padding: 8px 32px;
+        padding: 0px 32px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        max-height: 500px;
+        justify-content: start;
+        height: 100vh;
         .user-info {
             margin: 48px 0 105px;
             text-align: center;
