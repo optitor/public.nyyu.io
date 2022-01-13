@@ -318,8 +318,12 @@ const Profile = () => {
                                 <div className="notification-set">
                                     <Tabs className="notification-tab">
                                         <TabList>
-                                            <Tab>Recent</Tab>
-                                            <Tab>Setup</Tab>
+                                            <Tab>
+                                                <div className="pt-3 pb-2">Recent</div>
+                                            </Tab>
+                                            <Tab>
+                                                <div className="pt-3 pb-2">Setup</div>
+                                            </Tab>
                                         </TabList>
                                         <TabPanel>
                                             <NotificationRecent />
