@@ -178,73 +178,6 @@ const airdrops = [
         winners: 20,
     },
 ]
-const bids = [
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 55",
-        date: "2021.04.30",
-        bid: 360000,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-    {
-        name: "NDB Presale round 55",
-        date: "2021.04.30",
-        bid: 360000,
-    },
-    {
-        name: "NDB Presale round 80",
-        date: "2021.05.02",
-        bid: 4500,
-    },
-]
 const coins = [
     { value: "eth", label: "Ethereum", icon: ETH },
     { value: "btc", label: "Bitcoin", icon: BTC },
@@ -393,8 +326,9 @@ const History = () => {
 
                                         <div className="d-flex gap-2">
                                             <div
-                                                className={`cursor-pointer ${btcOrUsd === "BTC" && "fw-bold text-white"
-                                                    }`}
+                                                className={`cursor-pointer ${
+                                                    btcOrUsd === "BTC" && "fw-bold text-white"
+                                                }`}
                                                 onClick={() => setBtcOrUsd("BTC")}
                                                 onKeyDown={() => setBtcOrUsd("BTC")}
                                                 role="presentation"
@@ -403,8 +337,9 @@ const History = () => {
                                             </div>
                                             <div>|</div>
                                             <div
-                                                className={`cursor-pointer ${btcOrUsd === "USD" && "fw-bold text-white"
-                                                    }`}
+                                                className={`cursor-pointer ${
+                                                    btcOrUsd === "USD" && "fw-bold text-white"
+                                                }`}
                                                 onClick={() => setBtcOrUsd("USD")}
                                                 onKeyDown={() => setBtcOrUsd("USD")}
                                                 role="presentation"
@@ -417,16 +352,16 @@ const History = () => {
                                         {hideValues
                                             ? obscureValueString
                                             : btcOrUsd === "USD"
-                                                ? dollarEquityValue
-                                                : btcEquityValue}
+                                            ? dollarEquityValue
+                                            : btcEquityValue}
                                     </p>
                                     <p className="max-value mt-3">
                                         {hideValues
                                             ? obscureValueString
                                             : "~ $ " +
-                                            (btcOrUsd === "USD"
-                                                ? btcEquityValue
-                                                : dollarEquityValue)}
+                                              (btcOrUsd === "USD"
+                                                  ? btcEquityValue
+                                                  : dollarEquityValue)}
                                     </p>
                                 </div>
                                 <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
@@ -461,7 +396,7 @@ const History = () => {
                                     )}
                                 </div>
                             </div>
-                            <table className="mt-3">
+                            <table className="my-3">
                                 <tbody>
                                     {my_assets.map((item, idx) => (
                                         <tr key={idx}>
@@ -514,10 +449,11 @@ const History = () => {
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${detail_show &&
+                                    className={`${
+                                        detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                        }`}
+                                    }`}
                                 >
                                     <thead>
                                         <tr>

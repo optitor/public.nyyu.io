@@ -1,5 +1,7 @@
 .history-page {
     background-color: $black;
+    margin-bottom: 1rem;
+    margin-top: -1rem;
     .menu {
         border-bottom: 2px solid #464646;
     }
@@ -322,7 +324,7 @@
                 width: 100%;
                 .search {
                     display: flex;
-                    justify-content: flex-end;
+                    justify-content: flex-start;
                     .search-icon {
                         margin: 12px;
                         width: 20px;

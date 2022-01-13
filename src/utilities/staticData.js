@@ -1357,10 +1357,10 @@ export const wallets = {
         desc: "Connect to your Coinbase Account",
         warn: "Coinbase Account is not supported",
     },
-    "Trust Wallet": {
+    trustWallet: {
         icon: TrustWallet,
         desc: "Connect to your Trust wallet",
-        warn: "Trust wallet is not supported",
+        warn: "Trust wallet is only supported on Mobile",
     },
 }
 
@@ -1626,3 +1626,8 @@ export const FAQ_CONTENT = [
         ),
     },
 ]
+
+export const NDB_TOKEN_CONTENT = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
+
+By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 
+`
