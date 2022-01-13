@@ -3,6 +3,7 @@ import { navigate } from "gatsby";
 import { useSelector } from "react-redux";
 import { Router } from "@reach/router";
 import Loading from "../../components/common/Loading";
+import AlarmModal from './../../components/admin/AlarmModal';
 
 const Dashboard = lazy(() => import("./../../subPages/admin/dashboard"));
 const Rounds = lazy(() => import("./../../subPages/admin/rounds"));
@@ -45,6 +46,7 @@ const App = () => {
                         </Router>
                     </Suspense>
                 )}
+                <AlarmModal />
             </>
         );
     // } else {

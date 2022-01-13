@@ -10,7 +10,6 @@ import LayoutForCreate from "../../../components/admin/LayoutForCreate";
 import Alert from '@mui/material/Alert';
 
 
-
 const IndexPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
@@ -85,7 +84,7 @@ const IndexPage = () => {
     };
 
     const handleSubmit = () => {
-        alert('Token added Successfully');
+        alert('Token added successfully')
     };
 
     return (

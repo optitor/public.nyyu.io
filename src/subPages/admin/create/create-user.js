@@ -250,7 +250,7 @@ const IndexPage = () => {
                                             <div className="item">
                                                 <p>Country</p>
                                                 <p>{details.country.label}</p>
-                                            </div>                                        
+                                            </div>
                                             <div className="item">
                                                 <p>Role</p>
                                                 <p>{details.role.label}</p>
@@ -260,7 +260,7 @@ const IndexPage = () => {
                                             <div className="item">
                                                 <p>Email</p>
                                                 <p>{details.email}</p>
-                                            </div>  
+                                            </div>
                                             <div className="item">
                                                 <p>Password</p>
                                                 <p>********</p>
