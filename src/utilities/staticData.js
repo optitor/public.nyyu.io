@@ -1357,10 +1357,10 @@ export const wallets = {
         desc: "Connect to your Coinbase Account",
         warn: "Coinbase Account is not supported",
     },
-    "Trust Wallet": {
+    trustWallet: {
         icon: TrustWallet,
         desc: "Connect to your Trust wallet",
-        warn: "Trust wallet is not supported",
+        warn: "Trust wallet is only supported on Mobile",
     },
 }
 

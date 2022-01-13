@@ -17,7 +17,7 @@ import NotificationSetting from "./profile/notification-setting-switch"
 import NotificationRecent from "./profile/notification-recent-switch"
 import Loading from "./common/Loading"
 // import { ROUTES } from "../utilities/routes"
-import  { logInUser } from "../redux/actions/authAction";
+import  { setCurrentAuthInfo } from "../redux/actions/authAction";
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const Profile = () => {
     const user = user_data?.getUser
 
     useEffect(() => {
-        dispatch(logInUser(user));
+        dispatch(setCurrentAuthInfo(user));
     }, [dispatch, user]);
     // Containers
     const [loadingPage, setLoadingPage] = useState(true)

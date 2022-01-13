@@ -14,10 +14,6 @@ a:hover {
 nav.MuiPagination-root {
     display: flex;
     justify-content: end;
-
-    @include mq("phone", max) {
-        justify-content: center;
-    }
     li {
         width: 30px;
     }
@@ -28,6 +24,15 @@ nav.MuiPagination-root {
             @include mq("phone", max) {
                 background-color: transparent;
             }
+        }        
+    }
+    @include mq("phone", max) {
+        justify-content: center;
+        li {
+            width: 24px;
+        }
+        button {
+            font-size: 12px;
         }
     }
     button.Mui-selected {

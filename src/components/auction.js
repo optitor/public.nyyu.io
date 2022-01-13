@@ -42,6 +42,7 @@ import {
     isInbetween,
 } from "../utilities/number"
 import { User } from "../utilities/user-data"
+// import CurrencyConverter from "../utilities/currencyConverter"
 
 const options = [
     { value: "bid_performance", label: "BIDS PERFORMANCE" },
@@ -337,6 +338,7 @@ const Auction = () => {
                                 />
                             </div>
                         </div>
+                        {/* <CurrencyConverter /> */}
                         <div
                             className="position-absolute"
                             style={{ bottom: "20%", width: "calc(100% - 24px)" }}

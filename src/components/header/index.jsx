@@ -14,25 +14,27 @@ import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import { fetch_Avatar_Components } from './../../redux/actions/avatarAction';
 import { GET_USER } from "../../apollo/graghqls/querys/Auth";
-import { logInUser } from "../../redux/actions/authAction";
+import { setCurrentAuthInfo } from "../../redux/actions/authAction";
 
 const Menu = () => {
     const dispatch = useDispatch();
+    const { user, isAuthenticated } = useSelector(state => state.auth);
+    const { avatarComponents } = useSelector(state => state);
+
     const { data: user_data } = useQuery(GET_USER);
     const userInfo = user_data?.getUser;
-    // Fetch avatarComponents Data from backend    
+    // Fetch avatarComponents Data from backend
     useEffect(() => {
-        if(userInfo) {
-            dispatch(logInUser(userInfo));
+        if(!avatarComponents.loaded) {
+            dispatch(fetch_Avatar_Components());
         }
-    }, [dispatch, userInfo]);
+        if(!isAuthenticated && userInfo) {
+            dispatch(setCurrentAuthInfo(userInfo));
+        }
+    }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated]);
 
-    useEffect(() => {
-        dispatch(fetch_Avatar_Components());
-    }, [dispatch]);
 
     const auth = useAuth()
-    const { user } = useSelector((state) => state.auth)
 
     // State
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)

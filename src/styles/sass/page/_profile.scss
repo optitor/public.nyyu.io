@@ -374,6 +374,18 @@
                 @include mq("laptop", max) {
                     margin-top: 24px;
                 }
+                .connected {
+                    border: 1px solid #23c865;
+                    padding: 30px;
+                    p {
+                        color: #23c865;
+                        margin: 10px 0;
+                    }
+                    img {
+                        margin: 30px 0;
+                        width: 90px;
+                    }
+                }
             }
             .col-sm-6 {
                 margin-bottom: 16px;
@@ -400,9 +412,9 @@
                     line-height: 20px;
                     color: #8f8f8f;
                 }
-                &.active {
-                    background-color: white;
-                    border-color: white;
+                &.inactive {
+                    background-color: #333333;
+                    border-color: grey;
                 }
             }
             .btn-primary {
@@ -691,7 +703,7 @@
     div.profile {
         margin: auto;
         border: none;
-        @include mq('phone', max) {
+        @include mq("phone", max) {
             height: 100px;
             div.image_div {
                 width: 80px;
@@ -729,7 +741,7 @@
                 color: white;
             }
         }
-        @include mq('phone', max) {
+        @include mq("phone", max) {
             margin-top: 5px;
             margin-bottom: 5px;
             font-size: 20px;
@@ -754,7 +766,7 @@
             background-color: white;
             color: $black;
         }
-        @include mq('phone', max) {
+        @include mq("phone", max) {
             margin-bottom: 5px;
             font-size: 20px;
         }
@@ -770,7 +782,7 @@
     div.components {
         border-left: 1px solid white;
         padding: 20px;
-        @include mq('phone', max) {
+        @include mq("phone", max) {
             border-left: none;
             border-top: 1px solid white;
         }
@@ -816,7 +828,7 @@
                 text-align: center;
             }
         }
-        @include mq('tablet', max) {
+        @include mq("tablet", max) {
             height: 170px;
             & > div {
                 height: 170px;
@@ -826,7 +838,7 @@
                 }
             }
         }
-        @include mq('phone', max) {
+        @include mq("phone", max) {
             height: 100px;
             & > div {
                 height: 100px;
