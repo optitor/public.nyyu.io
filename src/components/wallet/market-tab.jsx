@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react"
 import ReactECharts from "echarts-for-react"
 import useWebSocket, { ReadyState } from "react-use-websocket"
 import CustomSpinner from "../common/custom-spinner"
+import { useState } from "react"
 
 const QUOTE = "USDT"
 
@@ -167,6 +168,7 @@ const CryptoRow = ({ data }) => {
 }
 
 export default function MarketTab() {
+    const [searchValue, setSearchValue] = useState("")
     return (
         <table className="wallet-transaction-table">
             <thead>
@@ -179,12 +181,38 @@ export default function MarketTab() {
                 </tr>
             </thead>
             <div className="search">
-                <Icon icon="akar-icons:search" color="white" className="search-icon" />
+                <svg
+                    class="search-icon text-light"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    ></path>
+                </svg>
+                <input
+                    type="text"
+                    placeholder="Search"
+                    className="bg-transparent text-secondary w-100 border-0"
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                />
             </div>
             <tbody className="pe-3">
-                {market_data.map((item, idx) => (
-                    <CryptoRow data={item} key={idx} />
-                ))}
+                {market_data
+                    .filter(
+                        (item) =>
+                            item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.abbr.toLowerCase().includes(searchValue.toLowerCase())
+                    )
+                    .map((item, idx) => (
+                        <CryptoRow data={item} key={idx} />
+                    ))}
             </tbody>
         </table>
     )
