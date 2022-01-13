@@ -168,7 +168,7 @@ const CryptoRow = ({ data }) => {
 
 export default function MarketTab() {
     return (
-        <table>
+        <table className="wallet-transaction-table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -181,7 +181,7 @@ export default function MarketTab() {
             <div className="search">
                 <Icon icon="akar-icons:search" color="white" className="search-icon" />
             </div>
-            <tbody>
+            <tbody className="pe-3">
                 {market_data.map((item, idx) => (
                     <CryptoRow data={item} key={idx} />
                 ))}
