@@ -336,7 +336,7 @@ const Profile = () => {
                             )}
                             {tabIndex === 2 && (
                                 <div className="connect-wallet">
-                                    <h4>select wallet</h4>
+                                    <h4 className="pt-3">select wallet</h4>
                                     <ConnectWalletTab />
                                 </div>
                             )}
