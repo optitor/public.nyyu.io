@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react"
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux"
 import Header from "../components/header"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { Link, navigate } from "gatsby"
@@ -17,17 +17,17 @@ import NotificationSetting from "./profile/notification-setting-switch"
 import NotificationRecent from "./profile/notification-recent-switch"
 import Loading from "./common/Loading"
 // import { ROUTES } from "../utilities/routes"
-import  { setCurrentAuthInfo } from "../redux/actions/authAction";
+import { setCurrentAuthInfo } from "../redux/actions/authAction"
 
 const Profile = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     // Queries and Mutations
     const { data: user_data } = useQuery(GET_USER)
     const user = user_data?.getUser
 
     useEffect(() => {
-        dispatch(setCurrentAuthInfo(user));
-    }, [dispatch, user]);
+        dispatch(setCurrentAuthInfo(user))
+    }, [dispatch, user])
     // Containers
     const [loadingPage, setLoadingPage] = useState(true)
     const displayName = user?.avatarPrefix + "." + user?.avatarName
@@ -330,7 +330,12 @@ const Profile = () => {
                                     </Tabs>
                                 </div>
                             )}
-                            {tabIndex === 2 && <ConnectWalletTab />}
+                            {tabIndex === 2 && (
+                                <div className="connect-wallet">
+                                    <h4>select wallet</h4>
+                                    <ConnectWalletTab />
+                                </div>
+                            )}
                             {tabIndex === 3 && <SignOutTab />}
                         </div>
                     </div>
