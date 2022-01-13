@@ -3,6 +3,7 @@ import * as Query from '../../apollo/graghqls/querys/AvatarComponent';
 import * as Mutation from './../../apollo/graghqls/mutations/AvatarComponent';
 import { CREATE_AVATAR_COMPONENT, FETCH_AVATAR_COMPONENTS } from "../actionTypes";
 import { client } from './../../apollo/client';
+import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';
 
 export const create_Avatar_Component = createData => async dispatch => {
     try {
@@ -45,8 +46,10 @@ export const create_New_Avatar = createData => async dispatch => {
             mutation: Mutation.CREATE_NEW_AVATAR,
             variables: { ...createData }
         });
+        showSuccessAlarm('Avatar created successfully');
         console.log(data);
     } catch(err) {
         console.log(err.message);
+        showFailAlarm('Action failed', 'Ops! Something went wrong. Try again!');
     }
 };

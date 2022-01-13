@@ -23,7 +23,7 @@ const IndexPage = () => {
                             Direct purchase round
                         </Link>
                         <Link className="select-item" to="/admin/create/user">
-                            <Icon icon="ant-design:user-add-outlined" />
+                            <Icon icon="carbon:user-follow" />
                             User
                         </Link>
                         <Link className="select-item" to="/admin/create/auction">
@@ -35,7 +35,7 @@ const IndexPage = () => {
                             Avatar customization
                         </Link>
                         <Link className="select-item" to="/admin/create/avatar">
-                            <Icon icon="clarity:avatar-line" />
+                            <Icon icon="bx:bxs-user-rectangle" />
                             Avatar
                         </Link>
                         <Link className="select-item" to="/admin/create/email">

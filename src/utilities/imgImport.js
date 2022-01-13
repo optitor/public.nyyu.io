@@ -165,6 +165,9 @@ import walletQRCode from "../images/wallet-qr-code.svg"
 import destinationWallet from "../images/destination-wallet.svg"
 import equity from "../images/icons/equity.svg"
 
+import failImage from "./../images/fail.svg";
+import successImage from "./../images/success.svg";
+
 export const Logo = logo
 export const Bell = bell
 export const DownArrow = downArrow
@@ -328,3 +331,6 @@ export const NdbToken = ndbToken
 export const WalletQRCode = walletQRCode
 export const DestinationWallet = destinationWallet
 export const Equity = equity
+
+export const FailImage = failImage;
+export const SuccesImage = successImage;
