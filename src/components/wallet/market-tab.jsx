@@ -5,7 +5,6 @@ import { numberSign, numberWithCommas, numFormatter } from "../../utilities/numb
 import icons from "base64-cryptocurrency-icons"
 import { Icon } from "@iconify/react"
 import ReactECharts from "echarts-for-react"
-import CustomSpinner from "../common/custom-spinner"
 import { useState } from "react"
 
 const QUOTE = "USDT"
@@ -53,7 +52,6 @@ const market_data = [
     },
 ]
 const CryptoRow = ({ data }) => {
-    console.log("data", data)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         chart: [],
         min: 0,
@@ -81,25 +79,30 @@ const CryptoRow = ({ data }) => {
                     chart: data,
                 })
             })
-        setInterval(() => {
+        const getTicker24hr = () => {
             axios.get(TICKER_24hr, { params: { symbol: data.abbr + QUOTE } }).then((res) => {
-                console.log("ticer res", res)
                 setState({
                     price: numberWithCommas(res.data.lastPrice),
                     percent: res.data.priceChangePercent,
                     volume: numFormatter(res.data.quoteVolume, 2),
                 })
             })
-        }, 3000)
-    }, [])
+        }
+        getTicker24hr()
+        setInterval(() => {
+            getTicker24hr()
+        }, 5000)
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <tr>
             <td className="d-flex align-items-start ps-2">
-                <Icon
-                    icon="bx:bxs-star"
-                    className={`star-checkbox ${data.active ? "txt-green" : "txt-grey"}`}
-                />
+                <div>
+                    <Icon
+                        icon="bx:bxs-star"
+                        className={`star-checkbox ${data.active ? "txt-green" : "txt-grey"}`}
+                    />
+                </div>
                 <img src={icons[data.abbr]?.icon} alt="coin" className="me-2" width="30" />
                 <div>
                     <p className="coin-abbr">{data.abbr}</p>
@@ -107,13 +110,7 @@ const CryptoRow = ({ data }) => {
                 </div>
             </td>
             <td>
-                {!price ? (
-                    <div className="loading">
-                        <CustomSpinner />
-                    </div>
-                ) : (
-                    <p className="coin-price">${price}</p>
-                )}
+                <p className="coin-price">${price}</p>
                 <p
                     className={
                         numberSign(percent) === "+"
