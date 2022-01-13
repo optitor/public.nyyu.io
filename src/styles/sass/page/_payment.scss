@@ -273,7 +273,7 @@
                 height: 100%;
                 padding-top: 15px;
                 padding-bottom: 15px;
-                border: 2px solid #525252;
+                border: 2px solid white;
                 img {
                     margin-bottom: 12px;
                     width: 32px;
@@ -287,11 +287,16 @@
                     font-weight: 500;
                     font-size: 16px;
                     line-height: 20px;
-                    color: #8f8f8f;
+                    color: white;
                 }
-                &.active {
-                    background-color: white;
-                    border-color: white;
+                &.inactive {
+                    border-color: grey;
+                    p {
+                        color: grey;
+                    }
+                    img {
+                        opacity: 0.5;
+                    }
                 }
             }
         }
