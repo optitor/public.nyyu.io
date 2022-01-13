@@ -6,6 +6,7 @@ import Slider from "rc-slider"
 import Select from "react-select"
 import Modal from "react-modal"
 import ReactTooltip from "react-tooltip"
+
 import Header from "./header"
 import BidsChart1 from "./chart/BidsChart1"
 import RoundsChart1 from "./chart/RoundsChart1"
@@ -30,6 +31,7 @@ import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/que
 import {
     AUCTION_TOOLTIP_CONTENT1,
     AUCTION_TOOLTIP_CONTENT2,
+    NDB_TOKEN_CONTENT,
     Currencies,
 } from "../utilities/staticData"
 import {
@@ -40,11 +42,7 @@ import {
     isInbetween,
 } from "../utilities/number"
 import { User } from "../utilities/user-data"
-
-const ndb_token = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
-
-By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 
-`
+// import CurrencyConverter from "../utilities/currencyConverter"
 
 const options = [
     { value: "bid_performance", label: "BIDS PERFORMANCE" },
@@ -285,7 +283,14 @@ const Auction = () => {
                                                         <td>{idx + 1}</td>
                                                         <td>
                                                             {item.totalPrice}
-                                                            <span className="txt-green"> $</span>
+                                                            <span className="txt-green">
+                                                                {" "}
+                                                                {
+                                                                    Currencies[
+                                                                        User.selectedCurrencyId
+                                                                    ].symbol
+                                                                }
+                                                            </span>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -293,7 +298,7 @@ const Auction = () => {
                                         </table>
                                     </TabPanel>
                                     <TabPanel>
-                                        <p className="text">{ndb_token}</p>
+                                        <p className="text">{NDB_TOKEN_CONTENT}</p>
                                     </TabPanel>
                                 </Tabs>
                                 {isInbetween(
@@ -333,6 +338,7 @@ const Auction = () => {
                                 />
                             </div>
                         </div>
+                        {/* <CurrencyConverter /> */}
                         <div
                             className="position-absolute"
                             style={{ bottom: "20%", width: "calc(100% - 24px)" }}
@@ -343,7 +349,10 @@ const Auction = () => {
                                         <p className="caption">Minimum bid</p>
                                         <p className="value">
                                             {fnAverateMinBid()}
-                                            <span className="txt-green"> $</span>{" "}
+                                            <span className="txt-green">
+                                                {" "}
+                                                {Currencies[User.selectedCurrencyId].symbol}
+                                            </span>{" "}
                                         </p>
                                     </div>
                                 ) : (
