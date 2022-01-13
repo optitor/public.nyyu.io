@@ -330,7 +330,12 @@ const Profile = () => {
                                     </Tabs>
                                 </div>
                             )}
-                            {tabIndex === 2 && <ConnectWalletTab />}
+                            {tabIndex === 2 && (
+                                <div className="connect-wallet">
+                                    <h4>select wallet</h4>
+                                    <ConnectWalletTab />
+                                </div>
+                            )}
                             {tabIndex === 3 && <SignOutTab />}
                         </div>
                     </div>
