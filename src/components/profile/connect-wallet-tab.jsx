@@ -4,10 +4,7 @@ import { wallets } from "../../utilities/staticData"
 import { useConnect, useAccount } from "wagmi"
 import { isMobile } from "react-device-detect"
 
-const TRUST_URL =
-    "https://links.trustwalletapp.com/a/key_live_lfvIpVeI9TFWxPCqwU8rZnogFqhnzs4D?&event=openURL&url="
-const currentURI = typeof window === "undefined" ? "" : window.location.href
-const deepLink = `${TRUST_URL}${encodeURIComponent(currentURI)}`
+const TRUST_URL = "https://link.trustwallet.com/open_url?coin_id=60&url=https://sale.ndb.money"
 
 export default function ConnectWalletTab() {
     const [{ data: connectData, error: connectError }, connect] = useConnect()
@@ -51,7 +48,7 @@ export default function ConnectWalletTab() {
                         <div
                             className="col-sm-6"
                             onClick={() => {
-                                navigate(deepLink)
+                                navigate(TRUST_URL)
                             }}
                             onKeyDown={() => {}}
                             role="presentation"
