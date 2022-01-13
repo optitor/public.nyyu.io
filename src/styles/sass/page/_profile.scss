@@ -149,7 +149,7 @@
             .react-tabs {
                 &__tab-list {
                     border: none;
-                    margin-bottom: 24px;
+                    margin-bottom: 12px;
                 }
                 &__tab {
                     font-weight: bold;
@@ -300,7 +300,6 @@
                     line-height: 22px;
                     letter-spacing: 0.04em;
                     color: #626161;
-                    padding: 0 24px 16px 0;
                     text-transform: uppercase;
                     &-list {
                         border-bottom: 2px solid #464646;

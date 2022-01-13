@@ -110,8 +110,12 @@ const Profile = () => {
                                 <>
                                     <Tabs className="detail-tab">
                                         <TabList>
-                                            <Tab>Account detaiLs</Tab>
-                                            <Tab>Tier Details</Tab>
+                                            <Tab>
+                                                <div className="pt-3">account detaiLs</div>
+                                            </Tab>
+                                            <Tab>
+                                                <div className="pt-3">tier Details</div>
+                                            </Tab>
                                         </TabList>
                                         <TabPanel>
                                             <div className="account-details">
@@ -322,7 +326,7 @@ const Profile = () => {
                                                 <div className="pt-3 pb-2">Recent</div>
                                             </Tab>
                                             <Tab>
-                                                <div className="pt-3 pb-2">Setup</div>
+                                                <div className="py-3 pb-2">Setup</div>
                                             </Tab>
                                         </TabList>
                                         <TabPanel>
