@@ -57,12 +57,6 @@ const TableHead = styled.div`
     &>div.address {width: ${width.address};}
     &>div.edit {width: ${width.edit};}
 
-    @media screen and (max-width: ${device['laptop-md']}){
-        div.bid_status {
-            width: 8%;
-        }
-    }
-
     @media screen and (max-width: ${device['phone']}){
         display: none;
     }    
