@@ -46,9 +46,11 @@ export default function ConnectWalletTab() {
                     <div
                         className="col-sm-6"
                         onClick={() => {
-                            navigate(TRUST_URL)
+                            isMobile && navigate(TRUST_URL)
                         }}
-                        onKeyDown={() => {}}
+                        onKeyDown={() => {
+                            isMobile && navigate(TRUST_URL)
+                        }}
                         role="presentation"
                     >
                         <div className={`wallet-item  ${!isMobile && "inactive"}`}>
