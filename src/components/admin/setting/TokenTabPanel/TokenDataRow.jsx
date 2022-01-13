@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 
-const SocailDataRow = ({datum, index}) => {
+const TokenDataRow = ({datum, index}) => {
     const [show, setShow] = useState(false);
     return (
         <>
@@ -100,7 +100,7 @@ const SocailDataRow = ({datum, index}) => {
     );
 };
 
-export default SocailDataRow;
+export default TokenDataRow;
 
 const DataRow = styled.div`
     min-height: 80px;
