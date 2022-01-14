@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client"
 
 export const GET_USER = gql`
-    {
-        getUser {
+    query getUser {
+        getUser{
             id
             regDate
             updateDate
@@ -19,7 +19,7 @@ export const GET_USER = gql`
             provider
             providerId
             notifySetting
-            avatar {
+            avatar{
                 id
                 regDate
                 updateDate
@@ -29,7 +29,7 @@ export const GET_USER = gql`
                 prefix
                 name
             }
-            security {
+            security{
                 id
                 regDate
                 updateDate
@@ -37,7 +37,7 @@ export const GET_USER = gql`
                 authType
                 tfaEnabled
             }
-            verify {
+            verify{
                 id
                 regDate
                 updateDate
