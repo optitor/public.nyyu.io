@@ -25,7 +25,7 @@ const Profile = () => {
     const { data: user_data } = useQuery(GET_USER)
     const user = user_data?.getUser
 
-    console.log("user", user)
+    // console.log("user", user)
 
     useEffect(() => {
         dispatch(setCurrentAuthInfo(user))
