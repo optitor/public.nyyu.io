@@ -25,10 +25,10 @@ const IndexPage = () => {
             <main className="home-page">
                 <Header />
                 <ReferToFriendsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-                <section className="home-section">
+                <section className="home-section mt-5 mt-sm-0">
                     <div className="container h-100 d-flex flex-column justify-content-sm-center justify-content-start mt-5 mt-sm-0">
                         <div className="row m-0">
-                            <div className="left-part col-md-6">
+                            <div className="left-part col-md-6 pe-0 pe-sm-auto">
                                 <h3 className="home-title d-sm-block d-none">
                                     <div>
                                         <span className="txt-green">round 20</span> ends in
@@ -45,8 +45,10 @@ const IndexPage = () => {
                                     <p className="token-left text-uppercase mt-4">
                                         tokens left in this round
                                     </p>
-                                    <p className="token-value">{numberWithCommas(604800, " ")}</p>
-                                    <div className="cta mt-5 mt-sm-0">
+                                    <p className="token-value mt-2 mt-sm-0">
+                                        {numberWithCommas(604800, " ")}
+                                    </p>
+                                    <div className="cta mt-5 mt-sm-0 px-4 px-sm-0">
                                         <button
                                             className="btn btn-green"
                                             onClick={placeABidButtonClick}
