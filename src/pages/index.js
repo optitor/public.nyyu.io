@@ -35,7 +35,7 @@ const IndexPage = () => {
                                     </div>
                                     <CountDown />
                                 </h3>
-                                <h3 className="home-title-mobile d-sm-none d-block">
+                                <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
                                     <div className="mb-3">
                                         <span className="txt-green">round 20</span> ends in
                                     </div>
