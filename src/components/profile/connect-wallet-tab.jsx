@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { navigate } from "gatsby"
 import { wallets } from "../../utilities/staticData"
 import { useConnect, useAccount } from "wagmi"
