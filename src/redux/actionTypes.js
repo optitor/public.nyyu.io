@@ -6,3 +6,4 @@ export const CREATE_NEW_AVATAR = "CREATE_NEW_AVATAR";
 export const BID_PLACE = "BID_PLACE";
 export const GET_USER_TIERS = 'GET_USER_TIERS';
 export const CREATE_USER_TIER = 'CREATE_USER_TIER';
+export const SET_CURRENCY = "SET_CURRENCY";
