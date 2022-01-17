@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useReducer, useEffect, useState, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { navigate } from "gatsby"
@@ -383,7 +385,7 @@ const Auction = () => {
                                                         (item, idx) => (
                                                             <tr key={idx}>
                                                                 <td>{`${idx + 1}. ${
-                                                                    item.userId
+                                                                    item.prefix + "." + item.name
                                                                 }`}</td>
                                                                 <td>
                                                                     {calcPriceFromUsd(
@@ -407,15 +409,6 @@ const Auction = () => {
                                             <p className="text">{NDB_TOKEN_CONTENT}</p>
                                         </TabPanel>
                                     </Tabs>
-                                    {isInbetween(
-                                        fnSelectedRoundData()?.startedAt,
-                                        fnSelectedRoundData()?.endedAt
-                                    ) && (
-                                        <TimeframeBar
-                                            percentage={percentage}
-                                            round={fnSelectedRoundData()}
-                                        />
-                                    )}
                                 </div>
                                 <div className="d-none d-md-block mt-5">
                                     <ReactTooltip
@@ -444,11 +437,19 @@ const Auction = () => {
                                     />
                                 </div>
                             </div>
-                            {/* <CurrencyConverter /> */}
                             <div
                                 className="position-absolute"
                                 style={{ bottom: "20%", width: "calc(100% - 24px)" }}
                             >
+                                {isInbetween(
+                                    fnSelectedRoundData()?.startedAt,
+                                    fnSelectedRoundData()?.endedAt
+                                ) && (
+                                    <TimeframeBar
+                                        percentage={percentage}
+                                        round={fnSelectedRoundData()}
+                                    />
+                                )}
                                 <div className="d-flex justify-content-between mt-4">
                                     {fnAverateMinBid !== 0 ? (
                                         <div>
@@ -495,7 +496,7 @@ const Auction = () => {
                                 </div>
                                 {size.width <= 1024 && (
                                     <div className="text-center my-5">
-                                        <p>Audited by {user.name}</p>
+                                        <p>AuCyberunit</p>
                                         <button
                                             className="btn-primary btn-increase"
                                             onClick={() => {
@@ -575,8 +576,8 @@ const Auction = () => {
                                         {Currencies[currencyId].symbol}
                                     </h3>
                                 </div>
-                                <div style={{ paddingTop: "20px" }}>
-                                    <p>Audited by {user.name}</p>
+                                <div className="mt-3 mb-2">
+                                    <p>Audited by Cyberunit</p>
                                 </div>
                                 <button
                                     className="btn-primary text-uppercase w-100"
