@@ -14,6 +14,9 @@
         flex-direction: column;
         justify-content: start;
         height: 100vh;
+        @include mq("phone", max) {
+            height: 100%;
+        }
         .user-info {
             margin: 48px 0 105px;
             text-align: center;
