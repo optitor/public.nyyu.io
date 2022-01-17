@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react"
-import Header from "../components/header"
-import FigureItem from "../components/FigureItem"
-import { CloseIcon, Trees } from "../utilities/imgImport"
-import { figures } from "../utilities/staticData"
+import Header from "../header"
+import FigureItem from "../FigureItem"
+import { CloseIcon, Trees } from "../../utilities/imgImport"
+import { figures } from "../../utilities/staticData"
 import StarRatings from "react-star-ratings"
 import names from "random-names-generator"
 import Modal from "react-modal"
-import { setUser } from "../utilities/auth"
+import { setUser } from "../../utilities/auth"
 import { navigate } from "gatsby"
-import Loading from "../components/common/Loading"
-import { ROUTES } from "../utilities/routes"
-import { SET_AVATAR } from "../apollo/graghqls/mutations/Auth"
+import Loading from "../common/Loading"
+import { ROUTES } from "../../utilities/routes"
+import { SET_AVATAR } from "../../apollo/graghqls/mutations/Auth"
 import { useMutation, useQuery } from "@apollo/client"
-import { GET_USER } from "../apollo/graghqls/querys/Auth"
-import CustomSpinner from "../components/common/custom-spinner"
+import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import CustomSpinner from "../common/custom-spinner"
 
 const SelectFigure = () => {
     const { data: user_data } = useQuery(GET_USER)
@@ -62,8 +62,7 @@ const SelectFigure = () => {
                 if (user_data.getUser)
                     if (user_data.getUser.avatarPrefix && user_data.getUser.avatarName)
                         return navigate(ROUTES.profile)
-                    else
-                        return setLoadingPage(false)
+                    else return setLoadingPage(false)
     }, [user_data])
     if (loadingPage) return <Loading />
     else
