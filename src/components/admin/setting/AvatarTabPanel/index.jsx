@@ -18,7 +18,7 @@ const AvatarTabPanel = () => {
 
     useEffect(() => {
         setPageData(data.slice((page - 1) * limit, page * limit));
-    }, [dispatch, page, limit]);
+    }, [dispatch, data, page, limit]);
 
     return (
         <div className='avatar_div custom_scrollbar'>
