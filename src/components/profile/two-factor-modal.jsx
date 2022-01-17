@@ -5,7 +5,6 @@ import Modal from "react-modal"
 import { CloseIcon } from "../../utilities/imgImport"
 import { useMutation } from "@apollo/client"
 import { REQUEST_2FA, DISABLE_2FA, CONFIRM_REQUEST_2FA } from "../../apollo/graghqls/mutations/Auth"
-import { getUser, setUser } from "../../utilities/auth"
 import { ROUTES } from "../../utilities/routes"
 
 import "react-phone-number-input/style.css"
@@ -23,13 +22,15 @@ const initial = {
     input_mobile: false,
 }
 
-export default function TwoFactorModal({ is2FAModalOpen, setIs2FAModalOpen }) {
-    const user = getUser()
-
+export default function TwoFactorModal({
+    is2FAModalOpen,
+    setIs2FAModalOpen,
+    email,
+    twoStep,
+    updateUser,
+}) {
     const [qrcode, setQRCode] = useState("")
-
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), initial)
-
     const { result_code, selected, set_type, input_mobile } = state
 
     const handleInput = useCallback((e) => {
@@ -39,37 +40,34 @@ export default function TwoFactorModal({ is2FAModalOpen, setIs2FAModalOpen }) {
 
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
-            console.log("request2FA result", data.request2FA)
             setQRCode(data.request2FA)
             setState({ set_type: selected })
         },
     })
+
+    // This will be only trigger on Profile page
     const [disable2FA] = useMutation(DISABLE_2FA, {
         onCompleted: (data) => {
-            console.log("disable2FA result", data.disable2FA)
-            user.twoStep = user.twoStep.filter((t) => t !== two_factors[selected].method)
-            setUser(user)
+            updateUser()
         },
     })
+
     const [confirmRequest2FA] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
             console.log("confirm Request 2FA", data)
             if (data.confirmRequest2FA === "Failed") {
-                user.isVerify = false
-                setUser(user)
                 navigate(ROUTES.verifyFailed)
             } else if (data.confirmRequest2FA === "Success") {
-                user.isVerify = true
-                setUser(user)
                 navigate(ROUTES.signIn)
             }
         },
     })
+
     const sendRequest2FA = (i, mobile = "") => {
         console.log("Two : ", two_factors[i].method)
         request2FA({
             variables: {
-                email: user.email,
+                email,
                 method: two_factors[i].method,
                 phone: mobile,
             },
@@ -111,7 +109,7 @@ export default function TwoFactorModal({ is2FAModalOpen, setIs2FAModalOpen }) {
                             </p>
                             <div className="d-flex flex-column justify-content-center align-items-center">
                                 {two_factors.map((item, idx) => {
-                                    const enable = user?.twoStep.includes(item.method)
+                                    const enable = !!twoStep ? twoStep.includes(item.method) : false
                                     return (
                                         <div key={idx} className="tfa-line">
                                             <div className="tfa-line_labels">
@@ -216,7 +214,7 @@ export default function TwoFactorModal({ is2FAModalOpen, setIs2FAModalOpen }) {
                                 onClick={() =>
                                     confirmRequest2FA({
                                         variables: {
-                                            email: user.email,
+                                            email,
                                             method: two_factors[selected].method,
                                             code: result_code,
                                         },
