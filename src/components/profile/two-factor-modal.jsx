@@ -26,6 +26,7 @@ export default function TwoFactorModal({
     is2FAModalOpen,
     setIs2FAModalOpen,
     email,
+    phone,
     twoStep,
     updateUser,
 }) {
@@ -58,6 +59,7 @@ export default function TwoFactorModal({
             if (data.confirmRequest2FA === "Failed") {
                 navigate(ROUTES.verifyFailed)
             } else if (data.confirmRequest2FA === "Success") {
+                updateUser()
                 navigate(ROUTES.signIn)
             }
         },
@@ -114,9 +116,17 @@ export default function TwoFactorModal({
                                         <div key={idx} className="tfa-line">
                                             <div className="tfa-line_labels">
                                                 <p className="tfa-line_labels_type">{item.label}</p>
-                                                <p className="tfa-line_labels_preview">
-                                                    ad***@***om
-                                                </p>
+                                                {enable && (
+                                                    <p className="tfa-line_labels_preview">
+                                                        {item.method === "phone" && phone
+                                                            ? "*******" + phone.slice(-3)
+                                                            : ""}
+                                                        {item.method === "email" &&
+                                                            email.slice(0, 2) +
+                                                                "***@***" +
+                                                                email.slice(-2)}
+                                                    </p>
+                                                )}
                                             </div>
                                             <div className="tfa-line_buttons">
                                                 {enable ? (

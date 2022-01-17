@@ -361,6 +361,7 @@ const Profile = () => {
                     is2FAModalOpen={is2FAModalOpen}
                     setIs2FAModalOpen={setIs2FAModalOpen}
                     email={user?.email}
+                    phone={user?.phone}
                     twoStep={twoStep}
                     updateUser={() => refetch()}
                 />

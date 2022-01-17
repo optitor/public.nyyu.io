@@ -175,6 +175,9 @@
                 width: 100%;
             }
             &_labels {
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
                 text-align: left;
                 &_type {
                     font-size: 18px;
