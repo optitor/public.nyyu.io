@@ -60,10 +60,7 @@ const SingupPage = () => {
 
     return (
         <AuthLayout>
-            <h3 className="signup-head">Create an Account</h3>
-            <p className="signup-subhead">
-                Create an account to participate in the auction and to start bidding!
-            </p>
+            <h3 className="signup-head mb-4">Create an Account</h3>
             <form className="form" onSubmit={signUserUp}>
                 <div className="form-group">
                     <FormInput
