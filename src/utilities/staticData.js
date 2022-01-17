@@ -1038,8 +1038,8 @@ export const countries = [
     },
 ]
 
-// export const API_BASE_URL = "http://localhost:5000";
-export const API_BASE_URL = "https://api.ndb.money"
+export const API_BASE_URL = "http://localhost:5000";
+// export const API_BASE_URL = "https://api.ndb.money"
 
 // export const SUBSCRIPTION_BASE_URL = "ws://localhost:5000/subscriptions";
 export const SUBSCRIPTION_BASE_URL = "wss://api.ndb.money/subscriptions"
