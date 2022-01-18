@@ -7,9 +7,9 @@ import { ROUTES } from "../../utilities/routes"
 const OAuth2RedirectHandler = ({ type, dataType, data }) => {
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        email: "", twoStep: [], tempToken: "", tfaOpen: false
+        email: "", twoStep: [], tempToken: "", tfaOpen: false, success: false
     })
-    const { email, twoStep, tempToken, tfaOpen } = state
+    const { email, twoStep, tempToken, tfaOpen, success } = state
     if (type === "success") {
         if (data) {
             let email
@@ -24,14 +24,12 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                 email: email,
                 twoStep: twoStep,
             })
-            navigate("/app/onetime-pwd")
         } else {
             navigate("/app/signin")
         }
     } else {
         if (dataType === "No2FA") {
-            setState({ email: data })
-            navigate(`/app/verify-email/1`)
+            setState({ email: data, tfaOpen: true })
         }
         else {
             navigate(`/app/signin/${dataType}.${data}`)
@@ -40,12 +38,13 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
 
     return (
         <AuthLayout>
-            <VerifyMutliFA
-                twoStep={twoStep}
-                email={email}
-                tempToken={tempToken}
-                returnToSignIn={() => navigate(ROUTES.signIn)}
-            />
+            {success &&
+                <VerifyMutliFA
+                    twoStep={twoStep}
+                    email={email}
+                    tempToken={tempToken}
+                    returnToSignIn={() => navigate(ROUTES.signIn)}
+                />}
             <TwoFactorModal
                 is2FAModalOpen={tfaOpen}
                 setIs2FAModalOpen={(res) => {
