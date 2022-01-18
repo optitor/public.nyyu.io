@@ -1,29 +1,37 @@
-import React, { useEffect, useState } from "react"
 import Header from "../header"
-import FigureItem from "../FigureItem"
-import { CloseIcon, Trees } from "../../utilities/imgImport"
-import { figures } from "../../utilities/staticData"
-import StarRatings from "react-star-ratings"
-import names from "random-names-generator"
 import Modal from "react-modal"
-import { setUser } from "../../utilities/auth"
 import { navigate } from "gatsby"
+import FigureItem from "../FigureItem"
 import Loading from "../common/Loading"
+import names from "random-names-generator"
+import StarRatings from "react-star-ratings"
 import { ROUTES } from "../../utilities/routes"
-import { SET_AVATAR } from "../../apollo/graghqls/mutations/Auth"
-import { useMutation, useQuery } from "@apollo/client"
-import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import React, { useEffect, useState } from "react"
+import { figures } from "../../utilities/staticData"
 import CustomSpinner from "../common/custom-spinner"
+import { useMutation, useQuery } from "@apollo/client"
+import { CloseIcon, Trees } from "../../utilities/imgImport"
+import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { SET_AVATAR } from "../../apollo/graghqls/mutations/Auth"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 
 const SelectFigure = () => {
-    const { data: user_data } = useQuery(GET_USER)
     // Containers
-    const [loadingPage, setLoadingPage] = useState(true)
+    const [error, setError] = useState("")
     const [pending, setPending] = useState(false)
     const [selected, setSelect] = useState(false)
     const [selectedId, setSelectId] = useState(0)
     const [modalIsOpen, setIsOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
+    const [loadingPage, setLoadingPage] = useState(true)
+    const { data: userData } = useQuery(GET_USER, {
+        onCompleted: () => {
+            if (userData.getUser.avatar) return navigate(ROUTES.profile)
+            return setLoadingPage(false)
+        },
+        fetchPolicy: "network-only",
+    })
     const [randomName, setRandomName] = useState(figures[selectedId].lastname)
 
     // Queries and Mutations
@@ -32,6 +40,7 @@ const SelectFigure = () => {
         onCompleted: (data) => {
             setPending(false)
             if (data?.setAvatar === "Success") navigate(ROUTES.profile)
+            else setError(`${figures[selectedId].lastname}.${randomName} Already Exists`)
         },
     })
 
@@ -48,6 +57,7 @@ const SelectFigure = () => {
     const handleOnConfirmButtonClick = (e) => {
         e.preventDefault()
         setPending(true)
+        setError("")
         setAvatar({
             variables: {
                 prefix: figures[selectedId].lastname,
@@ -55,15 +65,6 @@ const SelectFigure = () => {
             },
         })
     }
-    //Authentication
-    useEffect(() => {
-        if (user_data)
-            if ("getUser" in user_data)
-                if (user_data.getUser)
-                    if (user_data.getUser.avatarPrefix && user_data.getUser.avatarName)
-                        return navigate(ROUTES.profile)
-                    else return setLoadingPage(false)
-    }, [user_data])
     if (loadingPage) return <Loading />
     else
         return (
@@ -228,27 +229,36 @@ const SelectFigure = () => {
                                         )}
                                     </div>
                                 </div>
-                                {selected ? (
-                                    <button
-                                        className="btn-primary text-uppercase w-100 mt-3 d-flex align-items-center justify-content-center"
-                                        disabled={pending}
-                                        onClick={handleOnConfirmButtonClick}
-                                    >
-                                        <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
-                                            <CustomSpinner />
-                                        </div>
-                                        <div className={`${pending ? "ms-3" : "pe-4"}`}>
-                                            confirm
-                                        </div>
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="btn-primary text-uppercase w-100 mt-3"
-                                        onClick={() => setSelect(true)}
-                                    >
-                                        select
-                                    </button>
-                                )}
+                                <div className="mt-3">
+                                    {error && (
+                                        <span className="errorsapn">
+                                            <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                        </span>
+                                    )}
+                                    {selected ? (
+                                        <button
+                                            className="btn btn-outline-light rounded-0 text-uppercase w-100 d-flex align-items-center justify-content-center text-uppercase fw-bold fs-24px"
+                                            disabled={pending}
+                                            onClick={handleOnConfirmButtonClick}
+                                        >
+                                            <div
+                                                className={`${pending ? "opacity-1" : "opacity-0"}`}
+                                            >
+                                                <CustomSpinner />
+                                            </div>
+                                            <div className={`${pending ? "ms-3" : "pe-4"}`}>
+                                                confirm
+                                            </div>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="btn-primary text-uppercase w-100 mt-3"
+                                            onClick={() => setSelect(true)}
+                                        >
+                                            select
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
