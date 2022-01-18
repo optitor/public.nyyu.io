@@ -61,6 +61,18 @@ const Profile = () => {
     else
         return (
             <main className="profile-page">
+                <TwoFactorModal
+                    is2FAModalOpen={is2FAModalOpen}
+                    setIs2FAModalOpen={setIs2FAModalOpen}
+                    email={user?.email}
+                    phone={user?.phone}
+                    twoStep={twoStep}
+                    onResult={(res) => {
+                        if (res) {
+                            refetch()
+                        }
+                    }}
+                />
                 <Header />
                 <section className="container position-relative h-100">
                     <div className="row mt-lg-2">
@@ -346,14 +358,6 @@ const Profile = () => {
                 <DeleteAccountModal
                     isDeleteAccountModalOpen={isDeleteAccountModalOpen}
                     setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
-                />
-                <TwoFactorModal
-                    is2FAModalOpen={is2FAModalOpen}
-                    setIs2FAModalOpen={setIs2FAModalOpen}
-                    email={user?.email}
-                    phone={user?.phone}
-                    twoStep={twoStep}
-                    updateUser={() => refetch()}
                 />
             </main>
         )
