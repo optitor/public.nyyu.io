@@ -60,11 +60,13 @@ const Profile = () => {
                 if (user_data.getUser?.avatar?.prefix && user_data.getUser?.avatar?.name) {
                     return setLoadingPage(false)
                 } else {
+                    console.log(user_data)
                     return navigate(ROUTES.selectFigure)
                 }
             }
         }
     }, [user_data])
+    useEffect(() => refetch(), [])
     if (loadingPage) return <Loading />
     else
         return (

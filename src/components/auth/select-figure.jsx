@@ -6,7 +6,6 @@ import { figures } from "../../utilities/staticData"
 import StarRatings from "react-star-ratings"
 import names from "random-names-generator"
 import Modal from "react-modal"
-import { setUser } from "../../utilities/auth"
 import { navigate } from "gatsby"
 import Loading from "../common/Loading"
 import { ROUTES } from "../../utilities/routes"
@@ -18,7 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 
 const SelectFigure = () => {
-    const { data: user_data } = useQuery(GET_USER)
+    const { data: user_data, refetch } = useQuery(GET_USER)
     // Containers
     const [loadingPage, setLoadingPage] = useState(true)
     const [pending, setPending] = useState(false)
@@ -67,11 +66,13 @@ const SelectFigure = () => {
                 if (user_data.getUser?.avatar?.prefix && user_data.getUser?.avatar?.name) {
                     return navigate(ROUTES.profile)
                 } else {
+                    console.log(user_data)
                     return setLoadingPage(false)
                 }
             }
         }
     }, [user_data])
+    useEffect(() => refetch(), [])
     if (loadingPage) return <Loading />
     else
         return (
