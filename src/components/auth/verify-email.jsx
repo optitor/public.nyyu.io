@@ -28,7 +28,6 @@ const VerifyEmail = (props) => {
 
     const [resendVerifyCode] = useMutation(RESEND_VERIFY_CODE, {
         onCompleted: (data) => {
-            console.log("resend result", data)
             if (data.resendVerifyCode === "Already verified") {
                 setIs2FAModalOpen(true)
             }

@@ -51,7 +51,6 @@ export const useSigninMutation = () => {
 export const useSignupMutation = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNUP, {
         onCompleted: (data) => {
-            console.log("Signup data", data)
             if (data?.signup === "Already verified")
                 navigate("/app/signin")
             else
@@ -79,7 +78,6 @@ export const useSignupMutation = () => {
 export const useSignIn2FA = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
         onCompleted: (data) => {
-            console.log("2fa data", data)
             if (data.confirm2FA.status === "Failed") {
                 return
             } else if (data.confirm2FA.status === "Success") {
