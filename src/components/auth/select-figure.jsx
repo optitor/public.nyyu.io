@@ -237,7 +237,7 @@ const SelectFigure = () => {
                                     )}
                                     {selected ? (
                                         <button
-                                            className="btn-primary text-uppercase w-100 d-flex align-items-center justify-content-center"
+                                            className="btn btn-outline-light rounded-0 text-uppercase w-100 d-flex align-items-center justify-content-center text-uppercase fw-bold fs-24px"
                                             disabled={pending}
                                             onClick={handleOnConfirmButtonClick}
                                         >
