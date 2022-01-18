@@ -38,20 +38,22 @@ const SingupPage = () => {
         let error = false
         if (!email || !validator.isEmail(email)) {
             setEmailError("Invalid email address")
-            error = true
+            return (error = true)
         }
         if (!pwd || !validator.isStrongPassword(pwd, passwordValidatorOptions)) {
             setPwdError(
                 "Password must contain at least 8 characters, including UPPER/lowercase and numbers!"
             )
-            error = true
+            return (error = true)
         }
         if (!agree) {
             setAgreeError("Please agree to terms and conditions")
-            error = true
+            return (error = true)
         }
-        if (!pwdConfirm || pwd !== pwdConfirm)
+        if (!pwdConfirm || pwd !== pwdConfirm) {
             setPwdConfirmError("Password doest not match it's repeat!")
+            return (error = true)
+        }
         if (!error) signupMutation(email, pwd, country)
     }
 
@@ -61,7 +63,7 @@ const SingupPage = () => {
     return (
         <AuthLayout>
             <h3 className="signup-head mb-4">Create an Account</h3>
-            <form className="form" onSubmit={signUserUp}>
+            <form className="form">
                 <div className="form-group">
                     <FormInput
                         name="email"
@@ -162,6 +164,7 @@ const SingupPage = () => {
                     )}
                     <button
                         type="submit"
+                        onClick={signUserUp}
                         className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
                         disabled={pending}
                     >
