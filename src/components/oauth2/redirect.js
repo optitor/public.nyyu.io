@@ -44,19 +44,19 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
             <TwoFactorModal
                 is2FAModalOpen={tfaOpen}
                 setIs2FAModalOpen={(res) => {
-                    // setState({ tfaOpen: res })
-                    // if (!res) navigate(ROUTES.signIn)
+                    setTfaOpen(res)
+                    if (!res) navigate(ROUTES.signIn)
 
                 }}
                 email={email}
                 twoStep={twoStep}
                 onResult={(r) => {
-                    // if (r) {
-                    //     setState({ tfaOpen: false })
-                    //     navigate(ROUTES.signIn)
-                    // }
-                    // else
-                    //     navigate(ROUTES.verifyFailed)
+                    if (r) {
+                        setTfaOpen(false)
+                        navigate(ROUTES.signIn)
+                    }
+                    else
+                        navigate(ROUTES.verifyFailed)
                 }}
             />
         </div>
