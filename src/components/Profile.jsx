@@ -22,9 +22,16 @@ import { setCurrentAuthInfo } from "../redux/actions/authAction"
 const Profile = () => {
     const dispatch = useDispatch()
     // Queries and Mutations
-    const { data: user_data } = useQuery(GET_USER)
+    const { data: user_data, refetch } = useQuery(GET_USER)
     const user = user_data?.getUser
 
+    const twoStep = user?.security
+        ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
+        : []
+
+    useEffect(() => {
+        dispatch(setCurrentAuthInfo(user))
+    }, [dispatch, user])
     // Containers
     const [loadingPage, setLoadingPage] = useState(true)
     const displayName = user?.avatar ? user?.avatar?.prefix + "." + user?.avatar?.name : "none"
@@ -354,6 +361,10 @@ const Profile = () => {
                 <TwoFactorModal
                     is2FAModalOpen={is2FAModalOpen}
                     setIs2FAModalOpen={setIs2FAModalOpen}
+                    email={user?.email}
+                    phone={user?.phone}
+                    twoStep={twoStep}
+                    updateUser={() => refetch()}
                 />
             </main>
         )
