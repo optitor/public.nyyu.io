@@ -1,4 +1,4 @@
-import React, { useReducer } from "react"
+import React, { useEffect, useReducer } from "react"
 import { navigate } from "gatsby"
 import AuthLayout from "../common/AuthLayout"
 import VerifyMutliFA from "../auth/verify-multiFA"
@@ -10,31 +10,34 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
         email: "", twoStep: [], tempToken: "", tfaOpen: false, success: false
     })
     const { email, twoStep, tempToken, tfaOpen, success } = state
-    if (type === "success") {
-        if (data) {
-            let email
-            let twoStep = []
-            for (let i in data.split("*")) {
-                const d = data.split("*")[i]
-                if (i === "0") email = d
-                else twoStep.push({ key: d, value: true })
+
+    useEffect(() => {
+        if (type === "success") {
+            if (data) {
+                let email
+                let twoStep = []
+                for (let i in data.split("*")) {
+                    const d = data.split("*")[i]
+                    if (i === "0") email = d
+                    else twoStep.push({ key: d, value: true })
+                }
+                setState({
+                    tempToken: dataType,
+                    email: email,
+                    twoStep: twoStep,
+                })
+            } else {
+                navigate("/app/signin")
             }
-            setState({
-                tempToken: dataType,
-                email: email,
-                twoStep: twoStep,
-            })
         } else {
-            navigate("/app/signin")
+            if (dataType === "No2FA") {
+                setState({ email: data, tfaOpen: true })
+            }
+            else {
+                navigate(`/app/signin/${dataType}.${data}`)
+            }
         }
-    } else {
-        if (dataType === "No2FA") {
-            setState({ email: data, tfaOpen: true })
-        }
-        else {
-            navigate(`/app/signin/${dataType}.${data}`)
-        }
-    }
+    }, [type, dataType, data])
 
     return (
         <AuthLayout>
