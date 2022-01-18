@@ -51,6 +51,10 @@ export default function TwoFactorModal({
             setQRCode(data.request2FA)
             setState({ set_type: selected })
         },
+        onError: (error) => {
+            console.log("Error", error)
+            onResult(false)
+        },
     })
 
     // This will be only trigger on Profile page
