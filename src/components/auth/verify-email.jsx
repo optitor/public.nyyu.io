@@ -89,6 +89,7 @@ const VerifyEmail = (props) => {
                 setIs2FAModalOpen={setIs2FAModalOpen}
                 email={user?.email}
                 twoStep={user?.twoStep}
+                updateUser={() => {}}
             />
         </AuthLayout>
     )
