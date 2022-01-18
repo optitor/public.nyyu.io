@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState } from "react"
+import React, { useCallback, useReducer, useState, useEffect } from "react"
 import { navigate } from "gatsby"
 import { Input } from "../common/FormControl"
 import Modal from "react-modal"
@@ -6,6 +6,9 @@ import { CloseIcon } from "../../utilities/imgImport"
 import { useMutation } from "@apollo/client"
 import { REQUEST_2FA, DISABLE_2FA, CONFIRM_REQUEST_2FA } from "../../apollo/graghqls/mutations/Auth"
 import { ROUTES } from "../../utilities/routes"
+import CustomSpinner from "../common/custom-spinner"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 
 import "react-phone-number-input/style.css"
 import ConnectMobile from "./connect-mobile"
@@ -20,6 +23,8 @@ const initial = {
     selected: 0,
     set_type: -1,
     input_mobile: false,
+    loading: false,
+    error: false,
 }
 
 export default function TwoFactorModal({
@@ -32,12 +37,16 @@ export default function TwoFactorModal({
 }) {
     const [qrcode, setQRCode] = useState("")
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), initial)
-    const { result_code, selected, set_type, input_mobile } = state
+    const { result_code, selected, set_type, input_mobile, loading, error } = state
 
     const handleInput = useCallback((e) => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
     }, [])
+
+    useEffect(() => {
+        setState({ loading: false })
+    }, [twoStep])
 
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
@@ -53,7 +62,7 @@ export default function TwoFactorModal({
         },
     })
 
-    const [confirmRequest2FA] = useMutation(CONFIRM_REQUEST_2FA, {
+    const [confirmRequest2FA, { loading: confirmLoading }] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
             console.log("confirm Request 2FA", data)
             if (data.confirmRequest2FA === "Failed") {
@@ -67,6 +76,7 @@ export default function TwoFactorModal({
 
     const sendRequest2FA = (i, mobile = "") => {
         console.log("Two : ", two_factors[i].method)
+        setState({ loading: true })
         request2FA({
             variables: {
                 email,
@@ -79,6 +89,8 @@ export default function TwoFactorModal({
         setIs2FAModalOpen(false)
         setState(initial)
     }
+
+    console.log("loading", loading)
     return (
         <Modal
             isOpen={is2FAModalOpen}
@@ -135,9 +147,12 @@ export default function TwoFactorModal({
                                                             Change
                                                         </button>
                                                         <button
-                                                            className="btn-primary select-tfa"
+                                                            className="btn-primary select-tfa d-flex align-items-center justify-content-center"
                                                             onClick={() => {
-                                                                setState({ selected: idx })
+                                                                setState({
+                                                                    selected: idx,
+                                                                    loading: true,
+                                                                })
                                                                 disable2FA({
                                                                     variables: {
                                                                         method: item.method,
@@ -145,12 +160,29 @@ export default function TwoFactorModal({
                                                                 })
                                                             }}
                                                         >
-                                                            Disable
+                                                            <div
+                                                                className={`${
+                                                                    selected === idx && loading
+                                                                        ? "opacity-1"
+                                                                        : "opacity-0"
+                                                                }`}
+                                                            >
+                                                                <CustomSpinner />
+                                                            </div>
+                                                            <div
+                                                                className={`${
+                                                                    selected === idx && loading
+                                                                        ? "ms-3"
+                                                                        : "pe-4"
+                                                                }`}
+                                                            >
+                                                                Disable
+                                                            </div>
                                                         </button>
                                                     </>
                                                 ) : (
                                                     <button
-                                                        className="btn-primary select-tfa enable"
+                                                        className="btn-primary select-tfa d-flex align-items-center justify-content-center enable"
                                                         onClick={() => {
                                                             setState({ selected: idx })
                                                             if (item.method === "phone") {
@@ -160,7 +192,24 @@ export default function TwoFactorModal({
                                                             }
                                                         }}
                                                     >
-                                                        Enable
+                                                        <div
+                                                            className={`${
+                                                                selected === idx && loading
+                                                                    ? "opacity-1"
+                                                                    : "opacity-0"
+                                                            }`}
+                                                        >
+                                                            <CustomSpinner color="black" />
+                                                        </div>
+                                                        <div
+                                                            className={`${
+                                                                selected === idx && loading
+                                                                    ? "ms-3"
+                                                                    : "pe-4"
+                                                            }`}
+                                                        >
+                                                            Enable
+                                                        </div>
                                                     </button>
                                                 )}
                                             </div>
@@ -217,21 +266,34 @@ export default function TwoFactorModal({
                                 name="result_code"
                                 value={result_code}
                                 onChange={handleInput}
-                                placeholder="000000"
+                                placeholder="000 000"
                             />
+                            <div className="result_code_error">
+                                {error && (
+                                    <span className="errorsapn">
+                                        <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                        {"Please input confirm code"}
+                                    </span>
+                                )}
+                            </div>
                             <button
-                                className="btn-primary next-step"
-                                onClick={() =>
-                                    confirmRequest2FA({
-                                        variables: {
-                                            email,
-                                            method: two_factors[selected].method,
-                                            code: result_code,
-                                        },
-                                    })
-                                }
+                                className="btn-primary next-step d-flex align-items-center justify-content-center"
+                                onClick={() => {
+                                    if (!result_code.length) setState({ error: true })
+                                    else
+                                        confirmRequest2FA({
+                                            variables: {
+                                                email,
+                                                method: two_factors[selected].method,
+                                                code: result_code,
+                                            },
+                                        })
+                                }}
                             >
-                                Confirm
+                                <div className={`${confirmLoading ? "opacity-1" : "opacity-0"}`}>
+                                    <CustomSpinner />
+                                </div>
+                                <div className={`${confirmLoading ? "ms-3" : "pe-4"}`}>Confirm</div>
                             </button>
                         </div>
                     </div>

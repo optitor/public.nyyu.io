@@ -63,6 +63,10 @@
                 color: $green;
             }
         }
+        .result_code_error {
+            height: 20px;
+            text-align: left;
+        }
         .form {
             &-group {
                 margin-bottom: 8px;
@@ -151,10 +155,12 @@
         line-height: 40px;
     }
     .next-step {
+        margin: auto;
         font-weight: bold;
         font-size: 24px;
         line-height: 29px;
         width: 322px;
+        margin-bottom: 40px;
         @include mq("phone", max) {
             width: 100%;
         }
