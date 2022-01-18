@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from "react"
 import Header from "../header"
-import FigureItem from "../FigureItem"
-import { CloseIcon, Trees } from "../../utilities/imgImport"
-import { figures } from "../../utilities/staticData"
-import StarRatings from "react-star-ratings"
-import names from "random-names-generator"
 import Modal from "react-modal"
 import { navigate } from "gatsby"
+import FigureItem from "../FigureItem"
 import Loading from "../common/Loading"
+import names from "random-names-generator"
+import StarRatings from "react-star-ratings"
 import { ROUTES } from "../../utilities/routes"
-import { SET_AVATAR } from "../../apollo/graghqls/mutations/Auth"
-import { useMutation, useQuery } from "@apollo/client"
-import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import React, { useEffect, useState } from "react"
+import { figures } from "../../utilities/staticData"
 import CustomSpinner from "../common/custom-spinner"
+import { useMutation, useQuery } from "@apollo/client"
+import { CloseIcon, Trees } from "../../utilities/imgImport"
+import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { SET_AVATAR } from "../../apollo/graghqls/mutations/Auth"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 
 const SelectFigure = () => {
-    const { data: user_data, refetch } = useQuery(GET_USER)
     // Containers
-    const [loadingPage, setLoadingPage] = useState(true)
+    const [error, setError] = useState("")
     const [pending, setPending] = useState(false)
     const [selected, setSelect] = useState(false)
     const [selectedId, setSelectId] = useState(0)
     const [modalIsOpen, setIsOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
+    const [loadingPage, setLoadingPage] = useState(true)
+    const { data: userData } = useQuery(GET_USER, {
+        fetchPolicy: "network-only",
+    })
     const [randomName, setRandomName] = useState(figures[selectedId].lastname)
-    const [error, setError] = useState("")
 
     // Queries and Mutations
     const [setAvatar] = useMutation(SET_AVATAR, {
@@ -61,18 +63,13 @@ const SelectFigure = () => {
     }
     //Authentication
     useEffect(() => {
-        if (user_data) {
-            if (user_data?.getUser) {
-                if (user_data.getUser?.avatar?.prefix && user_data.getUser?.avatar?.name) {
-                    return navigate(ROUTES.profile)
-                } else {
-                    console.log(user_data)
-                    return setLoadingPage(false)
-                }
-            }
+        if (userData?.getUser?.avatar) {
+            const { prefix, name } = userData.getUser.avatar
+            if (prefix && name) {
+                return navigate(ROUTES.profile)
+            } else return setLoadingPage(false)
         }
-    }, [user_data])
-    useEffect(() => refetch(), [])
+    }, [userData])
     if (loadingPage) return <Loading />
     else
         return (
