@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Link, navigate } from "gatsby"
 import { Input } from "../common/FormControl"
-import AuthLayout from "../common/AuthLayout"
 import { useMutation } from "@apollo/client"
 import { VERIFY_ACCOUNT, RESEND_VERIFY_CODE } from "../../apollo/graghqls/mutations/Auth"
-import { getUser } from "../../utilities/auth"
 import { ROUTES } from "../../utilities/routes"
-import TwoFactorModal from "../profile/two-factor-modal"
 
-const VerifyEmail = (props) => {
-    const user = getUser()
-
-    useEffect(() => {
-        if (!user?.email) navigate(ROUTES.signUp)
-    }, [user])
-
+const VerifyEmail = ({ email, onResult }) => {
     const [code, setCode] = useState("")
-
-    const [is2FAModalOpen, setIs2FAModalOpen] = useState(!!props.verified)
 
     const [verifyAccount] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
-            if (data.verifyAccount === "Failed") navigate(ROUTES.verifyFailed)
-            else if (data.verifyAccount === "Success") setIs2FAModalOpen(true)
+            if (data.verifyAccount === "Failed") onResult(false)
+            else if (data.verifyAccount === "Success") onResult(true)
         },
     })
 
     const [resendVerifyCode] = useMutation(RESEND_VERIFY_CODE, {
         onCompleted: (data) => {
             if (data.resendVerifyCode === "Already verified") {
-                setIs2FAModalOpen(true)
+                navigate(ROUTES.signIn + "error.Already verified")
             }
         },
     })
 
     return (
-        <AuthLayout>
+        <>
             <h3 className="signup-head mb-5">Verify email</h3>
             <form
                 className="form"
@@ -43,8 +32,8 @@ const VerifyEmail = (props) => {
                     e.preventDefault()
                     verifyAccount({
                         variables: {
-                            email: user.email,
-                            code: code,
+                            email,
+                            code,
                         },
                     })
                 }}
@@ -66,7 +55,7 @@ const VerifyEmail = (props) => {
                         onClick={() =>
                             resendVerifyCode({
                                 variables: {
-                                    email: user.email,
+                                    email,
                                 },
                             })
                         }
@@ -84,14 +73,7 @@ const VerifyEmail = (props) => {
                     Sign up
                 </Link>
             </p>
-            <TwoFactorModal
-                is2FAModalOpen={is2FAModalOpen}
-                setIs2FAModalOpen={setIs2FAModalOpen}
-                email={user?.email}
-                twoStep={user?.twoStep}
-                updateUser={() => {}}
-            />
-        </AuthLayout>
+        </>
     )
 }
 
