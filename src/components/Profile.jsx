@@ -22,6 +22,16 @@ import ProfileChangePasswordModal from "./profile/change-password-modal"
 const Profile = () => {
     // Containers
     const { data: userData, refetch } = useQuery(GET_USER, {
+        onCompleted: () => {
+            if (userData.getUser.avatar) {
+                const { prefix, name } = userData.getUser.avatar
+                if (prefix && name) {
+                    setDisplayName(prefix + "." + name)
+                    return setLoadingPage(false)
+                } else return navigate(ROUTES.selectFigure)
+            }
+            return navigate(ROUTES.selectFigure)
+        },
         fetchPolicy: "network-only",
     })
     const user = userData?.getUser
@@ -46,15 +56,6 @@ const Profile = () => {
 
     const getSecurityStatus = (key) => user?.userSecurity?.find((f) => f?.key === key)?.value
 
-    useEffect(() => {
-        if (userData?.getUser?.avatar) {
-            const { prefix, name } = userData?.getUser?.avatar
-            if (prefix && name) {
-                setDisplayName(prefix + "." + name)
-                return setLoadingPage(false)
-            } else return navigate(ROUTES.selectFigure)
-        }
-    }, [userData])
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user])
     if (loadingPage) return <Loading />
     else

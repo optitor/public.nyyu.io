@@ -26,6 +26,10 @@ const SelectFigure = () => {
     const [searchValue, setSearchValue] = useState("")
     const [loadingPage, setLoadingPage] = useState(true)
     const { data: userData } = useQuery(GET_USER, {
+        onCompleted: () => {
+            if (userData.getUser.avatar) return navigate(ROUTES.profile)
+            return setLoadingPage(false)
+        },
         fetchPolicy: "network-only",
     })
     const [randomName, setRandomName] = useState(figures[selectedId].lastname)
@@ -61,15 +65,6 @@ const SelectFigure = () => {
             },
         })
     }
-    //Authentication
-    useEffect(() => {
-        if (userData?.getUser?.avatar) {
-            const { prefix, name } = userData.getUser.avatar
-            if (prefix && name) {
-                return navigate(ROUTES.profile)
-            } else return setLoadingPage(false)
-        }
-    }, [userData])
     if (loadingPage) return <Loading />
     else
         return (
