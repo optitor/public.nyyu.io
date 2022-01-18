@@ -55,8 +55,9 @@ const Signin = ({ error }) => {
                 if (data.signin.token === "Please set 2FA.") {
                     //Open select 2FA modal
                     setState({ tfaOpen: true })
+                } else if (data.signin.token === "Please verify your email.") {
+                    navigate(ROUTES.verifyEmail + email)
                 }
-                return
             } else if (data.signin.status === "Success") {
                 setSuccess(true)
             }

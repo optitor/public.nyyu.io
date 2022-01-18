@@ -56,7 +56,6 @@ export default function TwoFactorModal({
     // This will be only trigger on Profile page
     const [disable2FA] = useMutation(DISABLE_2FA, {
         onCompleted: (data) => {
-            // updateUser()
             onResult(true)
         },
     })
@@ -64,12 +63,17 @@ export default function TwoFactorModal({
     const [confirmRequest2FA, { loading: confirmLoading }] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
             if (data.confirmRequest2FA === "Failed") {
+                setState(initial)
                 onResult(false)
-                // navigate(ROUTES.verifyFailed)
             } else if (data.confirmRequest2FA === "Success") {
                 onResult(true)
-                // updateUser()
-                // navigate(ROUTES.signIn)
+                setState({
+                    result_code: "",
+                    set_type: -1,
+                    input_mobile: false,
+                    loading: false,
+                    error: false,
+                })
             }
         },
     })

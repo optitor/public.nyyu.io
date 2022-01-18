@@ -36,21 +36,21 @@ const App = () => {
             {!isSSR && (
                 <Suspense fallback={<Loading />}>
                     <Router basepath="app">
-                        <PrivateRoute path="/profile" component={Profile} />
-
                         <AuthRoute path="signin" component={SignIn} />
                         <AuthRoute path="signin/:error" component={SignIn} />
                         <AuthRoute path="signup" component={SignUp} />
-                        <AuthRoute path="verify-email" component={VerifyEmail} />
+                        <AuthRoute path="verify-email/:email" component={VerifyEmail} />
 
                         <VerifyFailed path="verify-failed" />
-                        <ForgotPassword path="forgot-password" />
                         <NewPassword path="new-password" />
+                        <ForgotPassword path="forgot-password" />
+                        <ChangePassword path="change-password" />
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
                         <Auction path="auction" />
-                        <SelectFigure path="select-figure" />
-                        <ChangePassword path="change-password" />
+
+                        <PrivateRoute path="/profile" component={Profile} />
+                        <PrivateRoute path="select-figure" component={SelectFigure} />
                     </Router>
                 </Suspense>
             )}
