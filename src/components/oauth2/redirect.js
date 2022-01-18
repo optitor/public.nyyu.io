@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useReducer } from "react"
 import { navigate } from "gatsby"
 import AuthLayout from "../common/AuthLayout"
 import VerifyMutliFA from "../auth/verify-multiFA"
@@ -6,34 +6,41 @@ import TwoFactorModal from "../profile/two-factor-modal"
 import { ROUTES } from "../../utilities/routes"
 const OAuth2RedirectHandler = ({ type, dataType, data }) => {
 
-    const [tfaOpen, setTfaOpen] = useState(false)
-    const [success, setSuccess] = useState(false)
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
+        email: "", twoStep: [], tempToken: "", tfaOpen: false, success: false
+    })
+    const { email, twoStep, tempToken, tfaOpen, success } = state
 
-    let email
-    let twoStep = []
-
-    if (type === "success") {
-        if (data) {
-            for (let i in data.split("*")) {
-                const d = data.split("*")[i]
-                if (i === "0") email = d
-                else twoStep.push({ key: d, value: true })
+    useEffect(() => {
+        if (type === "success") {
+            if (data) {
+                let email
+                let twoStep = []
+                for (let i in data.split("*")) {
+                    const d = data.split("*")[i]
+                    if (i === "0") email = d
+                    else twoStep.push({ key: d, value: true })
+                }
+                setState({
+                    tempToken: dataType,
+                    email: email,
+                    twoStep: twoStep,
+                })
+            } else {
+                navigate("/app/signin")
             }
         } else {
-            navigate("/app/signin")
+            if (dataType === "No2FA") {
+                setState({ email: data, tfaOpen: true })
+            }
+            else {
+                navigate(`/app/signin/${dataType}.${data}`)
+            }
         }
-    } else {
-        if (dataType === "No2FA") {
-            setTfaOpen(true)
-            email = data
-        }
-        else {
-            navigate(`/app/signin/${dataType}.${data}`)
-        }
-    }
+    }, [type, dataType, data])
 
     return (
-        <div>
+        <AuthLayout>
             {success &&
                 <VerifyMutliFA
                     twoStep={twoStep}
@@ -44,22 +51,22 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
             <TwoFactorModal
                 is2FAModalOpen={tfaOpen}
                 setIs2FAModalOpen={(res) => {
-                    setTfaOpen(res)
                     if (!res) navigate(ROUTES.signIn)
+                    setState({ tfaOpen: res })
 
                 }}
                 email={email}
                 twoStep={twoStep}
                 onResult={(r) => {
                     if (r) {
-                        setTfaOpen(false)
+                        setState({ tfaOpen: false })
                         navigate(ROUTES.signIn)
                     }
                     else
                         navigate(ROUTES.verifyFailed)
                 }}
             />
-        </div>
+        </AuthLayout>
     )
 }
 
