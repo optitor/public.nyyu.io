@@ -87,6 +87,9 @@ const Auction = () => {
         (item) => (item.status === 2 || item.status === 0) && item
     )
 
+    ////////////////////////
+
+    const [period, setPeriod] = useState("1M")
     useEffect(() => {
         if (!auctionLoaded && roundData) {
             setActionLoaded(true)
@@ -220,6 +223,11 @@ const Auction = () => {
     // const calcRatioInteger = (value) => {
     //     return Math.ceil(calcRatio(Currencies[currencyId].label.toLowerCase(), "usd", value))
     // }
+
+    const onDispData = (data) => {
+        //this is temparary for candlestick
+        console.log(data)
+    }
 
     useEffect(() => {
         if (hData === undefined) {
@@ -690,49 +698,87 @@ const Auction = () => {
                                             </div>
                                         )}
                                         {selectLabel.value === "round_performance" && (
-                                            <div className="d-flex align-items-center pt-3 w-100 ">
-                                                <button
-                                                    className={`btn-small ${
-                                                        reser_price ? "" : "btn-disabled"
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!reser_price) {
-                                                            setReserPrice(true)
-                                                            setSoldPrice(true)
-                                                            setPerformance(false)
-                                                        }
-                                                    }}
-                                                >
-                                                    Reserved Price
-                                                </button>
-                                                <button
-                                                    className={`btn-small ${
-                                                        sold_price ? "" : "btn-disabled"
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!sold_price) {
-                                                            setReserPrice(true)
-                                                            setSoldPrice(true)
-                                                            setPerformance(false)
-                                                        }
-                                                    }}
-                                                >
-                                                    Price Sold
-                                                </button>
-                                                <button
-                                                    className={`btn-small ${
-                                                        performance ? "" : "btn-disabled"
-                                                    }`}
-                                                    onClick={() => {
-                                                        if (!performance) {
-                                                            setReserPrice(false)
-                                                            setSoldPrice(false)
-                                                            setPerformance(true)
-                                                        }
-                                                    }}
-                                                >
-                                                    Histogram
-                                                </button>
+                                            <div className=" d-flex justify-content-between pt-3 w-100 flex-wrap">
+                                                <div className="d-flex">
+                                                    <button
+                                                        className={`btn-small ${
+                                                            reser_price ? "" : "btn-disabled"
+                                                        }`}
+                                                        onClick={() => {
+                                                            if (!reser_price) {
+                                                                setReserPrice(true)
+                                                                setSoldPrice(true)
+                                                                setPerformance(false)
+                                                            }
+                                                        }}
+                                                    >
+                                                        Reserved Price
+                                                    </button>
+                                                    <button
+                                                        className={`btn-small ${
+                                                            sold_price ? "" : "btn-disabled"
+                                                        }`}
+                                                        onClick={() => {
+                                                            if (!sold_price) {
+                                                                setReserPrice(true)
+                                                                setSoldPrice(true)
+                                                                setPerformance(false)
+                                                            }
+                                                        }}
+                                                    >
+                                                        Price Sold
+                                                    </button>
+                                                    <button
+                                                        className={`btn-small ${
+                                                            performance ? "" : "btn-disabled"
+                                                        }`}
+                                                        onClick={() => {
+                                                            if (!performance) {
+                                                                setReserPrice(false)
+                                                                setSoldPrice(false)
+                                                                setPerformance(true)
+                                                            }
+                                                        }}
+                                                    >
+                                                        Histogram
+                                                    </button>
+                                                </div>
+                                                {performance && (
+                                                    <div className="d-flex py-auto">
+                                                        <div className="px-auto">
+                                                            <label className="text-white">
+                                                                Max:&nbsp;&nbsp;
+                                                            </label>
+                                                            <span className="text-secondary">
+                                                                0.034
+                                                            </span>
+                                                        </div>
+                                                        <div className="px-2">
+                                                            <label className="text-white">
+                                                                Min:&nbsp;&nbsp;
+                                                            </label>
+                                                            <span className="text-secondary ">
+                                                                0.034
+                                                            </span>
+                                                        </div>
+                                                        <div className="px-2">
+                                                            <label className="text-white">
+                                                                Std:&nbsp;&nbsp;
+                                                            </label>
+                                                            <span className="text-secondary ">
+                                                                0.034
+                                                            </span>
+                                                        </div>
+                                                        <div className="px-2">
+                                                            <label className="text-white">
+                                                                Rnd:&nbsp;&nbsp;
+                                                            </label>
+                                                            <span className="text-secondary ">
+                                                                5
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -742,11 +788,15 @@ const Auction = () => {
                                     pricce &&
                                     volume &&
                                     !bid_perform.loading &&
-                                    !bid_perform.error && <BidsChart1 data={bid_perform?.data} />}
+                                    !bid_perform.error && (
+                                        <BidsChart1 data={bid_perform?.data} period={period} />
+                                    )}
                                 {selectLabel.value === "bid_performance" &&
                                     price_volume &&
                                     !bid_perform.loading &&
-                                    !bid_perform.error && <BidsChart2 data={bid_perform?.data} />}
+                                    !bid_perform.error && (
+                                        <BidsChart2 data={bid_perform?.data} period={period} />
+                                    )}
 
                                 {selectLabel.value === "round_performance" &&
                                     reser_price &&
@@ -759,13 +809,77 @@ const Auction = () => {
                                     performance &&
                                     !round_perform2.loading &&
                                     !round_perform2.error && (
-                                        <RoundsChart2 data={round_perform2?.data} />
+                                        <RoundsChart2
+                                            data={round_perform2?.data}
+                                            onDispData={onDispData}
+                                        />
                                     )}
                                 {selectLabel.value === "round_chance" &&
                                     !round_chance.loading &&
                                     !round_chance.error && (
                                         <ChanceChart data={round_chance?.data} />
                                     )}
+                                <div
+                                    className="btnGroup "
+                                    role="group"
+                                    style={{
+                                        borderTop: "2px solid #c4c4c4",
+                                        marginLeft: "33px",
+                                        marginTop: "22px",
+                                        paddingLeft: "18px",
+                                        marginRight: "11px",
+                                        paddingTop: "12px",
+                                    }}
+                                >
+                                    <button
+                                        className="btn-no-border-green text-uppercase btn-small  "
+                                        onClick={() => {
+                                            setPeriod("1D")
+                                        }}
+                                    >
+                                        1D
+                                    </button>
+                                    <button
+                                        className="btn-no-border-green text-uppercase btn-small  "
+                                        onClick={() => {
+                                            setPeriod("5D")
+                                        }}
+                                    >
+                                        5D
+                                    </button>
+                                    <button
+                                        className="btn-no-border-green text-uppercase btn-small "
+                                        onClick={() => {
+                                            setPeriod("1M")
+                                        }}
+                                    >
+                                        1M
+                                    </button>
+                                    <button
+                                        className="btn-no-border-green text-uppercase btn-small  "
+                                        onClick={() => {
+                                            setPeriod("6M")
+                                        }}
+                                    >
+                                        3M
+                                    </button>
+                                    <button
+                                        className="btn-no-border-green text-uppercase btn-small  "
+                                        onClick={() => {
+                                            setPeriod("1Y")
+                                        }}
+                                    >
+                                        1Y
+                                    </button>
+                                    <button
+                                        className="btn-no-border-green text-uppercase btn-small  "
+                                        onClick={() => {
+                                            setPeriod("ALL")
+                                        }}
+                                    >
+                                        ALL
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
