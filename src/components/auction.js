@@ -18,19 +18,15 @@ import TimeframeBar from "./auction/TimeframeBar"
 import { ROUTES } from "../utilities/routes"
 import BidsChart2 from "./chart/BidsChart2"
 import ChanceChart from "./chart/ChanceChart"
-import { useQuery, useLazyQuery } from "@apollo/client"
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client"
 import { setBidInfo } from "../redux/actions/bidAction"
 import Loading from "./common/Loading"
 
 import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
-// import { PLACE_BID } from "../apollo/graghqls/mutations/Bid"
-import {
-    GET_AUCTION,
-    GET_AUCTION_BY_NUMBER,
-    GET_BIDLIST_BY_ROUND,
-    GET_BID_LIST,
-} from "../apollo/graghqls/querys/Auction"
+import { PLACE_BID } from "../apollo/graghqls/mutations/Bid"
+import { GET_AUCTION, GET_AUCTION_BY_NUMBER } from "../apollo/graghqls/querys/Auction"
+import { GET_BID, GET_BIDLIST_BY_ROUND, GET_BID_LIST } from "../apollo/graghqls/querys/Bid"
 import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
 import {
     AUCTION_TOOLTIP_CONTENT1,
@@ -111,6 +107,15 @@ const Auction = () => {
             loadHistoryLByNumber({
                 variables: { round: roundData && roundData[0].round - 1 },
             })
+            loadBidMByNumber({
+                variables: { round: roundData && roundData[0].round },
+            })
+            loadBidHByNumber({
+                variables: { round: roundData && roundData[0].round + 1 },
+            })
+            loadBidLByNumber({
+                variables: { round: roundData && roundData[0].round - 1 },
+            })
         }
     }, [roundData])
 
@@ -122,13 +127,18 @@ const Auction = () => {
     const [loadRoundLByNumber, { data: roundL, error: lFetched }] =
         useLazyQuery(GET_AUCTION_BY_NUMBER)
 
-    // get history bids
+    // get bids history
     const [loadHistoryMByNumber, { data: historyBidListM, error: hmFetched }] =
         useLazyQuery(GET_BIDLIST_BY_ROUND)
     const [loadHistoryLByNumber, { data: historyBidListL, error: hlFetched }] =
         useLazyQuery(GET_BIDLIST_BY_ROUND)
     const [loadHistoryHByNumber, { data: historyBidListH, error: hhFetched }] =
         useLazyQuery(GET_BIDLIST_BY_ROUND)
+
+    // get my bid
+    const [loadBidMByNumber, { data: bidListM, error: bmFetched }] = useLazyQuery(GET_BID)
+    const [loadBidLByNumber, { data: bidListL, error: blFetched }] = useLazyQuery(GET_BID)
+    const [loadBidHByNumber, { data: bidListH, error: bhFetched }] = useLazyQuery(GET_BID)
 
     const loading = useMemo(() => {
         if (
@@ -138,6 +148,9 @@ const Auction = () => {
             !!(hmFetched || historyBidListM) &&
             !!(hhFetched || historyBidListH) &&
             !!(hlFetched || historyBidListL) &&
+            !!(bmFetched || bidListM) &&
+            !!(blFetched || bidListL) &&
+            !!(bhFetched || bidListH) &&
             ratioFetched
         ) {
             return false
@@ -158,6 +171,12 @@ const Auction = () => {
         historyBidListM,
         historyBidListH,
         historyBidListL,
+        bmFetched,
+        blFetched,
+        bhFetched,
+        bidListM,
+        bidListL,
+        bidListH,
     ])
 
     // get chart data
@@ -192,16 +211,14 @@ const Auction = () => {
     ) //getSecTomorrow()
     const percentage = (distanceToDate / duration) * 100
 
-    // const [PlaceBid] = useMutation(PLACE_BID, {
-    //     onCompleted: (data) => {
-    //         console.log("received Mutation data", data)
-    //         setState({ isBid: true })
-    //     },
-    //     onError: (err) => {
-    //         console.log("received Mutation data", err)
-    //         setState({ isBid: true })
-    //     },
-    // })
+    const [PlaceBid] = useMutation(PLACE_BID, {
+        onCompleted: (data) => {
+            console.log("received Mutation data", data)
+        },
+        onError: (err) => {
+            console.log("received Mutation data", err)
+        },
+    })
 
     const calcRatio = (from, to, value) => {
         if (!ratioFetched) {
@@ -223,11 +240,6 @@ const Auction = () => {
     // const calcRatioInteger = (value) => {
     //     return Math.ceil(calcRatio(Currencies[currencyId].label.toLowerCase(), "usd", value))
     // }
-
-    const onDispData = (data) => {
-        //this is temparary for candlestick
-        console.log(data)
-    }
 
     useEffect(() => {
         if (hData === undefined) {
@@ -275,6 +287,19 @@ const Auction = () => {
             .catch((e) => {
                 console.log(e)
             })
+    }
+    const bidMutation = () => {
+        PlaceBid({
+            variables: {
+                roundId: fnSelectedRoundData()?.id,
+                tokenAmount: amount,
+                tokenPrice: Math.max(fnSelectedRoundData()?.minPrice, price),
+                payment: 1,
+                cryptoType: "BTC",
+            },
+        })
+        dispatch(setBidInfo(Math.max(fnSelectedRoundData()?.minPrice, price) * amount))
+        navigate(ROUTES.payment)
     }
 
     if (loading)
@@ -504,7 +529,6 @@ const Auction = () => {
                                 </div>
                                 {size.width <= 1024 && (
                                     <div className="text-center my-5">
-                                        <p>AuCyberunit</p>
                                         <button
                                             className="btn-primary btn-increase"
                                             onClick={() => {
@@ -590,17 +614,7 @@ const Auction = () => {
                                 <button
                                     className="btn-primary text-uppercase w-100"
                                     onClick={() => {
-                                        // PlaceBid({
-                                        //     variables: {
-                                        //         roundId: fnSelectedRoundData()?.auctionId,
-                                        //         tokenAmount: amount,
-                                        //         tokenPrice: price,
-                                        //         payment: 1,
-                                        //         cryptoType: "String",
-                                        //     },
-                                        // })
-                                        dispatch(setBidInfo(price * amount))
-                                        navigate(ROUTES.payment)
+                                        bidMutation()
                                     }}
                                 >
                                     {!isBid ? "Place Bid" : "Increase Bid"}
@@ -743,44 +757,78 @@ const Auction = () => {
                                                         Histogram
                                                     </button>
                                                 </div>
-                                                {performance && (
-                                                    <div className="d-flex py-auto">
-                                                        <div className="px-auto">
-                                                            <label className="text-white">
-                                                                Max:&nbsp;&nbsp;
-                                                            </label>
-                                                            <span className="text-secondary">
-                                                                0.034
-                                                            </span>
+
+                                                {/* {
+                                                    performance && (
+                                                        <div className="d-flex py-auto">
+                                                            <div className="px-auto">
+                                                                <label className="text-white">Max:&nbsp;&nbsp;</label>
+                                                                <span className="text-secondary">0.034</span>
+                                                            </div>
+                                                            <div className="px-2">
+                                                                <label className="text-white">Min:&nbsp;&nbsp;</label>
+                                                                <span className="text-secondary ">0.034</span>
+                                                            </div>
+                                                            <div className="px-2">
+                                                                <label className="text-white">Std:&nbsp;&nbsp;</label>
+                                                                <span className="text-secondary ">0.034</span>
+                                                            </div>
+                                                            <div className="px-2">
+                                                                <label className="text-white">Rnd:&nbsp;&nbsp;</label>
+                                                                <span className="text-secondary ">5</span>
+                                                            </div>
                                                         </div>
-                                                        <div className="px-2">
-                                                            <label className="text-white">
-                                                                Min:&nbsp;&nbsp;
-                                                            </label>
-                                                            <span className="text-secondary ">
-                                                                0.034
-                                                            </span>
-                                                        </div>
-                                                        <div className="px-2">
-                                                            <label className="text-white">
-                                                                Std:&nbsp;&nbsp;
-                                                            </label>
-                                                            <span className="text-secondary ">
-                                                                0.034
-                                                            </span>
-                                                        </div>
-                                                        <div className="px-2">
-                                                            <label className="text-white">
-                                                                Rnd:&nbsp;&nbsp;
-                                                            </label>
-                                                            <span className="text-secondary ">
-                                                                5
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                )}
+                                                    )
+                                                } */}
                                             </div>
                                         )}
+                                        {/* {selectLabel.value === "round_performance" && (
+                                            <div className="d-flex align-items-center pt-3 w-100 ">
+                                                <button
+                                                    className={`btn-small ${
+                                                        reser_price ? "" : "btn-disabled"
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!reser_price) {
+                                                            setReserPrice(true)
+                                                            setSoldPrice(true)
+                                                            setPerformance(false)
+                                                        }
+                                                    }}
+                                                >
+                                                    Reserved Price
+                                                </button>
+                                                <button
+                                                    className={`btn-small ${
+                                                        sold_price ? "" : "btn-disabled"
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!sold_price) {
+                                                            setReserPrice(true)
+                                                            setSoldPrice(true)
+                                                            setPerformance(false)
+                                                        }
+                                                    }}
+                                                >
+                                                    Price Sold
+                                                </button>
+                                                <button
+                                                    className={`btn-small ${
+                                                        performance ? "" : "btn-disabled"
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!performance) {
+                                                            setReserPrice(false)
+                                                            setSoldPrice(false)
+                                                            setPerformance(true)
+                                                        }
+                                                    }}
+                                                >
+                                                    Histogram
+                                                </button>
+                                            </div>
+                                            
+                                        )} */}
                                     </div>
                                 </div>
 
@@ -809,77 +857,79 @@ const Auction = () => {
                                     performance &&
                                     !round_perform2.loading &&
                                     !round_perform2.error && (
-                                        <RoundsChart2
-                                            data={round_perform2?.data}
-                                            onDispData={onDispData}
-                                        />
+                                        <RoundsChart2 data={round_perform2?.data} />
                                     )}
                                 {selectLabel.value === "round_chance" &&
                                     !round_chance.loading &&
                                     !round_chance.error && (
-                                        <ChanceChart data={round_chance?.data} />
+                                        <React.Fragment>
+                                            <ChanceChart data={round_chance?.data} />
+                                        </React.Fragment>
                                     )}
-                                <div
-                                    className="btnGroup "
-                                    role="group"
-                                    style={{
-                                        borderTop: "2px solid #c4c4c4",
-                                        marginLeft: "33px",
-                                        marginTop: "22px",
-                                        paddingLeft: "18px",
-                                        marginRight: "11px",
-                                        paddingTop: "12px",
-                                    }}
-                                >
-                                    <button
-                                        className="btn-no-border-green text-uppercase btn-small  "
-                                        onClick={() => {
-                                            setPeriod("1D")
+                                {selectLabel.value !== "round_chance" && (
+                                    <div
+                                        className="btnGroup "
+                                        role="group"
+                                        style={{
+                                            borderTop: "2px solid #c4c4c4",
+                                            marginLeft: "76px",
+                                            marginTop: "25px",
+                                            paddingLeft: "18px",
+                                            marginRight: "11px",
+                                            paddingTop: "12px",
+                                            zIndex: "-2",
                                         }}
                                     >
-                                        1D
-                                    </button>
-                                    <button
-                                        className="btn-no-border-green text-uppercase btn-small  "
-                                        onClick={() => {
-                                            setPeriod("5D")
-                                        }}
-                                    >
-                                        5D
-                                    </button>
-                                    <button
-                                        className="btn-no-border-green text-uppercase btn-small "
-                                        onClick={() => {
-                                            setPeriod("1M")
-                                        }}
-                                    >
-                                        1M
-                                    </button>
-                                    <button
-                                        className="btn-no-border-green text-uppercase btn-small  "
-                                        onClick={() => {
-                                            setPeriod("6M")
-                                        }}
-                                    >
-                                        3M
-                                    </button>
-                                    <button
-                                        className="btn-no-border-green text-uppercase btn-small  "
-                                        onClick={() => {
-                                            setPeriod("1Y")
-                                        }}
-                                    >
-                                        1Y
-                                    </button>
-                                    <button
-                                        className="btn-no-border-green text-uppercase btn-small  "
-                                        onClick={() => {
-                                            setPeriod("ALL")
-                                        }}
-                                    >
-                                        ALL
-                                    </button>
-                                </div>
+                                        <button
+                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            onClick={() => {
+                                                setPeriod("1D")
+                                            }}
+                                        >
+                                            1D
+                                        </button>
+                                        <button
+                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            onClick={() => {
+                                                setPeriod("5D")
+                                            }}
+                                        >
+                                            5D
+                                        </button>
+                                        <button
+                                            className="btn-no-border-green text-uppercase btn-small "
+                                            onClick={() => {
+                                                setPeriod("1M")
+                                            }}
+                                        >
+                                            1M
+                                        </button>
+                                        <button
+                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            onClick={() => {
+                                                setPeriod("6M")
+                                            }}
+                                        >
+                                            6M
+                                        </button>
+                                        <button
+                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            onClick={() => {
+                                                setPeriod("1Y")
+                                            }}
+                                        >
+                                            1Y
+                                        </button>
+                                        <button
+                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            onClick={() => {
+                                                setPeriod("ALL")
+                                            }}
+                                        >
+                                            ALL
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -948,10 +998,8 @@ const Auction = () => {
                         <button
                             className="btn-primary text-uppercase w-100"
                             onClick={() => {
-                                dispatch(setBidInfo(price * amount))
-                                setState({ isBid: true })
                                 setState({ bidModal: false })
-                                navigate(ROUTES.payment)
+                                bidMutation()
                             }}
                         >
                             {!isBid ? "Place Bid" : "Increase Bid"}
@@ -984,10 +1032,8 @@ const Auction = () => {
                         <button
                             className="btn-primary text-uppercase"
                             onClick={() => {
-                                dispatch(setBidInfo(price * amount))
+                                bidMutation()
                                 setState({ bidModal: false })
-                                setState({ isBid: true })
-                                navigate(ROUTES.payment)
                             }}
                         >
                             {!isBid ? "Place Bid" : "Increase Bid"}
