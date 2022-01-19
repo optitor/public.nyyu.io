@@ -21,3 +21,17 @@ export const GET_NOTIFICATIONS = gql`
         }
     }
 `
+
+export const GET_ALL_UNREAD_NOTIFICATIONS = gql`
+    {
+        getAllUnReadNotifications {
+            id
+            userId
+            timeStamp
+            nType
+            read
+            title
+            msg
+        }
+    }
+`
