@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as Query from './../../apollo/graghqls/querys/UserTier';
-import * as Mutation from './../../apollo/graghqls/mutations/User_Tier'
+import * as Mutation from '../../apollo/graghqls/mutations/UserTier';
 import { client } from '../../apollo/client';
 import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';
 import { GET_USER_TIERS, UPDATE_USER_TIER, DELETE_USER_TIER, CREATE_USER_TIER } from '../actionTypes';
