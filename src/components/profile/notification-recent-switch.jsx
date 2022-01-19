@@ -7,11 +7,14 @@ import CustomSpinner from "../common/custom-spinner"
 const NOTIFICATION_PAGE_LIMIT = 8
 
 export default function NotificationRecent() {
+    const [loadingSection, setLoadingSection] = useState(true)
     const [last, setLast] = useState(null)
 
     const [NTList, setNTList] = useState([])
 
     const { data: ntf_list, loading } = useQuery(GET_NOTIFICATIONS, {
+        onCompleted: () => setLoadingSection(false),
+        fetchPolicy: "network-only",
         variables: {
             stamp: last?.timeStamp,
             limit: NOTIFICATION_PAGE_LIMIT,
@@ -53,47 +56,57 @@ export default function NotificationRecent() {
             },
         })
     }
-
-    return (
-        <>
-            <div className="recent-notification-wrapper">
-                {NTList.length ? (
-                    NTList.map((item, idx) => (
-                        <div
-                            className="recent-item"
-                            key={idx}
-                            tabIndex={0}
-                            role="button"
-                            onClick={() => setRead(item)}
-                            onKeyDown={() => setRead(item)}
-                        >
+    if (loadingSection)
+        return (
+            <div className="d-flex justify-content-center mt-5">
+                <CustomSpinner />
+            </div>
+        )
+    else
+        return (
+            <>
+                <div className="recent-notification-wrapper">
+                    {NTList.length ? (
+                        NTList.map((item, idx) => (
                             <div
-                                className={`status ${
-                                    item?.pending ? "pending" : item?.read ? "deactive" : "active"
-                                }`}
-                            ></div>
-                            <p>{item?.msg}</p>
+                                className="recent-item"
+                                key={idx}
+                                tabIndex={0}
+                                role="button"
+                                onClick={() => setRead(item)}
+                                onKeyDown={() => setRead(item)}
+                            >
+                                <div
+                                    className={`status ${
+                                        item?.pending
+                                            ? "pending"
+                                            : item?.read
+                                            ? "deactive"
+                                            : "active"
+                                    }`}
+                                ></div>
+                                <p>{item?.msg}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="text-light fw-500 text-center text-uppercase py-3">
+                            no notification yet
                         </div>
-                    ))
-                ) : (
-                    <div className="text-light fw-500 text-center text-uppercase py-3">
-                        no notification yet
+                    )}
+                </div>
+                {NTList.length && (
+                    <div className="w-100 d-flex flex-column align-items-center justify-content-center py-2">
+                        <button
+                            className="btn-primary d-flex align-items-center justify-content-center py-2"
+                            onClick={(e) => loadMore()}
+                        >
+                            <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                                <CustomSpinner />
+                            </div>
+                            <div className={`${loading ? "ms-3" : "pe-4"}`}>Load More</div>
+                        </button>
                     </div>
                 )}
-            </div>
-            {NTList.length && (
-                <div className="w-100 d-flex flex-column align-items-center justify-content-center py-2">
-                    <button
-                        className="btn-primary d-flex align-items-center justify-content-center py-2"
-                        onClick={(e) => loadMore()}
-                    >
-                        <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
-                            <CustomSpinner />
-                        </div>
-                        <div className={`${loading ? "ms-3" : "pe-4"}`}>Load More</div>
-                    </button>
-                </div>
-            )}
-        </>
-    )
+            </>
+        )
 }
