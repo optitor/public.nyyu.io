@@ -10,8 +10,8 @@ export const GET_NOTICATION_TYPES = gql`
 `
 
 export const GET_NOTIFICATIONS = gql`
-    query getNotifications($stamp: Float, $limit: Int!) {
-        getNotifications(stamp: $stamp, limit: $limit) {
+    {
+        getNotifications {
             userId
             timeStamp
             nType

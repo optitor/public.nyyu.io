@@ -4,8 +4,6 @@ import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
 import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification"
 import CustomSpinner from "../common/custom-spinner"
 
-const NOTIFICATION_PAGE_LIMIT = 8
-
 export default function NotificationRecent() {
     const [loadingSection, setLoadingSection] = useState(true)
     const [last, setLast] = useState(null)
@@ -15,10 +13,6 @@ export default function NotificationRecent() {
     const { data: ntf_list, loading } = useQuery(GET_NOTIFICATIONS, {
         onCompleted: () => setLoadingSection(false),
         fetchPolicy: "network-only",
-        variables: {
-            stamp: last?.timeStamp,
-            limit: NOTIFICATION_PAGE_LIMIT,
-        },
     })
 
     const tempList = ntf_list?.getNotifications
