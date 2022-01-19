@@ -46,7 +46,7 @@ export default function NotificationRecent() {
         console.log(item)
         setNotificationReadFlag({
             variables: {
-                stamp: item.timeStamp,
+                id: item.id,
             },
         })
     }
@@ -88,7 +88,7 @@ export default function NotificationRecent() {
                         </div>
                     )}
                 </div>
-                {NTList.length && (
+                {/* {NTList.length && (
                     <div className="w-100 d-flex flex-column align-items-center justify-content-center py-2">
                         <button
                             className="btn-primary d-flex align-items-center justify-content-center py-2"
@@ -100,7 +100,7 @@ export default function NotificationRecent() {
                             <div className={`${loading ? "ms-3" : "pe-4"}`}>Load More</div>
                         </button>
                     </div>
-                )}
+                )} */}
             </>
         )
 }

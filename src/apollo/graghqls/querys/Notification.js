@@ -12,6 +12,7 @@ export const GET_NOTICATION_TYPES = gql`
 export const GET_NOTIFICATIONS = gql`
     {
         getNotifications {
+            id
             userId
             timeStamp
             nType

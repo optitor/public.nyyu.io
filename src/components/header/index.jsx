@@ -22,8 +22,8 @@ const Menu = () => {
     const { data: user_data } = useQuery(GET_USER)
     const { data: allUnReadNotifications } = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
-        onCompleted: () => {
-            setNewNotification(allUnReadNotifications.length !== 0)
+        onCompleted: (response) => {
+            setNewNotification(response.getAllUnReadNotifications.length !== 0)
         },
     })
 

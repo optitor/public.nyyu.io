@@ -14,10 +14,10 @@ export const USER_NOTIFICATION_SETTING = gql`
 
 export const SET_NOTIFICATION_READ_FLAG = gql`
     mutation setNotificationReadFlag(
-        $stamp: Float!
+        $id: Int!
     ) {
         setNotificationReadFlag(
-            stamp: $stamp
+            id: $id
         ){
             userId
             timeStamp
