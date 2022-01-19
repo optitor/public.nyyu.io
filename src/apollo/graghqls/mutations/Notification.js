@@ -8,7 +8,7 @@ export const USER_NOTIFICATION_SETTING = gql`
         changeNotifySetting(
             nType: $nType
             status: $status
-        )  
+        )
     }
 `
 
