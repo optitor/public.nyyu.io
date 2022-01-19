@@ -26,7 +26,7 @@ export default function NotificationSetting() {
     const [loadingSection, setLoadingSection] = useState(true)
     const setting = user_data?.getUser.notifySetting
     const [tempSetting, setTempSetting] = useState([])
-    const ntfTypeList = notificationTypes?.getNotificationTypes
+    const notificationTypeList = notificationTypes?.getNotificationTypes
 
     // Methods
     const setChecked = (i) => {
@@ -42,6 +42,15 @@ export default function NotificationSetting() {
             },
         })
     }
+    const createBinaryString = (nMask) => {
+        for (
+            var nFlag = 0, nShifted = nMask, sMask = "";
+            nFlag < 32;
+            nFlag++, sMask += String(nShifted >>> 31), nShifted <<= 1
+        );
+        sMask = sMask.replace(/\B(?=(.{8})+(?!.))/g, " ") // added
+        return sMask
+    }
     const resetLoading = (nType) => {
         const cList = tempSetting.slice()
         const idx = cList.findIndex((c) => c.index === nType)
@@ -50,18 +59,22 @@ export default function NotificationSetting() {
     }
     useEffect(() => {
         setTempSetting(
-            ntfTypeList
-                ? ntfTypeList.map((n) => {
+            notificationTypeList
+                ? notificationTypeList.map((n) => {
+                      const settingBinaryString = createBinaryString(setting).slice(
+                          35 - notificationTypeList?.length,
+                          35
+                      )
                       return {
                           index: n.index,
                           type: n.type,
-                          status: (setting & (1 << n.type)) > 0,
+                          status: Number(settingBinaryString[n.index]) > 0,
                           loading: false,
                       }
                   })
                 : []
         )
-    }, [setting, ntfTypeList])
+    }, [setting, notificationTypeList])
 
     // Render
     if (loadingSection)
@@ -73,8 +86,8 @@ export default function NotificationSetting() {
     else
         return (
             <>
-                {ntfTypeList &&
-                    ntfTypeList.map(({ type }, index) => (
+                {notificationTypeList &&
+                    notificationTypeList.map(({ type }, index) => (
                         <div className="notification-item" key={index}>
                             <p>{type}</p>
                             <Switch
