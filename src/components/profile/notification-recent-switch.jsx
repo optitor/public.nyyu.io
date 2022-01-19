@@ -59,7 +59,7 @@ export default function NotificationRecent() {
     else
         return (
             <>
-                <div className="recent-notification-wrapper">
+                <div className="recent-notification-wrapper pe-3">
                     {NTList.length ? (
                         NTList.map((item, idx) => (
                             <div
