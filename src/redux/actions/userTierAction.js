@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import * as Mutation from '../../apollo/graghqls/mutations/UserTier';
+import * as Mutation from './../../apollo/graghqls/mutations/UserTier';
 import * as Query from './../../apollo/graghqls/querys/UserTier';
 import { client } from '../../apollo/client';
 import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';
