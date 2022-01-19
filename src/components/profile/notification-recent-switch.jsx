@@ -41,7 +41,6 @@ export default function NotificationRecent() {
             ids[index] = { ...ids[index], pending: false, read: true }
             setNTList(ids)
         },
-        onError: (error) => {},
     })
 
     const setRead = (item) => {
@@ -50,6 +49,7 @@ export default function NotificationRecent() {
         let index = ids.findIndex((el) => el.timeStamp === item.timeStamp)
         ids[index] = { ...ids[index], pending: true }
         setNTList(ids)
+        console.log(item)
         setNotificationReadFlag({
             variables: {
                 stamp: item.timeStamp,
