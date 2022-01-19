@@ -17,7 +17,6 @@ export default function NotificationSetting() {
     })
     const [changeNotifySetting] = useMutation(USER_NOTIFICATION_SETTING, {
         onCompleted: (data) => {
-            resetLoading(data.changeNotifySetting)
             refetch()
         },
     })
@@ -36,6 +35,11 @@ export default function NotificationSetting() {
         setTempSetting(cList)
 
         changeNotifySetting({
+            onCompleted: () => {
+                cList[i].status = !cList[i].status
+                cList[i].loading = false
+                setTempSetting(cList)
+            },
             variables: {
                 nType: Number(cList[i].index),
                 status: cList[i].status,
@@ -48,27 +52,22 @@ export default function NotificationSetting() {
             nFlag < 32;
             nFlag++, sMask += String(nShifted >>> 31), nShifted <<= 1
         );
-        sMask = sMask.replace(/\B(?=(.{8})+(?!.))/g, " ") // added
+        sMask = sMask.replace(/\B(?=(.{8})+(?!.))/g, " ")
         return sMask
-    }
-    const resetLoading = (nType) => {
-        const cList = tempSetting.slice()
-        const idx = cList.findIndex((c) => c.index === nType)
-        cList[idx].loading = false
-        setTempSetting(cList)
     }
     useEffect(() => {
         setTempSetting(
             notificationTypeList
                 ? notificationTypeList.map((n) => {
-                      const settingBinaryString = createBinaryString(setting).slice(
-                          35 - notificationTypeList?.length,
-                          35
-                      )
+                      const settingBinaryString = createBinaryString(setting)
+                          .slice(35 - notificationTypeList?.length, 35)
+                          .split("")
+                          .reverse()
+                          .join("")
                       return {
                           index: n.index,
                           type: n.type,
-                          status: Number(settingBinaryString[n.index]) > 0,
+                          status: Number(settingBinaryString[n.index]) !== 0,
                           loading: false,
                       }
                   })
