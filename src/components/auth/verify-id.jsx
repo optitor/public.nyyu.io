@@ -11,6 +11,7 @@ import StepTwo from "../verify-identity/step-two"
 import StepThree from "../verify-identity/step-three"
 import StepFour from "../verify-identity/step-four"
 import StepFive from "../verify-identity/step-five"
+import StepSix from "../verify-identity/step-six"
 
 const VerificationPage = () => {
     const inputRef = useRef()
@@ -179,17 +180,7 @@ const VerificationPage = () => {
                     {step === 2 && <StepThree step={step} setState={setState} />}
                     {step === 3 && <StepFour step={step} setState={setState} />}
                     {step === 4 && <StepFive step={step} setState={setState} />}
-                    {step === 5 && (
-                        <div className="verify-step3">
-                            <h6 className="verify-step3__heading">Selfie</h6>
-                            <p className="verify-step3__text">
-                                Face the camera.
-                                <br /> Make sure your face is visible and fits in the frame.
-                                <br /> Then, slowly turn your head around in a circle.
-                            </p>
-                            <img className="selfie-img" src={SelfieImg} alt="seflie" />
-                        </div>
-                    )}
+                    {step === 5 && <StepSix step={step} setState={setState} />}
                     {step === 6 && (
                         <div className="verify-step4">
                             <div className="selfie-modal__body">

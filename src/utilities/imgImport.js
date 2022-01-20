@@ -175,6 +175,7 @@ import verifyIdStep3 from "../images/verify-id/verify-id-step-3.svg"
 import verifyIdStep4 from "../images/verify-id/verify-id-step-4.svg"
 import verifyIdStep5 from "../images/verify-id/verify-id-step-5.svg"
 import verifyIdStep6 from "../images/verify-id/verify-id-step-6.svg"
+import verifyIdStep7 from "../images/verify-id/verify-id-step-7.svg"
 
 export const Logo = logo
 export const Bell = bell
