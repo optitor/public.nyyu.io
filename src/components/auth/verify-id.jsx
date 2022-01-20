@@ -20,8 +20,8 @@ import {
 } from "../../utilities/imgImport"
 import { ROUTES } from "../../utilities/routes"
 import SimpleHeader from "../header/simple-header"
+import PrimaryStep from "../verify-identity/primary-step"
 
-const content = ``
 const doc_types = [
     {
         label: "Passports",
@@ -67,18 +67,6 @@ const VerificationPage = () => {
         selfieImg,
     } = state
 
-    const handleAgreeOption = useCallback(
-        (e) => {
-            setState({ agree: !agree })
-        },
-        [agree]
-    )
-    const handleAcceptOption = useCallback(
-        (e) => {
-            setState({ accept: !accept })
-        },
-        [accept]
-    )
     const capture = useCallback(() => {
         setState({ selfieImg: webcamRef.current.getScreenshot() })
     }, [webcamRef])
@@ -138,50 +126,7 @@ const VerificationPage = () => {
                             </div>
                         </div>
                     )}
-                    {step === -1 && (
-                        <div className="verify-step0">
-                            <p className="pre-wrap">
-                                <span className="text-white fw-bold fs-18px">
-                                    Identity verificaton Consent
-                                    <br />
-                                </span>
-                                I declare that i am at least 16 years of age; I agree to the
-                                collection, processing or storage of my personal information,
-                                including biometic data, by NDB for the purpose(s) of identiy
-                                verification; that the information I provide is true and accurate to
-                                the best of my knowledge; and I shall be fully responsible in case I
-                                provide wrong information or any of the documents I use are fake,
-                                forged, counterfeit etc.
-                            </p>
-                            <div className="form-group">
-                                <CheckBox
-                                    name="agree"
-                                    type="checkbox"
-                                    value={agree}
-                                    onChange={handleAgreeOption}
-                                >
-                                    I agree to the above statement, and I have read NDB{" "}
-                                    <Link to="/" className="txt-green">
-                                        Privacy Policy
-                                    </Link>
-                                </CheckBox>
-                            </div>
-                            <div className="d-flex justify-content-center gap-3 mt-5">
-                                <Link
-                                    to={ROUTES.profile}
-                                    className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500"
-                                >
-                                    cancel
-                                </Link>
-                                <button
-                                    className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light"
-                                    onClick={() => setState({ step: step + 1 })}
-                                >
-                                    next
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                    {step === -1 && <PrimaryStep step={step} setState={setState} />}
                     {step === 0 && (
                         <div className="verify-step1 mb-sm-5">
                             <h5 className="text-center mb-4">Identity document</h5>
