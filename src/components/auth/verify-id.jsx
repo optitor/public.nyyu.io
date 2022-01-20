@@ -8,6 +8,7 @@ import SimpleHeader from "../header/simple-header"
 import PrimaryStep from "../verify-identity/primary-step"
 import StepOne from "../verify-identity/step-one"
 import StepTwo from "../verify-identity/step-two"
+import StepThree from "../verify-identity/step-three"
 
 const VerificationPage = () => {
     const inputRef = useRef()
@@ -173,7 +174,8 @@ const VerificationPage = () => {
                         //     </div>
                         // </div>
                     */}
-                    {step === 2 && (
+                    {step === 2 && <StepThree step={step} setState={setState} />}
+                    {step === 3 && (
                         <div className="verify-step3">
                             <h6 className="verify-step3__heading">Selfie</h6>
                             <p className="verify-step3__text">
@@ -184,7 +186,7 @@ const VerificationPage = () => {
                             <img className="selfie-img" src={SelfieImg} alt="seflie" />
                         </div>
                     )}
-                    {step === 3 && (
+                    {step === 4 && (
                         <div className="verify-step4">
                             <div className="selfie-modal__body">
                                 <div className="selfie-content">
@@ -210,28 +212,6 @@ const VerificationPage = () => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                    )}
-                    {step < 3 && (
-                        <div className="btn-group">
-                            {step === 2 ? (
-                                <>
-                                    <button
-                                        className="btn-ready"
-                                        onClick={() => setState({ selfieModal: true })}
-                                    >
-                                        I'm Ready
-                                    </button>
-                                    <button
-                                        className="btn-primary btn-take"
-                                        onClick={() => setState({ step: step + 1 })}
-                                    >
-                                        Take photo
-                                    </button>
-                                </>
-                            ) : (
-                                <></>
-                            )}
                         </div>
                     )}
                 </div>
