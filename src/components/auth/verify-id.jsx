@@ -12,6 +12,7 @@ import StepThree from "../verify-identity/step-three"
 import StepFour from "../verify-identity/step-four"
 import StepFive from "../verify-identity/step-five"
 import StepSix from "../verify-identity/step-six"
+import StepSeven from "../verify-identity/step-seven"
 
 const VerificationPage = () => {
     const inputRef = useRef()
@@ -181,7 +182,8 @@ const VerificationPage = () => {
                     {step === 3 && <StepFour step={step} setState={setState} />}
                     {step === 4 && <StepFive step={step} setState={setState} />}
                     {step === 5 && <StepSix step={step} setState={setState} />}
-                    {step === 6 && (
+                    {step === 6 && <StepSeven step={step} setState={setState} />}
+                    {/* {step === 6 && (
                         <div className="verify-step4">
                             <div className="selfie-modal__body">
                                 <div className="selfie-content">
@@ -208,7 +210,7 @@ const VerificationPage = () => {
                                 </div>
                             </div>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </section>
             <Modal

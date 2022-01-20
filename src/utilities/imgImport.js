@@ -351,3 +351,4 @@ export const VerifyIdStep3 = verifyIdStep3
 export const VerifyIdStep4 = verifyIdStep4
 export const VerifyIdStep5 = verifyIdStep5
 export const VerifyIdStep6 = verifyIdStep6
+export const VerifyIdStep7 = verifyIdStep7
