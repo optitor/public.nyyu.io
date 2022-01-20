@@ -200,9 +200,19 @@ const Profile = () => {
                                                                 <p className="security-name">
                                                                     KYC/KYB Verificatoin
                                                                 </p>
-                                                                <p className="txt-green security-link">
-                                                                    Verified
-                                                                </p>
+                                                                {user?.verify.kybVerified &&
+                                                                user?.verify.kycVerified ? (
+                                                                    <p className="txt-green">
+                                                                        verified
+                                                                    </p>
+                                                                ) : (
+                                                                    <Link
+                                                                        to={ROUTES.verifyId}
+                                                                        className="security-link"
+                                                                    >
+                                                                        setup
+                                                                    </Link>
+                                                                )}
                                                             </div>
                                                         </div>
 

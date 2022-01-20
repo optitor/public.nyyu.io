@@ -58,6 +58,7 @@ import photoIcon from "../images/photo-icon.svg"
 import selfieImg from "../images/selfie-img.svg"
 
 import bell from "../images/icons/bell.svg"
+import notificationBell from "../images/icons/notification-bell.svg"
 import downArrow from "../images/icons/down-arrow.svg"
 
 //dressup
@@ -168,8 +169,17 @@ import equity from "../images/icons/equity.svg"
 import failImage from "./../images/fail.svg";
 import successImage from "./../images/success.svg";
 
+import verifyIdStep1 from "../images/verify-id/verify-id-step-1.svg"
+import verifyIdStep2 from "../images/verify-id/verify-id-step-2.svg"
+import verifyIdStep3 from "../images/verify-id/verify-id-step-3.svg"
+import verifyIdStep4 from "../images/verify-id/verify-id-step-4.svg"
+import verifyIdStep5 from "../images/verify-id/verify-id-step-5.svg"
+import verifyIdStep6 from "../images/verify-id/verify-id-step-6.svg"
+import verifyIdStep7 from "../images/verify-id/verify-id-step-7.svg"
+
 export const Logo = logo
 export const Bell = bell
+export const NotificationBell = notificationBell
 export const DownArrow = downArrow
 export const Hero1 = hero1
 export const Hero2 = hero2
@@ -334,3 +344,11 @@ export const Equity = equity
 
 export const FailImage = failImage;
 export const SuccesImage = successImage;
+
+export const VerifyIdStep1 = verifyIdStep1
+export const VerifyIdStep2 = verifyIdStep2
+export const VerifyIdStep3 = verifyIdStep3
+export const VerifyIdStep4 = verifyIdStep4
+export const VerifyIdStep5 = verifyIdStep5
+export const VerifyIdStep6 = verifyIdStep6
+export const VerifyIdStep7 = verifyIdStep7

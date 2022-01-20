@@ -4,8 +4,6 @@ import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
 import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification"
 import CustomSpinner from "../common/custom-spinner"
 
-const NOTIFICATION_PAGE_LIMIT = 8
-
 export default function NotificationRecent() {
     const [loadingSection, setLoadingSection] = useState(true)
     const [last, setLast] = useState(null)
@@ -15,10 +13,6 @@ export default function NotificationRecent() {
     const { data: ntf_list, loading } = useQuery(GET_NOTIFICATIONS, {
         onCompleted: () => setLoadingSection(false),
         fetchPolicy: "network-only",
-        variables: {
-            stamp: last?.timeStamp,
-            limit: NOTIFICATION_PAGE_LIMIT,
-        },
     })
 
     const tempList = ntf_list?.getNotifications
@@ -41,7 +35,6 @@ export default function NotificationRecent() {
             ids[index] = { ...ids[index], pending: false, read: true }
             setNTList(ids)
         },
-        onError: (error) => {},
     })
 
     const setRead = (item) => {
@@ -50,9 +43,10 @@ export default function NotificationRecent() {
         let index = ids.findIndex((el) => el.timeStamp === item.timeStamp)
         ids[index] = { ...ids[index], pending: true }
         setNTList(ids)
+        console.log(item)
         setNotificationReadFlag({
             variables: {
-                stamp: item.timeStamp,
+                id: item.id,
             },
         })
     }
@@ -65,7 +59,7 @@ export default function NotificationRecent() {
     else
         return (
             <>
-                <div className="recent-notification-wrapper">
+                <div className="recent-notification-wrapper pe-3">
                     {NTList.length ? (
                         NTList.map((item, idx) => (
                             <div
@@ -94,7 +88,7 @@ export default function NotificationRecent() {
                         </div>
                     )}
                 </div>
-                {NTList.length && (
+                {/* {NTList.length && (
                     <div className="w-100 d-flex flex-column align-items-center justify-content-center py-2">
                         <button
                             className="btn-primary d-flex align-items-center justify-content-center py-2"
@@ -106,7 +100,7 @@ export default function NotificationRecent() {
                             <div className={`${loading ? "ms-3" : "pe-4"}`}>Load More</div>
                         </button>
                     </div>
-                )}
+                )} */}
             </>
         )
 }
