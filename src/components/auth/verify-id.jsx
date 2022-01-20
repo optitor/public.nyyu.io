@@ -1,41 +1,21 @@
-import { Link } from "gatsby"
 import React, { useReducer, useCallback, useRef } from "react"
-import Select from "react-select"
 import useFileUpload from "react-use-file-upload"
 import Modal from "react-modal"
 import Webcam from "react-webcam"
-import { CheckBox } from "../common/FormControl"
 import { formatBytes } from "../../utilities/number"
-import { countries } from "../../utilities/staticData"
 import {
     NewDoc,
     Pass,
     PhotoIcon,
     QRCode,
     SelfieImg,
-    Trees,
     Unpass1,
     Unpass2,
     CloseIcon,
 } from "../../utilities/imgImport"
-import { ROUTES } from "../../utilities/routes"
 import SimpleHeader from "../header/simple-header"
 import PrimaryStep from "../verify-identity/primary-step"
-
-const doc_types = [
-    {
-        label: "Passports",
-        value: "passport",
-    },
-    {
-        label: "National Identification Cards",
-        value: "id_card",
-    },
-    {
-        label: "Driving License",
-        value: "driver_license",
-    },
-]
+import StepOne from "../verify-identity/step-one"
 
 const VerificationPage = () => {
     const inputRef = useRef()
@@ -45,27 +25,14 @@ const VerificationPage = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         agree: false,
         accept: false,
-        step: -1,
-        country: countries[0],
-        doc_type: doc_types[0],
+        step: 0, // --> initial value: -1;
         phoneModal: false,
         file: null,
         fileOpen: false,
         selfieModal: false,
         selfieImg: "",
     })
-    const {
-        agree,
-        accept,
-        step,
-        country,
-        doc_type,
-        phoneModal,
-        file,
-        fileOpen,
-        selfieModal,
-        selfieImg,
-    } = state
+    const { step, phoneModal, file, fileOpen, selfieModal, selfieImg } = state
 
     const capture = useCallback(() => {
         setState({ selfieImg: webcamRef.current.getScreenshot() })
@@ -107,10 +74,10 @@ const VerificationPage = () => {
     return (
         <main className="verify-page">
             <SimpleHeader />
-            <section className="d-flex align-items-start align-items-xl-center">
-                <div className="container">
+            <section className="d-flex justify-content-center align-items-start align-items-xl-center">
+                <div>
                     {step < 3 && <h4 className="text-center mt-2 mb-4">Verify your identity</h4>}
-                    {step !== -1 && step < 3 && (
+                    {/* {step !== -1 && step < 3 && (
                         <div className="d-flex mt-4">
                             <div className="step-bar">
                                 <div className="left-circle bg-green"></div>
@@ -125,26 +92,9 @@ const VerificationPage = () => {
                                 ></div>
                             </div>
                         </div>
-                    )}
+                    )} */}
                     {step === -1 && <PrimaryStep step={step} setState={setState} />}
-                    {step === 0 && (
-                        <div className="verify-step1 mb-sm-5">
-                            <h5 className="text-center mb-4">Identity document</h5>
-                            <Select
-                                options={countries}
-                                value={country}
-                                onChange={(v) => setState({ country: v })}
-                                placeholder="Choose country"
-                            />
-                            <p className="form-label mt-4">Document type</p>
-                            <Select
-                                options={doc_types}
-                                value={doc_type}
-                                onChange={(v) => setState({ doc_type: v })}
-                                placeholder="Document type"
-                            />
-                        </div>
-                    )}
+                    {step === 0 && <StepOne step={step} setState={setState} />}
                     {step === 1 && (
                         <div className="verify-step2">
                             <h5 className="text-center">Identity document</h5>
@@ -269,16 +219,6 @@ const VerificationPage = () => {
                             </div>
                         </div>
                     )}
-                    {step > -1 && (
-                        <div className="text-center continue-on-mobile-button my-0 my-xxl-5">
-                            <button
-                                className="btn-link"
-                                onClick={() => setState({ phoneModal: true })}
-                            >
-                                Continue on a phone
-                            </button>
-                        </div>
-                    )}
                     {step < 3 && (
                         <div className="btn-group">
                             {step > 0 && (
@@ -342,7 +282,6 @@ const VerificationPage = () => {
                         </div>
                     )}
                 </div>
-                {step !== -1 && <img src={Trees} alt="trees" className="trees-img w-100" />}
             </section>
             <Modal
                 isOpen={phoneModal}

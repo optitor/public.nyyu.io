@@ -1,8 +1,7 @@
-import React from "react"
 import { Link } from "gatsby"
-import { CheckBox } from "../common/FormControl"
-import { useState } from "react"
+import React, { useState } from "react"
 import { ROUTES } from "../../utilities/routes"
+import { CheckBox } from "../common/FormControl"
 
 export default function PrimaryStep({ step, setState }) {
     const [accept, setAccept] = useState(false)
@@ -33,16 +32,16 @@ export default function PrimaryStep({ step, setState }) {
                     </Link>
                 </CheckBox>
             </div>
-            <div className="d-flex justify-content-center gap-3 mt-5">
+            <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
                 <Link
                     to={ROUTES.profile}
-                    className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500"
+                    className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-md-3"
                 >
                     cancel
                 </Link>
                 <button
                     disabled={!accept}
-                    className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light"
+                    className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-md-3"
                     onClick={() => setState({ step: step + 1 })}
                 >
                     next
