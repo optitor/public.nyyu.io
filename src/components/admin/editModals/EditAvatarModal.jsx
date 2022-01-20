@@ -47,7 +47,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
 
     //-------- Stats Data and Validation
     // Stats Data
-    const InitialSkills = avatar.skillSet.map(item => {
+    const InitialSkills = avatar.skillSet?.map(item => {
         return {title: item.name, stars: item.rate};
     });
     const [skills, setSkills] = useState(InitialSkills);
