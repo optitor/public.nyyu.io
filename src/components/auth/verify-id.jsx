@@ -9,6 +9,7 @@ import PrimaryStep from "../verify-identity/primary-step"
 import StepOne from "../verify-identity/step-one"
 import StepTwo from "../verify-identity/step-two"
 import StepThree from "../verify-identity/step-three"
+import StepFour from "../verify-identity/step-four"
 
 const VerificationPage = () => {
     const inputRef = useRef()
@@ -69,7 +70,7 @@ const VerificationPage = () => {
             <SimpleHeader />
             <section className="d-flex justify-content-center align-items-start align-items-xl-center">
                 <div>
-                    {step < 3 && <h4 className="text-center mt-2 mb-4">Verify your identity</h4>}
+                    <h4 className="text-center mt-2 mb-4">Verify your identity</h4>
                     {/* {step !== -1 && step < 3 && (
                         <div className="d-flex mt-4">
                             <div className="step-bar">
@@ -175,7 +176,8 @@ const VerificationPage = () => {
                         // </div>
                     */}
                     {step === 2 && <StepThree step={step} setState={setState} />}
-                    {step === 3 && (
+                    {step === 3 && <StepFour step={step} setState={setState} />}
+                    {step === 4 && (
                         <div className="verify-step3">
                             <h6 className="verify-step3__heading">Selfie</h6>
                             <p className="verify-step3__text">
@@ -186,7 +188,7 @@ const VerificationPage = () => {
                             <img className="selfie-img" src={SelfieImg} alt="seflie" />
                         </div>
                     )}
-                    {step === 4 && (
+                    {step === 5 && (
                         <div className="verify-step4">
                             <div className="selfie-modal__body">
                                 <div className="selfie-content">
