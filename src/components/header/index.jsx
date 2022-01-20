@@ -9,7 +9,7 @@ import { Bell, Logo, NotificationBell } from "../../utilities/imgImport"
 import { User } from "../../utilities/user-data"
 
 import { useAuth } from "../../hooks/useAuth"
-import DressupModal from "../dressup/dressup-modal"
+import DressupModal from "../dress-up/dressup-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction"
