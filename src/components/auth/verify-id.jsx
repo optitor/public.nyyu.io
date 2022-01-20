@@ -4,7 +4,6 @@ import Select from "react-select"
 import useFileUpload from "react-use-file-upload"
 import Modal from "react-modal"
 import Webcam from "react-webcam"
-import Header from "../header"
 import { CheckBox } from "../common/FormControl"
 import { formatBytes } from "../../utilities/number"
 import { countries } from "../../utilities/staticData"
@@ -19,11 +18,10 @@ import {
     Unpass2,
     CloseIcon,
 } from "../../utilities/imgImport"
+import { ROUTES } from "../../utilities/routes"
+import SimpleHeader from "../header/simple-header"
 
-const content = `Before we start, please prepare your identity document and make sure it is valid.
-
-We also require you to accept our Terms and conditions, and to agree to our processing of your personal data.
-`
+const content = ``
 const doc_types = [
     {
         label: "Passports",
@@ -120,7 +118,7 @@ const VerificationPage = () => {
     }
     return (
         <main className="verify-page">
-            <Header />
+            <SimpleHeader />
             <section className="d-flex align-items-start align-items-xl-center">
                 <div className="container">
                     {step < 3 && <h4 className="text-center mt-2 mb-4">Verify your identity</h4>}
@@ -142,7 +140,19 @@ const VerificationPage = () => {
                     )}
                     {step === -1 && (
                         <div className="verify-step0">
-                            <p className="pre-wrap">{content}</p>
+                            <p className="pre-wrap">
+                                <span className="text-white fw-bold fs-18px">
+                                    Identity verificaton Consent
+                                    <br />
+                                </span>
+                                I declare that i am at least 16 years of age; I agree to the
+                                collection, processing or storage of my personal information,
+                                including biometic data, by NDB for the purpose(s) of identiy
+                                verification; that the information I provide is true and accurate to
+                                the best of my knowledge; and I shall be fully responsible in case I
+                                provide wrong information or any of the documents I use are fake,
+                                forged, counterfeit etc.
+                            </p>
                             <div className="form-group">
                                 <CheckBox
                                     name="agree"
@@ -150,23 +160,25 @@ const VerificationPage = () => {
                                     value={agree}
                                     onChange={handleAgreeOption}
                                 >
-                                    I agree to the processing of my personal data, as described
-                                    in&nbsp;
+                                    I agree to the above statement, and I have read NDB{" "}
                                     <Link to="/" className="txt-green">
-                                        the Consent to Personal Data Processing.
+                                        Privacy Policy
                                     </Link>
                                 </CheckBox>
-                                <CheckBox
-                                    name="accept"
-                                    type="checkbox"
-                                    value={accept}
-                                    onChange={handleAcceptOption}
+                            </div>
+                            <div className="d-flex justify-content-center gap-3 mt-5">
+                                <Link
+                                    to={ROUTES.profile}
+                                    className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500"
                                 >
-                                    By clicking Next, I accept the&nbsp;
-                                    <Link to="/" className="txt-green">
-                                        Terms and Conditions.
-                                    </Link>
-                                </CheckBox>
+                                    cancel
+                                </Link>
+                                <button
+                                    className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light"
+                                    onClick={() => setState({ step: step + 1 })}
+                                >
+                                    next
+                                </button>
                             </div>
                         </div>
                     )}
@@ -380,12 +392,7 @@ const VerificationPage = () => {
                                     </button>
                                 </>
                             ) : (
-                                <button
-                                    className="btn-primary"
-                                    onClick={() => setState({ step: step + 1 })}
-                                >
-                                    Next
-                                </button>
+                                <></>
                             )}
                         </div>
                     )}

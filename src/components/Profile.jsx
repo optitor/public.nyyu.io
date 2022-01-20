@@ -207,7 +207,7 @@ const Profile = () => {
                                                                     </p>
                                                                 ) : (
                                                                     <Link
-                                                                        to={ROUTES.verifyCompany}
+                                                                        to={ROUTES.verifyId}
                                                                         className="security-link"
                                                                     >
                                                                         setup
