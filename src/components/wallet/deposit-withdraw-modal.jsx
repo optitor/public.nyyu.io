@@ -21,18 +21,6 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                     }
                 })
             )
-            // const firstAsset = balances.getBalances[0]
-            const firstAsset = null
-            setSelectedAsset(
-                firstAsset
-                    ? {
-                          icon: firstAsset.symbol,
-                          abbr: firstAsset.tokenSymbol,
-                          name: firstAsset.tokenName,
-                          amount: firstAsset.free + firstAsset.hold,
-                      }
-                    : null
-            )
         },
     })
 
@@ -203,7 +191,7 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                             </div>
                         </div>
                     )}
-                    {type === TRANSACTION_TYPES.withdraw && (
+                    {type === TRANSACTION_TYPES.withdraw && selectedAsset && (
                         <div>
                             <div className="mt-3 text-light">
                                 <div className="border border-light d-flex justify-content-between align-items-center">
