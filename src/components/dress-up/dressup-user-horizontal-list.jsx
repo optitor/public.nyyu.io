@@ -104,8 +104,8 @@ export default function DressupHorizontalList({
                                                   ""
                                               )}
                                               <div
-                                                  compid={list[index].compId}
-                                                  groupid={list[index].groupId}
+                                                  compid={list[index]?.compId}
+                                                  groupid={list[index]?.groupId}
                                                   style={{
                                                       top: `${list[index]?.top ?? 0}%`,
                                                       left: `${list[index]?.left ?? 0}%`,
