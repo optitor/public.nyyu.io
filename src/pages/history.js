@@ -1,10 +1,12 @@
+/* eslint-disable */
+
 import React, { useReducer, useCallback, useState } from "react"
+import { useQuery } from "@apollo/client"
 import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { numberWithCommas } from "../utilities/number"
 import { BTC, DOGE, ETH, NDB, Airdrop, Address, Copy2, CloseIcon } from "../utilities/imgImport"
-import { Link } from "gatsby"
 import Modal from "react-modal"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Input } from "../components/common/FormControl"
@@ -17,6 +19,7 @@ import Transactions from "../components/wallet/transactions-tab"
 import ReferralTab from "../components/wallet/referral-tab"
 import StakeTab from "../components/wallet/stake-tab"
 import BidActivityTab from "../components/wallet/bid-activity-tab"
+import { GET_BID_LIST_BY_USER } from "../apollo/graghqls/querys/Bid"
 
 const transactions = [
     {
@@ -224,6 +227,9 @@ const SelectedValue = (props) => {
 }
 
 const History = () => {
+    const size = useWindowSize()
+    const { data: bidList } = useQuery(GET_BID_LIST_BY_USER)
+
     const [hideValues, setHideValues] = useState(false)
     const [btcEquityValue, setBtcEquityValue] = useState("12.003.877")
     const [dollarEquityValue, setDollarEquityValue] = useState("282,004.43")
@@ -232,7 +238,7 @@ const History = () => {
     const obscureValueString = "****"
     const [btcOrUsd, setBtcOrUsd] = useState("USD")
     const copyText = "kjY602GgjsKP23mhs09oOp63bd3n34fsla"
-    const size = useWindowSize()
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         amount: "",
         detail_show: false,
@@ -517,7 +523,7 @@ const History = () => {
                                 <Transactions />
                             </TabPanel>
                             <TabPanel>
-                                <BidActivityTab />
+                                <BidActivityTab bids={bidList?.getBidListByUser} />
                             </TabPanel>
                         </Tabs>
                     </div>

@@ -162,3 +162,15 @@ input[type="number"]::-webkit-outer-spin-button {
     line-height: 25px !important;
 }
 // End: New Font Sizes
+
+//Begin: Backgourn Color
+.bg-green {
+    background: $green;
+}
+.bg-red {
+    background: #e8503a;
+}
+.bg-gray {
+    background: $grey;
+}
+//End: Background Color

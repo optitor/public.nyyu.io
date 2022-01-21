@@ -166,8 +166,15 @@ import walletQRCode from "../images/wallet-qr-code.svg"
 import destinationWallet from "../images/destination-wallet.svg"
 import equity from "../images/icons/equity.svg"
 
-import failImage from "./../images/fail.svg";
-import successImage from "./../images/success.svg";
+import failImage from "./../images/fail.svg"
+import successImage from "./../images/success.svg"
+
+import cryptoCoin from "../images/payment/cryptocoin.svg"
+import credit from "../images/payment/credit.svg"
+import ndbWallet from "../images/payment/ndb-wallet.svg"
+import externalWallet from "../images/payment/external-wallet.svg"
+import paypal from "../images/payment/paypal.svg"
+import paypalBrand from "../images/payment/paypal-brand.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -334,5 +341,12 @@ export const WalletQRCode = walletQRCode
 export const DestinationWallet = destinationWallet
 export const Equity = equity
 
-export const FailImage = failImage;
-export const SuccesImage = successImage;
+export const FailImage = failImage
+export const SuccesImage = successImage
+
+export const CryptoCoin = cryptoCoin
+export const Credit = credit
+export const NdbWallet = ndbWallet
+export const ExternalWallet = externalWallet
+export const Paypal = paypal
+export const PaypalBrand = paypalBrand
