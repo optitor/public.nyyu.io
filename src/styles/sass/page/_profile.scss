@@ -16,7 +16,7 @@
             height: 100%;
         }
         .user-info {
-            margin: 80px 0 105px;
+            margin: 45px 0px;
             @include mq("laptop", max) {
                 margin: 24px 0;
             }

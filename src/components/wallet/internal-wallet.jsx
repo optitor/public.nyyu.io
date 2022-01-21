@@ -52,6 +52,9 @@ export default function InternalWallet() {
                             </td>
                         </tr>
                     ))}
+                    {myAssets.length === 0 && (
+                        <p className="text-center fw-500 text-uppercase">no assets found</p>
+                    )}
                 </tbody>
             </table>
         )
