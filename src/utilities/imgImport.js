@@ -176,6 +176,14 @@ import externalWallet from "../images/payment/external-wallet.svg"
 import paypal from "../images/payment/paypal.svg"
 import paypalBrand from "../images/payment/paypal-brand.svg"
 
+import verifyIdStep1 from "../images/verify-id/verify-id-step-1.svg"
+import verifyIdStep2 from "../images/verify-id/verify-id-step-2.svg"
+import verifyIdStep3 from "../images/verify-id/verify-id-step-3.svg"
+import verifyIdStep4 from "../images/verify-id/verify-id-step-4.svg"
+import verifyIdStep5 from "../images/verify-id/verify-id-step-5.svg"
+import verifyIdStep6 from "../images/verify-id/verify-id-step-6.svg"
+import verifyIdStep7 from "../images/verify-id/verify-id-step-7.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const NotificationBell = notificationBell
@@ -350,3 +358,11 @@ export const NdbWallet = ndbWallet
 export const ExternalWallet = externalWallet
 export const Paypal = paypal
 export const PaypalBrand = paypalBrand
+
+export const VerifyIdStep1 = verifyIdStep1
+export const VerifyIdStep2 = verifyIdStep2
+export const VerifyIdStep3 = verifyIdStep3
+export const VerifyIdStep4 = verifyIdStep4
+export const VerifyIdStep5 = verifyIdStep5
+export const VerifyIdStep6 = verifyIdStep6
+export const VerifyIdStep7 = verifyIdStep7

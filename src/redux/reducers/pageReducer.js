@@ -1,4 +1,9 @@
-import { PAGINATION_SET_PAGE, PAGINATION_SET_LIMIT, FETCH_DATA } from './../actionTypes';
+import {
+  PAGINATION_SET_PAGE,
+  PAGINATION_SET_LIMIT,
+  FETCH_DATA,
+  DELETE_DATUM
+} from './../actionTypes';
 
 const initialState = {
   page: 1,
@@ -14,6 +19,9 @@ export const paginationReducer = (state = initialState, action) => {
       return { ...state, ...action.payload };
     case FETCH_DATA:
       return { ...state, total: Object.keys(action.payload).length };
+    case DELETE_DATUM:
+      state.total -= 1;
+      return { ...state };
     default:
       return state;
   }

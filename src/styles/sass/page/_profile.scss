@@ -19,7 +19,6 @@
         }
         .user-info {
             margin: 48px 0 105px;
-            text-align: center;
             @include mq("laptop", max) {
                 margin: 24px 0;
             }

@@ -1,4 +1,10 @@
-import { GET_USER_TIERS, UPDATE_USER_TIER, DELETE_USER_TIER, CREATE_USER_TIER } from "../actionTypes";
+import {
+    GET_USER_TIERS,
+    UPDATE_USER_TIER,
+    DELETE_USER_TIER,
+    CREATE_USER_TIER,
+
+} from "../actionTypes";
 
 export const userTierReducer = (state = {}, action) => {
     switch(action.type) {

@@ -7,9 +7,6 @@
     section {
         @extend %set-height2;
         overflow: auto;
-        .trees-img {
-            display: block;
-        }
     }
     .step {
         &-bar {
@@ -174,6 +171,7 @@
                 margin-top: 60px;
                 font-size: 18px;
                 line-height: 30px;
+                opacity: 0.9;
                 @include mq("phone", max) {
                     margin-top: 40px;
                     font-size: 14px;
@@ -208,10 +206,10 @@
             }
         }
         &-step1 {
-            max-width: 365px;
             margin: 0 auto;
         }
-        &-step2 {
+        &-step2,
+        &-step1 {
             // margin-bottom: -30px;
             .upload {
                 &-doc {
@@ -663,5 +661,20 @@
                 }
             }
         }
+    }
+}
+
+.requirements {
+    margin-top: 40px;
+    .small-white-dot {
+        background-color: #dadada;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+    }
+    .item {
+        opacity: 0.85;
+        font-size: 14px;
+        line-height: 24px;
     }
 }

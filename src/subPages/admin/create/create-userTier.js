@@ -148,7 +148,7 @@ const IndexPage = () => {
                     {currentStep === 2 && (
                         <>
                             <div className="input_div row">
-                                <div className="col-lg-6">
+                                <div className="col-sm-6">
                                     {showError? (tokenIconError? <Alert severity="error">{tokenIconError}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
                                     {error? <Alert severity="error">{error}</Alert>: ''}
                                     <div>
@@ -166,7 +166,7 @@ const IndexPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-6">
+                                <div className="col-sm-6">
                                     <div className="preview-icon">
                                         <div>
                                             {parse(svgFile.svg)}

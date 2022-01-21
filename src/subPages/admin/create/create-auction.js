@@ -48,8 +48,7 @@ const IndexPage = () => {
     }, [roundData]);
 
     // Round Data Validation
-    let roundDataError = {};
-    roundDataError = useMemo(() => {
+    const roundDataError = useMemo(() => {
         if(!roundData.roundNumber) return {roundNumber: 'Round Number is required'};
         if(!roundData.startTime) return {startTime: 'Round Start Time is required'};
         if(!validator.isDate(new Date(roundData.startTime))) return {startTime: 'Round Start Time is invalid'};        
@@ -65,8 +64,7 @@ const IndexPage = () => {
     const [tokenData, setTokenData] = useState(initialTokenData);
 
     // Token Data Validation
-    let tokenDataError = {};
-    tokenDataError = useMemo(() => {
+    const tokenDataError = useMemo(() => {
         if(!tokenData.tokenAmount) return {tokenAmount: 'Token Amount is required'};
         if(!validator.isNumeric(tokenData.tokenAmount)) return {tokenAmount: 'Token Amount must be number'};
         if(!tokenData.ReservedPrice) return {ReservedPrice: 'Reserved Price is required'};
