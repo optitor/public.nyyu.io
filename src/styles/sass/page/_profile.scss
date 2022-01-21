@@ -1,7 +1,5 @@
 @use "sass:math";
 .profile-page {
-    margin-bottom: 1rem;
-    margin-top: -1rem;
     @include mq("phone", max) {
         margin: 0rem;
     }

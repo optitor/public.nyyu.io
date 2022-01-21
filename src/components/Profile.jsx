@@ -76,7 +76,7 @@ const Profile = () => {
                 />
                 <Header />
                 <section className="container position-relative h-100">
-                    <div className="row mt-lg-2">
+                    <div className="row">
                         <div className="col-lg-3 profile-page__left border-end border-white">
                             <div className="user-info">
                                 <div className="my-5">
