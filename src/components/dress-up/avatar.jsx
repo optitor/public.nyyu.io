@@ -1,89 +1,12 @@
 import React from "react"
 import { useSelector } from "react-redux"
-import parse from "html-react-parser"
-import styled from "styled-components"
-import { EmptyAvatar } from "../../utilities/imgImport"
-import { hairColors } from "./dressup-data"
-import _ from "lodash"
+import AvatarImage from "../admin/shared/AvatarImage"
 
 export default function Avatar() {
-    const avatarComponents = useSelector((state) => state.avatarComponents)
-    const userAvatarJSON = useSelector((state) => state.auth?.user?.avatar?.selected)
+    const selected = useSelector((state) => state.auth?.user?.avatar?.selected)
 
-    const avatar = JSON.parse(userAvatarJSON ?? "")
-    const avatarSet = _.mapValues(_.mapKeys(avatar, "groupId"), "compId")
-    const expression = avatarSet?.expression ?? 0
-    const facialStyle = avatarSet?.facialStyle ?? 0
-    const hairStyle = avatarSet?.hairStyle ?? 0
-    const hat = avatarSet?.hat ?? 0
-    const other = avatarSet?.other ?? 0
-    const hairColor = avatarSet?.hairColor ?? 0
+    const avatar = JSON.parse(selected ?? "[]")
+    console.log("avatarset", avatar)
 
-    let { loaded, hairStyles, facialStyles, expressions, hats, others } = avatarComponents
-
-    return (
-        <div className="avatar-component">
-            <div className="image_div">
-                <img src={EmptyAvatar} alt="back" />
-                {loaded && (
-                    <>
-                        <Hair
-                            hairColor={hairColors[hairColor]}
-                            style={{
-                                top: `${hairStyles[hairStyle]?.top}%`,
-                                left: `${hairStyles[hairStyle]?.left}%`,
-                                width: `${hairStyles[hairStyle]?.width}%`,
-                            }}
-                        >
-                            {parse(hairStyles[hairStyle]?.svg ?? "")}
-                        </Hair>
-                        <div
-                            style={{
-                                top: `${expressions[expression]?.top}%`,
-                                left: `${expressions[expression]?.left}%`,
-                                width: `${expressions[expression]?.width}%`,
-                            }}
-                        >
-                            {parse(expressions[expression]?.svg ?? "")}
-                        </div>
-                        <div
-                            style={{
-                                top: `${facialStyles[facialStyle]?.top}%`,
-                                left: `${facialStyles[facialStyle]?.left}%`,
-                                width: `${facialStyles[facialStyle]?.width}%`,
-                            }}
-                        >
-                            {parse(facialStyles[facialStyle]?.svg ?? "")}
-                        </div>
-                        <div
-                            style={{
-                                top: `${hats[hat]?.top}%`,
-                                left: `${hats[hat]?.left}%`,
-                                width: `${hats[hat]?.width}%`,
-                            }}
-                        >
-                            {parse(hats[hat]?.svg ?? "")}
-                        </div>
-                        <div
-                            style={{
-                                top: `${others[other]?.top}%`,
-                                left: `${others[other]?.left}%`,
-                                width: `${others[other]?.width}%`,
-                            }}
-                        >
-                            {parse(others[other]?.svg ?? "")}
-                        </div>
-                    </>
-                )}
-            </div>
-        </div>
-    )
+    return <AvatarImage avatar={{ avatarSet: avatar }} />
 }
-
-const Hair = styled.div`
-    svg > path {
-        fill: ${(props) => {
-            return props.hairColor ? props.hairColor : "#626161"
-        }};
-    }
-`
