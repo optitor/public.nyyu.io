@@ -68,3 +68,15 @@ export const GET_AVATAR_COMPONENT = gql`
         }
     }
 `
+
+export const GET_BALANCES = gql`
+    {
+        getBalances {
+            tokenName
+            tokenSymbol
+            symbol
+            free
+            hold
+        }
+    }
+`

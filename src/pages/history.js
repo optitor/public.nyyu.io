@@ -2,9 +2,7 @@ import React, { useReducer, useCallback, useState } from "react"
 import Header from "../components/header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { numberWithCommas } from "../utilities/number"
-import { BTC, DOGE, ETH, NDB, Airdrop, Address, Copy2, CloseIcon } from "../utilities/imgImport"
-import { Link } from "gatsby"
+import { BTC, DOGE, ETH, Airdrop, Address, Copy2, CloseIcon } from "../utilities/imgImport"
 import Modal from "react-modal"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Input } from "../components/common/FormControl"
@@ -17,6 +15,7 @@ import Transactions from "../components/wallet/transactions-tab"
 import ReferralTab from "../components/wallet/referral-tab"
 import StakeTab from "../components/wallet/stake-tab"
 import BidActivityTab from "../components/wallet/bid-activity-tab"
+import InternalWallet from "../components/wallet/internal-wallet"
 
 const transactions = [
     {
@@ -81,71 +80,6 @@ const transactions = [
     },
 ]
 
-const my_assets = [
-    {
-        icon: NDB,
-        abbr: "NDB",
-        name: "NDB Token",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: ETH,
-        abbr: "ETH",
-        name: "Ethereum",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: BTC,
-        abbr: "BTC",
-        name: "Bitcoin",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: NDB,
-        abbr: "NDB",
-        name: "NDB Token",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: ETH,
-        abbr: "ETH",
-        name: "Ethereum",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: BTC,
-        abbr: "BTC",
-        name: "Bitcoin",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: NDB,
-        abbr: "NDB",
-        name: "NDB Token",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: ETH,
-        abbr: "ETH",
-        name: "Ethereum",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-    {
-        icon: BTC,
-        abbr: "BTC",
-        name: "Bitcoin",
-        amount: 12.0865,
-        price: 282004.43,
-    },
-]
 const airdrops = [
     {
         icon: Airdrop,
@@ -326,8 +260,9 @@ const History = () => {
 
                                         <div className="d-flex gap-2">
                                             <div
-                                                className={`cursor-pointer ${btcOrUsd === "BTC" && "fw-bold text-white"
-                                                    }`}
+                                                className={`cursor-pointer ${
+                                                    btcOrUsd === "BTC" && "fw-bold text-white"
+                                                }`}
                                                 onClick={() => setBtcOrUsd("BTC")}
                                                 onKeyDown={() => setBtcOrUsd("BTC")}
                                                 role="presentation"
@@ -336,8 +271,9 @@ const History = () => {
                                             </div>
                                             <div>|</div>
                                             <div
-                                                className={`cursor-pointer ${btcOrUsd === "USD" && "fw-bold text-white"
-                                                    }`}
+                                                className={`cursor-pointer ${
+                                                    btcOrUsd === "USD" && "fw-bold text-white"
+                                                }`}
                                                 onClick={() => setBtcOrUsd("USD")}
                                                 onKeyDown={() => setBtcOrUsd("USD")}
                                                 role="presentation"
@@ -350,16 +286,16 @@ const History = () => {
                                         {hideValues
                                             ? obscureValueString
                                             : btcOrUsd === "USD"
-                                                ? dollarEquityValue
-                                                : btcEquityValue}
+                                            ? dollarEquityValue
+                                            : btcEquityValue}
                                     </p>
                                     <p className="max-value mt-3">
                                         {hideValues
                                             ? obscureValueString
                                             : "~ $ " +
-                                            (btcOrUsd === "USD"
-                                                ? btcEquityValue
-                                                : dollarEquityValue)}
+                                              (btcOrUsd === "USD"
+                                                  ? btcEquityValue
+                                                  : dollarEquityValue)}
                                     </p>
                                 </div>
                                 <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
@@ -395,34 +331,10 @@ const History = () => {
                                     )}
                                 </div>
                             </div>
-                            <table className="my-3">
-                                <tbody>
-                                    {my_assets.map((item, idx) => (
-                                        <tr key={idx}>
-                                            <td className="d-flex align-items-center ps-2">
-                                                <img
-                                                    src={item.icon}
-                                                    alt="coin icon"
-                                                    className="me-2"
-                                                />
-                                                <div>
-                                                    <p className="coin-abbr text-light">
-                                                        {item.name}
-                                                    </p>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p className="coin-price fw-bold">
-                                                    {item.amount} {item.abbr}
-                                                </p>
-                                                <p className="coin-percent">
-                                                    {numberWithCommas(item.price)}$
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+
+                            <div>
+                                <InternalWallet />
+                            </div>
                         </div>
                     </div>
                     <div className="section-history__right col-lg-8 col-md-7">
@@ -448,10 +360,11 @@ const History = () => {
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${detail_show &&
+                                    className={`${
+                                        detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                        }`}
+                                    }`}
                                 >
                                     <thead>
                                         <tr>
