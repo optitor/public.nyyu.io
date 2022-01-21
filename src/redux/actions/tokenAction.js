@@ -37,14 +37,14 @@ export const get_Tokens = () => async dispatch => {
 
 export const delete_Token = id => async dispatch => {
     try {
-        const { data } = await client.mutate({
+        await client.mutate({
             mutation: Mutation.DELETE_TOKEN,
             variables: { id }
         });
         showSuccessAlarm('Token deleted successfully');
         dispatch({
             type: DELETE_DATUM,
-            payload: data.deleteTokenAsset
+            payload: id
         });
     } catch(err) {
         console.log(err.message);
