@@ -107,12 +107,12 @@ export default function DressupHorizontalList({
                                                   compid={list[index].compId}
                                                   groupid={list[index].groupId}
                                                   style={{
-                                                      top: `${list[index].top}%`,
-                                                      left: `${list[index].left}%`,
-                                                      width: `${list[index].width}%`,
+                                                      top: `${list[index]?.top ?? 0}%`,
+                                                      left: `${list[index]?.left ?? 0}%`,
+                                                      width: `${list[index]?.width ?? 0}%`,
                                                   }}
                                               >
-                                                  {parse(list[index].svg)}
+                                                  {parse(list[index]?.svg ?? "")}
                                               </div>
                                           </>
                                       )}
@@ -122,12 +122,14 @@ export default function DressupHorizontalList({
                                               <Hair
                                                   hairColor={list[index]}
                                                   style={{
-                                                      top: `${hairStyles[hairStyle].top}%`,
-                                                      left: `${hairStyles[hairStyle].left}%`,
-                                                      width: `${hairStyles[hairStyle].width}%`,
+                                                      top: `${hairStyles[hairStyle]?.top ?? 0}%`,
+                                                      left: `${hairStyles[hairStyle]?.left ?? 0}%`,
+                                                      width: `${
+                                                          hairStyles[hairStyle]?.width ?? 0
+                                                      }%`,
                                                   }}
                                               >
-                                                  {parse(hairStyles[hairStyle].svg)}
+                                                  {parse(hairStyles[hairStyle]?.svg ?? 0)}
                                               </Hair>
                                           </>
                                       )}
