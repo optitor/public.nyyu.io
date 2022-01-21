@@ -29,6 +29,7 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
     const [myAssets, setMyAssets] = useState(null)
     const [selectedAsset, setSelectedAsset] = useState(null)
     const [selectedPercent, setSelectedPercent] = useState(25)
+    const [withdrawAmount, setWithdrawAmount] = useState()
     const loadingSection = !myAssets
 
     // Methods
@@ -69,7 +70,6 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                             onClick={() => toggleAssetsList()}
                         >
                             <div>
-                                {console.log(selectedAsset)}
                                 {selectedAsset ? (
                                     <div className="d-flex align-items-center">
                                         <div
@@ -197,6 +197,8 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                                 <div className="border border-light d-flex justify-content-between align-items-center">
                                     <input
                                         type="number"
+                                        value={withdrawAmount}
+                                        onChange={(e) => setWithdrawAmount(e.target.value)}
                                         placeholder="Withdraw amount"
                                         className="bg-transparent p-3 text-light placeholder:text-light border-0 w-100"
                                     />
@@ -211,7 +213,10 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                             <div className="text-light d-flex justify-content-between text-center mt-3">
                                 {[25, 50, 75, 100].map((item) => (
                                     <button
-                                        onClick={() => setSelectedPercent(item)}
+                                        onClick={() => {
+                                            setSelectedPercent(item)
+                                            setWithdrawAmount((selectedAsset.amount * item) / 100)
+                                        }}
                                         className={`btn ${
                                             item === selectedPercent
                                                 ? "btn-light"
