@@ -79,7 +79,7 @@ const Profile = () => {
                     <div className="row">
                         <div className="col-lg-3 profile-page__left border-end border-white">
                             <div className="user-info">
-                                <div className="my-5">
+                                <div className="my-5 user-info__avatar">
                                     <Avatar />
                                 </div>
                                 <p className="user-info__name">
