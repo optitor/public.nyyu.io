@@ -58,26 +58,43 @@ export const CREATE_NEW_AVATAR = gql`
     }
 `;
 
-export const UPDATE_AVATAR_PROFILE = gql`
-    mutation UpdateAvatarProfile(
-        $id: Int!
-        $fname: String!
-        $surname: String!
-        $skillSet: [SkillSetInput]!
-        $avatarSet: [AvatarSetInput]
-        $factsSet: [FactsInput]
-        $hairColor: String
-        $details: String
+// export const UPDATE_AVATAR_PROFILE = gql`
+//     mutation UpdateAvatarProfile(
+//         $id: Int!
+//         $fname: String!
+//         $surname: String!
+//         $skillSet: [SkillSetInput]!
+//         $avatarSet: [AvatarSetInput]
+//         $factsSet: [FactsInput]
+//         $hairColor: String
+//         $details: String
+//     ) {
+//         updateAvatarProfile(
+//             id: $id
+//             fname: $fname
+//             surname: $surname
+//             skillSet: $skillSet
+//             avatarSet: $avatarSet
+//             factsSet: $factsSet
+//             hairColor: $hairColor
+//             details: $details
+//         ) 
+//     }
+// `;
+
+export const UPDATE_AVATARSET = gql`
+    mutation updateAvatarSet(
+        $components: [AvatarSetInput]
     ) {
-        updateAvatarProfile(
-            id: $id
-            fname: $fname
-            surname: $surname
-            skillSet: $skillSet
-            avatarSet: $avatarSet
-            factsSet: $factsSet
-            hairColor: $hairColor
-            details: $details
-        ) 
+        updateAvatarSet(
+            components:  $components
+        ) {
+            id
+            regDate
+            updateDate
+            deleted
+            groupId
+            compId
+        }
     }
 `;

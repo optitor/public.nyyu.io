@@ -1,14 +1,23 @@
-import React, { useState } from "react"
+import React, { useState, useReducer } from "react"
 import { useSelector } from "react-redux"
 import Modal from "react-modal"
 import parse from "html-react-parser"
 import styled from "styled-components"
 import { DressupData } from "../../utilities/dressup-data"
 import { CloseIcon, EmptyAvatar } from "../../utilities/imgImport"
-import DressupHorizontalList from "./dressup-horizontal-list"
+import DressupHorizontalList from "./dressup-user-horizontal-list"
 import { hairColors } from "./dressup-data"
 
-export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAvatarItems }) {
+const init = {
+    hairStyles: { index: 0, updatable: false },
+    facialStyles: { index: 0, updatable: false },
+    expressions: { index: 0, updatable: false },
+    hats: { index: 0, updatable: false },
+    others: { index: 0, updatable: false },
+    hairColors: { index: 0, updatable: false },
+}
+
+export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const avatarComponents = useSelector((state) => state.avatarComponents)
 
     let { loaded, hairStyles, facialStyles, expressions, hats, others } = avatarComponents
@@ -19,37 +28,39 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
     hats = Object.values(hats)
     others = Object.values(others)
 
-    const [selectedHairStyle, setSelectedHairStyle] = useState(0)
-    const [selectedHairColor, setSelectedHairColor] = useState(0)
-    const [selectedFacialStyle, setSelectedFacialStyle] = useState(0)
-    const [selectedExpression, setSelectedExpression] = useState(0)
-    const [selectedHat, setSelectedHat] = useState(0)
-    const [selectedOther, setSelectedOther] = useState(0)
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), init)
 
     const [selectedTab, setSelectedTab] = useState(0)
 
     const saveAvatarItems = () => {
-        setDressUpAvatarItems({
-            hairStyle: hairStyles[selectedHairStyle]?.compId,
-            facialStyle: facialStyles[selectedFacialStyle]?.compId,
-            expression: expressions[selectedExpression]?.compId,
-            hat: hats[selectedHat]?.compId,
-            other: others[selectedOther]?.compId,
-            hairColor: hairColors[selectedHairColor],
-        })
+        console.log(state)
+        const avatarSets = Object.keys(avatarComponents)
+            .filter((key) => state[key]?.updatable ?? false)
+            .map((key) => {
+                const index = state[key].index
+                console.log("index", avatarComponents[key])
+                return {
+                    groupId:
+                        Object.values(avatarComponents[key])[index]?.groupId ?? key.slice(0, -1),
+                    compId: Object.values(avatarComponents[key])[index]?.compId ?? 0,
+                }
+            })
+
+        if (!!avatarSets.length) onSave(avatarSets)
         setIsModalOpen(false)
     }
 
     const closeModal = () => {
-        setSelectedHairStyle(0)
-        setSelectedHairColor(0)
-        setSelectedFacialStyle(0)
-        setSelectedExpression(0)
-        setSelectedHat(0)
-        setSelectedOther(0)
-
+        setState(init)
         setIsModalOpen(false)
     }
+
+    const selectedHairColor = state.hairColors?.index ?? 0
+    const selectedHairStyle = state.hairStyles?.index ?? 0
+    const selectedFacialStyle = state.facialStyles?.index ?? 0
+    const selectedHat = state.hats?.index ?? 0
+    const selectedExpression = state.expressions?.index ?? 0
+    const selectedOther = state.others?.index ?? 0
 
     return (
         <Modal
@@ -153,21 +164,21 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                     {loaded && selectedTab === 0 && (
                         <div className="dress-up-modal-hair-section">
                             <DressupHorizontalList
-                                topic="hairStyles"
+                                topic="hairStyle"
                                 title={"hair style"}
                                 list={hairStyles}
                                 selectedItem={selectedHairStyle}
-                                setSelectedItem={setSelectedHairStyle}
+                                setSelectedItem={(res) => setState({ hairStyles: res })}
                             />
                             <div className="mt-4"></div>
                             <DressupHorizontalList
-                                topic="hairColors"
+                                topic="hairColor"
                                 title={"hair color"}
                                 hairStyle={selectedHairStyle}
                                 hairStyles={hairStyles}
                                 list={hairColors}
                                 selectedItem={selectedHairColor}
-                                setSelectedItem={setSelectedHairColor}
+                                setSelectedItem={(res) => setState({ hairColors: res })}
                                 secondRow
                             />
                         </div>
@@ -175,19 +186,19 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                     {loaded && selectedTab === 1 && (
                         <div className="dress-up-modal-hair-section">
                             <DressupHorizontalList
-                                topic="facialStyles"
+                                topic="facialStyle"
                                 title={"facial style"}
                                 list={facialStyles}
                                 selectedItem={selectedFacialStyle}
-                                setSelectedItem={setSelectedFacialStyle}
+                                setSelectedItem={(res) => setState({ facialStyles: res })}
                             />
                             <div className="mt-4"></div>
                             <DressupHorizontalList
-                                topic="expressions"
+                                topic="expression"
                                 title={"expressions"}
                                 list={expressions}
                                 selectedItem={selectedExpression}
-                                setSelectedItem={setSelectedExpression}
+                                setSelectedItem={(res) => setState({ expressions: res })}
                                 secondRow
                             />
                         </div>
@@ -195,19 +206,19 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                     {loaded && selectedTab === 2 && (
                         <div className="dress-up-modal-hair-section">
                             <DressupHorizontalList
-                                topic="hats"
+                                topic="hat"
                                 title={"hats"}
                                 list={hats}
                                 selectedItem={selectedHat}
-                                setSelectedItem={setSelectedHat}
+                                setSelectedItem={(res) => setState({ hats: res })}
                             />
                             <div className="mt-4"></div>
                             <DressupHorizontalList
-                                topic="others"
+                                topic="other"
                                 title={"others"}
                                 list={others}
                                 selectedItem={selectedOther}
-                                setSelectedItem={setSelectedOther}
+                                setSelectedItem={(res) => setState({ others: res })}
                                 secondRow
                             />
                         </div>
