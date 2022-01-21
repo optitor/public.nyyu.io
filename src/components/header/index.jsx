@@ -20,16 +20,16 @@ import Avatar from "../dress-up/avatar"
 
 const Menu = () => {
     // Webservice
-    const { data: user_data } = useQuery(GET_USER)
+    const { data: user_data, refetch } = useQuery(GET_USER)
     const { data: allUnReadNotifications } = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         onCompleted: (response) => {
             setNewNotification(response.getAllUnReadNotifications.length !== 0)
         },
     })
-    const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
+    const [updateAvatarSet] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
-            console.log("received Mutation data", data)
+            refetch()
         },
         onError: (err) => {
             console.log("received Mutation data", err)
@@ -193,7 +193,6 @@ const Menu = () => {
                                     setIsModalOpen={setIsDressUPModalOpen}
                                     isModalOpen={isDressUPModalOpen}
                                     onSave={(res) => {
-                                        console.log("save", res)
                                         updateAvatarSet({
                                             variables: {
                                                 components: res,

@@ -15,8 +15,6 @@ export default function Avatar() {
         const avatar = JSON.parse(userAvatarJSON)
         const avatarSet = _.mapValues(_.mapKeys(avatar, "groupId"), "compId")
 
-        console.log("avatarset", avatarSet)
-
         expression = avatarSet?.expression ?? 0
         facialStyle = avatarSet?.facialStyle ?? 0
         hairStyle = avatarSet?.hairStyle ?? 0

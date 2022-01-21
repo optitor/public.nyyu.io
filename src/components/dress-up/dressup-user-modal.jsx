@@ -38,7 +38,6 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
             .filter((key) => state[key]?.updatable ?? false)
             .map((key) => {
                 const index = state[key].index
-                console.log("index", avatarComponents[key])
                 return {
                     groupId:
                         Object.values(avatarComponents[key])[index]?.groupId ?? key.slice(0, -1),
