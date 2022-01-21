@@ -96,7 +96,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                                 width: `${hairStyles[selectedHairStyle]?.width}%`,
                                             }}
                                         >
-                                            {parse(hairStyles[selectedHairStyle]?.svg)}
+                                            {parse(hairStyles[selectedHairStyle]?.svg ?? "")}
                                         </Hair>
                                         <div
                                             style={{
@@ -105,7 +105,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                                 width: `${expressions[selectedExpression]?.width}%`,
                                             }}
                                         >
-                                            {parse(expressions[selectedExpression]?.svg)}
+                                            {parse(expressions[selectedExpression]?.svg ?? "")}
                                         </div>
                                         <div
                                             style={{
@@ -114,7 +114,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                                 width: `${facialStyles[selectedFacialStyle]?.width}%`,
                                             }}
                                         >
-                                            {parse(facialStyles[selectedFacialStyle]?.svg)}
+                                            {parse(facialStyles[selectedFacialStyle]?.svg ?? "")}
                                         </div>
                                         <div
                                             style={{
@@ -123,7 +123,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                                 width: `${hats[selectedHat]?.width}%`,
                                             }}
                                         >
-                                            {parse(hats[selectedHat]?.svg)}
+                                            {parse(hats[selectedHat]?.svg ?? "")}
                                         </div>
                                         <div
                                             style={{
@@ -132,7 +132,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                                 width: `${others[selectedOther]?.width}%`,
                                             }}
                                         >
-                                            {parse(others[selectedOther]?.svg)}
+                                            {parse(others[selectedOther]?.svg ?? "")}
                                         </div>
                                     </>
                                 )}
