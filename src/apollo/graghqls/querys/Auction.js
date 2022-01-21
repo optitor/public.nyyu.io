@@ -55,3 +55,23 @@ export const GET_AUCTION_BY_STATUS = gql`
         }
     }
 `
+export const GET_AUCTIONS = gql`
+    query {
+        getAuctions {
+            id
+            round
+            startedAt
+            endedAt
+            totalToken
+            minPrice
+            token
+            sold
+            stats {
+                qty
+                win
+                fail
+            }
+            status
+        }
+    }
+`;

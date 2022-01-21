@@ -79,7 +79,9 @@ const Profile = () => {
                     <div className="row mt-lg-2">
                         <div className="col-lg-3 profile-page__left border-end border-white">
                             <div className="user-info">
-                                <Avatar />
+                                <div className="my-5">
+                                    <Avatar />
+                                </div>
                                 <p className="user-info__name">
                                     <img src={Bronze} alt="bronze" className="me-3" />
                                     {displayName}

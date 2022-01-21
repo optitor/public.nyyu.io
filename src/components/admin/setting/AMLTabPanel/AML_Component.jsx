@@ -62,7 +62,7 @@ const AMLComponent = ({icon, topic, content}) => {
                                 styles={customSelectStyles}
                                 placeholder=""
                             />
-                        </div>  
+                        </div>
                         <div className='input'>
                             <p className={requirement.item.value === 'not_required'? 'disabled': ''} style={{fontSize: 12}}>Threshold</p>
                             <NumberFormat className={`black_input ${requirement.item.value === 'not_required'? 'disabled': ''}`}

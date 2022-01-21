@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useQuery, useMutation } from "@apollo/client"
@@ -104,16 +106,9 @@ const Menu = () => {
                             window.location.pathname === ROUTES.faq ||
                             window.location.pathname === ROUTES.wallet ||
                             window.location.pathname === ROUTES.auction ||
+                            window.location.pathname === ROUTES.payment ||
                             window.location.pathname.includes(ROUTES.admin)) && (
                             <div className="d-none d-sm-flex justify-content-between gap-5">
-                                <Link
-                                    to={ROUTES.auction}
-                                    className={`${
-                                        window.location.pathname === ROUTES.auction && "txt-green"
-                                    }`}
-                                >
-                                    sale
-                                </Link>
                                 <Link
                                     to={ROUTES.wallet}
                                     className={`${
@@ -121,6 +116,16 @@ const Menu = () => {
                                     }`}
                                 >
                                     wallet
+                                </Link>
+                                <Link
+                                    to={ROUTES.auction}
+                                    className={`${
+                                        (window.location.pathname === ROUTES.auction ||
+                                            window.location.pathname === ROUTES.payment) &&
+                                        "txt-green"
+                                    }`}
+                                >
+                                    sale
                                 </Link>
                                 <Link
                                     to={ROUTES.profile}
