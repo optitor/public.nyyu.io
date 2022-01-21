@@ -187,12 +187,7 @@ const Menu = () => {
                                 </li>
                                 <li className="px-sm-3 px-0 scale-75">
                                     <Link to={ROUTES.profile}>
-                                        {/* <img
-                                            src={User.avatar}
-                                            className="user-avatar"
-                                            alt="Tesla Icon"
-                                        /> */}
-                                        <Avatar className="user-avatar" />
+                                        {/* <Avatar className="user-avatar" /> */}
                                     </Link>
                                 </li>
                                 <DressupModal
