@@ -35,6 +35,7 @@ export default function TierDetailsTab() {
     const [userData, setUserData] = useState(null)
     const loadingSection = !(gainPointsData && taskSettingData && userTiers && userData)
     const currentTier = userTiersData?.filter((item) => item?.level === userData?.tierLevel)
+    const nextTier = userTiersData?.filter((item) => item?.level === userData?.tierLevel + 1)
     // Methods
 
     if (loadingSection)
@@ -64,7 +65,9 @@ export default function TierDetailsTab() {
                     </div>
                     <div className="row w-100 mx-auto">
                         <div className="col-6 br">Point to next tier</div>
-                        <div className="col-6 text-end text-sm-start">500</div>
+                        <div className="col-6 text-end text-sm-start">
+                            {nextTier.length > 0 ? nextTier[0].point - userData.tierPoint : ""}
+                        </div>
                     </div>
                     <div className="row w-100 mx-auto pt-5">
                         <h4>
