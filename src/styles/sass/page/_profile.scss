@@ -1,7 +1,5 @@
 @use "sass:math";
 .profile-page {
-    margin-bottom: 1rem;
-    margin-top: -1rem;
     @include mq("phone", max) {
         margin: 0rem;
     }
@@ -18,8 +16,7 @@
             height: 100%;
         }
         .user-info {
-            margin: 48px 0 105px;
-            text-align: center;
+            margin: 45px 0px;
             @include mq("laptop", max) {
                 margin: 24px 0;
             }
@@ -29,6 +26,7 @@
             &__avatar {
                 width: 123.42px;
                 height: 93.17px;
+                margin: auto;
             }
             &__name {
                 display: flex;

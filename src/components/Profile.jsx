@@ -7,7 +7,7 @@ import Header from "../components/header"
 import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs } from "../utilities/staticData"
-import { Tesla, Bronze } from "../utilities/imgImport"
+import { Bronze } from "../utilities/imgImport"
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
@@ -19,7 +19,7 @@ import NotificationRecent from "./profile/notification-recent-switch"
 import NotificationSetting from "./profile/notification-setting-switch"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
 import TierDetailsTab from "./profile/tier-details-tab"
-
+import Avatar from "../components/dress-up/avatar"
 const Profile = () => {
     // Containers
     const { data: userData, refetch } = useQuery(GET_USER, {
@@ -76,10 +76,12 @@ const Profile = () => {
                 />
                 <Header />
                 <section className="container position-relative h-100">
-                    <div className="row mt-lg-2">
+                    <div className="row">
                         <div className="col-lg-3 profile-page__left border-end border-white">
                             <div className="user-info">
-                                <img className="user-info__avatar" src={Tesla} alt="tesla" />
+                                <div className="my-5 user-info__avatar">
+                                    <Avatar />
+                                </div>
                                 <p className="user-info__name">
                                     <img src={Bronze} alt="bronze" className="me-3" />
                                     {displayName}
