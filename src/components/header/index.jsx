@@ -15,23 +15,25 @@ import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
-import { setCurrentAuthInfo } from "../../redux/actions/authAction"
+import { setCurrentAuthInfo, getAuthInfo } from "../../redux/actions/authAction"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
 import { UPDATE_AVATARSET } from "../../apollo/graghqls/mutations/AvatarComponent"
 import Avatar from "../dress-up/avatar"
 
 const Menu = () => {
+    const dispatch = useDispatch()
     // Webservice
-    const { data: user_data, refetch } = useQuery(GET_USER)
+    const { data: user_data } = useQuery(GET_USER)
     const { data: allUnReadNotifications } = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         onCompleted: (response) => {
+            if (!response.getAllUnReadNotifications) return
             setNewNotification(response.getAllUnReadNotifications.length !== 0)
         },
     })
     const [updateAvatarSet] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
-            refetch()
+            dispatch(getAuthInfo())
         },
         onError: (err) => {
             console.log("received Mutation data", err)
@@ -40,7 +42,6 @@ const Menu = () => {
 
     // Containers
     const auth = useAuth()
-    const dispatch = useDispatch()
     const userInfo = user_data?.getUser
     const [active, setActive] = useState(false)
     const { avatarComponents } = useSelector((state) => state)
