@@ -33,7 +33,6 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const [selectedTab, setSelectedTab] = useState(0)
 
     const saveAvatarItems = () => {
-        console.log(state)
         const avatarSets = Object.keys(avatarComponents)
             .filter((key) => state[key]?.updatable ?? false)
             .map((key) => {
