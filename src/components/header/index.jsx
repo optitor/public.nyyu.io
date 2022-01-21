@@ -6,16 +6,16 @@ import { Link } from "gatsby"
 import { isBrowser } from "./../../utilities/auth"
 // Icons
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport"
-import { User } from "../../utilities/user-data"
 
 import { useAuth } from "../../hooks/useAuth"
-import DressupModal from "../dress-up/dressup-modal"
+import DressupModal from "../dress-up/dressup-modal-user"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import { setCurrentAuthInfo } from "../../redux/actions/authAction"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
+import Avatar from "../dress-up/avatar"
 
 const Menu = () => {
     // Webservice
@@ -82,7 +82,6 @@ const Menu = () => {
         document.addEventListener("keydown", handleEscKeyPress)
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
-
     // Render
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
@@ -154,7 +153,7 @@ const Menu = () => {
                             </div>
                         )}
                 </div>
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center header-right-side">
                     <div>
                         {!auth?.isLoggedIn() ? (
                             <Link
@@ -173,11 +172,12 @@ const Menu = () => {
                                 </li>
                                 <li className="px-sm-3 px-0 scale-75">
                                     <Link to={ROUTES.profile}>
-                                        <img
+                                        {/* <img
                                             src={User.avatar}
                                             className="user-avatar"
                                             alt="Tesla Icon"
-                                        />
+                                        /> */}
+                                        <Avatar className="user-avatar" />
                                     </Link>
                                 </li>
                                 <DressupModal
