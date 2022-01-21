@@ -13,7 +13,6 @@ const Status = {
 
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
-    const [isEditOpen, setIsEditOpen] = useState(false);
 
     return (
         <>

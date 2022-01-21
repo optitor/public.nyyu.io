@@ -19,7 +19,6 @@ const TokenDataRow = ({ datum = {} }) => {
 
     const deleteToken = async () => {
         setDeletePending(true);
-        console.log(datum.id)
         await dispatch(delete_Token(datum.id));
         setDeletePending(false);
         setIsConfirmOpen(false);

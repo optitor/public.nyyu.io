@@ -23,7 +23,7 @@ const Menu = () => {
     const { data: allUnReadNotifications } = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         onCompleted: (response) => {
-            setNewNotification(response.getAllUnReadNotifications.length !== 0)
+            setNewNotification(response.getAllUnReadNotifications?.length !== 0)
         },
     })
 
