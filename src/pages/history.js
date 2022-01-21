@@ -326,9 +326,8 @@ const History = () => {
 
                                         <div className="d-flex gap-2">
                                             <div
-                                                className={`cursor-pointer ${
-                                                    btcOrUsd === "BTC" && "fw-bold text-white"
-                                                }`}
+                                                className={`cursor-pointer ${btcOrUsd === "BTC" && "fw-bold text-white"
+                                                    }`}
                                                 onClick={() => setBtcOrUsd("BTC")}
                                                 onKeyDown={() => setBtcOrUsd("BTC")}
                                                 role="presentation"
@@ -337,9 +336,8 @@ const History = () => {
                                             </div>
                                             <div>|</div>
                                             <div
-                                                className={`cursor-pointer ${
-                                                    btcOrUsd === "USD" && "fw-bold text-white"
-                                                }`}
+                                                className={`cursor-pointer ${btcOrUsd === "USD" && "fw-bold text-white"
+                                                    }`}
                                                 onClick={() => setBtcOrUsd("USD")}
                                                 onKeyDown={() => setBtcOrUsd("USD")}
                                                 role="presentation"
@@ -352,22 +350,23 @@ const History = () => {
                                         {hideValues
                                             ? obscureValueString
                                             : btcOrUsd === "USD"
-                                            ? dollarEquityValue
-                                            : btcEquityValue}
+                                                ? dollarEquityValue
+                                                : btcEquityValue}
                                     </p>
                                     <p className="max-value mt-3">
                                         {hideValues
                                             ? obscureValueString
                                             : "~ $ " +
-                                              (btcOrUsd === "USD"
-                                                  ? btcEquityValue
-                                                  : dollarEquityValue)}
+                                            (btcOrUsd === "USD"
+                                                ? btcEquityValue
+                                                : dollarEquityValue)}
                                     </p>
                                 </div>
                                 <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                                     <div className="col-sm-6 pe-2">
                                         <button
-                                            className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
+                                            disabled
+                                            className="btn btn-outline-secondary rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                             onClick={() => {
                                                 setTransactionType(TRANSACTION_TYPES.deposit)
                                                 setShowDepositAndWidthdrawModal(true)
@@ -449,11 +448,10 @@ const History = () => {
                             </TabPanel>
                             <TabPanel>
                                 <table
-                                    className={`${
-                                        detail_show &&
+                                    className={`${detail_show &&
                                         (size.width > 1024 || size.width <= 576) &&
                                         "d-none"
-                                    }`}
+                                        }`}
                                 >
                                     <thead>
                                         <tr>
