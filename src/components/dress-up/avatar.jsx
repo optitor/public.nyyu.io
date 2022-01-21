@@ -10,28 +10,16 @@ export default function Avatar() {
     const avatarComponents = useSelector((state) => state.avatarComponents)
     const userAvatarJSON = useSelector((state) => state.auth?.user?.avatar?.selected)
 
-    let expression, facialStyle, hairStyle, hat, other, hairColor
-    try {
-        const avatar = JSON.parse(userAvatarJSON)
-        const avatarSet = _.mapValues(_.mapKeys(avatar, "groupId"), "compId")
-
-        expression = avatarSet?.expression ?? 0
-        facialStyle = avatarSet?.facialStyle ?? 0
-        hairStyle = avatarSet?.hairStyle ?? 0
-        hat = avatarSet?.hat ?? 0
-        other = avatarSet?.other ?? 0
-        hairColor = avatarSet?.hairColor ?? 0
-    } catch (e) {
-        console.log(e)
-    }
+    const avatar = JSON.parse(userAvatarJSON ?? "")
+    const avatarSet = _.mapValues(_.mapKeys(avatar, "groupId"), "compId")
+    const expression = avatarSet?.expression ?? 0
+    const facialStyle = avatarSet?.facialStyle ?? 0
+    const hairStyle = avatarSet?.hairStyle ?? 0
+    const hat = avatarSet?.hat ?? 0
+    const other = avatarSet?.other ?? 0
+    const hairColor = avatarSet?.hairColor ?? 0
 
     let { loaded, hairStyles, facialStyles, expressions, hats, others } = avatarComponents
-    // Convert the mapKey Object to the array.
-    hairStyles = Object.values(hairStyles)
-    facialStyles = Object.values(facialStyles)
-    expressions = Object.values(expressions)
-    hats = Object.values(hats)
-    others = Object.values(others)
 
     return (
         <div className="avatar-component">

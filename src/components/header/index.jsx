@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useQuery } from "@apollo/client"
+import { useQuery, useMutation } from "@apollo/client"
 // Libraries
 import { Link } from "gatsby"
 import { isBrowser } from "./../../utilities/auth"
@@ -10,22 +10,31 @@ import { isBrowser } from "./../../utilities/auth"
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport"
 
 import { useAuth } from "../../hooks/useAuth"
-import DressupModal from "../dress-up/dressup-modal-user"
+import DressupModal from "../dress-up/dressup-user-modal"
 import { ROUTES } from "../../utilities/routes"
 import CurrencyChoice from "./currency-choice"
 import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import { setCurrentAuthInfo } from "../../redux/actions/authAction"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
+import { UPDATE_AVATARSET } from "../../apollo/graghqls/mutations/AvatarComponent"
 import Avatar from "../dress-up/avatar"
 
 const Menu = () => {
     // Webservice
-    const { data: user_data } = useQuery(GET_USER)
+    const { data: user_data, refetch } = useQuery(GET_USER)
     const { data: allUnReadNotifications } = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         onCompleted: (response) => {
             setNewNotification(response.getAllUnReadNotifications.length !== 0)
+        },
+    })
+    const [updateAvatarSet] = useMutation(UPDATE_AVATARSET, {
+        onCompleted: (data) => {
+            refetch()
+        },
+        onError: (err) => {
+            console.log("received Mutation data", err)
         },
     })
 
@@ -188,6 +197,13 @@ const Menu = () => {
                                 <DressupModal
                                     setIsModalOpen={setIsDressUPModalOpen}
                                     isModalOpen={isDressUPModalOpen}
+                                    onSave={(res) => {
+                                        updateAvatarSet({
+                                            variables: {
+                                                components: res,
+                                            },
+                                        })
+                                    }}
                                 />
                             </ul>
                         )}
