@@ -29,15 +29,19 @@ export const fetch_Avatar_Components = () => async dispatch => {
             query: Query.GET_AVATAR_COMPONENTS
         });
         const compData = data.getAvatarComponents;
-        const hairStyles = _.mapKeys(_.filter(compData, {groupId: 'hairStyle'}), 'compId');
-        const facialStyles = _.mapKeys(_.filter(compData, {groupId: 'facialStyle'}), 'compId');
-        const expressions = _.mapKeys(_.filter(compData, {groupId: 'expression'}), 'compId');
-        const hats = _.mapKeys(_.filter(compData, {groupId: 'hat'}), 'compId');
-        const others = _.mapKeys(_.filter(compData, {groupId: 'other'}), 'compId');
-        dispatch({
-            type: FETCH_AVATAR_COMPONENTS,
-            payload: { hairStyles, facialStyles, expressions, hats, others }
-        });
+        if(compData) {
+            const hairStyles = _.mapKeys(_.filter(compData, {groupId: 'hairStyle'}), 'compId');
+            const facialStyles = _.mapKeys(_.filter(compData, {groupId: 'facialStyle'}), 'compId');
+            const expressions = _.mapKeys(_.filter(compData, {groupId: 'expression'}), 'compId');
+            const hats = _.mapKeys(_.filter(compData, {groupId: 'hat'}), 'compId');
+            const others = _.mapKeys(_.filter(compData, {groupId: 'other'}), 'compId');
+            dispatch({
+                type: FETCH_AVATAR_COMPONENTS,
+                payload: { hairStyles, facialStyles, expressions, hats, others }
+            });
+        } else {
+            return null;
+        }
     } catch(err) {
         console.log(err.message);
     }
