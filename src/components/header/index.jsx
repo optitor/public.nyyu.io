@@ -28,7 +28,7 @@ const Menu = () => {
         fetchPolicy: "network-only",
         onCompleted: (response) => {
             if (!response.getAllUnReadNotifications) return
-            setNewNotification(response.getAllUnReadNotifications.length !== 0)
+            setNewNotification(response.getAllUnReadNotifications?.length !== 0)
         },
     })
     const [updateAvatarSet] = useMutation(UPDATE_AVATARSET, {
