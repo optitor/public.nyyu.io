@@ -12,7 +12,6 @@ const InitialAvatarComponents = {
 export const avatarComponentsReducer = (state = InitialAvatarComponents, action) => {
     switch(action.type) {
         case CREATE_AVATAR_COMPONENT:
-            console.log(action.payload)
             state[`${action.payload.groupId}s`] = { ...state[`${action.payload.groupId}s`], [action.payload.compId]: action.payload };
             return { ...state };
         case FETCH_AVATAR_COMPONENTS:

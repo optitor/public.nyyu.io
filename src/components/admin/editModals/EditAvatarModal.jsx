@@ -493,7 +493,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
                             Previous
                         </button>
                         <button className="btn next" onClick={handleSubmit} disabled={pending}>
-                            {pending? 'Saving...': 'Save'}
+                            {pending? 'Saving. . .': 'Save'}
                         </button>
                     </div>
                 </>

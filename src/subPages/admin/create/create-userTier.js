@@ -212,7 +212,7 @@ const IndexPage = () => {
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(2)}>Previous</button>
-                                <button className="btn next" onClick={handleSubmit} disabled={pending}>{pending? 'Saving...': 'Save'}</button>
+                                <button className="btn next" onClick={handleSubmit} disabled={pending}>{pending? 'Saving. . .': 'Save'}</button>
                             </div>
                         </>
                     )}
