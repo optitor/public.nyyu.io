@@ -19,8 +19,8 @@ const RoundDataRow = ({ datum }) => {
             <DataRow>
                 <div className='round'>
                     <Main>
-                        <p className='first'>Id: {datum.id}</p>
-                        <p className='second'>Number: {datum.round}</p>
+                        <p className='first'>Round {datum.round}</p>
+                        <p className='second'>Id: {datum.id}</p>
                     </Main>
                 </div>
                 <div className='time'>
@@ -69,7 +69,7 @@ const RoundDataRow = ({ datum }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>Id: {datum.id}</p>
+                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>Round {datum.round}</p>
                             <p className={`
                                 ${Status[datum.status] === 'pending'? 'pending': ''}
                                 ${Status[datum.status] === 'countdown'? 'countdown': ''}
@@ -80,7 +80,7 @@ const RoundDataRow = ({ datum }) => {
                             </p>
                         </div>
                         <div className='right'>
-                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>Number: {datum.round}</p>
+                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>Id: {datum.id}</p>
                         </div>
                         <div className='right'>
                             <p style={{fontSize: 16}}>

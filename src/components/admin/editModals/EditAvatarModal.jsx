@@ -65,7 +65,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
     // FactsDetail Data
     const InitialFactsDetail = {
         facts: avatar.factsSet.map(item => {
-            return {topic: item.topic, detail: item.topic};
+            return {topic: item.topic, detail: item.detail};
         }),
         details: avatar.details
     };
@@ -383,7 +383,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
                             <div className="details">
                                 <p>Details</p>
                                 <textarea
-                                    className={`black_input ${
+                                    className={`black_input custom_scrollbar ${
                                         showError && factsDataError.item === "details"
                                             ? "error"
                                             : ""

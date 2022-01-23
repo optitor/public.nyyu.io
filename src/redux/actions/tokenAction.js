@@ -3,7 +3,7 @@ import * as Mutation from './../../apollo/graghqls/mutations/Token';
 import * as Query from './../../apollo/graghqls/querys/Token';
 import { client } from '../../apollo/client';
 import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';
-import { FETCH_DATA, DELETE_DATUM } from '../actionTypes';
+import * as types from '../actionTypes';
 
 export const create_Token = createData => async dispatch => {
     try {
@@ -26,7 +26,7 @@ export const get_Tokens = () => async dispatch => {
         const dataList = _.mapKeys(data.getTokenAssets, 'id');
         
         dispatch({
-            type: FETCH_DATA,
+            type: types.FETCH_DATA,
             payload: dataList
         });
     } catch(err) {
@@ -43,7 +43,7 @@ export const delete_Token = id => async dispatch => {
         });
         showSuccessAlarm('Token deleted successfully');
         dispatch({
-            type: DELETE_DATUM,
+            type: types.DELETE_DATUM,
             payload: id
         });
     } catch(err) {

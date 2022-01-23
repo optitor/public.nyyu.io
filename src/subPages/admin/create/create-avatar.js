@@ -362,7 +362,7 @@ const CreateAvatar = () => {
                                     <div className="details">
                                         <p>Details</p>
                                         <textarea
-                                            className={`black_input ${
+                                            className={`black_input custom_scrollbar ${
                                                 showError && factsDataError.item === "details"
                                                     ? "error"
                                                     : ""

@@ -274,7 +274,7 @@ const IndexPage = () => {
                                             <div className="item">
                                                 <p>Display Name</p>
                                                 <p>{avatar.surname}.{userName}</p>
-                                            </div>                                        
+                                            </div>
                                             <div className="item">
                                                 <p>Country</p>
                                                 <p>{details.country.label}</p>
