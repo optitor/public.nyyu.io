@@ -8,10 +8,14 @@ export const create_New_User = createData => async dispatch => {
             mutation: Mutation.CREATE_NEW_USER,
             variables: { ...createData }
         });
-        console.log(data);
-        showSuccessAlarm('User created successfully');
+        if(data.createNewUser) {
+            showSuccessAlarm('User created successfully');
+        }
     } catch(err) {
-        console.log(err);
-        showFailAlarm('Action failed', 'Ops! Something went wrong!');
+        if(err.message === 'already_exists') {
+            showFailAlarm('Action failed', 'User with this email already exists');
+        } else {
+            showFailAlarm('Action failed', 'Ops! Something went wrong!');
+        }
     }
 };

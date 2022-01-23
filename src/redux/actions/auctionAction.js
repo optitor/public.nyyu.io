@@ -3,7 +3,7 @@ import { client } from "../../apollo/client";
 import * as Mutation from './../../apollo/graghqls/mutations/Auction';
 import * as Query from './../../apollo/graghqls/querys/Auction';
 import { showFailAlarm, showSuccessAlarm } from "../../components/admin/AlarmModal";
-import { FETCH_DATA } from '../actionTypes';
+import * as types from '../actionTypes';
 
 export const create_Auction = createData => async dispatch => {
     try {
@@ -13,7 +13,7 @@ export const create_Auction = createData => async dispatch => {
         });
         showSuccessAlarm('Auction created successfully');
     } catch(err) {
-        console.log(err.message);
+        // console.log(err.message);
         showFailAlarm('Action failed', err.message);
     }
 };
@@ -25,11 +25,11 @@ export const get_Auctions = () => async dispatch => {
         });
         const dataList = _.mapKeys(data.getAuctions, 'id');
         dispatch({
-            type: FETCH_DATA,
+            type: types.FETCH_DATA,
             payload: dataList
         });
     } catch(err) {
-        console.log(err.message);
+        // console.log(err.message);
         showFailAlarm('Action failed', err.message);
     }
 };
