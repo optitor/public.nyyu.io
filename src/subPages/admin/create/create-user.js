@@ -4,15 +4,13 @@ import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import validator from "validator";
 import names from 'random-names-generator';
+import { Alert } from '@mui/material';
+import Select from 'react-select';
 
 import Seo from "../../../components/seo"
 import Stepper from "../../../components/admin/Stepper";
 import LayoutForCreate from "../../../components/admin/LayoutForCreate";
-
-import { Alert } from '@mui/material';
-import Select from 'react-select';
 import { countryList } from "../../../utilities/countryAlpha2";
-
 import PaginationBar from "../../../components/admin/PaginationBar";
 import { fetch_Avatars } from './../../../redux/actions/avatarAction';
 import { set_Page } from "../../../redux/actions/paginationAction";
