@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState } from "react"
 import { NDB } from "../../utilities/imgImport"
 import CustomSpinner from "../common/custom-spinner"

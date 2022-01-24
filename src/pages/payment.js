@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { useMutation } from "@apollo/client"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import Header from "../components/header"
 import { Input, CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -27,7 +26,6 @@ import {
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT, Currencies } from "../utilities/staticData"
-import { setBidInfo } from "../redux/actions/bidAction"
 import { CREATE_CRYPTO_PAYMENT } from "../apollo/graghqls/mutations/Payment"
 
 const { Option, SingleValue } = components
@@ -85,9 +83,8 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    const currencyId = useSelector((state) => state?.placeBid.currencyId)
     const currentRound = useSelector((state) => state?.placeBid.round_id)
 
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
@@ -99,28 +96,13 @@ const Payment = () => {
         code: "",
         bill: "",
         allow_fraction: false,
-        amount: "",
-        walletId: 0,
         getAddress: false,
     })
-    const {
-        firstname,
-        lastname,
-        card,
-        expire,
-        code,
-        bill,
-        allow_fraction,
-        amount,
-        walletId,
-        getAddress,
-    } = state
+    const { firstname, lastname, card, expire, code, bill, allow_fraction, getAddress } = state
 
     const [coin, setCoin] = useState(FOO_COINS[0])
     const [balance, setBalance] = useState(null)
-    const [copied, setCopied] = useState(false)
     const [tabIndex, setTabIndex] = useState(0)
-    const [payment_type, setPaymentType] = useState(payment_types[0])
 
     const handleInput = useCallback((e) => {
         e.preventDefault()
@@ -150,9 +132,9 @@ const Payment = () => {
     return (
         <main className="payment-page">
             <Header />
-            <section className="container position-relative h-100">
-                <div className="row mt-5">
-                    <div className="col-md-8 payment-select">
+            <section className="container position-relative">
+                <div className="row payment-wrapper">
+                    <div className="col-lg-8 payment-select">
                         <div className="payment-type__tab">
                             <div className="payment-type__tab-name">
                                 {tabIndex !== 0 && (
@@ -538,7 +520,7 @@ const Payment = () => {
                             )}
                         </div>
                     </div>
-                    <div className="col-md-4 d-flex flex-column justify-content-between">
+                    <div className="col-lg-4 d-flex flex-column justify-content-between">
                         <div className="order-summary ">
                             <h4>Order Summary</h4>
 
@@ -546,7 +528,7 @@ const Payment = () => {
                                 <div className="d-flex justify-content-between">
                                     <p className="order-list__label">Total order</p>
                                     <p className="order-list__label">
-                                        {bidAmount} <span> {Currencies[currencyId].label}</span>
+                                        {bidAmount} <span> USD</span>
                                     </p>
                                 </div>
                                 <div className="d-flex justify-content-between my-3">
@@ -566,7 +548,7 @@ const Payment = () => {
                                     Order total:
                                 </p>
                                 <p className="order-total">
-                                    {bidAmount} <span> {Currencies[currencyId].label}</span>
+                                    {bidAmount} <span> USD</span>
                                 </p>
                             </div>
                         </div>

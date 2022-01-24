@@ -1,4 +1,13 @@
 .payment-page {
+    .payment-wrapper {
+        padding-top: 100px;
+        @include mq("tablet", max) {
+            padding-top: 75px;
+        }
+        @include mq("phone", max) {
+            padding-top: 65px;
+        }
+    }
     & > section {
         .title {
             color: white;
@@ -365,7 +374,7 @@
     .confirm-payment {
         margin-top: 16px;
         font-size: 24px;
-        @include mq("tablet", max) {
+        @include mq("laptop", max) {
             margin: auto;
             margin-top: 55px;
         }
@@ -394,7 +403,7 @@
             line-height: 29px;
             color: white;
         }
-        @include mq("tablet", max) {
+        @include mq("laptop", max) {
             border: none;
             padding-left: 0;
             margin-top: 32px;
