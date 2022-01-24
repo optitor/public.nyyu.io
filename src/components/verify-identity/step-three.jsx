@@ -24,13 +24,17 @@ export default function StepThree({ step, setState }) {
 
     // Render
     return (
-        <>
+        <div className="col-sm-12 col-10 mx-auto mt-3 mt-sm-0">
             <div className="text-center">
-                <img src={VerifyIdStep3} alt="step indicator" />
+                <div className="d-block d-sm-none">
+                    <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 2</div>
+                    <div className="text-light fs-14px">Proof of address</div>
+                </div>
+                <img className="d-sm-block d-none" src={VerifyIdStep3} alt="step indicator" />
             </div>
             <div className="my-sm-5 verify-step1">
-                <div className="col-12 d-flex gap-5">
-                    <div className="col-md-6">
+                <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
+                    <div className="col-md-6 col-12">
                         <p className="form-label mt-4">Document type</p>
                         <Select
                             options={docTypes}
@@ -65,10 +69,10 @@ export default function StepThree({ step, setState }) {
                             </p>
                         </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 col-12">
                         <div className="d-flex flex-wrap justify-content-center my-0 mt-xxl-5">
                             <div className="upload-doc">
-                                <div className="mb-3">
+                                <div className="my-5 mb-sm-3">
                                     <div className="file-upload py-3 px-5">
                                         <div className="new-doc">
                                             <img src={NewDoc} className="w-50" alt="new doc" />
@@ -91,7 +95,7 @@ export default function StepThree({ step, setState }) {
                     </div>
                 </div>
 
-                <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
+                <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                     <button
                         className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-md-3"
                         onClick={() => setState({ step: step - 1 })}
@@ -106,6 +110,6 @@ export default function StepThree({ step, setState }) {
                     </button>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
