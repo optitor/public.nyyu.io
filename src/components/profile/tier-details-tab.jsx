@@ -66,7 +66,7 @@ export default function TierDetailsTab() {
                     <div className="row w-100 mx-auto">
                         <div className="col-6 br">Point to next tier</div>
                         <div className="col-6 text-end text-sm-start">
-                            {nextTier.length > 0 ? nextTier[0].point - userData.tierPoint : ""}
+                            {nextTier?.length > 0 ? nextTier[0]?.point - userData?.tierPoint : ""}
                         </div>
                     </div>
                     <div className="row w-100 mx-auto pt-5">
