@@ -4,16 +4,20 @@ import { VerifyIdStep2 } from "../../utilities/imgImport"
 export default function StepTwo({ step, setState }) {
     // Render
     return (
-        <>
+        <div className="col-sm-12 col-12 mx-auto mt-3 mt-sm-0">
             <div className="text-center">
-                <img src={VerifyIdStep2} alt="step indicator" />
+                <div className="d-block d-sm-none">
+                    <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 1</div>
+                    <div className="text-light fs-14px">Confirm your ID information</div>
+                </div>
+                <img className="d-sm-block d-none" src={VerifyIdStep2} alt="step indicator" />
             </div>
             <div className="my-sm-5 verify-step1">
-                <div className="mt-5 text-light fs-25px fw-bold text-center">
+                <div className="mt-5 text-light fs-25px fw-bold text-center d-sm-block d-none">
                     Confirm your ID information
                     <div className="fs-16px fw-500">Make edits if needed</div>
                 </div>
-                <div className="col-8 mx-auto">
+                <div className="col-sm-8 col-12 mx-auto">
                     <div>
                         <p className="form-label mt-4">Name surname</p>
                         <input type="text" className="form-control" placeholder="Name Surname" />
@@ -39,6 +43,6 @@ export default function StepTwo({ step, setState }) {
                     </button>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
