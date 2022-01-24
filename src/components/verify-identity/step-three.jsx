@@ -73,7 +73,7 @@ export default function StepThree({ step, setState }) {
                     <div className="col-md-6 col-12">
                         <div className="d-flex flex-wrap justify-content-center my-0 mt-xxl-5">
                             <div className="upload-doc">
-                                <div className="my-5 mb-sm-3">
+                                <div className="my-5 mb-sm-3 mt-sm-0">
                                     <div className="file-upload py-3 px-5">
                                         <div className="new-doc">
                                             <img src={NewDoc} className="w-50" alt="new doc" />
