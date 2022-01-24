@@ -102,7 +102,7 @@ const IndexPage = () => {
 
     return (
         <>
-            <Seo title="Create Email" />
+            <Seo title="Create Token" />
             <main className="create-token-page">
                 <LayoutForCreate>
                     <Link className="close" to="/admin"><Icon icon="codicon:chrome-close" /></Link>
