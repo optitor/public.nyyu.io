@@ -97,13 +97,13 @@ export default function StepOne({ step, setState }) {
 
                 <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                     <button
-                        className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-md-3"
+                        className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
                         onClick={() => setState({ step: step - 1 })}
                     >
                         back
                     </button>
                     <button
-                        className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-md-3"
+                        className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                         onClick={() => setState({ step: step + 1 })}
                     >
                         next

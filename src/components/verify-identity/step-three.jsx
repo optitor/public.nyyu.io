@@ -28,7 +28,8 @@ export default function StepThree({ step, setState }) {
             <div className="text-center">
                 <div className="d-block d-sm-none">
                     <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 2</div>
-                    <div className="text-light fs-14px">Proof of address</div>
+                    <div className="text-light fs-14px">Confirm your address information</div>
+                    <div className="text-light fs-12px">Make edits if needed</div>
                 </div>
                 <img className="d-sm-block d-none" src={VerifyIdStep3} alt="step indicator" />
             </div>
@@ -97,13 +98,13 @@ export default function StepThree({ step, setState }) {
 
                 <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                     <button
-                        className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-md-3"
+                        className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
                         onClick={() => setState({ step: step - 1 })}
                     >
                         back
                     </button>
                     <button
-                        className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-md-3"
+                        className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                         onClick={() => setState({ step: step + 1 })}
                     >
                         next
