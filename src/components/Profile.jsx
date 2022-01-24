@@ -44,10 +44,6 @@ const Profile = () => {
             return setUserTiersLoading(false)
         },
     })
-    // Containers
-    const twoStep = user?.security
-        ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
-        : []
 
     const dispatch = useDispatch()
     const [userDataLoading, setUserDataLoading] = useState(true)
@@ -62,6 +58,10 @@ const Profile = () => {
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
 
     const loadingPage = userDataLoading || userTiersLoading
+    // Containers
+    const twoStep = user?.security
+        ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
+        : []
 
     const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel)
     const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1)
