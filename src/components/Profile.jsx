@@ -25,6 +25,7 @@ const Profile = () => {
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: () => {
+            setUser(userData.getUser)
             if (userData.getUser.avatar) {
                 const { prefix, name } = userData.getUser.avatar
                 if (prefix && name) {
@@ -44,7 +45,6 @@ const Profile = () => {
         },
     })
     // Containers
-    const user = userData?.getUser
     const twoStep = user?.security
         ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
         : []
@@ -53,6 +53,7 @@ const Profile = () => {
     const [userDataLoading, setUserDataLoading] = useState(true)
     const [userTiersLoading, setUserTiersLoading] = useState(true)
     const [tabIndex, setTabIndex] = useState(0)
+    const [user, setUser] = useState(null)
     const [displayName, setDisplayName] = useState("")
     const [userTiersData, setUserTiersData] = useState(null)
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
@@ -122,7 +123,7 @@ const Profile = () => {
                                     <div
                                         className="timeleft"
                                         style={{
-                                            width: "25%",
+                                            width: `${(user.tierPoint / nextTier[0].point) * 100}%`,
                                         }}
                                     ></div>
                                 </div>
