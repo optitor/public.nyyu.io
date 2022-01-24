@@ -19,7 +19,7 @@ import { ROUTES } from "../utilities/routes"
 import BidsChart2 from "./chart/BidsChart2"
 import ChanceChart from "./chart/ChanceChart"
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client"
-import { setBidInfo, setCurrencyInfo, setCurrentRound } from "../redux/actions/bidAction"
+import { setBidInfo, setCurrentRound } from "../redux/actions/bidAction"
 import Loading from "./common/Loading"
 
 import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
@@ -142,6 +142,7 @@ const Auction = () => {
 
     const loading = useMemo(() => {
         if (
+            roundData &&
             !!(mFetched || roundM) &&
             !!(hFetched || roundH) &&
             !!(lFetched || roundL) &&
@@ -158,6 +159,7 @@ const Auction = () => {
             return true
         }
     }, [
+        roundData,
         mFetched,
         hFetched,
         lFetched,
@@ -289,7 +291,7 @@ const Auction = () => {
         PlaceBid({
             variables: {
                 roundId: fnSelectedRoundData()?.id,
-                tokenAmount: amount,
+                tokenAmount: amount * amount,
                 tokenPrice: Math.max(fnSelectedRoundData()?.minPrice, price),
                 payment: 1,
                 cryptoType: "BTC",
@@ -297,14 +299,9 @@ const Auction = () => {
         })
         dispatch(
             setBidInfo(
-                numberWithCommas(
-                    Number(
-                        calcPriceFromUsd(Math.max(fnSelectedRoundData()?.minPrice, price * amount))
-                    )
-                )
+                numberWithCommas(Number(Math.max(fnSelectedRoundData()?.minPrice, price * amount)))
             )
         )
-        dispatch(setCurrencyInfo(Currencies[currencyId].id))
         dispatch(setCurrentRound(fnSelectedRoundData()?.id))
         navigate(ROUTES.payment)
     }
@@ -339,43 +336,43 @@ const Auction = () => {
                         >
                             <div className="d-flex">
                                 <div className="w-100">
-                                    {roundM?.getAuctionByNumber && (
-                                        <Tabs
-                                            className="round-tab"
-                                            selectedIndex={selectedData}
-                                            onSelect={(index) => {
-                                                if (index !== selectedData) {
-                                                    setState({ price: 1, amount: 1 })
-                                                    setSelectedData(index)
-                                                }
-                                            }}
-                                        >
-                                            <TabList>
-                                                <Tab>Round {roundL?.getAuctionByNumber?.round}</Tab>
-                                                <Tab>Round {roundM?.getAuctionByNumber?.round}</Tab>
-                                                <Tab>Round {roundH?.getAuctionByNumber?.round}</Tab>
-                                            </TabList>
+                                    {/* {roundM?.getAuctionByNumber && ( */}
+                                    <Tabs
+                                        className="round-tab"
+                                        selectedIndex={selectedData}
+                                        onSelect={(index) => {
+                                            if (index !== selectedData) {
+                                                setState({ price: 1, amount: 1 })
+                                                setSelectedData(index)
+                                            }
+                                        }}
+                                    >
+                                        <TabList>
+                                            <Tab>Round {roundL?.getAuctionByNumber?.round}</Tab>
+                                            <Tab>Round {roundM?.getAuctionByNumber?.round}</Tab>
+                                            <Tab>Round {roundH?.getAuctionByNumber?.round}</Tab>
+                                        </TabList>
 
-                                            <TabPanel>
-                                                Token Available{" "}
-                                                <span className="fw-bold">
-                                                    {fnSelectedRoundData()?.totalToken}
-                                                </span>
-                                            </TabPanel>
-                                            <TabPanel>
-                                                Token Available{" "}
-                                                <span className="fw-bold">
-                                                    {fnSelectedRoundData()?.totalToken}
-                                                </span>
-                                            </TabPanel>
-                                            <TabPanel>
-                                                Token Available{" "}
-                                                <span className="fw-bold">
-                                                    {fnSelectedRoundData()?.totalToken}
-                                                </span>
-                                            </TabPanel>
-                                        </Tabs>
-                                    )}
+                                        <TabPanel>
+                                            Token Available{" "}
+                                            <span className="fw-bold">
+                                                {fnSelectedRoundData()?.totalToken}
+                                            </span>
+                                        </TabPanel>
+                                        <TabPanel>
+                                            Token Available{" "}
+                                            <span className="fw-bold">
+                                                {fnSelectedRoundData()?.totalToken}
+                                            </span>
+                                        </TabPanel>
+                                        <TabPanel>
+                                            Token Available{" "}
+                                            <span className="fw-bold">
+                                                {fnSelectedRoundData()?.totalToken}
+                                            </span>
+                                        </TabPanel>
+                                    </Tabs>
+                                    {/* )} */}
                                     <Tabs
                                         className="statistics-tab"
                                         selectedIndex={tabIndex}

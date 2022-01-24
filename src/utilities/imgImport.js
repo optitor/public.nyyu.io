@@ -26,7 +26,6 @@ import failla from "../images/avatars/failla.svg"
 import curie from "../images/avatars/curie.svg"
 
 import editIcon from "../images/edit.svg"
-import qrCode from "../images/qr-code.png"
 
 import eth from "../images/eth.svg"
 import btc from "../images/btc.svg"
@@ -215,7 +214,6 @@ export const Failla = failla
 export const Curie = curie
 
 export const EditIcon = editIcon
-export const QRCode = qrCode
 export const ETH = eth
 export const BTC = btc
 export const BCH = bch
