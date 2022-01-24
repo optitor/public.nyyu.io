@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useMutation } from "@apollo/client"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
+import QRCode from "react-qr-code"
 import Header from "../components/header"
 import { Input, CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -19,7 +20,6 @@ import {
     ETH,
     BTC,
     DOGE,
-    QRCode,
     Copy,
     PaypalBrand,
 } from "../utilities/imgImport"
@@ -43,7 +43,7 @@ const payment_types = [
     { icon: ExternalWallet, value: "externalwallets", label: "External Wallets" },
 ]
 
-const IconOption = (props) => (
+const SelectOption = (props) => (
     <Option {...props}>
         <div className="d-flex justify-content-start align-items-center">
             <img
@@ -51,21 +51,11 @@ const IconOption = (props) => (
                 style={{ width: "30px", height: "auto" }}
                 alt={props.data.label}
             />
-            <p className="coin-label">{props.data.label}</p>
+            <p className="coin-label ms-2">{props.data.label}</p>
         </div>
     </Option>
 )
-const SelectedValue = (props) => {
-    return (
-        <SingleValue {...props}>
-            <img
-                src={props.data.icon}
-                style={{ width: "30px", height: "auto" }}
-                alt={props.data.label}
-            />
-        </SingleValue>
-    )
-}
+
 const CustomOption = (props) => (
     <Option {...props}>
         <div className="custom-option">
@@ -86,7 +76,7 @@ const Payment = () => {
     // const dispatch = useDispatch()
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
     const currentRound = useSelector((state) => state?.placeBid.round_id)
-
+    console.log("data: ", bidAmount, currentRound)
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         firstname: "",
@@ -103,6 +93,9 @@ const Payment = () => {
     const [coin, setCoin] = useState(FOO_COINS[0])
     const [balance, setBalance] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
+    const [selectedCoinPrice, setSelectedCoinPrice] = useState(0)
+    const [price_list, setPriceList] = useState(null)
+    const [address_list, setAddressList] = useState(null)
 
     const handleInput = useCallback((e) => {
         e.preventDefault()
@@ -115,14 +108,17 @@ const Payment = () => {
         },
         [allow_fraction]
     )
-    const handlePaymentType = (value) => {
-        setPaymentType(value)
-        setTabIndex(value.index)
-    }
 
     const [CreateCryptoPayment] = useMutation(CREATE_CRYPTO_PAYMENT, {
         onCompleted: (data) => {
             console.log("create cypto payment: ", data)
+            const list = data.createCryptoPayment.pricing
+            const addresses = data.createCryptoPayment.addresses
+            console.log(addresses)
+            setAddressList(addresses)
+            setPriceList(data.createCryptoPayment.pricing)
+            setCurrentCoinAddress(addresses[0].value)
+            setSelectedCoinPrice(list[1].value.amount.toFixed(3))
         },
         onError: (err) => {
             console.log("create cypto payment: ", err)
@@ -176,8 +172,8 @@ const Payment = () => {
                             {tabIndex === 1 && (
                                 <div className="cryptocoin-tab">
                                     <div className="payment-content">
-                                        <div className="row">
-                                            <div className="d-flex flex-column justify-content-between col-lg-9">
+                                        <div className="set-cryptocoin">
+                                            <div className="d-flex flex-column justify-content-between coin-address">
                                                 <div className="d-flex justify-content-between w-100">
                                                     <Select
                                                         className="cryptocoin-select col-3"
@@ -186,15 +182,30 @@ const Payment = () => {
                                                         onChange={(v) => {
                                                             setCoin(v)
                                                             setCurrentCoinAddress(v.address)
+                                                            price_list.map((item, index) => {
+                                                                if (
+                                                                    item.value.currency === v.value
+                                                                ) {
+                                                                    setSelectedCoinPrice(
+                                                                        (
+                                                                            item.value.amount * 1
+                                                                        ).toFixed(3)
+                                                                    )
+                                                                    setCurrentCoinAddress(
+                                                                        address_list[index - 1]
+                                                                            .value
+                                                                    )
+                                                                }
+                                                            })
                                                         }}
                                                         components={{
-                                                            Option: IconOption,
-                                                            SingleValue: SelectedValue,
+                                                            Option: SelectOption,
+                                                            SingleValue: SelectOption,
                                                         }}
                                                     />
                                                     <Input
                                                         type="number"
-                                                        value={bidAmount}
+                                                        value={selectedCoinPrice}
                                                         disabled
                                                     />
                                                 </div>
@@ -234,8 +245,8 @@ const Payment = () => {
                                                 )}
                                             </div>
                                             {getAddress && (
-                                                <div className="qr-code col-lg-3">
-                                                    <img src={QRCode} alt="qr code" />
+                                                <div className="qr-code">
+                                                    <QRCode value={currentCoinAddress} />
                                                 </div>
                                             )}
                                         </div>
