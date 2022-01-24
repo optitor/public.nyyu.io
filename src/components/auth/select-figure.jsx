@@ -119,8 +119,7 @@ const SelectFigure = () => {
                                     value={searchValue}
                                     onChange={(e) => setSearchValue(e.target.value)}
                                 />
-                                <div className="row">
-                                    {/* displaying the avatars from webservice */}
+                                <div className="row figure-select-items-section">
                                     {figuresArray
                                         .filter((item) =>
                                             (item.firstname + item.lastname)
