@@ -8,13 +8,13 @@ import { useQuery } from "@apollo/client"
 import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth"
 
 export default function InternalWallet() {
-    const [myAssets, setMyAssets] = useState(null)
+    const [myAssets, setMyAssets] = useState([])
 
     const { data: balances } = useQuery(GET_BALANCES, {
         fetchPolicy: "network-only",
         onCompleted: () => {
             setMyAssets(
-                balances.getBalances.map((item) => {
+                balances.getBalances?.map((item) => {
                     return {
                         icon: NDB,
                         abbr: item.tokenSymbol,

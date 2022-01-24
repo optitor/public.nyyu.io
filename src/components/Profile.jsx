@@ -1,4 +1,4 @@
-import Select from "react-select"
+import Select, { useStateManager } from "react-select"
 import Loading from "./common/Loading"
 import { Link, navigate } from "gatsby"
 import { useQuery } from "@apollo/client"
@@ -20,34 +20,50 @@ import NotificationSetting from "./profile/notification-setting-switch"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
 import TierDetailsTab from "./profile/tier-details-tab"
 import Avatar from "../components/dress-up/avatar"
+import { GET_USER_TIERS } from "./profile/profile-queries"
 const Profile = () => {
-    // Containers
+    // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: () => {
             if (userData.getUser.avatar) {
                 const { prefix, name } = userData.getUser.avatar
                 if (prefix && name) {
                     setDisplayName(prefix + "." + name)
-                    return setLoadingPage(false)
+                    return setUserDataLoading(false)
                 } else return navigate(ROUTES.selectFigure)
             }
             return navigate(ROUTES.selectFigure)
         },
         fetchPolicy: "network-only",
     })
+    const { data: userTiers } = useQuery(GET_USER_TIERS, {
+        fetchPolicy: "network-only",
+        onCompleted: () => {
+            setUserTiersData(userTiers.getUserTiers)
+            return setUserTiersLoading(false)
+        },
+    })
+    // Containers
     const user = userData?.getUser
     const twoStep = user?.security
         ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
         : []
 
     const dispatch = useDispatch()
+    const [userDataLoading, setUserDataLoading] = useState(true)
+    const [userTiersLoading, setUserTiersLoading] = useState(true)
     const [tabIndex, setTabIndex] = useState(0)
     const [displayName, setDisplayName] = useState("")
-    const [loadingPage, setLoadingPage] = useState(true)
+    const [userTiersData, setUserTiersData] = useState(null)
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[0])
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
+
+    const loadingPage = userDataLoading || userTiersLoading
+
+    const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel)
+    const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1)
 
     // Methods
     const handleProfileTab = (value) => {
@@ -83,10 +99,25 @@ const Profile = () => {
                                     <Avatar />
                                 </div>
                                 <p className="user-info__name">
-                                    <img src={Bronze} alt="bronze" className="me-3" />
+                                    {currentTier?.length > 0 ? (
+                                        <div
+                                            className="me-3"
+                                            dangerouslySetInnerHTML={{
+                                                __html: currentTier[0]?.svg,
+                                            }}
+                                        />
+                                    ) : (
+                                        <></>
+                                    )}
                                     {displayName}
                                 </p>
-                                <p className="silver-cnt">500p to Silver</p>
+                                <p className="silver-cnt">
+                                    {nextTier.length > 0 &&
+                                        nextTier[0].point -
+                                            user.tierPoint +
+                                            "p to " +
+                                            nextTier[0].name}
+                                </p>
                                 <div className="timeframe-bar mt-1">
                                     <div
                                         className="timeleft"
