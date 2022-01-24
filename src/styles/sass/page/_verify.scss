@@ -137,6 +137,12 @@
             font-size: 18px;
         }
     }
+    h4 {
+        @include mq("tablet", max) {
+            font-size: 25px;
+            line-height: 30px;
+        }
+    }
     .css-1s2u09g-control,
     .css-1pahdxg-control {
         border-radius: unset;

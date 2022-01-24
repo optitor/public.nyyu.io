@@ -6,7 +6,7 @@ import { CheckBox } from "../common/FormControl"
 export default function PrimaryStep({ step, setState }) {
     const [accept, setAccept] = useState(false)
     return (
-        <div className="verify-step0">
+        <div className="verify-step0 col-sm-12 col-10 mx-auto mt-5 mt-sm-0">
             <p className="pre-wrap">
                 <span className="text-white fw-bold fs-18px">
                     Identity verificaton Consent
