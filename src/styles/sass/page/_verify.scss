@@ -220,7 +220,7 @@
             .upload {
                 &-doc {
                     @include mq("phone", max) {
-                        display: none;
+                        // display: none;
                     }
                     .file-upload {
                         display: flex;

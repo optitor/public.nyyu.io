@@ -32,7 +32,7 @@ export default function PrimaryStep({ step, setState }) {
                     </Link>
                 </CheckBox>
             </div>
-            <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
+            <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                 <Link
                     to={ROUTES.profile}
                     className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-md-3"
