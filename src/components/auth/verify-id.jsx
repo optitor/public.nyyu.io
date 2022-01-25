@@ -18,8 +18,10 @@ import { countries } from "../../utilities/staticData"
 
 const VerificationPage = () => {
     // Containers
+
     // 0
     const [accept, setAccept] = useState(false)
+
     // 1
     const [country, setCountry] = useState(countries[0])
     const {
@@ -28,13 +30,13 @@ const VerificationPage = () => {
         setFiles: stepOneSetFiles,
         removeFile: stepOneRemoveFile,
     } = useFileUpload()
-    // 2
 
+    // 2
     const [name, setName] = useState("")
     const [surname, setSurname] = useState("")
     const [dob, setDob] = useState("")
-    // 3
 
+    // 3
     const [stepThreeCountry, setStepThreeCountry] = useState(countries[0])
     const {
         files: stepThreeFiles,
@@ -45,11 +47,19 @@ const VerificationPage = () => {
 
     // 4
     const [address, setAddress] = useState("")
+
+    // 5
+    const {
+        files: stepFourFiles,
+        handleDragDropEvent: stepFourHandleDragDropEvent,
+        setFiles: stepFourSetFiles,
+        removeFile: stepFourRemoveFile,
+    } = useFileUpload()
     const inputRef = useRef()
     const webcamRef = useRef(null)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        step: 3, // --> initial value: -1;
+        step: 4, // --> initial value: -1;
         phoneModal: false,
         file: null,
         fileOpen: false,
@@ -167,7 +177,16 @@ const VerificationPage = () => {
                             setState={setState}
                         />
                     )}
-                    {step === 4 && <StepFive step={step} setState={setState} />}
+                    {step === 4 && (
+                        <StepFive
+                            step={step}
+                            setState={setState}
+                            files={stepFourFiles}
+                            setFiles={stepFourSetFiles}
+                            handleDragDropEvent={stepFourHandleDragDropEvent}
+                            removeFile={stepFourRemoveFile}
+                        />
+                    )}
                     {step === 5 && <StepSix step={step} setState={setState} />}
                     {step === 6 && <StepSeven step={step} setState={setState} />}
 
