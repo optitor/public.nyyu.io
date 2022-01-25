@@ -13,15 +13,24 @@ import StepFour from "../verify-identity/step-four"
 import StepFive from "../verify-identity/step-five"
 import StepSix from "../verify-identity/step-six"
 import StepSeven from "../verify-identity/step-seven"
+import { useState } from "react"
+import { countries } from "../../utilities/staticData"
 
 const VerificationPage = () => {
+    // Containers
+    const [accept, setAccept] = useState(false)
+    const [country, setCountry] = useState(countries[0])
+
     const inputRef = useRef()
     const webcamRef = useRef(null)
 
-    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
+    const {
+        files: stepOneFiles,
+        handleDragDropEvent: stepOneHandleDragDropEvent,
+        setFiles: stepOneSetFiles,
+        removeFile: stepOneRemoveFile,
+    } = useFileUpload()
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        agree: false,
-        accept: false,
         step: -1, // --> initial value: -1;
         phoneModal: false,
         file: null,
@@ -57,8 +66,8 @@ const VerificationPage = () => {
                     </div>
                     <p
                         className="remove-file"
-                        onClick={() => removeFile(data.name)}
-                        onKeyDown={() => removeFile(data.name)}
+                        // onClick={() => removeFile(data.name)}
+                        // onKeyDown={() => removeFile(data.name)}
                         role="presentation"
                     >
                         <span></span>
@@ -90,94 +99,110 @@ const VerificationPage = () => {
                             </div>
                         </div>
                     )} */}
-                    {step === -1 && <PrimaryStep step={step} setState={setState} />}
-                    {step === 0 && <StepOne step={step} setState={setState} />}
+                    {step === -1 && (
+                        <PrimaryStep
+                            accept={accept}
+                            setAccept={setAccept}
+                            step={step}
+                            setState={setState}
+                        />
+                    )}
+                    {step === 0 && (
+                        <StepOne
+                            country={country}
+                            setCountry={setCountry}
+                            step={step}
+                            setState={setState}
+                            files={stepOneFiles}
+                            setFiles={stepOneSetFiles}
+                            handleDragDropEvent={stepOneHandleDragDropEvent}
+                            removeFile={stepOneRemoveFile}
+                        />
+                    )}
                     {step === 1 && <StepTwo step={step} setState={setState} />}
-                    {/*
-                        // <div className="verify-step2">
-                        //     <h5 className="text-center">Identity document</h5>
-                        //     <div className="d-flex flex-wrap justify-content-center my-0 my-xxl-5">
-                        //         <div className="upload-doc me-lg-5">
-                        //             <div className="mb-3">
-                        //                 <div
-                        //                     className={`file-upload ${
-                        //                         files.length > 0 && "uploaded"
-                        //                     }`}
-                        //                     onDragEnter={handleDragDropEvent}
-                        //                     onDragOver={handleDragDropEvent}
-                        //                     onDrop={(e) => {
-                        //                         handleDragDropEvent(e)
-                        //                         setFiles(e, "a")
-                        //                     }}
-                        //                     role="presentation"
-                        //                 >
-                        //                     <div className="new-doc">
-                        //                         <img src={NewDoc} alt="new doc" />
-                        //                     </div>
-                        //                     <p className="file-browse">
-                        //                         Drag & drop files here or{" "}
-                        //                         <span
-                        //                             onClick={() => inputRef.current.click()}
-                        //                             onKeyDown={() => inputRef.current.click()}
-                        //                             role="presentation"
-                        //                         >
-                        //                             browse
-                        //                         </span>
-                        //                     </p>
 
-                        //                     <input
-                        //                         ref={inputRef}
-                        //                         type="file"
-                        //                         multiple
-                        //                         style={{ display: "none" }}
-                        //                         onChange={(e) => setFiles(e, "a")}
-                        //                     />
-                        //                 </div>
-                        //             </div>
-                        //             <ul className="file-list">
-                        //                 {files?.map((item, idx) => (
-                        //                     <FileList key={idx} data={item} />
-                        //                 ))}
-                        //             </ul>
-                        //         </div>
-                        //         {files.length > 0 && (
-                        //             <div className="uploaded-list">
-                        //                 <p className="uploaded-list__text">You uploaded:</p>
-                        //                 <ul className="file-list">
-                        //                     {files?.map((item, idx) => (
-                        //                         <FileList key={idx} data={item} />
-                        //                     ))}
-                        //                 </ul>
+                    {/* <div className="verify-step2">
+                        <h5 className="text-center">Identity document</h5>
+                        <div className="d-flex flex-wrap justify-content-center my-0 my-xxl-5">
+                            <div className="upload-doc me-lg-5">
+                                <div className="mb-3">
+                                    <div
+                                        className={`file-upload ${files.length > 0 && "uploaded"}`}
+                                        onDragEnter={handleDragDropEvent}
+                                        onDragOver={handleDragDropEvent}
+                                        onDrop={(e) => {
+                                            handleDragDropEvent(e)
+                                            setFiles(e, "a")
+                                        }}
+                                        role="presentation"
+                                    >
+                                        <div className="new-doc">
+                                            <img src={NewDoc} alt="new doc" />
+                                        </div>
+                                        <p className="file-browse">
+                                            Drag & drop files here or{" "}
+                                            <span
+                                                onClick={() => inputRef.current.click()}
+                                                onKeyDown={() => inputRef.current.click()}
+                                                role="presentation"
+                                            >
+                                                browse
+                                            </span>
+                                        </p>
 
-                        //                 <button
-                        //                     className="btn-add"
-                        //                     onClick={() => inputRef.current.click()}
-                        //                 >
-                        //                     <span></span>Add more files
-                        //                 </button>
-                        //             </div>
-                        //         )}
-                        //         <div className="upload-rule">
-                        //             <p>Take a photo of your document. </p>
-                        //             <p>The photo should be:</p>
-                        //             <ul>
-                        //                 <li>
-                        //                     <strong>bright and clear</strong> (good quality);
-                        //                 </li>
-                        //                 <li>
-                        //                     <strong>uncut</strong> (all corners of the document
-                        //                     should be visible).
-                        //                 </li>
-                        //             </ul>
-                        //             <div className="upload-rule__img">
-                        //                 <img src={Pass} alt="pass" />
-                        //                 <img className="mx-3" src={Unpass1} alt="pass" />
-                        //                 <img src={Unpass2} alt="pass" />
-                        //             </div>
-                        //         </div>
-                        //     </div>
-                        // </div>
-                    */}
+                                        <input
+                                            ref={inputRef}
+                                            type="file"
+                                            multiple
+                                            style={{ display: "none" }}
+                                            onChange={(e) => setFiles(e, "a")}
+                                        />
+                                    </div>
+                                </div>
+                                <ul className="file-list">
+                                    {files?.map((item, idx) => (
+                                        <FileList key={idx} data={item} />
+                                    ))}
+                                </ul>
+                            </div>
+                            {files.length > 0 && (
+                                <div className="uploaded-list">
+                                    <p className="uploaded-list__text">You uploaded:</p>
+                                    <ul className="file-list">
+                                        {files?.map((item, idx) => (
+                                            <FileList key={idx} data={item} />
+                                        ))}
+                                    </ul>
+
+                                    <button
+                                        className="btn-add"
+                                        onClick={() => inputRef.current.click()}
+                                    >
+                                        <span></span>Add more files
+                                    </button>
+                                </div>
+                            )}
+                            <div className="upload-rule">
+                                <p>Take a photo of your document. </p>
+                                <p>The photo should be:</p>
+                                <ul>
+                                    <li>
+                                        <strong>bright and clear</strong> (good quality);
+                                    </li>
+                                    <li>
+                                        <strong>uncut</strong> (all corners of the document should
+                                        be visible).
+                                    </li>
+                                </ul>
+                                <div className="upload-rule__img">
+                                    <img src={Pass} alt="pass" />
+                                    <img className="mx-3" src={Unpass1} alt="pass" />
+                                    <img src={Unpass2} alt="pass" />
+                                </div>
+                            </div>
+                        </div>
+                    </div> */}
+
                     {step === 2 && <StepThree step={step} setState={setState} />}
                     {step === 3 && <StepFour step={step} setState={setState} />}
                     {step === 4 && <StepFive step={step} setState={setState} />}
@@ -262,11 +287,11 @@ const VerificationPage = () => {
                 <button
                     className="btn-primary"
                     onClick={() => {
-                        removeFile(file.name)
+                        // removeFile(file.name)
                         setState({ fileOpen: false })
                     }}
                     onKeyDown={() => {
-                        removeFile(file.name)
+                        // removeFile(file.name)
                         setState({ fileOpen: false })
                     }}
                 >
