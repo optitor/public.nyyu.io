@@ -182,7 +182,7 @@ const Payment = () => {
                                                         onChange={(v) => {
                                                             setCoin(v)
                                                             setCurrentCoinAddress(v.address)
-                                                            price_list.map((item, index) => {
+                                                            price_list?.map((item, index) => {
                                                                 if (
                                                                     item.value.currency === v.value
                                                                 ) {
