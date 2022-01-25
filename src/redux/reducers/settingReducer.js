@@ -14,3 +14,19 @@ export const userTierReducer = (state = {}, action) => {
             return state;
     }
 };
+
+const InitialKYCSetting = {
+    KYC: {},
+    AML: {}
+}
+
+export const kycSettingsReducer = (state = InitialKYCSetting, action) => {
+    switch(action.type) {
+        case types.FETCH_KYC_SETTINGS:
+            return { ...state, ...action.payload };
+        case types.UPDATE_KYC_SETTING:
+            return { ...state, [action.payload.kind]: action.payload };
+        default:
+            return state;
+    }
+};

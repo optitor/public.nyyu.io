@@ -27,21 +27,21 @@ export default function PrimaryStep({ step, setState }) {
                     onChange={(e) => setAccept(e.target.checked)}
                 >
                     I agree to the above statement, and I have read NDB{" "}
-                    <Link to="/" className="txt-green">
+                    <Link to="/" className="txt-green fw-bold">
                         Privacy Policy
                     </Link>
                 </CheckBox>
             </div>
-            <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
+            <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                 <Link
                     to={ROUTES.profile}
-                    className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-md-3"
+                    className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
                 >
                     cancel
                 </Link>
                 <button
                     disabled={!accept}
-                    className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-md-3"
+                    className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                     onClick={() => setState({ step: step + 1 })}
                 >
                     next
