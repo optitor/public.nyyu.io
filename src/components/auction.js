@@ -53,15 +53,12 @@ const Auction = () => {
     const size = useWindowSize()
     const currencyId = useSelector((state) => state?.placeBid.currencyId)
     const user = useSelector((state) => state.auth.user)
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        tabIndex: 0,
-        amount: 1,
-        price: 1,
-        isBid: false,
-        bidModal: false,
-        show_chart: false,
-        selectLabel: options[0],
-    })
+
+    //Get Auctions
+    const { data } = useQuery(GET_AUCTION)
+    const roundData = data?.getAuctions?.filter(
+        (item) => (item.status === 2 || item.status === 0) && item
+    )
 
     // set chart type
     const [pricce, setPrice] = useState(true)
@@ -75,17 +72,10 @@ const Auction = () => {
     const [fnAverateMinBid, setfnAverateMinBid] = useState(0)
     const [auctionLoaded, setActionLoaded] = useState(false)
 
-    const { tabIndex, amount, price, isBid, bidModal, show_chart, selectLabel } = state
     const [selectedData, setSelectedData] = useState(1)
-    const { data } = useQuery(GET_AUCTION)
-
-    const roundData = data?.getAuctions?.filter(
-        (item) => (item.status === 2 || item.status === 0) && item
-    )
-
+    const [period, setPeriod] = useState("1M")
     ////////////////////////
 
-    const [period, setPeriod] = useState("1M")
     useEffect(() => {
         if (!auctionLoaded && roundData) {
             setActionLoaded(true)
@@ -118,6 +108,19 @@ const Auction = () => {
             })
         }
     }, [roundData])
+
+    console.log(roundData && roundData[0]?.minPrice)
+
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
+        tabIndex: 0,
+        amount: 1,
+        price: roundData && roundData[0]?.minPrice,
+        isBid: false,
+        bidModal: false,
+        show_chart: false,
+        selectLabel: options[0],
+    })
+    const { tabIndex, amount, price, isBid, bidModal, show_chart, selectLabel } = state
 
     // get round based data
     const [loadRoundMByNumber, { data: roundM, error: mFetched }] =
@@ -305,7 +308,9 @@ const Auction = () => {
         dispatch(setCurrentRound(fnSelectedRoundData()?.id))
         navigate(ROUTES.payment)
     }
-
+    console.log("amount: ", amount)
+    console.log("price: ", price)
+    console.log("total: ", price * amount)
     if (loading) return <Loading />
     else
         return (
@@ -469,10 +474,7 @@ const Auction = () => {
                                     />
                                 </div>
                             </div>
-                            <div
-                                className="position-absolute"
-                                style={{ bottom: "20%", width: "calc(100% - 24px)" }}
-                            >
+                            <div className="auction-left__bottom">
                                 {isInbetween(
                                     fnSelectedRoundData()?.startedAt,
                                     fnSelectedRoundData()?.endedAt
@@ -547,12 +549,12 @@ const Auction = () => {
                                 <div className="d-flex align-items-center mb-4">
                                     <input
                                         type="number"
-                                        value={amount || 1}
+                                        value={Math.max(1, amount)}
                                         onChange={(e) => setState({ amount: e.target.value })}
                                         className="range-input"
                                     />
                                     <Slider
-                                        value={amount || 1}
+                                        value={Math.max(1, amount)}
                                         onChange={(value) => setState({ amount: value })}
                                         min={1}
                                         max={fnSelectedRoundData()?.token}
