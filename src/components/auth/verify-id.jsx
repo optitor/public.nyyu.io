@@ -55,6 +55,10 @@ const VerificationPage = () => {
         setFiles: stepFourSetFiles,
         removeFile: stepFourRemoveFile,
     } = useFileUpload()
+
+    // 6
+    const [selfieImage, setSelfieImage] = useState()
+
     const inputRef = useRef()
     const webcamRef = useRef(null)
 
@@ -187,7 +191,14 @@ const VerificationPage = () => {
                             removeFile={stepFourRemoveFile}
                         />
                     )}
-                    {step === 5 && <StepSix step={step} setState={setState} />}
+                    {step === 5 && (
+                        <StepSix
+                            step={step}
+                            setState={setState}
+                            selfieImage={selfieImage}
+                            setSelfieImage={setSelfieImage}
+                        />
+                    )}
                     {step === 6 && <StepSeven step={step} setState={setState} />}
 
                     {/* <div className="verify-step2">
