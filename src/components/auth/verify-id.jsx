@@ -18,18 +18,22 @@ import { countries } from "../../utilities/staticData"
 
 const VerificationPage = () => {
     // Containers
+
     const [accept, setAccept] = useState(false)
     const [country, setCountry] = useState(countries[0])
-
-    const inputRef = useRef()
-    const webcamRef = useRef(null)
-
     const {
         files: stepOneFiles,
         handleDragDropEvent: stepOneHandleDragDropEvent,
         setFiles: stepOneSetFiles,
         removeFile: stepOneRemoveFile,
     } = useFileUpload()
+    const [name, setName] = useState("")
+    const [surname, setSurname] = useState("")
+    const [dob, setDob] = useState("")
+
+    const inputRef = useRef()
+    const webcamRef = useRef(null)
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         step: -1, // --> initial value: -1;
         phoneModal: false,
@@ -119,7 +123,16 @@ const VerificationPage = () => {
                             removeFile={stepOneRemoveFile}
                         />
                     )}
-                    {step === 1 && <StepTwo step={step} setState={setState} />}
+                    {step === 1 && (
+                        <StepTwo
+                            name={name}
+                            setName={setName}
+                            dob={dob}
+                            setDob={setDob}
+                            step={step}
+                            setState={setState}
+                        />
+                    )}
 
                     {/* <div className="verify-step2">
                         <h5 className="text-center">Identity document</h5>

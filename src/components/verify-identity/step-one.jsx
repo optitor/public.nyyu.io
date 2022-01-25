@@ -13,7 +13,6 @@ export default function StepOne({
     handleDragDropEvent,
     removeFile,
 }) {
-    console.log(files)
     // Containers
     const docTypes = [
         {
