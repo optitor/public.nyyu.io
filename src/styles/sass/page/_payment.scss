@@ -194,6 +194,7 @@
                         padding-bottom: 0;
                     }
                     .css-ackcql {
+                        display: none !important;
                         input {
                             caret-color: transparent;
                         }
@@ -232,11 +233,6 @@
                     font-size: 16px;
                     line-height: 20px;
                     color: black;
-                }
-                @include mq("laptop-md", max) {
-                    code {
-                        font-size: 13px;
-                    }
                 }
                 @include mq("laptop", max) {
                     padding: 10px;
