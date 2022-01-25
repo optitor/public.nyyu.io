@@ -138,6 +138,7 @@ export default function StepOne({
                         back
                     </button>
                     <button
+                        disabled={files.length === 0}
                         className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                         onClick={() => setState({ step: step + 1 })}
                     >
