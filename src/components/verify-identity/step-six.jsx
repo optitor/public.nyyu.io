@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react"
 import Webcam from "react-webcam"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 
-export default function StepSix({ step, setState, selfieImage, setSelfieImage }) {
+export default function StepSix({ step, setState, selfieImage, setSelfieImage, submitKYCData }) {
     // Containers
     const webcamRef = useRef(null)
     const [openWebcam, setOpenWebcam] = useState(false)
@@ -82,7 +82,7 @@ export default function StepSix({ step, setState, selfieImage, setSelfieImage })
                     {selfieImage && !openWebcam && (
                         <button
                             className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
+                            onClick={submitKYCData}
                         >
                             complete
                         </button>

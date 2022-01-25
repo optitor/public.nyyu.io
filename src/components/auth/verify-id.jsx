@@ -11,8 +11,20 @@ import StepSix from "../verify-identity/step-six"
 import StepSeven from "../verify-identity/step-seven"
 import { useState } from "react"
 import { countries } from "../../utilities/staticData"
+import { VERIFY_KYC_MUTATION } from "../../apollo/graghqls/mutations/Auth"
+import { useMutation } from "@apollo/client"
 
 const VerificationPage = () => {
+    // WebService
+    const [verify] = useMutation(VERIFY_KYC_MUTATION, {
+        errorPolicy: "ignore",
+        onCompleted: (data) => {
+            console.log(data)
+        },
+        onerror: (error) => {
+            console.log(error)
+        },
+    })
     // Containers
 
     // 0
@@ -61,7 +73,38 @@ const VerificationPage = () => {
     const { step } = state
 
     // Methods
-    const submitKYCData = () => {}
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => resolve(reader.result)
+            reader.onerror = (error) => reject(error)
+        })
+    }
+    const submitKYCData = async () => {
+        // let's first turn the images into base64
+        const imageStep1 = await getBase64(stepOneFiles[0])
+        console.log(imageStep1)
+        const imageStep3 = await getBase64(stepThreeFiles[0])
+        console.log(imageStep3)
+        const imageStep4 = await getBase64(stepFourFiles[0])
+        console.log(imageStep4)
+        verify({
+            variables: {
+                country: country,
+                email: "mreskini30@gmail.com",
+                faceProof: selfieImage,
+                documentProof: imageStep4,
+                addressProof: imageStep3,
+                fullAddress: address,
+                consentProof: imageStep1,
+                fname: "Mohammad",
+                mname: "",
+                lname: "Eskini",
+                dob: dob,
+            },
+        })
+    }
 
     return (
         <main className="verify-page">
@@ -151,6 +194,7 @@ const VerificationPage = () => {
                             setState={setState}
                             selfieImage={selfieImage}
                             setSelfieImage={setSelfieImage}
+                            submitKYCData={submitKYCData}
                         />
                     )}
                     {step === 6 && <StepSeven step={step} setState={setState} />}

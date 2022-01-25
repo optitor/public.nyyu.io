@@ -13,6 +13,7 @@ export default function StepOne({
     handleDragDropEvent,
     removeFile,
 }) {
+    const [file, setFile] = useState(null)
     // Containers
     const docTypes = [
         {
@@ -99,6 +100,7 @@ export default function StepOne({
                                             id="file-upload-input"
                                             className="d-none"
                                             onChange={(e) => setFiles(e, "w")}
+                                            // onChange={onFileChange}
                                         />
                                         <div className="py-3 px-0">
                                             <div className="new-doc mx-auto">
