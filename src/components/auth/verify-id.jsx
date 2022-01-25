@@ -26,7 +26,7 @@ const VerificationPage = () => {
         },
     })
     // Containers
-
+    const [submitting, setSubmitting] = useState(false)
     // 0
     const [accept, setAccept] = useState(false)
 
@@ -83,6 +83,7 @@ const VerificationPage = () => {
     }
     const submitKYCData = async () => {
         // let's first turn the images into base64
+        setSubmitting(true)
         const imageStep1 = await getBase64(stepOneFiles[0])
         console.log(imageStep1)
         const imageStep3 = await getBase64(stepThreeFiles[0])
@@ -102,6 +103,9 @@ const VerificationPage = () => {
                 mname: "",
                 lname: "Eskini",
                 dob: dob,
+            },
+            onCompleted: () => {
+                setSubmitting(false)
             },
         })
     }
@@ -177,6 +181,7 @@ const VerificationPage = () => {
                             setState={setState}
                             selfieImage={selfieImage}
                             setSelfieImage={setSelfieImage}
+                            submitting={submitting}
                             submitKYCData={submitKYCData}
                         />
                     )}

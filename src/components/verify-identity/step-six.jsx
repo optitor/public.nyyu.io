@@ -2,8 +2,16 @@ import React, { useRef, useState } from "react"
 import Webcam from "react-webcam"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import CustomSpinner from "../common/custom-spinner"
 
-export default function StepSix({ step, setState, selfieImage, setSelfieImage, submitKYCData }) {
+export default function StepSix({
+    step,
+    setState,
+    selfieImage,
+    setSelfieImage,
+    submitKYCData,
+    submitting,
+}) {
     // Containers
     const webcamRef = useRef(null)
     const [openWebcam, setOpenWebcam] = useState(false)
@@ -97,10 +105,17 @@ export default function StepSix({ step, setState, selfieImage, setSelfieImage, s
                         )}
                         {selfieImage && !openWebcam && (
                             <button
+                                disabled={submitting}
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
                                 onClick={submitKYCData}
                             >
-                                complete
+                                {submitting ? (
+                                    <div className="mt-3px">
+                                        <CustomSpinner />
+                                    </div>
+                                ) : (
+                                    "compete"
+                                )}
                             </button>
                         )}
                     </div>
