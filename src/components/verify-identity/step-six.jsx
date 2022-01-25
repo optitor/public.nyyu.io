@@ -26,11 +26,9 @@ export default function StepSix({ step, setState, selfieImage, setSelfieImage })
             </div>
             <div className="my-sm-5 verify-step1">
                 <div className="text-center mt-3 mt-sm-0">
-                    <p className="fs-14px">
+                    <p className="fs-16px">
                         Face the camera. Make sure your face is visible including the ears.
-                        <div className="d-sm-block d-none">
-                            <br />
-                        </div>
+                        <div className="d-sm-block d-none"></div>
                         Have good lightening and face the camera straight on.
                     </p>
                     {openWebcam ? (
