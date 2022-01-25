@@ -111,23 +111,6 @@ const VerificationPage = () => {
             <SimpleHeader />
             <section className="d-flex justify-content-center align-items-start align-items-xl-center">
                 <div>
-                    <h4 className="text-center  mt-5 mt-sm-2 mb-4">Verify your identity</h4>
-                    {/* {step !== -1 && step < 3 && (
-                        <div className="d-flex mt-4">
-                            <div className="step-bar">
-                                <div className="left-circle bg-green"></div>
-                                <div
-                                    className="step-progress"
-                                    style={{ width: step * 50 + "%" }}
-                                ></div>
-                                <div
-                                    className={`right-circle ${
-                                        step === 2 ? "bg-green" : "bg-white"
-                                    }`}
-                                ></div>
-                            </div>
-                        </div>
-                    )} */}
                     {step === -1 && (
                         <PrimaryStep
                             accept={accept}
