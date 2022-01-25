@@ -69,7 +69,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
             overlayClassName="dress-up-modal__overlay"
         >
             <div className="dress-up-modal__header">
-                <div onClick={closeModal} onKeyDown={closeModal} role="button" tabIndex="0">
+                <div onClick={closeModal} onKeyDown={closeModal} role="button" tabIndex="0" className="close">
                     <img
                         width="14px"
                         height="14px"
