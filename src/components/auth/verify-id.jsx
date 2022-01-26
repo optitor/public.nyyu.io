@@ -19,7 +19,7 @@ const VerificationPage = () => {
     // WebService
     useQuery(GET_USER, {
         onCompleted: (res) => {
-            console.log(res.getUser.email)
+            setUserEmail(res.getUser.email)
             setLoadingData(false)
         },
         fetchPolicy: "network-only",
