@@ -1,12 +1,11 @@
 import { Link, navigate } from "gatsby"
 import React, { useReducer, useCallback, useState } from "react"
-
 import { DatePicker } from "@mui/lab"
 import { Icon } from "@iconify/react"
 import AdapterDateFns from "@mui/lab/AdapterDateFns"
 import LocalizationProvider from "@mui/lab/LocalizationProvider"
 import Header from "../header"
-import { CheckBox, Input } from "../common/FormControl"
+import { Input } from "../common/FormControl"
 import MInput from "@mui/material/Input"
 import { Trees } from "../../utilities/imgImport"
 import { ROUTES } from "../../utilities/routes"
@@ -22,7 +21,7 @@ const Verifier = ({ isFirst }) => {
         email: "",
         us_citizen: true,
     })
-    const { business_name, email, us_citizen } = state
+    const { business_name, email } = state
 
     const handleInput = useCallback((e) => {
         e.preventDefault()
@@ -94,15 +93,7 @@ const VerifyCompany = () => {
     })
     const { step, business_name, dateOpen, incop_date, verifiers } = state
 
-    const [open, setOpen] = useState(false)
     const [agree, setAgree] = useState(false)
-
-    const handleAgreeChange = useCallback(
-        (e) => {
-            setAgree(!agree)
-        },
-        [agree]
-    )
 
     const handleInput = useCallback((e) => {
         e.preventDefault()

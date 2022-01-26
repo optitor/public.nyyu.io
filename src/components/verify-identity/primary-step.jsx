@@ -1,7 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
 import { ROUTES } from "../../utilities/routes"
-import { CheckBox } from "../common/FormControl"
 import PrivacyPolicy from "./privacy-policy"
 
 export default function PrimaryStep({ step, setState, accept, setAccept }) {
