@@ -11,7 +11,6 @@
             padding-left: 0;
             padding-right: 0;
         }
-
     }
     & > section {
         .title {
@@ -77,9 +76,7 @@
                 font-size: 18px;
                 line-height: 22px;
                 margin-bottom: 0;
-                @include mq("phone", max) {
-                    text-transform: uppercase;
-                }
+                text-transform: uppercase;
             }
         }
         &-list {
@@ -256,7 +253,7 @@
                 @include mq("phone", max) {
                     width: 130px;
                     height: 130px;
-                    margin: auto;                    
+                    margin: auto;
                     margin-top: 20px;
                 }
             }

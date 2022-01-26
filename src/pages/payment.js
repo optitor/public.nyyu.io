@@ -27,7 +27,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT, Currencies } from "../utilities/staticData"
 import { CREATE_CRYPTO_PAYMENT } from "../apollo/graghqls/mutations/Payment"
-import { generateQR } from './../utilities/string';
+import { generateQR } from "./../utilities/string"
 
 const { Option, SingleValue } = components
 
@@ -79,28 +79,27 @@ const Payment = () => {
     const currentRound = useSelector((state) => state?.placeBid.round_id)
     // console.log("data: ", bidAmount, currentRound)
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
-    const [copied, setCopied] = useState(false);
-    const [coinQRCode, setCoinQRCode] = useState('');
+    const [copied, setCopied] = useState(false)
+    const [coinQRCode, setCoinQRCode] = useState("")
 
     useEffect(async () => {
-        if(currentCoinAddress) {
-            const qrCode = await generateQR(currentCoinAddress);
-            setCoinQRCode(qrCode);
+        if (currentCoinAddress) {
+            const qrCode = await generateQR(currentCoinAddress)
+            setCoinQRCode(qrCode)
         }
-        return '';
-    }, [currentCoinAddress]);
+        return ""
+    }, [currentCoinAddress])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        firstname: "",
-        lastname: "",
-        card: "",
+        cardholder: "",
+        cardnumber: "",
         expire: "",
         code: "",
         bill: "",
         allow_fraction: false,
         getAddress: false,
     })
-    const { firstname, lastname, card, expire, code, bill, allow_fraction, getAddress } = state
+    const { cardholder, cardnumber, expire, code, bill, allow_fraction, getAddress } = state
 
     const [coin, setCoin] = useState(FOO_COINS[0])
     const [balance, setBalance] = useState(null)
@@ -258,10 +257,11 @@ const Payment = () => {
                                             </div>
                                             {getAddress && (
                                                 <div className="qr-code">
-                                                    {coinQRCode?
-                                                        <img src={coinQRCode} alt="qrcode" />:
+                                                    {coinQRCode ? (
+                                                        <img src={coinQRCode} alt="qrcode" />
+                                                    ) : (
                                                         ""
-                                                    }
+                                                    )}
                                                 </div>
                                             )}
                                         </div>
@@ -309,36 +309,27 @@ const Payment = () => {
                                 <div className="creditcard-tab">
                                     <div className="payment-content">
                                         <div className="row">
-                                            <div className="form-group col-sm-6">
+                                            <div className="form-group">
                                                 <Input
                                                     type="text"
-                                                    name="firstname"
-                                                    value={firstname}
+                                                    name="cardholder"
+                                                    value={cardholder}
                                                     onChange={handleInput}
-                                                    placeholder="First name"
-                                                />
-                                            </div>
-                                            <div className="form-group col-sm-6">
-                                                <Input
-                                                    type="text"
-                                                    name="lastname"
-                                                    value={lastname}
-                                                    onChange={handleInput}
-                                                    placeholder="Last name"
+                                                    placeholder="Card Holder"
                                                 />
                                             </div>
                                         </div>
                                         <div className="form-group">
                                             <Input
                                                 type="number"
-                                                name="card"
-                                                value={card}
+                                                name="cardnumber"
+                                                value={cardnumber}
                                                 onChange={handleInput}
                                                 placeholder="Card number"
                                             />
                                         </div>
                                         <div className="row">
-                                            <div className="form-group col-sm-4">
+                                            <div className="form-group col-sm-4 pe-sm-0">
                                                 <Input
                                                     type="number"
                                                     name="expire"
@@ -356,7 +347,7 @@ const Payment = () => {
                                                     placeholder="CSS code"
                                                 />
                                             </div>
-                                            <div className="form-group col-sm-4">
+                                            <div className="form-group col-sm-4 ps-sm-0">
                                                 <Input
                                                     type="number"
                                                     name="bill"
