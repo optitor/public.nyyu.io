@@ -35,6 +35,17 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins }) => {
         })
     }
     actions.setWebpackConfig({
+        module: {
+            rules: [
+                {
+                    test: /\.html$/,
+                    loader: require.resolve('html-loader'),
+                    options: {
+                        minimize: false,
+                    },
+                },
+            ],
+        },
         plugins: [plugins.provide({
             Buffer: ['buffer/', 'Buffer'],
         })]

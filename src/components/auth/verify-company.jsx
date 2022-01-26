@@ -1,5 +1,6 @@
 import { Link, navigate } from "gatsby"
-import React, { useReducer, useCallback } from "react"
+import React, { useReducer, useCallback, useState } from "react"
+
 import { DatePicker } from "@mui/lab"
 import { Icon } from "@iconify/react"
 import AdapterDateFns from "@mui/lab/AdapterDateFns"
@@ -9,6 +10,7 @@ import { CheckBox, Input } from "../common/FormControl"
 import MInput from "@mui/material/Input"
 import { Trees } from "../../utilities/imgImport"
 import { ROUTES } from "../../utilities/routes"
+import PrivacyPolicy from "../verify-identity/privacy-policy"
 
 const content = `
 I declare that i am at least 16 years of age; I agree to the collection, processing or storage of my personal information, including biometic data, by NDB for the purpose(s) of identiy verification; that the information I provide is true and accurate to the best of my knowledge; and I shall be fully responsible in case I provide wrong information or any of the documents I use are fake, forged, counterfeit etc.
@@ -81,7 +83,6 @@ const Verifier = ({ isFirst }) => {
 
 const VerifyCompany = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        agree: false,
         step: -1,
         file: null,
         fileOpen: false,
@@ -91,11 +92,14 @@ const VerifyCompany = () => {
         register_num: "",
         verifiers: ["1"],
     })
-    const { agree, step, business_name, dateOpen, incop_date, verifiers } = state
+    const { step, business_name, dateOpen, incop_date, verifiers } = state
 
-    const handleAgreeOption = useCallback(
+    const [open, setOpen] = useState(false)
+    const [agree, setAgree] = useState(false)
+
+    const handleAgreeChange = useCallback(
         (e) => {
-            setState({ agree: !agree })
+            setAgree(!agree)
         },
         [agree]
     )
@@ -135,19 +139,7 @@ const VerifyCompany = () => {
                                 <b>Identity verificaton Consent</b>
                                 {content}
                             </p>
-                            <div className="form-group">
-                                <CheckBox
-                                    name="agree"
-                                    type="checkbox"
-                                    value={agree}
-                                    onChange={handleAgreeOption}
-                                >
-                                    I agree to the above statment, and i have read NDB&nbsp;
-                                    <Link to="#" className="txt-green">
-                                        Privacy Policy
-                                    </Link>
-                                </CheckBox>
-                            </div>
+                            <PrivacyPolicy agree={agree} setAgree={(res) => setAgree(res)} />
                         </div>
                     )}
                     {step === 0 && (

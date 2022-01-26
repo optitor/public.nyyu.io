@@ -2,6 +2,7 @@ import { Link } from "gatsby"
 import React, { useState } from "react"
 import { ROUTES } from "../../utilities/routes"
 import { CheckBox } from "../common/FormControl"
+import PrivacyPolicy from "./privacy-policy"
 
 export default function PrimaryStep({ step, setState }) {
     const [accept, setAccept] = useState(false)
@@ -20,17 +21,7 @@ export default function PrimaryStep({ step, setState }) {
                 counterfeit etc.
             </p>
             <div className="form-group">
-                <CheckBox
-                    name="agree"
-                    type="checkbox"
-                    value={accept}
-                    onChange={(e) => setAccept(e.target.checked)}
-                >
-                    I agree to the above statement, and I have read NDB{" "}
-                    <Link to="/" className="txt-green fw-bold">
-                        Privacy Policy
-                    </Link>
-                </CheckBox>
+                <PrivacyPolicy agree={accept} setAgree={(res) => setAccept(res)} />
             </div>
             <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                 <Link

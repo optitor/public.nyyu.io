@@ -244,6 +244,7 @@
             }
             .qr-code {
                 text-align: center;
+                margin-left: 1em;
                 svg {
                     width: 115.95px;
                     height: 115.95px;
@@ -542,7 +543,7 @@
         display: flex;
         justify-content: space-between;
         .coin-address {
-            width: calc(100% - 139.95px);
+            width: 100%;
             @include mq("phone", max) {
                 display: block;
                 width: 100%;
