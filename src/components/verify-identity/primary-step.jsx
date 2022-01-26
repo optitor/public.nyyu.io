@@ -1,13 +1,13 @@
+import React from "react"
 import { Link } from "gatsby"
-import React, { useState } from "react"
 import { ROUTES } from "../../utilities/routes"
 import { CheckBox } from "../common/FormControl"
 import PrivacyPolicy from "./privacy-policy"
 
-export default function PrimaryStep({ step, setState }) {
-    const [accept, setAccept] = useState(false)
+export default function PrimaryStep({ step, setState, accept, setAccept }) {
     return (
         <div className="verify-step0 col-sm-12 col-10 mx-auto mt-5 mt-sm-0">
+            <h4 className="text-center  mt-5 mt-sm-2 mb-4">Verify your identity</h4>
             <p className="pre-wrap">
                 <span className="text-white fw-bold fs-18px">
                     Identity verificaton Consent
