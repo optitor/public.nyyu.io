@@ -26,7 +26,7 @@ export default function StepSeven() {
                 <div className="text-center">
                     <img className="d-sm-block d-none" src={VerifyIdStep7} alt="step indicator" />
                 </div>
-                <div className="my-sm-5 verify-step1">
+                <div className="my-sm-5 py-sm-5 verify-step1">
                     <div className="text-sm-start text-center">
                         <p className="fs-25px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
                             Thank you, your verification has been successfully submitted.
