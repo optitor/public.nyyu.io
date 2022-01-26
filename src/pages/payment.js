@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState } from "react"
+import React, { useCallback, useReducer, useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useMutation } from "@apollo/client"
 import ReactTooltip from "react-tooltip"
@@ -27,6 +27,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT, Currencies } from "../utilities/staticData"
 import { CREATE_CRYPTO_PAYMENT } from "../apollo/graghqls/mutations/Payment"
+import { generateQR } from './../utilities/string';
 
 const { Option, SingleValue } = components
 
@@ -76,8 +77,19 @@ const Payment = () => {
     // const dispatch = useDispatch()
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
     const currentRound = useSelector((state) => state?.placeBid.round_id)
-    console.log("data: ", bidAmount, currentRound)
+    // console.log("data: ", bidAmount, currentRound)
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
+    const [copied, setCopied] = useState(false);
+    const [coinQRCode, setCoinQRCode] = useState('');
+
+    useEffect(async () => {
+        if(currentCoinAddress) {
+            const qrCode = await generateQR(currentCoinAddress);
+            setCoinQRCode(qrCode);
+        }
+        return '';
+    }, [currentCoinAddress]);
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         firstname: "",
         lastname: "",
@@ -182,7 +194,7 @@ const Payment = () => {
                                                         onChange={(v) => {
                                                             setCoin(v)
                                                             setCurrentCoinAddress(v.address)
-                                                            price_list.map((item, index) => {
+                                                            price_list?.map((item, index) => {
                                                                 if (
                                                                     item.value.currency === v.value
                                                                 ) {
@@ -246,7 +258,10 @@ const Payment = () => {
                                             </div>
                                             {getAddress && (
                                                 <div className="qr-code">
-                                                    <QRCode value={currentCoinAddress} />
+                                                    {coinQRCode?
+                                                        <img src={coinQRCode} alt="qrcode" />:
+                                                        ""
+                                                    }
                                                 </div>
                                             )}
                                         </div>
@@ -564,7 +579,7 @@ const Payment = () => {
                             </div>
                         </div>
 
-                        <button className="btn-primary text-uppercase width-max-content confirm-payment">
+                        <button className="btn-primary text-uppercase confirm-payment">
                             Confirm Payment
                         </button>
                     </div>
