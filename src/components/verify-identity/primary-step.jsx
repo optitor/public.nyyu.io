@@ -27,7 +27,7 @@ export default function PrimaryStep({ step, setState, accept, setAccept }) {
                     onChange={(e) => setAccept(e.target.checked)}
                 >
                     I agree to the above statement, and I have read NDB{" "}
-                    <Link to="/" className="txt-green fw-bold">
+                    <Link to="/" className="txt-green fw-500">
                         Privacy Policy
                     </Link>
                 </CheckBox>
