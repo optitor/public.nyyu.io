@@ -3,23 +3,38 @@ import { useState } from "react"
 import { VerifyIdStep2 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
 
-export default function StepTwo({ step, setState, name, setName, dob, setDob }) {
+export default function StepTwo({
+    step,
+    setState,
+    dob,
+    setDob,
+    firstName,
+    setFirstName,
+    surname,
+    setSurname,
+}) {
     // Containers
     const dateValidationRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/
     const [dateError, setDateError] = useState("")
-    const [nameError, setNameError] = useState("")
+    const [firstNameError, setFirstNameError] = useState("")
+    const [surnameError, setSurnameError] = useState("")
 
     // Methods
     const validateDateFormat = (date) => String(date).search(dateValidationRegex) !== -1
 
     const onNextButtonClick = (e) => {
         e.preventDefault()
-        setNameError("")
+        setFirstNameError("")
         setDateError("")
+        setSurnameError("")
         let error = false
-        if (!name) {
+        if (!firstName) {
             error = true
-            setNameError("Please fill out the name field")
+            setFirstNameError("Please fill out the first name field")
+        }
+        if (!surname) {
+            error = true
+            setSurnameError("Please fill out the surname field")
         }
         if (!validateDateFormat(dob)) {
             error = true
@@ -62,16 +77,27 @@ export default function StepTwo({ step, setState, name, setName, dob, setDob }) 
                         <div className="fs-16px fw-500">Make edits if needed</div>
                     </div>
                     <div className="col-sm-8 col-12 mx-auto">
-                        <div>
-                            <p className="form-label mt-4">Name surname</p>
+                        <div className="">
+                            <p className="form-label mt-4">First name</p>
                             <input
                                 type="text"
                                 className="form-control"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Name Surname"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                placeholder="First name"
                             />
-                            <div className="text-danger mt-2">{nameError}</div>
+                            <div className="text-danger mt-2">{firstNameError}</div>
+                        </div>
+                        <div>
+                            <p className="form-label mt-4">Surname Name</p>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={surname}
+                                onChange={(e) => setSurname(e.target.value)}
+                                placeholder="Surname name"
+                            />
+                            <div className="text-danger mt-2">{surnameError}</div>
                         </div>
                         <div>
                             <p className="form-label mt-4">Date of birth (YYYY-MM-DD)</p>

@@ -1,4 +1,4 @@
-import React, { useReducer, useRef } from "react"
+import React, { useReducer } from "react"
 import useFileUpload from "react-use-file-upload"
 import SimpleHeader from "../header/simple-header"
 import PrimaryStep from "../verify-identity/primary-step"
@@ -18,8 +18,9 @@ const VerificationPage = () => {
     // WebService
     const [verify] = useMutation(VERIFY_KYC_MUTATION, {
         errorPolicy: "ignore",
-        onCompleted: (data) => {
-            console.log(data)
+        onCompleted: () => {
+            setSubmitting(false)
+            setState({ step: step + 1 })
         },
         onerror: (error) => {
             console.log(error)
@@ -40,8 +41,9 @@ const VerificationPage = () => {
     } = useFileUpload()
 
     // 2
-    const [name, setName] = useState("")
+    const [firstName, setFirstName] = useState("")
     const [surname, setSurname] = useState("")
+    const [middleName, setMiddleName] = useState("")
     const [dob, setDob] = useState("")
 
     // 3
@@ -85,27 +87,21 @@ const VerificationPage = () => {
         // let's first turn the images into base64
         setSubmitting(true)
         const imageStep1 = await getBase64(stepOneFiles[0])
-        console.log(imageStep1)
         const imageStep3 = await getBase64(stepThreeFiles[0])
-        console.log(imageStep3)
         const imageStep4 = await getBase64(stepFourFiles[0])
-        console.log(imageStep4)
         verify({
             variables: {
-                country: country,
+                country: country.label,
                 email: "mreskini30@gmail.com",
                 faceProof: selfieImage,
                 documentProof: imageStep4,
                 addressProof: imageStep3,
                 fullAddress: address,
                 consentProof: imageStep1,
-                fname: "Mohammad",
-                mname: "",
-                lname: "Eskini",
+                fname: firstName,
+                mname: middleName,
+                lname: surname,
                 dob: dob,
-            },
-            onCompleted: () => {
-                setSubmitting(false)
             },
         })
     }
@@ -137,8 +133,12 @@ const VerificationPage = () => {
                     )}
                     {step === 1 && (
                         <StepTwo
-                            name={name}
-                            setName={setName}
+                            firstName={firstName}
+                            setFirstName={setFirstName}
+                            surname={surname}
+                            setSurname={setSurname}
+                            middleName={middleName}
+                            setMiddleName={setMiddleName}
                             dob={dob}
                             setDob={setDob}
                             step={step}

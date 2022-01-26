@@ -19,7 +19,6 @@ export default function StepSix({
     // Methods
     const capture = () => {
         const fooImage = webcamRef.current.getScreenshot()
-        console.log(fooImage)
         setSelfieImage(fooImage)
         return setOpenWebcam(false)
     }
