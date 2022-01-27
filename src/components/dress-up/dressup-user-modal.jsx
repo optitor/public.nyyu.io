@@ -83,16 +83,6 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
         state.expressions?.updatable &&
         state.hats?.updatable &&
         state.others?.updatable
-
-    console.log(
-        state.hairStyles?.updatable,
-        state.hairColors?.updatable,
-        state.facialStyles?.updatable,
-        state.expressions?.updatable,
-        state.hats?.updatable,
-        state.others?.updatable
-    )
-
     return (
         <Modal
             isOpen={isModalOpen}
