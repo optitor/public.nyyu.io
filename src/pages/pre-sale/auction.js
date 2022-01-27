@@ -1,6 +1,8 @@
 /* eslint-disable */
 
 import React, { useState, useEffect, useMemo } from "react"
+import { useSelector } from "react-redux"
+import { navigate } from "gatsby"
 import Slider from "rc-slider"
 import Modal from "react-modal"
 import { Link } from "gatsby"
@@ -10,6 +12,8 @@ import { faTimes, faArrowLeft, faWindowClose } from "@fortawesome/free-solid-svg
 import Header from "../../components/header"
 import ConnectWalletTab from "../../components/profile/connect-wallet-tab"
 import { getSecTomorrow, numberWithLength } from "../../utilities/number"
+import { Currencies } from "../../utilities/staticData"
+import { ROUTES } from "../../utilities/routes"
 
 const modalDesc = {
     sign: [
@@ -24,6 +28,7 @@ const modalDesc = {
 }
 
 const Auction = () => {
+    const currencyId = useSelector((state) => state?.placeBid.currencyId)
     const auth = {
         isSigned: true,
         isKYCVerified: false,
@@ -246,7 +251,7 @@ const Auction = () => {
                                         </div>
                                         <button
                                             className="ndb_button w-100"
-                                            onClick={() => alert("ok")}
+                                            onClick={() => navigate(ROUTES.payment)}
                                             disabled={paymentDisabled}
                                         >
                                             GO TO PAYMENT
@@ -340,7 +345,7 @@ const Auction = () => {
                                     </div>
                                     <button
                                         className="ndb_button w-100"
-                                        onClick={() => alert("ok")}
+                                        onClick={() => navigate(ROUTES.payment)}
                                         disabled={paymentDisabled}
                                     >
                                         GO TO PAYMENT
@@ -376,6 +381,9 @@ const Auction = () => {
                                     <div className="total-price">
                                         <p className="title">total price</p>
                                         <div className="price">{price * amount}</div>
+                                        <h3 className="symbol-label">
+                                            {Currencies[currencyId].label}
+                                        </h3>
                                     </div>
                                     <button className="ndb_button w-100" onClick={handleBuyToken}>
                                         BUY
