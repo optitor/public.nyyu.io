@@ -197,9 +197,7 @@ const Menu = () => {
                                         isModalOpen={isDressUPModalOpen}
                                         onSave={(res) => {
                                             updateAvatarSet({
-                                                variables: {
-                                                    components: res,
-                                                },
+                                                variables: { ...res },
                                             })
                                         }}
                                     />
