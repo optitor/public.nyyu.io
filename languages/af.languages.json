@@ -1,0 +1,15 @@
+{
+    "name": "Afrikaans",
+    "nativeName": "Afrikaans",
+    "content": {
+        "title": "Verifieer jou identiteit",
+
+        "subtitle": "Identiteit verifikasie van toestemming",
+
+        "inhoud": "Ek verklaar dat ek ten minste 16 jaar oud is; ek stem in tot die versameling, verwerking of berging van my persoonlike inligting, insluitend biometriese data, deur NDB vir die doel(e) van identiteitsverifikasie; dat die inligting Ek verskaf is waar en akkuraat na die beste van my wete; en ek sal ten volle verantwoordelik wees indien ek verkeerde inligting verskaf of enige van die dokumente wat ek gebruik vals, vervals, vervals is, ens.",
+
+        "agree": "Ek stem in tot bogenoemde stelling, en ek het NDB gelees "
+    },
+    "bcp47": "af",
+    "native": "Afrikaans"
+}

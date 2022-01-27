@@ -5,6 +5,11 @@ import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import { GET_USER_TIERS } from "../profile/profile-queries"
 
 export default function UserTier() {
+    // Containers
+    const [userTiersData, setUserTiersData] = useState(null)
+    const [userData, setUserData] = useState(null)
+    // Methods
+    
     // Webservice
     const { loading: userTiersLoading } = useQuery(GET_USER_TIERS, {
         onCompleted: (data) => setUserTiersData(data.getUserTiers),
@@ -12,13 +17,7 @@ export default function UserTier() {
     const { loading: userLoading } = useQuery(GET_USER, {
         onCompleted: (data) => setUserData(data.getUser),
     })
-
-    // Containers
     const loading = userTiersLoading || userLoading
-    const [userTiersData, setUserTiersData] = useState(null)
-    const [userData, setUserData] = useState(null)
-    // Methods
-
     // Render
     if (loading) return <></>
     else

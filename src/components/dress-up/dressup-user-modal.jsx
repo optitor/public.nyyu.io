@@ -21,6 +21,7 @@ const init = {
 export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const avatarComponents = useSelector((state) => state.avatarComponents)
     const selected = useSelector((state) => state.auth?.user?.avatar?.selected)
+    const hairColor = useSelector((state) => state.auth?.user?.avatar?.hairColor)
 
     let { loaded, hairStyles, facialStyles, expressions, hats, others } = avatarComponents
     // Convert the mapKey Object to the array.
@@ -40,15 +41,19 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
         const avatarSet = _.mapKeys(avatar, "groupId")
 
         const newState = Object.keys(init).map((key) => {
-            const index = Object.values(avatarComponents[key] ?? {}).findIndex(
+            let index = Object.values(avatarComponents[key] ?? {}).findIndex(
                 (i) => i?.compId === avatarSet?.[key.slice(0, -1)]?.compId
             )
+            if(key === 'hairColors') {
+                index = hairColors?.findIndex(item => item === hairColor);
+                return { key, index, updatable: true };
+            }
             return { key, index, updatable: index >= 0 }
         })
 
         const s = _.mapKeys(newState, "key")
         setState(s)
-    }, [isModalOpen, selected, avatarComponents])
+    }, [isModalOpen, selected, avatarComponents, hairColor])
 
     const saveAvatarItems = () => {
         const avatarSets = Object.keys(avatarComponents)
@@ -61,7 +66,12 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                     compId: Object.values(avatarComponents[key])[index]?.compId ?? 0,
                 }
             })
-        if (!!avatarSets.length) onSave(avatarSets)
+        if (!!avatarSets.length) {
+            onSave({
+                components: avatarSets,
+                hairColor: hairColors[selectedHairColor]
+            });
+        }
         setIsModalOpen(false)
     }
 
@@ -70,7 +80,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
         setIsModalOpen(false)
     }
 
-    const selectedHairColor = state.hairColors?.index ?? 0
+    const selectedHairColor =  state.hairColors?.index ?? 0
     const selectedHairStyle = state.hairStyles?.index ?? 0
     const selectedFacialStyle = state.facialStyles?.index ?? 0
     const selectedHat = state.hats?.index ?? 0
