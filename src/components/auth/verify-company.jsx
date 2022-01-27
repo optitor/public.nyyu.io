@@ -105,7 +105,6 @@ const VerifyCompany = () => {
 
     return (
         <main className="verify-company">
-            <LanguageDropdown />
             <SimpleHeader />
             <section>
                 <div className="container verify-company_container">
@@ -130,6 +129,7 @@ const VerifyCompany = () => {
                     </div>
                     {step === -1 && (
                         <div className="verify-step0">
+                            <LanguageDropdown />
                             <p className="pre-wrap">
                                 <b>{language.content?.subtitle}</b>
                                 {language.content?.content}
