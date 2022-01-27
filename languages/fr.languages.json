@@ -1,0 +1,13 @@
+{
+    "name": "French",
+    "emoji": "🇫🇷",
+    "nativeName": "français, langue française",
+    "content": {
+        "title": "Vérifiez votre identité",
+        "subtitle": "Consentement de vérification d'identité",
+        "content": "Je déclare être âgé d'au moins 16 ans ; j'accepte la collecte, le traitement ou le stockage de mes informations personnelles, y compris les données biométriques, par NDB à des fins de vérification d'identité ; que les informations que je fournis est véridique et exacte au meilleur de ma connaissance ; et je serai entièrement responsable si je fournis des informations erronées ou si l'un des documents que j'utilise est faux, falsifié, contrefait, etc.",
+        "agree": "J'accepte la déclaration ci-dessus et j'ai lu NDB "
+    },
+    "bcp47": "fr",
+    "native": "français, langue française"
+}
