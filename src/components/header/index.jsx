@@ -1,15 +1,10 @@
-/* eslint-disable */
-
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useQuery, useMutation } from "@apollo/client"
-// Libraries
 import { Link } from "gatsby"
 import { isBrowser } from "./../../utilities/auth"
-// Icons
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport"
 import Loading from "../common/FadeLoading"
-
 import { useAuth } from "../../hooks/useAuth"
 import DressupModal from "../dress-up/dressup-user-modal"
 import { ROUTES } from "../../utilities/routes"

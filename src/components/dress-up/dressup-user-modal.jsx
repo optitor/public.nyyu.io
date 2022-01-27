@@ -86,7 +86,13 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
             overlayClassName="dress-up-modal__overlay"
         >
             <div className="dress-up-modal__header">
-                <div onClick={closeModal} onKeyDown={closeModal} role="button" tabIndex="0" className="close">
+                <div
+                    onClick={closeModal}
+                    onKeyDown={closeModal}
+                    role="button"
+                    tabIndex="0"
+                    className="close"
+                >
                     <img
                         width="14px"
                         height="14px"
@@ -156,7 +162,6 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                             </div>
                         </div>
 
-                        {/* <span className="text-center dress-up-modal-avatar-name mt-3">Tesla</span> */}
                         <div className="dress-up-modal-sections-list">
                             {DressupData.tabs.map((item) => (
                                 <div
