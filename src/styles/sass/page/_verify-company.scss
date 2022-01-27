@@ -282,6 +282,17 @@
         &-step1 {
             width: 365px;
             margin: 0 auto;
+            div.MuiFormControl-root {
+                background-color: #ffffff;
+            }
+            div.MuiFormControl-root div.MuiOutlinedInput-root {
+                border: 1px solid #ced4da;
+                height: 38px;
+                border-radius: 0;
+                color: black;
+                font-size: 14px;
+                width: 100%;
+            }
         }
         &-step2 {
             height: 100%;

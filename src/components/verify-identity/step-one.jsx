@@ -123,14 +123,14 @@ export default function StepOne({
                                                 {files[0] ? (
                                                     <p className="mt-30px">
                                                         {files[0].name}{" "}
-                                                        <span className="txt-green fw-bold">
+                                                        <span className="txt-green fw-normal">
                                                             selected
                                                         </span>
                                                     </p>
                                                 ) : (
                                                     <p className="file-browse">
                                                         Drag & drop files here or{" "}
-                                                        <span className="fw-bold">browse</span>
+                                                        <span className="fw-normal">browse</span>
                                                     </p>
                                                 )}
                                             </div>
