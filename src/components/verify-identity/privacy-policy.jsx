@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Link } from "gatsby"
 import { Icon } from "@iconify/react"
 import Modal from "react-modal"
-import InnerHTML from "dangerously-set-html-content"
+// import InnerHTML from "dangerously-set-html-content"
 // import PrivacyHTML from "../../assets/files/Privacy Policy.html"
 
 export default function PrivacyPolicy({ agree, setAgree }) {
