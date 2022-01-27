@@ -84,7 +84,7 @@ const Profile = () => {
 
                     {!config && (
                         <p
-                            className="txt-cyan security-link"
+                            className="txt-green security-link"
                             onClick={() => setIs2FAModalOpen(true)}
                             onKeyDown={() => setIs2FAModalOpen(true)}
                             role="presentation"
@@ -253,7 +253,7 @@ const Profile = () => {
                                                                 ) : (
                                                                     <Link
                                                                         to={ROUTES.verifyId}
-                                                                        className="txt-cyan security-link"
+                                                                        className="security-link"
                                                                     >
                                                                         setup
                                                                     </Link>

@@ -1,14 +1,19 @@
 /* eslint-disable */
 
 import React, { useState, useEffect, useMemo } from "react"
+import { useSelector } from "react-redux"
+import { navigate } from "gatsby"
 import Slider from "rc-slider"
 import Modal from "react-modal"
 import { Link } from "gatsby"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes, faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { Tabs, Tab, TabList, TabPanel } from "react-tabs"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTimes, faArrowLeft, faWindowClose } from "@fortawesome/free-solid-svg-icons"
 import Header from "../../components/header"
+import ConnectWalletTab from "../../components/profile/connect-wallet-tab"
 import { getSecTomorrow, numberWithLength } from "../../utilities/number"
+import { Currencies } from "../../utilities/staticData"
+import { ROUTES } from "../../utilities/routes"
 
 const modalDesc = {
     sign: [
@@ -23,6 +28,7 @@ const modalDesc = {
 }
 
 const Auction = () => {
+    const currencyId = useSelector((state) => state?.placeBid.currencyId)
     const auth = {
         isSigned: true,
         isKYCVerified: false,
@@ -34,14 +40,15 @@ const Auction = () => {
         minutes: 0,
         seconds: 0,
     })
-    const [amount, setAmount] = useState(0)
-    const [price, setPrice] = useState(0)
+    const [amount, setAmount] = useState(1)
+    const [price, setPrice] = useState(10)
     const distanceToDate = getSecTomorrow()
     const percentage = (distanceToDate / duration) * 100
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const [showSelect, setShowSelect] = useState(false)
     const [tabIndex, setTabIndex] = useState(2)
     const [walletAddress, setWalletAddress] = useState("")
+    const [show, setShow] = useState(false)
 
     const paymentDisabled = useMemo(() => {
         if (tabIndex === 0) {
@@ -91,8 +98,8 @@ const Auction = () => {
                         {amount >= 100000
                             ? modalDesc.sign[2]
                             : amount >= 2000
-                                ? modalDesc.sign[1]
-                                : modalDesc.sign[0]}
+                            ? modalDesc.sign[1]
+                            : modalDesc.sign[0]}
                     </p>
                     <div className="btnDiv">
                         <Link to="/signup">
@@ -111,8 +118,8 @@ const Auction = () => {
                         {amount >= 100000
                             ? modalDesc.verify[1]
                             : amount >= 2000
-                                ? modalDesc.verify[0]
-                                : ""}
+                            ? modalDesc.verify[0]
+                            : ""}
                     </p>
                     <div className="btnDiv">
                         <Link to="#">
@@ -126,12 +133,13 @@ const Auction = () => {
                             </p>
                         </Link>
                         <Link
-                            to={`${amount >= 100000
+                            to={`${
+                                amount >= 100000
                                     ? "/aml_verify"
                                     : amount >= 2000
-                                        ? "/kyc_verify"
-                                        : ""
-                                }`}
+                                    ? "/kyc_verify"
+                                    : ""
+                            }`}
                         >
                             <p className="greenbtn">Verify</p>
                         </Link>
@@ -152,8 +160,8 @@ const Auction = () => {
             <Header />
             <section className="container">
                 <div className="row">
-                    <div className="auction-left col-md-5">
-                        <p className="title">Next round starts In</p>
+                    <div className="auction-left col-md-4">
+                        <p className="title-sale-ends">Pre-SALE ends in</p>
                         <div className="timebar">
                             <div className="progress">
                                 <span className="time" style={{ left: percentage * 0.8 + "%" }}>
@@ -161,10 +169,7 @@ const Auction = () => {
                                     {numberWithLength(curTime.minutes, 2)} :{" "}
                                     {numberWithLength(curTime.seconds, 2)}
                                 </span>
-                                <span
-                                    className="pointer"
-                                    style={{ left: percentage * 0.8 + 9 + "%" }}
-                                ></span>
+                                <span className="pointer" style={{ left: percentage + "%" }}></span>
                                 <div
                                     className="progress-bar"
                                     style={{
@@ -190,10 +195,121 @@ const Auction = () => {
                                 </tbody>
                             </table>
                         </div>
+                        <div className="d-block d-md-none px-2 mt-auto w-100 mb-5">
+                            <button className="ndb_button w-100" onClick={() => setShow(true)}>
+                                BUY
+                            </button>
+                        </div>
                     </div>
-                    <div className="auction-right col-md-7">
-                        <p className="title">Exclusive pre round</p>
-                        <div className="tokenDiv">
+                    <div className="auction-right col-md-8">
+                        <p className="title d-none d-md-block">Exclusive pre sale</p>
+                        {show && (
+                            <div className="tokenDiv d-block d-md-none">
+                                <FontAwesomeIcon
+                                    icon={faWindowClose}
+                                    className="text-white"
+                                    onClick={() => setShow(false)}
+                                    role="button"
+                                    style={{
+                                        position: "absolute",
+                                        top: "5px",
+                                        right: "5px",
+                                    }}
+                                />
+                                {showSelect ? (
+                                    <div className="select_wallet">
+                                        <p className="title">
+                                            Select wallet destination
+                                            <FontAwesomeIcon
+                                                icon={faArrowLeft}
+                                                className="text-white"
+                                                onClick={closeSelectWallet}
+                                                role="button"
+                                            />
+                                        </p>
+                                        <div className="select_div">
+                                            <Tabs
+                                                className="wallet-type__tab"
+                                                selectedIndex={tabIndex}
+                                                onSelect={(index) => setTabIndex(index)}
+                                            >
+                                                <TabList>
+                                                    <Tab className="wallet-type__tab-list">
+                                                        NDB WALLET
+                                                    </Tab>
+                                                    <Tab className="wallet-type__tab-list">
+                                                        EXTERNAL WALLET
+                                                    </Tab>
+                                                </TabList>
+                                                <TabPanel>
+                                                    <></>
+                                                </TabPanel>
+                                                <TabPanel>
+                                                    <ConnectWalletTab />
+                                                </TabPanel>
+                                            </Tabs>
+                                        </div>
+                                        <button
+                                            className="ndb_button w-100"
+                                            onClick={() => navigate(ROUTES.payment)}
+                                            disabled={paymentDisabled}
+                                        >
+                                            GO TO PAYMENT
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="buy_token">
+                                        <p className="title">
+                                            <span className="txt-green">10 USD</span> per token
+                                        </p>
+                                        <p className="title" style={{ margin: "5px 0" }}>
+                                            amount of Token
+                                        </p>
+                                        <div className="slider-container">
+                                            <span className="max d-none">Maximum 10</span>
+                                            <input
+                                                type="number"
+                                                value={amount}
+                                                onChange={(e) => setAmount(e.target.value)}
+                                                className="range-input"
+                                                min={1}
+                                                max={10}
+                                                style={{ marginRight: "30px" }}
+                                            />
+                                            <Slider
+                                                value={amount}
+                                                onChange={(value) => setAmount(value)}
+                                                min={1}
+                                                max={10}
+                                                step={1}
+                                                className="d-none"
+                                            />
+                                        </div>
+                                        <div className="total-price">
+                                            <p className="title">total price</p>
+                                            <div className="price">{price * amount}</div>
+                                        </div>
+                                        <p
+                                            style={{
+                                                margin: "51px 40px 25px",
+                                                display: "block",
+                                                textAlign: "center",
+                                            }}
+                                        >
+                                            NDB tokens will be delivered within 30 days of purchase
+                                        </p>
+                                        <button
+                                            className="ndb_button w-100"
+                                            onClick={handleBuyToken}
+                                        >
+                                            BUY
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        <div className="tokenDiv d-none d-md-block ">
                             {showSelect ? (
                                 <div className="select_wallet">
                                     <p className="title">
@@ -216,28 +332,20 @@ const Auction = () => {
                                                     NDB WALLET
                                                 </Tab>
                                                 <Tab className="wallet-type__tab-list">
-                                                    OTHER WALLET
+                                                    EXTERNAL WALLET
                                                 </Tab>
                                             </TabList>
-
                                             <TabPanel>
                                                 <></>
                                             </TabPanel>
                                             <TabPanel>
-                                                <input
-                                                    className="black_input"
-                                                    placeholder="Paste Wallet Address"
-                                                    value={walletAddress}
-                                                    onChange={(e) =>
-                                                        setWalletAddress(e.target.value)
-                                                    }
-                                                />
+                                                <ConnectWalletTab />
                                             </TabPanel>
                                         </Tabs>
                                     </div>
                                     <button
                                         className="ndb_button w-100"
-                                        onClick={() => alert("ok")}
+                                        onClick={() => navigate(ROUTES.payment)}
                                         disabled={paymentDisabled}
                                     >
                                         GO TO PAYMENT
@@ -246,7 +354,7 @@ const Auction = () => {
                             ) : (
                                 <div className="buy_token">
                                     <p className="title">
-                                        <span className="txt-green">100 USD</span> per token
+                                        <span className="txt-green">10 USD</span> per token
                                     </p>
                                     <p className="title" style={{ margin: "5px 0" }}>
                                         amount of Token
@@ -258,20 +366,24 @@ const Auction = () => {
                                             value={amount}
                                             onChange={(e) => setAmount(e.target.value)}
                                             className="range-input"
-                                            min={0}
-                                            max={100000}
+                                            min={1}
+                                            max={10}
+                                            style={{ marginRight: "30px" }}
                                         />
                                         <Slider
                                             value={amount}
                                             onChange={(value) => setAmount(value)}
-                                            min={0}
-                                            max={100000}
+                                            min={1}
+                                            max={10}
                                             step={1}
                                         />
                                     </div>
                                     <div className="total-price">
                                         <p className="title">total price</p>
-                                        <div className="price">{price}</div>
+                                        <div className="price">{price * amount}</div>
+                                        <h3 className="symbol-label">
+                                            {Currencies[currencyId].label}
+                                        </h3>
                                     </div>
                                     <button className="ndb_button w-100" onClick={handleBuyToken}>
                                         BUY
@@ -279,6 +391,9 @@ const Auction = () => {
                                 </div>
                             )}
                         </div>
+                        <p className="mt-2 d-none d-md-block">
+                            NDB tokens will be delivered within 30 days of purchase
+                        </p>
                     </div>
                 </div>
 
