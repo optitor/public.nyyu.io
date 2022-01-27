@@ -48,7 +48,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
 
         const s = _.mapKeys(newState, "key")
         setState(s)
-    }, [isModalOpen, selected])
+    }, [isModalOpen, selected, avatarComponents])
 
     const saveAvatarItems = () => {
         const avatarSets = Object.keys(avatarComponents)
