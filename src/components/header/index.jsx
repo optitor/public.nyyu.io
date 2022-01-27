@@ -20,6 +20,7 @@ import { setCurrentAuthInfo, getAuthInfo } from "../../redux/actions/authAction"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
 import { UPDATE_AVATARSET } from "../../apollo/graghqls/mutations/AvatarComponent"
 import Avatar from "../dress-up/avatar"
+import UserTier from "./user-tier"
 
 const Menu = () => {
     const dispatch = useDispatch()
@@ -193,6 +194,7 @@ const Menu = () => {
                                     <li className="px-sm-3 px-0 scale-75">
                                         <Link to={ROUTES.profile}>
                                             <Avatar className="user-avatar" />
+                                            <UserTier />
                                         </Link>
                                     </li>
                                     <DressupModal
