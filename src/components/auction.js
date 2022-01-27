@@ -109,7 +109,7 @@ const Auction = () => {
         }
     }, [roundData])
 
-    console.log(roundData && roundData[0]?.minPrice)
+    // console.log(roundData && roundData[0]?.minPrice)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         tabIndex: 0,
@@ -308,9 +308,9 @@ const Auction = () => {
         dispatch(setCurrentRound(fnSelectedRoundData()?.id))
         navigate(ROUTES.payment)
     }
-    console.log("amount: ", amount)
-    console.log("price: ", price)
-    console.log("total: ", price * amount)
+    // console.log("amount: ", amount)
+    // console.log("price: ", price)
+    // console.log("total: ", price * amount)
     if (loading) return <Loading />
     else
         return (
