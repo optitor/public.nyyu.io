@@ -180,6 +180,15 @@
         }
     }
     .verify {
+        .languageDropdown {
+            position: absolute;
+            right: 50px;
+            top: 24px;
+            z-index: 100;
+            select {
+                padding: 6px;
+            }
+        }
         &-step0 {
             max-width: 646px;
             margin: 0 auto;

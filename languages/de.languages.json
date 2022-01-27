@@ -1,0 +1,16 @@
+{
+    "name": "German",
+    "nativeName": "Deutsch",
+    "emoji": "🇩🇪",
+    "content": {
+        "title": "Bestätige deine Identität",
+
+        "subtitle": "Einwilligung zur Identitätsprüfung",
+
+        "content": "Ich erkläre, dass ich mindestens 16 Jahre alt bin; ich stimme der Erhebung, Verarbeitung oder Speicherung meiner personenbezogenen Daten, einschließlich biometrischer Daten, durch NDB zum Zwecke der Identitätsprüfung zu; dass die Informationen Ich gebe nach bestem Wissen wahrheitsgemäß und genau an; und ich bin voll verantwortlich, falls ich falsche Informationen gebe oder eines der von mir verwendeten Dokumente gefälscht, gefälscht, gefälscht usw. ist.",
+
+        "agree": "Ich stimme der obigen Aussage zu und habe NDB gelesen "
+    },
+    "bcp47": "de",
+    "native": "Deutsch"
+}
