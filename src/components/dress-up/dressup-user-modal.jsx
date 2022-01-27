@@ -77,6 +77,22 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const selectedExpression = state.expressions?.index ?? 0
     const selectedOther = state.others?.index ?? 0
 
+    const saveButtonActive =
+        state.hairStyles?.updatable &&
+        state.facialStyles?.updatable &&
+        state.expressions?.updatable &&
+        state.hats?.updatable &&
+        state.others?.updatable
+
+    console.log(
+        state.hairStyles?.updatable,
+        state.hairColors?.updatable,
+        state.facialStyles?.updatable,
+        state.expressions?.updatable,
+        state.hats?.updatable,
+        state.others?.updatable
+    )
+
     return (
         <Modal
             isOpen={isModalOpen}
@@ -175,9 +191,17 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                 </div>
                             ))}
                         </div>
-                        <button className="btn-save" onClick={saveAvatarItems}>
-                            save
-                        </button>
+                        <div>
+                            <button
+                                className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase ${
+                                    !saveButtonActive && "btn-secondary"
+                                } ms-4`}
+                                onClick={saveAvatarItems}
+                                disabled={!saveButtonActive}
+                            >
+                                save
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className="col-sm-8 components">
