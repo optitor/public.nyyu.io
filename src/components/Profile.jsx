@@ -134,7 +134,7 @@ const Profile = () => {
                                 <div className="my-5 user-info__avatar">
                                     <Avatar />
                                 </div>
-                                <p className="user-info__name">
+                                <div className="user-info__name">
                                     {currentTier?.length > 0 ? (
                                         <div
                                             className="me-3"
@@ -146,7 +146,7 @@ const Profile = () => {
                                         <></>
                                     )}
                                     {displayName}
-                                </p>
+                                </div>
                                 <p className="silver-cnt">
                                     {nextTier.length > 0 &&
                                         nextTier[0].point -
