@@ -149,16 +149,18 @@ const Profile = () => {
                                 </div>
                                 <p className="silver-cnt">
                                     {nextTier.length > 0 &&
-                                        nextTier[0].point -
-                                            user.tierPoint +
+                                        nextTier[0]?.point -
+                                            user?.tierPoint +
                                             "p to " +
-                                            nextTier[0].name}
+                                            nextTier[0]?.name}
                                 </p>
                                 <div className="timeframe-bar mt-1">
                                     <div
                                         className="timeleft"
                                         style={{
-                                            width: `${(user.tierPoint / nextTier[0].point) * 100}%`,
+                                            width: `${
+                                                (user?.tierPoint / nextTier[0]?.point) * 100
+                                            }%`,
                                         }}
                                     ></div>
                                 </div>
