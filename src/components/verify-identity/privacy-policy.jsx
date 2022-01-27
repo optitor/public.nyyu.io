@@ -5,6 +5,7 @@ import Modal from "react-modal"
 // import InnerHTML from "dangerously-set-html-content"
 // import PrivacyHTML from "../../assets/files/Privacy Policy.html"
 
+
 export default function PrivacyPolicy({ agree, setAgree }) {
     const [open, setOpen] = useState(false)
     return (
