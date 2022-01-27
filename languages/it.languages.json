@@ -1,0 +1,16 @@
+{
+    "name": "Italian",
+    "emoji": "🇮🇹",
+    "nativeName": "Italiano",
+    "content": {
+        "title": "Verifica la tua identità",
+
+        "subtitle": "Identità verificata con consenso",
+
+        "content": "Dichiaro di avere almeno 16 anni di età; acconsento alla raccolta, elaborazione o archiviazione delle mie informazioni personali, compresi i dati biometrici, da parte di NDB ai fini della verifica dell'identità; che le informazioni Fornisco è veritiero e accurato al meglio delle mie conoscenze; e sarò pienamente responsabile nel caso in cui fornisco informazioni errate o uno qualsiasi dei documenti che utilizzo sono falsi, contraffatti, contraffatti, ecc.",
+
+        "agree": "Accetto la dichiarazione di cui sopra e ho letto NDB "
+    },
+    "bcp47": "it",
+    "native": "Italiano"
+}
