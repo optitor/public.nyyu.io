@@ -7,7 +7,7 @@ import Header from "../components/header"
 import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs } from "../utilities/staticData"
-import { Bronze } from "../utilities/imgImport"
+// import { Bronze } from "../utilities/imgImport"
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
@@ -73,7 +73,7 @@ const Profile = () => {
     const getSecurityStatus = (key) =>
         user?.security?.find((f) => f?.authType === key && f?.tfaEnabled)
 
-    const Tfa_Config = ({ title, method }) => {
+    const TfaConfig = ({ title, method }) => {
         const config = !!getSecurityStatus(method)
 
         return (
@@ -227,7 +227,7 @@ const Profile = () => {
                                                     <h4>Increase your account security</h4>
                                                     <div className="row w-100 mx-auto">
                                                         <div className="col-sm-6 br">
-                                                            <Tfa_Config
+                                                            <TfaConfig
                                                                 title="2FA Email"
                                                                 method="email"
                                                             />
@@ -262,14 +262,14 @@ const Profile = () => {
                                                         </div>
 
                                                         <div className="col-sm-6 br">
-                                                            <Tfa_Config
+                                                            <TfaConfig
                                                                 title="2FA Mobile"
                                                                 method="phone"
                                                             />
                                                         </div>
 
                                                         <div className="col-sm-6">
-                                                            <Tfa_Config
+                                                            <TfaConfig
                                                                 title="2FA Authentication app"
                                                                 method="app"
                                                             />
