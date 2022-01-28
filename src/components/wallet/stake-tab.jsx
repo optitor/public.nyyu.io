@@ -170,7 +170,7 @@ export default function StakeTab() {
                                                 { id: 3, label: "90 days" },
                                             ].map((item) => (
                                                 <div
-                                                    className={`bg-dark ${
+                                                    className={`bg-black-10 ${
                                                         asset.duration === item.id &&
                                                         "active-duration"
                                                     }`}
