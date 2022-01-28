@@ -46,6 +46,9 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins }) => {
                 },
             ],
         },
+        optimization: {
+            splitChunks: false,
+        },
         plugins: [plugins.provide({
             Buffer: ['buffer/', 'Buffer'],
         })]
