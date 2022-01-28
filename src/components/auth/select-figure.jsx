@@ -101,7 +101,6 @@ const SelectFigure = () => {
             },
         })
     }
-
     if (loadingPage) return <Loading />
     else
         return (
@@ -301,7 +300,6 @@ const SelectFigure = () => {
                         </div>
                     </div>
                 </section>
-                {/* <img src={Trees} alt="trees" className="trees-img w-100" /> */}
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
