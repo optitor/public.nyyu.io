@@ -11,13 +11,16 @@ const FAQ = () => {
             <section className="container px-sm-5 px-4 pb-5 pb-sm-0">
                 <Tabs className="faq__tabs">
                     <TabList className="faq__tabs-list">
-                        <Tab className="faq__tabs-tab w-100 pb-2 pb-sm-0">Auction FAQ</Tab>
+                        <Tab className="faq__tabs-tab w-100 pb-2 pb-sm-0">help center</Tab>
                     </TabList>
                     <TabPanel>
                         <Tabs className="sub-faq__tabs">
                             <TabList className="sub-faq__tabs-list">
-                                <Tab className="sub-faq__tabs-tab">Auction</Tab>
+                                <Tab className="sub-faq__tabs-tab text-uppercase">self-service</Tab>
+                                <Tab className="sub-faq__tabs-tab text-uppercase">faq</Tab>
+                                <Tab className="sub-faq__tabs-tab text-uppercase">news</Tab>
                             </TabList>
+                            <TabPanel></TabPanel>
                             <TabPanel>
                                 <p className="question-label d-sm-block d-none">Question</p>
                                 <div className="faq-list">
@@ -26,6 +29,7 @@ const FAQ = () => {
                                     ))}
                                 </div>
                             </TabPanel>
+                            <TabPanel></TabPanel>
                         </Tabs>
                     </TabPanel>
                 </Tabs>

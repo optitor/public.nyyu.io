@@ -101,11 +101,10 @@ const SelectFigure = () => {
             },
         })
     }
-
     if (loadingPage) return <Loading />
     else
         return (
-            <main className="profile-page">
+            <main className="select-figure-page">
                 <Header />
                 <section className="container position-relative h-100">
                     <div className="figure-section">
@@ -188,7 +187,7 @@ const SelectFigure = () => {
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className="mt-5 mb-4">
+                                                <div className="my-4">
                                                     {figuresArray[selectedId].abilities.map(
                                                         (item, idx) => (
                                                             <div className="row mb-1" key={idx}>
@@ -267,7 +266,7 @@ const SelectFigure = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="mt-3">
+                                <div className="mt-1">
                                     {error && (
                                         <span className="errorsapn">
                                             <FontAwesomeIcon icon={faExclamationCircle} /> {error}
@@ -301,7 +300,6 @@ const SelectFigure = () => {
                         </div>
                     </div>
                 </section>
-                <img src={Trees} alt="trees" className="trees-img w-100" />
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}

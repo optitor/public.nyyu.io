@@ -3,12 +3,12 @@ main.purchase-page {
         background: black;
     }
     .home-section {
-        height: 100vh;
+        height: calc(100% - 100px);
         background-color: black;
         display: flex;
         align-items: center;
         @media screen and (max-width: 768px) {
-            height: 100vh;
+            height: calc(100% - 75px);
             background: radial-gradient(
                 37.36% 30.86% at 38.06% 59.62%,
                 rgba(0, 0, 0, 0) 0%,
@@ -78,11 +78,29 @@ main.purchase-page {
                             font-size: 22px;
                         }
                     }
+                    @media screen and (max-width: 768px) {
+                        max-width: 50%;
+                        h4.title1 {
+                            font-size: 22px;
+                        }
+                        h3.title2 {
+                            font-size: 42px;
+                        }
+                        p.text {
+                            font-size: 15px;
+                            margin-right: 2vw;
+                        }
+                        button.btn-green {
+                            width: 250px;
+                            font-size: 22px;
+                        }
+                    }
                     @media screen and (max-width: 575px) {
-                        // max-width:350px;
+                        max-width:100%;
                         text-align: center;
                         align-items: center !important;
-                        padding: 0 20px;
+                        padding: 10px 20px;
+                        margin-top: 20px;
                         h4.title1 {
                             font-size: 22px;
                             margin: 10px 0px;
@@ -125,8 +143,34 @@ main.purchase-page {
                         font-variant: small-caps;
                         color: #ffffff;
                     }
+                    @media screen and (max-width: 768px) {
+                        width: 50%;
+                        div.hero-image {
+                            width: 100%;
+                            height: 200px;
+                            justify-content: start;
+                            background-position: -30px 70px;
+                            div {
+                                width: 100%;
+                                .text-left {
+                                    font-weight: bold;
+                                    font-size: 20px;
+                                    line-height: 29px;
+                                    font-variant: small-caps;
+                                    color: #ffffff;
+                                }
+                                .token-value{
+                                    font-size: 70px;
+                                }
+                                .token-left{
+                                    font-size: 22px;
+                                }
+                            }
+                        }
+                    }
                     @media screen and (max-width: 575px) {
-                        padding: 0 20px;
+                        width: 100%;
+                        padding: 10px 20px;
                         div.hero-image {
                             width: 100%;
                             height: 200px;

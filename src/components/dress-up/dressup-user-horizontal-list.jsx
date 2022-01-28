@@ -12,7 +12,7 @@ export default function DressupHorizontalList({
     list = [],
     topic,
     title,
-    selectedItem,
+    selectedItem = 0,
     setSelectedItem,
     secondRow,
     hairStyle,
@@ -87,16 +87,24 @@ export default function DressupHorizontalList({
                                       })
                                   }
                                   role="presentation"
-                                  className={`border border-4 cursor-pointer ${
-                                      selectedItem !== index
-                                          ? "border-transparent"
-                                          : status === OWNED
-                                          ? "border-success"
-                                          : status === LOCKED
-                                          ? "border-grey"
-                                          : status === UNAVAILABLE
-                                          ? "border-grey"
-                                          : "border-success"
+                                  className={`${
+                                      topic === "hairColor"
+                                          ? `border border-4 cursor-pointer ${
+                                                selectedItem !== index
+                                                    ? "border-transparent"
+                                                    : "border-success"
+                                            }`
+                                          : `border border-4 cursor-pointer ${
+                                                selectedItem !== index
+                                                    ? "border-transparent"
+                                                    : status === OWNED
+                                                    ? "border-success"
+                                                    : status === LOCKED
+                                                    ? "border-grey"
+                                                    : status === UNAVAILABLE
+                                                    ? "border-grey"
+                                                    : "border-success"
+                                            }`
                                   }`}
                                   style={{opacity: status === LOCKED || status === UNAVAILABLE? 0.5: 1, marginTop: -1}}
                               >
