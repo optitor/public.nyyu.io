@@ -375,6 +375,10 @@
                         border-top: 2px solid #464646;
 
                         td {
+                            div.echarts-for-react.echarts-for-echarts {
+                                margin: 0px !important;
+                                margin-left: auto !important;
+                            }
                             padding-top: 24px;
                             padding-bottom: 16px;
                         }
