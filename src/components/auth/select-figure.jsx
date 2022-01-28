@@ -30,7 +30,7 @@ const SelectFigure = () => {
     const [figuresArray, setFiguresArray] = useState([])
     const { data: userData } = useQuery(GET_USER, {
         onCompleted: () => {
-            if (userData.getUser.avatar) return navigate(ROUTES.profile)
+            // if (userData.getUser.avatar) return navigate(ROUTES.profile)
             return setUserDataLoading(false)
         },
         fetchPolicy: "network-only",
@@ -105,7 +105,7 @@ const SelectFigure = () => {
     if (loadingPage) return <Loading />
     else
         return (
-            <main className="profile-page">
+            <main className="select-figure-page">
                 <Header />
                 <section className="container position-relative h-100">
                     <div className="figure-section">
@@ -188,7 +188,7 @@ const SelectFigure = () => {
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className="mt-5 mb-4">
+                                                <div className="my-4">
                                                     {figuresArray[selectedId].abilities.map(
                                                         (item, idx) => (
                                                             <div className="row mb-1" key={idx}>
@@ -267,7 +267,7 @@ const SelectFigure = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="mt-3">
+                                <div className="mt-1">
                                     {error && (
                                         <span className="errorsapn">
                                             <FontAwesomeIcon icon={faExclamationCircle} /> {error}
