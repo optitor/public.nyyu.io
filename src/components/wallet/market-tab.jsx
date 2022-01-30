@@ -151,6 +151,7 @@ const CryptoRow = ({ data }) => {
                             right: "0",
                         },
                     }}
+                    style={{ height: "50px", width: "150px", margin: "auto !important" }}
                     className="echarts-for-echarts"
                 />
             </td>
