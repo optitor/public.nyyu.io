@@ -149,3 +149,43 @@
         text-transform: capitalize;
     }
 }
+
+.support-modal {
+    max-width: 881px;
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
+        text-transform: uppercase;
+        color: white;
+    }
+    &__footer {
+        align-items: center;
+        button {
+            display: block;
+        }
+        .btn-cancel {
+            margin-top: 11px;
+            background-color: unset;
+            border: unset;
+            font-size: 12px;
+            line-height: 23px;
+            color: white;
+        }
+        .btn-primary {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 22px;
+            padding: 15px 95px;
+        }
+    }
+    .form {
+        padding: 18px 51px;
+        @include mq("phone", max) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+}
