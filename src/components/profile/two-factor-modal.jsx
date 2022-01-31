@@ -252,7 +252,7 @@ export default function TwoFactorModal({
                                         Scan the QR code below or mannually type the secret key into
                                         your authenticator app.
                                     </p>
-                                    <img src={qrcode} alt="qr code" />
+                                    <img src={qrcode} width={120} alt="qr code" />
                                     <p>
                                         <small className="fw-bold">123456xxxx</small>
                                     </p>
@@ -284,6 +284,7 @@ export default function TwoFactorModal({
 
                         <div className="mt-5">
                             <Input
+                                style={result_code?.length > 0 ? { opacity: 1 } : {}}
                                 type="text"
                                 name="result_code"
                                 value={result_code}
