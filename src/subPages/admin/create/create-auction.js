@@ -4,6 +4,8 @@ import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import validator from "validator";
 import NumberFormat from "react-number-format";
+import { useQuery } from "@apollo/client";
+import * as Query from './../../../apollo/graghqls/querys/Auction'
 
 import Seo from "../../../components/seo"
 import Stepper from "../../../components/admin/Stepper";
@@ -41,11 +43,22 @@ const IndexPage = () => {
     // Round Data
     const initialRoundData = { roundNumber: '', startTime: Date.now(), endTime: Date.now() };
     const [roundData, setRoundData] = useState(initialRoundData);
+
+    const { data: newRound } = useQuery(Query.GET_NEW_ROUND, {
+        fetchPolicy: "network-only",
+        onCompleted: () => {
+            if(newRound.getNewRound) {
+                setRoundData({ ...roundData, roundNumber: newRound.getNewRound });
+            }
+        },
+    });
+
     const duration = useMemo(() => {
         if(!roundData.startTime || !roundData.endTime) return '';
         if(new Date(roundData.endTime) <= new Date(roundData.startTime)) return '';
         return new Date(roundData.endTime) - new Date(roundData.startTime) + 1000;
     }, [roundData]);
+    // console.log(roundData)
 
     // Round Data Validation
     const roundDataError = useMemo(() => {
@@ -146,15 +159,12 @@ const IndexPage = () => {
                                     </div>
                                     <div>
                                         <p>Round Number</p>
-                                        <NumberFormat className={`black_input ${showError && roundDataError.roundNumber? 'error': ''}`}
+                                        <NumberFormat className={`black_input disabled`}
                                             placeholder='Enter number'
                                             thousandSeparator={true}
                                             allowNegative={false}
                                             value={roundData.roundNumber}
-                                            onValueChange={({ value }) => {
-                                                setRoundData({...roundData, roundNumber: value});
-                                            }}
-                                            isAllowed={({floatValue}) => Number.isInteger(floatValue)}
+                                            readOnly
                                         />
                                     </div>
                                 </div>
@@ -219,21 +229,33 @@ const IndexPage = () => {
                                     </div>                                    
                                 </div>
                                 <div className="div1 mt-4">
-                                    <div>           
+                                    <div>
                                         <p>Total Token Amount</p>  
                                         <div className="token_div">
-                                            <input className="white_input" value={totalTokenAmount} readOnly/>
+                                            <NumberFormat
+                                                value={totalTokenAmount}
+                                                className="white_input"
+                                                displayType='text'
+                                                thousandSeparator={true}
+                                                readOnly
+                                            />
                                             <div>
                                                 {[5, 10, 20, 50].map(value => {
                                                     return (<button key={value} onClick={() => setTokenData({...tokenData, tokenAmount: String(totalTokenAmount * value / 100)})}>{value}%</button>);
                                                 })}
                                             </div>
-                                        </div>                                                               
+                                        </div>
                                     </div>
                                     <div>    
                                         <p>Previous Reserved Price</p>                                     
                                         <div className="token_div">
-                                            <input className="white_input" value={prevReservedPrice+'$'} readOnly/>
+                                            <NumberFormat
+                                                value={prevReservedPrice}
+                                                className="white_input"
+                                                displayType='text'
+                                                thousandSeparator={true}
+                                                readOnly
+                                            />
                                             <div>
                                                 {[5, 10, 20, 50].map(value => {
                                                     return (<button key={value} onClick={() => setTokenData({...tokenData, ReservedPrice: String(prevReservedPrice * value / 100)})}>{value}%</button>);

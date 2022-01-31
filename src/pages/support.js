@@ -12,6 +12,7 @@ import {
     SupportUnlock,
 } from "../utilities/imgImport"
 import ResetPasswordModal from "../components/support/reset-password-modal"
+import Seo from "../components/seo"
 import UnlockAccountModal from "../components/support/unlock-account-moda"
 import ResetPhoneModal from "../components/support/reset-phone-modal"
 import DepositAssetModal from "../components/support/deposit-asset-modal"
@@ -65,6 +66,8 @@ const FAQ = () => {
     const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false)
     const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false)
     return (
+    <>
+        <Seo title="Support" />
         <main className="faq-page">
             <Header />
             <section className="container px-sm-5 px-4 pb-5 pb-sm-0">
@@ -142,6 +145,7 @@ const FAQ = () => {
                 />
             </section>
         </main>
+    </>
     )
 }
 

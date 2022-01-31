@@ -21,6 +21,7 @@ import ChanceChart from "./chart/ChanceChart"
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client"
 import { setBidInfo, setCurrentRound } from "../redux/actions/bidAction"
 import Loading from "./common/Loading"
+import Seo from "./seo"
 
 import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
@@ -352,6 +353,8 @@ const Auction = () => {
     if (loading) return <Loading />
     else
         return (
+        <>
+            <Seo title="Sale" />
             <main className="auction-page">
                 <Header />
                 <section className="section-auction container">
@@ -1023,7 +1026,8 @@ const Auction = () => {
                     </div>
                 </Modal>
             </main>
-        )
+        </>
+    )
 }
 
 export default Auction

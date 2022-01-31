@@ -11,15 +11,14 @@ import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Input } from "../components/common/FormControl"
 import { useWindowSize } from "../utilities/customHook"
 import AirdropDetail from "../components/AirdropDetail"
-import DepositWithdrawModal from "../components/wallet/deposit-withdraw-modal"
 import MarketTab from "../components/wallet/market-tab"
-import { TRANSACTION_TYPES } from "../utilities/staticData"
 import Transactions from "../components/wallet/transactions-tab"
 import ReferralTab from "../components/wallet/referral-tab"
 import StakeTab from "../components/wallet/stake-tab"
 import BidActivityTab from "../components/wallet/bid-activity-tab"
 import { GET_BID_LIST_BY_USER } from "../apollo/graghqls/querys/Bid"
 import InternalWallet from "../components/wallet/internal-wallet"
+import Seo from "../components/seo"
 
 const transactions = [
     {
@@ -165,13 +164,6 @@ const History = () => {
     const size = useWindowSize()
     const { data: bidList } = useQuery(GET_BID_LIST_BY_USER)
 
-    const [hideValues, setHideValues] = useState(false)
-    const [btcEquityValue, setBtcEquityValue] = useState("12.003.877")
-    const [dollarEquityValue, setDollarEquityValue] = useState("282,004.43")
-    const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit)
-    const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false)
-    const obscureValueString = "****"
-    const [btcOrUsd, setBtcOrUsd] = useState("USD")
     const copyText = "kjY602GgjsKP23mhs09oOp63bd3n34fsla"
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -212,137 +204,14 @@ const History = () => {
     }
 
     return (
+    <>
+        <Seo title="Wallet" />
         <main className="history-page">
             <Header />
             <section className="container">
                 <div className="section-history row">
                     <div className="section-history__left col-lg-4 col-md-5">
-                        <div>
-                            <div className="profile-value">
-                                <div className="value-box">
-                                    <p className="value-label d-flex justify-content-between align-items-center">
-                                        <div className="d-flex align-items-center">
-                                            Equity Value (BTC)
-                                            {!hideValues && (
-                                                <svg
-                                                    className="value-label-eye-icon"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    onClick={() => setHideValues(true)}
-                                                    viewBox="0 0 24 24"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                                                    ></path>
-                                                </svg>
-                                            )}
-                                            {hideValues && (
-                                                <svg
-                                                    className="value-label-eye-icon"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    onClick={() => setHideValues(false)}
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                                    ></path>
-                                                    <path
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                        strokeWidth="2"
-                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                                    ></path>
-                                                </svg>
-                                            )}
-                                        </div>
-
-                                        <div className="d-flex gap-2">
-                                            <div
-                                                className={`cursor-pointer ${
-                                                    btcOrUsd === "BTC" && "fw-bold text-white"
-                                                }`}
-                                                onClick={() => setBtcOrUsd("BTC")}
-                                                onKeyDown={() => setBtcOrUsd("BTC")}
-                                                role="presentation"
-                                            >
-                                                BTC
-                                            </div>
-                                            <div>|</div>
-                                            <div
-                                                className={`cursor-pointer ${
-                                                    btcOrUsd === "USD" && "fw-bold text-white"
-                                                }`}
-                                                onClick={() => setBtcOrUsd("USD")}
-                                                onKeyDown={() => setBtcOrUsd("USD")}
-                                                role="presentation"
-                                            >
-                                                USD
-                                            </div>
-                                        </div>
-                                    </p>
-                                    <p className="value">
-                                        {hideValues
-                                            ? obscureValueString
-                                            : btcOrUsd === "USD"
-                                            ? dollarEquityValue
-                                            : btcEquityValue}
-                                    </p>
-                                    <p className="max-value mt-3">
-                                        {hideValues
-                                            ? obscureValueString
-                                            : "~ $ " +
-                                              (btcOrUsd === "USD"
-                                                  ? btcEquityValue
-                                                  : dollarEquityValue)}
-                                    </p>
-                                </div>
-                                <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
-                                    <div className="col-sm-6 pe-2">
-                                        <button
-                                            disabled
-                                            className="btn btn-outline-secondary rounded-0 col-12 text-uppercase fw-bold py-2 h4"
-                                            onClick={() => {
-                                                setTransactionType(TRANSACTION_TYPES.deposit)
-                                                setShowDepositAndWidthdrawModal(true)
-                                            }}
-                                        >
-                                            deposit
-                                        </button>
-                                    </div>
-                                    <div className="col-sm-6 ps-2">
-                                        <button
-                                            className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
-                                            onClick={() => {
-                                                setTransactionType(TRANSACTION_TYPES.withdraw)
-                                                setShowDepositAndWidthdrawModal(true)
-                                            }}
-                                        >
-                                            withdraw
-                                        </button>
-                                    </div>
-                                    {showDepositAndWidthdrawModal && (
-                                        <DepositWithdrawModal
-                                            showModal={showDepositAndWidthdrawModal}
-                                            setShowModal={setShowDepositAndWidthdrawModal}
-                                            transactionType={transactionType}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <InternalWallet />
-                            </div>
-                        </div>
+                        <InternalWallet />
                     </div>
                     <div className="section-history__right col-lg-8 col-md-7">
                         <Tabs onSelect={() => setState({ detail_show: false })}>
@@ -614,6 +483,7 @@ const History = () => {
                 </div>
             </Modal>
         </main>
+    </>
     )
 }
 
