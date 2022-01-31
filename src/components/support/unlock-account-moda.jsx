@@ -46,7 +46,9 @@ export default function UnlockAccountModal({ isOpen, setIsOpen }) {
                                 <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
                                     <CustomSpinner />
                                 </div>
-                                <div className={`${loading ? "ms-3" : "pe-4"}`}>reactivate</div>
+                                <div className={`fs-20px ${loading ? "ms-3" : "pe-4"}`}>
+                                    reactivate
+                                </div>
                             </button>
                         </div>
                     </form>

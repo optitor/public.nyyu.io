@@ -7,7 +7,7 @@ import { CloseIcon } from "../../utilities/imgImport"
 import CustomSpinner from "../common/custom-spinner"
 import { FormInput } from "../common/FormControl"
 
-export default function ResetPasswordModal({ isOpen, setIsOpen }) {
+export default function ResetPhoneModal({ isOpen, setIsOpen }) {
     const [sentCode, setSentCode] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
@@ -30,7 +30,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
             </div>
             <div className="my-5">
                 <div className="text-center">
-                    <p className="text-capitalize fs-30px fw-bold">reset password</p>
+                    <p className="text-capitalize fs-30px fw-bold">reset phone verification</p>
                     <p className="fs-16px mt-2 text-light fw-normald">
                         To secure your account, please complete the following verification
                     </p>

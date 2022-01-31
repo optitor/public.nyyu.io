@@ -14,6 +14,7 @@ import {
 import ResetPasswordModal from "../components/support/reset-password-modal"
 import { useState } from "react"
 import UnlockAccountModal from "../components/support/unlock-account-moda"
+import ResetPhoneModal from "../components/support/reset-phone-modal"
 
 const FAQ = () => {
     const selfServiceData = [
@@ -33,7 +34,7 @@ const FAQ = () => {
             id: 2,
             label: "Reset Phone Security Verification",
             icon: SupportSecurity,
-            clickEvent: () => {},
+            clickEvent: () => setIsResetPhoneModalOpen(true),
         },
         {
             id: 3,
@@ -57,6 +58,7 @@ const FAQ = () => {
 
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
     const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false)
+    const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false)
     return (
         <main className="faq-page">
             <Header />
@@ -116,6 +118,10 @@ const FAQ = () => {
                 <UnlockAccountModal
                     isOpen={isUnlockAccountModalOpen}
                     setIsOpen={setIsUnlockAccountModalOpen}
+                />
+                <ResetPhoneModal
+                    isOpen={isResetPhoneModalOpen}
+                    setIsOpen={setIsResetPhoneModalOpen}
                 />
             </section>
         </main>
