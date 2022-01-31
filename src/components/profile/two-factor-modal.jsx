@@ -49,6 +49,7 @@ export default function TwoFactorModal({
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
             setQRCode(data.request2FA)
+            console.log("selected", selected)
             setState({ set_type: selected })
         },
         onError: (error) => {
@@ -87,7 +88,6 @@ export default function TwoFactorModal({
     })
 
     const sendRequest2FA = (i, mobile = "") => {
-        setState({ loading: true })
         request2FA({
             variables: {
                 email,
@@ -198,7 +198,11 @@ export default function TwoFactorModal({
                                                             if (item.method === "phone") {
                                                                 setState({ input_mobile: true })
                                                             } else {
-                                                                sendRequest2FA(idx)
+                                                                setState({ loading: true })
+                                                                setTimeout(
+                                                                    () => sendRequest2FA(idx),
+                                                                    300
+                                                                )
                                                             }
                                                         }}
                                                     >
