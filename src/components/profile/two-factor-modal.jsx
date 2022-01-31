@@ -284,6 +284,7 @@ export default function TwoFactorModal({
 
                         <div className="mt-5">
                             <Input
+                                style={result_code?.length > 0 ? { opacity: 1 } : {}}
                                 type="text"
                                 name="result_code"
                                 value={result_code}

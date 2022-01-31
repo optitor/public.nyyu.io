@@ -1093,7 +1093,7 @@ export const wallets = {
     injected: {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
-        warn: "MetaMask is not supported",
+        warn: "MetaMask is not supported by your Browser",
     },
     walletConnect: {
         icon: WalletConnect,
