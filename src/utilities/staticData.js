@@ -1375,6 +1375,54 @@ export const FAQ_CONTENT = [
     },
 ]
 
+export const NEWS_CONTENT = [
+    {
+        question: "What is the Dual Token System?",
+        date: "17.01.2022",
+        answer: (
+            <p>
+                The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
+                the Volt Token, a variable supply token. The Dual token brings more incentives to
+                the users and partners. For example, with this method we can provide to our partners
+                more accurate measurements of the interest in their companies by utilizing our
+                services and products from their customer’s perspective.
+            </p>
+        ),
+    },
+    {
+        question: "Latest NDB news",
+        date: "08.01.2022",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+    {
+        question: "Latest activities",
+        date: "26.12.2021",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+    {
+        question: "API updates",
+        date: "19.12.2021",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+    {
+        question: "Crypto airdrop",
+        date: "12.12.2021",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+]
+
 export const NDB_TOKEN_CONTENT = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
 By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 

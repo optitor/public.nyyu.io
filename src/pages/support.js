@@ -1,10 +1,60 @@
 import React from "react"
 import Header from "../components/header"
-import { FAQ_CONTENT } from "../utilities/staticData"
+import { FAQ_CONTENT, NEWS_CONTENT } from "../utilities/staticData"
 import Accordion from "../components/common/Accordion"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
+import {
+    SupportAuthenticator,
+    SupportRecovery,
+    SupportReset,
+    SupportSecurity,
+    SupportTag,
+    SupportUnlock,
+} from "../utilities/imgImport"
+import ResetPasswordModal from "../components/support/reset-password-modal"
+import { useState } from "react"
 
 const FAQ = () => {
+    const selfServiceData = [
+        {
+            id: 0,
+            label: "Reset Password",
+            icon: SupportReset,
+            clickEvent: () => setIsResetPasswordModalOpen(true),
+        },
+        {
+            id: 1,
+            label: "Unlock Account",
+            icon: SupportUnlock,
+            clickEvent: () => {},
+        },
+        {
+            id: 2,
+            label: "Reset Phone Security Verification",
+            icon: SupportSecurity,
+            clickEvent: () => {},
+        },
+        {
+            id: 3,
+            label: "Reset Google Authenticator",
+            icon: SupportAuthenticator,
+            clickEvent: () => {},
+        },
+        {
+            id: 4,
+            label: "Deposit Non Credit Asset Recovery",
+            icon: SupportRecovery,
+            clickEvent: () => {},
+        },
+        {
+            id: 5,
+            label: "Deposit Missing Or Wrong Tag/Memo Asset Recovery",
+            icon: SupportTag,
+            clickEvent: () => {},
+        },
+    ]
+
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
     return (
         <main className="faq-page">
             <Header />
@@ -20,7 +70,25 @@ const FAQ = () => {
                                 <Tab className="sub-faq__tabs-tab text-uppercase">faq</Tab>
                                 <Tab className="sub-faq__tabs-tab text-uppercase">news</Tab>
                             </TabList>
-                            <TabPanel></TabPanel>
+                            <TabPanel>
+                                <div className="row col-12 p-0 m-0">
+                                    {selfServiceData.map((item, index) => {
+                                        return (
+                                            <div
+                                                className={`col-12 col-sm-6 ${
+                                                    index % 2 == 0 ? "ps-0 pe-1" : "pe-0 ps-1"
+                                                }`}
+                                                onClick={item.clickEvent}
+                                            >
+                                                <div className="text-light border border-1 border-light text-center support-self-security-item col-12 mb-2">
+                                                    <img src={item.icon} alt="item figure" />
+                                                    <div>{item.label}</div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </TabPanel>
                             <TabPanel>
                                 <p className="question-label d-sm-block d-none">Question</p>
                                 <div className="faq-list">
@@ -29,10 +97,20 @@ const FAQ = () => {
                                     ))}
                                 </div>
                             </TabPanel>
-                            <TabPanel></TabPanel>
+                            <TabPanel>
+                                <div className="faq-list">
+                                    {NEWS_CONTENT?.map((question, idx) => (
+                                        <Accordion {...question} key={idx} />
+                                    ))}
+                                </div>
+                            </TabPanel>
                         </Tabs>
                     </TabPanel>
                 </Tabs>
+                <ResetPasswordModal
+                    isOpen={isResetPasswordModalOpen}
+                    setIsOpen={setIsResetPasswordModalOpen}
+                />
             </section>
         </main>
     )

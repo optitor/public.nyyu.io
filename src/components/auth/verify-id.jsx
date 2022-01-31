@@ -98,7 +98,7 @@ const VerificationPage = () => {
                 fname: firstName,
                 mname: "",
                 lname: surname,
-                dob: dob,
+                // dob: dob,
             },
         })
     }

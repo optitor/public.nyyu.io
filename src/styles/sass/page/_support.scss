@@ -69,7 +69,7 @@
             max-width: 470px;
         }
         &-list {
-            margin: 0 65px 0 35px;
+            margin: 0 35px 0 35px;
             flex-shrink: 0;
             @include mq("laptop", max) {
                 margin: 0 45px 0 25px;
@@ -122,5 +122,70 @@
     .divide {
         border-bottom: 1px solid white;
         width: 62px;
+    }
+}
+
+.support-self-security-item {
+    min-height: 115px;
+    padding: 0px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    transition: 500ms;
+    &:hover {
+        opacity: 0.6;
+    }
+    img {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 10px;
+    }
+    div {
+        font-size: 13px;
+        line-height: 19px;
+        letter-spacing: -0.02em;
+        text-transform: capitalize;
+    }
+}
+
+.support-modal {
+    max-width: 881px;
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
+        text-transform: uppercase;
+        color: white;
+    }
+    &__footer {
+        align-items: center;
+        button {
+            display: block;
+        }
+        .btn-cancel {
+            margin-top: 11px;
+            background-color: unset;
+            border: unset;
+            font-size: 12px;
+            line-height: 23px;
+            color: white;
+        }
+        .btn-primary {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 22px;
+            padding: 15px 95px;
+        }
+    }
+    .form {
+        padding: 18px 51px;
+        @include mq("phone", max) {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 }

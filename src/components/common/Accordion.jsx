@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-const Accordion = ({ question, answer }) => {
+const Accordion = ({ question, date, answer }) => {
     const [active, setActive] = useState(false)
 
     const handleClick = () => {
@@ -17,7 +17,10 @@ const Accordion = ({ question, answer }) => {
                 className="accordion__toggler w-100 d-flex justify-content-between"
                 onClick={() => handleClick()}
             >
-                <span>{question}</span>
+                <span>
+                    {question}
+                    {date && <div className="fw-normal text-secondary mt-3">{date}</div>}
+                </span>
                 <span className="sign" />
             </button>
 
