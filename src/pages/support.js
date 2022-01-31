@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Header from "../components/header"
 import { FAQ_CONTENT, NEWS_CONTENT } from "../utilities/staticData"
 import Accordion from "../components/common/Accordion"
@@ -12,11 +12,11 @@ import {
     SupportUnlock,
 } from "../utilities/imgImport"
 import ResetPasswordModal from "../components/support/reset-password-modal"
-import { useState } from "react"
 import UnlockAccountModal from "../components/support/unlock-account-moda"
 import ResetPhoneModal from "../components/support/reset-phone-modal"
 import DepositAssetModal from "../components/support/deposit-asset-modal"
 import DepositMissingModal from "../components/support/deposit-missing-modal"
+import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal"
 
 const FAQ = () => {
     const selfServiceData = [
@@ -42,7 +42,7 @@ const FAQ = () => {
             id: 3,
             label: "Reset Google Authenticator",
             icon: SupportAuthenticator,
-            clickEvent: () => {},
+            clickEvent: () => setIsResetAuthenticatorModalOpen(true),
         },
         {
             id: 4,
@@ -61,7 +61,7 @@ const FAQ = () => {
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
     const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false)
     const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false)
-    //4
+    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false)
     const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false)
     const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false)
     return (
@@ -128,7 +128,10 @@ const FAQ = () => {
                     isOpen={isResetPhoneModalOpen}
                     setIsOpen={setIsResetPhoneModalOpen}
                 />
-                {/* 4 */}
+                <ResetAuthenticatorModal
+                    isOpen={isResetAuthenticatorModalOpen}
+                    setIsOpen={setIsResetAuthenticatorModalOpen}
+                />
                 <DepositAssetModal
                     isOpen={isDepositAssetModalOpen}
                     setIsOpen={setIsDepositAssetModalOpen}
