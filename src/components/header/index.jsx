@@ -16,6 +16,7 @@ import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notif
 import { UPDATE_AVATARSET } from "../../apollo/graghqls/mutations/AvatarComponent"
 import Avatar from "../dress-up/avatar"
 import UserTier from "./user-tier"
+import ReactTooltip from "react-tooltip"
 
 const Menu = () => {
     const dispatch = useDispatch()
@@ -180,11 +181,26 @@ const Menu = () => {
                                     <Link className="header-btn sale" to="/app/auction">
                                         Sale
                                     </Link>
-                                    <li className="scale-75">
-                                        <img
-                                            src={newNotification ? NotificationBell : Bell}
-                                            alt="Bell Icon"
-                                        />
+                                    <li className="scale-75 cursor-pointer">
+                                        {newNotification ? (
+                                            <Link to={ROUTES.profile}>
+                                                <img src={NotificationBell} alt="Bell Icon" />
+                                            </Link>
+                                        ) : (
+                                            <img
+                                                src={Bell}
+                                                alt="Bell Icon"
+                                                data-tip="React-tooltip"
+                                            />
+                                        )}
+                                        <ReactTooltip place="bottom" type="light" effect="solid">
+                                            <div
+                                                className="text-uppercase text-center"
+                                                style={{ width: "200px" }}
+                                            >
+                                                no unread notification
+                                            </div>
+                                        </ReactTooltip>
                                     </li>
                                     <li className="px-sm-3 px-0 scale-75">
                                         <Link to={ROUTES.profile}>
