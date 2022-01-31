@@ -3,6 +3,7 @@ import Header from "../components/header"
 import { FAQ_CONTENT } from "../utilities/staticData"
 import Accordion from "../components/common/Accordion"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
+import { SupportReset } from "../utilities/imgImport"
 
 const FAQ = () => {
     return (
@@ -20,7 +21,22 @@ const FAQ = () => {
                                 <Tab className="sub-faq__tabs-tab text-uppercase">faq</Tab>
                                 <Tab className="sub-faq__tabs-tab text-uppercase">news</Tab>
                             </TabList>
-                            <TabPanel></TabPanel>
+                            <TabPanel>
+                                <div className="row">
+                                    <div className="text-light border border-1 border-light text-center support-self-security-item">
+                                        <img src={SupportReset} alt="reset" />
+                                        <div>Reset Password</div>
+                                    </div>
+                                    <div className="text-light border border-1 border-light text-center support-self-security-item">
+                                        <img src={SupportReset} alt="reset" />
+                                        <div>Reset Password</div>
+                                    </div>
+                                    <div className="text-light border border-1 border-light text-center support-self-security-item">
+                                        <img src={SupportReset} alt="reset" />
+                                        <div>Reset Password</div>
+                                    </div>
+                                </div>
+                            </TabPanel>
                             <TabPanel>
                                 <p className="question-label d-sm-block d-none">Question</p>
                                 <div className="faq-list">
@@ -29,7 +45,14 @@ const FAQ = () => {
                                     ))}
                                 </div>
                             </TabPanel>
-                            <TabPanel></TabPanel>
+                            <TabPanel>
+                                <p className="question-label d-sm-block d-none">Question</p>
+                                <div className="faq-list">
+                                    {FAQ_CONTENT?.map((question, idx) => (
+                                        <Accordion {...question} key={idx} />
+                                    ))}
+                                </div>
+                            </TabPanel>
                         </Tabs>
                     </TabPanel>
                 </Tabs>

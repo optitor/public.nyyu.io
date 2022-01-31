@@ -87,7 +87,6 @@ export default function TwoFactorModal({
     })
 
     const sendRequest2FA = (i, mobile = "") => {
-        setState({ loading: true })
         request2FA({
             variables: {
                 email,
@@ -192,13 +191,26 @@ export default function TwoFactorModal({
                                                     </>
                                                 ) : (
                                                     <button
+                                                        disabled={
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method === "app" &&
+                                                                twoStep.includes("phone")) ||
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method ===
+                                                                    "phone" &&
+                                                                twoStep.includes("app"))
+                                                        }
                                                         className="btn-primary select-tfa d-flex align-items-center justify-content-center enable"
                                                         onClick={() => {
                                                             setSelected(idx)
                                                             if (item.method === "phone") {
                                                                 setState({ input_mobile: true })
                                                             } else {
-                                                                sendRequest2FA(idx)
+                                                                setState({ loading: true })
+                                                                setTimeout(
+                                                                    () => sendRequest2FA(idx),
+                                                                    300
+                                                                )
                                                             }
                                                         }}
                                                     >

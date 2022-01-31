@@ -93,6 +93,13 @@ import verifyIdStep5 from "../images/verify-id/verify-id-step-5.svg"
 import verifyIdStep6 from "../images/verify-id/verify-id-step-6.svg"
 import verifyIdStep7 from "../images/verify-id/verify-id-step-7.svg"
 
+import supportAuthenticator from "../images/support/authenticator.svg"
+import supportRecovery from "../images/support/recovery.svg"
+import supportReset from "../images/support/reset.svg"
+import supportSecurity from "../images/support/security.svg"
+import supportUnlock from "../images/support/unlock.svg"
+import supportTag from "../images/support/tag.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const NotificationBell = notificationBell
@@ -183,3 +190,10 @@ export const VerifyIdStep4 = verifyIdStep4
 export const VerifyIdStep5 = verifyIdStep5
 export const VerifyIdStep6 = verifyIdStep6
 export const VerifyIdStep7 = verifyIdStep7
+
+export const SupportAuthenticator = supportAuthenticator
+export const SupportTag = supportTag
+export const SupportRecovery = supportRecovery
+export const SupportReset = supportReset
+export const SupportSecurity = supportSecurity
+export const SupportUnlock = supportUnlock
