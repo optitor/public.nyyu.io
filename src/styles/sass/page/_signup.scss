@@ -221,6 +221,9 @@
                         &:focus {
                             box-shadow: unset;
                         }
+                        &:disabled {
+                            opacity: 0.5;
+                        }
                     }
                 }
             }

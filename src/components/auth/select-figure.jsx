@@ -207,7 +207,7 @@ const SelectFigure = () => {
                                             </>
                                         ) : (
                                             <>
-                                                <p className="text-end">
+                                                <div className="text-end">
                                                     <div
                                                         onClick={() => setSelect(false)}
                                                         onKeyDown={() => setSelect(false)}
@@ -221,7 +221,7 @@ const SelectFigure = () => {
                                                             alt="close"
                                                         />
                                                     </div>
-                                                </p>
+                                                </div>
                                                 <div className="main-content">
                                                     <div className="d-flex align-items-end flex-column">
                                                         <div className="d-flex align-items-end justify-content-start">
@@ -308,7 +308,7 @@ const SelectFigure = () => {
                     overlayClassName="figure-modal__overlay"
                 >
                     <div className="figure-intro__box">
-                        <p className="mobile-figure-header">
+                        <div className="mobile-figure-header">
                             {figuresArray[selectedId].firstname +
                                 " " +
                                 figuresArray[selectedId].lastname}
@@ -322,7 +322,7 @@ const SelectFigure = () => {
                             >
                                 <img width="14px" height="14px" src={CloseIcon} alt="close" />
                             </div>
-                        </p>
+                        </div>
                         <div className="figure-intro__box--body">
                             {!selected ? (
                                 <>

@@ -18,7 +18,6 @@ const two_factors = [
 ]
 const initial = {
     result_code: "",
-    selected: 0,
     set_type: -1,
     input_mobile: false,
     loading: false,
@@ -34,8 +33,9 @@ export default function TwoFactorModal({
     onResult,
 }) {
     const [qrcode, setQRCode] = useState("")
+    const [selected, setSelected] = useState(0)
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), initial)
-    const { result_code, selected, set_type, input_mobile, loading, error } = state
+    const { result_code, set_type, input_mobile, loading, error } = state
 
     const handleInput = useCallback((e) => {
         e.preventDefault()
@@ -87,7 +87,6 @@ export default function TwoFactorModal({
     })
 
     const sendRequest2FA = (i, mobile = "") => {
-        setState({ loading: true })
         request2FA({
             variables: {
                 email,
@@ -159,8 +158,8 @@ export default function TwoFactorModal({
                                                         <button
                                                             className="btn-primary select-tfa d-flex align-items-center justify-content-center"
                                                             onClick={() => {
+                                                                setSelected(idx)
                                                                 setState({
-                                                                    selected: idx,
                                                                     loading: true,
                                                                 })
                                                                 disable2FA({
@@ -192,13 +191,23 @@ export default function TwoFactorModal({
                                                     </>
                                                 ) : (
                                                     <button
+                                                        disabled={
+                                                            (two_factors[idx].method === "app" &&
+                                                                twoStep.includes("phone")) ||
+                                                            (two_factors[idx].method === "phone" &&
+                                                                twoStep.includes("app"))
+                                                        }
                                                         className="btn-primary select-tfa d-flex align-items-center justify-content-center enable"
                                                         onClick={() => {
-                                                            setState({ selected: idx })
+                                                            setSelected(idx)
                                                             if (item.method === "phone") {
                                                                 setState({ input_mobile: true })
                                                             } else {
-                                                                sendRequest2FA(idx)
+                                                                setState({ loading: true })
+                                                                setTimeout(
+                                                                    () => sendRequest2FA(idx),
+                                                                    300
+                                                                )
                                                             }
                                                         }}
                                                     >
