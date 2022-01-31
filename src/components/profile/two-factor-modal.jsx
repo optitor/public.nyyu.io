@@ -192,9 +192,12 @@ export default function TwoFactorModal({
                                                 ) : (
                                                     <button
                                                         disabled={
-                                                            (two_factors[idx].method === "app" &&
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method === "app" &&
                                                                 twoStep.includes("phone")) ||
-                                                            (two_factors[idx].method === "phone" &&
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method ===
+                                                                    "phone" &&
                                                                 twoStep.includes("app"))
                                                         }
                                                         className="btn-primary select-tfa d-flex align-items-center justify-content-center enable"
