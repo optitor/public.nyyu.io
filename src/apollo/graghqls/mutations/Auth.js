@@ -131,7 +131,6 @@ export const VERIFY_KYC_MUTATION = gql`
         $fname: String
         $mname: String
         $lname: String
-        $dob: String
     ) {
         verifyKYC(
             shuftiRequest: {
@@ -141,13 +140,11 @@ export const VERIFY_KYC_MUTATION = gql`
                 document: {
                     proof: $documentProof
                     name: { first_name: $fname, last_name: $lname }
-                    dob: $dob
                 }
                 address: { proof: $addressProof, full_address: $fullAddress }
                 consent: { proof: $consentProof }
                 background_checks: {
                     name: { first_name: $fname, middle_name: $mname, last_name: $lname }
-                    dob: $dob
                 }
             }
         )
