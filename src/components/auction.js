@@ -56,10 +56,9 @@ const Auction = () => {
 
     //Get Auctions
     const { data } = useQuery(GET_AUCTION)
-    const roundData = data?.getAuctions?.filter(
-        (item) => (item.status === 2 || item.status === 0) && item
-    )
-    console.log(roundData && roundData[0])
+    var roundData = data?.getAuctions?.filter(item=>item)
+  
+    
     // set chart type
     const [pricce, setPrice] = useState(true)
     const [volume, setVolume] = useState(true)
@@ -86,40 +85,71 @@ const Auction = () => {
         selectLabel: options[0],
     })
     const { tabIndex, amount, price, isBid, bidModal, show_chart, selectLabel } = state
-
+    
     useEffect(() => {
         if (!auctionLoaded && roundData) {
+            
+            const statPriority = [2,0,1,3]
+            var pointIndex = 0
+            roundData.reverse()
+
+            for (var i=0;i<statPriority.length;i++){
+                var curPriority = statPriority[i]        
+                var flag = false
+
+                for (var j = 0; j< roundData.length ;j++){
+                    if (roundData[j].status == curPriority){
+                        pointIndex = j
+                        flag = true
+                        break;
+                    }
+                }
+                if (flag){
+                    break
+                }
+            }
+            
+            roundData.reverse()
+            pointIndex = roundData.length -pointIndex - 1
+            console.log(pointIndex)
+            if (pointIndex == 0 || pointIndex == 1){
+                pointIndex = 1
+            }else if (pointIndex == roundData.length -1 || pointIndex == roundData.length -2){
+                pointIndex = roundData.length - 2
+            }
+            
             setActionLoaded(true)
             loadRoundMByNumber({
-                variables: { round: roundData && roundData[0].round },
+                variables: { round: roundData && roundData[pointIndex].round },
             })
             loadRoundHByNumber({
-                variables: { round: roundData && roundData[0].round + 1 },
+                variables: { round: roundData && roundData[pointIndex+1].round },
             })
             loadRoundLByNumber({
-                variables: { round: roundData && roundData[0].round - 1 },
+                variables: { round: roundData && roundData[pointIndex-1].round },
             })
             loadHistoryMByNumber({
-                variables: { round: roundData && roundData[0].round },
+                variables: { round: roundData && roundData[pointIndex].round },
             })
             loadHistoryHByNumber({
-                variables: { round: roundData && roundData[0].round + 1 },
+                variables: { round: roundData && roundData[pointIndex+1].round },
             })
             loadHistoryLByNumber({
-                variables: { round: roundData && roundData[0].round - 1 },
+                variables: { round: roundData && roundData[pointIndex-1].round },
             })
             loadBidMByNumber({
-                variables: { round: roundData && roundData[0].round },
+                variables: { round: roundData && roundData[pointIndex].round },
             })
             loadBidHByNumber({
-                variables: { round: roundData && roundData[0].round + 1 },
+                variables: { round: roundData && roundData[pointIndex+1].round },
             })
             loadBidLByNumber({
-                variables: { round: roundData && roundData[0].round - 1 },
+                variables: { round: roundData && roundData[pointIndex-1].round },
             })
             if (roundData[0]?.minPrice) {
                 setState({ price: roundData[0]?.minPrice })
             }
+            
         }
     }, [roundData])
 
@@ -715,7 +745,7 @@ const Auction = () => {
                                         )}
                                         {selectLabel.value === "round_performance" && (
                                             <div className=" d-flex justify-content-between pt-3 w-100 flex-wrap">
-                                                <div className="d-flex">
+                                                <div className="d-flex" style={{zIndex:'99'}}>
                                                     <button
                                                         className={`btn-small ${
                                                             reser_price ? "" : "btn-disabled"
@@ -813,7 +843,7 @@ const Auction = () => {
                                         }}
                                     >
                                         <button
-                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            className="btn-no-border-green text-uppercase  "
                                             onClick={() => {
                                                 setPeriod("1D")
                                             }}
@@ -821,7 +851,7 @@ const Auction = () => {
                                             1D
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            className="btn-no-border-green text-uppercase  "
                                             onClick={() => {
                                                 setPeriod("5D")
                                             }}
@@ -829,7 +859,9 @@ const Auction = () => {
                                             5D
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase btn-small "
+                                            className={`btn-no-border-green text-uppercase ${
+                                                period=="1M" ? "btn-active-green" : ""
+                                            }`}
                                             onClick={() => {
                                                 setPeriod("1M")
                                             }}
@@ -837,7 +869,7 @@ const Auction = () => {
                                             1M
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            className="btn-no-border-green text-uppercase "
                                             onClick={() => {
                                                 setPeriod("6M")
                                             }}
@@ -845,7 +877,7 @@ const Auction = () => {
                                             6M
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            className="btn-no-border-green text-uppercase   "
                                             onClick={() => {
                                                 setPeriod("1Y")
                                             }}
@@ -853,7 +885,7 @@ const Auction = () => {
                                             1Y
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase btn-small  "
+                                            className="btn-no-border-green text-uppercase   "
                                             onClick={() => {
                                                 setPeriod("ALL")
                                             }}
