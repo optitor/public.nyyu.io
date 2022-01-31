@@ -13,6 +13,7 @@ import {
 } from "../utilities/imgImport"
 import ResetPasswordModal from "../components/support/reset-password-modal"
 import { useState } from "react"
+import UnlockAccountModal from "../components/support/unlock-account-moda"
 
 const FAQ = () => {
     const selfServiceData = [
@@ -26,7 +27,7 @@ const FAQ = () => {
             id: 1,
             label: "Unlock Account",
             icon: SupportUnlock,
-            clickEvent: () => {},
+            clickEvent: () => setIsUnlockAccountModalOpen(true),
         },
         {
             id: 2,
@@ -55,6 +56,7 @@ const FAQ = () => {
     ]
 
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
+    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false)
     return (
         <main className="faq-page">
             <Header />
@@ -110,6 +112,10 @@ const FAQ = () => {
                 <ResetPasswordModal
                     isOpen={isResetPasswordModalOpen}
                     setIsOpen={setIsResetPasswordModalOpen}
+                />
+                <UnlockAccountModal
+                    isOpen={isUnlockAccountModalOpen}
+                    setIsOpen={setIsUnlockAccountModalOpen}
                 />
             </section>
         </main>
