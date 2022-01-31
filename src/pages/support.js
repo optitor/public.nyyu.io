@@ -16,6 +16,7 @@ import { useState } from "react"
 import UnlockAccountModal from "../components/support/unlock-account-moda"
 import ResetPhoneModal from "../components/support/reset-phone-modal"
 import DepositAssetModal from "../components/support/deposit-asset-modal"
+import DepositMissingModal from "../components/support/deposit-missing-modal"
 
 const FAQ = () => {
     const selfServiceData = [
@@ -53,7 +54,7 @@ const FAQ = () => {
             id: 5,
             label: "Deposit Missing Or Wrong Tag/Memo Asset Recovery",
             icon: SupportTag,
-            clickEvent: () => {},
+            clickEvent: () => setIsDepositMissingModalOpen(true),
         },
     ]
 
@@ -62,6 +63,7 @@ const FAQ = () => {
     const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false)
     //4
     const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false)
+    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false)
     return (
         <main className="faq-page">
             <Header />
@@ -130,6 +132,10 @@ const FAQ = () => {
                 <DepositAssetModal
                     isOpen={isDepositAssetModalOpen}
                     setIsOpen={setIsDepositAssetModalOpen}
+                />
+                <DepositMissingModal
+                    isOpen={isDepositMissingModalOpen}
+                    setIsOpen={setIsDepositMissingModalOpen}
                 />
             </section>
         </main>
