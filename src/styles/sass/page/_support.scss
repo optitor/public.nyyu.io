@@ -124,3 +124,23 @@
         width: 62px;
     }
 }
+
+.support-self-security-item {
+    padding: 40px 120px;
+    cursor: pointer;
+    transition: 500ms;
+    &:hover {
+        opacity: 0.6;
+    }
+    img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 10px;
+    }
+    div {
+        font-size: 15px;
+        line-height: 16px;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+    }
+}
