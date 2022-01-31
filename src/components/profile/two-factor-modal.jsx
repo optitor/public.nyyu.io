@@ -252,7 +252,7 @@ export default function TwoFactorModal({
                                         Scan the QR code below or mannually type the secret key into
                                         your authenticator app.
                                     </p>
-                                    <img src={qrcode} alt="qr code" />
+                                    <img src={qrcode} width={120} alt="qr code" />
                                     <p>
                                         <small className="fw-bold">123456xxxx</small>
                                     </p>
