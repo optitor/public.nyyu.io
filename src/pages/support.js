@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Header from "../components/header"
 import { FAQ_CONTENT, NEWS_CONTENT } from "../utilities/staticData"
 import Accordion from "../components/common/Accordion"
@@ -12,8 +12,12 @@ import {
     SupportUnlock,
 } from "../utilities/imgImport"
 import ResetPasswordModal from "../components/support/reset-password-modal"
-import { useState } from "react"
 import Seo from "../components/seo"
+import UnlockAccountModal from "../components/support/unlock-account-moda"
+import ResetPhoneModal from "../components/support/reset-phone-modal"
+import DepositAssetModal from "../components/support/deposit-asset-modal"
+import DepositMissingModal from "../components/support/deposit-missing-modal"
+import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal"
 
 const FAQ = () => {
     const selfServiceData = [
@@ -27,35 +31,40 @@ const FAQ = () => {
             id: 1,
             label: "Unlock Account",
             icon: SupportUnlock,
-            clickEvent: () => {},
+            clickEvent: () => setIsUnlockAccountModalOpen(true),
         },
         {
             id: 2,
             label: "Reset Phone Security Verification",
             icon: SupportSecurity,
-            clickEvent: () => {},
+            clickEvent: () => setIsResetPhoneModalOpen(true),
         },
         {
             id: 3,
             label: "Reset Google Authenticator",
             icon: SupportAuthenticator,
-            clickEvent: () => {},
+            clickEvent: () => setIsResetAuthenticatorModalOpen(true),
         },
         {
             id: 4,
             label: "Deposit Non Credit Asset Recovery",
             icon: SupportRecovery,
-            clickEvent: () => {},
+            clickEvent: () => setIsDepositAssetModalOpen(true),
         },
         {
             id: 5,
             label: "Deposit Missing Or Wrong Tag/Memo Asset Recovery",
             icon: SupportTag,
-            clickEvent: () => {},
+            clickEvent: () => setIsDepositMissingModalOpen(true),
         },
     ]
 
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
+    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false)
+    const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false)
+    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false)
+    const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false)
+    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false)
     return (
     <>
         <Seo title="Support" />
@@ -113,6 +122,26 @@ const FAQ = () => {
                 <ResetPasswordModal
                     isOpen={isResetPasswordModalOpen}
                     setIsOpen={setIsResetPasswordModalOpen}
+                />
+                <UnlockAccountModal
+                    isOpen={isUnlockAccountModalOpen}
+                    setIsOpen={setIsUnlockAccountModalOpen}
+                />
+                <ResetPhoneModal
+                    isOpen={isResetPhoneModalOpen}
+                    setIsOpen={setIsResetPhoneModalOpen}
+                />
+                <ResetAuthenticatorModal
+                    isOpen={isResetAuthenticatorModalOpen}
+                    setIsOpen={setIsResetAuthenticatorModalOpen}
+                />
+                <DepositAssetModal
+                    isOpen={isDepositAssetModalOpen}
+                    setIsOpen={setIsDepositAssetModalOpen}
+                />
+                <DepositMissingModal
+                    isOpen={isDepositMissingModalOpen}
+                    setIsOpen={setIsDepositMissingModalOpen}
                 />
             </section>
         </main>

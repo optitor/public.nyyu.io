@@ -7,7 +7,7 @@ import { CloseIcon } from "../../utilities/imgImport"
 import CustomSpinner from "../common/custom-spinner"
 import { FormInput } from "../common/FormControl"
 
-export default function ResetPasswordModal({ isOpen, setIsOpen }) {
+export default function DepositMissingModal({ isOpen, setIsOpen }) {
     const [sentCode, setSentCode] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
@@ -28,30 +28,42 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                     <img width="14px" height="14px" src={CloseIcon} alt="close" />
                 </div>
             </div>
-            <div className="my-5">
+            <div className="mt-2">
                 <div className="text-center">
-                    <p className="text-capitalize fs-30px fw-bold">reset password</p>
+                    <p className="text-capitalize fs-30px fw-bold">unkown memo/tag recovery</p>
                     <p className="fs-16px mt-2 text-light fw-normald">
-                        To secure your account, please complete the following verification
+                        Please fill in the application form and we will assist you in retrieving
+                        your assets
                     </p>
                 </div>
-
-                <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light my-5">
+                <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light mt-5">
                     <form action="form">
                         <div className="form-group">
                             <FormInput
                                 type="text"
-                                label="Email"
-                                value={sentCode}
-                                onChange={(e) => setSentCode(e.target.value)}
-                                placeholder="Enter code"
+                                label="Coin"
+                                placeholder="Choose your deposit coin"
                             />
-                            <div className="fs-12px">
-                                The code have been sent to email_address{" "}
-                                <span className="txt-green fw-500 cursor-pointer">Resend</span>
+                        </div>
+                        <div className="form-group">
+                            <FormInput
+                                type="text"
+                                label="Deposit Amount"
+                                placeholder="Input your deposit amount"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <FormInput
+                                type="text"
+                                label="TxID/TxHash"
+                                placeholder="Enter your TxID/TxHash"
+                            />
+                            <div className="fst-italic fw-normal text-light fs-12px my-3">
+                                Please note that in order to maximize the security of your assets,
+                                they will be returned to the source address once retrieved.
                             </div>
                         </div>
-                        <div className="my-5">
+                        <div className="mt-4 mb-3">
                             {error && (
                                 <span className="errorsapn">
                                     <FontAwesomeIcon icon={faExclamationCircle} /> {error}
@@ -66,7 +78,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                 <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
                                     <CustomSpinner />
                                 </div>
-                                <div className={`fs-20px ${loading ? "ms-3" : "pe-4"}`}>verify</div>
+                                <div className={`fs-20px ${loading ? "ms-3" : "pe-4"}`}>submit</div>
                             </button>
                         </div>
                     </form>

@@ -7,7 +7,7 @@ import { CloseIcon } from "../../utilities/imgImport"
 import CustomSpinner from "../common/custom-spinner"
 import { FormInput } from "../common/FormControl"
 
-export default function ResetPasswordModal({ isOpen, setIsOpen }) {
+export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
     const [sentCode, setSentCode] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
