@@ -49,7 +49,6 @@ export default function TwoFactorModal({
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
             setQRCode(data.request2FA)
-            console.log("selected", selected)
             setState({ set_type: selected })
         },
         onError: (error) => {
