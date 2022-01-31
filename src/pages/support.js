@@ -1,6 +1,6 @@
 import React from "react"
 import Header from "../components/header"
-import { FAQ_CONTENT } from "../utilities/staticData"
+import { FAQ_CONTENT, NEWS_CONTENT } from "../utilities/staticData"
 import Accordion from "../components/common/Accordion"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import {
@@ -87,9 +87,8 @@ const FAQ = () => {
                                 </div>
                             </TabPanel>
                             <TabPanel>
-                                <p className="question-label d-sm-block d-none">Question</p>
                                 <div className="faq-list">
-                                    {FAQ_CONTENT?.map((question, idx) => (
+                                    {NEWS_CONTENT?.map((question, idx) => (
                                         <Accordion {...question} key={idx} />
                                     ))}
                                 </div>
