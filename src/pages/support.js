@@ -13,6 +13,7 @@ import {
 } from "../utilities/imgImport"
 import ResetPasswordModal from "../components/support/reset-password-modal"
 import { useState } from "react"
+import Seo from "../components/seo"
 
 const FAQ = () => {
     const selfServiceData = [
@@ -56,6 +57,8 @@ const FAQ = () => {
 
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
     return (
+    <>
+        <Seo title="Support" />
         <main className="faq-page">
             <Header />
             <section className="container px-sm-5 px-4 pb-5 pb-sm-0">
@@ -113,6 +116,7 @@ const FAQ = () => {
                 />
             </section>
         </main>
+    </>
     )
 }
 

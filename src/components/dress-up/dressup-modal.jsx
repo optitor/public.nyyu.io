@@ -84,20 +84,40 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                             <div className="image_div">
                                 <img src={EmptyAvatar} alt="back" />
                                 {loaded && (<>
-                                    <Hair hairColor={hairColors[selectedHairColor]} style={{top: `${hairStyles[selectedHairStyle]?.top}%`, left: `${hairStyles[selectedHairStyle]?.left}%`, width: `${hairStyles[selectedHairStyle]?.width}%`}}>
-                                        {parse(hairStyles[selectedHairStyle]?.svg)}
+                                    <Hair
+                                        hairColor={hairColors[selectedHairColor]}
+                                        style={{
+                                            top: `${hairStyles[selectedHairStyle]?.top}%`,
+                                            left: `${hairStyles[selectedHairStyle]?.left}%`,
+                                            width: `${hairStyles[selectedHairStyle]?.width}%`
+                                        }}
+                                    >
+                                        {parse(hairStyles[selectedHairStyle]?.svg ?? "")}
                                     </Hair>
-                                    <div style={{top: `${expressions[selectedExpression]?.top}%`, left: `${expressions[selectedExpression]?.left}%`, width: `${expressions[selectedExpression]?.width}%`}}>
-                                        {parse(expressions[selectedExpression]?.svg)}
+                                    <div style={{
+                                        top: `${expressions[selectedExpression]?.top}%`,
+                                        left: `${expressions[selectedExpression]?.left}%`,
+                                        width: `${expressions[selectedExpression]?.width}%`}}
+                                    >
+                                        {parse(expressions[selectedExpression]?.svg ?? "")}
                                     </div>
-                                    <div style={{top: `${facialStyles[selectedFacialStyle]?.top}%`, left: `${facialStyles[selectedFacialStyle]?.left}%`, width: `${facialStyles[selectedFacialStyle]?.width}%`}}>
-                                        {parse(facialStyles[selectedFacialStyle]?.svg)}
+                                    <div style={{top: `${facialStyles[selectedFacialStyle]?.top}%`,
+                                        left: `${facialStyles[selectedFacialStyle]?.left}%`,
+                                        width: `${facialStyles[selectedFacialStyle]?.width}%`}}
+                                    >
+                                        {parse(facialStyles[selectedFacialStyle]?.svg ?? "")}
                                     </div>
-                                    <div style={{top: `${hats[selectedHat]?.top}%`, left: `${hats[selectedHat]?.left}%`, width: `${hats[selectedHat]?.width}%`}}>
-                                        {parse(hats[selectedHat]?.svg)}
+                                    <div style={{top: `${hats[selectedHat]?.top}%`,
+                                        left: `${hats[selectedHat]?.left}%`,
+                                        width: `${hats[selectedHat]?.width}%`}}
+                                    >
+                                        {parse(hats[selectedHat]?.svg ?? "")}
                                     </div>
-                                    <div style={{top: `${others[selectedOther]?.top}%`, left: `${others[selectedOther]?.left}%`, width: `${others[selectedOther]?.width}%`}}>
-                                        {parse(others[selectedOther]?.svg)}
+                                    <div style={{top: `${others[selectedOther]?.top}%`, 
+                                        left: `${others[selectedOther]?.left}%`,
+                                        width: `${others[selectedOther]?.width}%`}}
+                                    >
+                                        {parse(others[selectedOther]?.svg ?? "")}
                                     </div>
                                 </>)}
                             </div>

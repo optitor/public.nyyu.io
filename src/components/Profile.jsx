@@ -8,6 +8,7 @@ import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs } from "../utilities/staticData"
 // import { Bronze } from "../utilities/imgImport"
+import Seo from './seo';
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
@@ -114,6 +115,8 @@ const Profile = () => {
     if (loadingPage) return <Loading />
     else
         return (
+        <>
+            <Seo title="Profile" />
             <main className="profile-page">
                 <TwoFactorModal
                     is2FAModalOpen={is2FAModalOpen}
@@ -349,7 +352,8 @@ const Profile = () => {
                     setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
                 />
             </main>
-        )
+        </>
+    )
 }
 
 export default Profile

@@ -83,10 +83,11 @@ div.MuiPaper-root {
     }
 }
 
-input.black_input {
+.black_input {
     background-color: #1e1e1e;
     color: #ffffff;
     height: 32px;
+    line-height: 32px;
     font-size: 14px;
     font-weight: 400;
     border: 1px solid;
@@ -104,10 +105,11 @@ textarea.black_input {
     width: 100%;
 }
 
-input.white_input {
+.white_input {
     background-color: #ffffff;
     color: #1e1e1e;
     height: 32px;
+    line-height: 32px;
     font-size: 14px;
     font-weight: 400;
     border: 1px solid;

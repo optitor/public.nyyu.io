@@ -67,3 +67,9 @@ export const GET_AUCTIONS = gql`
         }
     }
 `
+
+export const GET_NEW_ROUND = gql`
+    query {
+        getNewRound
+    }
+`;
