@@ -17,6 +17,8 @@ const VerificationPage = () => {
     const [KYCPageUrl, setKYCPageUrl] = useState(null)
     const callbackUrl = "https://saledev.ndb.money/app/profile"
     const redirectUrl = "https://saledev.ndb.money/app/profile"
+    // const callbackUrl = "http://localhost:8000/app/profile/"
+    // const redirectUrl = "http://localhost:8000/app/profile/"
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
     const clientId =
@@ -37,6 +39,17 @@ const VerificationPage = () => {
                     country: "GB",
                     language: "EN",
                     verification_mode: "any",
+                    document: {
+                        proof: "",
+                        supported_types: ["id_card", "passport"],
+                    },
+                    background_checks: {
+                        name: {
+                            first_name: "",
+                            middle_name: "",
+                            last_name: "",
+                        },
+                    },
                     address: {
                         full_address: "",
                         supported_types: [
@@ -45,9 +58,9 @@ const VerificationPage = () => {
                             "bank_statement",
                         ],
                     },
-                    document: {
+                    consent: {
                         proof: "",
-                        supported_types: ["id_card", "passport"],
+                        text: "I & NDB",
                     },
                     face: {
                         proof: "",
