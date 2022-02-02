@@ -1,23 +1,42 @@
-import React, { useReducer, useEffect } from "react"
+import React, { useReducer, useEffect, useState } from "react"
 import axios from "axios"
-
+import Select, {components} from 'react-select'
 import { numberSign, numberWithCommas, numFormatter } from "../../utilities/number"
 import icons from "base64-cryptocurrency-icons"
 import { Icon } from "@iconify/react"
 import ReactECharts from "echarts-for-react"
-import { useState } from "react"
+import { cryptoSymbol } from 'crypto-symbol';
+import {NickToken} from "./../../utilities/imgImport";
 
 const QUOTE = "USDT"
 
 const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines"
-
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
+const ALLPRICES = "https://api.binance.com/api/v3/ticker/price"
 
 const KLINE_INTERVAL = "1h"
 
 const GREEN = "#23C865"
 
 const RED = "#F6361A"
+
+const cryptoList = [
+    {value: 'ETH', label: 'Ethereum'},
+    {value: 'BTC', label: 'Bitcoin'},
+    {value: 'BCH', label: 'Bitcoin Cash'},
+    {value: 'ETH', label: 'Ethereum'},
+    {value: 'BTC', label: 'Bitcoin'},
+    {value: 'BCH', label: 'Bitcoin Cash'},
+    {value: 'ETH', label: 'Ethereum'},
+    {value: 'BTC', label: 'Bitcoin'},
+    {value: 'BCH', label: 'Bitcoin Cash'},
+    {value: 'ETH', label: 'Ethereum'},
+    {value: 'BTC', label: 'Bitcoin'},
+    {value: 'BCH', label: 'Bitcoin Cash'},
+    {value: 'ETH', label: 'Ethereum'},
+    {value: 'BTC', label: 'Bitcoin'},
+    {value: 'BCH', label: 'Bitcoin Cash'},
+];
 
 const market_data = [
     {
@@ -41,6 +60,11 @@ const market_data = [
         active: true,
     },
     {
+        abbr: "TRX",
+        name: "TronCoin",
+        active: true,
+    },
+    {
         abbr: "USDC",
         name: "USD Coin",
         active: false,
@@ -51,6 +75,25 @@ const market_data = [
         active: false,
     },
 ]
+
+const { get } = cryptoSymbol({})
+const cryptoSymbolList = get().SNPair;
+
+const { Option, SingleValue } = components;
+
+const SelectOption = (props) => (
+    <Option {...props}>
+        <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
+            <img
+                src={icons[props.value]?.icon?? NickToken}
+                style={{ width: "30px", height: "auto" }}
+                alt={props.label}
+            />
+            <p className="coin-label ms-2">{props.label} ({props.value})</p>
+        </div>
+    </Option>
+);
+
 const CryptoRow = ({ data }) => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         chart: [],
@@ -162,6 +205,18 @@ const CryptoRow = ({ data }) => {
 
 export default function MarketTab() {
     const [searchValue, setSearchValue] = useState("")
+    const [cryptoList, setCryptoList] = useState([]);
+
+    useEffect(() => {
+        axios.get(ALLPRICES).then((res) => {
+            const allprices = res.data;
+            let cryptos = allprices?.filter(el => el.symbol.includes('USDT'))
+                .map(item => ({symbol: item.symbol?.replace('USDT', '')}));
+            cryptos = cryptos.map(item => ({ value: item.symbol, label: cryptoSymbolList[item.symbol]?? item.symbol + 'Coin' }))
+            setCryptoList(cryptos);
+        })
+    }, []);
+    
     return (
         <table className="wallet-transaction-table">
             <thead>
@@ -174,12 +229,19 @@ export default function MarketTab() {
             </thead>
             <div className="search">
                 <Icon className="search-icon text-light" icon="carbon:search" />
-                <input
-                    type="text"
+                <Select
+                    className="black_input"
+                    value=''
+                    // onChange={(selected) => {
+                    //     setAvatarInfo({...avatarInfo, tier: selected});
+                    // }}
+                    options={cryptoList}
+                    styles={customSelectStyles}
                     placeholder="Search"
-                    className="bg-transparent text-secondary w-100 border-0"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
+                    components={{
+                        Option: SelectOption,
+                        SingleValue: SelectOption,
+                    }}
                 />
             </div>
             <tbody>
@@ -196,3 +258,39 @@ export default function MarketTab() {
         </table>
     )
 }
+
+const customSelectStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      color: 'white',
+      backgroundColor: state.isSelected ? '#23c865' : '#1e1e1e'
+    }),
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: '#1e1e1e',
+      borderRadius: 0,
+      fontSize: 14,
+      border: 'none'
+    }),
+    IndicatorSeparator: provided => ({
+        ...provided,
+        display: 'none'
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: '#1e1e1e',
+        border: '1px solid white',
+    }),
+    singleValue: provided => ({
+        ...provided,
+        color: 'white',
+    }),
+    input: provided => ({
+        ...provided,
+        color: 'white'
+    }),
+    placeholder: provided => ({
+        ...provided,
+        fontWeight: 400
+    })
+};

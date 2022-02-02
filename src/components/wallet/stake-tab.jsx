@@ -4,6 +4,7 @@ import React from "react"
 import { useState } from "react"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import { BTC, DownArrow, Equity, ETH, USDC } from "../../utilities/imgImport"
+import { Icon } from '@iconify/react';
 
 export default function StakeTab() {
     // Containers
@@ -37,7 +38,7 @@ export default function StakeTab() {
         const fooArray = lockedStakingAssets
         fooArray[assetID].duration = durationID
         setLockedStakingAssets([...fooArray])
-        console.log("clicking")
+        // console.log("clicking")
     }
     return (
         <Tabs className="text-light stake-react-list__tab">
@@ -115,8 +116,8 @@ export default function StakeTab() {
                                 {[
                                     { icon: BTC, label: "btc" },
                                     { icon: ETH, label: "eth" },
-                                ].map((item) => (
-                                    <tr>
+                                ].map((item, index) => (
+                                    <tr key={index}>
                                         <td>
                                             <div className="d-flex align-items-center fs-16px gap-2">
                                                 <img src={item.icon} alt="btc image" />
@@ -168,8 +169,8 @@ export default function StakeTab() {
                                                 { id: 1, label: "30 days" },
                                                 { id: 2, label: "60 days" },
                                                 { id: 3, label: "90 days" },
-                                            ].map((item) => (
-                                                <div
+                                            ].map((item, index) => (
+                                                <div key={index}
                                                     className={`bg-black-10 ${
                                                         asset.duration === item.id &&
                                                         "active-duration"
@@ -216,8 +217,8 @@ export default function StakeTab() {
                                     apy: "30.77%",
                                     duration: 0,
                                 },
-                            ].map((asset) => (
-                                <tr>
+                            ].map((asset, index) => (
+                                <tr key={index}>
                                     <td>
                                         <div className="d-flex align-items-center fs-16px gap-2">
                                             <div className="circle-light"></div>
@@ -229,20 +230,7 @@ export default function StakeTab() {
                                     <td className="fs-14px text-success">{asset.apy}</td>
                                     <td className="fs-14px">
                                         <div className="d-flex align-items-center gap-2 justify-content-center">
-                                            <svg
-                                                className="clock-icon text-success"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                ></path>
-                                            </svg>
+                                            <Icon className="clock-icon text-success" icon="ic:baseline-access-time" />
                                             <div>Flexible</div>
                                         </div>
                                     </td>

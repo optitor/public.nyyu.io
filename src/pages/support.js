@@ -86,7 +86,7 @@ const FAQ = () => {
                                 <div className="row col-12 p-0 m-0">
                                     {selfServiceData.map((item, index) => {
                                         return (
-                                            <div
+                                            <div key={index}
                                                 className={`col-12 col-sm-6 ${
                                                     index % 2 == 0 ? "ps-0 pe-1" : "pe-0 ps-1"
                                                 }`}

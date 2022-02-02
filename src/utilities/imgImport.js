@@ -34,6 +34,7 @@ import dai from "../images/dai.svg"
 import ltc from "../images/ltc.svg"
 import doge from "../images/doge.svg"
 import usdc from "../images/usdc.svg"
+import nickToken from "../images/nickToken.svg";
 
 import ndb from "../images/ndb.svg"
 import copy from "../images/copy.png"
@@ -142,6 +143,7 @@ export const Copy = copy
 export const Copy2 = copy2
 export const NDB = ndb
 export const Airdrop = airdrop
+export const NickToken = nickToken
 
 export const MetaMask = metamask
 export const WalletConnect = walletConnect

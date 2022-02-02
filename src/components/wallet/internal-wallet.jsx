@@ -76,7 +76,7 @@ export default function InternalWallet() {
             if(!Object.keys(myAssets).length) return;
             for(const item of Object.values(myAssets)) {
                 let price = 0;
-                if(!item.tokenSymbol || item.tokenSymbol === 'NDB') {
+                if(!item.tokenSymbol || item.tokenSymbol === 'NDB' || item.tokenSymbol === 'VOLT') {
                     price = 0;
                 } else {
                     const res = await axios.get(TICKER_24hr, { params: { symbol: item.tokenSymbol + QUOTE } });
@@ -173,7 +173,7 @@ export default function InternalWallet() {
                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                         <div className="col-sm-6 pe-2">
                             <button
-                                disabled
+                                // disabled
                                 className="btn btn-outline-secondary rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
                                     setTransactionType(TRANSACTION_TYPES.deposit)
