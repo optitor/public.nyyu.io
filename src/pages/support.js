@@ -118,10 +118,13 @@ const FAQ = () => {
                             </Tabs>
                         </TabPanel>
                     </Tabs>
-                    <ResetPasswordModal
-                        isOpen={isResetPasswordModalOpen}
-                        setIsOpen={setIsResetPasswordModalOpen}
-                    />
+                    {
+                        isResetPasswordModalOpen &&
+                        <ResetPasswordModal
+                            isOpen={isResetPasswordModalOpen}
+                            setIsOpen={setIsResetPasswordModalOpen}
+                        />
+                    }
                     <UnlockAccountModal
                         isOpen={isUnlockAccountModalOpen}
                         setIsOpen={setIsUnlockAccountModalOpen}
