@@ -142,13 +142,19 @@ input[type="number"]::-webkit-outer-spin-button {
 .w-316px {
     width: 316px !important;
 }
-// Begin: New Font Sizes
+// Font Sizes
 @for $size from 12 to 48 {
     .fs-#{$size}px {
         font-size: #{$size}px !important;
     }
 }
 
+// Line Heights
+@for $size from 12 to 48 {
+    .lh-#{$size}px {
+        line-height: #{$size}px !important;
+    }
+}
 .scale-75 {
     transform: scale(0.75, 0.75);
     @include mq("phone", min) {
