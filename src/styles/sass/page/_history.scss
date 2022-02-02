@@ -492,6 +492,10 @@
             }
             .stake-react-list__tab {
                 .react-tabs__tab {
+                    text-transform: capitalize;
+                    font-variant: normal;
+                    font-size: 16px;
+                    line-height: 20px;
                     font-weight: 500 !important;
                 }
             }

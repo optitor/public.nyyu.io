@@ -25,15 +25,22 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                     role="button"
                     tabIndex="0"
                 >
-                    <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    <img
+                        width="14px"
+                        height="14px"
+                        src={CloseIcon}
+                        alt="close"
+                    />
                 </div>
             </div>
             <div className="mt-2">
                 <div className="text-center">
-                    <p className="text-capitalize fs-30px fw-bold">unkown memo/tag recovery</p>
+                    <p className="text-capitalize fs-30px fw-bold lh-36px">
+                        unkown memo/tag recovery
+                    </p>
                     <p className="fs-16px mt-2 text-light fw-normald">
-                        Please fill in the application form and we will assist you in retrieving
-                        your assets
+                        Please fill in the application form and we will assist
+                        you in retrieving your assets
                     </p>
                 </div>
                 <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light mt-5">
@@ -59,14 +66,18 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                                 placeholder="Enter your TxID/TxHash"
                             />
                             <div className="fst-italic fw-normal text-light fs-12px my-3">
-                                Please note that in order to maximize the security of your assets,
-                                they will be returned to the source address once retrieved.
+                                Please note that in order to maximize the
+                                security of your assets, they will be returned
+                                to the source address once retrieved.
                             </div>
                         </div>
                         <div className="mt-4 mb-3">
                             {error && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                    <FontAwesomeIcon
+                                        icon={faExclamationCircle}
+                                    />{" "}
+                                    {error}
                                 </span>
                             )}
                             <button
@@ -75,10 +86,20 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                                 disabled={loading}
                                 // onClick={signUserIn}
                             >
-                                <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                                <div
+                                    className={`${
+                                        loading ? "opacity-1" : "opacity-0"
+                                    }`}
+                                >
                                     <CustomSpinner />
                                 </div>
-                                <div className={`fs-20px ${loading ? "ms-3" : "pe-4"}`}>submit</div>
+                                <div
+                                    className={`fs-20px ${
+                                        loading ? "ms-3" : "pe-4"
+                                    }`}
+                                >
+                                    submit
+                                </div>
                             </button>
                         </div>
                     </form>

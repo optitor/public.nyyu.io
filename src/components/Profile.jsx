@@ -8,7 +8,7 @@ import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs } from "../utilities/staticData"
 // import { Bronze } from "../utilities/imgImport"
-import Seo from './seo';
+import Seo from "./seo"
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import { GET_USER } from "../apollo/graghqls/querys/Auth"
@@ -33,7 +33,8 @@ const Profile = () => {
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[0])
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
+        useState(false)
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
@@ -63,8 +64,12 @@ const Profile = () => {
         ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
         : []
 
-    const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel)
-    const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1)
+    const currentTier = userTiersData?.filter(
+        (item) => item?.level === user?.tierLevel
+    )
+    const nextTier = userTiersData?.filter(
+        (item) => item?.level === user?.tierLevel + 1
+    )
 
     // Methods
     const handleProfileTab = (value) => {
@@ -80,7 +85,9 @@ const Profile = () => {
 
         return (
             <>
-                <div className={`status ${config ? "active" : "deactive"}`}></div>
+                <div
+                    className={`status ${config ? "active" : "deactive"}`}
+                ></div>
                 <div className="security-item">
                     <p className="security-name">{title}</p>
 
@@ -115,245 +122,286 @@ const Profile = () => {
     if (loadingPage) return <Loading />
     else
         return (
-        <>
-            <Seo title="Profile" />
-            <main className="profile-page">
-                <TwoFactorModal
-                    is2FAModalOpen={is2FAModalOpen}
-                    setIs2FAModalOpen={setIs2FAModalOpen}
-                    email={user?.email}
-                    phone={user?.phone}
-                    twoStep={twoStep}
-                    onResult={(res) => {
-                        if (res) {
-                            refetch()
-                        }
-                    }}
-                />
-                <Header />
-                <section className="container position-relative h-100">
-                    <div className="row">
-                        <div className="col-lg-3 profile-page__left border-md-end border-white">
-                            <div className="user-info">
-                                <div className="my-5 user-info__avatar">
-                                    <Avatar />
-                                </div>
-                                <div className="user-info__name">
-                                    {currentTier?.length > 0 ? (
+            <>
+                <Seo title="Profile" />
+                <main className="profile-page">
+                    <TwoFactorModal
+                        is2FAModalOpen={is2FAModalOpen}
+                        setIs2FAModalOpen={setIs2FAModalOpen}
+                        email={user?.email}
+                        phone={user?.phone}
+                        twoStep={twoStep}
+                        onResult={(res) => {
+                            if (res) {
+                                refetch()
+                            }
+                        }}
+                    />
+                    <Header />
+                    <section className="container position-relative h-100">
+                        <div className="row">
+                            <div className="col-lg-3 profile-page__left border-md-end border-white">
+                                <div className="user-info">
+                                    <div className="my-5 user-info__avatar">
+                                        <Avatar />
+                                    </div>
+                                    <div className="user-info__name">
+                                        {currentTier?.length > 0 ? (
+                                            <div
+                                                className="me-3"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: currentTier[0]?.svg,
+                                                }}
+                                            />
+                                        ) : (
+                                            <></>
+                                        )}
+                                        {displayName}
+                                    </div>
+                                    <p className="silver-cnt">
+                                        {nextTier.length > 0 &&
+                                            nextTier[0]?.point -
+                                                user?.tierPoint +
+                                                "p to " +
+                                                nextTier[0]?.name}
+                                    </p>
+                                    <div className="timeframe-bar mt-1">
                                         <div
-                                            className="me-3"
-                                            dangerouslySetInnerHTML={{
-                                                __html: currentTier[0]?.svg,
+                                            className="timeleft"
+                                            style={{
+                                                width: `${
+                                                    (user?.tierPoint /
+                                                        nextTier[0]?.point) *
+                                                    100
+                                                }%`,
                                             }}
-                                        />
-                                    ) : (
-                                        <></>
-                                    )}
-                                    {displayName}
+                                        ></div>
+                                    </div>
                                 </div>
-                                <p className="silver-cnt">
-                                    {nextTier.length > 0 &&
-                                        nextTier[0]?.point -
-                                            user?.tierPoint +
-                                            "p to " +
-                                            nextTier[0]?.name}
-                                </p>
-                                <div className="timeframe-bar mt-1">
-                                    <div
-                                        className="timeleft"
-                                        style={{
-                                            width: `${
-                                                (user?.tierPoint / nextTier[0]?.point) * 100
-                                            }%`,
-                                        }}
-                                    ></div>
-                                </div>
+                                <Tabs
+                                    className="profile-tab"
+                                    onSelect={(index) => setTabIndex(index)}
+                                >
+                                    <TabList>
+                                        {profile_tabs.map((item, idx) => (
+                                            <Tab key={idx}>{item.label}</Tab>
+                                        ))}
+                                    </TabList>
+                                    <Select
+                                        options={profile_tabs}
+                                        value={currentProfileTab}
+                                        onChange={(v) => handleProfileTab(v)}
+                                        className="profile-tab__select mb-3"
+                                    />
+                                    <TabPanel>0</TabPanel>
+                                    <TabPanel>1</TabPanel>
+                                    <TabPanel>2</TabPanel>
+                                    <TabPanel>3</TabPanel>
+                                </Tabs>
                             </div>
-                            <Tabs className="profile-tab" onSelect={(index) => setTabIndex(index)}>
-                                <TabList>
-                                    {profile_tabs.map((item, idx) => (
-                                        <Tab key={idx}>{item.label}</Tab>
-                                    ))}
-                                </TabList>
-                                <Select
-                                    options={profile_tabs}
-                                    value={currentProfileTab}
-                                    onChange={(v) => handleProfileTab(v)}
-                                    className="profile-tab__select mb-3"
-                                />
-                                <TabPanel>0</TabPanel>
-                                <TabPanel>1</TabPanel>
-                                <TabPanel>2</TabPanel>
-                                <TabPanel>3</TabPanel>
-                            </Tabs>
-                        </div>
-                        <div className="col-lg-9 profile-page__right">
-                            {tabIndex === 0 && (
-                                <>
-                                    <Tabs className="detail-tab">
-                                        <TabList>
-                                            <Tab>
-                                                <div className="pt-3">account detaiLs</div>
-                                            </Tab>
-                                            <Tab>
-                                                <div className="pt-3">tier Details</div>
-                                            </Tab>
-                                        </TabList>
-                                        <TabPanel>
-                                            <div className="account-details">
-                                                <div className="account-detail">
-                                                    <div className="row w-100 mx-auto">
-                                                        <div className="col-6 col-sm-4 col-md-6 br">
-                                                            Display name
-                                                        </div>
-                                                        <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
-                                                            {displayName}
-                                                        </div>
+                            <div className="col-lg-9 profile-page__right">
+                                {tabIndex === 0 && (
+                                    <>
+                                        <Tabs className="detail-tab">
+                                            <TabList>
+                                                <Tab>
+                                                    <div className="pt-3">
+                                                        account detaiLs
                                                     </div>
-                                                    <div className="row w-100 mx-auto">
-                                                        <div className="col-6 col-sm-4 col-md-6 br">
-                                                            email
-                                                        </div>
-                                                        <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
-                                                            {user && user?.email}
-                                                        </div>
+                                                </Tab>
+                                                <Tab>
+                                                    <div className="pt-3">
+                                                        tier Details
                                                     </div>
-                                                    <div className="row w-100 mx-auto change-password">
-                                                        <div className="col-6 col-sm-4 col-md-6 br">
-                                                            Password
-                                                        </div>
-                                                        <div className="col-6 col-sm-8 col-md-6 justify-content-sm-between justify-content-end">
-                                                            <p>********</p>
-                                                            <button
-                                                                className="btn-primary change-pwd"
-                                                                onClick={() =>
-                                                                    setIsPasswordModalOpen(true)
-                                                                }
-                                                            >
-                                                                Change Password
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="account-security">
-                                                    <h4>Increase your account security</h4>
-                                                    <div className="row w-100 mx-auto">
-                                                        <div className="col-md-6 br">
-                                                            <TfaConfig
-                                                                title="2FA Email"
-                                                                method="email"
-                                                            />
-                                                        </div>
-
-                                                        <div className="col-md-6">
-                                                            <div
-                                                                className={`status ${
-                                                                    user?.verify?.kycVerified
-                                                                        ? "active"
-                                                                        : "deactive"
-                                                                }`}
-                                                            ></div>
-                                                            <div className="security-item">
-                                                                <p className="security-name">
-                                                                    KYC Verificatoin
-                                                                </p>
-                                                                {user?.verify.kybVerified &&
-                                                                user?.verify.kycVerified ? (
-                                                                    <p className="txt-green">
-                                                                        verified
-                                                                    </p>
-                                                                ) : (
-                                                                    <Link
-                                                                        to={ROUTES.verifyId}
-                                                                        className="security-link"
-                                                                    >
-                                                                        setup
-                                                                    </Link>
-                                                                )}
+                                                </Tab>
+                                            </TabList>
+                                            <TabPanel>
+                                                <div className="account-details">
+                                                    <div className="account-detail">
+                                                        <div className="row w-100 mx-auto">
+                                                            <div className="col-6 col-sm-4 col-md-6 br">
+                                                                Display name
+                                                            </div>
+                                                            <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
+                                                                {displayName}
                                                             </div>
                                                         </div>
-
-                                                        <div className="col-md-6 br">
-                                                            <TfaConfig
-                                                                title="2FA Mobile"
-                                                                method="phone"
-                                                            />
+                                                        <div className="row w-100 mx-auto">
+                                                            <div className="col-6 col-sm-4 col-md-6 br">
+                                                                email
+                                                            </div>
+                                                            <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
+                                                                {user &&
+                                                                    user?.email}
+                                                            </div>
                                                         </div>
+                                                        <div className="row w-100 mx-auto change-password">
+                                                            <div className="col-6 col-sm-4 col-md-6 br">
+                                                                Password
+                                                            </div>
+                                                            <div className="col-6 col-sm-8 col-md-6 justify-content-sm-between justify-content-end">
+                                                                <p>********</p>
+                                                                <button
+                                                                    className="btn-primary change-pwd"
+                                                                    onClick={() =>
+                                                                        setIsPasswordModalOpen(
+                                                                            true
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Change
+                                                                    Password
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="account-security">
+                                                        <h4>
+                                                            Increase your
+                                                            account security
+                                                        </h4>
+                                                        <div className="row w-100 mx-auto">
+                                                            <div className="col-md-6 br">
+                                                                <TfaConfig
+                                                                    title="2FA Email"
+                                                                    method="email"
+                                                                />
+                                                            </div>
 
-                                                        <div className="col-md-6">
-                                                            <TfaConfig
-                                                                title="2FA Authentication app"
-                                                                method="app"
-                                                            />
+                                                            <div className="col-md-6">
+                                                                <div
+                                                                    className={`status ${
+                                                                        user
+                                                                            ?.verify
+                                                                            ?.kycVerified
+                                                                            ? "active"
+                                                                            : "deactive"
+                                                                    }`}
+                                                                ></div>
+                                                                <div className="security-item">
+                                                                    <p className="security-name">
+                                                                        KYC
+                                                                        Verificatoin
+                                                                    </p>
+                                                                    {user
+                                                                        ?.verify
+                                                                        .kybVerified &&
+                                                                    user?.verify
+                                                                        .kycVerified ? (
+                                                                        <p className="txt-green">
+                                                                            verified
+                                                                        </p>
+                                                                    ) : (
+                                                                        <Link
+                                                                            to={
+                                                                                ROUTES.verifyId
+                                                                            }
+                                                                            className="security-link"
+                                                                        >
+                                                                            setup
+                                                                        </Link>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-md-6 br">
+                                                                <TfaConfig
+                                                                    title="2FA Mobile"
+                                                                    method="phone"
+                                                                />
+                                                            </div>
+
+                                                            <div className="col-md-6">
+                                                                <TfaConfig
+                                                                    title="2FA Authentication app"
+                                                                    method="app"
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </TabPanel>
-                                        <TabPanel>
-                                            <TierDetailsTab />
-                                        </TabPanel>
-                                    </Tabs>
-                                    <div className="verify-delete mt-3 pb-5">
-                                        <p>
-                                            <Link to="/" className="get-verify">
-                                                Get verified.
-                                            </Link>{" "}
-                                            To buy, deposit or withdraw the account should be
-                                            verified
-                                        </p>
-                                        <p
-                                            className="delete-account-link"
-                                            onClick={() => setIsDeleteAccountModalOpen(true)}
-                                            onKeyDown={() => setIsDeleteAccountModalOpen(true)}
-                                            role="presentation"
-                                        >
-                                            Delete account
-                                        </p>
+                                            </TabPanel>
+                                            <TabPanel>
+                                                <TierDetailsTab />
+                                            </TabPanel>
+                                        </Tabs>
+                                        <div className="verify-delete mt-3 pb-5">
+                                            <p>
+                                                <Link
+                                                    to="/"
+                                                    className="get-verify"
+                                                >
+                                                    Get verified.
+                                                </Link>{" "}
+                                                To buy, deposit or withdraw the
+                                                account should be verified
+                                            </p>
+                                            <p
+                                                className="delete-account-link"
+                                                onClick={() =>
+                                                    setIsDeleteAccountModalOpen(
+                                                        true
+                                                    )
+                                                }
+                                                onKeyDown={() =>
+                                                    setIsDeleteAccountModalOpen(
+                                                        true
+                                                    )
+                                                }
+                                                role="presentation"
+                                            >
+                                                Delete account
+                                            </p>
+                                        </div>
+                                    </>
+                                )}
+                                {tabIndex === 1 && (
+                                    <div className="notification-set">
+                                        <Tabs className="notification-tab">
+                                            <TabList>
+                                                <Tab>
+                                                    <div className="pt-3 pb-2">
+                                                        Recent
+                                                    </div>
+                                                </Tab>
+                                                <Tab>
+                                                    <div className="py-3 pb-2">
+                                                        Setup
+                                                    </div>
+                                                </Tab>
+                                            </TabList>
+                                            <TabPanel>
+                                                <NotificationRecent />
+                                            </TabPanel>
+                                            <TabPanel>
+                                                <NotificationSetting />
+                                            </TabPanel>
+                                        </Tabs>
                                     </div>
-                                </>
-                            )}
-                            {tabIndex === 1 && (
-                                <div className="notification-set">
-                                    <Tabs className="notification-tab">
-                                        <TabList>
-                                            <Tab>
-                                                <div className="pt-3 pb-2">Recent</div>
-                                            </Tab>
-                                            <Tab>
-                                                <div className="py-3 pb-2">Setup</div>
-                                            </Tab>
-                                        </TabList>
-                                        <TabPanel>
-                                            <NotificationRecent />
-                                        </TabPanel>
-                                        <TabPanel>
-                                            <NotificationSetting />
-                                        </TabPanel>
-                                    </Tabs>
-                                </div>
-                            )}
-                            {tabIndex === 2 && (
-                                <div className="connect-wallet">
-                                    <h4 className="pt-3">select wallet</h4>
-                                    <ConnectWalletTab />
-                                </div>
-                            )}
-                            {tabIndex === 3 && <SignOutTab />}
+                                )}
+                                {tabIndex === 2 && (
+                                    <div className="connect-wallet">
+                                        <h4 className="pt-3">select wallet</h4>
+                                        <ConnectWalletTab />
+                                    </div>
+                                )}
+                                {tabIndex === 3 && <SignOutTab />}
+                            </div>
                         </div>
-                    </div>
-                </section>
-                <ProfileChangePasswordModal
-                    isPasswordModalOpen={isPasswordModalOpen}
-                    setIsPasswordModalOpen={setIsPasswordModalOpen}
-                />
-                <DeleteAccountModal
-                    isDeleteAccountModalOpen={isDeleteAccountModalOpen}
-                    setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
-                />
-            </main>
-        </>
-    )
+                    </section>
+                    <ProfileChangePasswordModal
+                        isPasswordModalOpen={isPasswordModalOpen}
+                        setIsPasswordModalOpen={setIsPasswordModalOpen}
+                    />
+                    <DeleteAccountModal
+                        isDeleteAccountModalOpen={isDeleteAccountModalOpen}
+                        setIsDeleteAccountModalOpen={
+                            setIsDeleteAccountModalOpen
+                        }
+                    />
+                </main>
+            </>
+        )
 }
 
 export default Profile

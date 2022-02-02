@@ -29,7 +29,11 @@ export const DISABLE_2FA = gql`
     }
 `
 export const CONFIRM_REQUEST_2FA = gql`
-    mutation confirmRequest2FA($email: String!, $method: String!, $code: String!) {
+    mutation confirmRequest2FA(
+        $email: String!
+        $method: String!
+        $code: String!
+    ) {
         confirmRequest2FA(email: $email, method: $method, code: $code)
     }
 `
@@ -103,7 +107,11 @@ export const CHANGE_PASSWORD = gql`
 `
 
 export const RESET_PASSWORD = gql`
-    mutation resetPassword($email: String!, $code: String!, $newPassword: String!) {
+    mutation resetPassword(
+        $email: String!
+        $code: String!
+        $newPassword: String!
+    ) {
         resetPassword(email: $email, code: $code, newPassword: $newPassword)
     }
 `
@@ -144,9 +152,19 @@ export const VERIFY_KYC_MUTATION = gql`
                 address: { proof: $addressProof, full_address: $fullAddress }
                 consent: { proof: $consentProof }
                 background_checks: {
-                    name: { first_name: $fname, middle_name: $mname, last_name: $lname }
+                    name: {
+                        first_name: $fname
+                        middle_name: $mname
+                        last_name: $lname
+                    }
                 }
             }
         )
+    }
+`
+
+export const CREATE_NEW_REFERENCE = gql`
+    mutation {
+        createNewReference
     }
 `

@@ -71,6 +71,7 @@
         &-list {
             margin: 0 35px 0 35px;
             flex-shrink: 0;
+            gap: 15px;
             @include mq("laptop", max) {
                 margin: 0 45px 0 25px;
             }

@@ -25,14 +25,22 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
                     role="button"
                     tabIndex="0"
                 >
-                    <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    <img
+                        width="14px"
+                        height="14px"
+                        src={CloseIcon}
+                        alt="close"
+                    />
                 </div>
             </div>
             <div className="my-5">
                 <div className="text-center">
-                    <p className="text-capitalize fs-30px fw-bold">reset password</p>
+                    <p className="text-capitalize fs-30px fw-bold lh-36px">
+                        reset password
+                    </p>
                     <p className="fs-16px mt-2 text-light fw-normald">
-                        To secure your account, please complete the following verification
+                        To secure your account, please complete the following
+                        verification
                     </p>
                 </div>
 
@@ -48,13 +56,18 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
                             />
                             <div className="fs-12px">
                                 The code have been sent to email_address{" "}
-                                <span className="txt-green fw-500 cursor-pointer">Resend</span>
+                                <span className="txt-green fw-500 cursor-pointer">
+                                    Resend
+                                </span>
                             </div>
                         </div>
                         <div className="my-5">
                             {error && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                    <FontAwesomeIcon
+                                        icon={faExclamationCircle}
+                                    />{" "}
+                                    {error}
                                 </span>
                             )}
                             <button
@@ -63,10 +76,20 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
                                 disabled={loading}
                                 // onClick={signUserIn}
                             >
-                                <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                                <div
+                                    className={`${
+                                        loading ? "opacity-1" : "opacity-0"
+                                    }`}
+                                >
                                     <CustomSpinner />
                                 </div>
-                                <div className={`fs-20px ${loading ? "ms-3" : "pe-4"}`}>verify</div>
+                                <div
+                                    className={`fs-20px ${
+                                        loading ? "ms-3" : "pe-4"
+                                    }`}
+                                >
+                                    verify
+                                </div>
                             </button>
                         </div>
                     </form>
