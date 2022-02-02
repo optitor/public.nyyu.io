@@ -335,6 +335,24 @@
                             color: yellow !important;
                         }
                     }
+                    .black_input {
+                        width: 100%;
+                        border: unset;
+                        .css-1okebmr-indicatorSeparator {
+                            display: none;
+                        }
+                        .css-1sufdz7-control {
+                            min-height: 44px;
+                        }
+                        .css-21qapu-control {
+                            min-height: 44px;
+                            border: unset;
+                            box-shadow: none!important;
+                        }
+                        .css-tlfecz-indicatorContainer {
+                            display: none;
+                        }
+                    }
                 }
                 thead,
                 tbody tr {
@@ -942,7 +960,7 @@
         }
     }
     .value {
-        font-size: 40px;
+        font-size: 30px;
         line-height: 54px;
     }
     .max-value {
