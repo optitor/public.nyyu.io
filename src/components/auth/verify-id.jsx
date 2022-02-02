@@ -16,8 +16,8 @@ const VerificationPage = () => {
     const [reference, setReference] = useState(null)
     const [KYCPageUrl, setKYCPageUrl] = useState(null)
     const callbackUrl = "https://api.ndb.money/shufti"
-    const redirectUrl = "https://saledev.ndb.money/app/profile"
-    // const redirectUrl = "http://localhost:8000/app/profile/"
+    // const redirectUrl = "https://saledev.ndb.money/app/profile"
+    const redirectUrl = "http://localhost:8000/app/profile/"
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
     const clientId =
@@ -28,50 +28,56 @@ const VerificationPage = () => {
     // Methods
     const sendShuftiRequest = async () => {
         const token = btoa(`${clientId}:${secret}`)
+        // const data = {
+        //     reference,
+        //     callback_url: callbackUrl,
+        //     redirect_url: redirectUrl,
+        //     country: "GB",
+        //     language: "EN",
+        //     verification_mode: "any",
+        //     document: {
+        //         proof: "",
+        //         supported_types: ["id_card", "passport"],
+        //     },
+        //     background_checks: {
+        //         name: {
+        //             first_name: "",
+        //             middle_name: "",
+        //             last_name: "",
+        //         },
+        //     },
+        //     address: {
+        //         full_address: "",
+        //         supported_types: ["utility_bill", "passport", "bank_statement"],
+        //     },
+        //     consent: {
+        //         proof: "",
+        //         text: "I & NDB",
+        //     },
+        //     face: {
+        //         proof: "",
+        //     },
+        //     ttl: 120,
+        // }
+        const data = {
+            reference,
+            callback_url: callbackUrl,
+            redirect_url: redirectUrl,
+            country: "GB",
+            language: "EN",
+            verification_mode: "any",
+            consent: {
+                proof: "",
+                text: "I & NDB",
+            },
+            ttl: 120,
+        }
         await axios
-            .post(
-                shuftiProBaseUrl,
-                {
-                    reference,
-                    callback_url: callbackUrl,
-                    redirect_url: redirectUrl,
-                    country: "GB",
-                    language: "EN",
-                    verification_mode: "any",
-                    document: {
-                        proof: "",
-                        supported_types: ["id_card", "passport"],
-                    },
-                    background_checks: {
-                        name: {
-                            first_name: "",
-                            middle_name: "",
-                            last_name: "",
-                        },
-                    },
-                    address: {
-                        full_address: "",
-                        supported_types: [
-                            "utility_bill",
-                            "passport",
-                            "bank_statement",
-                        ],
-                    },
-                    consent: {
-                        proof: "",
-                        text: "I & NDB",
-                    },
-                    face: {
-                        proof: "",
-                    },
-                    ttl: 120,
+            .post(shuftiProBaseUrl, data, {
+                headers: {
+                    Authorization: `Basic ${token}`,
                 },
-                {
-                    headers: {
-                        Authorization: `Basic ${token}`,
-                    },
-                }
-            )
+            })
             .then((response) => setKYCPageUrl(response.data.verification_url))
     }
     useEffect(() => createNewReference(), [])
