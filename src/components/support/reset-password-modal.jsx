@@ -35,10 +35,10 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
             </div>
             <div className="my-5">
                 <div className="text-center">
-                    <p className="text-capitalize fs-30px fw-bold lh-30px">
+                    <p className="text-capitalize fs-30px fw-bold lh-36px">
                         reset password
                     </p>
-                    <p className="fs-16px mt-sm-2 mt-4 text-light fw-normald">
+                    <p className="fs-16px mt-2 text-light fw-normald">
                         To secure your account, please complete the following
                         verification
                     </p>
