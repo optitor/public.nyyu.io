@@ -15,7 +15,7 @@ const VerificationPage = () => {
     // Containers
     const [reference, setReference] = useState(null)
     const [KYCPageUrl, setKYCPageUrl] = useState(null)
-    const callbackUrl = "https://saledev.ndb.money/app/profile"
+    const callbackUrl = "https://api.ndb.money/shufti"
     const redirectUrl = "https://saledev.ndb.money/app/profile"
     // const callbackUrl = "http://localhost:8000/app/profile/"
     // const redirectUrl = "http://localhost:8000/app/profile/"
