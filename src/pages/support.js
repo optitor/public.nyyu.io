@@ -87,7 +87,7 @@ const FAQ = () => {
                                         {selfServiceData.map((item, index) => {
                                             return (
                                                 <div
-                                                    className={`col-12 col-sm-6 ${index % 2 == 0 ? "ps-sm-0 pe-sm-1 px-0" : "pe-sm-0 ps-sm-1 px-0"
+                                                    className={`col-12 col-lg-6 ${index % 2 == 0 ? "ps-lg-0 pe-lg-1 px-0" : "pe-lg-0 ps-lg-1 px-0"
                                                         }`}
                                                     onClick={item.clickEvent}
                                                 >
