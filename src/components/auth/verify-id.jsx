@@ -16,49 +16,25 @@ const VerificationPage = () => {
     const [reference, setReference] = useState(null)
     const [KYCPageUrl, setKYCPageUrl] = useState(null)
     const callbackUrl = "https://api.ndb.money/shufti"
-    // const redirectUrl = "https://saledev.ndb.money/app/profile"
-    const redirectUrl = "http://localhost:8000/app/profile/"
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
+    // Production
+    // const clientId =
+    //     "wiKW623AK8inO2Uq7w1Hg2j3vOxGdEFDgigTByjxzA4Xl47pLJ1641498266"
+    // const secret =
+    //     "$2y$10$vPNtAL2q8rRxhWU4fNKQDeLv09AhIQfd9zRFsmXF6AkL.sWkPpTj2"
+
+    // Test
+    const redirectUrl = "https://saledev.ndb.money/app/profile"
+    // const redirectUrl = "http://localhost:8000/app/profile/"
     const clientId =
-        "wiKW623AK8inO2Uq7w1Hg2j3vOxGdEFDgigTByjxzA4Xl47pLJ1641498266"
+        "sWPA9CtQUI09MRpvQtxCPKK1hN6CU8qqngge3jHjAYptWsm9Ab1643819657"
     const secret =
-        "$2y$10$vPNtAL2q8rRxhWU4fNKQDeLv09AhIQfd9zRFsmXF6AkL.sWkPpTj2"
+        "$2y$10$O1V4dOxzCYFbNBswBwEdX.ZnDkqf5VvKQWOLElLEacTEx../zHC3O"
 
     // Methods
     const sendShuftiRequest = async () => {
         const token = btoa(`${clientId}:${secret}`)
-        // const data = {
-        //     reference,
-        //     callback_url: callbackUrl,
-        //     redirect_url: redirectUrl,
-        //     country: "GB",
-        //     language: "EN",
-        //     verification_mode: "any",
-        //     document: {
-        //         proof: "",
-        //         supported_types: ["id_card", "passport"],
-        //     },
-        //     background_checks: {
-        //         name: {
-        //             first_name: "",
-        //             middle_name: "",
-        //             last_name: "",
-        //         },
-        //     },
-        //     address: {
-        //         full_address: "",
-        //         supported_types: ["utility_bill", "passport", "bank_statement"],
-        //     },
-        //     consent: {
-        //         proof: "",
-        //         text: "I & NDB",
-        //     },
-        //     face: {
-        //         proof: "",
-        //     },
-        //     ttl: 120,
-        // }
         const data = {
             reference,
             callback_url: callbackUrl,
@@ -66,9 +42,36 @@ const VerificationPage = () => {
             country: "GB",
             language: "EN",
             verification_mode: "any",
+            document: {
+                proof: "",
+                supported_types: ["id_card", "passport", "driving_license"],
+            },
+            background_checks: {
+                name: {
+                    first_name: "",
+                    middle_name: "",
+                    last_name: "",
+                },
+            },
+            address: {
+                full_address: "",
+                supported_types: [
+                    "utility_bill",
+                    "passport",
+                    "bank_statement",
+                    "driving_license",
+                    "rent_agreement",
+                    "employer_letter",
+                    "tax_bill",
+                    "insurance_agreement",
+                ],
+            },
             consent: {
                 proof: "",
                 text: "I & NDB",
+            },
+            face: {
+                proof: "",
             },
             ttl: 120,
         }
