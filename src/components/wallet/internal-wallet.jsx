@@ -74,6 +74,7 @@ export default function InternalWallet() {
     useEffect(() => {
         (async function() {
             if(!Object.keys(myAssets).length) return;
+            let assets = {};
             for(const item of Object.values(myAssets)) {
                 let price = 0;
                 if(!item.tokenSymbol || item.tokenSymbol === 'NDB' || item.tokenSymbol === 'VOLT') {
@@ -82,13 +83,12 @@ export default function InternalWallet() {
                     const res = await axios.get(TICKER_24hr, { params: { symbol: item.tokenSymbol + QUOTE } });
                     price = res.data.lastPrice;
                 }
-                item.price = price;
-                item.balance = (item.free + item.hold) * price;
-                setMyAssets({ ...myAssets, [item.tokenSymbol]: item })
+                let balance = (item.free + item.hold) * price;
+                assets[item.tokenSymbol] = { ...item, price, balance };
             }
+            setMyAssets({ ...assets });
         })();
     }, [Object.keys(myAssets).length]);
-
     const loadingSection = !myAssets
 
     if (loadingSection)
