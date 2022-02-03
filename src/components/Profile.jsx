@@ -1,4 +1,4 @@
-import Select, { useStateManager } from "react-select"
+import Select from "react-select"
 import Loading from "./common/Loading"
 import { Link, navigate } from "gatsby"
 import { useQuery } from "@apollo/client"
@@ -7,7 +7,6 @@ import Header from "../components/header"
 import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
 import { profile_tabs } from "../utilities/staticData"
-// import { Bronze } from "../utilities/imgImport"
 import Seo from "./seo"
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
@@ -120,7 +119,7 @@ const Profile = () => {
 
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user])
     if (loadingPage) return <Loading />
-    else
+    else {
         return (
             <>
                 <Seo title="Profile" />
@@ -402,6 +401,7 @@ const Profile = () => {
                 </main>
             </>
         )
+    }
 }
 
 export default Profile
