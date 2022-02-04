@@ -14,6 +14,7 @@ import { Icon } from '@iconify/react';
 
 const QUOTE = "USDT"
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
+const REFRESH_TIME = 30;
 
 const Asset = ({item}) => {
     return (
@@ -41,7 +42,7 @@ const Asset = ({item}) => {
 }
 
 export default function InternalWallet() {
-    const [myAssets, setMyAssets] = useState({})
+    const [myAssets, setMyAssets] = useState({});
     const [BTCPrice, setBTCPrice] = useState(10000);
 
     const [hideValues, setHideValues] = useState(false)
@@ -49,16 +50,23 @@ export default function InternalWallet() {
     const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false)
     const obscureValueString = "******"
     const [btcOrUsd, setBtcOrUsd] = useState("USD")
-
+    
+    // console.log(myAssets)
     const totalBalance = useMemo(() => {
         if(!Object.values(myAssets)) return 0;
         return _.sumBy(Object.values(myAssets), 'balance');
     }, [myAssets]);
 
     useEffect(() => {
-        axios.get(TICKER_24hr, { params: { symbol: 'BTC' + QUOTE } }).then(res => {
-            setBTCPrice(res.data.lastPrice);
-        });
+        const get_BTCPrice = () => {
+            axios.get(TICKER_24hr, { params: { symbol: 'BTC' + QUOTE } }).then(res => {
+                setBTCPrice(res.data.lastPrice);
+            });
+        };
+        get_BTCPrice();
+        setInterval(() => {
+            get_BTCPrice();
+        }, 1000 * REFRESH_TIME);
     }, []);
 
     const { data: balances } = useQuery(GET_BALANCES, {
@@ -73,20 +81,27 @@ export default function InternalWallet() {
 
     useEffect(() => {
         (async function() {
-            if(!Object.keys(myAssets).length) return;
-            let assets = {};
-            for(const item of Object.values(myAssets)) {
-                let price = 0;
-                if(!item.tokenSymbol || item.tokenSymbol === 'NDB' || item.tokenSymbol === 'VOLT') {
-                    price = 0;
-                } else {
-                    const res = await axios.get(TICKER_24hr, { params: { symbol: item.tokenSymbol + QUOTE } });
-                    price = res.data.lastPrice;
+            const get_balances = async () => {
+                if(!Object.keys(myAssets).length) return;
+                let assets = {};
+                for(const item of Object.values(myAssets)) {
+                    let price = 0;
+                    if(!item.tokenSymbol || item.tokenSymbol === 'NDB' || item.tokenSymbol === 'VOLT') {
+                        price = 0;
+                    } else {
+                        const res = await axios.get(TICKER_24hr, { params: { symbol: item.tokenSymbol + QUOTE } });
+                        price = res.data.lastPrice;
+                    }
+                    let balance = (item.free + item.hold) * price;
+                    assets[item.tokenSymbol] = { ...item, price, balance };
                 }
-                let balance = (item.free + item.hold) * price;
-                assets[item.tokenSymbol] = { ...item, price, balance };
-            }
-            setMyAssets({ ...assets });
+                setMyAssets({ ...assets });
+            };
+
+            get_balances();
+            setInterval(() => {
+                get_balances();
+            }, 1000 * REFRESH_TIME);
         })();
     }, [Object.keys(myAssets).length]);
     const loadingSection = !myAssets
