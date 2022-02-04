@@ -10,10 +10,13 @@
     }
     .exclusive-label {
         font-variant: small-caps;
-        font-size: 24px;
         font-weight: bold;
+        font-size: 30px;
         line-height: 23px;
         color: $green;
+        @include mq("phone") {
+            font-size: 24px;
+        }
     }
     .ndb-tokens-label {
         font-size: 48px;
@@ -21,26 +24,43 @@
         text-transform: uppercase;
         font-style: italic;
         color: white;
-        margin-left: 41px;
+        margin-left: 0px;
         margin-bottom: 0px;
         padding: 10px 0px;
+        text-align: center;
+        @include mq("phone") {
+            text-align: left;
+            font-size: 48px;
+            margin-left: 41px;
+        }
     }
     .miss-label {
-        font-size: 16px;
-        font-weight: 300;
-        line-height: 24px;
-        letter-spacing: -0.02em;
         color: white;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 500;
         margin-bottom: 23px;
+        letter-spacing: -0.02em;
+        @include mq("phone") {
+            font-weight: 300;
+        }
     }
     .tokens-amount {
-        font-size: 100px;
-        line-height: 122px;
-        letter-spacing: -0.02em;
+        font-size: 64px;
+        line-height: 78px;
+        letter-spacing: 0.03em;
         font-variant: small-caps;
         font-weight: bold;
         color: white;
-        width: max-content;
+        width: 100%;
+        text-align: center;
+        @include mq("phone") {
+            letter-spacing: -0.02em;
+            width: max-content;
+            text-align: left;
+            font-size: 100px;
+            line-height: 122px;
+        }
     }
     .next-auction-label {
         font-variant: small-caps;
@@ -54,7 +74,7 @@
         font-size: 24px;
         line-height: 29px;
         font-variant: small-caps;
-        font-weight: bold;
+        font-weight: 900;
         color: white;
         opacity: 0.4;
         text-align: right;
