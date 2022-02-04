@@ -1,14 +1,15 @@
 import React from "react"
 import Seo from "../components/seo"
 import Header from "../components/header"
-import { GreenCoin, NdbToken } from "../utilities/imgImport"
+import { GreenCoin } from "../utilities/imgImport"
+import QualifyModal from "../components/presale/qualify-modal"
+import { useState } from "react"
 
 const Presale = () => {
+    const [isQualifyModalOpen, setIsQualifyModalOpen] = useState(false)
     return (
         <div
             style={{
-                // background:
-                //     "radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%)",
                 background: "#000000",
             }}
         >
@@ -17,7 +18,7 @@ const Presale = () => {
                 <Header />
                 <div className="container col-lg-10 col-12 mx-auto gap-lg-5 gap-0">
                     <div
-                        className="direct-purchase"
+                        className="presale"
                         style={{
                             backgroundImage: `url(${GreenCoin})`,
                             backgroundSize: "contain",
@@ -56,7 +57,12 @@ const Presale = () => {
                                         fixed price before the auction starts.
                                     </div>
                                     <div className="text-center d-none d-md-block">
-                                        <button className="btn btn-green btn-buy">
+                                        <button
+                                            className="btn btn-green btn-buy"
+                                            onClick={() =>
+                                                setIsQualifyModalOpen(true)
+                                            }
+                                        >
                                             buy
                                         </button>
                                     </div>
@@ -66,6 +72,10 @@ const Presale = () => {
                     </div>
                 </div>
             </main>
+            <QualifyModal
+                isOpen={isQualifyModalOpen}
+                setIsOpen={setIsQualifyModalOpen}
+            />
         </div>
     )
 }
