@@ -1,14 +1,15 @@
 import React from "react"
 import Seo from "../components/seo"
 import Header from "../components/header"
-import { NdbToken } from "../utilities/imgImport"
+import { GreenCoin, NdbToken } from "../utilities/imgImport"
 
 const Presale = () => {
     return (
         <div
             style={{
-                background:
-                    "radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%)",
+                // background:
+                //     "radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%)",
+                background: "#000000",
             }}
         >
             <Seo title="Direct Purchase" />
@@ -18,36 +19,40 @@ const Presale = () => {
                     <div
                         className="direct-purchase"
                         style={{
-                            backgroundImage: `url(${NdbToken})`,
+                            backgroundImage: `url(${GreenCoin})`,
                             backgroundSize: "contain",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "left center",
                         }}
                     >
                         <div className="d-flex align-items-center">
-                            <div className="col-md-6 d-xl-flex flex-xl-column align-items-xl-center">
+                            <div className="col-md-6 d-xl-flex flex-xl-column">
                                 <div className="next-auction-label">
-                                    <div>the next auction round starts in</div>
-                                    <div className="text-end">7 days</div>
+                                    7 days left
                                 </div>
-                                <div className="tokens-amount">604 800</div>
+                                <div className="tokens-amount">
+                                    604 800
+                                    <div className="tokens-left">
+                                        tokens left
+                                    </div>
+                                </div>
                             </div>
                             <div className="col-md-6 d-flex flex-column align-items-center">
                                 <div>
                                     <div className="exclusive-label">
-                                        exlusive sale of
+                                        exlusive pre-sale of
                                     </div>
                                     <div className="ndb-tokens-label">
-                                        10 ndb tokens
+                                        ndb token
                                     </div>
                                     <div className="miss-label">
-                                        Don't miss an opportunity to buy limited
-                                        number of NDB Tokens at the fixed price
-                                        before the next auction round started.
+                                        Don't miss an opportunity to get ahold
+                                        of NDB Tokens before anyone else at the
+                                        fixed price before the auction starts.
                                     </div>
                                     <div className="text-center">
-                                        <button className="btn btn-green btn-buy-now">
-                                            buy now
+                                        <button className="btn btn-green btn-buy">
+                                            buy
                                         </button>
                                     </div>
                                 </div>

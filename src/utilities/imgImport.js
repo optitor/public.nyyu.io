@@ -101,6 +101,9 @@ import supportSecurity from "../images/support/security.svg"
 import supportUnlock from "../images/support/unlock.svg"
 import supportTag from "../images/support/tag.svg"
 
+
+import greenCoin from "../images/green-coin.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const NotificationBell = notificationBell
@@ -199,3 +202,5 @@ export const SupportRecovery = supportRecovery
 export const SupportReset = supportReset
 export const SupportSecurity = supportSecurity
 export const SupportUnlock = supportUnlock
+
+export const GreenCoin = greenCoin
