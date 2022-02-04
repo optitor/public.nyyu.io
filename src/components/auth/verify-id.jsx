@@ -39,32 +39,37 @@ const VerificationPage = () => {
             reference,
             callback_url: callbackUrl,
             redirect_url: redirectUrl,
-            country: "GB",
-            language: "EN",
             verification_mode: "any",
             document: {
                 proof: "",
                 supported_types: ["id_card", "passport", "driving_license"],
-            },
-            background_checks: {
-                name: {
-                    first_name: "",
-                    middle_name: "",
-                    last_name: "",
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
                 },
             },
             address: {
                 full_address: "",
                 supported_types: [
                     "utility_bill",
-                    "passport",
                     "bank_statement",
                     "driving_license",
                     "rent_agreement",
                     "employer_letter",
                     "tax_bill",
-                    "insurance_agreement",
                 ],
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
+                },
             },
             consent: {
                 proof: "",
@@ -74,6 +79,7 @@ const VerificationPage = () => {
                 proof: "",
             },
             ttl: 120,
+            decline_on_single_step: "0",
         }
         await axios
             .post(shuftiProBaseUrl, data, {
