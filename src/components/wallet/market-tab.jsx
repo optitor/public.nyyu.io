@@ -144,6 +144,7 @@ export default function MarketTab() {
         SOL: {symbol: 'SOL', name: cryptoSymbolList['SOL']},
         DOGE: {symbol: 'DOGE', name: cryptoSymbolList['DOGE']},
         SHIB: {symbol: 'SHIB', name: cryptoSymbolList['SHIB']},
+        // DAI: {symbol: 'DAI', name: cryptoSymbolList['DAI']},
         ADA: {symbol: 'ADA', name: cryptoSymbolList['ADA']},
         CAKE: {symbol: 'CAKE', name: cryptoSymbolList['CAKE']},
     });
@@ -197,17 +198,14 @@ export default function MarketTab() {
             </div>
             <tbody>
                 <>
-                    {searchValue && Object.values(cryptoList)
-                        .filter(
-                            (item) =>
-                                item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                                item.symbol.toLowerCase().includes(searchValue.toLowerCase())
-                        )
-                        .map((item, index) => (
-                            <CryptoRow data={item} key={index} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                    {searchValue && _.map( _.filter(cryptoList, item => 
+                        item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        item.symbol.toLowerCase().includes(searchValue.toLowerCase())
+                    ), item => (
+                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
-                    {!searchValue && _.map(favours, (item, index) => (
-                        <CryptoRow data={item} key={index} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                    {!searchValue && _.map(favours, item => (
+                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
                 </>
             </tbody>
