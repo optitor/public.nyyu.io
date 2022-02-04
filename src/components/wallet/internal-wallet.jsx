@@ -90,9 +90,9 @@ export default function InternalWallet() {
     useEffect(() => {
         (async function() {
             const get_Balances_Price = async () => {
-                const assets = { ...myAssets };
-                if(Object.keys(myAssets).length === Object.keys(InitialMyAssets).length) return;
-
+                const assets = { ...myAssets };                
+                if(_.isEqual(myAssets, InitialMyAssets)) return;
+                
                 for(const item of Object.values(myAssets)) {
                     let price = 0;
                     if(!item.tokenSymbol || item.tokenSymbol === 'NDB' || item.tokenSymbol === 'VOLT') {
