@@ -20,6 +20,7 @@ const RED = "#F6361A"
 
 const { get } = cryptoSymbol({})
 const cryptoSymbolList = get().SNPair;
+const REFRESH_TIME = 30;
 
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
@@ -64,7 +65,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
         getTicker24hr()
         setInterval(() => {
             getTicker24hr()
-        }, 1000 * 60 * 30)
+        }, 1000 * REFRESH_TIME)
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
@@ -138,8 +139,14 @@ export default function MarketTab() {
     const [inputValue, setInputValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [favours, setFavours] = useState({
-        BTC: {symbol: 'BTC', name: 'Bitcoin'},
-        ETH: {symbol: 'ETH', name: 'Ethereum'},
+        BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
+        ETH: {symbol: 'ETH', name: cryptoSymbolList['ETH']},
+        SOL: {symbol: 'SOL', name: cryptoSymbolList['SOL']},
+        DOGE: {symbol: 'DOGE', name: cryptoSymbolList['DOGE']},
+        SHIB: {symbol: 'SHIB', name: cryptoSymbolList['SHIB']},
+        // DAI: {symbol: 'DAI', name: cryptoSymbolList['DAI']},
+        ADA: {symbol: 'ADA', name: cryptoSymbolList['ADA']},
+        CAKE: {symbol: 'CAKE', name: cryptoSymbolList['CAKE']},
     });
     useEffect(() => {
         axios.get(ALLPRICES).then((res) => {
@@ -171,7 +178,11 @@ export default function MarketTab() {
                 </tr>
             </thead>
             <div className="search">
-                <Icon className="search-icon text-light" icon="carbon:search" onClick={() => setSearchValue(inputValue)}/>
+                <Icon className="search-icon text-light"
+                    icon={searchValue? "bi:list-stars": "carbon:search"}
+                    onClick={() => {setSearchValue(''); setInputValue('');}}
+                    disabled={!searchValue}
+                />
                 <input className="black_input"
                     value={inputValue}
                     onChange={e => setInputValue(e.target.value)}
@@ -181,21 +192,20 @@ export default function MarketTab() {
                         };
                     }}
                     placeholder="Search"
+                    onFocus={(e) => e.target.placeholder = 'Please enter keyword and press Enter'}
+                    onBlur={(e) => e.target.placeholder = 'Search'}
                 />
             </div>
             <tbody>
                 <>
-                    {searchValue && Object.values(cryptoList)
-                        .filter(
-                            (item) =>
-                                item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                                item.symbol.toLowerCase().includes(searchValue.toLowerCase())
-                        )
-                        .map((item, index) => (
-                            <CryptoRow data={item} key={index} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                    {searchValue && _.map( _.filter(cryptoList, item => 
+                        item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        item.symbol.toLowerCase().includes(searchValue.toLowerCase())
+                    ), item => (
+                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
-                    {!searchValue && _.map(favours, (item, index) => (
-                        <CryptoRow data={item} key={index} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                    {!searchValue && _.map(favours, item => (
+                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
                 </>
             </tbody>

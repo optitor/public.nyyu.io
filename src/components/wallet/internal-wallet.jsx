@@ -11,15 +11,17 @@ import NumberFormat from "react-number-format"
 import { useQuery } from "@apollo/client"
 import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth"
 import { Icon } from '@iconify/react';
+import { VOLT, NDB } from './../../utilities/imgImport'
 
 const QUOTE = "USDT"
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
+const REFRESH_TIME = 30;
 
 const Asset = ({item}) => {
     return (
         <tr>
             <td className="d-flex align-items-center ps-2">
-                <img src={svgToDataURL(item.symbol)} alt="coin icon" className="me-2" />
+                <img src={item.symbol} alt="coin icon" className="me-2" />
                 <div>
                     <p className="coin-abbr text-light">{item.tokenName}</p>
                 </div>
@@ -41,7 +43,11 @@ const Asset = ({item}) => {
 }
 
 export default function InternalWallet() {
-    const [myAssets, setMyAssets] = useState({})
+    const InitialMyAssets = {
+        NDB: {tokenSymbol: 'NDB', tokenName: 'NDB', free: 0, hold: 0, symbol: NDB},
+        VOLT: {tokenSymbol: 'VOLT', tokenName: 'Volt token', free: 0, hold: 0, symbol: VOLT},
+    };
+    const [myAssets, setMyAssets] = useState(InitialMyAssets);
     const [BTCPrice, setBTCPrice] = useState(10000);
 
     const [hideValues, setHideValues] = useState(false)
@@ -49,46 +55,67 @@ export default function InternalWallet() {
     const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false)
     const obscureValueString = "******"
     const [btcOrUsd, setBtcOrUsd] = useState("USD")
-
+    
+    // console.log(myAssets)
     const totalBalance = useMemo(() => {
         if(!Object.values(myAssets)) return 0;
         return _.sumBy(Object.values(myAssets), 'balance');
     }, [myAssets]);
-
+    
     useEffect(() => {
-        axios.get(TICKER_24hr, { params: { symbol: 'BTC' + QUOTE } }).then(res => {
-            setBTCPrice(res.data.lastPrice);
-        });
+        const get_BTCPrice = () => {
+            axios.get(TICKER_24hr, { params: { symbol: 'BTC' + QUOTE } }).then(res => {
+                setBTCPrice(res.data.lastPrice);
+            });
+        };
+        get_BTCPrice();
+        setInterval(() => {
+            get_BTCPrice();
+        }, 1000 * REFRESH_TIME);
     }, []);
 
     const { data: balances } = useQuery(GET_BALANCES, {
         fetchPolicy: "network-only",
         onCompleted: () => {
             if(balances.getBalances) {
-                const assets = _.mapKeys(balances.getBalances, 'tokenSymbol');
-                setMyAssets(assets);
+                let assets = balances.getBalances?.map(item => {
+                    return { ...item, symbol: svgToDataURL(item.symbol) };
+                });
+                assets = _.mapKeys(assets, 'tokenSymbol');
+                setMyAssets({...myAssets, ...assets});
             }
         },
     })
 
     useEffect(() => {
         (async function() {
-            if(!Object.keys(myAssets).length) return;
-            let assets = {};
-            for(const item of Object.values(myAssets)) {
-                let price = 0;
-                if(!item.tokenSymbol || item.tokenSymbol === 'NDB' || item.tokenSymbol === 'VOLT') {
-                    price = 0;
-                } else {
-                    const res = await axios.get(TICKER_24hr, { params: { symbol: item.tokenSymbol + QUOTE } });
-                    price = res.data.lastPrice;
+            const get_Balances_Price = async () => {
+                const assets = { ...myAssets };
+                if(Object.keys(myAssets).length === Object.keys(InitialMyAssets).length) return;
+
+                for(const item of Object.values(myAssets)) {
+                    let price = 0;
+                    if(!item.tokenSymbol || item.tokenSymbol === 'NDB' || item.tokenSymbol === 'VOLT') {
+                        price = 0;
+                    } else {
+                        const res = await axios.get(TICKER_24hr, { params: { symbol: item.tokenSymbol + QUOTE } });
+                        price = res.data.lastPrice;
+                    }
+                    const balance = (item.hold + item.free) * price;
+                    assets[item.tokenSymbol] = { ...item, price, balance };
                 }
-                let balance = (item.free + item.hold) * price;
-                assets[item.tokenSymbol] = { ...item, price, balance };
-            }
-            setMyAssets({ ...assets });
+                setMyAssets({...assets});
+            };
+
+            get_Balances_Price();
+            const interval1 = setInterval(() => {
+                get_Balances_Price();
+            }, 1000 * REFRESH_TIME);
+
+            return () => clearInterval(interval1);
         })();
     }, [Object.keys(myAssets).length]);
+
     const loadingSection = !myAssets
 
     if (loadingSection)
@@ -207,7 +234,7 @@ export default function InternalWallet() {
                 <div>
                     <table className="my-3">
                         <tbody>
-                            {_.map((_.orderBy(myAssets, ['balance'], ['desc'])), (item, index) => <Asset item={item} key={index} />)}
+                            {_.map((_.orderBy(myAssets, ['balance'], ['desc'])), (item) => <Asset item={item} key={item.tokenName} />)}
                             {Object.values(myAssets).length === 0 && (
                                 <p className="text-center fw-500 text-uppercase">no assets found</p>
                             )}
