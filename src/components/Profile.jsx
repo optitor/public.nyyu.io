@@ -93,7 +93,9 @@ const Profile = () => {
         return (
             <>
                 <div
-                    className={`status ${config ? "active" : "deactive"}`}
+                    className={`status ${
+                        config ? "active" : "deactive"
+                    } mt-3px`}
                 ></div>
                 <div className="security-item">
                     <p className="security-name">{title}</p>
@@ -261,6 +263,15 @@ const Profile = () => {
                                                                 </button>
                                                             </div>
                                                         </div>
+                                                        <div className="row w-100 mx-auto">
+                                                            <div className="col-6 col-sm-4 col-md-6 br">
+                                                                email
+                                                            </div>
+                                                            <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
+                                                                {user &&
+                                                                    user?.email}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">
@@ -277,14 +288,14 @@ const Profile = () => {
                                                             />
                                                         </h4>
                                                         <div className="row w-100 mx-auto">
-                                                            <div className="col-md-6 br">
+                                                            <div className="col-md-4 br">
                                                                 <TfaConfig
                                                                     title="2FA Email"
                                                                     method="email"
                                                                 />
                                                             </div>
 
-                                                            <div className="col-md-6">
+                                                            {/* <div className="col-md-6">
                                                                 <div
                                                                     className={`status ${
                                                                         user
@@ -318,16 +329,16 @@ const Profile = () => {
                                                                         </Link>
                                                                     )}
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
 
-                                                            <div className="col-md-6 br">
+                                                            <div className="col-md-4 br">
                                                                 <TfaConfig
                                                                     title="2FA Mobile"
                                                                     method="phone"
                                                                 />
                                                             </div>
 
-                                                            <div className="col-md-6">
+                                                            <div className="col-md-4">
                                                                 <TfaConfig
                                                                     title="2FA Authentication app"
                                                                     method="app"
@@ -341,17 +352,7 @@ const Profile = () => {
                                                 <TierDetailsTab />
                                             </TabPanel>
                                         </Tabs>
-                                        <div className="verify-delete mt-3 pb-5">
-                                            <p>
-                                                <Link
-                                                    to="/"
-                                                    className="get-verify"
-                                                >
-                                                    Get verified.
-                                                </Link>{" "}
-                                                To buy, deposit or withdraw the
-                                                account should be verified
-                                            </p>
+                                        <div className="verify-delete mt-3 pb-5 ps-2">
                                             <p
                                                 className="delete-account-link"
                                                 onClick={() =>
