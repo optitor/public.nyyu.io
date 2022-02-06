@@ -229,43 +229,6 @@ const Profile = () => {
                                                                     method="email"
                                                                 />
                                                             </div>
-
-                                                            {/* <div className="col-md-6">
-                                                                <div
-                                                                    className={`status ${
-                                                                        user
-                                                                            ?.verify
-                                                                            ?.kycVerified
-                                                                            ? "active"
-                                                                            : "deactive"
-                                                                    }`}
-                                                                ></div>
-                                                                <div className="security-item">
-                                                                    <p className="security-name">
-                                                                        KYC
-                                                                        Verificatoin
-                                                                    </p>
-                                                                    {user
-                                                                        ?.verify
-                                                                        .kybVerified &&
-                                                                    user?.verify
-                                                                        .kycVerified ? (
-                                                                        <p className="txt-green">
-                                                                            verified
-                                                                        </p>
-                                                                    ) : (
-                                                                        <Link
-                                                                            to={
-                                                                                ROUTES.verifyId
-                                                                            }
-                                                                            className="security-link"
-                                                                        >
-                                                                            setup
-                                                                        </Link>
-                                                                    )}
-                                                                </div>
-                                                            </div> */}
-
                                                             <div className="col-md-4 br">
                                                                 <TfaConfig
                                                                     title="2FA Mobile"
