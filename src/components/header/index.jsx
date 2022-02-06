@@ -22,13 +22,18 @@ const Menu = () => {
     const dispatch = useDispatch()
     // Webservice
     const { data: user_data } = useQuery(GET_USER)
-    const { data: allUnReadNotifications } = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
-        fetchPolicy: "network-only",
-        onCompleted: (response) => {
-            if (!response.getAllUnReadNotifications) return
-            setNewNotification(response.getAllUnReadNotifications?.length !== 0)
-        },
-    })
+    const { data: allUnReadNotifications } = useQuery(
+        GET_ALL_UNREAD_NOTIFICATIONS,
+        {
+            fetchPolicy: "network-only",
+            onCompleted: (response) => {
+                if (!response.getAllUnReadNotifications) return
+                setNewNotification(
+                    response.getAllUnReadNotifications?.length !== 0
+                )
+            },
+        }
+    )
     const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
             dispatch(getAuthInfo())
@@ -108,13 +113,15 @@ const Menu = () => {
                                 window.location.pathname === ROUTES.wallet ||
                                 window.location.pathname === ROUTES.auction ||
                                 window.location.pathname === ROUTES.payment ||
-                                window.location.pathname.includes(ROUTES.admin)) && (
+                                window.location.pathname.includes(
+                                    ROUTES.admin
+                                )) && (
                                 <div className="d-none d-md-flex justify-content-between gap-5">
                                     <Link
                                         to={ROUTES.wallet}
                                         className={`${
-                                            window.location.pathname === ROUTES.wallet &&
-                                            "txt-green"
+                                            window.location.pathname ===
+                                                ROUTES.wallet && "txt-green"
                                         }`}
                                     >
                                         wallet
@@ -122,8 +129,10 @@ const Menu = () => {
                                     <Link
                                         to={ROUTES.auction}
                                         className={`${
-                                            (window.location.pathname === ROUTES.auction ||
-                                                window.location.pathname === ROUTES.payment) &&
+                                            (window.location.pathname ===
+                                                ROUTES.auction ||
+                                                window.location.pathname ===
+                                                    ROUTES.payment) &&
                                             "txt-green"
                                         }`}
                                     >
@@ -132,15 +141,19 @@ const Menu = () => {
                                     <Link
                                         to={ROUTES.profile}
                                         className={`${
-                                            window.location.pathname === ROUTES.profile &&
-                                            "txt-green"
+                                            window.location.pathname ===
+                                                ROUTES.profile && "txt-green"
                                         }`}
                                     >
                                         profile
                                     </Link>
                                     <div
-                                        onClick={() => setIsDressUPModalOpen(true)}
-                                        onKeyDown={() => setIsDressUPModalOpen(true)}
+                                        onClick={() =>
+                                            setIsDressUPModalOpen(true)
+                                        }
+                                        onKeyDown={() =>
+                                            setIsDressUPModalOpen(true)
+                                        }
                                         className="cursor-pointer hover:text-green"
                                         role="presentation"
                                     >
@@ -149,17 +162,20 @@ const Menu = () => {
                                     <Link
                                         to={ROUTES.faq}
                                         className={`${
-                                            window.location.pathname === ROUTES.faq && "txt-green"
+                                            window.location.pathname ===
+                                                ROUTES.faq && "txt-green"
                                         }`}
                                     >
                                         support
                                     </Link>
-                                    {user?.role && user?.role?.includes("ROLE_ADMIN") ? (
+                                    {user?.role &&
+                                    user?.role?.includes("ROLE_ADMIN") ? (
                                         <Link
                                             to={ROUTES.admin}
                                             className={`${
-                                                window.location.pathname.includes(ROUTES.admin) &&
-                                                "txt-green"
+                                                window.location.pathname.includes(
+                                                    ROUTES.admin
+                                                ) && "txt-green"
                                             }`}
                                         >
                                             admin
@@ -178,22 +194,34 @@ const Menu = () => {
                                 </Link>
                             ) : (
                                 <ul className="d-flex align-items-center">
-                                    <Link className="header-btn sale" to="/app/auction">
+                                    <Link
+                                        className="header-btn sale"
+                                        to="/app/auction"
+                                    >
                                         Sale
                                     </Link>
                                     <li className="scale-75 cursor-pointer">
                                         {newNotification ? (
                                             <Link to={ROUTES.profile}>
-                                                <img src={NotificationBell} alt="Bell Icon" />
+                                                <img
+                                                    src={NotificationBell}
+                                                    alt="Bell Icon"
+                                                />
                                             </Link>
                                         ) : (
                                             <img
                                                 src={Bell}
                                                 alt="Bell Icon"
-                                                data-tip="React-tooltip"
+                                                data-tip="Bell-Icon"
+                                                data-id="bell-icon"
                                             />
                                         )}
-                                        <ReactTooltip place="bottom" type="light" effect="solid">
+                                        <ReactTooltip
+                                            id="bell-icon"
+                                            place="bottom"
+                                            type="light"
+                                            effect="solid"
+                                        >
                                             <div
                                                 className="text-uppercase text-center"
                                                 style={{ width: "200px" }}

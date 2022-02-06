@@ -6,7 +6,11 @@ import { useDispatch } from "react-redux"
 import Header from "../components/header"
 import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
-import { profile_tabs } from "../utilities/staticData"
+import {
+    PAYMENT_FRACTION_TOOLTIP_CONTENT,
+    profile_tabs,
+    TWO_FACTOR_AUTH_TOOLTIP_CONTENT,
+} from "../utilities/staticData"
 import Seo from "./seo"
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
@@ -21,6 +25,10 @@ import ProfileChangePasswordModal from "./profile/change-password-modal"
 import TierDetailsTab from "./profile/tier-details-tab"
 import Avatar from "../components/dress-up/avatar"
 import { GET_USER_TIERS } from "./profile/profile-queries"
+import ReactTooltip from "react-tooltip"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
+import { QuestionMark } from "../utilities/imgImport"
 
 const Profile = () => {
     const dispatch = useDispatch()
@@ -255,9 +263,18 @@ const Profile = () => {
                                                         </div>
                                                     </div>
                                                     <div className="account-security">
-                                                        <h4>
-                                                            Increase your
-                                                            account security
+                                                        <h4 className="d-flex align-items-center">
+                                                            <div>
+                                                                Increase your
+                                                                account security
+                                                            </div>
+                                                            <img
+                                                                className="cursor-pointer ms-2"
+                                                                src={
+                                                                    QuestionMark
+                                                                }
+                                                                alt="Question Mark"
+                                                            />
                                                         </h4>
                                                         <div className="row w-100 mx-auto">
                                                             <div className="col-md-6 br">

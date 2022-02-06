@@ -104,6 +104,7 @@ import supportTag from "../images/support/tag.svg"
 
 
 import greenCoin from "../images/green-coin.svg"
+import questionMark from "../images/icons/question-mark.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -206,3 +207,4 @@ export const SupportSecurity = supportSecurity
 export const SupportUnlock = supportUnlock
 
 export const GreenCoin = greenCoin
+export const QuestionMark = questionMark

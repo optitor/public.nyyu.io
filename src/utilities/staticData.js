@@ -1231,6 +1231,9 @@ export const FOO_COINS = [
 export const PAYMENT_FRACTION_TOOLTIP_CONTENT =
     "If your bid is the last one to be accepted and there are not enough tokens to fulfil your order, by checking this box you allow us to complete your order with the remaining tokens only."
 
+
+export const TWO_FACTOR_AUTH_TOOLTIP_CONTENT = "Enable 2FA to secure your account. Email 2FA can be used along with mobile or Google authentication."
+
 export const AUCTION_TOOLTIP_CONTENT1 =
     "You can easily move between rounds to have a more clear understanding about auction statistics."
 
