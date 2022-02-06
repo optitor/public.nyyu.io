@@ -223,6 +223,7 @@ const Menu = () => {
                                             effect="solid"
                                         >
                                             <div
+                                                data-tip="bell-icon"
                                                 className="text-uppercase text-center"
                                                 style={{ width: "200px" }}
                                             >

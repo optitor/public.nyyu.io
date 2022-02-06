@@ -6,11 +6,7 @@ import { useDispatch } from "react-redux"
 import Header from "../components/header"
 import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
-import {
-    PAYMENT_FRACTION_TOOLTIP_CONTENT,
-    profile_tabs,
-    TWO_FACTOR_AUTH_TOOLTIP_CONTENT,
-} from "../utilities/staticData"
+import { profile_tabs } from "../utilities/staticData"
 import Seo from "./seo"
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
@@ -25,11 +21,8 @@ import ProfileChangePasswordModal from "./profile/change-password-modal"
 import TierDetailsTab from "./profile/tier-details-tab"
 import Avatar from "../components/dress-up/avatar"
 import { GET_USER_TIERS } from "./profile/profile-queries"
-import ReactTooltip from "react-tooltip"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
 import { QuestionMark } from "../utilities/imgImport"
-
+import AccountDetails from "./profile/account-details"
 const Profile = () => {
     const dispatch = useDispatch()
     const [userDataLoading, setUserDataLoading] = useState(true)
@@ -40,8 +33,7 @@ const Profile = () => {
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[0])
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
-        useState(false)
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
@@ -71,12 +63,8 @@ const Profile = () => {
         ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
         : []
 
-    const currentTier = userTiersData?.filter(
-        (item) => item?.level === user?.tierLevel
-    )
-    const nextTier = userTiersData?.filter(
-        (item) => item?.level === user?.tierLevel + 1
-    )
+    const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel)
+    const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1)
 
     // Methods
     const handleProfileTab = (value) => {
@@ -92,11 +80,7 @@ const Profile = () => {
 
         return (
             <>
-                <div
-                    className={`status ${
-                        config ? "active" : "deactive"
-                    } mt-3px`}
-                ></div>
+                <div className={`status ${config ? "active" : "deactive"} mt-3px`}></div>
                 <div className="security-item">
                     <p className="security-name">{title}</p>
 
@@ -107,7 +91,7 @@ const Profile = () => {
                             onKeyDown={() => setIs2FAModalOpen(true)}
                             role="presentation"
                         >
-                            setup
+                            Setup
                         </p>
                     )}
                 </div>
@@ -179,9 +163,7 @@ const Profile = () => {
                                             className="timeleft"
                                             style={{
                                                 width: `${
-                                                    (user?.tierPoint /
-                                                        nextTier[0]?.point) *
-                                                    100
+                                                    (user?.tierPoint / nextTier[0]?.point) * 100
                                                 }%`,
                                             }}
                                         ></div>
@@ -214,76 +196,29 @@ const Profile = () => {
                                         <Tabs className="detail-tab">
                                             <TabList>
                                                 <Tab>
-                                                    <div className="pt-3">
-                                                        account detaiLs
-                                                    </div>
+                                                    <div className="pt-3">account detaiLs</div>
                                                 </Tab>
                                                 <Tab>
-                                                    <div className="pt-3">
-                                                        tier Details
-                                                    </div>
+                                                    <div className="pt-3">tier Details</div>
                                                 </Tab>
                                             </TabList>
                                             <TabPanel>
                                                 <div className="account-details">
-                                                    <div className="account-detail">
-                                                        <div className="row w-100 mx-auto">
-                                                            <div className="col-6 col-sm-4 col-md-6 br">
-                                                                Display name
-                                                            </div>
-                                                            <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
-                                                                {displayName}
-                                                            </div>
-                                                        </div>
-                                                        <div className="row w-100 mx-auto">
-                                                            <div className="col-6 col-sm-4 col-md-6 br">
-                                                                email
-                                                            </div>
-                                                            <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
-                                                                {user &&
-                                                                    user?.email}
-                                                            </div>
-                                                        </div>
-                                                        <div className="row w-100 mx-auto change-password">
-                                                            <div className="col-6 col-sm-4 col-md-6 br">
-                                                                Password
-                                                            </div>
-                                                            <div className="col-6 col-sm-8 col-md-6 justify-content-sm-between justify-content-end">
-                                                                <p>********</p>
-                                                                <button
-                                                                    className="btn-primary change-pwd"
-                                                                    onClick={() =>
-                                                                        setIsPasswordModalOpen(
-                                                                            true
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    Change
-                                                                    Password
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div className="row w-100 mx-auto">
-                                                            <div className="col-6 col-sm-4 col-md-6 br">
-                                                                email
-                                                            </div>
-                                                            <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
-                                                                {user &&
-                                                                    user?.email}
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <AccountDetails
+                                                        setIsPasswordModalOpen={
+                                                            setIsPasswordModalOpen
+                                                        }
+                                                        user={user}
+                                                        displayName={displayName}
+                                                    />
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">
                                                             <div>
-                                                                Increase your
-                                                                account security
+                                                                Increase your account security
                                                             </div>
                                                             <img
                                                                 className="cursor-pointer ms-2"
-                                                                src={
-                                                                    QuestionMark
-                                                                }
+                                                                src={QuestionMark}
                                                                 alt="Question Mark"
                                                             />
                                                         </h4>
@@ -340,7 +275,7 @@ const Profile = () => {
 
                                                             <div className="col-md-4">
                                                                 <TfaConfig
-                                                                    title="2FA Authentication app"
+                                                                    title="2FA Google Authentication"
                                                                     method="app"
                                                                 />
                                                             </div>
@@ -352,19 +287,11 @@ const Profile = () => {
                                                 <TierDetailsTab />
                                             </TabPanel>
                                         </Tabs>
-                                        <div className="verify-delete mt-3 pb-5 ps-2">
+                                        <div className="verify-delete mt-3 pb-5 ps-3">
                                             <p
                                                 className="delete-account-link"
-                                                onClick={() =>
-                                                    setIsDeleteAccountModalOpen(
-                                                        true
-                                                    )
-                                                }
-                                                onKeyDown={() =>
-                                                    setIsDeleteAccountModalOpen(
-                                                        true
-                                                    )
-                                                }
+                                                onClick={() => setIsDeleteAccountModalOpen(true)}
+                                                onKeyDown={() => setIsDeleteAccountModalOpen(true)}
                                                 role="presentation"
                                             >
                                                 Delete account
@@ -377,14 +304,10 @@ const Profile = () => {
                                         <Tabs className="notification-tab">
                                             <TabList>
                                                 <Tab>
-                                                    <div className="pt-3 pb-2">
-                                                        Recent
-                                                    </div>
+                                                    <div className="pt-3 pb-2">Recent</div>
                                                 </Tab>
                                                 <Tab>
-                                                    <div className="py-3 pb-2">
-                                                        Setup
-                                                    </div>
+                                                    <div className="py-3 pb-2">Setup</div>
                                                 </Tab>
                                             </TabList>
                                             <TabPanel>
@@ -412,9 +335,7 @@ const Profile = () => {
                     />
                     <DeleteAccountModal
                         isDeleteAccountModalOpen={isDeleteAccountModalOpen}
-                        setIsDeleteAccountModalOpen={
-                            setIsDeleteAccountModalOpen
-                        }
+                        setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
                     />
                 </main>
             </>
