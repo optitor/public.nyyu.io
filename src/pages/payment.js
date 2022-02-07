@@ -25,7 +25,7 @@ import {
 } from "../utilities/imgImport"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
-import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT, Currencies } from "../utilities/staticData"
+import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
 import { CREATE_CRYPTO_PAYMENT } from "../apollo/graghqls/mutations/Payment"
 import { generateQR } from "./../utilities/string"
 
@@ -214,11 +214,14 @@ const Payment = () => {
                                                             SingleValue: SelectOption,
                                                         }}
                                                     />
-                                                    <Input
-                                                        type="number"
-                                                        value={selectedCoinPrice}
-                                                        disabled
-                                                    />
+                                                    <div className="w-75">
+                                                        <Input
+                                                            type="number"
+                                                            value={selectedCoinPrice}
+                                                            disabled
+                                                        />
+                                                    </div>
+
                                                 </div>
                                                 {!getAddress ? (
                                                     <button
