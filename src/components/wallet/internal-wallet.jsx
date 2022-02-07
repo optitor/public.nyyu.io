@@ -4,7 +4,8 @@ import React, { useEffect, useState, useMemo } from "react"
 import _ from 'lodash';
 import svgToDataURL from 'svg-to-dataurl'
 import axios from "axios"
-import DepositWithdrawModal from "../../components/wallet/deposit-withdraw-modal"
+import DepositWithdrawModal from "./deposit-withdraw-modal"
+import DepositModal from "./DepositModal";
 import CustomSpinner from "../common/custom-spinner"
 import { TRANSACTION_TYPES } from "../../utilities/staticData"
 import NumberFormat from "react-number-format"
@@ -53,6 +54,7 @@ export default function InternalWallet() {
     const [hideValues, setHideValues] = useState(false)
     const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit)
     const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false)
+    const [isDepositOpen, setIsDepositOpen] = useState(false);
     const obscureValueString = "******"
     const [btcOrUsd, setBtcOrUsd] = useState("USD")
     
@@ -203,8 +205,7 @@ export default function InternalWallet() {
                                 // disabled
                                 className="btn btn-outline-secondary rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
-                                    setTransactionType(TRANSACTION_TYPES.deposit)
-                                    setShowDepositAndWidthdrawModal(true)
+                                    setIsDepositOpen(true);
                                 }}
                             >
                                 deposit
@@ -226,6 +227,12 @@ export default function InternalWallet() {
                                 showModal={showDepositAndWidthdrawModal}
                                 setShowModal={setShowDepositAndWidthdrawModal}
                                 transactionType={transactionType}
+                            />
+                        )}
+                        {isDepositOpen && (
+                            <DepositModal
+                                showModal={isDepositOpen}
+                                setShowModal={setIsDepositOpen}
                             />
                         )}
                     </div>

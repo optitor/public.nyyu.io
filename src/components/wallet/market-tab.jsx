@@ -155,7 +155,7 @@ export default function MarketTab() {
                 .map(item => ({symbol: item.symbol?.replace('USDT', '')}));
             cryptos = cryptos.map(item => ({ symbol: item.symbol, name: cryptoSymbolList[item.symbol]?? item.symbol + 'Coin' }))
             setCryptoList(_.mapKeys(cryptos, 'symbol'));
-        })
+        });
     }, []);
 
     const set_Favourite_Crypto = item => {
@@ -169,14 +169,6 @@ export default function MarketTab() {
     
     return (
         <table className="wallet-transaction-table">
-            <thead>
-                <tr>
-                    <th className="text-center">Name</th>
-                    <th className="text-center">Price</th>
-                    <th className="laptop-not text-center">Price Chart</th>
-                    <th className="mobile-not text-center">Volume (24h)</th>
-                </tr>
-            </thead>
             <div className="search">
                 <Icon className="search-icon text-light"
                     icon={searchValue? "bi:list-stars": "carbon:search"}
@@ -196,6 +188,14 @@ export default function MarketTab() {
                     onBlur={(e) => e.target.placeholder = 'Search'}
                 />
             </div>
+            <thead>
+                <tr>
+                    <th className="text-center">Name</th>
+                    <th className="text-center">Price</th>
+                    <th className="laptop-not text-center">Price Chart</th>
+                    <th className="mobile-not text-center">Volume (24h)</th>
+                </tr>
+            </thead>
             <tbody>
                 <>
                     {searchValue && _.map( _.filter(cryptoList, item => 
@@ -210,5 +210,5 @@ export default function MarketTab() {
                 </>
             </tbody>
         </table>
-    )
-}
+    );
+};

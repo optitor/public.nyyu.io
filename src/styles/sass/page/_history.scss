@@ -487,115 +487,104 @@
 }
 
 .deposit-modal {
-    max-width: 545px;
-    .cryptocoin-select {
-        margin: 14px 0;
-        height: 45px;
-        width: 100%;
-        .css-1s2u09g-control,
-        .css-1pahdxg-control {
-            @extend %select-style;
-        }
-        .css-1okebmr-indicatorSeparator {
-            display: none;
-        }
-        .css-319lph-ValueContainer {
-            padding: 0;
-            .css-qc6sy-singleValue {
-                display: flex;
-                align-items: center;
-                font-weight: 500;
-                font-size: 18px;
-                line-height: 22px;
-                align-items: center;
-                color: white;
-                img {
-                    margin-right: 4px;
-                    width: 24px;
-                    height: 24px;
-                }
-            }
-        }
-        .css-tlfecz-indicatorContainer {
-            padding: 0;
-        }
-        .css-6j8wv5-Input {
-            display: none;
-        }
+    max-width: 800px;
+    svg.icon {
+        color: white;
+        cursor: pointer;
+        font-size: 32px;
     }
-    .deposit-tab {
-        .react-tabs__tab-list {
-            border: 1px solid white;
-            margin-bottom: 14px;
-            .react-tabs__tab {
-                width: 50%;
-                font-weight: 500;
-                font-size: 18px;
-                line-height: 22px;
-                letter-spacing: 0.04em;
-                color: #ffffff;
-                text-align: center;
-                border: unset;
-                bottom: unset;
-                border-radius: unset;
-                padding: 10px;
-                &--selected {
-                    color: $black;
-                }
+    div.step1 {
+        width: 60%;
+    }
+    div.step2 {
+        width: 75%;
+    }
+    div.deposit {
+        min-height: 400px;
+        margin: auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        @include mq('tablet', max) {
+            width: 100%;
+        }
+        div.button-group {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            button.btn {
+                color: white;
+                border: 1px solid #ffffff;
+                border-radius: 0;
+                width: 49%;
+            }
+            button.selected {
+                color: black;
+                background-color: white;
             }
         }
-        .deposit-panel {
-            .clipboard {
+        div.select_div {
+            margin-top: 20px;
+            p.subtitle {
+                color: dimgray;
+            }
+            div.css-w4zpwe-Input {
+                display: none;
+            }
+        }
+        button.confirm {
+            margin-top: 40px;
+            color: black;
+            background-color: white;
+            width: 100%;
+            border-radius: 0;
+            font-size: 18px;
+            font-weight: 600;
+            &:hover {
+                color: #03b94c;
+            }
+        }
+        div.address_div {
+            p.subtitle {
+                color: dimgray;
+            }
+            div.clipboard {
+                background-color: white;
                 display: flex;
-                align-items: center;
                 justify-content: space-between;
                 padding: 10px;
-                border: 1px solid white;
-                p,
-                code {
-                    font-size: 16px;
-                    line-height: 20px;
-                    letter-spacing: 0.04em;
-                    color: white;
+                div.address {
+                    width: 90%;
+                    word-wrap: break-word;
                 }
+                div.copy_icon {
+                    width: 10%;
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    svg {
+                        font-size: 22px;
+                    }
+                }
+            }
+            div.qr_code {
+                padding: 20px;
                 img {
-                    cursor: pointer;
+                    display: block;
+                    margin: auto;
+                    width: 90px;
                 }
             }
-            .bitcoin-address {
-                text-align: center;
-                p {
-                    margin-top: 22px;
-                    margin-bottom: 14px;
-                    font-size: 12px;
-                    line-height: 15px;
-                }
-            }
-        }
-        .withdraw-panel {
-            .form-control {
-                font-size: 16px;
-                line-height: 20px;
-                letter-spacing: 0.04em;
-                color: #ffffff;
-                border: 1px solid white;
-                background-color: $black;
-                padding: 10px;
-            }
-            .available-balance,
-            .minimum-transfer {
+            div.stats {
+                padding-top: 10px;
                 display: flex;
-                justify-content: space-between;
-                padding: 2px 0;
-                p {
-                    font-size: 12px;
-                    line-height: 15px;
-                    letter-spacing: 0.04em;
-                    color: #ffffff;
+                p.topic {
+                    width: 40%;
+                    color: dimgray
                 }
-            }
-            .available-balance {
-                border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+                p.content {
+                    width: 60%;
+                    text-align: right;
+                }
             }
         }
     }
