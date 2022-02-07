@@ -232,7 +232,7 @@ const Profile = () => {
                                                             >
                                                                 <div
                                                                     className="text-capitalize text-start fw-normal"
-                                                                    style={{ width: "330px" }}
+                                                                    style={{ width: "320px" }}
                                                                 >
                                                                     {
                                                                         TWO_FACTOR_AUTH_TOOLTIP_CONTENT
