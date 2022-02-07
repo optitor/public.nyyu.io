@@ -8,59 +8,16 @@ import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
 import { ROUTES } from "../utilities/routes"
 import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
-import Loading from "../components/common/FadeLoading"
-import { useQuery } from "@apollo/client"
-import { GET_AUCTION_BY_STATUS, GET_PRESALE_BY_STATUS } from "../components/home/home-queries"
 
 const IndexPage = () => {
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [preSaleCountDown, setPreSaleCountDown] = useState(null)
-    const [preSaleStarted, setPreSaleStarted] = useState(null)
-    const [auctionCountDown, setAuctionCountDown] = useState(null)
-    const [auctionStarted, setAuctionStarted] = useState(null)
-    const loading = !(preSaleCountDown && preSaleStarted && auctionCountDown && auctionStarted)
-    // Webservice
-    useQuery(GET_PRESALE_BY_STATUS, {
-        variables: {
-            status: 1,
-        },
-        onCompleted: (data) => {
-            setPreSaleCountDown(data.getPreSaleByStatus)
-        },
-        fetchPolicy: "network-only",
-    })
-    useQuery(GET_PRESALE_BY_STATUS, {
-        variables: {
-            status: 2,
-        },
-        onCompleted: (data) => {
-            setPreSaleStarted(data.getPreSaleByStatus)
-        },
-    })
-    useQuery(GET_AUCTION_BY_STATUS, {
-        variables: {
-            status: 1,
-        },
-        onCompleted: (data) => {
-            setAuctionCountDown(data.getAuctionByStatus)
-        },
-    })
-    useQuery(GET_AUCTION_BY_STATUS, {
-        variables: {
-            status: 2,
-        },
-        onCompleted: (data) => {
-            setAuctionStarted(data.getAuctionByStatus)
-        },
-    })
 
     // Methods
     const placeABidButtonClick = () =>
         auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
 
-    if (loading) return <Loading />
     return (
         <div
             style={{
