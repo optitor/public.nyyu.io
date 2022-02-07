@@ -585,6 +585,12 @@
                     width: 60%;
                     text-align: right;
                 }
+                @include mq('phone', max) {
+                    flex-direction: column;
+                    p.topic, p.content {
+                        width: 100%;
+                    }
+                }
             }
         }
     }
