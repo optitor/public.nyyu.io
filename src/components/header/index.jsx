@@ -187,11 +187,20 @@ const Menu = () => {
                                                 <img src={NotificationBell} alt="Bell Icon" />
                                             </Link>
                                         ) : (
-                                            <img src={Bell} alt="Bell Icon" data-tip="bell-icon" />
+                                            <img
+                                                src={Bell}
+                                                alt="Bell Icon"
+                                                data-tip
+                                                data-for="bell-icon-tooltip"
+                                            />
                                         )}
-                                        <ReactTooltip place="bottom" type="light" effect="solid">
+                                        <ReactTooltip
+                                            id="bell-icon-tooltip"
+                                            place="bottom"
+                                            type="light"
+                                            effect="solid"
+                                        >
                                             <div
-                                                data-tip="bell-icon"
                                                 className="text-uppercase text-center"
                                                 style={{ width: "200px" }}
                                             >

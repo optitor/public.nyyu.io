@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux"
 import Header from "../components/header"
 import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
-import { profile_tabs } from "../utilities/staticData"
+import { profile_tabs, TWO_FACTOR_AUTH_TOOLTIP_CONTENT } from "../utilities/staticData"
 import Seo from "./seo"
 import TwoFactorModal from "./profile/two-factor-modal"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
@@ -23,6 +23,7 @@ import Avatar from "../components/dress-up/avatar"
 import { GET_USER_TIERS } from "./profile/profile-queries"
 import { QuestionMark } from "../utilities/imgImport"
 import AccountDetails from "./profile/account-details"
+import ReactTooltip from "react-tooltip"
 const Profile = () => {
     const dispatch = useDispatch()
     const [userDataLoading, setUserDataLoading] = useState(true)
@@ -217,10 +218,27 @@ const Profile = () => {
                                                                 Increase your account security
                                                             </div>
                                                             <img
+                                                                data-tip
+                                                                data-for="question-mark-tooltip"
                                                                 className="cursor-pointer ms-2"
                                                                 src={QuestionMark}
                                                                 alt="Question Mark"
                                                             />
+                                                            <ReactTooltip
+                                                                id="question-mark-tooltip"
+                                                                place="right"
+                                                                type="light"
+                                                                effect="solid"
+                                                            >
+                                                                <div
+                                                                    className="text-capitalize text-start fw-normal"
+                                                                    style={{ width: "330px" }}
+                                                                >
+                                                                    {
+                                                                        TWO_FACTOR_AUTH_TOOLTIP_CONTENT
+                                                                    }
+                                                                </div>
+                                                            </ReactTooltip>
                                                         </h4>
                                                         <div className="row w-100 mx-auto">
                                                             <div className="col-md-4 br">
