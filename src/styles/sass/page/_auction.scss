@@ -246,7 +246,7 @@
             &__bottom {
                 position: absolute;
                 width: calc(100% - 70px);
-                top:373px;
+                top: 373px;
                 @include mq("phone", max) {
                     position: relative;
                     bottom: unset;
@@ -263,7 +263,7 @@
             .place-bid {
                 display: none;
                 margin-top: 65px;
-                margin-left:43px;
+                margin-left: 43px;
                 @include mq("laptop") {
                     display: block;
                 }
@@ -280,7 +280,6 @@
                 }
                 .select-chart-type {
                     width: 375px;
-                    z-index: 199;
                     @include mq("laptop", max) {
                         width: 100%;
                     }
