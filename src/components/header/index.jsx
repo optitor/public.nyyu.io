@@ -50,26 +50,58 @@ const Menu = () => {
         {
             label: "Home",
             url: "https://ndb.money/",
+            active: false,
         },
         {
             label: "Vision",
             url: "https://ndb.city",
+            active: false,
         },
         {
             label: "Technology",
             url: "https://ndb.money/technology",
+            active: false,
         },
         {
             label: "Learn",
             url: "https://ndb.money/learn",
+            active: false,
         },
         {
             label: "Sale",
             url: "/",
+            active: true,
+            subMenu: [
+                {
+                    label: "Wallet",
+                    url: ROUTES.wallet,
+                    isDressup: false,
+                },
+                {
+                    label: "Sale",
+                    url: ROUTES.auction,
+                    isDressup: false,
+                },
+                {
+                    label: "Profile",
+                    url: ROUTES.profile,
+                    isDressup: false,
+                },
+                {
+                    label: "Dressup",
+                    isDressup: true,
+                },
+                {
+                    label: "Support",
+                    url: ROUTES.faq,
+                    isDressup: false,
+                },
+            ],
         },
         {
             label: "Contact Us",
             url: "https://ndb.money/#contactUs",
+            active: false,
         },
     ]
 
@@ -240,16 +272,46 @@ const Menu = () => {
 
                     <div className="menu__content">
                         <div className="content d-md-flex align-items-center">
+                            {/* <div className="mb-5 ms-4 d-sm-none d-block d-flex justify-content-center">
+                                <CurrencyChoice />
+                            </div> */}
                             <ul className="content__section menu__items">
                                 {navigationLinks.map((link) => (
                                     <li className="menu__item" key={link.label}>
                                         <a
                                             href={link.url}
-                                            className="d-inline-block"
+                                            className={`d-inline-block ${link.active && "active"}`}
                                             onClick={() => setActive(false)}
                                         >
                                             {link.label}
                                         </a>
+                                        {link.active && (
+                                            <ul className="my-4 d-block d-sm-none">
+                                                {link.subMenu.map((subLink) => {
+                                                    return (
+                                                        <li className="mb-3">
+                                                            {subLink.isDressup ? (
+                                                                <Link
+                                                                    onClick={() =>
+                                                                        setIsDressUPModalOpen(true)
+                                                                    }
+                                                                    className="fw-500 text-light fs-20px"
+                                                                >
+                                                                    {subLink.label}
+                                                                </Link>
+                                                            ) : (
+                                                                <Link
+                                                                    to={subLink.url}
+                                                                    className="fw-500 text-light fs-20px"
+                                                                >
+                                                                    {subLink.label}
+                                                                </Link>
+                                                            )}
+                                                        </li>
+                                                    )
+                                                })}
+                                            </ul>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

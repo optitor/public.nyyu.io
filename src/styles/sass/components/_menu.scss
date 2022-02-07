@@ -85,10 +85,6 @@
         padding: 15px 0;
     }
 
-    // .container {
-    //     max-width: 100%;
-    // }
-
     .menu__logo {
         svg {
             width: 200px;
@@ -190,7 +186,7 @@
         transition: all 0.3s ease;
 
         .content {
-            width: 80%;
+            width: 100%;
             height: 100%;
             position: relative;
             left: 100%;
@@ -214,35 +210,30 @@
 
             .menu__item {
                 margin-bottom: 28px;
+                text-align: center;
+                text-transform: uppercase;
 
                 @include mq("laptop") {
                     margin-bottom: 34px;
-                    text-align: center;
-                    text-transform: uppercase;
+                }
+
+                .active {
+                    color: $white;
+                    &::first-letter {
+                        color: $green;
+                    }
                 }
 
                 a {
                     font-size: 24px;
                     line-height: 29px;
                     font-weight: bold;
-
-                    &::first-letter {
-                        color: $green;
-                    }
-
-                    @include mq("laptop") {
-                        color: #424242;
+                    color: #424242;
+                    &:hover {
+                        color: $white;
 
                         &::first-letter {
-                            color: inherit;
-                        }
-
-                        &:hover {
-                            color: $white;
-
-                            &::first-letter {
-                                color: $green;
-                            }
+                            color: $green;
                         }
                     }
                 }
@@ -256,7 +247,7 @@
             visibility: visible;
 
             .content {
-                left: 20%;
+                left: 0;
 
                 @include mq("laptop") {
                     left: 0;
