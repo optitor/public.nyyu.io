@@ -258,7 +258,7 @@ const Menu = () => {
                                 </ul>
                             )}
                         </div>
-                        <CurrencyChoice classNames="d-sm-block d-none" />
+                        <CurrencyChoice />
                         <button
                             type="button"
                             className="menu__toggler"
@@ -272,9 +272,6 @@ const Menu = () => {
 
                     <div className="menu__content">
                         <div className="content d-md-flex align-items-center">
-                            {/* <div className="mb-5 ms-4 d-sm-none d-block d-flex justify-content-center">
-                                <CurrencyChoice />
-                            </div> */}
                             <ul className="content__section menu__items">
                                 {navigationLinks.map((link) => (
                                     <li className="menu__item" key={link.label}>
