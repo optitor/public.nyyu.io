@@ -180,6 +180,7 @@ const Profile = () => {
                                         ))}
                                     </TabList>
                                     <Select
+                                        isSearchable={false}
                                         options={profile_tabs}
                                         value={currentProfileTab}
                                         onChange={(v) => handleProfileTab(v)}
