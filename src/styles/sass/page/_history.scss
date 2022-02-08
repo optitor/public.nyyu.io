@@ -487,6 +487,13 @@
 }
 
 .deposit-modal {
+    .css-lv2wyh-option {
+        background-color: transparent !important;
+        border-radius: 0px !important;
+    }
+    .css-xmxkze-menu {
+        border-radius: 0px !important;
+    }
     max-width: 800px;
     svg.icon {
         color: white;
@@ -504,7 +511,7 @@
         margin: auto;
         margin-top: 20px;
         margin-bottom: 20px;
-        @include mq('tablet', max) {
+        @include mq("tablet", max) {
             width: 100%;
         }
         div.button-group {
@@ -579,15 +586,16 @@
                 display: flex;
                 p.topic {
                     width: 40%;
-                    color: dimgray
+                    color: dimgray;
                 }
                 p.content {
                     width: 60%;
                     text-align: right;
                 }
-                @include mq('phone', max) {
+                @include mq("phone", max) {
                     flex-direction: column;
-                    p.topic, p.content {
+                    p.topic,
+                    p.content {
                         width: 100%;
                     }
                 }
