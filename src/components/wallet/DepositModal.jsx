@@ -62,7 +62,14 @@ export default function DepositModal({ showModal, setShowModal, transactionType 
             setCoinQRCode(qrCode)
         }
         return ""
-    }, [coinAddress])
+    }, [coinAddress]);
+
+    const handleCopy = () => {
+        setCopied(true);
+        setTimeout(() => {
+            setCopied(false);
+        }, 1500);
+    };
 
     return (
         <Modal
@@ -123,19 +130,19 @@ export default function DepositModal({ showModal, setShowModal, transactionType 
                             <div className="address_div">
                                 <p className="subtitle">Deposit Address</p>
                                 <CopyToClipboard
-                                    onCopy={() => setCopied(true)}
+                                    onCopy={handleCopy}
                                     text={coinAddress}
                                     options={{ message: "copied" }}
                                 >
                                     <div
                                         className="clipboard"
-                                        onClick={() => setCopied(true)}
-                                        onKeyDown={() => setCopied(true)}
+                                        onClick={handleCopy}
+                                        onKeyDown={handleCopy}
                                         role="presentation"
                                     >
                                         <div className="address">{coinAddress}</div>
                                         <div className="copy_icon">
-                                            <Icon icon="clarity:copy-line" />
+                                            <Icon icon={copied? "clarity:copy-solid": "clarity:copy-line"} />
                                         </div>                                        
                                     </div>
                                 </CopyToClipboard>

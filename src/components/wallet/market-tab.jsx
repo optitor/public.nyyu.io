@@ -133,10 +133,35 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
         </tr>
     )
 }
+const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
+
+    return (
+        <tr onClick={doAction}>
+            <td className="d-flex align-items-start ps-2">
+                <div>
+                    <Icon
+                        icon="bx:bxs-star"
+                        className={`star-checkbox ${favours[data.symbol]? "txt-green" : "txt-grey"}`}
+                    />
+                </div>
+                <img src={icons[data.symbol]?.icon?? NickToken} alt="coin" className="me-2" width="30" />
+                <div>
+                    <p className="coin-abbr">{data.symbol}</p>
+                    <p className="coin-name">{data.name}</p>
+                </div>
+            </td>
+            <td className="text-center">
+                <p className="coin-price text-center"></p>
+            </td>
+            <td className="laptop-not price-chart">                
+            </td>
+            <td className="mobile-not text-center"></td>
+        </tr>
+    )
+}
 
 export default function MarketTab() {
     const [searchValue, setSearchValue] = useState("");
-    const [inputValue, setInputValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [favours, setFavours] = useState({
         BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
@@ -172,20 +197,13 @@ export default function MarketTab() {
             <div className="search">
                 <Icon className="search-icon text-light"
                     icon={searchValue? "bi:list-stars": "carbon:search"}
-                    onClick={() => {setSearchValue(''); setInputValue('');}}
+                    onClick={() => {setSearchValue(''); }}
                     disabled={!searchValue}
                 />
                 <input className="black_input"
-                    value={inputValue}
-                    onChange={e => setInputValue(e.target.value)}
-                    onKeyUp={e => {
-                        if(e.key === 'Enter') {
-                            setSearchValue(inputValue);
-                        };
-                    }}
+                    value={searchValue}
+                    onChange={e => setSearchValue(e.target.value)}
                     placeholder="Search"
-                    onFocus={(e) => e.target.placeholder = 'Please enter keyword and press Enter'}
-                    onBlur={(e) => e.target.placeholder = 'Search'}
                 />
             </div>
             <thead>
@@ -202,7 +220,7 @@ export default function MarketTab() {
                         item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
                         item.symbol.toLowerCase().includes(searchValue.toLowerCase())
                     ), item => (
-                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                        <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
                     {!searchValue && _.map(favours, item => (
                         <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
