@@ -46,7 +46,7 @@ const Asset = ({ item }) => {
 export default function InternalWallet() {
     const InitialMyAssets = {
         NDB: { tokenSymbol: "NDB", tokenName: "NDB", free: 0, hold: 0, symbol: NDB },
-        VOLT: { tokenSymbol: "VOLT", tokenName: "Volt", free: 0, hold: 0, symbol: VOLT },
+        VOLT: { tokenSymbol: "VOLT", tokenName: "VOLT", free: 0, hold: 0, symbol: VOLT },
     }
     const [myAssets, setMyAssets] = useState(InitialMyAssets)
     const [BTCPrice, setBTCPrice] = useState(10000)
@@ -197,7 +197,9 @@ export default function InternalWallet() {
                                     className="value"
                                     displayType="text"
                                     thousandSeparator={true}
-                                    renderText={(value, props) => <p {...props}>{value} {btcOrUsd === "USD" ? "USD" : "BTC"}</p>}
+                                    renderText={(value, props) => (
+                                        <p {...props}>{value} {btcOrUsd === "USD" ? "USD" : "BTC"}</p>
+                                    )}
                                 />
                                 <NumberFormat
                                     value={
