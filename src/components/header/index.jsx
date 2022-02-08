@@ -299,7 +299,8 @@ const Menu = () => {
                                                             ) : (
                                                                 <Link
                                                                     to={subLink.url}
-                                                                    className="fw-500 text-light fs-20px"
+                                                                    className="fw-500 fs-20px d-block text-light"
+                                                                    activeClassName="first-letter:text-green"
                                                                 >
                                                                     {subLink.label}
                                                                 </Link>
