@@ -922,7 +922,7 @@ const Auction = () => {
                                     type="number"
                                     value={amount}
                                     onChange={(e) => setState({ amount: e.target.value })}
-                                    className="range-input"
+                                    className="range-input rounded-0"
                                 />
                                 <Slider
                                     value={amount}
@@ -940,7 +940,7 @@ const Auction = () => {
                                     onChange={(e) =>
                                         setState({ price: calcPriceToUsd(e.target.value) })
                                     }
-                                    className="range-input"
+                                    className="range-input rounded-0"
                                 />
                                 <Slider
                                     value={calcPriceFromUsd(price)}
@@ -953,7 +953,7 @@ const Auction = () => {
                             <div className="d-flex align-items-center">
                                 <span className="range-label">Total price</span>
                                 <input
-                                    className="total-input"
+                                    className="total-input rounded-0"
                                     type="text"
                                     value={numberWithCommas(
                                         Number(

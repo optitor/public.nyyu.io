@@ -148,9 +148,9 @@
         .menu__toggler {
             span {
                 &:first-child {
-                    top: 11px;
+                    width: 40px;
+                    top: 6px;
                     transform: rotate(45deg);
-
                     @include mq("laptop") {
                         top: 16px;
                     }
@@ -161,14 +161,9 @@
                 }
 
                 &:last-child {
-                    width: 27px;
-                    top: -11px;
+                    width: 40px;
+                    top: -18px;
                     transform: rotate(-45deg);
-
-                    @include mq("laptop") {
-                        width: 40px;
-                        top: -18px;
-                    }
                 }
             }
         }
