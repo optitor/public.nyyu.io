@@ -190,8 +190,8 @@ export default function InternalWallet() {
                                 <NumberFormat
                                     value={
                                         btcOrUsd === "USD"
-                                            ? totalBalance?.toFixed(2)
-                                            : (totalBalance / BTCPrice).toFixed(9)
+                                            ? totalBalance?.toFixed(2) ?? 0
+                                            : (totalBalance / BTCPrice).toFixed(9)?? 0
                                     }
                                     className="value"
                                     displayType="text"
@@ -201,8 +201,8 @@ export default function InternalWallet() {
                                 <NumberFormat
                                     value={
                                         btcOrUsd === "USD"
-                                            ? (totalBalance / BTCPrice).toFixed(9)
-                                            : totalBalance?.toFixed(2)
+                                            ? (totalBalance / BTCPrice)?.toFixed(9) ?? 0
+                                            : totalBalance?.toFixed(2) ?? 0
                                     }
                                     className="max-value mt-3"
                                     displayType="text"
