@@ -46,7 +46,7 @@ const Asset = ({ item }) => {
 export default function InternalWallet() {
     const InitialMyAssets = {
         NDB: { tokenSymbol: "NDB", tokenName: "NDB", free: 0, hold: 0, symbol: NDB },
-        VOLT: { tokenSymbol: "VOLT", tokenName: "Volt token", free: 0, hold: 0, symbol: VOLT },
+        VOLT: { tokenSymbol: "VOLT", tokenName: "Volt", free: 0, hold: 0, symbol: VOLT },
     }
     const [myAssets, setMyAssets] = useState(InitialMyAssets)
     const [BTCPrice, setBTCPrice] = useState(10000)
@@ -61,9 +61,10 @@ export default function InternalWallet() {
     // console.log(myAssets)
     const totalBalance = useMemo(() => {
         if (!Object.values(myAssets)) return 0
-        return _.sumBy(Object.values(myAssets), "balance")
+        return _.sumBy(Object.values(myAssets), "balance")?? 0;
     }, [myAssets])
 
+    
     useEffect(() => {
         const get_BTCPrice = () => {
             axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
@@ -110,7 +111,7 @@ export default function InternalWallet() {
                         price = res.data.lastPrice
                     }
                     const balance = (item.hold + item.free) * price
-                    assets[item.tokenSymbol] = { ...item, price, balance }
+                    assets[item.tokenSymbol] = { ...item, price, balance: balance }
                 }
                 setMyAssets({ ...assets })
             }
@@ -190,19 +191,19 @@ export default function InternalWallet() {
                                 <NumberFormat
                                     value={
                                         btcOrUsd === "USD"
-                                            ? totalBalance?.toFixed(2)
-                                            : (totalBalance / BTCPrice).toFixed(9)
+                                            ? (totalBalance === 0? 0: totalBalance?.toFixed(2))
+                                            : (totalBalance === 0? 0: (totalBalance / BTCPrice).toFixed(9))
                                     }
                                     className="value"
                                     displayType="text"
                                     thousandSeparator={true}
-                                    renderText={(value, props) => <p {...props}>{value}</p>}
+                                    renderText={(value, props) => <p {...props}>{value} {btcOrUsd === "USD" ? "USD" : "BTC"}</p>}
                                 />
                                 <NumberFormat
                                     value={
                                         btcOrUsd === "USD"
-                                            ? (totalBalance / BTCPrice).toFixed(9)
-                                            : totalBalance?.toFixed(2)
+                                            ? (totalBalance === 0? 0: (totalBalance / BTCPrice).toFixed(9))
+                                            : (totalBalance === 0? 0: totalBalance?.toFixed(2))
                                     }
                                     className="max-value mt-3"
                                     displayType="text"
