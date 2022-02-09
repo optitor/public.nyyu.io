@@ -22,6 +22,10 @@ export default function StepOne({ step, setState, country, setCountry }) {
             // setState({ step: step + 1 })
             console.log(data)
         },
+        onError: err => {
+            if(err) setRequestPending(false);
+            console.log(err)
+        }
     })
 
     // Methods
@@ -31,16 +35,14 @@ export default function StepOne({ step, setState, country, setCountry }) {
     }
     const uploadDocumentMethod = (e) => {
         e.preventDefault()
+        // console.log(files[0])
         setRequestPending(true)
-        console.log(files[0])
         uploadDocument({
             variables: {
-                file: files[0],
+                document: files[0],
             },
         })
     }
-
-    console.log(files)
 
     // Render
     return (
@@ -152,17 +154,17 @@ export default function StepOne({ step, setState, country, setCountry }) {
 
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                            className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
                             onClick={() => setState({ step: step - 1 })}
                         >
                             back
                         </button>
                         <button
-                            disabled={files.length === 0}
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                            disabled={files.length === 0 || requestPending}
+                            className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                             onClick={uploadDocumentMethod}
                         >
-                            next
+                            {requestPending? 'uploading. . .': 'next'}
                         </button>
                     </div>
                 </div>
