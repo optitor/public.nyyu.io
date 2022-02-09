@@ -89,19 +89,6 @@ export default function StepTwo({
                             />
                             <div className="text-danger mt-2">{surnameError}</div>
                         </div>
-                        <div>
-                            <p className="form-label mt-4">Date of birth (YYYY-MM-DD)</p>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <MobileDatePicker
-                                    inputFormat="yyyy-MM-dd"
-                                    value={dob}
-                                    onChange={(newValue) => {
-                                        setDob(newValue)
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </LocalizationProvider>
-                        </div>
                     </div>
 
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">

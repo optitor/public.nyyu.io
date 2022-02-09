@@ -8,13 +8,13 @@ import StepFour from "../verify-identity/step-four"
 import StepFive from "../verify-identity/step-five"
 import StepSix from "../verify-identity/step-six"
 import StepSeven from "../verify-identity/step-seven"
-import { countries } from "../../utilities/staticData"
 import { VERIFY_KYC_MUTATION } from "../../apollo/graghqls/mutations/Auth"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import Loading from "../common/Loading"
 
 import { Suspense } from "react"
+import { VerificationCountriesList } from "../../utilities/countries-list"
 const StepOne = lazy(() => import("../verify-identity/step-one"))
 
 const VerificationPage = () => {
@@ -41,7 +41,7 @@ const VerificationPage = () => {
     const [loadingData, setLoadingData] = useState(true)
     const [userEmail, setUserEmail] = useState("")
     const [accept, setAccept] = useState(false)
-    const [country, setCountry] = useState(countries[0])
+    const [country, setCountry] = useState(VerificationCountriesList[0])
     const {
         files: stepOneFiles,
         handleDragDropEvent: stepOneHandleDragDropEvent,
@@ -51,7 +51,7 @@ const VerificationPage = () => {
     const [firstName, setFirstName] = useState("")
     const [surname, setSurname] = useState("")
     const [dob, setDob] = useState(new Date())
-    const [stepThreeCountry, setStepThreeCountry] = useState(countries[0])
+    const [stepThreeCountry, setStepThreeCountry] = useState(VerificationCountriesList[0])
     const {
         files: stepThreeFiles,
         handleDragDropEvent: stepThreeHandleDragDropEvent,

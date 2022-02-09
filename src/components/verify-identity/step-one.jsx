@@ -1,8 +1,8 @@
 import Select from "react-select"
 import React, { useState } from "react"
-import { countries } from "../../utilities/staticData"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import { VerificationCountriesList } from "../../utilities/countries-list"
 
 export default function StepOne({
     step,
@@ -70,7 +70,7 @@ export default function StepOne({
                             />
                             <p className="form-label mt-4">Country issuing</p>
                             <Select
-                                options={countries}
+                                options={VerificationCountriesList}
                                 value={country}
                                 onChange={(v) => setCountry(v)}
                                 placeholder="Choose country"
