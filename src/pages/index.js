@@ -32,7 +32,7 @@ const IndexPage = () => {
                 <section className="home-section mt-5 mt-sm-0">
                     <div className="container h-100 d-flex flex-column justify-content-md-center justify-content-start mt-5 mt-md-0">
                         <div className="row m-0">
-                            <div className="left-part col-md-6 pe-0 pe-sm-auto">
+                            <div className="left-part col-md-6 px-0 pe-sm-auto">
                                 <h3 className="home-title d-sm-block d-none">
                                     <div>
                                         <span className="txt-green">round 20</span> ends in
@@ -55,9 +55,9 @@ const IndexPage = () => {
                                     <p className="token-left text-uppercase d-sm-block d-none">
                                         tokens left in this round
                                     </p>
-                                    <div className="cta mt-5 mt-sm-0 px-4 px-sm-0">
+                                    <div className="cta mt-5 mt-sm-0 px-1 px-sm-0">
                                         <button
-                                            className="btn btn-green"
+                                            className="btn btn-green white-space-nowrap"
                                             onClick={placeABidButtonClick}
                                         >
                                             place a bid
