@@ -12,7 +12,6 @@ import NumberFormat from "react-number-format"
 import { useQuery } from "@apollo/client"
 import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth"
 import { Icon } from "@iconify/react"
-import { VOLT, NDB } from "./../../utilities/imgImport"
 
 const QUOTE = "USDT"
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
@@ -44,11 +43,8 @@ const Asset = ({ item }) => {
 }
 
 export default function InternalWallet() {
-    const InitialMyAssets = {
-        NDB: { tokenSymbol: "NDB", tokenName: "NDB", free: 0, hold: 0, symbol: NDB },
-        VOLT: { tokenSymbol: "VOLT", tokenName: "VOLT", free: 0, hold: 0, symbol: VOLT },
-    }
-    const [myAssets, setMyAssets] = useState(InitialMyAssets)
+    const InitialAssets = {}
+    const [myAssets, setMyAssets] = useState(InitialAssets)
     const [BTCPrice, setBTCPrice] = useState(10000)
 
     const [hideValues, setHideValues] = useState(false)
@@ -63,7 +59,6 @@ export default function InternalWallet() {
         if (!Object.values(myAssets)) return 0
         return _.sumBy(Object.values(myAssets), "balance")?? 0;
     }, [myAssets])
-
     
     useEffect(() => {
         const get_BTCPrice = () => {
@@ -91,10 +86,10 @@ export default function InternalWallet() {
     })
 
     useEffect(() => {
-        ;(async function () {
+        (async function () {
             const get_Balances_Price = async () => {
                 const assets = { ...myAssets }
-                if (_.isEqual(myAssets, InitialMyAssets)) return
+                if(_.isEqual(myAssets, InitialAssets)) return
 
                 for (const item of Object.values(myAssets)) {
                     let price = 0
@@ -264,7 +259,7 @@ export default function InternalWallet() {
                                 <Asset item={item} key={item.tokenName} />
                             ))}
                             {Object.values(myAssets).length === 0 && (
-                                <p className="text-center fw-500 text-uppercase">no assets found</p>
+                                <div className="text-center fw-500 text-uppercase">No assets found</div>
                             )}
                         </tbody>
                     </table>

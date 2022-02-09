@@ -53,6 +53,7 @@ const VerificationPage = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
+    
     const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
         onCompleted: (data) => {
             setReference(data.createNewReference)
@@ -63,6 +64,7 @@ const VerificationPage = () => {
     useEffect(() => {
         createNewReference()
     }, [])
+
     if (loadingData) return <Loading />
     else
         return (

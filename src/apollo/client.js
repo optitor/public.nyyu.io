@@ -2,9 +2,10 @@ import fetch from "isomorphic-fetch"
 import {
     ApolloClient,
     InMemoryCache,
-    createHttpLink,
+    // createHttpLink,
     // split 
 } from "@apollo/client"
+import { createUploadLink } from "apollo-upload-client";
 import { setContext } from '@apollo/client/link/context';
 import {
     getInMemoryAuthToken,
@@ -17,7 +18,7 @@ import {
 // import { WebSocketLink } from '@apollo/client/link/ws';
 // import { getMainDefinition } from '@apollo/client/utilities';
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
     uri: API_BASE_URL + "/graphql",
 });
 

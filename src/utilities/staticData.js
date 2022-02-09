@@ -1434,11 +1434,11 @@ By using NDB token you will be able to contribute to the development of our tech
 
 export const VerificationDocumentTypes = [
     {
-        label: "Passports",
+        label: "Passport",
         value: "passport",
     },
     {
-        label: "National Identification Cards",
+        label: "National Identification Card",
         value: "id_card",
     },
     {
