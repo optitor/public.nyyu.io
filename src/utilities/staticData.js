@@ -1430,3 +1430,19 @@ export const NDB_TOKEN_CONTENT = `Since the beginning of NDB’s project the vis
 
 By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 
 `
+
+
+export const VerificationDocumentTypes = [
+    {
+        label: "Passports",
+        value: "passport",
+    },
+    {
+        label: "National Identification Cards",
+        value: "id_card",
+    },
+    {
+        label: "Driving License",
+        value: "driver_license",
+    },
+]
