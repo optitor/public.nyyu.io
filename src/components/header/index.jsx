@@ -288,14 +288,18 @@ const Menu = () => {
                                                     return (
                                                         <li className="mb-3">
                                                             {subLink.isDressup ? (
-                                                                <Link
-                                                                    onClick={() =>
+                                                                <div
+                                                                    onClick={() => {
+                                                                        setActive(false)
+                                                                        console.log(
+                                                                            "clicking the dressup btn"
+                                                                        )
                                                                         setIsDressUPModalOpen(true)
-                                                                    }
+                                                                    }}
                                                                     className="fw-500 text-light fs-20px"
                                                                 >
                                                                     {subLink.label}
-                                                                </Link>
+                                                                </div>
                                                             ) : (
                                                                 <Link
                                                                     to={subLink.url}
