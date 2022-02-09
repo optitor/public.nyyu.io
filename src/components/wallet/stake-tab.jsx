@@ -4,7 +4,7 @@ import React from "react"
 import { useState } from "react"
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import { BTC, DownArrow, Equity, ETH, USDC } from "../../utilities/imgImport"
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react"
 
 export default function StakeTab() {
     // Containers
@@ -42,7 +42,7 @@ export default function StakeTab() {
     }
     return (
         <Tabs className="text-light stake-react-list__tab">
-            <TabList className="py-3 px-4">
+            <TabList className="py-3 px-0 px-sm-4 overflow-auto d-flex align-items-center justify-content-start white-space-nowrap">
                 <Tab>equity value</Tab>
                 <Tab>locked staking</Tab>
                 <Tab>defi staking</Tab>
@@ -170,7 +170,8 @@ export default function StakeTab() {
                                                 { id: 2, label: "60 days" },
                                                 { id: 3, label: "90 days" },
                                             ].map((item, index) => (
-                                                <div key={index}
+                                                <div
+                                                    key={index}
                                                     className={`bg-black-10 ${
                                                         asset.duration === item.id &&
                                                         "active-duration"
@@ -230,7 +231,10 @@ export default function StakeTab() {
                                     <td className="fs-14px text-success">{asset.apy}</td>
                                     <td className="fs-14px">
                                         <div className="d-flex align-items-center gap-2 justify-content-center">
-                                            <Icon className="clock-icon text-success" icon="ic:baseline-access-time" />
+                                            <Icon
+                                                className="clock-icon text-success"
+                                                icon="ic:baseline-access-time"
+                                            />
                                             <div>Flexible</div>
                                         </div>
                                     </td>
