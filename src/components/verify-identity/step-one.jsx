@@ -1,19 +1,11 @@
 import Select from "react-select"
-import React, { useState } from "react"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import React, { useState } from "react"
+import useFileUpload from "react-use-file-upload"
 import { VerificationCountriesList } from "../../utilities/countries-list"
+import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 
-export default function StepOne({
-    step,
-    setState,
-    country,
-    setCountry,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+export default function StepOne({ step, setState, country, setCountry }) {
     // Containers
     const docTypes = [
         {
@@ -30,6 +22,7 @@ export default function StepOne({
         },
     ]
     const [docType, setDocType] = useState(docTypes[0])
+    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
 
     // Methods
     const onUserDropFile = (e) => {

@@ -2,24 +2,10 @@ import React from "react"
 import { useState } from "react"
 import { VerifyIdStep2 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
-import AdapterDateFns from "@mui/lab/AdapterDateFns"
-import LocalizationProvider from "@mui/lab/LocalizationProvider"
-import TextField from "@mui/material/TextField"
-import { MobileDatePicker } from "@mui/lab"
 
-export default function StepTwo({
-    step,
-    setState,
-    dob,
-    setDob,
-    firstName,
-    setFirstName,
-    surname,
-    setSurname,
-}) {
+export default function StepTwo({ step, setState, firstName, setFirstName, surname, setSurname }) {
     const [firstNameError, setFirstNameError] = useState("")
     const [surnameError, setSurnameError] = useState("")
-
     const onNextButtonClick = (e) => {
         e.preventDefault()
         setFirstNameError("")
