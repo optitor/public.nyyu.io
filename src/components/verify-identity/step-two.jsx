@@ -2,24 +2,10 @@ import React from "react"
 import { useState } from "react"
 import { VerifyIdStep2 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
-import AdapterDateFns from "@mui/lab/AdapterDateFns"
-import LocalizationProvider from "@mui/lab/LocalizationProvider"
-import TextField from "@mui/material/TextField"
-import { MobileDatePicker } from "@mui/lab"
 
-export default function StepTwo({
-    step,
-    setState,
-    dob,
-    setDob,
-    firstName,
-    setFirstName,
-    surname,
-    setSurname,
-}) {
+export default function StepTwo({ step, setState, firstName, setFirstName, surname, setSurname }) {
     const [firstNameError, setFirstNameError] = useState("")
     const [surnameError, setSurnameError] = useState("")
-
     const onNextButtonClick = (e) => {
         e.preventDefault()
         setFirstNameError("")
@@ -88,19 +74,6 @@ export default function StepTwo({
                                 placeholder="Surname name"
                             />
                             <div className="text-danger mt-2">{surnameError}</div>
-                        </div>
-                        <div>
-                            <p className="form-label mt-4">Date of birth (YYYY-MM-DD)</p>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <MobileDatePicker
-                                    inputFormat="yyyy-MM-dd"
-                                    value={dob}
-                                    onChange={(newValue) => {
-                                        setDob(newValue)
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </LocalizationProvider>
                         </div>
                     </div>
 

@@ -1,44 +1,48 @@
 import Select from "react-select"
-import React, { useState } from "react"
-import { countries } from "../../utilities/staticData"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import React, { useState } from "react"
+import useFileUpload from "react-use-file-upload"
+import { VerificationCountriesList } from "../../utilities/countries-list"
+import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
+import { VerificationDocumentTypes } from "../../utilities/staticData"
+import { useMutation } from "@apollo/client"
+import { UPLOAD_DOCUMENT } from "./kyc-webservice"
 
-export default function StepOne({
-    step,
-    setState,
-    country,
-    setCountry,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+export default function StepOne({ step, setState, country, setCountry }) {
     // Containers
-    const docTypes = [
-        {
-            label: "Passports",
-            value: "passport",
+    const [loading, setLoading] = useState(true)
+    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
+    const [docType, setDocType] = useState(VerificationDocumentTypes[0])
+    const [requestPending, setRequestPending] = useState(false)
+
+    // Webservice
+    const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
+        onCompleted: (data) => {
+            setRequestPending(false)
+            // setState({ step: step + 1 })
+            console.log(data)
         },
-        {
-            label: "National Identification Cards",
-            value: "id_card",
-        },
-        {
-            label: "Driving License",
-            value: "driver_license",
-        },
-    ]
-    const [docType, setDocType] = useState(docTypes[0])
+    })
 
     // Methods
     const onUserDropFile = (e) => {
         handleDragDropEvent(e)
         setFiles(e, "w")
     }
+    const uploadDocumentMethod = (e) => {
+        e.preventDefault()
+        setRequestPending(true)
+        console.log(files[0])
+        uploadDocument({
+            variables: {
+                file: files[0],
+            },
+        })
+    }
+
+    console.log(files)
 
     // Render
-    const [loading, setLoading] = useState(true)
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -63,14 +67,14 @@ export default function StepOne({
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>
                             <Select
-                                options={docTypes}
+                                options={VerificationDocumentTypes}
                                 value={docType}
                                 onChange={(v) => setDocType(v)}
                                 placeholder="Document type"
                             />
                             <p className="form-label mt-4">Country issuing</p>
                             <Select
-                                options={countries}
+                                options={VerificationCountriesList}
                                 value={country}
                                 onChange={(v) => setCountry(v)}
                                 placeholder="Choose country"
@@ -156,7 +160,7 @@ export default function StepOne({
                         <button
                             disabled={files.length === 0}
                             className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
+                            onClick={uploadDocumentMethod}
                         >
                             next
                         </button>

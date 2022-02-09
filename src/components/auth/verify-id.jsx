@@ -1,105 +1,148 @@
-import { useMutation } from "@apollo/client"
-import axios from "axios"
-import React, { useEffect, useState } from "react"
-import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
 import Loading from "../common/Loading"
+import useFileUpload from "react-use-file-upload"
+import SimpleHeader from "../header/simple-header"
+import StepOne from "../verify-identity/step-one"
+import StepTwo from "../verify-identity/step-two"
+import StepThree from "../verify-identity/step-three"
+import StepFour from "../verify-identity/step-four"
+import StepFive from "../verify-identity/step-five"
+import StepSix from "../verify-identity/step-six"
+import StepSeven from "../verify-identity/step-seven"
+import { useMutation, useQuery } from "@apollo/client"
+import PrimaryStep from "../verify-identity/primary-step"
+import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import React, { useReducer, useState, useEffect } from "react"
+import { VerificationCountriesList } from "../../utilities/countries-list"
+import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
 
 const VerificationPage = () => {
     // Containers
     const [reference, setReference] = useState(null)
-    const [KYCPageUrl, setKYCPageUrl] = useState(null)
-    const callbackUrl = "https://api.ndb.money/shufti"
-    const shuftiProBaseUrl = "https://api.shuftipro.com"
+    const [submitting, setSubmitting] = useState(false)
+    const [userEmail, setUserEmail] = useState("")
+    const [accept, setAccept] = useState(false)
+    const [country, setCountry] = useState(VerificationCountriesList[0])
+    const loadingData = !(userEmail && reference)
+    const [firstName, setFirstName] = useState("")
+    const [surname, setSurname] = useState("")
+    const [stepThreeCountry, setStepThreeCountry] = useState(VerificationCountriesList[0])
+    const {
+        files: stepThreeFiles,
+        handleDragDropEvent: stepThreeHandleDragDropEvent,
+        setFiles: stepThreeSetFiles,
+        removeFile: stepThreeRemoveFile,
+    } = useFileUpload()
+    const [address, setAddress] = useState("")
+    const {
+        files: stepFourFiles,
+        handleDragDropEvent: stepFourHandleDragDropEvent,
+        setFiles: stepFourSetFiles,
+        removeFile: stepFourRemoveFile,
+    } = useFileUpload()
+    const [selfieImage, setSelfieImage] = useState()
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
+        step: -1, // --> initial value: -1;
+    })
+    const { step } = state
 
     // WebService
-    // const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
-    //     onCompleted: (data) => {
-    //         setReference(data.createNewReference)
-    //     },
-    // })
-    // Production
-    // const clientId =
-    //     "wiKW623AK8inO2Uq7w1Hg2j3vOxGdEFDgigTByjxzA4Xl47pLJ1641498266"
-    // const secret =
-    //     "$2y$10$vPNtAL2q8rRxhWU4fNKQDeLv09AhIQfd9zRFsmXF6AkL.sWkPpTj2"
-
-    // Test
-    const redirectUrl = "https://saledev.ndb.money/app/profile"
-    // const redirectUrl = "http://localhost:8000/app/profile/"
-    const clientId =
-        "sWPA9CtQUI09MRpvQtxCPKK1hN6CU8qqngge3jHjAYptWsm9Ab1643819657"
-    const secret =
-        "$2y$10$O1V4dOxzCYFbNBswBwEdX.ZnDkqf5VvKQWOLElLEacTEx../zHC3O"
+    useQuery(GET_USER, {
+        onCompleted: (res) => {
+            setUserEmail(res.getUser?.email)
+        },
+        fetchPolicy: "network-only",
+        errorpolicy: "ignore",
+    })
+    
+    const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
+        onCompleted: (data) => {
+            setReference(data.createNewReference)
+        },
+    })
 
     // Methods
-    const sendShuftiRequest = async () => {
-        const token = btoa(`${clientId}:${secret}`)
-        const data = {
-            reference,
-            callback_url: callbackUrl,
-            redirect_url: redirectUrl,
-            verification_mode: "any",
-            document: {
-                proof: "",
-                supported_types: ["id_card", "passport", "driving_license"],
-                verification_instructions: {
-                    allow_paper_based: "1",
-                    allow_photocopy: "1",
-                    allow_laminated: "1",
-                    allow_screenshot: "1",
-                    allow_cropped: "1",
-                    allow_scanned: "1",
-                },
-            },
-            address: {
-                full_address: "",
-                supported_types: [
-                    "utility_bill",
-                    "bank_statement",
-                    "driving_license",
-                    "rent_agreement",
-                    "employer_letter",
-                    "tax_bill",
-                ],
-                verification_instructions: {
-                    allow_paper_based: "1",
-                    allow_photocopy: "1",
-                    allow_laminated: "1",
-                    allow_screenshot: "1",
-                    allow_cropped: "1",
-                    allow_scanned: "1",
-                },
-            },
-            consent: {
-                proof: "",
-                text: "I & NDB",
-            },
-            face: {
-                proof: "",
-            },
-            ttl: 120,
-            decline_on_single_step: "0",
-        }
-        await axios
-            .post(shuftiProBaseUrl, data, {
-                headers: {
-                    Authorization: `Basic ${token}`,
-                },
-            })
-            .then((response) => setKYCPageUrl(response.data.verification_url))
-    }
-    // useEffect(() => createNewReference(), [])
-
     useEffect(() => {
-        if (reference) sendShuftiRequest()
-    }, [reference])
-    if (!KYCPageUrl) return <Loading />
-    else {
-        const a = document.createElement("a")
-        a.href = `${KYCPageUrl}`
-        a.click()
-        return <></>
-    }
+        createNewReference()
+    }, [])
+
+    if (loadingData) return <Loading />
+    else
+        return (
+            <main className="verify-page">
+                <SimpleHeader />
+                <section className="d-flex justify-content-center align-items-start align-items-xl-center">
+                    <div>
+                        {step === -1 && (
+                            <PrimaryStep
+                                accept={accept}
+                                setAccept={setAccept}
+                                step={step}
+                                setState={setState}
+                            />
+                        )}
+                        {step === 0 && (
+                            <StepOne
+                                country={country}
+                                setCountry={setCountry}
+                                step={step}
+                                setState={setState}
+                            />
+                        )}
+                        {step === 1 && (
+                            <StepTwo
+                                firstName={firstName}
+                                setFirstName={setFirstName}
+                                surname={surname}
+                                setSurname={setSurname}
+                                step={step}
+                                setState={setState}
+                            />
+                        )}
+                        {step === 2 && (
+                            <StepThree
+                                country={stepThreeCountry}
+                                setCountry={setStepThreeCountry}
+                                step={step}
+                                setState={setState}
+                                files={stepThreeFiles}
+                                setFiles={stepThreeSetFiles}
+                                handleDragDropEvent={stepThreeHandleDragDropEvent}
+                                removeFile={stepThreeRemoveFile}
+                            />
+                        )}
+                        {step === 3 && (
+                            <StepFour
+                                address={address}
+                                setAddress={setAddress}
+                                step={step}
+                                setState={setState}
+                            />
+                        )}
+                        {step === 4 && (
+                            <StepFive
+                                step={step}
+                                setState={setState}
+                                files={stepFourFiles}
+                                setFiles={stepFourSetFiles}
+                                handleDragDropEvent={stepFourHandleDragDropEvent}
+                                removeFile={stepFourRemoveFile}
+                            />
+                        )}
+                        {step === 5 && (
+                            <StepSix
+                                step={step}
+                                setState={setState}
+                                selfieImage={selfieImage}
+                                setSelfieImage={setSelfieImage}
+                                submitting={submitting}
+                                submitKYCData={() => {}}
+                            />
+                        )}
+                        {step === 6 && <StepSeven step={step} setState={setState} />}
+                    </div>
+                </section>
+            </main>
+        )
 }
 
 export default VerificationPage

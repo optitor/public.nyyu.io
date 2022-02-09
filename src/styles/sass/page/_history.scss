@@ -20,11 +20,14 @@
             }
         }
         &__left {
-            padding-right: 24px;
             border-right: 2px solid #464646;
             height: 100%;
+            padding-right: 17px;
             @include mq("tablet", max) {
                 border-right: unset;
+            }
+            @include mq("phone") {
+                padding-right: 20px;
             }
             .verify-link {
                 display: none;
@@ -66,7 +69,7 @@
                         max-height: 350px;
                     }
                     display: block;
-                    padding-right: 20px;
+                    padding-right: 0px;
                     tr {
                         // margin-bottom: 23px;
                         border-bottom: 2px solid #464646;
@@ -239,13 +242,15 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                overflow-x: auto;
                 @include mq("phone", max) {
                     display: block;
                     .react-tabs__tab-list {
                         padding: 24px 0;
                     }
                     .react-tabs__tab {
-                        font-size: 16px;
+                        font-size: 20px;
+                        white-space: nowrap;
                     }
                 }
             }
