@@ -347,6 +347,13 @@
                     width: 100%;
                     th {
                         padding: 16px 0px;
+                        svg {
+                            cursor: pointer;
+                            margin-left: 4px;
+                            &.text-green {
+                                color: $green;
+                            }
+                        }
                     }
                 }
                 th {

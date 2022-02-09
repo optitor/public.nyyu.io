@@ -5,19 +5,18 @@ import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
 import Loading from "../common/Loading"
 
 const VerificationPage = () => {
-    // WebService
-    const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
-        onCompleted: (data) => {
-            setReference(data.createNewReference)
-        },
-    })
-
     // Containers
     const [reference, setReference] = useState(null)
     const [KYCPageUrl, setKYCPageUrl] = useState(null)
     const callbackUrl = "https://api.ndb.money/shufti"
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
+    // WebService
+    // const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
+    //     onCompleted: (data) => {
+    //         setReference(data.createNewReference)
+    //     },
+    // })
     // Production
     // const clientId =
     //     "wiKW623AK8inO2Uq7w1Hg2j3vOxGdEFDgigTByjxzA4Xl47pLJ1641498266"
@@ -89,7 +88,7 @@ const VerificationPage = () => {
             })
             .then((response) => setKYCPageUrl(response.data.verification_url))
     }
-    useEffect(() => createNewReference(), [])
+    // useEffect(() => createNewReference(), [])
 
     useEffect(() => {
         if (reference) sendShuftiRequest()

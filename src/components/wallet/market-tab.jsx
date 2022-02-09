@@ -134,7 +134,6 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     )
 }
 const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
-
     return (
         <tr onClick={doAction}>
             <td className="d-flex align-items-start ps-2">
@@ -163,6 +162,7 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
 export default function MarketTab() {
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
+    const [sortOption, setSortOption] = useState({});
     const [favours, setFavours] = useState({
         BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
         ETH: {symbol: 'ETH', name: cryptoSymbolList['ETH']},
@@ -173,6 +173,7 @@ export default function MarketTab() {
         ADA: {symbol: 'ADA', name: cryptoSymbolList['ADA']},
         CAKE: {symbol: 'CAKE', name: cryptoSymbolList['CAKE']},
     });
+
     useEffect(() => {
         axios.get(ALLPRICES).then((res) => {
             const allprices = res.data;
@@ -191,6 +192,11 @@ export default function MarketTab() {
         }
         setFavours({ ...favours, [item.symbol]: item });
     };
+
+    console.log(sortOption)
+    const set_SortOption = sortName => {
+        setSortOption({[sortName]: (sortOption[sortName] === 'desc'? 'asc': 'desc')});
+    }
     
     return (
         <table className="wallet-transaction-table">
@@ -208,10 +214,28 @@ export default function MarketTab() {
             </div>
             <thead>
                 <tr>
-                    <th className="text-center">Name</th>
-                    <th className="text-center">Price</th>
+                    <th className="text-center">
+                        Name
+                        <Icon icon={sortOption['name'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
+                            className={sortOption['name']? 'text-green': ''}
+                            onClick={() => set_SortOption('name')}
+                        />
+                    </th>
+                    <th className="text-center">
+                        Price
+                        <Icon icon={sortOption['price'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
+                            className={sortOption['price']? 'text-green': ''}
+                            onClick={() => set_SortOption('price')}
+                        />
+                    </th>
                     <th className="laptop-not text-center">Price Chart</th>
-                    <th className="mobile-not text-center">Volume (24h)</th>
+                    <th className="mobile-not text-center">
+                        Volume (24h)
+                        <Icon icon={sortOption['volumn'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
+                            className={sortOption['volumn']? 'text-green': ''}
+                            onClick={() => set_SortOption('volumn')}
+                        />
+                    </th>
                 </tr>
             </thead>
             <tbody>

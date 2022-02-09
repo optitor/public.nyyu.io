@@ -284,9 +284,9 @@ const Menu = () => {
                                         </a>
                                         {link.active && (
                                             <ul className="my-4 d-block d-sm-none">
-                                                {link.subMenu.map((subLink) => {
+                                                {link.subMenu.map((subLink, index) => {
                                                     return (
-                                                        <li className="mb-3">
+                                                        <li className="mb-3" key={index}>
                                                             {subLink.isDressup ? (
                                                                 <Link
                                                                     onClick={() =>
