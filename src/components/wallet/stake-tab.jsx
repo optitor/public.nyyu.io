@@ -49,7 +49,7 @@ export default function StakeTab() {
             </TabList>
             <TabPanel className="px-4">
                 <div className="py-3">
-                    <div className="d-flex justify-content-between px-2">
+                    <div className="d-flex justify-content-between px-2 flex-sm-row flex-column">
                         <div className="d-flex flex-column justify-content-center">
                             <div className="d-flex align-items-center gap-3">
                                 <div className="fs-24px fw-500">Equity value(BTC)</div>
@@ -107,9 +107,9 @@ export default function StakeTab() {
                             <thead className="border-bottom-1px">
                                 <tr>
                                     <th>Token</th>
-                                    <th className="text-center">Amount</th>
-                                    <th className="text-end">APY</th>
-                                    <th className="text-end">Interest</th>
+                                    <th className="text-sm-center">Amount</th>
+                                    <th className="text-sm-end">APY</th>
+                                    <th className="text-sm-end">Interest</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,8 +117,8 @@ export default function StakeTab() {
                                     { icon: BTC, label: "btc" },
                                     { icon: ETH, label: "eth" },
                                 ].map((item, index) => (
-                                    <tr key={index}>
-                                        <td>
+                                    <tr key={index} className="w-sm-100 w-max-content">
+                                        <td className="pe-5">
                                             <div className="d-flex align-items-center fs-16px gap-2">
                                                 <img src={item.icon} alt="btc image" />
                                                 <div className="fs-16px fw-500 text-uppercase">
@@ -126,9 +126,11 @@ export default function StakeTab() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="fs-14px text-center">1 NDB</td>
-                                        <td className="fs-14px text-success text-end">30.77%</td>
-                                        <td className="fs-14px text-end">0.06251 NDB</td>
+                                        <td className="fs-14px text-center pe-5">1 NDB</td>
+                                        <td className="fs-14px text-success text-end pe-5">
+                                            30.77%
+                                        </td>
+                                        <td className="fs-14px text-end pe-5">0.06251 NDB</td>
                                     </tr>
                                 ))}
                             </tbody>
