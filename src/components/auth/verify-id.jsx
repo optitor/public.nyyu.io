@@ -29,7 +29,7 @@ const VerificationPage = () => {
     const [submitting, setSubmitting] = useState(false)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        step: 6, // --> initial value: -1;
+        step: -1, // --> initial value: -1;
     })
     const { step } = state
 

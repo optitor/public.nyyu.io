@@ -37,7 +37,7 @@ export default function PrimaryStep({ step, setState }) {
                     to={ROUTES.profile}
                     className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
                 >
-                    cancel
+                    skip
                 </Link>
                 <button
                     disabled={!accept}
