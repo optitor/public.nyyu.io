@@ -79,6 +79,9 @@ const VerificationPage = () => {
             },
         })
     }
+    const nextStep = () => setState({ step: step + 1 })
+    const previousStep = () => setState({ step: step - 1 })
+
     useEffect(() => {
         createNewReference()
     }, [])
@@ -91,50 +94,75 @@ const VerificationPage = () => {
                 <section className="d-flex justify-content-center align-items-start align-items-xl-center">
                     {shuftReference.pending === false ? (
                         <div>
-                            {step === -1 && <PrimaryStep step={step} setState={setState} />}
-                            {step === 0 && (
-                                <StepOne
-                                    country={country}
-                                    setCountry={setCountry}
-                                    step={step}
-                                    setState={setState}
-                                />
-                            )}
-                            {step === 1 && (
-                                <StepTwo
-                                    firstName={firstName}
-                                    setFirstName={setFirstName}
-                                    surname={surname}
-                                    setSurname={setSurname}
-                                    step={step}
-                                    setState={setState}
-                                />
-                            )}
-                            {step === 2 && (
-                                <StepThree
-                                    country={country}
-                                    setCountry={setCountry}
-                                    step={step}
-                                    setState={setState}
-                                />
-                            )}
-                            {step === 3 && (
-                                <StepFour
-                                    address={address}
-                                    setAddress={setAddress}
-                                    step={step}
-                                    setState={setState}
-                                />
-                            )}
-                            {step === 4 && <StepFive step={step} setState={setState} />}
-                            {step === 5 && (
-                                <StepSix
-                                    step={step}
-                                    setState={setState}
-                                    submitting={submitting}
-                                    submitKYCData={submitKYCData}
-                                />
-                            )}
+                            {step === -1 &&
+                                (shuftReference.reference !== null ? (
+                                    nextStep()
+                                ) : (
+                                    <PrimaryStep step={step} setState={setState} />
+                                ))}
+                            {step === 0 &&
+                                (shuftReference.docStatus ? (
+                                    nextStep()
+                                ) : (
+                                    <StepOne
+                                        country={country}
+                                        setCountry={setCountry}
+                                        step={step}
+                                        setState={setState}
+                                    />
+                                ))}
+                            {step === 1 &&
+                                (shuftReference.docStatus ? (
+                                    nextStep()
+                                ) : (
+                                    <StepTwo
+                                        firstName={firstName}
+                                        setFirstName={setFirstName}
+                                        surname={surname}
+                                        setSurname={setSurname}
+                                        step={step}
+                                        setState={setState}
+                                    />
+                                ))}
+                            {step === 2 &&
+                                (shuftReference.addrStatus ? (
+                                    nextStep()
+                                ) : (
+                                    <StepThree
+                                        country={country}
+                                        setCountry={setCountry}
+                                        step={step}
+                                        setState={setState}
+                                    />
+                                ))}
+                            {step === 3 &&
+                                (shuftReference.addrStatus ? (
+                                    nextStep()
+                                ) : (
+                                    <StepFour
+                                        address={address}
+                                        setAddress={setAddress}
+                                        step={step}
+                                        setState={setState}
+                                    />
+                                ))}
+                            {step === 4 &&
+                                (shuftReference.conStatus ? (
+                                    nextStep()
+                                ) : (
+                                    <StepFive step={step} setState={setState} />
+                                ))}
+                            {step === 5 &&
+                                (shuftReference.selfieStatus ? (
+                                    nextStep()
+                                ) : (
+                                    <StepSix
+                                        step={step}
+                                        setState={setState}
+                                        submitting={submitting}
+                                        submitKYCData={submitKYCData}
+                                    />
+                                ))}
                             {step === 6 && <StepSeven step={step} setState={setState} />}
                         </div>
                     ) : (

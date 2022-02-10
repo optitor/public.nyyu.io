@@ -14,12 +14,14 @@ export default function StepOne({ step, setState, country, setCountry }) {
     const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
     const [docType, setDocType] = useState(VerificationDocumentTypes[0])
     const [requestPending, setRequestPending] = useState(false)
+    const [error, setError] = useState("Unable to upload the file!")
 
     // Webservice
     const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
         onCompleted: (data) => {
             setRequestPending(false)
             if (data.uploadDocument === true) setState({ step: step + 1 })
+            else setError("Unable to upload the file!")
         },
         onError: (err) => {
             if (err) setRequestPending(false)
@@ -62,6 +64,7 @@ export default function StepOne({ step, setState, country, setCountry }) {
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
+                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>
@@ -149,20 +152,22 @@ export default function StepOne({ step, setState, country, setCountry }) {
                         </div>
                     </div>
 
-                    <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
-                        <button
-                            className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
-                        >
-                            back
-                        </button>
-                        <button
-                            disabled={files.length === 0 || requestPending}
-                            className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={uploadDocumentMethod}
-                        >
-                            {requestPending ? "uploading. . ." : "next"}
-                        </button>
+                    <div className="my-5 ">
+                        <div className="d-flex justify-content-center gap-3 col-md-12">
+                            <button
+                                className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                                onClick={() => setState({ step: step - 1 })}
+                            >
+                                back
+                            </button>
+                            <button
+                                disabled={files.length === 0 || requestPending}
+                                className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                                onClick={uploadDocumentMethod}
+                            >
+                                {requestPending ? "uploading. . ." : "next"}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
