@@ -88,7 +88,7 @@ export default function InternalWallet() {
     useEffect(() => {
         (async function () {
             const get_Balances_Price = async () => {
-                const assets = { ...myAssets }
+                let assets = { ...myAssets }
                 if(_.isEqual(myAssets, InitialAssets)) return
 
                 for (const item of Object.values(myAssets)) {

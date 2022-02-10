@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect, useState } from "react"
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import axios from "axios"
 import { numberSign, numberWithCommas, numFormatter } from "../../utilities/number"
 import icons from "base64-cryptocurrency-icons"
@@ -20,7 +21,7 @@ const RED = "#F6361A"
 
 const { get } = cryptoSymbol({})
 const cryptoSymbolList = get().SNPair;
-const REFRESH_TIME = 30;
+const REFRESH_TIME = 10;
 
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
@@ -163,7 +164,8 @@ export default function MarketTab() {
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [sortOption, setSortOption] = useState({});
-    const [favours, setFavours] = useState({
+
+    const InitialFavours = {
         BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
         ETH: {symbol: 'ETH', name: cryptoSymbolList['ETH']},
         SOL: {symbol: 'SOL', name: cryptoSymbolList['SOL']},
@@ -172,7 +174,8 @@ export default function MarketTab() {
         // DAI: {symbol: 'DAI', name: cryptoSymbolList['DAI']},
         ADA: {symbol: 'ADA', name: cryptoSymbolList['ADA']},
         CAKE: {symbol: 'CAKE', name: cryptoSymbolList['CAKE']},
-    });
+    };
+    const [favours, setFavours] = useState(InitialFavours);
 
     useEffect(() => {
         axios.get(ALLPRICES).then((res) => {
@@ -184,16 +187,42 @@ export default function MarketTab() {
         });
     }, []);
 
+    const [favoursData, setFavoursData] = useState({});
+
+    useDeepCompareEffect(() => {
+        (async function() {
+            let assets = { ...favours };
+            let price = 0, percent = 0, volume = 0;
+            // if(!_.isEmpty(favoursData) && _.isEqual(favours, InitialFavours)) return;
+            
+            for(const favour of Object.values(favours)) {
+                const res = await axios.get(TICKER_24hr, { params: { symbol: favour.symbol + QUOTE } });
+                price = Number(res.data.lastPrice);
+                percent = Number(res.data.priceChangePercent);
+                volume = Number(res.data.quoteVolume);
+                assets[favour.symbol] = { ...favour, price, percent, volume };
+            }
+            setFavoursData({ ...assets })
+        })()
+    }, [favours])
+
+    // console.log(favoursData)
+    // console.log(sortOption)
+
     const set_Favourite_Crypto = item => {
         if(favours[item.symbol]) {
+            delete favoursData[item.symbol];
+            setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
+            
             return;
         }
         setFavours({ ...favours, [item.symbol]: item });
     };
 
-    console.log(sortOption)
+
+    // console.log(sortOption)
     const set_SortOption = sortName => {
         setSortOption({[sortName]: (sortOption[sortName] === 'desc'? 'asc': 'desc')});
     }
@@ -216,9 +245,9 @@ export default function MarketTab() {
                 <tr>
                     <th className="text-center">
                         Name
-                        <Icon icon={sortOption['name'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
-                            className={sortOption['name']? 'text-green': ''}
-                            onClick={() => set_SortOption('name')}
+                        <Icon icon={sortOption['symbol'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
+                            className={sortOption['symbol']? 'text-green': ''}
+                            onClick={() => set_SortOption('symbol')}
                         />
                     </th>
                     <th className="text-center">
@@ -231,9 +260,9 @@ export default function MarketTab() {
                     <th className="laptop-not text-center">Price Chart</th>
                     <th className="mobile-not text-center">
                         Volume (24h)
-                        <Icon icon={sortOption['volumn'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
-                            className={sortOption['volumn']? 'text-green': ''}
-                            onClick={() => set_SortOption('volumn')}
+                        <Icon icon={sortOption['volume'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
+                            className={sortOption['volume']? 'text-green': ''}
+                            onClick={() => set_SortOption('volume')}
                         />
                     </th>
                 </tr>
@@ -246,7 +275,7 @@ export default function MarketTab() {
                     ), item => (
                         <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
-                    {!searchValue && _.map(favours, item => (
+                    {!searchValue && _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
                         <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
                 </>
