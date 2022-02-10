@@ -205,7 +205,6 @@ export default function MarketTab() {
             setFavoursData({ ...assets })
         })()
     }, [favours])
-
     // console.log(favoursData)
     // console.log(sortOption)
 
@@ -220,7 +219,6 @@ export default function MarketTab() {
         }
         setFavours({ ...favours, [item.symbol]: item });
     };
-
 
     // console.log(sortOption)
     const set_SortOption = sortName => {
