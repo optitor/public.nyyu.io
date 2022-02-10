@@ -19,3 +19,13 @@ export const UPLOAD_ADDRESS = gql`
         )
     }
 `
+
+export const UPLOAD_CONSENT = gql`
+    mutation(
+        $consent: Upload
+    ) {
+        uploadConsent(
+            consent: $consent
+        )
+    }
+`

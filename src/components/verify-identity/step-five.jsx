@@ -1,19 +1,39 @@
 import React, { useState } from "react"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import { useMutation } from "@apollo/client"
+import useFileUpload from "react-use-file-upload"
+import { UPLOAD_CONSENT } from "./kyc-webservice"
+import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 
-export default function StepOne({
-    step,
-    setState,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+export default function StepOne({ step, setState }) {
+    // Containers
+    const [requestPending, setRequestPending] = useState(false)
+    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
+
+    // Webservice
+    const [uploadConsent] = useMutation(UPLOAD_CONSENT, {
+        onCompleted: (data) => {
+            setRequestPending(false)
+            if (data.uploadConsent === true) setState({ step: step + 1 })
+        },
+        onError: (err) => {
+            if (err) setRequestPending(false)
+        },
+    })
+
     // Methods
     const onUserDropFile = (e) => {
         handleDragDropEvent(e)
         setFiles(e, "w")
+    }
+    const uploadConsentMethod = (e) => {
+        e.preventDefault()
+        setRequestPending(true)
+        uploadConsent({
+            variables: {
+                consent: files[0],
+            },
+        })
     }
 
     // Render
@@ -118,16 +138,17 @@ export default function StepOne({
 
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                            className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
                             onClick={() => setState({ step: step - 1 })}
                         >
                             back
                         </button>
                         <button
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
+                            disabled={files.length === 0 || requestPending}
+                            className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                            onClick={uploadConsentMethod}
                         >
-                            next
+                            {requestPending ? "uploading. . ." : "next"}
                         </button>
                     </div>
                 </div>

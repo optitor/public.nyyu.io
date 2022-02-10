@@ -1,5 +1,4 @@
 import Loading from "../common/Loading"
-import useFileUpload from "react-use-file-upload"
 import SimpleHeader from "../header/simple-header"
 import StepOne from "../verify-identity/step-one"
 import StepTwo from "../verify-identity/step-two"
@@ -28,15 +27,10 @@ const VerificationPage = () => {
     const [stepThreeCountry, setStepThreeCountry] = useState(VerificationCountriesList[0])
 
     const [address, setAddress] = useState("")
-    const {
-        files: stepFourFiles,
-        handleDragDropEvent: stepFourHandleDragDropEvent,
-        setFiles: stepFourSetFiles,
-        removeFile: stepFourRemoveFile,
-    } = useFileUpload()
+
     const [selfieImage, setSelfieImage] = useState()
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        step: -1, // --> initial value: -1;
+        step: 4, // --> initial value: -1;
     })
     const { step } = state
 
@@ -109,16 +103,7 @@ const VerificationPage = () => {
                                 setState={setState}
                             />
                         )}
-                        {step === 4 && (
-                            <StepFive
-                                step={step}
-                                setState={setState}
-                                files={stepFourFiles}
-                                setFiles={stepFourSetFiles}
-                                handleDragDropEvent={stepFourHandleDragDropEvent}
-                                removeFile={stepFourRemoveFile}
-                            />
-                        )}
+                        {step === 4 && <StepFive step={step} setState={setState} />}
                         {step === 5 && (
                             <StepSix
                                 step={step}
