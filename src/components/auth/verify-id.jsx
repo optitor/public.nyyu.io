@@ -13,7 +13,7 @@ import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import React, { useReducer, useState, useEffect } from "react"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
-import { SEND_VERIFY_REQUEST } from "../verify-identity/kyc-webservice"
+import { GET_SHUFT_REFERENCE, SEND_VERIFY_REQUEST } from "../verify-identity/kyc-webservice"
 
 const VerificationPage = () => {
     // Containers
@@ -25,8 +25,9 @@ const VerificationPage = () => {
     const [surname, setSurname] = useState("")
     const [address, setAddress] = useState("")
 
-    const loadingData = !(userEmail && reference)
+    const [shuftReference, setShuftReference] = useState(null)
     const [submitting, setSubmitting] = useState(false)
+    const loadingData = !(userEmail && reference && shuftReference)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         step: -1, // --> initial value: -1;
@@ -37,6 +38,13 @@ const VerificationPage = () => {
     useQuery(GET_USER, {
         onCompleted: (res) => {
             setUserEmail(res.getUser?.email)
+        },
+        fetchPolicy: "network-only",
+        errorpolicy: "ignore",
+    })
+    useQuery(GET_SHUFT_REFERENCE, {
+        onCompleted: (data) => {
+            setShuftReference(data.getShuftReference)
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
@@ -81,53 +89,59 @@ const VerificationPage = () => {
             <main className="verify-page">
                 <SimpleHeader />
                 <section className="d-flex justify-content-center align-items-start align-items-xl-center">
-                    <div>
-                        {step === -1 && <PrimaryStep step={step} setState={setState} />}
-                        {step === 0 && (
-                            <StepOne
-                                country={country}
-                                setCountry={setCountry}
-                                step={step}
-                                setState={setState}
-                            />
-                        )}
-                        {step === 1 && (
-                            <StepTwo
-                                firstName={firstName}
-                                setFirstName={setFirstName}
-                                surname={surname}
-                                setSurname={setSurname}
-                                step={step}
-                                setState={setState}
-                            />
-                        )}
-                        {step === 2 && (
-                            <StepThree
-                                country={country}
-                                setCountry={setCountry}
-                                step={step}
-                                setState={setState}
-                            />
-                        )}
-                        {step === 3 && (
-                            <StepFour
-                                address={address}
-                                setAddress={setAddress}
-                                step={step}
-                                setState={setState}
-                            />
-                        )}
-                        {step === 4 && <StepFive step={step} setState={setState} />}
-                        {step === 5 && (
-                            <StepSix
-                                step={step}
-                                setState={setState}
-                                submitting={submitting}
-                                submitKYCData={submitKYCData}
-                            />
-                        )}
-                        {step === 6 && <StepSeven step={step} setState={setState} />}
-                    </div>
+                    {shuftReference.pending === false ? (
+                        <div>
+                            {step === -1 && <PrimaryStep step={step} setState={setState} />}
+                            {step === 0 && (
+                                <StepOne
+                                    country={country}
+                                    setCountry={setCountry}
+                                    step={step}
+                                    setState={setState}
+                                />
+                            )}
+                            {step === 1 && (
+                                <StepTwo
+                                    firstName={firstName}
+                                    setFirstName={setFirstName}
+                                    surname={surname}
+                                    setSurname={setSurname}
+                                    step={step}
+                                    setState={setState}
+                                />
+                            )}
+                            {step === 2 && (
+                                <StepThree
+                                    country={country}
+                                    setCountry={setCountry}
+                                    step={step}
+                                    setState={setState}
+                                />
+                            )}
+                            {step === 3 && (
+                                <StepFour
+                                    address={address}
+                                    setAddress={setAddress}
+                                    step={step}
+                                    setState={setState}
+                                />
+                            )}
+                            {step === 4 && <StepFive step={step} setState={setState} />}
+                            {step === 5 && (
+                                <StepSix
+                                    step={step}
+                                    setState={setState}
+                                    submitting={submitting}
+                                    submitKYCData={submitKYCData}
+                                />
+                            )}
+                            {step === 6 && <StepSeven step={step} setState={setState} />}
+                        </div>
+                    ) : (
+                        <div className="text-light h4 fw-500 text-center px-4 px-sm-0 mt-5 mt-sm-0">
+                            Please wait while your request is being verified...
+                        </div>
+                    )}
                 </section>
             </main>
         )
