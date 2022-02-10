@@ -3,18 +3,28 @@ import Webcam from "react-webcam"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
 import CustomSpinner from "../common/custom-spinner"
+import { useMutation } from "@apollo/client"
+import { UPLOAD_SELFIE } from "./kyc-webservice"
+import { dataURLtoFile } from "../../utilities/utility-methods"
 
-export default function StepSix({
-    step,
-    setState,
-    selfieImage,
-    setSelfieImage,
-    submitKYCData,
-    submitting,
-}) {
+export default function StepSix({ step, setState, submitKYCData, submitting }) {
     // Containers
     const webcamRef = useRef(null)
+    const [loading, setLoading] = useState(true)
+    const [selfieImage, setSelfieImage] = useState()
     const [openWebcam, setOpenWebcam] = useState(false)
+    const [requestPending, setRequestPending] = useState(false)
+
+    // Webservice
+    const [uploadSelfie] = useMutation(UPLOAD_SELFIE, {
+        onCompleted: (data) => {
+            setRequestPending(false)
+            if (data.uploadSelfie === true) setState({ step: step + 1 })
+        },
+        onError: (err) => {
+            if (err) setRequestPending(false)
+        },
+    })
 
     // Methods
     const capture = () => {
@@ -22,9 +32,21 @@ export default function StepSix({
         setSelfieImage(fooImage)
         return setOpenWebcam(false)
     }
-    // Render
-    const [loading, setLoading] = useState(true)
+    const uploadSelfieMethod = (e) => {
+        e.preventDefault()
+        setRequestPending(true)
+        fetch(selfieImage)
+            .then((res) => res.blob())
+            .then((blob) => {
+                uploadSelfie({
+                    variables: {
+                        selfie: new File([blob], "selfie", { type: "image/png" }),
+                    },
+                })
+            })
+    }
 
+    // Render
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -103,14 +125,16 @@ export default function StepSix({
                             <button
                                 disabled={submitting}
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={submitKYCData}
+                                onClick={uploadSelfieMethod}
                             >
                                 {submitting ? (
                                     <div className="mt-3px">
                                         <CustomSpinner />
                                     </div>
+                                ) : requestPending ? (
+                                    "uploading. . ."
                                 ) : (
-                                    "compete"
+                                    "complete"
                                 )}
                             </button>
                         )}

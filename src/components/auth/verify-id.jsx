@@ -28,9 +28,8 @@ const VerificationPage = () => {
 
     const [address, setAddress] = useState("")
 
-    const [selfieImage, setSelfieImage] = useState()
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        step: 4, // --> initial value: -1;
+        step: 5, // --> initial value: -1;
     })
     const { step } = state
 
@@ -108,8 +107,6 @@ const VerificationPage = () => {
                             <StepSix
                                 step={step}
                                 setState={setState}
-                                selfieImage={selfieImage}
-                                setSelfieImage={setSelfieImage}
                                 submitting={submitting}
                                 submitKYCData={() => {}}
                             />

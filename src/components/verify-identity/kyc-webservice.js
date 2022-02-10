@@ -29,3 +29,13 @@ export const UPLOAD_CONSENT = gql`
         )
     }
 `
+
+export const UPLOAD_SELFIE = gql`
+    mutation(
+        $selfie: Upload
+    ) {
+        uploadSelfie(
+            selfie: $selfie
+        )
+    }
+`
