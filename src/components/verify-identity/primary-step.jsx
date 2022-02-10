@@ -5,9 +5,10 @@ import PrivacyPolicy from "./privacy-policy"
 import languages from "../../assets/lang/languages.json"
 import SelectLang from "./select-lang"
 
-export default function PrimaryStep({ step, setState, accept, setAccept }) {
+export default function PrimaryStep({ step, setState }) {
     const [langKey, setLangKey] = useState("en")
     const language = languages[langKey]
+    const [accept, setAccept] = useState(false)
     return (
         <div className="verify-step0 col-sm-12 col-10 mx-auto mt-5 mt-sm-0">
             <SelectLang

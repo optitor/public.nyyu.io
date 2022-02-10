@@ -39,3 +39,23 @@ export const UPLOAD_SELFIE = gql`
         )
     }
 `
+
+export const SEND_VERIFY_REQUEST = gql`
+    mutation(
+        $country: String,
+        $fullAddr: String,
+        $firstName: String,
+        $middleName: String,
+        $lastName: String,
+    ) {
+        sendVerifyRequest(
+            country: $country,
+            fullAddr: $fullAddr,
+            names: {
+                first_name: $firstName,
+                middle_name: $middleName,
+                last_name: $lastName,
+            }
+        )
+    }
+`

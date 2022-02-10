@@ -13,23 +13,23 @@ import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import React, { useReducer, useState, useEffect } from "react"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
+import { SEND_VERIFY_REQUEST } from "../verify-identity/kyc-webservice"
 
 const VerificationPage = () => {
     // Containers
     const [reference, setReference] = useState(null)
-    const [submitting, setSubmitting] = useState(false)
     const [userEmail, setUserEmail] = useState("")
-    const [accept, setAccept] = useState(false)
+
     const [country, setCountry] = useState(VerificationCountriesList[0])
-    const loadingData = !(userEmail && reference)
     const [firstName, setFirstName] = useState("")
     const [surname, setSurname] = useState("")
-    const [stepThreeCountry, setStepThreeCountry] = useState(VerificationCountriesList[0])
-
     const [address, setAddress] = useState("")
 
+    const loadingData = !(userEmail && reference)
+    const [submitting, setSubmitting] = useState(false)
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        step: 5, // --> initial value: -1;
+        step: 6, // --> initial value: -1;
     })
     const { step } = state
 
@@ -41,14 +41,36 @@ const VerificationPage = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
-
     const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
         onCompleted: (data) => {
             setReference(data.createNewReference)
         },
     })
+    const [sendVerifyRequest] = useMutation(SEND_VERIFY_REQUEST, {
+        onCompleted: (data) => {
+            console.log(data)
+            setSubmitting(false)
+            setState({ step: step + 1 })
+        },
+        onError: (err) => {
+            if (err) setSubmitting(false)
+        },
+    })
 
     // Methods
+    const submitKYCData = () => {
+        setSubmitting(true)
+        console.log("country", country)
+        sendVerifyRequest({
+            variables: {
+                country: country.value,
+                fullAddr: address,
+                firstName: firstName,
+                middleName: "",
+                lastName: surname,
+            },
+        })
+    }
     useEffect(() => {
         createNewReference()
     }, [])
@@ -60,14 +82,7 @@ const VerificationPage = () => {
                 <SimpleHeader />
                 <section className="d-flex justify-content-center align-items-start align-items-xl-center">
                     <div>
-                        {step === -1 && (
-                            <PrimaryStep
-                                accept={accept}
-                                setAccept={setAccept}
-                                step={step}
-                                setState={setState}
-                            />
-                        )}
+                        {step === -1 && <PrimaryStep step={step} setState={setState} />}
                         {step === 0 && (
                             <StepOne
                                 country={country}
@@ -88,8 +103,8 @@ const VerificationPage = () => {
                         )}
                         {step === 2 && (
                             <StepThree
-                                country={stepThreeCountry}
-                                setCountry={setStepThreeCountry}
+                                country={country}
+                                setCountry={setCountry}
                                 step={step}
                                 setState={setState}
                             />
@@ -108,7 +123,7 @@ const VerificationPage = () => {
                                 step={step}
                                 setState={setState}
                                 submitting={submitting}
-                                submitKYCData={() => {}}
+                                submitKYCData={submitKYCData}
                             />
                         )}
                         {step === 6 && <StepSeven step={step} setState={setState} />}

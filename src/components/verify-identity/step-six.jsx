@@ -5,7 +5,6 @@ import Loading from "../common/Loading"
 import CustomSpinner from "../common/custom-spinner"
 import { useMutation } from "@apollo/client"
 import { UPLOAD_SELFIE } from "./kyc-webservice"
-import { dataURLtoFile } from "../../utilities/utility-methods"
 
 export default function StepSix({ step, setState, submitKYCData, submitting }) {
     // Containers
@@ -19,7 +18,7 @@ export default function StepSix({ step, setState, submitKYCData, submitting }) {
     const [uploadSelfie] = useMutation(UPLOAD_SELFIE, {
         onCompleted: (data) => {
             setRequestPending(false)
-            if (data.uploadSelfie === true) setState({ step: step + 1 })
+            if (data.uploadSelfie === true) submitKYCData()
         },
         onError: (err) => {
             if (err) setRequestPending(false)
@@ -132,7 +131,7 @@ export default function StepSix({ step, setState, submitKYCData, submitting }) {
                                         <CustomSpinner />
                                     </div>
                                 ) : requestPending ? (
-                                    "uploading. . ."
+                                    "submitting. . ."
                                 ) : (
                                     "complete"
                                 )}
