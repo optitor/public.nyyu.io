@@ -1,19 +1,44 @@
 import React, { useState } from "react"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import { useMutation } from "@apollo/client"
+import useFileUpload from "react-use-file-upload"
+import { UPLOAD_CONSENT } from "./kyc-webservice"
+import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 
-export default function StepOne({
-    step,
-    setState,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+export default function StepOne({ step, setState }) {
+    // Containers
+    const [requestPending, setRequestPending] = useState(false)
+    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
+    const [error, setError] = useState("")
+
+    // Webservice
+    const [uploadConsent] = useMutation(UPLOAD_CONSENT, {
+        onCompleted: (data) => {
+            setRequestPending(false)
+            if (data.uploadConsent === true) setState({ step: step + 1 })
+            else setError("Unable to upload the file!")
+        },
+        onError: (err) => {
+            if (err) {
+                setError("Unable to upload the file!")
+                setRequestPending(false)
+            }
+        },
+    })
+
     // Methods
     const onUserDropFile = (e) => {
         handleDragDropEvent(e)
         setFiles(e, "w")
+    }
+    const uploadConsentMethod = (e) => {
+        e.preventDefault()
+        setRequestPending(true)
+        uploadConsent({
+            variables: {
+                consent: files[0],
+            },
+        })
     }
 
     // Render
@@ -38,6 +63,7 @@ export default function StepOne({
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
+                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
                         <div className="col-md-6 col-12 mt-5 mt-sm-0">
                             <p>
@@ -118,16 +144,17 @@ export default function StepOne({
 
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                            className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
                             onClick={() => setState({ step: step - 1 })}
                         >
                             back
                         </button>
                         <button
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
+                            disabled={files.length === 0 || requestPending}
+                            className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                            onClick={uploadConsentMethod}
                         >
-                            next
+                            {requestPending ? "uploading. . ." : "next"}
                         </button>
                     </div>
                 </div>

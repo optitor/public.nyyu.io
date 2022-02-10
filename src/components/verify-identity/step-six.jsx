@@ -3,18 +3,32 @@ import Webcam from "react-webcam"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
 import CustomSpinner from "../common/custom-spinner"
+import { useMutation } from "@apollo/client"
+import { UPLOAD_SELFIE } from "./kyc-webservice"
 
-export default function StepSix({
-    step,
-    setState,
-    selfieImage,
-    setSelfieImage,
-    submitKYCData,
-    submitting,
-}) {
+export default function StepSix({ step, setState, submitKYCData, submitting }) {
     // Containers
     const webcamRef = useRef(null)
+    const [loading, setLoading] = useState(true)
+    const [selfieImage, setSelfieImage] = useState()
     const [openWebcam, setOpenWebcam] = useState(false)
+    const [requestPending, setRequestPending] = useState(false)
+    const [error, setError] = useState("")
+
+    // Webservice
+    const [uploadSelfie] = useMutation(UPLOAD_SELFIE, {
+        onCompleted: (data) => {
+            setRequestPending(false)
+            if (data.uploadSelfie === true) submitKYCData()
+            else setError("Unable to upload the file!")
+        },
+        onError: (err) => {
+            if (err) {
+                setRequestPending(false)
+                setError("Unable to upload the file!")
+            }
+        },
+    })
 
     // Methods
     const capture = () => {
@@ -22,9 +36,21 @@ export default function StepSix({
         setSelfieImage(fooImage)
         return setOpenWebcam(false)
     }
-    // Render
-    const [loading, setLoading] = useState(true)
+    const uploadSelfieMethod = (e) => {
+        e.preventDefault()
+        setRequestPending(true)
+        fetch(selfieImage)
+            .then((res) => res.blob())
+            .then((blob) => {
+                uploadSelfie({
+                    variables: {
+                        selfie: new File([blob], "selfie", { type: "image/png" }),
+                    },
+                })
+            })
+    }
 
+    // Render
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -45,6 +71,7 @@ export default function StepSix({
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
+                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="text-center mt-3 mt-sm-0">
                         <p className="fs-16px">
                             Face the camera. Make sure your face is visible including the ears.
@@ -103,14 +130,16 @@ export default function StepSix({
                             <button
                                 disabled={submitting}
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={submitKYCData}
+                                onClick={uploadSelfieMethod}
                             >
                                 {submitting ? (
                                     <div className="mt-3px">
                                         <CustomSpinner />
                                     </div>
+                                ) : requestPending ? (
+                                    "submitting. . ."
                                 ) : (
-                                    "compete"
+                                    "complete"
                                 )}
                             </button>
                         )}

@@ -3,58 +3,47 @@ import React, { useState } from "react"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep3 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
 import { VerificationCountriesList } from "../../utilities/countries-list"
+import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData"
+import { UPLOAD_ADDRESS } from "./kyc-webservice"
+import useFileUpload from "react-use-file-upload"
+import { useMutation } from "@apollo/client"
 
-export default function StepThree({
-    step,
-    setState,
-    country,
-    setCountry,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+export default function StepThree({ step, setState, country, setCountry }) {
     // Containers
-    const docTypes = [
-        {
-            label: "National ID",
-            value: "passport",
+    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
+    const [docType, setDocType] = useState(VerificationStepThreeDocumentTypes[0])
+    const [requestPending, setRequestPending] = useState(false)
+    const [error, setError] = useState("")
+
+    // Webservice
+    const [uploadAddress] = useMutation(UPLOAD_ADDRESS, {
+        onCompleted: (data) => {
+            setRequestPending(false)
+            if (data.uploadAddress === true) setState({ step: step + 1 })
+            else setError("Unable to upload the file!")
         },
-        {
-            label: "Driving license",
-            value: "driving_license",
+        onError: (err) => {
+            if (err) {
+                setRequestPending(false)
+                setError("Unable to upload the file!")
+            }
         },
-        {
-            label: "Utility bill",
-            value: "utility_bill",
-        },
-        {
-            label: "Rent agreement",
-            value: "rent_agreement",
-        },
-        {
-            label: "Employer letter",
-            value: "employer_letter",
-        },
-        {
-            label: "Tax bill",
-            value: "tax_bill",
-        },
-        {
-            label: "Bank statement",
-            value: "bank_statement",
-        },
-        {
-            label: "Insurence agreement",
-            value: "insurance_agreement",
-        },
-    ]
-    const [docType, setDocType] = useState(docTypes[0])
+    })
 
     // Methods
     const onUserDropFile = (e) => {
         handleDragDropEvent(e)
         setFiles(e, "w")
+    }
+
+    const uploadAddressMethod = (e) => {
+        e.preventDefault()
+        setRequestPending(true)
+        uploadAddress({
+            variables: {
+                document: files[0],
+            },
+        })
     }
 
     // Render
@@ -81,11 +70,12 @@ export default function StepThree({
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
+                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>
                             <Select
-                                options={docTypes}
+                                options={VerificationStepThreeDocumentTypes}
                                 value={docType}
                                 onChange={(v) => setDocType(v)}
                                 placeholder="Document type"
@@ -170,17 +160,17 @@ export default function StepThree({
 
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                            className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
                             onClick={() => setState({ step: step - 1 })}
                         >
                             back
                         </button>
                         <button
-                            disabled={files.length === 0}
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
+                            disabled={files.length === 0 || requestPending}
+                            className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                            onClick={uploadAddressMethod}
                         >
-                            next
+                            {requestPending ? "uploading. . ." : "next"}
                         </button>
                     </div>
                 </div>
