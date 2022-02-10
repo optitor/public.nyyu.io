@@ -25,10 +25,10 @@ export default function StepSeven() {
                 <div className="my-sm-5 py-sm-5 verify-step1">
                     <div className="text-sm-start text-center">
                         <p className="fs-25px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
-                            Thank you, your verification has been successfully submitted.
+                            Thank you, your verification result will be sent to your email soon.
                         </p>
                         <p className="fs-16px fw-bold text-light d-block d-sm-none">
-                            Thank you, your verification has been successfully submitted.
+                            Thank you, your verification result will be sent to your email soon.
                         </p>
                         <p className="fs-14px px-sm-2 px-4 mt-3">
                             As soley the data processor, NDB acknowledges your right to request
