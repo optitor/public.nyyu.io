@@ -255,7 +255,13 @@ export default function MarketTab() {
                             onClick={() => set_SortOption('price')}
                         />
                     </th>
-                    <th className="laptop-not text-center">Price Chart</th>
+                    <th className="laptop-not text-center">
+                        Price Chart
+                        <Icon icon={sortOption['percent'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
+                            className={sortOption['percent']? 'text-green': ''}
+                            onClick={() => set_SortOption('percent')}
+                        />
+                    </th>
                     <th className="mobile-not text-center">
                         Volume (24h)
                         <Icon icon={sortOption['volume'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
