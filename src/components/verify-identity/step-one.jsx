@@ -19,13 +19,11 @@ export default function StepOne({ step, setState, country, setCountry }) {
     const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
         onCompleted: (data) => {
             setRequestPending(false)
-            // setState({ step: step + 1 })
-            console.log(data)
+            if (data.uploadDocument === true) setState({ step: step + 1 })
         },
-        onError: err => {
-            if(err) setRequestPending(false);
-            console.log(err)
-        }
+        onError: (err) => {
+            if (err) setRequestPending(false)
+        },
     })
 
     // Methods
@@ -35,7 +33,6 @@ export default function StepOne({ step, setState, country, setCountry }) {
     }
     const uploadDocumentMethod = (e) => {
         e.preventDefault()
-        // console.log(files[0])
         setRequestPending(true)
         uploadDocument({
             variables: {
@@ -164,7 +161,7 @@ export default function StepOne({ step, setState, country, setCountry }) {
                             className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                             onClick={uploadDocumentMethod}
                         >
-                            {requestPending? 'uploading. . .': 'next'}
+                            {requestPending ? "uploading. . ." : "next"}
                         </button>
                     </div>
                 </div>

@@ -26,12 +26,7 @@ const VerificationPage = () => {
     const [firstName, setFirstName] = useState("")
     const [surname, setSurname] = useState("")
     const [stepThreeCountry, setStepThreeCountry] = useState(VerificationCountriesList[0])
-    const {
-        files: stepThreeFiles,
-        handleDragDropEvent: stepThreeHandleDragDropEvent,
-        setFiles: stepThreeSetFiles,
-        removeFile: stepThreeRemoveFile,
-    } = useFileUpload()
+
     const [address, setAddress] = useState("")
     const {
         files: stepFourFiles,
@@ -53,7 +48,7 @@ const VerificationPage = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
-    
+
     const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
         onCompleted: (data) => {
             setReference(data.createNewReference)
@@ -104,10 +99,6 @@ const VerificationPage = () => {
                                 setCountry={setStepThreeCountry}
                                 step={step}
                                 setState={setState}
-                                files={stepThreeFiles}
-                                setFiles={stepThreeSetFiles}
-                                handleDragDropEvent={stepThreeHandleDragDropEvent}
-                                removeFile={stepThreeRemoveFile}
                             />
                         )}
                         {step === 3 && (

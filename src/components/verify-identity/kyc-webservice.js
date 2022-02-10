@@ -9,3 +9,13 @@ export const UPLOAD_DOCUMENT = gql`
         )
     }
 `
+
+export const UPLOAD_ADDRESS = gql`
+    mutation(
+        $document: Upload
+    ) {
+        uploadAddress(
+            address: $document
+        )
+    }
+`

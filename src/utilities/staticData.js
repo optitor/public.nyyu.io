@@ -1446,3 +1446,38 @@ export const VerificationDocumentTypes = [
         value: "driver_license",
     },
 ]
+
+export const VerificationStepThreeDocumentTypes = [
+    {
+        label: "National ID",
+        value: "passport",
+    },
+    {
+        label: "Driving license",
+        value: "driving_license",
+    },
+    {
+        label: "Utility bill",
+        value: "utility_bill",
+    },
+    {
+        label: "Rent agreement",
+        value: "rent_agreement",
+    },
+    {
+        label: "Employer letter",
+        value: "employer_letter",
+    },
+    {
+        label: "Tax bill",
+        value: "tax_bill",
+    },
+    {
+        label: "Bank statement",
+        value: "bank_statement",
+    },
+    {
+        label: "Insurence agreement",
+        value: "insurance_agreement",
+    },
+]
