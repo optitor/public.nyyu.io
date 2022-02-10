@@ -68,7 +68,6 @@ const VerificationPage = () => {
     // Methods
     const submitKYCData = () => {
         setSubmitting(true)
-        console.log("country", country)
         sendVerifyRequest({
             variables: {
                 country: country.value,

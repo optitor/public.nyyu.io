@@ -13,15 +13,20 @@ export default function StepThree({ step, setState, country, setCountry }) {
     const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
     const [docType, setDocType] = useState(VerificationStepThreeDocumentTypes[0])
     const [requestPending, setRequestPending] = useState(false)
+    const [error, setError] = useState("")
 
     // Webservice
     const [uploadAddress] = useMutation(UPLOAD_ADDRESS, {
         onCompleted: (data) => {
             setRequestPending(false)
             if (data.uploadAddress === true) setState({ step: step + 1 })
+            else setError("Unable to upload the file!")
         },
         onError: (err) => {
-            if (err) setRequestPending(false)
+            if (err) {
+                setRequestPending(false)
+                setError("Unable to upload the file!")
+            }
         },
     })
 
@@ -65,6 +70,7 @@ export default function StepThree({ step, setState, country, setCountry }) {
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
+                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>

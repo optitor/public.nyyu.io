@@ -13,15 +13,20 @@ export default function StepSix({ step, setState, submitKYCData, submitting }) {
     const [selfieImage, setSelfieImage] = useState()
     const [openWebcam, setOpenWebcam] = useState(false)
     const [requestPending, setRequestPending] = useState(false)
+    const [error, setError] = useState("")
 
     // Webservice
     const [uploadSelfie] = useMutation(UPLOAD_SELFIE, {
         onCompleted: (data) => {
             setRequestPending(false)
             if (data.uploadSelfie === true) submitKYCData()
+            else setError("Unable to upload the file!")
         },
         onError: (err) => {
-            if (err) setRequestPending(false)
+            if (err) {
+                setRequestPending(false)
+                setError("Unable to upload the file!")
+            }
         },
     })
 
@@ -66,6 +71,7 @@ export default function StepSix({ step, setState, submitKYCData, submitting }) {
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
+                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="text-center mt-3 mt-sm-0">
                         <p className="fs-16px">
                             Face the camera. Make sure your face is visible including the ears.

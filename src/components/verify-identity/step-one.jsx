@@ -14,7 +14,7 @@ export default function StepOne({ step, setState, country, setCountry }) {
     const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
     const [docType, setDocType] = useState(VerificationDocumentTypes[0])
     const [requestPending, setRequestPending] = useState(false)
-    const [error, setError] = useState("Unable to upload the file!")
+    const [error, setError] = useState("")
 
     // Webservice
     const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
@@ -24,7 +24,10 @@ export default function StepOne({ step, setState, country, setCountry }) {
             else setError("Unable to upload the file!")
         },
         onError: (err) => {
-            if (err) setRequestPending(false)
+            if (err) {
+                setRequestPending(false)
+                setError("Unable to upload the file!")
+            }
         },
     })
 
