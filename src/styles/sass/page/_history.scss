@@ -854,6 +854,11 @@
         height: 10px;
         border-radius: 100%;
     }
+    td,
+    th {
+        padding: 10px 0px;
+        height: 70px;
+    }
 }
 
 .wallet-referral-tab {
@@ -930,10 +935,14 @@
 }
 
 .circle-light {
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
     background-color: #c4c4c4;
     border-radius: 50%;
+    @include mq("phone") {
+        width: 18px;
+        height: 18px;
+    }
 }
 
 .profile-value {

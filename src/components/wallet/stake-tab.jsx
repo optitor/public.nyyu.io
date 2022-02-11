@@ -49,7 +49,7 @@ export default function StakeTab() {
             </TabList>
             <TabPanel className="px-4">
                 <div className="py-3">
-                    <div className="d-flex justify-content-between px-2 flex-sm-row flex-column">
+                    <div className="d-flex justify-content-between px-0 px-sm-2 flex-sm-row flex-column">
                         <div className="d-flex flex-column justify-content-center">
                             <div className="d-flex align-items-center gap-3">
                                 <div className="fs-24px fw-500">Equity value(BTC)</div>
@@ -201,7 +201,7 @@ export default function StakeTab() {
                     </table>
                 </div>
             </TabPanel>
-            <TabPanel className="px-4">
+            <TabPanel className="px-2 px-sm-4">
                 <div className="d-flex py-3">
                     <table>
                         <thead className="border-bottom-1px">
