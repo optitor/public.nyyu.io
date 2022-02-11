@@ -4,6 +4,7 @@ import { FAQ_CONTENT, NEWS_CONTENT } from "../utilities/staticData"
 import Accordion from "../components/common/Accordion"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import {
+    ChatButton,
     SupportAuthenticator,
     SupportRecovery,
     SupportReset,
@@ -18,8 +19,11 @@ import ResetPhoneModal from "../components/support/reset-phone-modal"
 import DepositAssetModal from "../components/support/deposit-asset-modal"
 import DepositMissingModal from "../components/support/deposit-missing-modal"
 import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal"
+import DeleteAccountModal from "../components/profile/delete-account-modal"
+import ChatModal from "../components/support/chat-modal"
 
 const FAQ = () => {
+    // Containers
     const selfServiceData = [
         {
             id: 0,
@@ -65,6 +69,9 @@ const FAQ = () => {
     const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false)
     const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false)
     const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false)
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
+    const [isChatModalOpen, setIsChatModalOpen] = useState(false)
+    // Render
     return (
         <>
             <Seo title="Support" />
@@ -78,7 +85,9 @@ const FAQ = () => {
                         <TabPanel>
                             <Tabs className="sub-faq__tabs">
                                 <TabList className="sub-faq__tabs-list">
-                                    <Tab className="sub-faq__tabs-tab text-uppercase">self-service</Tab>
+                                    <Tab className="sub-faq__tabs-tab text-uppercase">
+                                        self-service
+                                    </Tab>
                                     <Tab className="sub-faq__tabs-tab text-uppercase">faq</Tab>
                                     <Tab className="sub-faq__tabs-tab text-uppercase">news</Tab>
                                 </TabList>
@@ -86,8 +95,11 @@ const FAQ = () => {
                                     <div className="row col-12 p-0 m-0">
                                         {selfServiceData.map((item, index) => {
                                             return (
-                                                <div key={index}
-                                                    className={`col-12 col-lg-6 ${index % 2 === 0 ? "ps-lg-0 pe-lg-1 px-0" : "pe-lg-0 ps-lg-1 px-0"
+                                                <div
+                                                    key={index}
+                                                    className={`col-12 col-lg-6 ${index % 2 === 0
+                                                        ? "ps-lg-0 pe-lg-1 px-0"
+                                                        : "pe-lg-0 ps-lg-1 px-0"
                                                         }`}
                                                     onClick={item.clickEvent}
                                                 >
@@ -99,6 +111,34 @@ const FAQ = () => {
                                             )
                                         })}
                                     </div>
+                                    <div className="d-flex justify-content-md-between mt-3">
+                                        <div>
+                                            <p
+                                                className="text-danger text-decoration-underline cursor-pointer"
+                                                onClick={() => setIsDeleteAccountModalOpen(true)}
+                                            >
+                                                Delete account
+                                            </p>
+                                        </div>
+                                        <div className="cursor-pointer position-absolute end-20px bottom-20px">
+                                            {
+                                                !isChatModalOpen && <img
+                                                    src={ChatButton}
+                                                    className="rounded-pill hover:scale-125"
+                                                    alt="Chat Button"
+                                                    onClick={() => setIsChatModalOpen(true)}
+                                                />
+                                            }
+                                            <ChatModal
+                                                isOpen={isChatModalOpen}
+                                                setIsOpen={setIsChatModalOpen}
+                                            />
+                                        </div>
+                                    </div>
+                                    <DeleteAccountModal
+                                        isDeleteAccountModalOpen={isDeleteAccountModalOpen}
+                                        setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
+                                    />
                                 </TabPanel>
                                 <TabPanel>
                                     <p className="question-label d-sm-block d-none">Question</p>
@@ -118,13 +158,12 @@ const FAQ = () => {
                             </Tabs>
                         </TabPanel>
                     </Tabs>
-                    {
-                        isResetPasswordModalOpen &&
+                    {isResetPasswordModalOpen && (
                         <ResetPasswordModal
                             isOpen={isResetPasswordModalOpen}
                             setIsOpen={setIsResetPasswordModalOpen}
                         />
-                    }
+                    )}
                     <UnlockAccountModal
                         isOpen={isUnlockAccountModalOpen}
                         setIsOpen={setIsUnlockAccountModalOpen}

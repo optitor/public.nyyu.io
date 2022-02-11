@@ -49,7 +49,7 @@ export default function StakeTab() {
             </TabList>
             <TabPanel className="px-4">
                 <div className="py-3">
-                    <div className="d-flex justify-content-between px-2 flex-sm-row flex-column">
+                    <div className="d-flex justify-content-between px-0 px-sm-2 flex-sm-row flex-column">
                         <div className="d-flex flex-column justify-content-center">
                             <div className="d-flex align-items-center gap-3">
                                 <div className="fs-24px fw-500">Equity value(BTC)</div>
@@ -141,67 +141,62 @@ export default function StakeTab() {
                 </div>
             </TabPanel>
             <TabPanel className="px-4">
-                <div className="d-flex py-3">
-                    <table>
-                        <thead className="border-bottom-1px">
-                            <tr className="text-center">
-                                <th className="text-start">Token</th>
-                                <th>Est. APY</th>
-                                <th></th>
-                                <th>Duration</th>
-                                <th></th>
-                                <th>Min. amount</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-center">
-                            {lockedStakingAssets.map((asset) => (
-                                <tr>
-                                    <td>
-                                        <div className="d-flex align-items-center fs-16px gap-2">
-                                            <div className="circle-light"></div>
-                                            <div className="fs-16px fw-500 text-uppercase">
-                                                {asset.label}
+                <div className="py-3 overflow-x-auto">
+                    <table className="wallet-transaction-table w-100 text-center mt-1">
+                        <tr className="text-center border-bottom-2-dark-gray">
+                            <th className="text-start">Token</th>
+                            <th>Est. APY</th>
+                            <th></th>
+                            <th>Duration</th>
+                            <th></th>
+                            <th>Min. amount</th>
+                            <th>Action</th>
+                        </tr>
+                        {lockedStakingAssets.map((asset) => (
+                            <tr className="border-bottom-2-dark-gray">
+                                <td>
+                                    <div className="d-flex align-items-center fs-16px gap-2">
+                                        <div className="circle-light"></div>
+                                        <div className="fs-16px fw-500 text-uppercase">
+                                            {asset.label}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="fs-14px text-success">{asset.apy}</td>
+                                <td className="fs-14px" colSpan={3}>
+                                    <div className="stake-duration">
+                                        {[
+                                            { id: 0, label: "Flexible" },
+                                            { id: 1, label: "30 days" },
+                                            { id: 2, label: "60 days" },
+                                            { id: 3, label: "90 days" },
+                                        ].map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className={`bg-black-10 ${
+                                                    asset.duration === item.id && "active-duration"
+                                                }`}
+                                                onClick={() =>
+                                                    changeDurationForAsset(asset.id, item.id)
+                                                }
+                                            >
+                                                {item.label}
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td className="fs-14px text-success">{asset.apy}</td>
-                                    <td className="fs-14px" colSpan={3}>
-                                        <div className="stake-duration">
-                                            {[
-                                                { id: 0, label: "Flexible" },
-                                                { id: 1, label: "30 days" },
-                                                { id: 2, label: "60 days" },
-                                                { id: 3, label: "90 days" },
-                                            ].map((item, index) => (
-                                                <div
-                                                    key={index}
-                                                    className={`bg-black-10 ${
-                                                        asset.duration === item.id &&
-                                                        "active-duration"
-                                                    }`}
-                                                    onClick={() =>
-                                                        changeDurationForAsset(asset.id, item.id)
-                                                    }
-                                                >
-                                                    {item.label}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </td>
-                                    <td className="fs-14px text-uppercase">{asset.minAmount}</td>
-                                    <td>
-                                        <button className="btn btn-outline-light rounded-0 fw-bold text-uppercase w-100 py-1">
-                                            stake
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+                                        ))}
+                                    </div>
+                                </td>
+                                <td className="fs-14px text-uppercase">{asset.minAmount}</td>
+                                <td>
+                                    <button className="btn btn-outline-light rounded-0 fw-bold text-uppercase w-100 py-1">
+                                        stake
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </table>
                 </div>
             </TabPanel>
-            <TabPanel className="px-4">
+            <TabPanel className="px-2 px-sm-4">
                 <div className="d-flex py-3">
                     <table>
                         <thead className="border-bottom-1px">

@@ -252,3 +252,27 @@ input[type="number"]::-webkit-outer-spin-button {
 .white-space-nowrap {
     white-space: nowrap !important;
 }
+
+.border-bottom-2-dark-gray {
+    border-bottom: 2px solid #464646;
+}
+
+.hover\:shadow-light {
+    transition: 500ms;
+    &:hover {
+        box-shadow: 0px 0px 8px lightgrey;
+    }
+}
+.hover\:scale-125 {
+    transition: 500ms;
+    &:hover {
+        transform: scale(1.25);
+    }
+}
+
+.bottom-20px {
+    bottom: 20px !important;
+}
+.end-20px {
+    right: 20px !important;
+}
