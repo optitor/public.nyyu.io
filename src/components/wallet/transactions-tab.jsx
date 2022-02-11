@@ -2,8 +2,8 @@ import React from "react"
 
 export default function Transactions() {
     return (
-        <div className="table-responsive">
-            <table className="wallet-transaction-table">
+        <div className="overflow-x-auto">
+            <table className="wallet-transaction-table w-100">
                 <tr className="border-bottom-2-dark-gray py-3">
                     <th scope="col">ID</th>
                     <th scope="col">Date</th>
