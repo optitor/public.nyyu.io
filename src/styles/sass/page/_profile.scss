@@ -297,6 +297,9 @@
                         .security-item-disable {
                             margin-right: 10px;
                             margin-top: 18px;
+                            @include mq("phone", max) {
+                                margin-right: 0px;
+                            }
                             .security-link {
                                 cursor: pointer;
                                 font-size: 13px;
