@@ -20,6 +20,7 @@ import DepositAssetModal from "../components/support/deposit-asset-modal"
 import DepositMissingModal from "../components/support/deposit-missing-modal"
 import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal"
 import DeleteAccountModal from "../components/profile/delete-account-modal"
+import ChatModal from "../components/support/chat-modal"
 
 const FAQ = () => {
     // Containers
@@ -69,7 +70,7 @@ const FAQ = () => {
     const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false)
     const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false)
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
-
+    const [isChatModalOpen, setIsChatModalOpen] = useState(false)
     // Render
     return (
         <>
@@ -96,11 +97,10 @@ const FAQ = () => {
                                             return (
                                                 <div
                                                     key={index}
-                                                    className={`col-12 col-lg-6 ${
-                                                        index % 2 === 0
-                                                            ? "ps-lg-0 pe-lg-1 px-0"
-                                                            : "pe-lg-0 ps-lg-1 px-0"
-                                                    }`}
+                                                    className={`col-12 col-lg-6 ${index % 2 === 0
+                                                        ? "ps-lg-0 pe-lg-1 px-0"
+                                                        : "pe-lg-0 ps-lg-1 px-0"
+                                                        }`}
                                                     onClick={item.clickEvent}
                                                 >
                                                     <div className="text-light border border-1 border-light text-center support-self-security-item col-12 mb-2">
@@ -120,11 +120,18 @@ const FAQ = () => {
                                                 Delete account
                                             </p>
                                         </div>
-                                        <div className="cursor-pointer">
-                                            <img
-                                                src={ChatButton}
-                                                className="hover:shadow-light rounded-pill"
-                                                alt="Chat Button"
+                                        <div className="cursor-pointer position-absolute end-20px bottom-20px">
+                                            {
+                                                !isChatModalOpen && <img
+                                                    src={ChatButton}
+                                                    className="rounded-pill hover:scale-125"
+                                                    alt="Chat Button"
+                                                    onClick={() => setIsChatModalOpen(true)}
+                                                />
+                                            }
+                                            <ChatModal
+                                                isOpen={isChatModalOpen}
+                                                setIsOpen={setIsChatModalOpen}
                                             />
                                         </div>
                                     </div>

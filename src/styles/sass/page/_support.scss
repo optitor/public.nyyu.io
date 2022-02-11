@@ -190,3 +190,25 @@
         }
     }
 }
+
+.chat-modal {
+    width: 379px;
+    height: 540px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #f8f8f8;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    &-header {
+        border-bottom: 2px solid #dbdbdb;
+        height: 60px;
+        width: 100%;
+        padding: 18px 12px;
+        .down-arrow {
+            width: 24px;
+            height: 24px;
+            margin-left: 8px;
+        }
+    }
+}
