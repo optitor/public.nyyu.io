@@ -124,7 +124,9 @@ export default function TwoFactorModal({
                         <ConnectMobile confirm={(number) => sendRequest2FA(1, number)} />
                     ) : (
                         <div className="tfa-select">
-                            <h3>Protect your account with 2-step verification</h3>
+                            <h3 className="tfa-select-title">
+                                Protect your account with 2-step verification
+                            </h3>
                             <p className="mt-4 mb-5">
                                 Each time you log in, in addition to your password, you will enter a
                                 one-time code you receive via text message or generate using an

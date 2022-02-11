@@ -148,6 +148,9 @@
 .twoFA-modal {
     max-width: 880px;
     padding: 27px 30px;
+    @include mq("phone", max) {
+        padding: 15px;
+    }
     h3 {
         margin: 0 auto;
         font-weight: bold;
@@ -170,7 +173,13 @@
         margin: 0 auto 50px;
         text-align: center;
         h3 {
+            margin-top: 0px;
             max-width: 445px;
+            @include mq("phone", max) {
+                margin-top: 10px;
+                font-size: 20px;
+                line-height: 30px;
+            }
         }
         .tfa-line {
             display: flex;
@@ -188,6 +197,9 @@
                 &_type {
                     font-size: 18px;
                     font-weight: 700;
+                    @include mq("phone", max) {
+                        font-size: 16px;
+                    }
                 }
                 &_preview {
                     font-size: 12px;
@@ -224,6 +236,12 @@
                         &:disabled {
                             opacity: 0.5;
                         }
+                    }
+
+                    @include mq("phone", max) {
+                        font-size: 14px;
+                        width: 100px;
+                        padding: 5px 10px;
                     }
                 }
             }
