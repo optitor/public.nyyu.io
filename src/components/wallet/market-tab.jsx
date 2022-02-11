@@ -88,7 +88,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                 </div>
             </td>
             <td className="text-center">
-                <p className="coin-price text-center">${price}</p>
+                <p className="coin-price text-center">{price? '$'+price: ''}</p>
                 <p
                     className={
                         numberSign(percent) === "+"
@@ -96,7 +96,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                             : "coin-percent txt-red text-center"
                     }
                 >
-                    {numberSign(percent) + percent === undefined ? "0" : percent}%
+                    {percent? `${numberSign(percent)}${percent}%`: ''}
                 </p>
             </td>
             <td className="laptop-not price-chart">
@@ -133,7 +133,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                     className="echarts-for-echarts"
                 />
             </td>
-            <td className="mobile-not text-center">${!volume ? 0 : volume}</td>
+            <td className="mobile-not text-center">{!volume ? '' : '$'+volume}</td>
         </tr>
     )
 }
@@ -175,7 +175,7 @@ export default function MarketTab() {
         SOL: {symbol: 'SOL', name: cryptoSymbolList['SOL']},
         DOGE: {symbol: 'DOGE', name: cryptoSymbolList['DOGE']},
         SHIB: {symbol: 'SHIB', name: cryptoSymbolList['SHIB']},
-        // DAI: {symbol: 'DAI', name: cryptoSymbolList['DAI']},
+        LTC: {symbol: 'LTC', name: cryptoSymbolList['LTC']},
         ADA: {symbol: 'ADA', name: cryptoSymbolList['ADA']},
         CAKE: {symbol: 'CAKE', name: cryptoSymbolList['CAKE']},
     };
