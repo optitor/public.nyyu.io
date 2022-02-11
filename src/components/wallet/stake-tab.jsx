@@ -117,20 +117,22 @@ export default function StakeTab() {
                                     { icon: BTC, label: "btc" },
                                     { icon: ETH, label: "eth" },
                                 ].map((item, index) => (
-                                    <tr key={index} className="w-sm-100 w-max-content">
+                                    <tr key={index} className="w-sm-100">
                                         <td className="pe-5">
-                                            <div className="d-flex align-items-center fs-16px gap-2">
+                                            <div className="d-flex align-items-center fs-12px gap-2">
                                                 <img src={item.icon} alt="btc image" />
                                                 <div className="fs-16px fw-500 text-uppercase">
                                                     {item.label}
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="fs-14px text-center pe-5">1 NDB</td>
-                                        <td className="fs-14px text-success text-end pe-5">
+                                        <td className="fs-12px text-center pe-5">1 NDB</td>
+                                        <td className="fs-12px text-success text-end pe-5">
                                             30.77%
                                         </td>
-                                        <td className="fs-14px text-end pe-5">0.06251 NDB</td>
+                                        <td className="fs-12px text-end pe-5 white-space-nowrap">
+                                            0.06251 NDB
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
