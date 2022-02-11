@@ -18,8 +18,10 @@ import ResetPhoneModal from "../components/support/reset-phone-modal"
 import DepositAssetModal from "../components/support/deposit-asset-modal"
 import DepositMissingModal from "../components/support/deposit-missing-modal"
 import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal"
+import DeleteAccountModal from "../components/profile/delete-account-modal"
 
 const FAQ = () => {
+    // Containers
     const selfServiceData = [
         {
             id: 0,
@@ -65,6 +67,9 @@ const FAQ = () => {
     const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false)
     const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false)
     const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false)
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
+
+    // Render
     return (
         <>
             <Seo title="Support" />
@@ -78,7 +83,9 @@ const FAQ = () => {
                         <TabPanel>
                             <Tabs className="sub-faq__tabs">
                                 <TabList className="sub-faq__tabs-list">
-                                    <Tab className="sub-faq__tabs-tab text-uppercase">self-service</Tab>
+                                    <Tab className="sub-faq__tabs-tab text-uppercase">
+                                        self-service
+                                    </Tab>
                                     <Tab className="sub-faq__tabs-tab text-uppercase">faq</Tab>
                                     <Tab className="sub-faq__tabs-tab text-uppercase">news</Tab>
                                 </TabList>
@@ -86,9 +93,13 @@ const FAQ = () => {
                                     <div className="row col-12 p-0 m-0">
                                         {selfServiceData.map((item, index) => {
                                             return (
-                                                <div key={index}
-                                                    className={`col-12 col-lg-6 ${index % 2 === 0 ? "ps-lg-0 pe-lg-1 px-0" : "pe-lg-0 ps-lg-1 px-0"
-                                                        }`}
+                                                <div
+                                                    key={index}
+                                                    className={`col-12 col-lg-6 ${
+                                                        index % 2 === 0
+                                                            ? "ps-lg-0 pe-lg-1 px-0"
+                                                            : "pe-lg-0 ps-lg-1 px-0"
+                                                    }`}
                                                     onClick={item.clickEvent}
                                                 >
                                                     <div className="text-light border border-1 border-light text-center support-self-security-item col-12 mb-2">
@@ -99,6 +110,21 @@ const FAQ = () => {
                                             )
                                         })}
                                     </div>
+                                    <div className="d-flex justify-content-md-between mt-3">
+                                        <div>
+                                            <p
+                                                className="text-danger text-decoration-underline cursor-pointer"
+                                                onClick={() => setIsDeleteAccountModalOpen(true)}
+                                            >
+                                                Delete account
+                                            </p>
+                                        </div>
+                                        <div className="text-light">CHAT</div>
+                                    </div>
+                                    <DeleteAccountModal
+                                        isDeleteAccountModalOpen={isDeleteAccountModalOpen}
+                                        setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
+                                    />
                                 </TabPanel>
                                 <TabPanel>
                                     <p className="question-label d-sm-block d-none">Question</p>
@@ -118,13 +144,12 @@ const FAQ = () => {
                             </Tabs>
                         </TabPanel>
                     </Tabs>
-                    {
-                        isResetPasswordModalOpen &&
+                    {isResetPasswordModalOpen && (
                         <ResetPasswordModal
                             isOpen={isResetPasswordModalOpen}
                             setIsOpen={setIsResetPasswordModalOpen}
                         />
-                    }
+                    )}
                     <UnlockAccountModal
                         isOpen={isUnlockAccountModalOpen}
                         setIsOpen={setIsUnlockAccountModalOpen}
