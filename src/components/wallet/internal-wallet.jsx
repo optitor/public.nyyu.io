@@ -57,9 +57,9 @@ export default function InternalWallet() {
     // console.log(myAssets)
     const totalBalance = useMemo(() => {
         if (!Object.values(myAssets)) return 0
-        return _.sumBy(Object.values(myAssets), "balance")?? 0;
+        return _.sumBy(Object.values(myAssets), "balance") ?? 0
     }, [myAssets])
-    
+
     useEffect(() => {
         const get_BTCPrice = () => {
             axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
@@ -86,10 +86,10 @@ export default function InternalWallet() {
     })
 
     useEffect(() => {
-        (async function () {
+        ;(async function () {
             const get_Balances_Price = async () => {
                 let assets = { ...myAssets }
-                if(_.isEqual(myAssets, InitialAssets)) return
+                if (_.isEqual(myAssets, InitialAssets)) return
 
                 for (const item of Object.values(myAssets)) {
                     let price = 0
@@ -186,21 +186,31 @@ export default function InternalWallet() {
                                 <NumberFormat
                                     value={
                                         btcOrUsd === "USD"
-                                            ? (totalBalance === 0? 0: totalBalance?.toFixed(2))
-                                            : (totalBalance === 0? 0: (totalBalance / BTCPrice).toFixed(9))
+                                            ? totalBalance === 0
+                                                ? 0
+                                                : totalBalance?.toFixed(2)
+                                            : totalBalance === 0
+                                            ? 0
+                                            : (totalBalance / BTCPrice).toFixed(9)
                                     }
                                     className="value"
                                     displayType="text"
                                     thousandSeparator={true}
                                     renderText={(value, props) => (
-                                        <p {...props}>{value} {btcOrUsd === "USD" ? "USD" : "BTC"}</p>
+                                        <p {...props}>
+                                            {value} {btcOrUsd === "USD" ? "USD" : "BTC"}
+                                        </p>
                                     )}
                                 />
                                 <NumberFormat
                                     value={
                                         btcOrUsd === "USD"
-                                            ? (totalBalance === 0? 0: (totalBalance / BTCPrice).toFixed(9))
-                                            : (totalBalance === 0? 0: totalBalance?.toFixed(2))
+                                            ? totalBalance === 0
+                                                ? 0
+                                                : (totalBalance / BTCPrice).toFixed(9)
+                                            : totalBalance === 0
+                                            ? 0
+                                            : totalBalance?.toFixed(2)
                                     }
                                     className="max-value mt-3"
                                     displayType="text"
@@ -215,7 +225,7 @@ export default function InternalWallet() {
                         )}
                     </div>
                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
-                        <div className="col-sm-6 pe-2">
+                        <div className="col-6 pe-2">
                             <button
                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
@@ -225,7 +235,7 @@ export default function InternalWallet() {
                                 deposit
                             </button>
                         </div>
-                        <div className="col-sm-6 ps-2">
+                        <div className="col-6 ps-2">
                             <button
                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
@@ -259,7 +269,9 @@ export default function InternalWallet() {
                                 <Asset item={item} key={item.tokenName} />
                             ))}
                             {Object.values(myAssets).length === 0 && (
-                                <div className="text-center fw-500 text-uppercase">No assets found</div>
+                                <div className="text-center fw-500 text-uppercase text-light">
+                                    No assets found
+                                </div>
                             )}
                         </tbody>
                     </table>

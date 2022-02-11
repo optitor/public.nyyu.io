@@ -129,7 +129,7 @@ const Menu = () => {
     else
         return (
             <nav className={active ? "menu menu--active" : "menu"}>
-                <div className="px-4 d-flex align-items-center justify-content-between">
+                <div className="px-4 d-flex align-items-sm-center align-items-start justify-content-between">
                     <div className="d-flex align-items-end gap-5 text-white text-uppercase fw-bold">
                         <Link to="/" className="menu__logo d-flex" title="Logo">
                             <img src={Logo} alt="NDB Brand Logo" />
@@ -205,7 +205,7 @@ const Menu = () => {
                     <div className="d-flex align-items-center header-right-side">
                         <div>
                             {!auth?.isLoggedIn() ? (
-                                <Link className="header-btn" to="/app/signin">
+                                <Link className="header-btn" to={ROUTES.signIn}>
                                     Sign In
                                 </Link>
                             ) : (
@@ -291,9 +291,6 @@ const Menu = () => {
                                                                 <div
                                                                     onClick={() => {
                                                                         setActive(false)
-                                                                        console.log(
-                                                                            "clicking the dressup btn"
-                                                                        )
                                                                         setIsDressUPModalOpen(true)
                                                                     }}
                                                                     className="fw-500 text-light fs-20px"
