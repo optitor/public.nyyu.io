@@ -15,7 +15,7 @@ export default function Transactions() {
                         Status
                     </th>
                 </tr>
-                {[...Array(15).keys()].map((item) => (
+                {[...Array(5).keys()].map((item) => (
                     <tr className="border-bottom-2-dark-gray my-5">
                         <td scope="row" className="fw-bold text-success pe-5 pe-sm-0">
                             BSNQ4X
