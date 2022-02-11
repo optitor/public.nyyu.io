@@ -269,7 +269,7 @@ export default function InternalWallet() {
                                 <Asset item={item} key={item.tokenName} />
                             ))}
                             {Object.values(myAssets).length === 0 && (
-                                <div className="text-center fw-500 text-uppercase">
+                                <div className="text-center fw-500 text-uppercase text-light">
                                     No assets found
                                 </div>
                             )}
