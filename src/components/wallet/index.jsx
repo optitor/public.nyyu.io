@@ -1,24 +1,24 @@
 /* eslint-disable */
 
-import React, { useReducer, useCallback, useState } from "react"
+import React, { useReducer, useCallback } from "react"
 import { useQuery } from "@apollo/client"
-import Header from "../components/header"
+import Header from "./../header"
 import Select, { components } from "react-select"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { BTC, DOGE, ETH, Airdrop, Address, Copy2, CloseIcon } from "../utilities/imgImport"
+import { BTC, DOGE, ETH, Airdrop, Address, Copy2, CloseIcon } from "../../utilities/imgImport"
 import Modal from "react-modal"
 import { CopyToClipboard } from "react-copy-to-clipboard"
-import { Input } from "../components/common/FormControl"
-import { useWindowSize } from "../utilities/customHook"
-import AirdropDetail from "../components/AirdropDetail"
-import MarketTab from "../components/wallet/market-tab"
-import Transactions from "../components/wallet/transactions-tab"
-import ReferralTab from "../components/wallet/referral-tab"
-import StakeTab from "../components/wallet/stake-tab"
-import BidActivityTab from "../components/wallet/bid-activity-tab"
-import { GET_BID_LIST_BY_USER } from "../apollo/graghqls/querys/Bid"
-import InternalWallet from "../components/wallet/internal-wallet"
-import Seo from "../components/seo"
+import { Input } from "../common/FormControl"
+import { useWindowSize } from "../../utilities/customHook"
+import AirdropDetail from "../AirdropDetail"
+import MarketTab from "../wallet/market-tab"
+import Transactions from "../wallet/transactions-tab"
+import ReferralTab from "../wallet/referral-tab"
+import StakeTab from "../wallet/stake-tab"
+import BidActivityTab from "../wallet/bid-activity-tab"
+import { GET_BID_LIST_BY_USER } from "./../../apollo/graghqls/querys/Bid"
+import InternalWallet from "../wallet/internal-wallet"
+import Seo from "../seo"
 
 const transactions = [
     {
@@ -160,7 +160,7 @@ const SelectedValue = (props) => {
     )
 }
 
-const History = () => {
+const Wallet = () => {
     const size = useWindowSize()
     const { data: bidList } = useQuery(GET_BID_LIST_BY_USER)
 
@@ -487,4 +487,4 @@ const History = () => {
     )
 }
 
-export default History
+export default Wallet
