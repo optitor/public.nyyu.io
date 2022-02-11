@@ -4,6 +4,7 @@ import { FAQ_CONTENT, NEWS_CONTENT } from "../utilities/staticData"
 import Accordion from "../components/common/Accordion"
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import {
+    ChatButton,
     SupportAuthenticator,
     SupportRecovery,
     SupportReset,
@@ -119,7 +120,13 @@ const FAQ = () => {
                                                 Delete account
                                             </p>
                                         </div>
-                                        <div className="text-light">CHAT</div>
+                                        <div className="cursor-pointer">
+                                            <img
+                                                src={ChatButton}
+                                                className="hover:shadow-light rounded-pill"
+                                                alt="Chat Button"
+                                            />
+                                        </div>
                                     </div>
                                     <DeleteAccountModal
                                         isDeleteAccountModalOpen={isDeleteAccountModalOpen}
