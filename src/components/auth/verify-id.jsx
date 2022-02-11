@@ -91,7 +91,8 @@ const VerificationPage = () => {
             <main className="verify-page">
                 <SimpleHeader />
                 <section className="d-flex justify-content-center align-items-start align-items-xl-center">
-                    {shuftReference.pending === false ? (
+                    {/* shuftReference.pending === false */}
+                    {true ? (
                         <div>
                             {step === -1 &&
                                 (shuftReference.reference !== null ? (
