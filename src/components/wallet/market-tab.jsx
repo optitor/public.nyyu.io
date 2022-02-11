@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useReducer, useEffect, useState } from "react"
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import axios from "axios"
@@ -8,6 +10,7 @@ import ReactECharts from "echarts-for-react"
 import { cryptoSymbol } from 'crypto-symbol';
 import _ from 'lodash';
 import {NickToken} from "./../../utilities/imgImport";
+import Loading from "./../admin/shared/Loading";
 
 const QUOTE = "USDT"
 
@@ -21,7 +24,7 @@ const RED = "#F6361A"
 
 const { get } = cryptoSymbol({})
 const cryptoSymbolList = get().SNPair;
-const REFRESH_TIME = 10;
+const REFRESH_TIME = 15;
 
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
@@ -164,6 +167,7 @@ export default function MarketTab() {
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [sortOption, setSortOption] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const InitialFavours = {
         BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
@@ -193,7 +197,7 @@ export default function MarketTab() {
         (async function() {
             let assets = { ...favours };
             let price = 0, percent = 0, volume = 0;
-            // if(!_.isEmpty(favoursData) && _.isEqual(favours, InitialFavours)) return;
+            if(_.isEmpty(favoursData)) setLoading(true);
             
             for(const favour of Object.values(favours)) {
                 const res = await axios.get(TICKER_24hr, { params: { symbol: favour.symbol + QUOTE } });
@@ -202,9 +206,10 @@ export default function MarketTab() {
                 volume = Number(res.data.quoteVolume);
                 assets[favour.symbol] = { ...favour, price, percent, volume };
             }
+            if(_.isEmpty(favoursData)) setLoading(false);
             setFavoursData({ ...assets })
         })()
-    }, [favours])
+    }, [favours, favoursData])
     // console.log(favoursData)
     // console.log(sortOption)
 
@@ -220,7 +225,7 @@ export default function MarketTab() {
         setFavours({ ...favours, [item.symbol]: item });
     };
 
-    // console.log(sortOption)
+    // console.log(loading)
     const set_SortOption = sortName => {
         setSortOption({[sortName]: (sortOption[sortName] === 'desc'? 'asc': 'desc')});
     }
@@ -272,7 +277,8 @@ export default function MarketTab() {
                 </tr>
             </thead>
             <tbody>
-                <>
+                {loading && <Loading />}
+                {!loading && (<>
                     {searchValue && _.map( _.filter(cryptoList, item => 
                         item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
                         item.symbol.toLowerCase().includes(searchValue.toLowerCase())
@@ -282,7 +288,7 @@ export default function MarketTab() {
                     {!searchValue && _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
                         <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     ))}
-                </>
+                </>)}
             </tbody>
         </table>
     );

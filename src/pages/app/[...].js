@@ -17,6 +17,9 @@ const VerifyCompany = lazy(() => import("../../components/auth/verify-company"))
 const Auction = lazy(() => import("../../components/auction"))
 const ChangePassword = lazy(() => import("../../components/auth/change-password"))
 const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
+const Wallet = lazy(() => import("../../components/wallet"))
+
+const NotFound = lazy(() => import("./../404"))
 
 const AuthRoute = ({ component: Component, location, ...rest }) => {
     const auth = useAuth()
@@ -48,9 +51,11 @@ const App = () => {
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
                         <Auction path="auction" />
+                        <Wallet path="wallet" />
 
                         <PrivateRoute path="/profile" component={Profile} />
                         <PrivateRoute path="select-figure" component={SelectFigure} />
+                        <NotFound default />
                     </Router>
                 </Suspense>
             )}
