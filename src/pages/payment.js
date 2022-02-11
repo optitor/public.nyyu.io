@@ -125,7 +125,7 @@ const Payment = () => {
             console.log("create cypto payment: ", data)
             const list = data.createCryptoPayment.pricing
             const addresses = data.createCryptoPayment.addresses
-            console.log(addresses)
+            // console.log(addresses)
             setAddressList(addresses)
             setPriceList(data.createCryptoPayment.pricing)
             setCurrentCoinAddress(addresses[0].value)
@@ -268,8 +268,8 @@ const Payment = () => {
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="mt-3 d-flex">
-                                            <div className="d-flex flex-row">
+                                        <div className="mt-3 d-flex justify-content-between">
+                                            <div className="d-flex flex-row ">
                                                 <CheckBox
                                                     type="checkbox"
                                                     name="allow_fraction"
@@ -360,7 +360,7 @@ const Payment = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="mt-3 d-flex">
+                                        <div className="mt-3 d-flex justify-content-between">
                                             <div className="d-flex flex-row text-white">
                                                 <CheckBox
                                                     type="checkbox"
@@ -453,7 +453,7 @@ const Payment = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="mt-3 d-flex">
+                                        <div className="mt-3 d-flex justify-content-between">
                                             <p className="d-flex flex-row">
                                                 <CheckBox
                                                     type="checkbox"
@@ -498,7 +498,7 @@ const Payment = () => {
                                     <div className="payment-content" style={{ display: "block" }}>
                                         <ConnectWalletTab />
 
-                                        <div className="mt-1 d-flex">
+                                        <div className="mt-1 d-flex justify-content-between">
                                             <p className="d-flex flex-row">
                                                 <CheckBox
                                                     type="checkbox"
