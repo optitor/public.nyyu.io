@@ -24,6 +24,7 @@ import { GET_USER_TIERS } from "./profile/profile-queries"
 import { QuestionMark } from "../utilities/imgImport"
 import AccountDetails from "./profile/account-details"
 import ReactTooltip from "react-tooltip"
+import { GET_SHUFTI_REF_PAYLOAD, GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
 const Profile = () => {
     const dispatch = useDispatch()
     const [userDataLoading, setUserDataLoading] = useState(true)
@@ -56,8 +57,15 @@ const Profile = () => {
             return setUserTiersLoading(false)
         },
     })
+    useQuery(GET_SHUFTI_REF_PAYLOAD, {
+        onCompleted: (data) => {
+            setShuftiReference(data.getShuftiRefPayload)
+        },
+        fetchPolicy: "network-only",
+        errorpolicy: "ignore",
+    })
 
-    const loadingPage = userDataLoading || userTiersLoading
+    const loadingPage = userDataLoading || userTiersLoading || shuftReference
     // Containers
     const user = userData?.getUser
     const twoStep = user?.security
@@ -65,6 +73,7 @@ const Profile = () => {
         : []
 
     const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel)
+    const [shuftReference, setShuftiReference] = useState(null)
     const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1)
 
     // Methods
@@ -212,6 +221,7 @@ const Profile = () => {
                                                         }
                                                         user={user}
                                                         displayName={displayName}
+                                                        shuftReference={shuftReference}
                                                     />
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">

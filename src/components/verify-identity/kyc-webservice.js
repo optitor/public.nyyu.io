@@ -42,7 +42,17 @@ export const SEND_VERIFY_REQUEST = gql`
 
 export const GET_SHUFT_REFERENCE = gql`
     {
-        getShuftReference {
+        getShuftiReference {
+            userId
+            reference
+            pending
+        }
+    }
+`
+
+export const GET_SHUFTI_REF_PAYLOAD = gql`
+    {
+        getShuftiRefPayload {
             userId
             reference
             verificationType
