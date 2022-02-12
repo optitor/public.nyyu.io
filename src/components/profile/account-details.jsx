@@ -35,10 +35,26 @@ export default function AccountDetails({
             <div className="row w-100 mx-auto">
                 <div className="col-6 col-sm-4 col-md-6 br">kyc/aml verification</div>
                 <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
-                    {user.verify.kycVerified === true ? (
+                    <div className="d-flex align-items-center gap-2">
+                        {user.verify.kycVerified === true ? (
+                            <div className="d-flex align-items-center gap-2">
+                                <div className="txt-green fs-15px fw-bold text-capitalize">
+                                    verified
+                                </div>
+                            </div>
+                        ) : (
+                            <Link
+                                to={ROUTES.verifyId}
+                                className="text-success fs-15px fw-500 text-underline text-capitalize"
+                            >
+                                Setup
+                            </Link>
+                        )}
+                    </div>
+                    {/* {user.verify.kycVerified === true ? (
                         <div className="d-flex align-items-center gap-2">
                             <div className="circle circle-success"></div>
-                            <div className="text-green fs-15px fw-bold text-capitalize">
+                            <div className="txt-green fs-15px fw-bold text-capitalize">
                                 verified
                             </div>
                         </div>
@@ -69,7 +85,7 @@ export default function AccountDetails({
                                 Setup
                             </Link>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>
