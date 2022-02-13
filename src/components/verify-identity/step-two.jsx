@@ -2,8 +2,11 @@ import React from "react"
 import { useState } from "react"
 import { VerifyIdStep2 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import { useVerification } from "./verification-context"
 
-export default function StepTwo({ step, setState, firstName, setFirstName, surname, setSurname }) {
+export default function StepTwo() {
+    // Containers
+    const verification = useVerification()
     const [firstNameError, setFirstNameError] = useState("")
     const [surnameError, setSurnameError] = useState("")
     const onNextButtonClick = (e) => {
@@ -11,15 +14,15 @@ export default function StepTwo({ step, setState, firstName, setFirstName, surna
         setFirstNameError("")
         setSurnameError("")
         let error = false
-        if (!firstName) {
+        if (!verification.firstName) {
             error = true
             setFirstNameError("Please fill out the first name field")
         }
-        if (!surname) {
+        if (!verification.surname) {
             error = true
             setSurnameError("Please fill out the surname field")
         }
-        if (!error) return setState({ step: step + 1 })
+        if (!error) return verification.nextStep()
     }
 
     // Render
@@ -58,8 +61,8 @@ export default function StepTwo({ step, setState, firstName, setFirstName, surna
                             <input
                                 type="text"
                                 className="form-control"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                value={verification.firstName}
+                                onChange={(e) => verification.setFirstName(e.target.value)}
                                 placeholder="First name"
                             />
                             <div className="text-danger mt-2">{firstNameError}</div>
@@ -69,8 +72,8 @@ export default function StepTwo({ step, setState, firstName, setFirstName, surna
                             <input
                                 type="text"
                                 className="form-control"
-                                value={surname}
-                                onChange={(e) => setSurname(e.target.value)}
+                                value={verification.surname}
+                                onChange={(e) => verification.setSurname(e.target.value)}
                                 placeholder="Surname name"
                             />
                             <div className="text-danger mt-2">{surnameError}</div>
@@ -80,7 +83,7 @@ export default function StepTwo({ step, setState, firstName, setFirstName, surna
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
                         <button
                             className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
+                            onClick={() => verification.previousStep()}
                         >
                             back
                         </button>

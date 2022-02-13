@@ -58,14 +58,14 @@ export default function AccountDetails({
                                 verified
                             </div>
                         </div>
-                    ) : shuftReference.pending ? (
+                    ) : shuftReference?.pending ? (
                         <div className="d-flex align-items-center gap-2">
                             <div className="circle circle-warning"></div>
                             <div className="text-light fs-15px fw-500 text-capitalize">
                                 under review
                             </div>
                         </div>
-                    ) : shuftReference.reference ? (
+                    ) : shuftReference?.reference ? (
                         <div className="d-flex align-items-center gap-2">
                             <div className="circle circle-danger"></div>
                             <Link

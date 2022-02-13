@@ -4,8 +4,10 @@ import { ROUTES } from "../../utilities/routes"
 import PrivacyPolicy from "./privacy-policy"
 import languages from "../../assets/lang/languages.json"
 import SelectLang from "./select-lang"
+import { useVerification } from "./verification-context"
 
 export default function PrimaryStep({ step, setState }) {
+    const verification = useVerification()
     const [langKey, setLangKey] = useState("en")
     const language = languages[langKey]
     const [accept, setAccept] = useState(false)
@@ -42,7 +44,7 @@ export default function PrimaryStep({ step, setState }) {
                 <button
                     disabled={!accept}
                     className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                    onClick={() => setState({ step: step + 1 })}
+                    onClick={() => verification.nextStep()}
                 >
                     next
                 </button>

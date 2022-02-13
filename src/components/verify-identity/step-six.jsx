@@ -5,9 +5,11 @@ import Loading from "../common/Loading"
 import CustomSpinner from "../common/custom-spinner"
 import { useMutation } from "@apollo/client"
 import { UPLOAD_SELFIE } from "./kyc-webservice"
+import { useVerification } from "./verification-context"
 
-export default function StepSix({ step, setState, submitKYCData, submitting }) {
+export default function StepSix({ submitKYCData }) {
     // Containers
+    const verification = useVerification()
     const webcamRef = useRef(null)
     const [loading, setLoading] = useState(true)
     const [selfieImage, setSelfieImage] = useState()
@@ -103,7 +105,7 @@ export default function StepSix({ step, setState, submitKYCData, submitting }) {
                         {!selfieImage && (
                             <button
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={() => setState({ step: step - 1 })}
+                                onClick={() => verification.previousStep()}
                             >
                                 back
                             </button>
@@ -128,11 +130,11 @@ export default function StepSix({ step, setState, submitKYCData, submitting }) {
                         )}
                         {selfieImage && !openWebcam && (
                             <button
-                                disabled={submitting}
+                                disabled={verification.submitting}
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
                                 onClick={uploadSelfieMethod}
                             >
-                                {submitting ? (
+                                {verification.submitting ? (
                                     <div className="mt-3px">
                                         <CustomSpinner />
                                     </div>

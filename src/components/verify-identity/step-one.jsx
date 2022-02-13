@@ -1,17 +1,17 @@
 import Select from "react-select"
 import Loading from "../common/Loading"
 import React, { useState } from "react"
-import useFileUpload from "react-use-file-upload"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 import { VerificationDocumentTypes } from "../../utilities/staticData"
 import { useMutation } from "@apollo/client"
 import { UPLOAD_DOCUMENT } from "./kyc-webservice"
+import { useVerification } from "./verification-context"
 
-export default function StepOne({ step, setState, country, setCountry }) {
+export default function StepOne() {
     // Containers
+    const verification = useVerification()
     const [loading, setLoading] = useState(true)
-    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
     const [docType, setDocType] = useState(VerificationDocumentTypes[0])
     const [requestPending, setRequestPending] = useState(false)
     const [error, setError] = useState("")
@@ -20,7 +20,7 @@ export default function StepOne({ step, setState, country, setCountry }) {
     const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
         onCompleted: (data) => {
             setRequestPending(false)
-            if (data.uploadDocument === true) setState({ step: step + 1 })
+            if (data.uploadDocument === true) verification.nextStep()
             else setError("Unable to upload the file!")
         },
         onError: (err) => {
@@ -33,15 +33,15 @@ export default function StepOne({ step, setState, country, setCountry }) {
 
     // Methods
     const onUserDropFile = (e) => {
-        handleDragDropEvent(e)
-        setFiles(e, "w")
+        verification.documentProof.handleDragDropEvent(e)
+        verification.documentProof.setFiles(e, "w")
     }
     const uploadDocumentMethod = (e) => {
         e.preventDefault()
         setRequestPending(true)
         uploadDocument({
             variables: {
-                document: files[0],
+                document: verification.documentProof.files[0],
             },
         })
     }
@@ -80,8 +80,8 @@ export default function StepOne({ step, setState, country, setCountry }) {
                             <p className="form-label mt-4">Country issuing</p>
                             <Select
                                 options={VerificationCountriesList}
-                                value={country}
-                                onChange={(v) => setCountry(v)}
+                                value={verification.country}
+                                onChange={(v) => verification.setCountry(v)}
                                 placeholder="Choose country"
                             />
                             <div className="requirements">
@@ -111,15 +111,21 @@ export default function StepOne({ step, setState, country, setCountry }) {
                                         <label
                                             htmlFor="file-upload-input"
                                             className="file-upload cursor-pointer"
-                                            onDragEnter={handleDragDropEvent}
-                                            onDragOver={handleDragDropEvent}
+                                            onDragEnter={
+                                                verification.documentProof.handleDragDropEvent
+                                            }
+                                            onDragOver={
+                                                verification.documentProof.handleDragDropEvent
+                                            }
                                             onDrop={onUserDropFile}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
-                                                onChange={(e) => setFiles(e, "w")}
+                                                onChange={(e) =>
+                                                    verification.documentProof.setFiles(e, "w")
+                                                }
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -129,9 +135,9 @@ export default function StepOne({ step, setState, country, setCountry }) {
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {files[0] ? (
+                                                {verification.documentProof.files[0] ? (
                                                     <p className="mt-30px">
-                                                        {files[0].name}{" "}
+                                                        {verification.documentProof.files[0].name}{" "}
                                                         <span className="txt-green fw-normal">
                                                             selected
                                                         </span>
@@ -159,12 +165,14 @@ export default function StepOne({ step, setState, country, setCountry }) {
                         <div className="d-flex justify-content-center gap-3 col-md-12">
                             <button
                                 className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={() => setState({ step: step - 1 })}
+                                onClick={() => verification.previousStep()}
                             >
                                 back
                             </button>
                             <button
-                                disabled={files.length === 0 || requestPending}
+                                disabled={
+                                    verification.documentProof.files.length === 0 || requestPending
+                                }
                                 className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                                 onClick={uploadDocumentMethod}
                             >

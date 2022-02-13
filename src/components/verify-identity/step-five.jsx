@@ -1,21 +1,21 @@
 import React, { useState } from "react"
 import Loading from "../common/Loading"
 import { useMutation } from "@apollo/client"
-import useFileUpload from "react-use-file-upload"
 import { UPLOAD_CONSENT } from "./kyc-webservice"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
+import { useVerification } from "./verification-context"
 
-export default function StepOne({ step, setState }) {
+export default function StepOne() {
     // Containers
+    const verification = useVerification()
     const [requestPending, setRequestPending] = useState(false)
-    const { files, handleDragDropEvent, setFiles, removeFile } = useFileUpload()
     const [error, setError] = useState("")
 
     // Webservice
     const [uploadConsent] = useMutation(UPLOAD_CONSENT, {
         onCompleted: (data) => {
             setRequestPending(false)
-            if (data.uploadConsent === true) setState({ step: step + 1 })
+            if (data.uploadConsent === true) verification.nextStep()
             else setError("Unable to upload the file!")
         },
         onError: (err) => {
@@ -28,15 +28,15 @@ export default function StepOne({ step, setState }) {
 
     // Methods
     const onUserDropFile = (e) => {
-        handleDragDropEvent(e)
-        setFiles(e, "w")
+        verification.consent.handleDragDropEvent(e)
+        verification.consent.setFiles(e, "w")
     }
     const uploadConsentMethod = (e) => {
         e.preventDefault()
         setRequestPending(true)
         uploadConsent({
             variables: {
-                consent: files[0],
+                consent: verification.consent.files[0],
             },
         })
     }
@@ -98,15 +98,17 @@ export default function StepOne({ step, setState }) {
                                         <label
                                             htmlFor="file-upload-input"
                                             className="file-upload cursor-pointer"
-                                            onDragEnter={handleDragDropEvent}
-                                            onDragOver={handleDragDropEvent}
+                                            onDragEnter={verification.consent.handleDragDropEvent}
+                                            onDragOver={verification.consent.handleDragDropEvent}
                                             onDrop={onUserDropFile}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
-                                                onChange={(e) => setFiles(e, "w")}
+                                                onChange={(e) =>
+                                                    verification.consent.setFiles(e, "w")
+                                                }
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -116,9 +118,9 @@ export default function StepOne({ step, setState }) {
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {files[0] ? (
+                                                {verification.consent.files[0] ? (
                                                     <p className="mt-30px">
-                                                        {files[0].name}{" "}
+                                                        {verification.consent.files[0].name}{" "}
                                                         <span className="txt-green fw-bold">
                                                             selected
                                                         </span>
@@ -145,12 +147,12 @@ export default function StepOne({ step, setState }) {
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
                             className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
+                            onClick={() => verification.previousStep()}
                         >
                             back
                         </button>
                         <button
-                            disabled={files.length === 0 || requestPending}
+                            disabled={verification.consent.files.length === 0 || requestPending}
                             className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                             onClick={uploadConsentMethod}
                         >

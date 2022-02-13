@@ -1,8 +1,8 @@
 import { Link } from "gatsby"
-import React, { useState } from "react"
-import { VerifyIdStep7 } from "../../utilities/imgImport"
-import { ROUTES } from "../../utilities/routes"
 import Loading from "../common/Loading"
+import React, { useState } from "react"
+import { ROUTES } from "../../utilities/routes"
+import { VerifyIdStep7 } from "../../utilities/imgImport"
 
 export default function StepSeven() {
     // Render
