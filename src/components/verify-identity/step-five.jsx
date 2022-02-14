@@ -8,41 +8,15 @@ import { useVerification } from "./verification-context"
 export default function StepOne() {
     // Containers
     const verification = useVerification()
-    const [requestPending, setRequestPending] = useState(false)
-    const [error, setError] = useState("")
-
-    // Webservice
-    const [uploadConsent] = useMutation(UPLOAD_CONSENT, {
-        onCompleted: (data) => {
-            setRequestPending(false)
-            if (data.uploadConsent === true) verification.nextStep()
-            else setError("Unable to upload the file!")
-        },
-        onError: (err) => {
-            if (err) {
-                setError("Unable to upload the file!")
-                setRequestPending(false)
-            }
-        },
-    })
+    const [loading, setLoading] = useState(true)
 
     // Methods
     const onUserDropFile = (e) => {
         verification.consent.handleDragDropEvent(e)
         verification.consent.setFiles(e, "w")
     }
-    const uploadConsentMethod = (e) => {
-        e.preventDefault()
-        setRequestPending(true)
-        uploadConsent({
-            variables: {
-                consent: verification.consent.files[0],
-            },
-        })
-    }
 
     // Render
-    const [loading, setLoading] = useState(true)
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -63,7 +37,6 @@ export default function StepOne() {
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
-                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
                         <div className="col-md-6 col-12 mt-5 mt-sm-0">
                             <p>
@@ -152,11 +125,11 @@ export default function StepOne() {
                             back
                         </button>
                         <button
-                            disabled={verification.consent.files.length === 0 || requestPending}
+                            disabled={verification.consent.files.length === 0}
                             className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={uploadConsentMethod}
+                            onClick={() => verification.nextStep()}
                         >
-                            {requestPending ? "uploading. . ." : "next"}
+                            next
                         </button>
                     </div>
                 </div>
