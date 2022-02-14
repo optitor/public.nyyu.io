@@ -25,6 +25,7 @@ import { QuestionMark } from "../utilities/imgImport"
 import AccountDetails from "./profile/account-details"
 import ReactTooltip from "react-tooltip"
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
+import { getShuftiStatusByReference } from "../utilities/utility-methods"
 const Profile = () => {
     const dispatch = useDispatch()
     const [userDataLoading, setUserDataLoading] = useState(true)

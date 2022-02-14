@@ -3,14 +3,13 @@ import SimpleHeader from "../header/simple-header"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import React, { useState, useEffect } from "react"
-import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
-import { GET_SHUFTI_REF_PAYLOAD } from "../verify-identity/kyc-webservice"
+import { GET_SHUFTI_REF_PAYLOAD, INSERT_UPDATE_REFERENCE } from "../verify-identity/kyc-webservice"
 import VerificationProvider from "../verify-identity/verification-context"
 import VerificationSwitch from "../verify-identity/verification-switch"
-
+import { v4 as uuidv4 } from "uuid"
 const VerificationPage = () => {
     // Containers
-    const [reference, setReference] = useState(null)
+    const [reference, setReference] = useState(uuidv4())
     const [userEmail, setUserEmail] = useState("")
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null)
     const loadingData = !(userEmail && reference && shuftReferencePayload)
@@ -30,15 +29,15 @@ const VerificationPage = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
-    const [createNewReference] = useMutation(CREATE_NEW_REFERENCE, {
-        onCompleted: (data) => {
-            setReference(data.createNewReference)
-        },
-    })
+    const [insertUpdateReference] = useMutation(INSERT_UPDATE_REFERENCE)
 
     // Methods
     useEffect(() => {
-        createNewReference()
+        insertUpdateReference({
+            variables: {
+                reference,
+            },
+        })
     }, [])
 
     if (loadingData) return <Loading />

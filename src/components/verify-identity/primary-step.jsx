@@ -15,7 +15,7 @@ export default function PrimaryStep() {
 
     // Methods
     useEffect(() => {
-        verification.shuftReferencePayload?.reference && verification.nextStep()
+        verification.shuftReferencePayload !== null && verification.nextStep()
     }, [])
 
     // Render

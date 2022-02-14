@@ -37,7 +37,10 @@ export default function StepSix({ reference }) {
             country: verification.country.value,
             language: "EN",
             verification_mode: "any",
-            document: {
+        }
+
+        if (verification.shuftReferencePayload?.docStatus === false)
+            payload["document"] = {
                 proof: documentProof,
                 supported_types: ["id_card", "passport", "driving_license"],
                 verification_instructions: {
@@ -49,8 +52,10 @@ export default function StepSix({ reference }) {
                     allow_scanned: "1",
                 },
                 allow_offline: "1",
-            },
-            address: {
+            }
+
+        if (verification.shuftReferencePayload?.addrStatus === false)
+            payload["address"] = {
                 full_address: verification.address,
                 proof: addressProof,
                 supported_types: [
@@ -70,26 +75,26 @@ export default function StepSix({ reference }) {
                     allow_scanned: "1",
                 },
                 allow_offline: "1",
-            },
-            consent: {
+            }
+
+        if (verification.shuftReferencePayload?.conStatus === false)
+            payload["consent"] = {
                 proof: consentProof,
                 text: "I & NDB",
                 supported_types: ["printed", "handwritten"],
                 allow_offline: "1",
-            },
-            face: {
+            }
+        if (verification.shuftReferencePayload?.selfieStatus === false)
+            payload["face"] = {
                 proof: selfieImage,
                 allow_offline: "1",
+            }
+
+        axios.post(verification.shuftiProBaseUrl, payload, {
+            headers: {
+                Authorization: `Basic ${token}`,
             },
-        }
-        axios
-            .post(verification.shuftiProBaseUrl, payload, {
-                headers: {
-                    Authorization: `Basic ${token}`,
-                },
-            })
-            .then((response) => {})
-            .catch((err) => {})
+        })
 
         verification.setSubmitting(false)
         verification.nextStep()

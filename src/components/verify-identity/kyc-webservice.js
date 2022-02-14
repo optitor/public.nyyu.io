@@ -64,3 +64,9 @@ export const GET_SHUFTI_REF_PAYLOAD = gql`
         }
     }
 `
+
+export const INSERT_UPDATE_REFERENCE = gql`
+    mutation ($reference: String) {
+        insertOrUpdateReference(reference: $reference)
+    }
+`
