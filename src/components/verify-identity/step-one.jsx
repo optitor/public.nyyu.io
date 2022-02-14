@@ -5,7 +5,6 @@ import { VerificationCountriesList } from "../../utilities/countries-list"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 import { VerificationDocumentTypes } from "../../utilities/staticData"
 import { useVerification } from "./verification-context"
-import { useEffect } from "react"
 
 export default function StepOne() {
     // Containers
@@ -19,11 +18,8 @@ export default function StepOne() {
         verification.documentProof.setFiles(e, "w")
     }
 
-    useEffect(() => {
-        verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
-    }, [])
-
     // Render
+    verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { useState } from "react"
 import { VerifyIdStep2 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
@@ -26,13 +26,8 @@ export default function StepTwo() {
         if (!error) return verification.nextStep()
     }
 
-    // Methods
-    useEffect(() => {
-        verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
-    }, [])
-
     // Render
-
+    verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>

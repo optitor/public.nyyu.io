@@ -1,5 +1,5 @@
 import Select from "react-select"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep3 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
 import { VerificationCountriesList } from "../../utilities/countries-list"
@@ -17,11 +17,9 @@ export default function StepThree() {
         verification.addressProof.handleDragDropEvent(e)
         verification.addressProof.setFiles(e, "w")
     }
-    useEffect(() => {
-        verification.shuftReferencePayload?.addrStatus === true && verification.nextStep()
-    }, [])
 
     // Render
+    verification.shuftReferencePayload?.addrStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>

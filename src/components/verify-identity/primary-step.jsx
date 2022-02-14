@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Link } from "gatsby"
 import { ROUTES } from "../../utilities/routes"
 import PrivacyPolicy from "./privacy-policy"
@@ -13,12 +13,8 @@ export default function PrimaryStep() {
     const language = languages[langKey]
     const [accept, setAccept] = useState(false)
 
-    // Methods
-    useEffect(() => {
-        verification.shuftReferencePayload !== null && verification.nextStep()
-    }, [])
-
     // Render
+    verification.shuftReferencePayload !== null && verification.nextStep()
     return (
         <div className="verify-step0 col-sm-12 col-10 mx-auto mt-5 mt-sm-0">
             <SelectLang
