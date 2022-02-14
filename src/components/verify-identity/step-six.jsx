@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react"
+import axios from "axios"
 import Webcam from "react-webcam"
-import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import React, { useRef, useState } from "react"
 import CustomSpinner from "../common/custom-spinner"
 import { useVerification } from "./verification-context"
 import { getBase64 } from "../../utilities/utility-methods"
-import axios from "axios"
+import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 
 export default function StepSix({ reference }) {
     // Containers
@@ -87,11 +87,15 @@ export default function StepSix({ reference }) {
                 allow_offline: "1",
             }
 
-        axios.post(verification.shuftiProBaseUrl, payload, {
-            headers: {
-                Authorization: `Basic ${token}`,
-            },
-        })
+        axios
+            .post(verification.shuftiProBaseUrl, payload, {
+                headers: {
+                    Authorization: `Basic ${token}`,
+                },
+            })
+            .catch((error) => {
+                console.log(error)
+            })
 
         verification.setSubmitting(false)
         verification.nextStep()
