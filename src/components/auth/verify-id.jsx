@@ -13,10 +13,9 @@ const VerificationPage = () => {
     // Containers
     const [reference, setReference] = useState(null)
     const [userEmail, setUserEmail] = useState("")
-
     const [shuftReference, setShuftReference] = useState(null)
-
     const loadingData = !(userEmail && reference && shuftReference)
+
     // WebService
     useQuery(GET_USER, {
         onCompleted: (res) => {
@@ -39,7 +38,6 @@ const VerificationPage = () => {
     })
 
     // Methods
-
     useEffect(() => {
         createNewReference()
     }, [])

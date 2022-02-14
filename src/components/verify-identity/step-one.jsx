@@ -4,8 +4,6 @@ import React, { useState } from "react"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 import { VerificationDocumentTypes } from "../../utilities/staticData"
-import { useMutation } from "@apollo/client"
-import { UPLOAD_DOCUMENT } from "./kyc-webservice"
 import { useVerification } from "./verification-context"
 
 export default function StepOne() {
@@ -13,37 +11,11 @@ export default function StepOne() {
     const verification = useVerification()
     const [loading, setLoading] = useState(true)
     const [docType, setDocType] = useState(VerificationDocumentTypes[0])
-    const [requestPending, setRequestPending] = useState(false)
-    const [error, setError] = useState("")
-
-    // Webservice
-    const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
-        onCompleted: (data) => {
-            setRequestPending(false)
-            if (data.uploadDocument === true) verification.nextStep()
-            else setError("Unable to upload the file!")
-        },
-        onError: (err) => {
-            if (err) {
-                setRequestPending(false)
-                setError("Unable to upload the file!")
-            }
-        },
-    })
 
     // Methods
     const onUserDropFile = (e) => {
         verification.documentProof.handleDragDropEvent(e)
         verification.documentProof.setFiles(e, "w")
-    }
-    const uploadDocumentMethod = (e) => {
-        e.preventDefault()
-        setRequestPending(true)
-        uploadDocument({
-            variables: {
-                document: verification.documentProof.files[0],
-            },
-        })
     }
 
     // Render
@@ -67,7 +39,6 @@ export default function StepOne() {
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
-                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>
@@ -170,13 +141,11 @@ export default function StepOne() {
                                 back
                             </button>
                             <button
-                                disabled={
-                                    verification.documentProof.files.length === 0 || requestPending
-                                }
+                                disabled={verification.documentProof.files.length === 0}
                                 className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                                onClick={uploadDocumentMethod}
+                                onClick={() => verification.nextStep()}
                             >
-                                {requestPending ? "uploading. . ." : "next"}
+                                next
                             </button>
                         </div>
                     </div>
