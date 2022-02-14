@@ -23,7 +23,7 @@ export default function StepSeven() {
                     />
                 </div>
                 <div className="my-sm-5 py-sm-5 verify-step1">
-                    <div className="text-sm-start text-center">
+                    <div className="text-center">
                         <p className="fs-25px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
                             Thank you, your verification result will be sent to your email soon.
                         </p>

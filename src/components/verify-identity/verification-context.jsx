@@ -15,7 +15,7 @@ const VerificationProvider = ({ children }) => {
     const [submitting, setSubmitting] = useState(false)
     const [country, setCountry] = useState(VerificationCountriesList[0])
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null)
-    const [step, setStep] = useState(-1) // --> initial value is -1
+    const [step, setStep] = useState(6) // --> initial value is -1
     const {
         files: documentFiles,
         handleDragDropEvent: documentHandleDragDropEvent,
