@@ -50,7 +50,7 @@ const VerificationPage = () => {
                 <section className="d-flex justify-content-center align-items-start align-items-xl-center">
                     {shuftReference.pending === false ? (
                         <VerificationProvider>
-                            <VerificationSwitch />
+                            <VerificationSwitch reference={reference} />
                         </VerificationProvider>
                     ) : (
                         <div className="text-light h4 fw-500 text-center px-4 px-sm-0 mt-5 mt-sm-0">

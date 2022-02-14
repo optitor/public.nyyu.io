@@ -3,11 +3,11 @@ import Webcam from "react-webcam"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
 import CustomSpinner from "../common/custom-spinner"
-import { useMutation } from "@apollo/client"
-import { UPLOAD_SELFIE } from "./kyc-webservice"
 import { useVerification } from "./verification-context"
+import { getBase64 } from "../../utilities/utility-methods"
+import axios from "axios"
 
-export default function StepSix({ submitKYCData }) {
+export default function StepSix({ reference }) {
     // Containers
     const verification = useVerification()
     const webcamRef = useRef(null)
@@ -20,6 +20,77 @@ export default function StepSix({ submitKYCData }) {
         const fooImage = webcamRef.current.getScreenshot()
         setSelfieImage(fooImage)
         return setOpenWebcam(false)
+    }
+
+    const sendShuftiRequest = async () => {
+        verification.setSubmitting(true)
+        const documentProof = await getBase64(verification.documentProof.files[0])
+        const addressProof = await getBase64(verification.addressProof.files[0])
+        const consentProof = await getBase64(verification.consentProof.files[0])
+        const token = btoa(`${verification.clientId}:${verification.secret}`)
+        const payload = {
+            reference: `${reference}`,
+            callback_url: verification.callbackUrl,
+            redirect_url: verification.redirectUrl,
+            country: verification.country.value,
+            language: "EN",
+            verification_mode: "any",
+            document: {
+                proof: documentProof,
+                supported_types: ["id_card", "passport", "driving_license"],
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
+                },
+                allow_offline: "1",
+            },
+            address: {
+                full_address: verification.address,
+                proof: addressProof,
+                supported_types: [
+                    "utility_bill",
+                    "bank_statement",
+                    "driving_license",
+                    "rent_agreement",
+                    "employer_letter",
+                    "tax_bill",
+                ],
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
+                },
+                allow_offline: "1",
+            },
+            consent: {
+                proof: consentProof,
+                text: "I & NDB",
+                supported_types: ["printed", "handwritten"],
+                allow_offline: "1",
+            },
+            face: {
+                proof: selfieImage,
+                allow_offline: "1",
+            },
+        }
+        axios
+            .post(verification.shuftiProBaseUrl, payload, {
+                headers: {
+                    Authorization: `Basic ${token}`,
+                },
+            })
+            .then((response) => {})
+            .catch((err) => {})
+
+        verification.setSubmitting(false)
+        verification.nextStep()
     }
 
     // Render
@@ -101,7 +172,7 @@ export default function StepSix({ submitKYCData }) {
                             <button
                                 disabled={verification.submitting}
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={() => verification.nextStep()}
+                                onClick={sendShuftiRequest}
                             >
                                 {verification.submitting ? (
                                     <div className="mt-3px">

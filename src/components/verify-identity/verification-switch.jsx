@@ -9,7 +9,7 @@ import StepSeven from "../verify-identity/step-seven"
 import PrimaryStep from "../verify-identity/primary-step"
 import { useVerification } from "./verification-context"
 
-export default function VerificationSwitch() {
+export default function VerificationSwitch({ reference }) {
     const verification = useVerification()
     return (
         <>
@@ -19,7 +19,7 @@ export default function VerificationSwitch() {
             {verification.step === 2 && <StepThree />}
             {verification.step === 3 && <StepFour />}
             {verification.step === 4 && <StepFive />}
-            {verification.step === 5 && <StepSix submitKYCData={() => {}} />}
+            {verification.step === 5 && <StepSix reference={reference} />}
             {verification.step === 6 && <StepSeven />}
         </>
     )

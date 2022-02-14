@@ -1,6 +1,7 @@
 import useFileUpload from "react-use-file-upload"
 import React, { useContext, useState } from "react"
 import { VerificationCountriesList } from "../../utilities/countries-list"
+import { CLIENT_ID, SECRET } from "../../utilities/staticData"
 
 export const VerificationContext = React.createContext()
 
@@ -30,6 +31,14 @@ const VerificationProvider = ({ children }) => {
         setFiles: consentSetFiles,
     } = useFileUpload()
 
+    const clientId = CLIENT_ID
+    const secret = SECRET
+    const shuftiProBaseUrl = "https://api.shuftipro.com"
+
+    const callbackUrl = "https://api.ndb.money/shufti"
+    const redirectUrl = "http://localhost:8000/app/profile/"
+    // const redirectUrl = "https://saledev.ndb.money/app/profile"
+
     // Methods
     const nextStep = () => {
         return setStep(step + 1)
@@ -39,6 +48,11 @@ const VerificationProvider = ({ children }) => {
     }
 
     const providerValue = {
+        clientId,
+        secret,
+        redirectUrl,
+        callbackUrl,
+        shuftiProBaseUrl,
         nextStep,
         previousStep,
         step,
@@ -63,7 +77,7 @@ const VerificationProvider = ({ children }) => {
             handleDragDropEvent: addressHandleDragDropEvent,
             setFiles: addressSetFiles,
         },
-        consent: {
+        consentProof: {
             files: consentFiles,
             handleDragDropEvent: consentHandleDragDropEvent,
             setFiles: consentSetFiles,

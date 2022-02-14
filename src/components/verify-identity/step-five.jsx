@@ -10,8 +10,8 @@ export default function StepOne() {
 
     // Methods
     const onUserDropFile = (e) => {
-        verification.consent.handleDragDropEvent(e)
-        verification.consent.setFiles(e, "w")
+        verification.consentProof.handleDragDropEvent(e)
+        verification.consentProof.setFiles(e, "w")
     }
 
     // Render
@@ -25,7 +25,7 @@ export default function StepOne() {
                 <div className="text-center">
                     <div className="d-block d-sm-none">
                         <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 3</div>
-                        <div className="text-light fs-14px fw-bold">Consent verification</div>
+                        <div className="text-light fs-14px fw-bold">consentProof verification</div>
                     </div>
                     <img
                         className="d-sm-block d-none"
@@ -69,8 +69,12 @@ export default function StepOne() {
                                         <label
                                             htmlFor="file-upload-input"
                                             className="file-upload cursor-pointer"
-                                            onDragEnter={verification.consent.handleDragDropEvent}
-                                            onDragOver={verification.consent.handleDragDropEvent}
+                                            onDragEnter={
+                                                verification.consentProof.handleDragDropEvent
+                                            }
+                                            onDragOver={
+                                                verification.consentProof.handleDragDropEvent
+                                            }
                                             onDrop={onUserDropFile}
                                         >
                                             <input
@@ -78,7 +82,7 @@ export default function StepOne() {
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 onChange={(e) =>
-                                                    verification.consent.setFiles(e, "w")
+                                                    verification.consentProof.setFiles(e, "w")
                                                 }
                                             />
                                             <div className="py-3 px-0">
@@ -89,9 +93,9 @@ export default function StepOne() {
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {verification.consent.files[0] ? (
+                                                {verification.consentProof.files[0] ? (
                                                     <p className="mt-30px">
-                                                        {verification.consent.files[0].name}{" "}
+                                                        {verification.consentProof.files[0].name}{" "}
                                                         <span className="txt-green fw-bold">
                                                             selected
                                                         </span>
@@ -123,7 +127,7 @@ export default function StepOne() {
                             back
                         </button>
                         <button
-                            disabled={verification.consent.files.length === 0}
+                            disabled={verification.consentProof.files.length === 0}
                             className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                             onClick={() => verification.nextStep()}
                         >
