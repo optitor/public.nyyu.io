@@ -1,7 +1,5 @@
 import React, { useState } from "react"
 import Loading from "../common/Loading"
-import { useMutation } from "@apollo/client"
-import { UPLOAD_CONSENT } from "./kyc-webservice"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 import { useVerification } from "./verification-context"
 

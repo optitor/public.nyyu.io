@@ -14,42 +14,12 @@ export default function StepSix({ submitKYCData }) {
     const [loading, setLoading] = useState(true)
     const [selfieImage, setSelfieImage] = useState()
     const [openWebcam, setOpenWebcam] = useState(false)
-    const [requestPending, setRequestPending] = useState(false)
-    const [error, setError] = useState("")
-
-    // Webservice
-    const [uploadSelfie] = useMutation(UPLOAD_SELFIE, {
-        onCompleted: (data) => {
-            setRequestPending(false)
-            if (data.uploadSelfie === true) submitKYCData()
-            else setError("Unable to upload the file!")
-        },
-        onError: (err) => {
-            if (err) {
-                setRequestPending(false)
-                setError("Unable to upload the file!")
-            }
-        },
-    })
 
     // Methods
     const capture = () => {
         const fooImage = webcamRef.current.getScreenshot()
         setSelfieImage(fooImage)
         return setOpenWebcam(false)
-    }
-    const uploadSelfieMethod = (e) => {
-        e.preventDefault()
-        setRequestPending(true)
-        fetch(selfieImage)
-            .then((res) => res.blob())
-            .then((blob) => {
-                uploadSelfie({
-                    variables: {
-                        selfie: new File([blob], "selfie", { type: "image/png" }),
-                    },
-                })
-            })
     }
 
     // Render
@@ -73,7 +43,6 @@ export default function StepSix({ submitKYCData }) {
                     />
                 </div>
                 <div className="my-sm-5 verify-step1">
-                    {error && <div className="text-danger fw-500">{error}</div>}
                     <div className="text-center mt-3 mt-sm-0">
                         <p className="fs-16px">
                             Face the camera. Make sure your face is visible including the ears.
@@ -132,14 +101,12 @@ export default function StepSix({ submitKYCData }) {
                             <button
                                 disabled={verification.submitting}
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={uploadSelfieMethod}
+                                onClick={() => verification.nextStep()}
                             >
                                 {verification.submitting ? (
                                     <div className="mt-3px">
                                         <CustomSpinner />
                                     </div>
-                                ) : requestPending ? (
-                                    "submitting. . ."
                                 ) : (
                                     "complete"
                                 )}
