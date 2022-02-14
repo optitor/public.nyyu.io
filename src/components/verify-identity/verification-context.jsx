@@ -14,6 +14,7 @@ const VerificationProvider = ({ children }) => {
     const [surname, setSurname] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const [country, setCountry] = useState(VerificationCountriesList[0])
+    const [shuftReferencePayload, setShuftReferencePayload] = useState(null)
     const [step, setStep] = useState(-1) // --> initial value is -1
     const {
         files: documentFiles,
@@ -48,6 +49,8 @@ const VerificationProvider = ({ children }) => {
     }
 
     const providerValue = {
+        shuftReferencePayload,
+        setShuftReferencePayload,
         clientId,
         secret,
         redirectUrl,

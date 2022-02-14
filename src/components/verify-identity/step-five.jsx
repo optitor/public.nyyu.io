@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Loading from "../common/Loading"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 import { useVerification } from "./verification-context"
@@ -13,6 +13,9 @@ export default function StepOne() {
         verification.consentProof.handleDragDropEvent(e)
         verification.consentProof.setFiles(e, "w")
     }
+    useEffect(() => {
+        verification.shuftReferencePayload?.conStatus === true && verification.nextStep()
+    }, [])
 
     // Render
     return (

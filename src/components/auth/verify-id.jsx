@@ -1,6 +1,5 @@
 import Loading from "../common/Loading"
 import SimpleHeader from "../header/simple-header"
-
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
 import React, { useState, useEffect } from "react"
@@ -13,8 +12,8 @@ const VerificationPage = () => {
     // Containers
     const [reference, setReference] = useState(null)
     const [userEmail, setUserEmail] = useState("")
-    const [shuftReference, setShuftReference] = useState(null)
-    const loadingData = !(userEmail && reference && shuftReference)
+    const [shuftReferencePayload, setShuftReferencePayload] = useState(null)
+    const loadingData = !(userEmail && reference && shuftReferencePayload)
 
     // WebService
     useQuery(GET_USER, {
@@ -26,7 +25,7 @@ const VerificationPage = () => {
     })
     useQuery(GET_SHUFTI_REF_PAYLOAD, {
         onCompleted: (data) => {
-            setShuftReference(data.getShuftiRefPayload)
+            setShuftReferencePayload(data.getShuftiRefPayload)
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
@@ -48,9 +47,12 @@ const VerificationPage = () => {
             <main className="verify-page">
                 <SimpleHeader />
                 <section className="d-flex justify-content-center align-items-start align-items-xl-center">
-                    {shuftReference.pending === false ? (
+                    {shuftReferencePayload.pending === false ? (
                         <VerificationProvider>
-                            <VerificationSwitch reference={reference} />
+                            <VerificationSwitch
+                                shuftReferencePayload={shuftReferencePayload}
+                                reference={reference}
+                            />
                         </VerificationProvider>
                     ) : (
                         <div className="text-light h4 fw-500 text-center px-4 px-sm-0 mt-5 mt-sm-0">

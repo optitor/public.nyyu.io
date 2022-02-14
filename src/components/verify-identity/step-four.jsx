@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import { VerifyIdStep4 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
@@ -20,6 +20,9 @@ export default function StepFour() {
         }
         if (!error) return verification.nextStep()
     }
+    useEffect(() => {
+        verification.shuftReferencePayload?.addrStatus === true && verification.nextStep()
+    }, [])
 
     // Render
     return (

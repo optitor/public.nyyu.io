@@ -1,6 +1,6 @@
 import Select from "react-select"
 import Loading from "./common/Loading"
-import { Link, navigate } from "gatsby"
+import { navigate } from "gatsby"
 import { useQuery } from "@apollo/client"
 import { useDispatch } from "react-redux"
 import Header from "../components/header"
@@ -24,7 +24,7 @@ import { GET_USER_TIERS } from "./profile/profile-queries"
 import { QuestionMark } from "../utilities/imgImport"
 import AccountDetails from "./profile/account-details"
 import ReactTooltip from "react-tooltip"
-import { GET_SHUFTI_REF_PAYLOAD, GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
+import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
 const Profile = () => {
     const dispatch = useDispatch()
     const [userDataLoading, setUserDataLoading] = useState(true)
@@ -57,9 +57,9 @@ const Profile = () => {
             return setUserTiersLoading(false)
         },
     })
-    useQuery(GET_SHUFTI_REF_PAYLOAD, {
+    useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
-            setShuftiReference(data.getShuftiRefPayload)
+            setShuftiReference(data.getShuftiReference)
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",

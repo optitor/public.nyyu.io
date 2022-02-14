@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react"
 import { VerifyIdStep2 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
@@ -9,6 +9,7 @@ export default function StepTwo() {
     const verification = useVerification()
     const [firstNameError, setFirstNameError] = useState("")
     const [surnameError, setSurnameError] = useState("")
+    const [loading, setLoading] = useState(true)
     const onNextButtonClick = (e) => {
         e.preventDefault()
         setFirstNameError("")
@@ -25,9 +26,12 @@ export default function StepTwo() {
         if (!error) return verification.nextStep()
     }
 
-    // Render
+    // Methods
+    useEffect(() => {
+        verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
+    }, [])
 
-    const [loading, setLoading] = useState(true)
+    // Render
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Webcam from "react-webcam"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
@@ -21,7 +21,9 @@ export default function StepSix({ reference }) {
         setSelfieImage(fooImage)
         return setOpenWebcam(false)
     }
-
+    useEffect(() => {
+        verification.shuftReferencePayload?.selfieStatus === true && verification.nextStep()
+    }, [])
     const sendShuftiRequest = async () => {
         verification.setSubmitting(true)
         const documentProof = await getBase64(verification.documentProof.files[0])
