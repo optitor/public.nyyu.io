@@ -25,11 +25,9 @@ import { QuestionMark } from "../utilities/imgImport"
 import AccountDetails from "./profile/account-details"
 import ReactTooltip from "react-tooltip"
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
-import { getShuftiStatusByReference } from "../utilities/utility-methods"
+import { getCurrentDate, getShuftiStatusByReference } from "../utilities/utility-methods"
 const Profile = () => {
     const dispatch = useDispatch()
-    const [userDataLoading, setUserDataLoading] = useState(true)
-    const [userTiersLoading, setUserTiersLoading] = useState(true)
     const [tabIndex, setTabIndex] = useState(0)
     const [displayName, setDisplayName] = useState("")
     const [userTiersData, setUserTiersData] = useState(null)
@@ -37,37 +35,39 @@ const Profile = () => {
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
     const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[0])
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
+    const [shuftiStatus, setShuftiStatus] = useState(null)
+    const [shuftReference, setShuftiReference] = useState(null)
+    const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true)
+
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
             if (userData.getUser.avatar) {
                 const { prefix, name } = userData.getUser.avatar
                 if (prefix && name) {
-                    setDisplayName(prefix + "." + name)
-                    return setUserDataLoading(false)
+                    return setDisplayName(prefix + "." + name)
                 } else return navigate(ROUTES.selectFigure)
             }
             return navigate(ROUTES.selectFigure)
         },
         fetchPolicy: "network-only",
     })
-    const { data: userTiers } = useQuery(GET_USER_TIERS, {
+    useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
-        onCompleted: () => {
-            setUserTiersData(userTiers.getUserTiers)
-            return setUserTiersLoading(false)
+        onCompleted: (data) => {
+            return setUserTiersData(data.getUserTiers)
         },
     })
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
             setShuftiReference(data.getShuftiReference)
-            // getShuftiStatusByReference(data.getShuftiReference.reference)
+            return setShuftiReferenceLoading(false)
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
 
-    const loadingPage = userDataLoading || userTiersLoading || shuftReference
+    const loadingPage = !(displayName && userTiersData && shuftReference && shuftiStatus)
     // Containers
     const user = userData?.getUser
     const twoStep = user?.security
@@ -75,7 +75,6 @@ const Profile = () => {
         : []
 
     const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel)
-    const [shuftReference, setShuftiReference] = useState(null)
     const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1)
 
     // Methods
@@ -124,6 +123,15 @@ const Profile = () => {
     }
 
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user])
+
+    useEffect(async () => {
+        if (!shuftiReferenceLoading) {
+            const response = await getShuftiStatusByReference(shuftReference?.reference)
+            console.log(response)
+            return setShuftiStatus(response)
+        }
+    }, [shuftiReferenceLoading])
+
     if (loadingPage) return <Loading />
     else {
         return (
@@ -224,6 +232,7 @@ const Profile = () => {
                                                         user={user}
                                                         displayName={displayName}
                                                         shuftReference={shuftReference}
+                                                        shuftiStatus={shuftiStatus}
                                                     />
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">
