@@ -42,9 +42,7 @@ export default function StepOne() {
                                 Write the following text on a blank paper, <br />
                                 upload its photo along with your face.
                             </p>
-                            <p className="my-3 fw-bold text-uppercase">
-                                {verification.consentText}
-                            </p>
+                            <p className="my-3 fw-bold">{verification.consentText}</p>
                             <div className="requirements mt-0">
                                 <p className="fs-14px">Photo requirements:</p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
