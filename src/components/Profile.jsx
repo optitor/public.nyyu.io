@@ -61,7 +61,7 @@ const Profile = () => {
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
             setShuftiReference(data.getShuftiReference)
-            // getShuftiStatusByReference(data.getShuftiReference.reference)
+            getShuftiStatusByReference(data.getShuftiReference.reference)
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
