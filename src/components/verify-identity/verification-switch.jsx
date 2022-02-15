@@ -9,7 +9,7 @@ import StepSeven from "../verify-identity/step-seven"
 import PrimaryStep from "../verify-identity/primary-step"
 import { useVerification } from "./verification-context"
 
-export default function VerificationSwitch({ reference, shuftReferencePayload }) {
+export default function VerificationSwitch({ shuftReferencePayload }) {
     const verification = useVerification()
     verification.setShuftReferencePayload(shuftReferencePayload)
     return (
@@ -20,7 +20,7 @@ export default function VerificationSwitch({ reference, shuftReferencePayload })
             {verification.step === 2 && <StepThree />}
             {verification.step === 3 && <StepFour />}
             {verification.step === 4 && <StepFive />}
-            {verification.step === 5 && <StepSix reference={reference} />}
+            {verification.step === 5 && <StepSix />}
             {verification.step === 6 && <StepSeven />}
         </>
     )

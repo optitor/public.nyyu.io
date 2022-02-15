@@ -63,12 +63,23 @@ export default function AccountDetails({
                                 Failed, <span className="text-underline">Retry</span>
                             </Link>
                         </div>
-                    ) : (
+                    ) : shuftiStatus?.event === "request.invalid" ||
+                      shuftiStatus?.event === "review.pending" ? (
                         <div className="d-flex align-items-center gap-2">
                             <div className="circle circle-warning"></div>
                             <div className="text-light fs-15px fw-500 text-capitalize">
                                 under review
                             </div>
+                        </div>
+                    ) : (
+                        <div className="d-flex align-items-center gap-2">
+                            <div className="circle circle-dark"></div>
+                            <Link
+                                to={ROUTES.verifyId}
+                                className="text-success fs-15px fw-bold text-underline text-capitalize"
+                            >
+                                Setup
+                            </Link>
                         </div>
                     )}
                 </div>

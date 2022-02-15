@@ -6,14 +6,21 @@ import CustomSpinner from "../common/custom-spinner"
 import { useVerification } from "./verification-context"
 import { getBase64 } from "../../utilities/utility-methods"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
+import { useMutation } from "@apollo/client"
+import { INSERT_UPDATE_REFERENCE } from "./kyc-webservice"
+import { v4 as uuidv4 } from "uuid"
 
-export default function StepSix({ reference }) {
+export default function StepSix() {
     // Containers
     const verification = useVerification()
     const webcamRef = useRef(null)
     const [loading, setLoading] = useState(true)
     const [selfieImage, setSelfieImage] = useState()
     const [openWebcam, setOpenWebcam] = useState(false)
+    const [reference, setReference] = useState(uuidv4())
+
+    // Webservice
+    const [insertUpdateReference] = useMutation(INSERT_UPDATE_REFERENCE)
 
     // Methods
     const capture = () => {
@@ -23,6 +30,11 @@ export default function StepSix({ reference }) {
     }
     const sendShuftiRequest = async () => {
         verification.setSubmitting(true)
+        insertUpdateReference({
+            variables: {
+                reference,
+            },
+        })
         const documentProof = await getBase64(verification.documentProof.files[0])
         const addressProof = await getBase64(verification.addressProof.files[0])
         const consentProof = await getBase64(verification.consentProof.files[0])
@@ -34,6 +46,7 @@ export default function StepSix({ reference }) {
             country: verification.country.value,
             language: "EN",
             verification_mode: "any",
+            manual_review: "1",
         }
 
         if (verification.shuftReferencePayload?.docStatus === false)
