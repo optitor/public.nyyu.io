@@ -37,6 +37,7 @@ const Profile = () => {
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false)
     const [shuftiStatus, setShuftiStatus] = useState(null)
     const [shuftReference, setShuftiReference] = useState(null)
+    const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true)
 
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
@@ -60,6 +61,7 @@ const Profile = () => {
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
             setShuftiReference(data.getShuftiReference)
+            return setShuftiReferenceLoading(false)
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
@@ -123,11 +125,11 @@ const Profile = () => {
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user])
 
     useEffect(async () => {
-        if (shuftReference === null) return setShuftiStatus("UNSET")
-
-        const response = await getShuftiStatusByReference(shuftReference?.reference)
-        setShuftiStatus(response)
-    }, [shuftReference, setShuftiStatus])
+        if (!shuftiReferenceLoading) {
+            const response = await getShuftiStatusByReference(shuftReference?.reference)
+            return setShuftiStatus(response)
+        }
+    }, [shuftiReferenceLoading])
 
     if (loadingPage) return <Loading />
     else {
@@ -229,6 +231,7 @@ const Profile = () => {
                                                         user={user}
                                                         displayName={displayName}
                                                         shuftReference={shuftReference}
+                                                        shuftiStatus={shuftiStatus}
                                                     />
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">

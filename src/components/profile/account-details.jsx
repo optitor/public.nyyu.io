@@ -7,6 +7,7 @@ export default function AccountDetails({
     user,
     displayName,
     shuftReference,
+    shuftiStatus,
 }) {
     return (
         <div className="account-details">
@@ -35,21 +36,24 @@ export default function AccountDetails({
             <div className="row w-100 mx-auto">
                 <div className="col-6 col-sm-4 col-md-6 br">kyc/aml verification</div>
                 <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
-                    {user.verify.kycVerified === true ? (
+                    {shuftiStatus === "UNSET" ? (
+                        <div className="d-flex align-items-center gap-2">
+                            <div className="circle circle-dark"></div>
+                            <Link
+                                to={ROUTES.verifyId}
+                                className="text-success fs-15px fw-bold text-underline text-capitalize"
+                            >
+                                Setup
+                            </Link>
+                        </div>
+                    ) : shuftiStatus?.event === "verification.accepted" ? (
                         <div className="d-flex align-items-center gap-2">
                             <div className="circle circle-success"></div>
                             <div className="txt-green fs-15px fw-bold text-capitalize">
                                 verified
                             </div>
                         </div>
-                    ) : shuftReference?.pending ? (
-                        <div className="d-flex align-items-center gap-2">
-                            <div className="circle circle-warning"></div>
-                            <div className="text-light fs-15px fw-500 text-capitalize">
-                                under review
-                            </div>
-                        </div>
-                    ) : shuftReference?.reference ? (
+                    ) : shuftiStatus?.event === "verification.declined" ? (
                         <div className="d-flex align-items-center gap-2">
                             <div className="circle circle-danger"></div>
                             <Link
@@ -61,13 +65,10 @@ export default function AccountDetails({
                         </div>
                     ) : (
                         <div className="d-flex align-items-center gap-2">
-                            <div className="circle circle-dark"></div>
-                            <Link
-                                to={ROUTES.verifyId}
-                                className="text-success fs-15px fw-bold text-underline text-capitalize"
-                            >
-                                Setup
-                            </Link>
+                            <div className="circle circle-warning"></div>
+                            <div className="text-light fs-15px fw-500 text-capitalize">
+                                under review
+                            </div>
                         </div>
                     )}
                 </div>
