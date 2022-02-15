@@ -47,27 +47,37 @@ export const getShuftiStatusByReference = async (reference) => {
     if (response && "data" in response) {
         const { data } = response
         if ("verification_result" in data && "event" in data) {
-            output["event"] = data.event
+            if (data.event === null) output["event"] = "request.invalid"
+            else output["event"] = data.event
 
-            output["docStatus"] =
-                data.verification_result.document.document === 1 ||
-                (data.verification_result.document.document_must_not_be_expired === 1 &&
-                    data.verification_result.document.document_visibility === 1 &&
-                    data.verification_result.document.selected_type)
+            // Document
+            if ("document" in data.verification_result)
+                output["docStatus"] =
+                    data.verification_result.document.document === 1 ||
+                    (data.verification_result.document.document_must_not_be_expired === 1 &&
+                        data.verification_result.document.document_visibility === 1)
+            else output["docStatus"] = true
 
-            output["addrStatus"] =
-                data.verification_result.address.full_address === 1 &&
-                data.verification_result.address.match_address_proofs_with_document_proofs === 1 &&
-                data.verification_result.address.address_document_must_not_be_expired === 1 &&
-                data.verification_result.address.selected_type &&
-                data.verification_result.address.address_document_visibility === 1 &&
-                data.verification_result.address.address_document === 1
+            // Address
+            if ("address" in data.verification_result)
+                output["addrStatus"] =
+                    data.verification_result.address.full_address === 1 &&
+                    data.verification_result.address.match_address_proofs_with_document_proofs ===
+                        1 &&
+                    data.verification_result.address.address_document_must_not_be_expired === 1 &&
+                    data.verification_result.address.address_document_visibility === 1 &&
+                    data.verification_result.address.address_document === 1
+            else output["addrStatus"] = true
 
-            output["conStatus"] =
-                data.verification_result.consent.consent === 1 &&
-                data.verification_result.consent.selected_type
+            //Consent
+            if ("consent" in data.verification_result)
+                output["conStatus"] = data.verification_result.consent.consent === 1
+            else output["conStatus"] = true
 
-            output["selfieStatus"] = data.verification_result.face === 1
+            // Selfie
+            if ("face" in data.verification_result)
+                output["selfieStatus"] = data.verification_result.face === 1
+            else output["selfieStatus"] = true
 
             return output
         }

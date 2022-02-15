@@ -26,9 +26,6 @@ export default function StepSeven() {
                 reference,
             },
         })
-        const documentProof = await getBase64(verification.documentProof.files[0])
-        const addressProof = await getBase64(verification.addressProof.files[0])
-        const consentProof = await getBase64(verification.consentProof.files[0])
         const token = btoa(`${verification.clientId}:${verification.secret}`)
         const payload = {
             reference: `${reference}`,
@@ -40,7 +37,8 @@ export default function StepSeven() {
             manual_review: "1",
         }
 
-        if (verification.shuftReferencePayload?.docStatus === false)
+        if (verification.shuftReferencePayload?.docStatus === false) {
+            const documentProof = await getBase64(verification.documentProof.files[0])
             payload["document"] = {
                 proof: documentProof,
                 supported_types: ["id_card", "passport", "driving_license"],
@@ -54,8 +52,10 @@ export default function StepSeven() {
                 },
                 allow_offline: "1",
             }
+        }
 
-        if (verification.shuftReferencePayload?.addrStatus === false)
+        if (verification.shuftReferencePayload?.addrStatus === false) {
+            const addressProof = await getBase64(verification.addressProof.files[0])
             payload["address"] = {
                 full_address: verification.address,
                 proof: addressProof,
@@ -77,17 +77,20 @@ export default function StepSeven() {
                 },
                 allow_offline: "1",
             }
+        }
 
-        if (verification.shuftReferencePayload?.conStatus === false)
+        if (verification.shuftReferencePayload?.conStatus === false) {
+            const consentProof = await getBase64(verification.consentProof.files[0])
             payload["consent"] = {
                 proof: consentProof,
                 text: verification.consentText,
                 supported_types: ["printed", "handwritten"],
                 allow_offline: "1",
             }
+        }
         if (verification.shuftReferencePayload?.selfieStatus === false)
             payload["face"] = {
-                proof: verification.selfieImage,
+                proof: verification.faceProof.selfieImage,
                 allow_offline: "1",
             }
 
@@ -102,7 +105,6 @@ export default function StepSeven() {
             })
 
         verification.setSubmitting(false)
-        verification.nextStep()
     }
 
     useEffect(() => {

@@ -64,7 +64,8 @@ export default function AccountDetails({
                             </Link>
                         </div>
                     ) : shuftiStatus?.event === "request.invalid" ||
-                      shuftiStatus?.event === "review.pending" ? (
+                      shuftiStatus?.event === "review.pending" ||
+                      shuftiStatus === "INVALID" ? (
                         <div className="d-flex align-items-center gap-2">
                             <div className="circle circle-warning"></div>
                             <div className="text-light fs-15px fw-500 text-capitalize">
