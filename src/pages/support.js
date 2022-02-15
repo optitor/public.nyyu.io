@@ -120,7 +120,7 @@ const FAQ = () => {
                                                 Delete account
                                             </p>
                                         </div>
-                                        <div className="cursor-pointer position-absolute end-20px bottom-20px">
+                                        <div className="cursor-pointer position-fixed end-20px bottom-20px" style={{zIndex: 99999}}>
                                             {
                                                 !isChatModalOpen && <img
                                                     src={ChatButton}
