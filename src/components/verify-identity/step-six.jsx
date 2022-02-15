@@ -90,7 +90,7 @@ export default function StepSix() {
         if (verification.shuftReferencePayload?.conStatus === false)
             payload["consent"] = {
                 proof: consentProof,
-                text: "I & NDB",
+                text: verification.consentText,
                 supported_types: ["printed", "handwritten"],
                 allow_offline: "1",
             }

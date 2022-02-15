@@ -25,7 +25,7 @@ import { QuestionMark } from "../utilities/imgImport"
 import AccountDetails from "./profile/account-details"
 import ReactTooltip from "react-tooltip"
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
-import { getShuftiStatusByReference } from "../utilities/utility-methods"
+import { getCurrentDate, getShuftiStatusByReference } from "../utilities/utility-methods"
 const Profile = () => {
     const dispatch = useDispatch()
     const [tabIndex, setTabIndex] = useState(0)
@@ -127,6 +127,7 @@ const Profile = () => {
     useEffect(async () => {
         if (!shuftiReferenceLoading) {
             const response = await getShuftiStatusByReference(shuftReference?.reference)
+            console.log(response)
             return setShuftiStatus(response)
         }
     }, [shuftiReferenceLoading])
