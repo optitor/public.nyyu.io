@@ -107,6 +107,8 @@ import greenCoin from "../images/green-coin.svg"
 import questionMark from "../images/icons/question-mark.svg"
 import chatButton from "../images/icons/chat.svg"
 import glotbIcon from "../images/support/globe.svg"
+import attachmentIcon from "../images/support/attachment.svg"
+import menuIcon from "../images/support/menu.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -212,3 +214,5 @@ export const GreenCoin = greenCoin
 export const QuestionMark = questionMark
 export const ChatButton = chatButton
 export const GloabIcon = glotbIcon
+export const AttachmentIcon = attachmentIcon
+export const MenuIcon = menuIcon
