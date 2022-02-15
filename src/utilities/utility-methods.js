@@ -81,7 +81,7 @@ export const getShuftiStatusByReference = async (reference) => {
 
             return output
         }
-        return "INVALID"
+        return "PENDING"
     }
 
     return "UNSET"
