@@ -16,6 +16,7 @@ const VerificationProvider = ({ children }) => {
     const [surname, setSurname] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const [country, setCountry] = useState(VerificationCountriesList[0])
+    const [selfieImage, setSelfieImage] = useState()
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null)
     const [step, setStep] = useState(-1) // --> initial value is -1
     const {
@@ -87,6 +88,10 @@ const VerificationProvider = ({ children }) => {
             files: consentFiles,
             handleDragDropEvent: consentHandleDragDropEvent,
             setFiles: consentSetFiles,
+        },
+        faceProof: {
+            selfieImage,
+            setSelfieImage,
         },
     }
     return (
