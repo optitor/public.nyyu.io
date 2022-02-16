@@ -1457,16 +1457,16 @@ export const VerificationStepThreeDocumentTypes = [
         value: "driving_license",
     },
     {
-        label: "Utility bill",
-        value: "utility_bill",
+        label: "Employer letter",
+        value: "employer_letter",
     },
     {
         label: "Rent agreement",
         value: "rent_agreement",
     },
     {
-        label: "Employer letter",
-        value: "employer_letter",
+        label: "Utility bill",
+        value: "utility_bill",
     },
     {
         label: "Tax bill",
@@ -1475,10 +1475,6 @@ export const VerificationStepThreeDocumentTypes = [
     {
         label: "Bank statement",
         value: "bank_statement",
-    },
-    {
-        label: "Insurence agreement",
-        value: "insurance_agreement",
     },
 ]
 

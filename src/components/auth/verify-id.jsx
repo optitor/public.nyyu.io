@@ -1,18 +1,19 @@
+import React, { useEffect, useState } from "react"
 import Loading from "../common/Loading"
+import { useQuery } from "@apollo/client"
 import SimpleHeader from "../header/simple-header"
-import { useMutation, useQuery } from "@apollo/client"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
-import React, { useState, useEffect } from "react"
-import { GET_SHUFTI_REF_PAYLOAD, INSERT_UPDATE_REFERENCE } from "../verify-identity/kyc-webservice"
-import VerificationProvider from "../verify-identity/verification-context"
 import VerificationSwitch from "../verify-identity/verification-switch"
-import { v4 as uuidv4 } from "uuid"
+import { GET_SHUFT_REFERENCE } from "../verify-identity/kyc-webservice"
+import VerificationProvider from "../verify-identity/verification-context"
+import { getShuftiStatusByReference } from "../../utilities/utility-methods"
 const VerificationPage = () => {
     // Containers
-    const [reference, setReference] = useState(uuidv4())
     const [userEmail, setUserEmail] = useState("")
-    const [shuftReferencePayload, setShuftReferencePayload] = useState(null)
-    const loadingData = !(userEmail && reference && shuftReferencePayload)
+    const [shuftReference, setShuftReference] = useState(null)
+    const [shuftiStatus, setShuftiStatus] = useState(null)
+    const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true)
+    const loadingData = !(userEmail && shuftReference && shuftiStatus)
 
     // WebService
     useQuery(GET_USER, {
@@ -22,23 +23,22 @@ const VerificationPage = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
-    useQuery(GET_SHUFTI_REF_PAYLOAD, {
+    useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
-            setShuftReferencePayload(data.getShuftiRefPayload)
+            setShuftReference(data.getShuftiReference)
+            return setShuftiReferenceLoading(false)
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
-    const [insertUpdateReference] = useMutation(INSERT_UPDATE_REFERENCE)
 
     // Methods
-    useEffect(() => {
-        insertUpdateReference({
-            variables: {
-                reference,
-            },
-        })
-    }, [])
+    useEffect(async () => {
+        if (!shuftiReferenceLoading) {
+            const response = await getShuftiStatusByReference(shuftReference?.reference)
+            return setShuftiStatus(response)
+        }
+    }, [shuftiReferenceLoading])
 
     if (loadingData) return <Loading />
     else
@@ -46,18 +46,9 @@ const VerificationPage = () => {
             <main className="verify-page">
                 <SimpleHeader />
                 <section className="d-flex justify-content-center align-items-start align-items-xl-center">
-                    {shuftReferencePayload.pending === false ? (
-                        <VerificationProvider>
-                            <VerificationSwitch
-                                shuftReferencePayload={shuftReferencePayload}
-                                reference={reference}
-                            />
-                        </VerificationProvider>
-                    ) : (
-                        <div className="text-light h4 fw-500 text-center px-4 px-sm-0 mt-5 mt-sm-0">
-                            Please wait while your request is being verified...
-                        </div>
-                    )}
+                    <VerificationProvider>
+                        <VerificationSwitch shuftReferencePayload={shuftiStatus} />
+                    </VerificationProvider>
                 </section>
             </main>
         )
