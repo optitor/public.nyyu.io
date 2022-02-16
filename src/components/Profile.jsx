@@ -25,7 +25,9 @@ import { QuestionMark } from "../utilities/imgImport"
 import AccountDetails from "./profile/account-details"
 import ReactTooltip from "react-tooltip"
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
+import { logout } from "../utilities/auth"
 import { getShuftiStatusByReference } from "../utilities/utility-methods"
+
 const Profile = () => {
     const dispatch = useDispatch()
     const [userDataLoading, setUserDataLoading] = useState(true)
@@ -40,7 +42,12 @@ const Profile = () => {
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
-            if (userData.getUser.avatar) {
+            if(!userData.getUser) {
+                return logout(() => {
+                    navigate(ROUTES.home)
+                })
+            }
+            if (userData.getUser?.avatar) {
                 const { prefix, name } = userData.getUser.avatar
                 if (prefix && name) {
                     setDisplayName(prefix + "." + name)
@@ -48,6 +55,9 @@ const Profile = () => {
                 } else return navigate(ROUTES.selectFigure)
             }
             return navigate(ROUTES.selectFigure)
+        },
+        onError: () => {
+            return setUserTiersLoading(false)
         },
         fetchPolicy: "network-only",
     })
@@ -164,7 +174,7 @@ const Profile = () => {
                                         {displayName}
                                     </div>
                                     <p className="silver-cnt">
-                                        {nextTier.length > 0 &&
+                                        {nextTier?.length > 0 &&
                                             nextTier[0]?.point -
                                                 user?.tierPoint +
                                                 "p to " +
@@ -175,7 +185,7 @@ const Profile = () => {
                                             className="timeleft"
                                             style={{
                                                 width: `${
-                                                    (user?.tierPoint / nextTier[0]?.point) * 100
+                                                    (user?.tierPoint / (nextTier?.length > 0?? nextTier[0]?.point)) * 100
                                                 }%`,
                                             }}
                                         ></div>

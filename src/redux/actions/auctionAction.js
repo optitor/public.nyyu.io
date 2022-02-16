@@ -14,7 +14,11 @@ export const create_Auction = createData => async dispatch => {
         showSuccessAlarm('Auction created successfully');
     } catch(err) {
         // console.log(err.message);
-        showFailAlarm('Action failed', err.message);
+        if(err.message === 'started_auction') {
+            showFailAlarm('Action failed', 'Auction already started');
+        } else {
+            showFailAlarm('Action failed', err.message);
+        }
     }
 };
 
