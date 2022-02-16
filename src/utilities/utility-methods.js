@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client"
 import axios from "axios"
 import { CLIENT_ID, SECRET } from "./staticData"
 
@@ -63,7 +64,7 @@ export const getShuftiStatusByReference = async (reference) => {
                 output["addrStatus"] =
                     data.verification_result.address.full_address === 1 &&
                     data.verification_result.address.match_address_proofs_with_document_proofs ===
-                        1 &&
+                    1 &&
                     data.verification_result.address.address_document_must_not_be_expired === 1 &&
                     data.verification_result.address.address_document_visibility === 1 &&
                     data.verification_result.address.address_document === 1
@@ -85,4 +86,30 @@ export const getShuftiStatusByReference = async (reference) => {
     }
 
     return "UNSET"
+}
+
+export const getStripePubKey = () => {
+    return new Promise((resolve, reject) => {
+        useQuery("", {
+            onCompleted: (data) => {
+                resolve(data.getStripePubKey)
+            },
+            onError: (error) => {
+                reject(error)
+            }
+        })
+    })
+}
+export const createPaymentIntent = (paymentMethodId, amount, currency) => {
+    const apiBaseUrl = "https://api.stripe.com/v1/payment_intents"
+    const response = axios.post(apiBaseUrl, {
+        paymentMethodId,
+        amount,
+        currency: "usd",
+        confirmation_method: "manual",
+        confirm: "true"
+    })
+    if (response && "data" in response) {
+
+    }
 }
