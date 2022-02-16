@@ -166,7 +166,6 @@ export default function MarketTab() {
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [sortOption, setSortOption] = useState({});
-    const [loading, setLoading] = useState(false);
 
     const InitialFavours = {
         BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
@@ -207,8 +206,6 @@ export default function MarketTab() {
             setFavoursData({ ...assets })
         })()
     }, [favours, favoursData])
-    // console.log(favoursData)
-    // console.log(sortOption)
 
     const set_Favourite_Crypto = item => {
         if(favours[item.symbol]) {
