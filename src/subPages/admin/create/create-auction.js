@@ -160,7 +160,7 @@ const IndexPage = () => {
                                     <div>
                                         <p>Round Number</p>
                                         <NumberFormat className={`black_input disabled`}
-                                            placeholder='Enter number'
+                                            placeholder='Auto-Generated'
                                             thousandSeparator={true}
                                             allowNegative={false}
                                             value={roundData.roundNumber}
