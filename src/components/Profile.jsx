@@ -73,8 +73,8 @@ const Profile = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
-
-    const loadingPage = !(displayName && userTiersData && shuftReference && shuftiStatus)
+    console.log(displayName, userTiersData, shuftReference, shuftiStatus)
+    const loadingPage = !(displayName && userTiersData && shuftiStatus)
     // Containers
     const user = userData?.getUser
     const twoStep = user?.security
