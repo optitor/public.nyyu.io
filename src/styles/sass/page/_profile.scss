@@ -174,15 +174,6 @@
                 }
             }
         }
-        .verify-delete {
-            display: flex;
-            justify-content: space-between;
-            .delete-account-link {
-                color: red;
-                cursor: pointer;
-                text-decoration: underline;
-            }
-        }
         .account-details,
         .tier-details {
             h4 {
