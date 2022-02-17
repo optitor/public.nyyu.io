@@ -120,7 +120,7 @@ const Profile = () => {
                             onKeyDown={() => setIs2FAModalOpen(true)}
                             role="presentation"
                         >
-                            disable
+                            Disable
                         </p>
                     </div>
                 )}
