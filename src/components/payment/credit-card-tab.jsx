@@ -81,14 +81,6 @@ const CardSection = ({ amount }) => {
             },
         })
         console.log(paymentMethod.id)
-        // const intent = await stripe.paymentIntents.create({
-        //     payment_method: paymentMethod.id,
-        //     amount,
-        //     currency: "usd",
-        //     confirmation_method: "manual",
-        //     confirm: true,
-        // })
-        // console.log("intent", intent)
     }
     // Render
     return (
