@@ -25,6 +25,7 @@ const VerificationPage = () => {
     })
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
+            console.log(data)
             setShuftReference(data.getShuftiReference)
             return setShuftiReferenceLoading(false)
         },
