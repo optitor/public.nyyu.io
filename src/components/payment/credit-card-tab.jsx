@@ -13,10 +13,10 @@ import ReactTooltip from "react-tooltip"
 import { CheckBox } from "../common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { GET_STRIPE_PUB_KEY } from "./payment-webservice"
-import { useQuery } from "@apollo/client"
+import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice"
+import { useMutation, useQuery } from "@apollo/client"
 import CustomSpinner from "../common/custom-spinner"
-export default function CreditCardTab({ amount }) {
+export default function CreditCardTab({ amount, round }) {
     // Containers
     const [loading, setLoading] = useState(true)
     const [stripePublicKey, setStripePublicKey] = useState(null)
@@ -39,18 +39,21 @@ export default function CreditCardTab({ amount }) {
                 </div>
             ) : (
                 <Elements stripe={loadStripe(stripePublicKey)}>
-                    <CardSection amount={amount} />
+                    <CardSection amount={amount} round={round} />
                 </Elements>
             )}
         </div>
     )
 }
 
-const CardSection = ({ amount }) => {
+const CardSection = ({ amount, round }) => {
     // Containers
-    const [allowFractionBox, setAllowFractionBox] = useState(false)
     const stripe = useStripe()
     const elements = useElements()
+    const [error, setError] = useState("")
+    const [cardHolder, setCardHolder] = useState("")
+    const [stripePaymentContainer, setStripePaymentContainer] = useState(null)
+    const [allowFractionBox, setAllowFractionBox] = useState(false)
     const style = {
         base: {
             color: "#E3E3E3",
@@ -68,6 +71,17 @@ const CardSection = ({ amount }) => {
             iconColor: "#fa755a",
         },
     }
+
+    // Webservice
+    const [stripePayment] = useMutation(STRIPE_PAYMENT, {
+        onCompleted: (data) => {
+            console.log(data.stripePayment)
+            if (data.stripePayment.error) return setError(data.stripePayment.error)
+            return setStripePaymentContainer(data.stripePayment)
+        },
+        onError: (error) => console.log(error),
+    })
+
     // Methods
     const submitPayment = async (e) => {
         e.preventDefault()
@@ -77,15 +91,31 @@ const CardSection = ({ amount }) => {
             type: "card",
             card: elements.getElement(CardNumberElement),
             billing_details: {
-                name: "Mohammad Eskini", // TODO: Change this later on.
+                name: cardHolder,
             },
         })
-        console.log(paymentMethod.id)
+        stripePayment({
+            variables: {
+                roundId: round,
+                amount: 300.0 * 100, // TODO: Change this later on and use "amount" as the value
+                paymentMethodId: paymentMethod.id,
+                paymentIntentId: null,
+            },
+        })
     }
     // Render
     return (
         <>
             <form className="row m-0">
+                {error && <div className="text-danger fs-14px">{error}</div>}
+                <input
+                    type="text"
+                    style={style.base}
+                    className="border border-light border-1 p-2 col-12 mb-3 bg-transparent placeholder:text-light"
+                    placeholder="Card holder"
+                    value={cardHolder}
+                    onChange={(e) => setCardHolder(e.target.value)}
+                />
                 <CardNumberElement
                     className="border border-light border-1 p-2 col-12 mb-3"
                     options={{

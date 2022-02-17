@@ -304,7 +304,7 @@ const Payment = () => {
                                     </div>
                                 </div>
                             )}
-                            {tabIndex === 2 && <CreditCardTab amount={bidAmount} />}
+                            {tabIndex === 2 && <CreditCardTab amount={bidAmount} round={currentRound} />}
                             {tabIndex === 3 && (
                                 <div className="paypal-tab">
                                     <div className="payment-content">

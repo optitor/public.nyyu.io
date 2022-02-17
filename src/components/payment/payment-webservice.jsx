@@ -18,6 +18,11 @@ export const STRIPE_PAYMENT = gql`
             amount: $amount
             paymentIntentId: $paymentIntentId
             paymentMethodId: $paymentMethodId
-        )
+        ) {
+            clientSecret
+            paymentIntentId
+            requiresAction
+            error
+        }
     }
 `
