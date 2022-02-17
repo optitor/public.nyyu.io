@@ -14,7 +14,7 @@ export default function PrimaryStep() {
     const [accept, setAccept] = useState(false)
 
     // Render
-    verification.shuftReferencePayload !== null && verification.nextStep()
+    if (verification.shuftReferencePayload !== "INVALID") verification.nextStep()
     return (
         <div className="verify-step0 col-sm-12 col-10 mx-auto mt-5 mt-sm-0">
             <SelectLang

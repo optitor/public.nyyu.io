@@ -44,7 +44,7 @@ const Profile = () => {
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
-            if(!userData.getUser) {
+            if (!userData.getUser) {
                 return logout(() => {
                     navigate(ROUTES.home)
                 })
@@ -121,7 +121,7 @@ const Profile = () => {
                             onKeyDown={() => setIs2FAModalOpen(true)}
                             role="presentation"
                         >
-                            disable
+                            Disable
                         </p>
                     </div>
                 )}
@@ -190,7 +190,10 @@ const Profile = () => {
                                             className="timeleft"
                                             style={{
                                                 width: `${
-                                                    (user?.tierPoint / (nextTier?.length > 0?? nextTier[0]?.point)) * 100
+                                                    (user?.tierPoint /
+                                                        (nextTier?.length > 0 ??
+                                                            nextTier[0]?.point)) *
+                                                    100
                                                 }%`,
                                             }}
                                         ></div>
@@ -297,16 +300,6 @@ const Profile = () => {
                                                 <TierDetailsTab />
                                             </TabPanel>
                                         </Tabs>
-                                        <div className="verify-delete mt-3 pb-5 ps-sm-3 ps-0">
-                                            <p
-                                                className="delete-account-link"
-                                                onClick={() => setIsDeleteAccountModalOpen(true)}
-                                                onKeyDown={() => setIsDeleteAccountModalOpen(true)}
-                                                role="presentation"
-                                            >
-                                                Delete account
-                                            </p>
-                                        </div>
                                     </>
                                 )}
                                 {tabIndex === 1 && (

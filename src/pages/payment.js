@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect } from "react"
+import React, { useCallback, useReducer, useState, useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
 import ReactTooltip from "react-tooltip"
 import axios from 'axios'
@@ -78,19 +78,25 @@ const CustomSingleValue = (props) => {
 const Payment = () => {
     // const dispatch = useDispatch()
     const currentRound = useSelector((state) => state?.placeBid.round_id);
-    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
     // console.log("data: ", bidAmount, currentRound)
+    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
+    const currentRound = useSelector((state) => state?.placeBid.round_id)
+    const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
+    const [copied, setCopied] = useState(false)
+    const [coinQRCode, setCoinQRCode] = useState("")
+    useEffect(async () => {
+        if (currentCoinAddress) {
+            const qrCode = await generateQR(currentCoinAddress)
+            setCoinQRCode(qrCode)
+        }
+        return ""
+    }, [currentCoinAddress])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        cardholder: "",
-        cardnumber: "",
-        expire: "",
-        code: "",
-        bill: "",
         allow_fraction: false,
         getAddress: false,
     })
-    const { cardholder, cardnumber, expire, code, bill, allow_fraction, getAddress } = state
+    const { allow_fraction, getAddress } = state
 
     const [balance, setBalance] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
@@ -184,7 +190,7 @@ const Payment = () => {
                                     fooCoins={fooCoins}
                                 />
                             )}
-                            {tabIndex === 2 && <CreditCardTab />}
+                            {tabIndex === 2 && <CreditCardTab amount={bidAmount} round={currentRound} />}
                             {tabIndex === 3 && (
                                 <div className="paypal-tab">
                                     <div className="payment-content">

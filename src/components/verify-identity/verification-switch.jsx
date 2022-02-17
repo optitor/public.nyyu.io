@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import StepSix from "../verify-identity/step-six"
 import StepOne from "../verify-identity/step-one"
 import StepTwo from "../verify-identity/step-two"
@@ -8,10 +8,21 @@ import StepThree from "../verify-identity/step-three"
 import StepSeven from "../verify-identity/step-seven"
 import PrimaryStep from "../verify-identity/primary-step"
 import { useVerification } from "./verification-context"
+import Loading from "../common/Loading"
 
 export default function VerificationSwitch({ shuftReferencePayload }) {
+    // Containers
     const verification = useVerification()
-    verification.setShuftReferencePayload(shuftReferencePayload)
+    const [loading, setLoading] = useState(true)
+
+    // Methods
+    useEffect(() => {
+        verification.setShuftReferencePayload(shuftReferencePayload)
+        setLoading(false)
+    }, [verification, shuftReferencePayload])
+
+    // Render
+    if (loading) return <Loading />
     return (
         <>
             {verification.step === -1 && <PrimaryStep />}
