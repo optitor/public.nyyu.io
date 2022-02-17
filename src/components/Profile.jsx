@@ -44,7 +44,7 @@ const Profile = () => {
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
-            if(!userData.getUser) {
+            if (!userData.getUser) {
                 return logout(() => {
                     navigate(ROUTES.home)
                 })
@@ -73,7 +73,6 @@ const Profile = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     })
-    console.log(displayName, userTiersData, shuftReference, shuftiStatus)
     const loadingPage = !(displayName && userTiersData && shuftiStatus)
     // Containers
     const user = userData?.getUser
@@ -190,7 +189,10 @@ const Profile = () => {
                                             className="timeleft"
                                             style={{
                                                 width: `${
-                                                    (user?.tierPoint / (nextTier?.length > 0?? nextTier[0]?.point)) * 100
+                                                    (user?.tierPoint /
+                                                        (nextTier?.length > 0 ??
+                                                            nextTier[0]?.point)) *
+                                                    100
                                                 }%`,
                                             }}
                                         ></div>
