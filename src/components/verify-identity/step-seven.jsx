@@ -37,7 +37,10 @@ export default function StepSeven() {
             manual_review: "1",
         }
 
-        if (verification.shuftReferencePayload?.docStatus === false) {
+        if (
+            verification.shuftReferencePayload?.docStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        ) {
             const documentProof = await getBase64(verification.documentProof.files[0])
             payload["document"] = {
                 proof: documentProof,
@@ -54,7 +57,10 @@ export default function StepSeven() {
             }
         }
 
-        if (verification.shuftReferencePayload?.addrStatus === false) {
+        if (
+            verification.shuftReferencePayload?.addrStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        ) {
             const addressProof = await getBase64(verification.addressProof.files[0])
             payload["address"] = {
                 full_address: verification.address,
@@ -79,7 +85,10 @@ export default function StepSeven() {
             }
         }
 
-        if (verification.shuftReferencePayload?.conStatus === false) {
+        if (
+            verification.shuftReferencePayload?.conStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        ) {
             const consentProof = await getBase64(verification.consentProof.files[0])
             payload["consent"] = {
                 proof: consentProof,
@@ -88,7 +97,10 @@ export default function StepSeven() {
                 allow_offline: "1",
             }
         }
-        if (verification.shuftReferencePayload?.selfieStatus === false)
+        if (
+            verification.shuftReferencePayload?.selfieStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        )
             payload["face"] = {
                 proof: verification.faceProof.selfieImage,
                 allow_offline: "1",
