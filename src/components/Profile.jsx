@@ -280,16 +280,6 @@ const Profile = () => {
                                                 <TierDetailsTab />
                                             </TabPanel>
                                         </Tabs>
-                                        <div className="verify-delete mt-3 pb-5 ps-sm-3 ps-0">
-                                            <p
-                                                className="delete-account-link"
-                                                onClick={() => setIsDeleteAccountModalOpen(true)}
-                                                onKeyDown={() => setIsDeleteAccountModalOpen(true)}
-                                                role="presentation"
-                                            >
-                                                Delete account
-                                            </p>
-                                        </div>
                                     </>
                                 )}
                                 {tabIndex === 1 && (
