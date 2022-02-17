@@ -80,7 +80,6 @@ const Payment = () => {
     const currentRound = useSelector((state) => state?.placeBid.round_id);
     // console.log("data: ", bidAmount, currentRound)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    const currentRound = useSelector((state) => state?.placeBid.round_id)
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
     const [copied, setCopied] = useState(false)
     const [coinQRCode, setCoinQRCode] = useState("")
