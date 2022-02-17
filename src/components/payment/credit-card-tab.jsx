@@ -52,8 +52,8 @@ const CardSection = ({ amount, round }) => {
     const elements = useElements()
     const [error, setError] = useState("")
     const [cardHolder, setCardHolder] = useState("")
-    const [stripePaymentContainer, setStripePaymentContainer] = useState(null)
     const [allowFractionBox, setAllowFractionBox] = useState(false)
+    const [stripePaymentContainer, setStripePaymentContainer] = useState(null)
     const style = {
         base: {
             color: "#E3E3E3",
@@ -103,6 +103,7 @@ const CardSection = ({ amount, round }) => {
             },
         })
     }
+
     // Render
     return (
         <>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect } from "react"
+import React, { useCallback, useReducer, useState, useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
 import { useMutation } from "@apollo/client"
 import ReactTooltip from "react-tooltip"
@@ -79,7 +79,6 @@ const Payment = () => {
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
     const [copied, setCopied] = useState(false)
     const [coinQRCode, setCoinQRCode] = useState("")
-
     useEffect(async () => {
         if (currentCoinAddress) {
             const qrCode = await generateQR(currentCoinAddress)
@@ -89,15 +88,10 @@ const Payment = () => {
     }, [currentCoinAddress])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        cardholder: "",
-        cardnumber: "",
-        expire: "",
-        code: "",
-        bill: "",
         allow_fraction: false,
         getAddress: false,
     })
-    const { cardholder, cardnumber, expire, code, bill, allow_fraction, getAddress } = state
+    const { allow_fraction, getAddress } = state
 
     const [coin, setCoin] = useState(FOO_COINS[0])
     const [balance, setBalance] = useState(null)
