@@ -74,10 +74,8 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
-    // const dispatch = useDispatch()
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
     const currentRound = useSelector((state) => state?.placeBid.round_id)
-    // console.log("data: ", bidAmount, currentRound)
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
     const [copied, setCopied] = useState(false)
     const [coinQRCode, setCoinQRCode] = useState("")
@@ -125,7 +123,6 @@ const Payment = () => {
             console.log("create cypto payment: ", data)
             const list = data.createCryptoPayment.pricing
             const addresses = data.createCryptoPayment.addresses
-            // console.log(addresses)
             setAddressList(addresses)
             setPriceList(data.createCryptoPayment.pricing)
             setCurrentCoinAddress(addresses[0].value)
@@ -307,7 +304,7 @@ const Payment = () => {
                                     </div>
                                 </div>
                             )}
-                            {tabIndex === 2 && <CreditCardTab />}
+                            {tabIndex === 2 && <CreditCardTab amount={bidAmount} />}
                             {tabIndex === 3 && (
                                 <div className="paypal-tab">
                                     <div className="payment-content">

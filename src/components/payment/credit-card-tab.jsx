@@ -16,7 +16,7 @@ import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { GET_STRIPE_PUB_KEY } from "./payment-webservice"
 import { useQuery } from "@apollo/client"
 import CustomSpinner from "../common/custom-spinner"
-export default function CreditCardTab() {
+export default function CreditCardTab({ amount }) {
     // Containers
     const [loading, setLoading] = useState(true)
     const [stripePublicKey, setStripePublicKey] = useState(null)
@@ -39,21 +39,21 @@ export default function CreditCardTab() {
                 </div>
             ) : (
                 <Elements stripe={loadStripe(stripePublicKey)}>
-                    <CardSection />
+                    <CardSection amount={amount} />
                 </Elements>
             )}
         </div>
     )
 }
 
-const CardSection = () => {
+const CardSection = ({ amount }) => {
     // Containers
     const [allowFractionBox, setAllowFractionBox] = useState(false)
     const stripe = useStripe()
     const elements = useElements()
     const style = {
         base: {
-            color: "white",
+            color: "#E3E3E3",
             fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
             fontSmoothing: "antialiased",
             fontSize: "16px",
@@ -73,14 +73,22 @@ const CardSection = () => {
         e.preventDefault()
         if (!stripe || !elements) return
 
-        const result = await stripe.createPaymentMethod({
+        const { paymentMethod } = await stripe.createPaymentMethod({
             type: "card",
             card: elements.getElement(CardNumberElement),
             billing_details: {
                 name: "Mohammad Eskini", // TODO: Change this later on.
             },
         })
-        console.log(result)
+        console.log(paymentMethod.id)
+        // const intent = await stripe.paymentIntents.create({
+        //     payment_method: paymentMethod.id,
+        //     amount,
+        //     currency: "usd",
+        //     confirmation_method: "manual",
+        //     confirm: true,
+        // })
+        // console.log("intent", intent)
     }
     // Render
     return (
