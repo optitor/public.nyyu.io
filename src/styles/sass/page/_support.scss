@@ -234,3 +234,17 @@
         }
     }
 }
+
+
+.delete-account-btn{
+    min-height: 45px;
+    max-width: 220px;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: 500ms;
+    font-weight: bold;
+    font-size: 18px;
+    &:hover {
+        opacity: 0.6;
+    }
+}
