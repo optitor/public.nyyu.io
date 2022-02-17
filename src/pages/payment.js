@@ -2,11 +2,12 @@
 
 import React, { useCallback, useReducer, useState, useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
-import { useMutation } from "@apollo/client"
 import ReactTooltip from "react-tooltip"
+import axios from 'axios'
+import { useQuery } from '@apollo/client'
 import Select, { components } from "react-select"
 import Header from "../components/header"
-import { Input, CheckBox } from "../components/common/FormControl"
+import { CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
@@ -19,15 +20,16 @@ import {
     ETH,
     BTC,
     DOGE,
-    Copy,
     PaypalBrand,
 } from "../utilities/imgImport"
-import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
-import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
-import { CREATE_CRYPTO_PAYMENT } from "../apollo/graghqls/mutations/Payment"
-import { generateQR } from "./../utilities/string"
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
 import CreditCardTab from "../components/payment/credit-card-tab"
+import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
+import { GET_EXCHANGE_RATE } from './../apollo/graghqls/querys/Payment'
+import Loading from "../components/common/Loading"
+import { numberWithCommas } from "../utilities/number"
+
 
 const { Option, SingleValue } = components
 
@@ -44,18 +46,18 @@ const payment_types = [
     { icon: ExternalWallet, value: "externalwallets", label: "External Wallets" },
 ]
 
-const SelectOption = (props) => (
-    <Option {...props}>
-        <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
-            <img
-                src={props.data.icon}
-                style={{ width: "30px", height: "auto" }}
-                alt={props.data.label}
-            />
-            <p className="coin-label ms-2">{props.data.label}</p>
-        </div>
-    </Option>
-)
+const FOO_COINS = [    
+    { value: "BTC", label: "BTC" },
+    { value: "ETH", label: "ETH" },
+    { value: "SOL", label: "SOL" },
+    { value: "BCH", label: "BCH" },
+    { value: "DOGE", label: "DOGE" },
+    { value: "USDC", label: "USDC" },
+    { value: "LTC", label: "LTC" },
+]
+
+const QUOTE = "USDT"
+const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
 
 const CustomOption = (props) => (
     <Option {...props}>
@@ -74,8 +76,10 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
+    // const dispatch = useDispatch()
+    const currentRound = useSelector((state) => state?.placeBid.round_id);
+    // console.log("data: ", bidAmount, currentRound)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    const currentRound = useSelector((state) => state?.placeBid.round_id)
     const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
     const [copied, setCopied] = useState(false)
     const [coinQRCode, setCoinQRCode] = useState("")
@@ -93,17 +97,37 @@ const Payment = () => {
     })
     const { allow_fraction, getAddress } = state
 
-    const [coin, setCoin] = useState(FOO_COINS[0])
     const [balance, setBalance] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
-    const [selectedCoinPrice, setSelectedCoinPrice] = useState(0)
-    const [price_list, setPriceList] = useState(null)
-    const [address_list, setAddressList] = useState(null)
 
-    const handleInput = useCallback((e) => {
-        e.preventDefault()
-        setState({ [e.target.name]: e.target.value })
+    const [fooCoins, setFooCoins] = useState(null);
+    const [BTCPrice, setBTCPrice] = useState(null);
+    const loadingData = !(fooCoins && BTCPrice);
+
+    useQuery(GET_EXCHANGE_RATE, {
+        onCompleted: data => {
+            if(data.getExchangeRate) {
+                const temp = JSON.parse(data.getExchangeRate);
+                const coins = FOO_COINS.map(item => {
+                    return {value: item.value, label: item.value, data: temp?.result[item.value]};
+                });
+                setFooCoins(coins);
+            }
+        },
+        onError: (err) => {
+            console.log("get exchange rate: ", err)
+        },
+    })
+
+    useEffect(() => {
+        const get_BTCPrice = () => {
+            axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
+                setBTCPrice(res.data.lastPrice)
+            })
+        }
+        get_BTCPrice()
     }, [])
+
     const handleAllowFraction = useCallback(
         (e) => {
             e.preventDefault()
@@ -112,22 +136,8 @@ const Payment = () => {
         [allow_fraction]
     )
 
-    const [CreateCryptoPayment] = useMutation(CREATE_CRYPTO_PAYMENT, {
-        onCompleted: (data) => {
-            console.log("create cypto payment: ", data)
-            const list = data.createCryptoPayment.pricing
-            const addresses = data.createCryptoPayment.addresses
-            setAddressList(addresses)
-            setPriceList(data.createCryptoPayment.pricing)
-            setCurrentCoinAddress(addresses[0].value)
-            setSelectedCoinPrice(list[1].value.amount.toFixed(3))
-        },
-        onError: (err) => {
-            console.log("create cypto payment: ", err)
-        },
-    })
-
-    return (
+    return loadingData? <Loading />:
+    (
         <main className="payment-page">
             <Header />
             <section className="container position-relative">
@@ -172,131 +182,12 @@ const Payment = () => {
                                 </div>
                             )}{" "}
                             {tabIndex === 1 && (
-                                <div className="cryptocoin-tab">
-                                    <div className="payment-content">
-                                        <div className="set-cryptocoin">
-                                            <div className="d-flex flex-column justify-content-between coin-address">
-                                                <div className="d-flex justify-content-between w-100">
-                                                    <Select
-                                                        className="cryptocoin-select"
-                                                        options={FOO_COINS}
-                                                        value={coin}
-                                                        onChange={(v) => {
-                                                            setCoin(v)
-                                                            setCurrentCoinAddress(v.address)
-                                                            price_list?.map((item, index) => {
-                                                                if (
-                                                                    item.value.currency === v.value
-                                                                ) {
-                                                                    setSelectedCoinPrice(
-                                                                        (
-                                                                            item.value.amount * 1
-                                                                        ).toFixed(3)
-                                                                    )
-                                                                    setCurrentCoinAddress(
-                                                                        address_list[index - 1]
-                                                                            .value
-                                                                    )
-                                                                }
-                                                            })
-                                                        }}
-                                                        components={{
-                                                            Option: SelectOption,
-                                                            SingleValue: SelectOption,
-                                                        }}
-                                                    />
-                                                    <div className="w-75">
-                                                        <Input
-                                                            type="number"
-                                                            value={selectedCoinPrice}
-                                                            disabled
-                                                        />
-                                                    </div>
-                                                </div>
-                                                {!getAddress ? (
-                                                    <button
-                                                        className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
-                                                        onClick={() => {
-                                                            setState({ getAddress: true })
-                                                            CreateCryptoPayment({
-                                                                variables: {
-                                                                    round: currentRound,
-                                                                    amount: bidAmount,
-                                                                },
-                                                            })
-                                                        }}
-                                                    >
-                                                        get deposit Address
-                                                    </button>
-                                                ) : (
-                                                    <>
-                                                        <CopyToClipboard
-                                                            onCopy={() => setCopied(true)}
-                                                            text={currentCoinAddress}
-                                                            options={{ message: "copied" }}
-                                                        >
-                                                            <p
-                                                                className="clipboard"
-                                                                onClick={() => setCopied(true)}
-                                                                onKeyDown={() => setCopied(true)}
-                                                                role="presentation"
-                                                            >
-                                                                <code>{currentCoinAddress}</code>
-                                                                <img src={Copy} alt="copy" />
-                                                            </p>
-                                                        </CopyToClipboard>
-                                                    </>
-                                                )}
-                                            </div>
-                                            {getAddress && (
-                                                <div className="qr-code">
-                                                    {coinQRCode ? (
-                                                        <img src={coinQRCode} alt="qrcode" />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="mt-3 d-flex justify-content-between">
-                                            <div className="d-flex flex-row ">
-                                                <CheckBox
-                                                    type="checkbox"
-                                                    name="allow_fraction"
-                                                    value={allow_fraction}
-                                                    onChange={handleAllowFraction}
-                                                    className="text-uppercase"
-                                                ></CheckBox>
-                                                <div className="allow-text text-light">
-                                                    Do you allow fraction of order compleation?
-                                                </div>
-                                                <ReactTooltip
-                                                    place="right"
-                                                    type="light"
-                                                    effect="solid"
-                                                >
-                                                    <div
-                                                        className="text-justify"
-                                                        style={{
-                                                            width: "300px",
-                                                        }}
-                                                    >
-                                                        {PAYMENT_FRACTION_TOOLTIP_CONTENT}
-                                                    </div>
-                                                </ReactTooltip>
-                                                <FontAwesomeIcon
-                                                    data-tip="React-tooltip"
-                                                    icon={faQuestionCircle}
-                                                    className="fa-2x ms-2 cursor-pointer text-light"
-                                                />
-                                            </div>
-                                            <p className="payment-expire my-auto">
-                                                payment expires in{" "}
-                                                <span className="txt-green">10 minutes</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CoinPaymentsTab 
+                                    currentRound={currentRound} 
+                                    bidAmount={bidAmount} 
+                                    BTCPrice={BTCPrice}
+                                    fooCoins={fooCoins}
+                                />
                             )}
                             {tabIndex === 2 && <CreditCardTab amount={bidAmount} round={currentRound} />}
                             {tabIndex === 3 && (
@@ -433,7 +324,7 @@ const Payment = () => {
                                 <div className="d-flex justify-content-between">
                                     <p className="order-list__label">Total order</p>
                                     <p className="order-list__label">
-                                        {bidAmount} <span> USD</span>
+                                        {numberWithCommas(bidAmount)} <span> USD</span>
                                     </p>
                                 </div>
                                 <div className="d-flex justify-content-between my-3">
@@ -453,14 +344,14 @@ const Payment = () => {
                                     Order total:
                                 </p>
                                 <p className="order-total">
-                                    {bidAmount} <span> USD</span>
+                                    {numberWithCommas(bidAmount)} <span> USD</span>
                                 </p>
                             </div>
                         </div>
 
-                        <button className="btn-primary text-uppercase confirm-payment">
+                        {tabIndex === 2 && (<button className="btn-primary text-uppercase confirm-payment">
                             Confirm Payment
-                        </button>
+                        </button>)}
                     </div>
                 </div>
                 <div className="remain-token__value col-md-12 mx-auto">

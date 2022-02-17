@@ -17,3 +17,13 @@ export const CREATE_CRYPTO_PAYMENT = gql`
         }
     }
 `
+
+export const GET_DEPOSIT_ADDRESS = gql`
+    mutation GetDepositAddress(
+        $currency: String!
+    ) {
+        getDepositAddress (
+            currency: $currency
+        )
+    }
+`

@@ -9,6 +9,14 @@ import { COLOR_LOAD, COLOR_OFF, COLOR_ON } from "../../utilities/staticData"
 import CustomSpinner from "../common/custom-spinner"
 
 export default function NotificationSetting() {
+
+    // Containers
+    const [loadingSection, setLoadingSection] = useState(true)
+    const [pendingSwitch, setPendingSwitch] = useState(false)
+    const setting = user_data?.getUser.notifySetting
+    const [tempSetting, setTempSetting] = useState([])
+    const notificationTypeList = notificationTypes?.getNotificationTypes
+
     //Webservice
     const { data: user_data, refetch } = useQuery(GET_USER, {
         onCompleted: () => {
@@ -29,13 +37,6 @@ export default function NotificationSetting() {
             setPendingSwitch(false)
         },
     })
-
-    // Containers
-    const [loadingSection, setLoadingSection] = useState(true)
-    const [pendingSwitch, setPendingSwitch] = useState(false)
-    const setting = user_data?.getUser.notifySetting
-    const [tempSetting, setTempSetting] = useState([])
-    const notificationTypeList = notificationTypes?.getNotificationTypes
 
     // Methods
     const setChecked = (i) => {
