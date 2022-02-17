@@ -13,7 +13,8 @@ const VerificationPage = () => {
     const [shuftReference, setShuftReference] = useState(null)
     const [shuftiStatus, setShuftiStatus] = useState(null)
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true)
-    const loadingData = !(userEmail && shuftReference && shuftiStatus)
+    // const loadingData = !(userEmail && shuftReference && shuftiStatus)
+    const loadingData = !(userEmail && shuftiStatus)
 
     // WebService
     useQuery(GET_USER, {
