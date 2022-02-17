@@ -1,29 +1,47 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { loadStripe } from "@stripe/stripe-js"
 import {
     CardNumberElement,
     CardCvcElement,
     CardExpiryElement,
     Elements,
-    ElementsConsumer,
+    useStripe,
+    useElements,
 } from "@stripe/react-stripe-js"
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
 import ReactTooltip from "react-tooltip"
 import { CheckBox } from "../common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
+import { GET_STRIPE_PUB_KEY } from "./payment-webservice"
+import { useQuery } from "@apollo/client"
+import CustomSpinner from "../common/custom-spinner"
 export default function CreditCardTab() {
     // Containers
-    const stripePromise = loadStripe("pk_test_oKhSR5nslBRnBZpjO6KuzZeX")
+    const [loading, setLoading] = useState(true)
+    const [stripePublicKey, setStripePublicKey] = useState(null)
 
-    // Methods
+    // Webservice
+    useQuery(GET_STRIPE_PUB_KEY, {
+        onCompleted: (data) => {
+            setStripePublicKey(data.getStripePubKey)
+            setLoading(false)
+        },
+        onError: (error) => console.log(error),
+    })
 
     // Render
     return (
         <div>
-            <Elements stripe={stripePromise}>
-                <CardSection />
-            </Elements>
+            {loading ? (
+                <div className="text-center mx-auto mt-2">
+                    <CustomSpinner />
+                </div>
+            ) : (
+                <Elements stripe={loadStripe(stripePublicKey)}>
+                    <CardSection />
+                </Elements>
+            )}
         </div>
     )
 }
@@ -31,6 +49,8 @@ export default function CreditCardTab() {
 const CardSection = () => {
     // Containers
     const [allowFractionBox, setAllowFractionBox] = useState(false)
+    const stripe = useStripe()
+    const elements = useElements()
     const style = {
         base: {
             color: "white",
@@ -47,6 +67,20 @@ const CardSection = () => {
             color: "#fa755a",
             iconColor: "#fa755a",
         },
+    }
+    // Methods
+    const submitPayment = async (e) => {
+        e.preventDefault()
+        if (!stripe || !elements) return
+
+        const result = await stripe.createPaymentMethod({
+            type: "card",
+            card: elements.getElement(CardNumberElement),
+            billing_details: {
+                name: "Mohammad Eskini", // TODO: Change this later on.
+            },
+        })
+        console.log(result)
     }
     // Render
     return (
@@ -124,6 +158,10 @@ const CardSection = () => {
                     </div>
                 </div>
             </div>
+
+            <button className="btn btn-outline-light" onClick={submitPayment}>
+                Confirm Payment
+            </button>
         </>
     )
 }
