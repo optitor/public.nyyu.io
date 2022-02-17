@@ -1,11 +1,10 @@
 /* eslint-disable */
 
 import React, { useCallback, useReducer, useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { useMutation } from "@apollo/client"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
-import QRCode from "react-qr-code"
 import Header from "../components/header"
 import { Input, CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -28,6 +27,7 @@ import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
 import { CREATE_CRYPTO_PAYMENT } from "../apollo/graghqls/mutations/Payment"
 import { generateQR } from "./../utilities/string"
+import CreditCardTab from "../components/payment/credit-card-tab"
 
 const { Option, SingleValue } = components
 
@@ -221,7 +221,6 @@ const Payment = () => {
                                                             disabled
                                                         />
                                                     </div>
-
                                                 </div>
                                                 {!getAddress ? (
                                                     <button
@@ -308,112 +307,7 @@ const Payment = () => {
                                     </div>
                                 </div>
                             )}
-                            {tabIndex === 2 && (
-                                <div className="creditcard-tab">
-                                    <div className="payment-content">
-                                        <div className="row">
-                                            <div className="form-group">
-                                                <Input
-                                                    type="text"
-                                                    name="cardholder"
-                                                    value={cardholder}
-                                                    onChange={handleInput}
-                                                    placeholder="Card Holder"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <Input
-                                                type="number"
-                                                name="cardnumber"
-                                                value={cardnumber}
-                                                onChange={handleInput}
-                                                placeholder="Card number"
-                                            />
-                                        </div>
-                                        <div className="row">
-                                            <div className="form-group col-sm-4 pe-sm-0">
-                                                <Input
-                                                    type="number"
-                                                    name="expire"
-                                                    value={expire}
-                                                    onChange={handleInput}
-                                                    placeholder="Expiration date"
-                                                />
-                                            </div>
-                                            <div className="form-group col-sm-4">
-                                                <Input
-                                                    type="number"
-                                                    name="code"
-                                                    value={code}
-                                                    onChange={handleInput}
-                                                    placeholder="CSS code"
-                                                />
-                                            </div>
-                                            <div className="form-group col-sm-4 ps-sm-0">
-                                                <Input
-                                                    type="number"
-                                                    name="bill"
-                                                    value={bill}
-                                                    onChange={handleInput}
-                                                    placeholder="Billing zip/postal code"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="mt-3 d-flex justify-content-between">
-                                            <div className="d-flex flex-row text-white">
-                                                <CheckBox
-                                                    type="checkbox"
-                                                    name="allow_fraction"
-                                                    value={allow_fraction}
-                                                    onChange={handleAllowFraction}
-                                                    className="text-uppercase mt-2"
-                                                ></CheckBox>
-                                                <div className="allow-text">
-                                                    Do you allow fraction of order compleation?
-                                                </div>
-                                                <ReactTooltip
-                                                    place="right"
-                                                    type="light"
-                                                    effect="solid"
-                                                >
-                                                    <div
-                                                        className="text-justify"
-                                                        style={{
-                                                            width: "300px",
-                                                        }}
-                                                    >
-                                                        {PAYMENT_FRACTION_TOOLTIP_CONTENT}
-                                                    </div>
-                                                </ReactTooltip>
-                                                <FontAwesomeIcon
-                                                    data-tip="React-tooltip"
-                                                    icon={faQuestionCircle}
-                                                    className="fa-2x ms-2 cursor-pointer"
-                                                />
-                                            </div>
-                                            <p className="payment-expire my-auto">
-                                                payment expires in{" "}
-                                                <span className="txt-green">10 minutes</span>
-                                            </p>
-                                        </div>
-                                        <div className="d-flex">
-                                            <p className="d-flex flex-row">
-                                                <CheckBox
-                                                    type="checkbox"
-                                                    name="allow_fraction"
-                                                    value={allow_fraction}
-                                                    onChange={handleAllowFraction}
-                                                    className="text-uppercase"
-                                                ></CheckBox>
-                                                <div className="allow-text">
-                                                    Save card details for future purchase
-                                                </div>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                            {tabIndex === 2 && <CreditCardTab />}
                             {tabIndex === 3 && (
                                 <div className="paypal-tab">
                                     <div className="payment-content">

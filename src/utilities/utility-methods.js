@@ -1,4 +1,3 @@
-import { useQuery } from "@apollo/client"
 import axios from "axios"
 import { CLIENT_ID, SECRET } from "./staticData"
 
@@ -88,28 +87,15 @@ export const getShuftiStatusByReference = async (reference) => {
     return "UNSET"
 }
 
-export const getStripePubKey = () => {
-    return new Promise((resolve, reject) => {
-        useQuery("", {
-            onCompleted: (data) => {
-                resolve(data.getStripePubKey)
-            },
-            onError: (error) => {
-                reject(error)
-            }
-        })
-    })
-}
-export const createPaymentIntent = (paymentMethodId, amount, currency) => {
+export const createPaymentIntent = (paymentMethodId, amount) => {
     const apiBaseUrl = "https://api.stripe.com/v1/payment_intents"
     const response = axios.post(apiBaseUrl, {
         paymentMethodId,
         amount,
         currency: "usd",
         confirmation_method: "manual",
-        confirm: "true"
+        confirm: "true",
     })
     if (response && "data" in response) {
-
     }
 }
