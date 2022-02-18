@@ -2,15 +2,11 @@
     width: 100%;
     position: fixed;
     top: 0;
-    padding: 22px;
+    padding: 28px 0 !important;
     background-color: $black;
     z-index: 9999;
     .image_div {
         width: 50px;
-    }
-    .header-right-side {
-        margin-bottom: -10px;
-        margin-top: 5px;
     }
     .user-dropdown {
         position: relative;
@@ -82,10 +78,7 @@
     }
 
     @include mq("tablet", max) {
-        padding: 9px 0;
-    }
-    @include mq("phone", max) {
-        padding: 15px 0;
+        padding: 16px 0 !important;
     }
 
     .menu__logo {
