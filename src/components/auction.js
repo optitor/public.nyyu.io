@@ -327,8 +327,8 @@ const Auction = () => {
         PlaceBid({
             variables: {
                 roundId: fnSelectedRoundData()?.id,
-                tokenAmount: amount * amount,
-                tokenPrice: Math.max(fnSelectedRoundData()?.minPrice, price),
+                tokenAmount: amount,
+                tokenPrice: price,
                 payment: 1,
                 cryptoType: "BTC",
             },
