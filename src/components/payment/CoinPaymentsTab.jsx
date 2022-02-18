@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback, useReducer, useMemo } from 'react';
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import axios from "axios"
+import _ from 'lodash'
+import { useQuery } from "@apollo/client"
 import Select, { components } from "react-select"
 import ReactTooltip from 'react-tooltip';
 import { FontAwesomeIcon, faQuestionCircle } from '@fortawesome/react-fontawesome';
 import CircularProgress from '@mui/material/CircularProgress';
+import NumberFormat from 'react-number-format';
 import { useMutation } from '@apollo/client';
 import { GET_DEPOSIT_ADDRESS } from '../../apollo/graghqls/mutations/Payment';
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from '../../utilities/staticData';
@@ -11,9 +15,11 @@ import icons from "base64-cryptocurrency-icons"
 import { generateQR } from '../../utilities/string';
 import { Input, CheckBox } from '../common/FormControl';
 import { Copy } from '../../utilities/imgImport';
+import { GET_EXCHANGE_RATE } from './../../apollo/graghqls/querys/Payment'
+import CustomSpinner from "../common/custom-spinner"
 import { numberWithCommas } from './../../utilities/number';
 
-const { Option, SingleValue } = components
+const { Option } = components
 
 const SelectOption = (props) => {
     const { data } = props;
@@ -29,10 +35,28 @@ const SelectOption = (props) => {
     </Option>)
 }
 
-const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 10000 }) => {
+const FOO_COINS = [
+    { value: "BTC", label: "BTC" },
+    { value: "ETH", label: "ETH" },
+    { value: "SOL", label: "SOL" },
+    { value: "BCH", label: "BCH" },
+    { value: "DOGE", label: "DOGE" },
+    { value: "USDC", label: "USDC" },
+    { value: "LTC", label: "LTC" },
+]
+
+const QUOTE = "USDT"
+const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
+
+const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const [copied, setCopied] = useState(false);
-    const [coinQRCode, setCoinQRCode] = useState("");
-    const [coin, setCoin] = useState(fooCoins[0])
+
+    const [fooCoins, setFooCoins] = useState([])
+    const [BTCPrice, setBTCPrice] = useState(null)
+
+    const loadingData = _.isEmpty(fooCoins) || !BTCPrice;
+
+    const [coin, setCoin] = useState({})
     const [pending, setPending] = useState(false);
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -45,12 +69,37 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
     })
     const { cardholder, cardnumber, expire, code, bill, allow_fraction } = state
 
+    useQuery(GET_EXCHANGE_RATE, {
+        onCompleted: (data) => {
+            if (data.getExchangeRate) {
+                const temp = JSON.parse(data.getExchangeRate)
+                const coins = FOO_COINS.map((item) => {
+                    return { value: item.value, label: item.value, data: temp?.result[item.value] }
+                })
+                setFooCoins(coins)
+                setCoin(coins[0])
+            }
+        },
+        onError: (err) => {
+            console.log("get exchange rate: ", err)
+        },
+    })
+
+    useEffect(() => {
+        const get_BTCPrice = () => {
+            axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
+                setBTCPrice(res.data.lastPrice)
+            })
+        }
+        get_BTCPrice()
+    }, [])
+
     const coinQuantity = useMemo(() => {
-        const coinPrice = BTCPrice * coin.data?.rate_btc;
-        return (bidAmount / coinPrice).toFixed(9).toString();
+        const coinPrice = BTCPrice * coin?.data?.rate_btc;
+        return parseFloat((bidAmount / coinPrice).toFixed(9));
     }, [bidAmount, coin, BTCPrice])
 
-
+    const [coinQRCode, setCoinQRCode] = useState("");
     const [depositAddress, setDepositAddress] = useState('')
 
     useEffect(async () => {
@@ -63,7 +112,6 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
 
     const [getDepositAddressMutation] = useMutation(GET_DEPOSIT_ADDRESS, {
         onCompleted: data => {
-            console.log(data)
             if(data.getDepositAddress) {
                 setDepositAddress(data.getDepositAddress);
                 setPending(false);
@@ -71,6 +119,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
         },
         onError: err => {
             console.log('get deposit address: ', err);
+            setPending(false);
         }
     })
 
@@ -91,7 +140,11 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
         [allow_fraction]
     )
 
-    return (
+    return loadingData?
+    <div className='text-center'>
+        <CustomSpinner />
+    </div>:
+    (
         <div className="cryptocoin-tab">
             <div className="payment-content">
                 <div className="set-cryptocoin">
@@ -111,10 +164,11 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
                                 }}
                             />
                             <div className="w-75">
-                                <Input
-                                    type="number"
+                                <NumberFormat
+                                    className='black_input'
                                     value={coinQuantity}
-                                    disabled
+                                    thousandSeparator={true}
+                                    readOnly
                                 />
                             </div>
                         </div>
@@ -123,7 +177,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
                                 className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
                                 onClick={get_Deposit_Address}
                             >
-                                {pending? <CircularProgress color="success" size={20}/>: 'get deposit Address'}
+                                {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit Address'}
                             </button>
                         ) : (
                             <>
