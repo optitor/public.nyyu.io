@@ -218,5 +218,6 @@ const customSelectStyles = {
     input: (provided) => ({
         ...provided,
         color: "white",
+        display: "none"
     }),
 }

@@ -664,129 +664,146 @@ const Auction = () => {
                                         (isBid && "d-block")
                                         }`}
                                 >
-                                    <div className="d-flex ">
-                                        <div className="w-100">
+                                    <div>
+                                        <div className="w-100 d-flex flex-column">
                                             <div className="d-flex">
-                                                <Select
-                                                    className="select-chart-type"
-                                                    options={options}
-                                                    value={selectLabel}
-                                                    onChange={(v) => setState({ selectLabel: v })}
-                                                />
-                                                <ReactTooltip
-                                                    place="right"
-                                                    type="light"
-                                                    effect="solid"
-                                                    id="tooltip1"
-                                                >
-                                                    <div
-                                                        style={{
-                                                            width: "300px",
-                                                            color: "#000000",
-                                                        }}
-                                                    >
-                                                        {AUCTION_TOOLTIP_CONTENT1}
+                                                <div className="flex-column">
+                                                    <div className="d-flex p-0">
+                                                        <Select
+                                                            className="select-chart-type"
+                                                            options={options}
+                                                            value={selectLabel}
+                                                            onChange={(v) => setState({ selectLabel: v })}
+                                                        />
                                                     </div>
-                                                </ReactTooltip>
+                                                    <div className="d-flex justify-content-center p-0">
+                                                        {selectLabel.value === "bid_performance" && (
+                                                            <div className="w-100 mt-2 row p-0">
+                                                                <div className="col-4 ps-0 pe-1 m-0">
+                                                                    <button
+                                                                        className={`btn-small w-100 ${pricce ? "" : "btn-disabled"
+                                                                            }`}
+                                                                        onClick={() => {
+                                                                            if (!pricce) {
+                                                                                setPrice(true)
+                                                                                setVolume(true)
+                                                                                setPriceVolume(false)
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Price
+                                                                    </button>
+                                                                </div>
+                                                                <div className="col-4 ps-0 pe-1 m-0">
+                                                                    <button
+                                                                        className={`btn-small w-100 ${volume ? "" : "btn-disabled"
+                                                                            }`}
+                                                                        onClick={() => {
+                                                                            if (!volume) {
+                                                                                setPrice(true)
+                                                                                setVolume(true)
+                                                                                setPriceVolume(false)
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Volume
+                                                                    </button>
+                                                                </div>
+                                                                <div className="col-4 ps-0 pe-0 m-0">
+                                                                    <button
+                                                                        className={`btn-small w-100  ${price_volume ? "" : "btn-disabled"
+                                                                            }`}
+                                                                        onClick={() => {
+                                                                            if (!price_volume) {
+                                                                                setPrice(false)
+                                                                                setVolume(false)
+                                                                                setPriceVolume(true)
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Price Volume
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        {selectLabel.value === "round_performance" && (
+                                                            <div className="w-100 row mt-2 p-0">
+                                                                <div className="col-4 ps-0 pe-1 m-0">
+                                                                    <button
+                                                                        className={`btn-small w-100 ${reser_price ? "" : "btn-disabled"
+                                                                            }`}
+                                                                        onClick={() => {
+                                                                            if (!reser_price) {
+                                                                                setReserPrice(true)
+                                                                                setSoldPrice(true)
+                                                                                setPerformance(false)
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Reserved Price
+                                                                    </button>
+                                                                </div>
+                                                                <div className="col-4 ps-0 pe-1 m-0">
+                                                                    <button
+                                                                        className={`btn-small w-100 ${sold_price ? "" : "btn-disabled"
+                                                                            }`}
+                                                                        onClick={() => {
+                                                                            if (!sold_price) {
+                                                                                setReserPrice(true)
+                                                                                setSoldPrice(true)
+                                                                                setPerformance(false)
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Price Sold
+                                                                    </button>
+                                                                </div>
+                                                                <div className="col-4 ps-0 pe-0 m-0">
+                                                                    <button
+                                                                        className={`btn-small w-100 ${performance ? "" : "btn-disabled"
+                                                                            }`}
+                                                                        onClick={() => {
+                                                                            if (!performance) {
+                                                                                setReserPrice(false)
+                                                                                setSoldPrice(false)
+                                                                                setPerformance(true)
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Histogram
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="align-items-start">
+                                                    <ReactTooltip
+                                                        place="right"
+                                                        type="light"
+                                                        effect="solid"
+                                                        id="tooltip1"
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                width: "300px",
+                                                                color: "#000000",
+                                                            }}
+                                                        >
+                                                            {AUCTION_TOOLTIP_CONTENT1}
+                                                        </div>
+                                                    </ReactTooltip>
 
-                                                <img
-                                                    src={Qmark}
-                                                    alt="question"
-                                                    className="ms-3 d-none d-sm-block"
-                                                    data-for="tooltip1"
-                                                    data-tip="tooltip1"
-                                                    style={{ cursor: "pointer" }}
-                                                />
+                                                    <img
+                                                        src={Qmark}
+                                                        alt="question"
+                                                        className="ms-3 d-none d-sm-block"
+                                                        data-for="tooltip1"
+                                                        data-tip="tooltip1"
+                                                        style={{ cursor: "pointer" }}
+                                                    />
+                                                </div>
                                             </div>
-
-                                            {selectLabel.value === "bid_performance" && (
-                                                <div className="d-flex align-items-center pt-3 w-100 ">
-                                                    <button
-                                                        className={`btn-small ${pricce ? "" : "btn-disabled"
-                                                            }`}
-                                                        onClick={() => {
-                                                            if (!pricce) {
-                                                                setPrice(true)
-                                                                setVolume(true)
-                                                                setPriceVolume(false)
-                                                            }
-                                                        }}
-                                                    >
-                                                        Price
-                                                    </button>
-                                                    <button
-                                                        className={`btn-small ${volume ? "" : "btn-disabled"
-                                                            }`}
-                                                        onClick={() => {
-                                                            if (!volume) {
-                                                                setPrice(true)
-                                                                setVolume(true)
-                                                                setPriceVolume(false)
-                                                            }
-                                                        }}
-                                                    >
-                                                        Volume
-                                                    </button>
-                                                    <button
-                                                        className={`btn-small ${price_volume ? "" : "btn-disabled"
-                                                            }`}
-                                                        onClick={() => {
-                                                            if (!price_volume) {
-                                                                setPrice(false)
-                                                                setVolume(false)
-                                                                setPriceVolume(true)
-                                                            }
-                                                        }}
-                                                    >
-                                                        Price Volume
-                                                    </button>
-                                                </div>
-                                            )}
-                                            {selectLabel.value === "round_performance" && (
-                                                <div className=" d-flex justify-content-between pt-3 w-100 flex-wrap">
-                                                    <div className="d-flex" style={{ zIndex: '99' }}>
-                                                        <button
-                                                            className={`btn-small ${reser_price ? "" : "btn-disabled"
-                                                                }`}
-                                                            onClick={() => {
-                                                                if (!reser_price) {
-                                                                    setReserPrice(true)
-                                                                    setSoldPrice(true)
-                                                                    setPerformance(false)
-                                                                }
-                                                            }}
-                                                        >
-                                                            Reserved Price
-                                                        </button>
-                                                        <button
-                                                            className={`btn-small ${sold_price ? "" : "btn-disabled"
-                                                                }`}
-                                                            onClick={() => {
-                                                                if (!sold_price) {
-                                                                    setReserPrice(true)
-                                                                    setSoldPrice(true)
-                                                                    setPerformance(false)
-                                                                }
-                                                            }}
-                                                        >
-                                                            Price Sold
-                                                        </button>
-                                                        <button
-                                                            className={`btn-small ${performance ? "" : "btn-disabled"
-                                                                }`}
-                                                            onClick={() => {
-                                                                if (!performance) {
-                                                                    setReserPrice(false)
-                                                                    setSoldPrice(false)
-                                                                    setPerformance(true)
-                                                                }
-                                                            }}
-                                                        >
-                                                            Histogram
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
 
