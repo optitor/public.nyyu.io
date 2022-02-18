@@ -297,7 +297,7 @@ const Payment = () => {
                                                 <FontAwesomeIcon
                                                     data-tip="React-tooltip"
                                                     icon={faQuestionCircle}
-                                                    className="fa-2x ms-2 cursor-pointer text-light"
+                                                    className="fa-xl ms-2 cursor-pointer text-light"
                                                 />
                                             </div>
                                             <p className="payment-expire my-auto">
@@ -389,7 +389,7 @@ const Payment = () => {
                                                 <FontAwesomeIcon
                                                     data-tip="React-tooltip"
                                                     icon={faQuestionCircle}
-                                                    className="fa-2x ms-2 cursor-pointer"
+                                                    className="fa-xl ms-2 cursor-pointer"
                                                 />
                                             </div>
                                             <p className="payment-expire my-auto">
@@ -482,7 +482,7 @@ const Payment = () => {
                                                 <FontAwesomeIcon
                                                     data-tip="React-tooltip"
                                                     icon={faQuestionCircle}
-                                                    className="fa-2x ms-2 cursor-pointer"
+                                                    className="fa-xl ms-2 cursor-pointer"
                                                 />
                                             </p>
                                             <p className="payment-expire my-auto">
@@ -527,7 +527,7 @@ const Payment = () => {
                                                 <FontAwesomeIcon
                                                     data-tip="React-tooltip"
                                                     icon={faQuestionCircle}
-                                                    className="fa-2x ms-2 cursor-pointer"
+                                                    className="fa-xl ms-2 cursor-pointer"
                                                 />
                                             </p>
                                             <p className="payment-expire my-auto">
