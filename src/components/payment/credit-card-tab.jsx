@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { loadStripe } from "@stripe/stripe-js"
 import {
     CardNumberElement,
@@ -16,6 +16,7 @@ import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice"
 import { useMutation, useQuery } from "@apollo/client"
 import CustomSpinner from "../common/custom-spinner"
+
 export default function CreditCardTab({ amount, round }) {
     // Containers
     const [loading, setLoading] = useState(true)
@@ -53,7 +54,8 @@ const CardSection = ({ amount, round }) => {
     const [error, setError] = useState("")
     const [cardHolder, setCardHolder] = useState("")
     const [allowFractionBox, setAllowFractionBox] = useState(false)
-    const [stripePaymentContainer, setStripePaymentContainer] = useState(null)
+    const [successfulPayment, setSuccessfulPayment] = useState(false)
+    const [requestPending, setRequestPending] = useState(false)
     const style = {
         base: {
             color: "#E3E3E3",
@@ -74,17 +76,24 @@ const CardSection = ({ amount, round }) => {
 
     // Webservice
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
-        onCompleted: (data) => {
-            console.log(data.stripePayment)
+        onCompleted: async (data) => {
+            setRequestPending(false)
             if (data.stripePayment.error) return setError(data.stripePayment.error)
-            return setStripePaymentContainer(data.stripePayment)
+            const { clientSecret } = data.stripePayment
+            if (clientSecret) return setSuccessfulPayment(true)
+            return setError("Invalid Payment")
         },
-        onError: (error) => console.log(error),
+        onError: (error) => {
+            console.log(error)
+            setRequestPending(false)
+        },
     })
 
     // Methods
     const submitPayment = async (e) => {
         e.preventDefault()
+        setError("")
+        setRequestPending(true)
         if (!stripe || !elements) return
 
         const { paymentMethod } = await stripe.createPaymentMethod({
@@ -94,21 +103,73 @@ const CardSection = ({ amount, round }) => {
                 name: cardHolder,
             },
         })
-        stripePayment({
-            variables: {
-                roundId: round,
-                amount: 300.0 * 100, // TODO: Change this later on and use "amount" as the value
-                paymentMethodId: paymentMethod.id,
-                paymentIntentId: null,
-            },
-        })
+        if (paymentMethod && "id" in paymentMethod && paymentMethod.id)
+            return stripePayment({
+                variables: {
+                    roundId: Number(round),
+                    amount: amount * 100,
+                    paymentMethodId: paymentMethod.id,
+                    paymentIntentId: null,
+                },
+            })
+        setRequestPending(false)
+        return setError("Invalid Card Information")
     }
 
     // Render
-    return (
+    return successfulPayment === true ? (
+        <div className="text-center p-4">
+            <div className="text-danger mb-4">
+                <svg
+                    width="126"
+                    height="126"
+                    viewBox="0 0 126 126"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <rect
+                        x="31"
+                        y="64.1067"
+                        width="14.2931"
+                        height="34.4792"
+                        transform="rotate(-45 31 64.1067)"
+                        fill="#F2F2F2"
+                    />
+                    <rect
+                        width="14.2931"
+                        height="57.0408"
+                        transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 95.6963 48.1067)"
+                        fill="#F2F2F2"
+                    />
+                    <circle cx="63" cy="63" r="56.5" stroke="#F2F2F2" stroke-width="13" />
+                </svg>
+            </div>
+            <div className="text-capitalize text-light fs-28px fw-bold">payment successful</div>
+        </div>
+    ) : (
         <>
             <form className="row m-0">
-                {error && <div className="text-danger fs-14px">{error}</div>}
+                {error && (
+                    <div className="text-danger fs-16px ps-0 mb-2">
+                        <div className="d-flex align-items-center gap-2">
+                            <svg
+                                class="icon-23px"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                ></path>
+                            </svg>
+                            <div>{error}</div>
+                        </div>
+                    </div>
+                )}
                 <input
                     type="text"
                     style={style.base}
@@ -189,9 +250,13 @@ const CardSection = ({ amount, round }) => {
                     </div>
                 </div>
             </div>
-
-            <button className="btn btn-outline-light" onClick={submitPayment}>
-                Confirm Payment
+            <button
+                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment w-100 mt-4 ${
+                    requestPending && "disabled"
+                }`}
+                onClick={requestPending ? null : submitPayment}
+            >
+                {requestPending ? "processing. . ." : "confirm payment"}
             </button>
         </>
     )

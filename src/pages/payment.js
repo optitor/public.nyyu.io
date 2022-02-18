@@ -3,8 +3,8 @@
 import React, { useCallback, useReducer, useState, useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
 import ReactTooltip from "react-tooltip"
-import axios from 'axios'
-import { useQuery } from '@apollo/client'
+import axios from "axios"
+import { useQuery } from "@apollo/client"
 import Select, { components } from "react-select"
 import Header from "../components/header"
 import { CheckBox } from "../components/common/FormControl"
@@ -26,10 +26,10 @@ import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
 import CreditCardTab from "../components/payment/credit-card-tab"
 import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
-import { GET_EXCHANGE_RATE } from './../apollo/graghqls/querys/Payment'
+import { GET_EXCHANGE_RATE } from "./../apollo/graghqls/querys/Payment"
 import Loading from "../components/common/Loading"
 import { numberWithCommas } from "../utilities/number"
-
+import OrderSummary from "../components/payment/order-summary"
 
 const { Option, SingleValue } = components
 
@@ -46,7 +46,7 @@ const payment_types = [
     { icon: ExternalWallet, value: "externalwallets", label: "External Wallets" },
 ]
 
-const FOO_COINS = [    
+const FOO_COINS = [
     { value: "BTC", label: "BTC" },
     { value: "ETH", label: "ETH" },
     { value: "SOL", label: "SOL" },
@@ -76,9 +76,7 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
-    // const dispatch = useDispatch()
-    const currentRound = useSelector((state) => state?.placeBid.round_id);
-    // console.log("data: ", bidAmount, currentRound)
+    const currentRound = useSelector((state) => state?.placeBid.round_id)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -90,18 +88,18 @@ const Payment = () => {
     const [balance, setBalance] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
 
-    const [fooCoins, setFooCoins] = useState(null);
-    const [BTCPrice, setBTCPrice] = useState(null);
-    const loadingData = !(fooCoins && BTCPrice);
+    const [fooCoins, setFooCoins] = useState(null)
+    const [BTCPrice, setBTCPrice] = useState(null)
+    const loadingData = !(fooCoins && BTCPrice)
 
     useQuery(GET_EXCHANGE_RATE, {
-        onCompleted: data => {
-            if(data.getExchangeRate) {
-                const temp = JSON.parse(data.getExchangeRate);
-                const coins = FOO_COINS.map(item => {
-                    return {value: item.value, label: item.value, data: temp?.result[item.value]};
-                });
-                setFooCoins(coins);
+        onCompleted: (data) => {
+            if (data.getExchangeRate) {
+                const temp = JSON.parse(data.getExchangeRate)
+                const coins = FOO_COINS.map((item) => {
+                    return { value: item.value, label: item.value, data: temp?.result[item.value] }
+                })
+                setFooCoins(coins)
             }
         },
         onError: (err) => {
@@ -126,8 +124,9 @@ const Payment = () => {
         [allow_fraction]
     )
 
-    return loadingData? <Loading />:
-    (
+    return loadingData ? (
+        <Loading />
+    ) : (
         <main className="payment-page">
             <Header />
             <section className="container position-relative">
@@ -172,14 +171,16 @@ const Payment = () => {
                                 </div>
                             )}{" "}
                             {tabIndex === 1 && (
-                                <CoinPaymentsTab 
-                                    currentRound={currentRound} 
-                                    bidAmount={bidAmount} 
+                                <CoinPaymentsTab
+                                    currentRound={currentRound}
+                                    bidAmount={bidAmount}
                                     BTCPrice={BTCPrice}
                                     fooCoins={fooCoins}
                                 />
                             )}
-                            {tabIndex === 2 && <CreditCardTab amount={bidAmount} round={currentRound} />}
+                            {tabIndex === 2 && (
+                                <CreditCardTab amount={bidAmount} round={currentRound} />
+                            )}
                             {tabIndex === 3 && (
                                 <div className="paypal-tab">
                                     <div className="payment-content">
@@ -306,43 +307,7 @@ const Payment = () => {
                             )}
                         </div>
                     </div>
-                    <div className="col-lg-4 d-flex flex-column justify-content-between">
-                        <div className="order-summary ">
-                            <h4>Order Summary</h4>
-
-                            <div className="order-list">
-                                <div className="d-flex justify-content-between">
-                                    <p className="order-list__label">Total order</p>
-                                    <p className="order-list__label">
-                                        {numberWithCommas(bidAmount)} <span> USD</span>
-                                    </p>
-                                </div>
-                                <div className="d-flex justify-content-between my-3">
-                                    <p className="order-list__label">Fee</p>
-                                    <p className="order-list__label">0</p>
-                                </div>
-                                <div className="d-flex justify-content-between">
-                                    <p className="order-list__label">Discount</p>
-                                    <p className="order-list__label">0</p>
-                                </div>
-                            </div>
-                            <div
-                                className="d-flex justify-content-between"
-                                style={{ paddingTop: "11px", paddingBottom: "25px" }}
-                            >
-                                <p className="order-list__label" style={{ color: "#959595" }}>
-                                    Order total:
-                                </p>
-                                <p className="order-total">
-                                    {numberWithCommas(bidAmount)} <span> USD</span>
-                                </p>
-                            </div>
-                        </div>
-
-                        {tabIndex === 2 && (<button className="btn-primary text-uppercase confirm-payment">
-                            Confirm Payment
-                        </button>)}
-                    </div>
+                    <OrderSummary bidAmount={bidAmount} />
                 </div>
                 <div className="remain-token__value col-md-12 mx-auto">
                     <div className="d-flex justify-content-between">
