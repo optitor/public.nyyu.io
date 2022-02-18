@@ -397,7 +397,7 @@ const Payment = () => {
                                                 <span className="txt-green">10 minutes</span>
                                             </p>
                                         </div>
-                                        <div className="d-flex">
+                                        <div className="d-flex mt-2">
                                             <p className="d-flex flex-row">
                                                 <CheckBox
                                                     type="checkbox"
