@@ -567,6 +567,12 @@
                 width: 100%;
             }
         }
+        input.black_input {
+            height: 48px;
+            font-size: 20px;
+            font-weight: 600;
+            padding-left: 25px;
+        }
         @include mq("phone", max) {
             display: block;
         }
