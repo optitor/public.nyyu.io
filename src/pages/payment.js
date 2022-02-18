@@ -3,8 +3,6 @@
 import React, { useCallback, useReducer, useState, useEffect, useRef } from "react"
 import { useSelector } from "react-redux"
 import ReactTooltip from "react-tooltip"
-import axios from "axios"
-import { useQuery } from "@apollo/client"
 import Select, { components } from "react-select"
 import Header from "../components/header"
 import { CheckBox } from "../components/common/FormControl"
@@ -26,9 +24,7 @@ import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
 import CreditCardTab from "../components/payment/credit-card-tab"
 import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
-import { GET_EXCHANGE_RATE } from "./../apollo/graghqls/querys/Payment"
-import Loading from "../components/common/Loading"
-import { numberWithCommas } from "../utilities/number"
+// import { numberWithCommas } from "../utilities/number"
 import OrderSummary from "../components/payment/order-summary"
 
 const { Option, SingleValue } = components
@@ -45,19 +41,6 @@ const payment_types = [
     { icon: NdbWallet, value: "ndb_wallet", label: "Ndb wallet" },
     { icon: ExternalWallet, value: "externalwallets", label: "External Wallets" },
 ]
-
-const FOO_COINS = [
-    { value: "BTC", label: "BTC" },
-    { value: "ETH", label: "ETH" },
-    { value: "SOL", label: "SOL" },
-    { value: "BCH", label: "BCH" },
-    { value: "DOGE", label: "DOGE" },
-    { value: "USDC", label: "USDC" },
-    { value: "LTC", label: "LTC" },
-]
-
-const QUOTE = "USDT"
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
 
 const CustomOption = (props) => (
     <Option {...props}>
@@ -78,16 +61,6 @@ const CustomSingleValue = (props) => {
 const Payment = () => {
     const currentRound = useSelector((state) => state?.placeBid.round_id)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
-    const [copied, setCopied] = useState(false)
-    const [coinQRCode, setCoinQRCode] = useState("")
-    useEffect(async () => {
-        if (currentCoinAddress) {
-            const qrCode = await generateQR(currentCoinAddress)
-            setCoinQRCode(qrCode)
-        }
-        return ""
-    }, [currentCoinAddress])
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         allow_fraction: false,
@@ -98,34 +71,6 @@ const Payment = () => {
     const [balance, setBalance] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
 
-    const [fooCoins, setFooCoins] = useState(null)
-    const [BTCPrice, setBTCPrice] = useState(null)
-    const loadingData = !(fooCoins && BTCPrice)
-
-    useQuery(GET_EXCHANGE_RATE, {
-        onCompleted: (data) => {
-            if (data.getExchangeRate) {
-                const temp = JSON.parse(data.getExchangeRate)
-                const coins = FOO_COINS.map((item) => {
-                    return { value: item.value, label: item.value, data: temp?.result[item.value] }
-                })
-                setFooCoins(coins)
-            }
-        },
-        onError: (err) => {
-            console.log("get exchange rate: ", err)
-        },
-    })
-
-    useEffect(() => {
-        const get_BTCPrice = () => {
-            axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
-                setBTCPrice(res.data.lastPrice)
-            })
-        }
-        get_BTCPrice()
-    }, [])
-
     const handleAllowFraction = useCallback(
         (e) => {
             e.preventDefault()
@@ -134,9 +79,7 @@ const Payment = () => {
         [allow_fraction]
     )
 
-    return loadingData ? (
-        <Loading />
-    ) : (
+    return (
         <main className="payment-page">
             <Header />
             <section className="container position-relative">
@@ -184,8 +127,6 @@ const Payment = () => {
                                 <CoinPaymentsTab
                                     currentRound={currentRound}
                                     bidAmount={bidAmount}
-                                    BTCPrice={BTCPrice}
-                                    fooCoins={fooCoins}
                                 />
                             )}
                             {tabIndex === 2 && (
