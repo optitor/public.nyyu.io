@@ -70,6 +70,7 @@
                     }
                     display: block;
                     padding-right: 0px;
+                    min-height: 50px;
                     tr {
                         // margin-bottom: 23px;
                         border-bottom: 2px solid #464646;
@@ -106,6 +107,9 @@
                     line-height: 18px;
                     letter-spacing: 0.04em;
                     color: #959595;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    width: 100%;
                 }
                 &-price {
                     font-size: 18px;
@@ -428,6 +432,13 @@
                     line-height: 18px;
                     letter-spacing: 0.04em;
                     color: #959595;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    width: 100%;
+                    &:hover {
+                        overflow: visible;
+                    }
                 }
                 &-price {
                     font-size: 18px;

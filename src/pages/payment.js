@@ -22,6 +22,7 @@ import {
 } from "../utilities/imgImport"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
+import Seo from './../components/seo';
 import CreditCardTab from "../components/payment/credit-card-tab"
 import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
 // import { numberWithCommas } from "../utilities/number"
@@ -80,6 +81,8 @@ const Payment = () => {
     )
 
     return (
+    <>
+        <Seo title="Payment" />
         <main className="payment-page">
             <Header />
             <section className="container position-relative">
@@ -289,6 +292,7 @@ const Payment = () => {
                 </div>
             </section>
         </main>
+    </>
     )
 }
 
