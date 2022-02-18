@@ -53,7 +53,6 @@ const CardSection = ({ amount, round }) => {
     const [error, setError] = useState("")
     const [cardHolder, setCardHolder] = useState("")
     const [allowFractionBox, setAllowFractionBox] = useState(false)
-    const [stripePaymentContainer, setStripePaymentContainer] = useState(null)
     const style = {
         base: {
             color: "#E3E3E3",
@@ -74,10 +73,12 @@ const CardSection = ({ amount, round }) => {
 
     // Webservice
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
-        onCompleted: (data) => {
-            console.log(data.stripePayment)
+        onCompleted: async (data) => {
             if (data.stripePayment.error) return setError(data.stripePayment.error)
-            return setStripePaymentContainer(data.stripePayment)
+            const { clientSecret } = data.stripePayment
+            if (clientSecret) {
+            }
+            return setError("Invalid Payment")
         },
         onError: (error) => console.log(error),
     })
@@ -96,8 +97,8 @@ const CardSection = ({ amount, round }) => {
         })
         stripePayment({
             variables: {
-                roundId: round,
-                amount: 300.0 * 100, // TODO: Change this later on and use "amount" as the value
+                roundId: Number(round),
+                amount: amount * 100,
                 paymentMethodId: paymentMethod.id,
                 paymentIntentId: null,
             },
@@ -108,7 +109,27 @@ const CardSection = ({ amount, round }) => {
     return (
         <>
             <form className="row m-0">
-                {error && <div className="text-danger fs-14px">{error}</div>}
+                {error && (
+                    <div className="text-danger fs-16px ps-0 mb-2">
+                        <div className="d-flex align-items-center gap-2">
+                            <svg
+                                class="icon-23px"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                ></path>
+                            </svg>
+                            <div>{error}</div>
+                        </div>
+                    </div>
+                )}
                 <input
                     type="text"
                     style={style.base}
@@ -189,8 +210,10 @@ const CardSection = ({ amount, round }) => {
                     </div>
                 </div>
             </div>
-
-            <button className="btn btn-outline-light" onClick={submitPayment}>
+            <button
+                className="btn-primary text-uppercase confirm-payment w-100 mt-4"
+                onClick={submitPayment}
+            >
                 Confirm Payment
             </button>
         </>
