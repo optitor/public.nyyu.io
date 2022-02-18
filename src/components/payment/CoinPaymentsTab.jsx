@@ -50,10 +50,6 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
         return (bidAmount / coinPrice).toFixed(9).toString();
     }, [bidAmount, coin, BTCPrice])
 
-    const handleInput = useCallback((e) => {
-        e.preventDefault()
-        setState({ [e.target.name]: e.target.value })
-    }, [])
 
     const [depositAddress, setDepositAddress] = useState('')
 
@@ -64,22 +60,6 @@ const CoinPaymentsTab = ({ currentRound , bidAmount, fooCoins = [], BTCPrice = 1
         }
         return ""
     }, [depositAddress])
-
-    // const [CreateCryptoPayment] = useMutation(CREATE_CRYPTO_PAYMENT, {
-    //     onCompleted: (data) => {
-    //         console.log("create cypto payment: ", data)
-    //         const list = data.createCryptoPayment.pricing
-    //         const addresses = data.createCryptoPayment.addresses
-    //         // console.log(addresses)
-    //         setAddressList(addresses)
-    //         setPriceList(data.createCryptoPayment.pricing)
-    //         setDepositAddress(addresses[0].value)
-    //         setSelectedCoinPrice(list[1].value.amount.toFixed(3))
-    //     },
-    //     onError: (err) => {
-    //         console.log("create cypto payment: ", err)
-    //     },
-    // })
 
     const [getDepositAddressMutation] = useMutation(GET_DEPOSIT_ADDRESS, {
         onCompleted: data => {
