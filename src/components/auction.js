@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useReducer, useEffect, useState, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { navigate } from "gatsby"
@@ -336,7 +335,7 @@ const Auction = () => {
         })
         dispatch(
             setBidInfo(
-                numberWithCommas(Number(Math.max(fnSelectedRoundData()?.minPrice, price * amount)))
+                Number(Math.max(fnSelectedRoundData()?.minPrice, price * amount))
             )
         )
         dispatch(setCurrentRound(fnSelectedRoundData()?.id))
@@ -606,18 +605,14 @@ const Auction = () => {
                                     <div className="d-flex align-items-center mb-4">
                                         <input
                                             type="number"
-                                            value={calcPriceFromUsd(
-                                                Math.max(fnSelectedRoundData()?.minPrice, price)
-                                            )}
+                                            value={price}
                                             onChange={(e) =>
                                                 setState({ price: calcPriceToUsd(e.target.value) })
                                             }
                                             className="range-input"
                                         />
                                         <Slider
-                                            value={calcPriceFromUsd(
-                                                Math.max(fnSelectedRoundData()?.minPrice, price)
-                                            )}
+                                            value={price}
                                             onChange={(value) =>
                                                 setState({ price: calcPriceToUsd(value) })
                                             }

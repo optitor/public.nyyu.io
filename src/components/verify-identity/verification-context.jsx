@@ -2,6 +2,7 @@ import useFileUpload from "react-use-file-upload"
 import React, { useContext, useState } from "react"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { CLIENT_ID, SECRET } from "../../utilities/staticData"
+import { getCurrentDate } from "../../utilities/utility-methods"
 
 export const VerificationContext = React.createContext()
 
@@ -9,13 +10,15 @@ export const useVerification = () => useContext(VerificationContext)
 
 const VerificationProvider = ({ children }) => {
     // Containers
+    const consentText = `I and NDB ${getCurrentDate()}`
     const [address, setAddress] = useState("")
     const [firstName, setFirstName] = useState("")
     const [surname, setSurname] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const [country, setCountry] = useState(VerificationCountriesList[0])
+    const [selfieImage, setSelfieImage] = useState()
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null)
-    const [step, setStep] = useState(6) // --> initial value is -1
+    const [step, setStep] = useState(-1) // --> initial value is -1
     const {
         files: documentFiles,
         handleDragDropEvent: documentHandleDragDropEvent,
@@ -49,6 +52,7 @@ const VerificationProvider = ({ children }) => {
     }
 
     const providerValue = {
+        consentText,
         shuftReferencePayload,
         setShuftReferencePayload,
         clientId,
@@ -84,6 +88,10 @@ const VerificationProvider = ({ children }) => {
             files: consentFiles,
             handleDragDropEvent: consentHandleDragDropEvent,
             setFiles: consentSetFiles,
+        },
+        faceProof: {
+            selfieImage,
+            setSelfieImage,
         },
     }
     return (

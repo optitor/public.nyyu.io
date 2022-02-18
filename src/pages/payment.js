@@ -1,13 +1,11 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useMutation } from "@apollo/client"
+import React, { useCallback, useReducer, useState, useEffect, useRef } from "react"
+import { useSelector } from "react-redux"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
-import QRCode from "react-qr-code"
 import Header from "../components/header"
-import { Input, CheckBox } from "../components/common/FormControl"
+import { CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
@@ -20,14 +18,14 @@ import {
     ETH,
     BTC,
     DOGE,
-    Copy,
     PaypalBrand,
 } from "../utilities/imgImport"
-import { CopyToClipboard } from "react-copy-to-clipboard"
 import ConnectWalletTab from "../components/profile/connect-wallet-tab"
-import { FOO_COINS, PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
-import { CREATE_CRYPTO_PAYMENT } from "../apollo/graghqls/mutations/Payment"
-import { generateQR } from "./../utilities/string"
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
+import CreditCardTab from "../components/payment/credit-card-tab"
+import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
+// import { numberWithCommas } from "../utilities/number"
+import OrderSummary from "../components/payment/order-summary"
 
 const { Option, SingleValue } = components
 
@@ -43,19 +41,6 @@ const payment_types = [
     { icon: NdbWallet, value: "ndb_wallet", label: "Ndb wallet" },
     { icon: ExternalWallet, value: "externalwallets", label: "External Wallets" },
 ]
-
-const SelectOption = (props) => (
-    <Option {...props}>
-        <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
-            <img
-                src={props.data.icon}
-                style={{ width: "30px", height: "auto" }}
-                alt={props.data.label}
-            />
-            <p className="coin-label ms-2">{props.data.label}</p>
-        </div>
-    </Option>
-)
 
 const CustomOption = (props) => (
     <Option {...props}>
@@ -74,44 +59,18 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
-    // const dispatch = useDispatch()
-    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
     const currentRound = useSelector((state) => state?.placeBid.round_id)
-    // console.log("data: ", bidAmount, currentRound)
-    const [currentCoinAddress, setCurrentCoinAddress] = useState(FOO_COINS[0].address)
-    const [copied, setCopied] = useState(false)
-    const [coinQRCode, setCoinQRCode] = useState("")
-
-    useEffect(async () => {
-        if (currentCoinAddress) {
-            const qrCode = await generateQR(currentCoinAddress)
-            setCoinQRCode(qrCode)
-        }
-        return ""
-    }, [currentCoinAddress])
+    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        cardholder: "",
-        cardnumber: "",
-        expire: "",
-        code: "",
-        bill: "",
         allow_fraction: false,
         getAddress: false,
     })
-    const { cardholder, cardnumber, expire, code, bill, allow_fraction, getAddress } = state
+    const { allow_fraction, getAddress } = state
 
-    const [coin, setCoin] = useState(FOO_COINS[0])
     const [balance, setBalance] = useState(null)
     const [tabIndex, setTabIndex] = useState(0)
-    const [selectedCoinPrice, setSelectedCoinPrice] = useState(0)
-    const [price_list, setPriceList] = useState(null)
-    const [address_list, setAddressList] = useState(null)
 
-    const handleInput = useCallback((e) => {
-        e.preventDefault()
-        setState({ [e.target.name]: e.target.value })
-    }, [])
     const handleAllowFraction = useCallback(
         (e) => {
             e.preventDefault()
@@ -119,22 +78,6 @@ const Payment = () => {
         },
         [allow_fraction]
     )
-
-    const [CreateCryptoPayment] = useMutation(CREATE_CRYPTO_PAYMENT, {
-        onCompleted: (data) => {
-            console.log("create cypto payment: ", data)
-            const list = data.createCryptoPayment.pricing
-            const addresses = data.createCryptoPayment.addresses
-            // console.log(addresses)
-            setAddressList(addresses)
-            setPriceList(data.createCryptoPayment.pricing)
-            setCurrentCoinAddress(addresses[0].value)
-            setSelectedCoinPrice(list[1].value.amount.toFixed(3))
-        },
-        onError: (err) => {
-            console.log("create cypto payment: ", err)
-        },
-    })
 
     return (
         <main className="payment-page">
@@ -181,238 +124,13 @@ const Payment = () => {
                                 </div>
                             )}{" "}
                             {tabIndex === 1 && (
-                                <div className="cryptocoin-tab">
-                                    <div className="payment-content">
-                                        <div className="set-cryptocoin">
-                                            <div className="d-flex flex-column justify-content-between coin-address">
-                                                <div className="d-flex justify-content-between w-100">
-                                                    <Select
-                                                        className="cryptocoin-select"
-                                                        options={FOO_COINS}
-                                                        value={coin}
-                                                        onChange={(v) => {
-                                                            setCoin(v)
-                                                            setCurrentCoinAddress(v.address)
-                                                            price_list?.map((item, index) => {
-                                                                if (
-                                                                    item.value.currency === v.value
-                                                                ) {
-                                                                    setSelectedCoinPrice(
-                                                                        (
-                                                                            item.value.amount * 1
-                                                                        ).toFixed(3)
-                                                                    )
-                                                                    setCurrentCoinAddress(
-                                                                        address_list[index - 1]
-                                                                            .value
-                                                                    )
-                                                                }
-                                                            })
-                                                        }}
-                                                        components={{
-                                                            Option: SelectOption,
-                                                            SingleValue: SelectOption,
-                                                        }}
-                                                    />
-                                                    <div className="w-75">
-                                                        <Input
-                                                            type="number"
-                                                            value={selectedCoinPrice}
-                                                            disabled
-                                                        />
-                                                    </div>
-
-                                                </div>
-                                                {!getAddress ? (
-                                                    <button
-                                                        className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
-                                                        onClick={() => {
-                                                            setState({ getAddress: true })
-                                                            CreateCryptoPayment({
-                                                                variables: {
-                                                                    round: currentRound,
-                                                                    amount: bidAmount,
-                                                                },
-                                                            })
-                                                        }}
-                                                    >
-                                                        get deposit Address
-                                                    </button>
-                                                ) : (
-                                                    <>
-                                                        <CopyToClipboard
-                                                            onCopy={() => setCopied(true)}
-                                                            text={currentCoinAddress}
-                                                            options={{ message: "copied" }}
-                                                        >
-                                                            <p
-                                                                className="clipboard"
-                                                                onClick={() => setCopied(true)}
-                                                                onKeyDown={() => setCopied(true)}
-                                                                role="presentation"
-                                                            >
-                                                                <code>{currentCoinAddress}</code>
-                                                                <img src={Copy} alt="copy" />
-                                                            </p>
-                                                        </CopyToClipboard>
-                                                    </>
-                                                )}
-                                            </div>
-                                            {getAddress && (
-                                                <div className="qr-code">
-                                                    {coinQRCode ? (
-                                                        <img src={coinQRCode} alt="qrcode" />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="mt-3 d-flex justify-content-between">
-                                            <div className="d-flex flex-row ">
-                                                <CheckBox
-                                                    type="checkbox"
-                                                    name="allow_fraction"
-                                                    value={allow_fraction}
-                                                    onChange={handleAllowFraction}
-                                                    className="text-uppercase"
-                                                ></CheckBox>
-                                                <div className="allow-text text-light">
-                                                    Do you allow fraction of order compleation?
-                                                </div>
-                                                <ReactTooltip
-                                                    place="right"
-                                                    type="light"
-                                                    effect="solid"
-                                                >
-                                                    <div
-                                                        className="text-justify"
-                                                        style={{
-                                                            width: "300px",
-                                                        }}
-                                                    >
-                                                        {PAYMENT_FRACTION_TOOLTIP_CONTENT}
-                                                    </div>
-                                                </ReactTooltip>
-                                                <FontAwesomeIcon
-                                                    data-tip="React-tooltip"
-                                                    icon={faQuestionCircle}
-                                                    className="fa-xl ms-2 cursor-pointer text-light"
-                                                />
-                                            </div>
-                                            <p className="payment-expire my-auto">
-                                                payment expires in{" "}
-                                                <span className="txt-green">10 minutes</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CoinPaymentsTab
+                                    currentRound={currentRound}
+                                    bidAmount={bidAmount}
+                                />
                             )}
                             {tabIndex === 2 && (
-                                <div className="creditcard-tab">
-                                    <div className="payment-content">
-                                        <div className="row">
-                                            <div className="form-group">
-                                                <Input
-                                                    type="text"
-                                                    name="cardholder"
-                                                    value={cardholder}
-                                                    onChange={handleInput}
-                                                    placeholder="Card Holder"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <Input
-                                                type="number"
-                                                name="cardnumber"
-                                                value={cardnumber}
-                                                onChange={handleInput}
-                                                placeholder="Card number"
-                                            />
-                                        </div>
-                                        <div className="row">
-                                            <div className="form-group col-sm-4 pe-sm-0">
-                                                <Input
-                                                    type="number"
-                                                    name="expire"
-                                                    value={expire}
-                                                    onChange={handleInput}
-                                                    placeholder="Expiration date"
-                                                />
-                                            </div>
-                                            <div className="form-group col-sm-4">
-                                                <Input
-                                                    type="number"
-                                                    name="code"
-                                                    value={code}
-                                                    onChange={handleInput}
-                                                    placeholder="CSS code"
-                                                />
-                                            </div>
-                                            <div className="form-group col-sm-4 ps-sm-0">
-                                                <Input
-                                                    type="number"
-                                                    name="bill"
-                                                    value={bill}
-                                                    onChange={handleInput}
-                                                    placeholder="Billing zip/postal code"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="mt-3 d-flex justify-content-between">
-                                            <div className="d-flex flex-row text-white">
-                                                <CheckBox
-                                                    type="checkbox"
-                                                    name="allow_fraction"
-                                                    value={allow_fraction}
-                                                    onChange={handleAllowFraction}
-                                                    className="text-uppercase mt-2"
-                                                ></CheckBox>
-                                                <div className="allow-text">
-                                                    Do you allow fraction of order compleation?
-                                                </div>
-                                                <ReactTooltip
-                                                    place="right"
-                                                    type="light"
-                                                    effect="solid"
-                                                >
-                                                    <div
-                                                        className="text-justify"
-                                                        style={{
-                                                            width: "300px",
-                                                        }}
-                                                    >
-                                                        {PAYMENT_FRACTION_TOOLTIP_CONTENT}
-                                                    </div>
-                                                </ReactTooltip>
-                                                <FontAwesomeIcon
-                                                    data-tip="React-tooltip"
-                                                    icon={faQuestionCircle}
-                                                    className="fa-xl ms-2 cursor-pointer"
-                                                />
-                                            </div>
-                                            <p className="payment-expire my-auto">
-                                                payment expires in{" "}
-                                                <span className="txt-green">10 minutes</span>
-                                            </p>
-                                        </div>
-                                        <div className="d-flex mt-2">
-                                            <p className="d-flex flex-row">
-                                                <CheckBox
-                                                    type="checkbox"
-                                                    name="allow_fraction"
-                                                    value={allow_fraction}
-                                                    onChange={handleAllowFraction}
-                                                    className="text-uppercase"
-                                                ></CheckBox>
-                                                <div className="allow-text">
-                                                    Save card details for future purchase
-                                                </div>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CreditCardTab amount={bidAmount} round={currentRound} />
                             )}
                             {tabIndex === 3 && (
                                 <div className="paypal-tab">
@@ -540,43 +258,7 @@ const Payment = () => {
                             )}
                         </div>
                     </div>
-                    <div className="col-lg-4 d-flex flex-column justify-content-between">
-                        <div className="order-summary ">
-                            <h4>Order Summary</h4>
-
-                            <div className="order-list">
-                                <div className="d-flex justify-content-between">
-                                    <p className="order-list__label">Total order</p>
-                                    <p className="order-list__label">
-                                        {bidAmount} <span> USD</span>
-                                    </p>
-                                </div>
-                                <div className="d-flex justify-content-between my-3">
-                                    <p className="order-list__label">Fee</p>
-                                    <p className="order-list__label">0</p>
-                                </div>
-                                <div className="d-flex justify-content-between">
-                                    <p className="order-list__label">Discount</p>
-                                    <p className="order-list__label">0</p>
-                                </div>
-                            </div>
-                            <div
-                                className="d-flex justify-content-between"
-                                style={{ paddingTop: "11px", paddingBottom: "25px" }}
-                            >
-                                <p className="order-list__label" style={{ color: "#959595" }}>
-                                    Order total:
-                                </p>
-                                <p className="order-total">
-                                    {bidAmount} <span> USD</span>
-                                </p>
-                            </div>
-                        </div>
-
-                        <button className="btn-primary text-uppercase confirm-payment">
-                            Confirm Payment
-                        </button>
-                    </div>
+                    <OrderSummary bidAmount={bidAmount} />
                 </div>
                 <div className="remain-token__value col-md-12 mx-auto">
                     <div className="d-flex justify-content-between">
