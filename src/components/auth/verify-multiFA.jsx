@@ -51,7 +51,7 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn }) => {
                         (step) =>
                             step && (
                                 <div key={step}>
-                                    <p className="text-capitalize">code</p>
+                                    <p className="text-capitalize">{step}</p>
                                     <div className="form-group">
                                         <Input
                                             name="code"
