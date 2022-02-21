@@ -22,7 +22,7 @@ import { setBidInfo, setCurrentRound } from "../redux/actions/bidAction"
 import Loading from "./common/Loading"
 import Seo from "./seo"
 
-import { ChartIcon, Qmark, CloseIcon } from "../utilities/imgImport"
+import { ChartIcon, Qmark, CloseIcon, GreenCup } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
 import { PLACE_BID } from "../apollo/graghqls/mutations/Bid"
 import { GET_AUCTION, GET_AUCTION_BY_NUMBER } from "../apollo/graghqls/querys/Auction"
@@ -41,6 +41,7 @@ import {
     getDiffOverall,
     isInbetween,
 } from "../utilities/number"
+import PercentageBar from "./auction/percentage-bar"
 
 const options = [
     { value: "bid_performance", label: "BIDS PERFORMANCE" },
@@ -52,12 +53,10 @@ const Auction = () => {
     const dispatch = useDispatch()
     const size = useWindowSize()
     const currencyId = useSelector((state) => state?.placeBid.currencyId)
-    const user = useSelector((state) => state.auth.user)
 
     //Get Auctions
     const { data } = useQuery(GET_AUCTION)
-    var roundData = data?.getAuctions?.filter(item => item)
-
+    var roundData = data?.getAuctions?.filter((item) => item)
 
     // set chart type
     const [pricce, setPrice] = useState(true)
@@ -71,7 +70,7 @@ const Auction = () => {
     const [fnAverateMinBid, setfnAverateMinBid] = useState(0)
     const [auctionLoaded, setActionLoaded] = useState(false)
 
-    const [selectedData, setSelectedData] = useState(1)
+    const [selectedData, setSelectedData] = useState(2)
     const [period, setPeriod] = useState("1M")
     ////////////////////////
 
@@ -88,7 +87,6 @@ const Auction = () => {
 
     useEffect(() => {
         if (!auctionLoaded && roundData) {
-
             const statPriority = [2, 0, 1, 3]
             var pointIndex = 0
             roundData.reverse()
@@ -101,7 +99,7 @@ const Auction = () => {
                     if (roundData[j].status == curPriority) {
                         pointIndex = j
                         flag = true
-                        break;
+                        break
                     }
                 }
                 if (flag) {
@@ -111,7 +109,6 @@ const Auction = () => {
 
             roundData.reverse()
             pointIndex = roundData.length - pointIndex - 1
-            console.log(pointIndex)
             if (pointIndex == 0 || pointIndex == 1) {
                 pointIndex = 1
             } else if (pointIndex == roundData.length - 1 || pointIndex == roundData.length - 2) {
@@ -149,11 +146,8 @@ const Auction = () => {
             if (roundData[0]?.minPrice) {
                 setState({ price: roundData[0]?.minPrice })
             }
-
         }
     }, [roundData])
-
-    // console.log(roundData && roundData[0]?.minPrice)
 
     // get round based data
     const [loadRoundMByNumber, { data: roundM, error: mFetched }] =
@@ -227,15 +221,15 @@ const Auction = () => {
         selectedData === 0
             ? roundL?.getAuctionByNumber
             : selectedData === 1
-                ? roundM?.getAuctionByNumber
-                : roundH?.getAuctionByNumber
+            ? roundM?.getAuctionByNumber
+            : roundH?.getAuctionByNumber
 
     const fnSelectedBidhistoryData = () =>
         selectedData === 0
             ? historyBidListL?.getBidListByRound
             : selectedData === 1
-                ? historyBidListM?.getBidListByRound
-                : historyBidListH?.getBidListByRound
+            ? historyBidListM?.getBidListByRound
+            : historyBidListH?.getBidListByRound
 
     const hData = fnSelectedBidhistoryData()
 
@@ -250,9 +244,6 @@ const Auction = () => {
     const percentage = (distanceToDate / duration) * 100
 
     const [PlaceBid] = useMutation(PLACE_BID, {
-        onCompleted: (data) => {
-            console.log("received Mutation data", data)
-        },
         onError: (err) => {
             console.log("received Mutation data", err)
         },
@@ -333,11 +324,7 @@ const Auction = () => {
                 cryptoType: "BTC",
             },
         })
-        dispatch(
-            setBidInfo(
-                Number(Math.max(fnSelectedRoundData()?.minPrice, price * amount))
-            )
-        )
+        dispatch(setBidInfo(Number(Math.max(fnSelectedRoundData()?.minPrice, price * amount))))
         dispatch(setCurrentRound(fnSelectedRoundData()?.id))
         navigate(ROUTES.payment)
     }
@@ -361,7 +348,8 @@ const Auction = () => {
                             <div>
                                 <h4>Round {roundData && roundData[0]?.round}</h4>
                                 <p>
-                                    Token Available <span>{roundData && roundData[0]?.totalToken}</span>
+                                    <span className="text-secondary">Token Available</span>{" "}
+                                    <span>{roundData && roundData[0]?.totalToken}</span>
                                 </p>
                             </div>
                             <img
@@ -375,115 +363,138 @@ const Auction = () => {
                         </div>
                         <div className="row h-100">
                             <div
-                                className={`auction-left col-lg-4 col-md-5 position-relative ${show_chart ? "d-none" : "d-block"
-                                    }`}
+                                className={`auction-left col-lg-4 col-md-5 position-relative ${
+                                    show_chart ? "d-none" : "d-block"
+                                }`}
                             >
                                 <div className="d-flex">
                                     <div className="w-100">
-                                        {/* {roundM?.getAuctionByNumber && ( */}
                                         <Tabs
                                             className="round-tab"
                                             selectedIndex={selectedData}
                                             onSelect={(index) => setSelectedData(index)}
                                         >
                                             <TabList>
-                                                <Tab>Round {roundL?.getAuctionByNumber?.round}</Tab>
-                                                <Tab>Round {roundM?.getAuctionByNumber?.round}</Tab>
-                                                <Tab>Round {roundH?.getAuctionByNumber?.round}</Tab>
+                                                <Tab className="w-100">
+                                                    <div className="d-flex justify-content-center flex-column align-items-center">
+                                                        <div className="d-flex justify-content-between align-items-center w-100">
+                                                            <div>
+                                                                <svg
+                                                                    className="icon-25px"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    viewBox="0 0 24 24"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                >
+                                                                    <path
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        stroke-width="2"
+                                                                        d="M15 19l-7-7 7-7"
+                                                                    ></path>
+                                                                </svg>
+                                                            </div>
+                                                            <div className="fw-bold text-uppercase fs-30px border-bottom border-3 border-success px-2">
+                                                                <div>
+                                                                    Round
+                                                                    {" " +
+                                                                        roundH?.getAuctionByNumber
+                                                                            ?.round}
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <svg
+                                                                    className="icon-25px"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    viewBox="0 0 24 24"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                >
+                                                                    <path
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        stroke-width="2"
+                                                                        d="M9 5l7 7-7 7"
+                                                                    ></path>
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-3">
+                                                            <span className="text-[#959595]">
+                                                                Token Available{" "}
+                                                            </span>
+                                                            <span className="fw-500">
+                                                                {numberWithCommas(
+                                                                    fnSelectedRoundData()
+                                                                        ?.totalToken
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </Tab>
                                             </TabList>
-
-                                            <TabPanel>
-                                                Token Available{" "}
-                                                <span className="fw-bold">
-                                                    {fnSelectedRoundData()?.totalToken}
-                                                </span>
-                                            </TabPanel>
-                                            <TabPanel>
-                                                Token Available{" "}
-                                                <span className="fw-bold">
-                                                    {fnSelectedRoundData()?.totalToken}
-                                                </span>
-                                            </TabPanel>
-                                            <TabPanel>
-                                                Token Available{" "}
-                                                <span className="fw-bold">
-                                                    {fnSelectedRoundData()?.totalToken}
-                                                </span>
-                                            </TabPanel>
                                         </Tabs>
-                                        {/* )} */}
                                         <Tabs
                                             className="statistics-tab"
                                             selectedIndex={tabIndex}
                                             onSelect={(index) => setState({ tabIndex: index })}
                                         >
-                                            <TabList>
-                                                <Tab onClick={() => setState({ isBid: false })}>
-                                                    bids
-                                                </Tab>
-                                                <Tab
-                                                    data-for="tooltip2"
-                                                    onClick={() => setState({ isBid: true })}
-                                                >
-                                                    statistics
-                                                </Tab>
-                                                <ReactTooltip
-                                                    place="right"
-                                                    type="light"
-                                                    effect="solid"
-                                                    id="tooltip2"
-                                                >
-                                                    <div
-                                                        style={{
-                                                            width: "300px",
-                                                            color: "#000000",
-                                                        }}
-                                                    >
-                                                        {AUCTION_TOOLTIP_CONTENT2}
-                                                    </div>
-                                                </ReactTooltip>
-                                            </TabList>
                                             <TabPanel>
                                                 <table>
                                                     <thead>
                                                         <tr>
-                                                            <th>Placement</th>
-                                                            <th>Highest Bid Per Token</th>
+                                                            <th className="border-0 py-2">
+                                                                <img
+                                                                    src={GreenCup}
+                                                                    alt="Green Cup"
+                                                                />
+                                                            </th>
+                                                            <th className="fw-500 py-2">
+                                                                Placement
+                                                            </th>
+                                                            <th className="fw-500 text-end py-2">
+                                                                Highest Bids
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {fnSelectedBidhistoryData()?.map(
                                                             (item, idx) => (
                                                                 <tr key={idx}>
-                                                                    <td>{`${idx + 1}. ${item.prefix + "." + item.name
-                                                                        }`}</td>
-                                                                    <td>
+                                                                    <td className="border-0 ps-6px py-2">
+                                                                        {idx + 1}
+                                                                    </td>
+                                                                    <td className="py-2">
+                                                                        {item.prefix + item.name}
+                                                                    </td>
+                                                                    <td className="py-2 text-end">
+                                                                        <span className="txt-green">
+                                                                            {
+                                                                                Currencies[
+                                                                                    currencyId
+                                                                                ].symbol
+                                                                            }{" "}
+                                                                        </span>
                                                                         {calcPriceFromUsd(
                                                                             item.totalPrice
                                                                         )}
-                                                                        <span className="txt-green">
-                                                                            {" "}
-                                                                            {
-                                                                                Currencies[currencyId]
-                                                                                    .symbol
-                                                                            }
-                                                                        </span>
                                                                     </td>
                                                                 </tr>
                                                             )
                                                         )}
-                                                        {
-                                                            fnSelectedBidhistoryData()?.length === 0 && (<tr>
-                                                                <td className="text-uppercase mx-auto fs-14px" colSpan={2}>
+                                                        {fnSelectedBidhistoryData()?.length ===
+                                                            0 && (
+                                                            <tr>
+                                                                <td
+                                                                    className="text-uppercase mx-auto fs-14px"
+                                                                    colSpan={3}
+                                                                >
                                                                     no records found
                                                                 </td>
-                                                            </tr>)
-                                                        }
+                                                            </tr>
+                                                        )}
                                                     </tbody>
                                                 </table>
-                                            </TabPanel>
-                                            <TabPanel>
-                                                <p className="text">{NDB_TOKEN_CONTENT}</p>
                                             </TabPanel>
                                         </Tabs>
                                     </div>
@@ -515,33 +526,37 @@ const Auction = () => {
                                     </div>
                                 </div>
                                 <div className="auction-left__bottom">
-                                    {isInbetween(
+                                    {/* {isInbetween(
                                         fnSelectedRoundData()?.startedAt,
                                         fnSelectedRoundData()?.endedAt
                                     ) && (
-                                            <TimeframeBar
-                                                percentage={percentage}
-                                                round={fnSelectedRoundData()}
-                                            />
-                                        )}
+                                        <TimeframeBar
+                                            percentage={percentage}
+                                            round={fnSelectedRoundData()}
+                                        />
+                                    )} */}
+                                    <PercentageBar percentage={20} />
                                     <div className="d-flex justify-content-between mt-4">
                                         {fnAverateMinBid !== 0 ? (
                                             <div>
-                                                <p className="caption">Minimum bid</p>
+                                                <p className="caption text-[#959595]">
+                                                    Minimum Bid
+                                                </p>
                                                 <p className="value">
-                                                    {fnAverateMinBid}
                                                     <span className="txt-green">
-                                                        {" "}
                                                         {Currencies[currencyId].symbol}
                                                     </span>{" "}
+                                                    {fnAverateMinBid}
                                                 </p>
                                             </div>
                                         ) : (
                                             <div></div>
                                         )}
                                         <div>
-                                            <p className="caption">Available Until</p>
-                                            <p className="value">
+                                            <p className="caption text-end text-[#959595]">
+                                                Available Until
+                                            </p>
+                                            <p className="value text-end">
                                                 {numberWithLength(
                                                     parseInt(
                                                         new Date(
@@ -641,10 +656,14 @@ const Auction = () => {
                                             )}
                                             readOnly
                                         />
-                                        <h3 className="symbol-label">{Currencies[currencyId].label}</h3>
+                                        <h3 className="symbol-label">
+                                            {Currencies[currencyId].label}
+                                        </h3>
                                     </div>
                                     <div className="mt-3 mb-2">
-                                        <p>Audited by Cyberunit</p>
+                                        <p className="text-secondary fw-500 text-[#959595]">
+                                            Audited by Cyberunit
+                                        </p>
                                     </div>
                                     <button
                                         className="btn-primary text-uppercase w-100"
@@ -656,13 +675,16 @@ const Auction = () => {
                                     </button>
                                 </div>
                                 <div
-                                    className={`chart-area ${size.width <= 768
-                                        ? show_chart
-                                            ? "d-block"
-                                            : "d-none"
-                                        : (size.width <= 1024 && size.width > 768 && "d-block") ||
-                                        (isBid && "d-block")
-                                        }`}
+                                    className={`chart-area ${
+                                        size.width <= 768
+                                            ? show_chart
+                                                ? "d-block"
+                                                : "d-none"
+                                            : (size.width <= 1024 &&
+                                                  size.width > 768 &&
+                                                  "d-block") ||
+                                              (isBid && "d-block")
+                                    }`}
                                 >
                                     <div>
                                         <div className="w-100 d-flex flex-column">
@@ -673,21 +695,29 @@ const Auction = () => {
                                                             className="select-chart-type"
                                                             options={options}
                                                             value={selectLabel}
-                                                            onChange={(v) => setState({ selectLabel: v })}
+                                                            onChange={(v) =>
+                                                                setState({ selectLabel: v })
+                                                            }
                                                         />
                                                     </div>
                                                     <div className="d-flex justify-content-center p-0">
-                                                        {selectLabel.value === "bid_performance" && (
+                                                        {selectLabel.value ===
+                                                            "bid_performance" && (
                                                             <div className="w-100 mt-2 row p-0">
                                                                 <div className="col-4 ps-0 pe-1 m-0">
                                                                     <button
-                                                                        className={`btn-small w-100 ${pricce ? "" : "btn-disabled"
-                                                                            }`}
+                                                                        className={`btn-small w-100 ${
+                                                                            pricce
+                                                                                ? ""
+                                                                                : "btn-disabled"
+                                                                        }`}
                                                                         onClick={() => {
                                                                             if (!pricce) {
                                                                                 setPrice(true)
                                                                                 setVolume(true)
-                                                                                setPriceVolume(false)
+                                                                                setPriceVolume(
+                                                                                    false
+                                                                                )
                                                                             }
                                                                         }}
                                                                     >
@@ -696,13 +726,18 @@ const Auction = () => {
                                                                 </div>
                                                                 <div className="col-4 ps-0 pe-1 m-0">
                                                                     <button
-                                                                        className={`btn-small w-100 ${volume ? "" : "btn-disabled"
-                                                                            }`}
+                                                                        className={`btn-small w-100 ${
+                                                                            volume
+                                                                                ? ""
+                                                                                : "btn-disabled"
+                                                                        }`}
                                                                         onClick={() => {
                                                                             if (!volume) {
                                                                                 setPrice(true)
                                                                                 setVolume(true)
-                                                                                setPriceVolume(false)
+                                                                                setPriceVolume(
+                                                                                    false
+                                                                                )
                                                                             }
                                                                         }}
                                                                     >
@@ -711,8 +746,11 @@ const Auction = () => {
                                                                 </div>
                                                                 <div className="col-4 ps-0 pe-0 m-0">
                                                                     <button
-                                                                        className={`btn-small w-100  ${price_volume ? "" : "btn-disabled"
-                                                                            }`}
+                                                                        className={`btn-small w-100  ${
+                                                                            price_volume
+                                                                                ? ""
+                                                                                : "btn-disabled"
+                                                                        }`}
                                                                         onClick={() => {
                                                                             if (!price_volume) {
                                                                                 setPrice(false)
@@ -726,17 +764,23 @@ const Auction = () => {
                                                                 </div>
                                                             </div>
                                                         )}
-                                                        {selectLabel.value === "round_performance" && (
+                                                        {selectLabel.value ===
+                                                            "round_performance" && (
                                                             <div className="w-100 row mt-2 p-0">
                                                                 <div className="col-4 ps-0 pe-1 m-0">
                                                                     <button
-                                                                        className={`btn-small w-100 ${reser_price ? "" : "btn-disabled"
-                                                                            }`}
+                                                                        className={`btn-small w-100 ${
+                                                                            reser_price
+                                                                                ? ""
+                                                                                : "btn-disabled"
+                                                                        }`}
                                                                         onClick={() => {
                                                                             if (!reser_price) {
                                                                                 setReserPrice(true)
                                                                                 setSoldPrice(true)
-                                                                                setPerformance(false)
+                                                                                setPerformance(
+                                                                                    false
+                                                                                )
                                                                             }
                                                                         }}
                                                                     >
@@ -745,13 +789,18 @@ const Auction = () => {
                                                                 </div>
                                                                 <div className="col-4 ps-0 pe-1 m-0">
                                                                     <button
-                                                                        className={`btn-small w-100 ${sold_price ? "" : "btn-disabled"
-                                                                            }`}
+                                                                        className={`btn-small w-100 ${
+                                                                            sold_price
+                                                                                ? ""
+                                                                                : "btn-disabled"
+                                                                        }`}
                                                                         onClick={() => {
                                                                             if (!sold_price) {
                                                                                 setReserPrice(true)
                                                                                 setSoldPrice(true)
-                                                                                setPerformance(false)
+                                                                                setPerformance(
+                                                                                    false
+                                                                                )
                                                                             }
                                                                         }}
                                                                     >
@@ -760,8 +809,11 @@ const Auction = () => {
                                                                 </div>
                                                                 <div className="col-4 ps-0 pe-0 m-0">
                                                                     <button
-                                                                        className={`btn-small w-100 ${performance ? "" : "btn-disabled"
-                                                                            }`}
+                                                                        className={`btn-small w-100 ${
+                                                                            performance
+                                                                                ? ""
+                                                                                : "btn-disabled"
+                                                                        }`}
                                                                         onClick={() => {
                                                                             if (!performance) {
                                                                                 setReserPrice(false)
@@ -872,8 +924,9 @@ const Auction = () => {
                                                 5D
                                             </button>
                                             <button
-                                                className={`btn-no-border-green text-uppercase ${period == "1M" ? "btn-active-green" : ""
-                                                    }`}
+                                                className={`btn-no-border-green text-uppercase ${
+                                                    period == "1M" ? "btn-active-green" : ""
+                                                }`}
                                                 onClick={() => {
                                                     setPeriod("1M")
                                                 }}
@@ -1016,7 +1069,10 @@ const Auction = () => {
                                 value={numberWithCommas(
                                     Number(
                                         calcPriceFromUsd(
-                                            Math.max(fnSelectedRoundData()?.minPrice, price * amount)
+                                            Math.max(
+                                                fnSelectedRoundData()?.minPrice,
+                                                price * amount
+                                            )
                                         ),
                                         ","
                                     )

@@ -109,6 +109,7 @@ import chatButton from "../images/icons/chat.svg"
 import glotbIcon from "../images/support/globe.svg"
 import attachmentIcon from "../images/support/attachment.svg"
 import menuIcon from "../images/support/menu.svg"
+import greenCup from "../images/icons/green-cup.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -216,3 +217,4 @@ export const ChatButton = chatButton
 export const GloabIcon = glotbIcon
 export const AttachmentIcon = attachmentIcon
 export const MenuIcon = menuIcon
+export const GreenCup = greenCup

@@ -100,7 +100,7 @@
                 .react-tabs__tab-list {
                     display: flex;
                     justify-content: space-between;
-                    border-bottom: 2px solid #464646;
+                    border-bottom: none;
                     .react-tabs__tab {
                         font-weight: 600;
                         font-size: 14px;
@@ -173,7 +173,7 @@
                 .react-tabs__tab-list {
                     display: flex;
                     justify-content: space-between;
-                    border-bottom: 2px solid #464646;
+                    border-bottom: none;
                     .react-tabs__tab {
                         width: 50%;
                     }
@@ -204,15 +204,11 @@
                             font-size: 12px;
                             line-height: 141.4%;
                             letter-spacing: 0.03em;
+                            border-bottom: 1px solid #525252;
                         }
                         td {
                             font-size: 16px;
                             line-height: 141.4%;
-                        }
-                        tr {
-                            display: flex;
-                            justify-content: space-between;
-                            padding: 3px 0;
                             border-bottom: 1px solid #525252;
                         }
                     }
@@ -246,7 +242,6 @@
             &__bottom {
                 position: absolute;
                 width: calc(100% - 70px);
-                top: 373px;
                 @include mq("phone", max) {
                     position: relative;
                     bottom: unset;
