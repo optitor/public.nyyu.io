@@ -30,6 +30,7 @@ import OrderSummary from "../components/payment/order-summary"
 
 const { Option, SingleValue } = components
 
+
 const balances = [
     { value: "3,002,565", label: "ETH", icon: ETH },
     { value: "225,489", label: "BTC", icon: BTC },

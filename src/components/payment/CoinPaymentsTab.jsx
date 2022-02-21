@@ -38,11 +38,12 @@ const SelectOption = (props) => {
 const FOO_COINS = [
     { value: "BTC", label: "BTC" },
     { value: "ETH", label: "ETH" },
-    { value: "SOL", label: "SOL" },
-    { value: "BCH", label: "BCH" },
+    { value: "BNB", label: "BNB" },
+    { value: "LTC", label: "LTC" },
     { value: "DOGE", label: "DOGE" },
     { value: "USDC", label: "USDC" },
-    { value: "LTC", label: "LTC" },
+    { value: "USDT", label: "USDT" },
+    { value: "DAI", label: "DAI" },
 ]
 
 const QUOTE = "USDT"
@@ -74,9 +75,10 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
             if (data.getExchangeRate) {
                 const temp = JSON.parse(data.getExchangeRate)
                 const coins = FOO_COINS.map((item) => {
-                    return { value: item.value, label: item.value, data: temp?.result[item.value] }
+                    return { ...item, detail: temp?.result[item.value] }
                 })
                 setFooCoins(coins)
+                console.log(coins)
                 setCoin(coins[0])
             }
         },
@@ -95,7 +97,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     }, [])
 
     const coinQuantity = useMemo(() => {
-        const coinPrice = BTCPrice * coin?.data?.rate_btc;
+        const coinPrice = BTCPrice * coin?.detail?.rate_btc;
         return parseFloat((bidAmount / coinPrice).toFixed(9));
     }, [bidAmount, coin, BTCPrice])
 
