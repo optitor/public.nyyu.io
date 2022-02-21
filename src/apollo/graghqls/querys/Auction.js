@@ -14,7 +14,46 @@ export const GET_AUCTION = gql`
         }
     }
 `
-
+export const GET_CURRENT_ROUND = gql`
+    {
+        getCurrentRound {
+            status
+            auction {
+                id
+                regDate
+                updateDate
+                deleted
+                round
+                endedAt
+                totalToken
+                minPrice
+                token
+                sold
+                stats {
+                    qty
+                    win
+                    fail
+                }
+                status
+            }
+            presale {
+                id
+                round
+                startedAt
+                endedAt
+                tokenAmount
+                tokenPrice
+                sold
+                status
+                conditions {
+                    presaleId
+                    task
+                    url
+                }
+            }
+        }
+    }
+`
 export const GET_AUCTION_BY_NUMBER = gql`
     query getAuctionByNumber($round: Int!) {
         getAuctionByNumber(round: $round) {
@@ -72,4 +111,4 @@ export const GET_NEW_ROUND = gql`
     query {
         getNewRound
     }
-`;
+`

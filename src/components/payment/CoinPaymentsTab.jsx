@@ -36,14 +36,40 @@ const SelectOption = (props) => {
 }
 
 const FOO_COINS = [
-    { value: "BTC", label: "BTC" },
-    { value: "ETH", label: "ETH" },
-    { value: "BNB", label: "BNB" },
-    { value: "LTC", label: "LTC" },
-    { value: "DOGE", label: "DOGE" },
-    { value: "USDC", label: "USDC" },
-    { value: "USDT", label: "USDT" },
-    { value: "DAI", label: "DAI" },
+    { value: "BTC", label: "BTC", networks: [
+        { label: 'Bitcoin', value: 'BTC' },
+        { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2' },
+        { label: 'Bitcoin/BTCB Token (BSC Chain)', value: 'BTC.BEP20' },
+        { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN' },
+    ] },
+    { value: "ETH", label: "ETH", networks: [
+        { label: 'Ether', value: 'ETH' },
+        { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2' },
+        { label: 'Ethereum Token (BSC Chain)', value: 'ETH.BEP20' },
+    ] },
+    { value: "BNB", label: "BNB", networks: [
+        { label: 'BNB Coin (Mainnet)', value: 'BNB' },
+        { label: 'BNB Coin (BSC Chain)', value: 'BNB.BSC' },
+        { label: 'BNB Coin (ERC-20)', value: 'BNB.ERC20' },
+    ] },
+    { value: "USDC", label: "USDC", networks: [
+        { label: 'USD Coin (ERC20)', value: 'USDC' },
+        { label: 'USD Coin (BSC Chain)', value: 'USDC.BEP20' },
+        { label: 'USD Coin (Tron/TRC20)', value: 'USDC.TRC20' },
+    ] },
+    { value: "USDT", label: "USDT", networks: [
+        { label: 'Tether USD (Omni Layer)', value: 'USDT' },
+        { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2' },
+        { label: 'Tether USD (BSC Chain)', value: 'USDT.BEP20' },
+        { label: 'Tether USD (ERC20)', value: 'USDT.ERC20' },
+        { label: 'Tether USD (Solana)', value: 'USDT.SOL' },
+        { label: 'Tether USD (Tron/TRC20)', value: 'USDT.TRC20' },
+        { label: 'TetherUSD (Waves Token)', value: 'USDT.Waves' },
+    ] },
+    { value: "DAI", label: "DAI", networks: [
+        { label: 'Dai (ERC20)', value: 'DAI' },
+        { label: 'Dai Token (BSC Chain)', value: 'DAI.BEP20' },
+    ] },
 ]
 
 const QUOTE = "USDT"
@@ -58,8 +84,10 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const loadingData = _.isEmpty(fooCoins) || !BTCPrice;
 
     const [coin, setCoin] = useState({})
+    const networks = useMemo(() => coin.networks, [coin]);
+    const [network, setNetwork] = useState(null)
     const [pending, setPending] = useState(false);
-
+    
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         cardholder: "",
         cardnumber: "",
@@ -78,7 +106,6 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                     return { ...item, detail: temp?.result[item.value] }
                 })
                 setFooCoins(coins)
-                console.log(coins)
                 setCoin(coins[0])
             }
         },
@@ -129,7 +156,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         setPending(true);
         getDepositAddressMutation({
             variables: {
-                currency: coin.value
+                currency: network.value
             }
         });
     };
@@ -158,6 +185,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                 value={coin}
                                 onChange={(v) => {
                                     setCoin(v)
+                                    setNetwork(null)
                                     setDepositAddress('')
                                 }}
                                 components={{
@@ -174,10 +202,24 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                 />
                             </div>
                         </div>
+                        <div className="d-flex justify-content-between w-100">
+                            <Select
+                                className="w-100"
+                                options={networks}
+                                value={network}
+                                onChange={(v) => {
+                                    setNetwork(v)
+                                    setDepositAddress('')
+                                }}
+                                styles={customSelectStyles}
+                                placeholder="SELELCT NETWORK"
+                            />
+                        </div>
                         {!depositAddress ? (
                             <button
                                 className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
                                 onClick={get_Deposit_Address}
+                                disabled={!network}
                             >
                                 {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit Address'}
                             </button>
@@ -254,3 +296,40 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
 };
 
 export default CoinPaymentsTab;
+
+const customSelectStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      color: 'white',
+    }),
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: '#1e1e1e',
+      borderRadius: 0
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: '#1e1e1e',
+        border: '1px solid white',
+    }),
+    singleValue: provided => ({
+        ...provided,
+        color: 'white',
+        padding: 8,
+        fontSize: 18,
+        fontWeight: 600
+    }),
+    input: provided => ({
+        ...provided,
+        color: 'white',
+        padding: 8,
+        fontSize: 18,
+        fontWeight: 600
+    }),
+    placeholder: provided => ({
+        ...provided,
+        padding: 8,
+        fontSize: 18,
+        fontWeight: 600
+    })
+};
