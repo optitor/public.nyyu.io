@@ -20,68 +20,7 @@ import { GET_BID_LIST_BY_USER } from "./../../apollo/graghqls/querys/Bid"
 import InternalWallet from "../wallet/internal-wallet"
 import Seo from "../seo"
 
-const transactions = [
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: -3500,
-    },
-    {
-        name: "Transaction Name",
-        date: "10.06.2021 11:05",
-        price: 3500,
-    },
-]
+
 
 const airdrops = [
     {
