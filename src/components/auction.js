@@ -13,7 +13,6 @@ import Header from "./header"
 import BidsChart1 from "./chart/BidsChart1"
 import RoundsChart1 from "./chart/RoundsChart1"
 import RoundsChart2 from "./chart/RoundsChart2"
-import TimeframeBar from "./auction/TimeframeBar"
 import { ROUTES } from "../utilities/routes"
 import BidsChart2 from "./chart/BidsChart2"
 import ChanceChart from "./chart/ChanceChart"
@@ -25,9 +24,19 @@ import Seo from "./seo"
 import { ChartIcon, Qmark, CloseIcon, GreenCup } from "../utilities/imgImport"
 import { useWindowSize } from "../utilities/customHook"
 import { PLACE_BID } from "../apollo/graghqls/mutations/Bid"
-import { GET_AUCTION, GET_AUCTION_BY_NUMBER } from "../apollo/graghqls/querys/Auction"
-import { GET_BID, GET_BIDLIST_BY_ROUND, GET_BID_LIST } from "../apollo/graghqls/querys/Bid"
-import { GET_ROUND_CHANCE, GET_ROUND_PERFORMANCE2 } from "../apollo/graghqls/querys/Statistics"
+import {
+    GET_AUCTION,
+    GET_AUCTION_BY_NUMBER,
+} from "../apollo/graghqls/querys/Auction"
+import {
+    GET_BID,
+    GET_BIDLIST_BY_ROUND,
+    GET_BID_LIST,
+} from "../apollo/graghqls/querys/Bid"
+import {
+    GET_ROUND_CHANCE,
+    GET_ROUND_PERFORMANCE2,
+} from "../apollo/graghqls/querys/Statistics"
 import {
     AUCTION_TOOLTIP_CONTENT1,
     AUCTION_TOOLTIP_CONTENT2,
@@ -42,6 +51,7 @@ import {
     isInbetween,
 } from "../utilities/number"
 import PercentageBar from "./auction/percentage-bar"
+import AuctionProvider from "./auction/auction-context"
 
 const options = [
     { value: "bid_performance", label: "BIDS PERFORMANCE" },
@@ -74,16 +84,27 @@ const Auction = () => {
     const [period, setPeriod] = useState("1M")
     ////////////////////////
 
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        tabIndex: 0,
-        amount: 1,
-        price: 1,
-        isBid: false,
-        bidModal: false,
-        show_chart: false,
-        selectLabel: options[0],
-    })
-    const { tabIndex, amount, price, isBid, bidModal, show_chart, selectLabel } = state
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            tabIndex: 0,
+            amount: 1,
+            price: 1,
+            isBid: false,
+            bidModal: false,
+            show_chart: false,
+            selectLabel: options[0],
+        }
+    )
+    const {
+        tabIndex,
+        amount,
+        price,
+        isBid,
+        bidModal,
+        show_chart,
+        selectLabel,
+    } = state
 
     useEffect(() => {
         if (!auctionLoaded && roundData) {
@@ -111,7 +132,10 @@ const Auction = () => {
             pointIndex = roundData.length - pointIndex - 1
             if (pointIndex == 0 || pointIndex == 1) {
                 pointIndex = 1
-            } else if (pointIndex == roundData.length - 1 || pointIndex == roundData.length - 2) {
+            } else if (
+                pointIndex == roundData.length - 1 ||
+                pointIndex == roundData.length - 2
+            ) {
                 pointIndex = roundData.length - 2
             }
 
@@ -120,28 +144,40 @@ const Auction = () => {
                 variables: { round: roundData && roundData[pointIndex].round },
             })
             loadRoundHByNumber({
-                variables: { round: roundData && roundData[pointIndex + 1].round },
+                variables: {
+                    round: roundData && roundData[pointIndex + 1].round,
+                },
             })
             loadRoundLByNumber({
-                variables: { round: roundData && roundData[pointIndex - 1].round },
+                variables: {
+                    round: roundData && roundData[pointIndex - 1].round,
+                },
             })
             loadHistoryMByNumber({
                 variables: { round: roundData && roundData[pointIndex].round },
             })
             loadHistoryHByNumber({
-                variables: { round: roundData && roundData[pointIndex + 1].round },
+                variables: {
+                    round: roundData && roundData[pointIndex + 1].round,
+                },
             })
             loadHistoryLByNumber({
-                variables: { round: roundData && roundData[pointIndex - 1].round },
+                variables: {
+                    round: roundData && roundData[pointIndex - 1].round,
+                },
             })
             loadBidMByNumber({
                 variables: { round: roundData && roundData[pointIndex].round },
             })
             loadBidHByNumber({
-                variables: { round: roundData && roundData[pointIndex + 1].round },
+                variables: {
+                    round: roundData && roundData[pointIndex + 1].round,
+                },
             })
             loadBidLByNumber({
-                variables: { round: roundData && roundData[pointIndex - 1].round },
+                variables: {
+                    round: roundData && roundData[pointIndex - 1].round,
+                },
             })
             if (roundData[0]?.minPrice) {
                 setState({ price: roundData[0]?.minPrice })
@@ -166,9 +202,12 @@ const Auction = () => {
         useLazyQuery(GET_BIDLIST_BY_ROUND)
 
     // get my bid
-    const [loadBidMByNumber, { data: bidListM, error: bmFetched }] = useLazyQuery(GET_BID)
-    const [loadBidLByNumber, { data: bidListL, error: blFetched }] = useLazyQuery(GET_BID)
-    const [loadBidHByNumber, { data: bidListH, error: bhFetched }] = useLazyQuery(GET_BID)
+    const [loadBidMByNumber, { data: bidListM, error: bmFetched }] =
+        useLazyQuery(GET_BID)
+    const [loadBidLByNumber, { data: bidListL, error: blFetched }] =
+        useLazyQuery(GET_BID)
+    const [loadBidHByNumber, { data: bidListH, error: bhFetched }] =
+        useLazyQuery(GET_BID)
 
     const loading = useMemo(() => {
         if (
@@ -261,10 +300,18 @@ const Auction = () => {
     }
 
     const calcPriceFromUsd = (price) => {
-        return calcRatio("usd", Currencies[currencyId].label.toLowerCase(), price)
+        return calcRatio(
+            "usd",
+            Currencies[currencyId].label.toLowerCase(),
+            price
+        )
     }
     const calcPriceToUsd = (price) => {
-        return calcRatio(Currencies[currencyId].label.toLowerCase(), "usd", price)
+        return calcRatio(
+            Currencies[currencyId].label.toLowerCase(),
+            "usd",
+            price
+        )
     }
 
     useEffect(() => {
@@ -276,7 +323,11 @@ const Auction = () => {
             let totalValue = 0
             hData.map((item) => (totalValue = +item.totalPrice))
             setfnAverateMinBid(
-                calcRatio("usd", Currencies[currencyId].label.toLowerCase(), totalValue)
+                calcRatio(
+                    "usd",
+                    Currencies[currencyId].label.toLowerCase(),
+                    totalValue
+                )
             )
         }
     }, [currencyId, hData, ratioFetched])
@@ -324,7 +375,13 @@ const Auction = () => {
                 cryptoType: "BTC",
             },
         })
-        dispatch(setBidInfo(Number(Math.max(fnSelectedRoundData()?.minPrice, price * amount))))
+        dispatch(
+            setBidInfo(
+                Number(
+                    Math.max(fnSelectedRoundData()?.minPrice, price * amount)
+                )
+            )
+        )
         dispatch(setCurrentRound(fnSelectedRoundData()?.id))
         navigate(ROUTES.payment)
     }
@@ -339,25 +396,35 @@ const Auction = () => {
     if (loading) return <Loading />
     else
         return (
-            <>
+            <AuctionProvider>
                 <Seo title="Sale" />
                 <main className="auction-page">
                     <Header />
                     <section className="section-auction container">
                         <div className="current-round">
                             <div>
-                                <h4>Round {roundData && roundData[0]?.round}</h4>
+                                <h4>
+                                    Round {roundData && roundData[0]?.round}
+                                </h4>
                                 <p>
-                                    <span className="text-secondary">Token Available</span>{" "}
-                                    <span>{roundData && roundData[0]?.totalToken}</span>
+                                    <span className="text-secondary">
+                                        Token Available
+                                    </span>{" "}
+                                    <span>
+                                        {roundData && roundData[0]?.totalToken}
+                                    </span>
                                 </p>
                             </div>
                             <img
                                 src={ChartIcon}
                                 alt="chart"
                                 className="show-chart"
-                                onClick={() => setState({ show_chart: !show_chart })}
-                                onKeyDown={() => setState({ show_chart: !show_chart })}
+                                onClick={() =>
+                                    setState({ show_chart: !show_chart })
+                                }
+                                onKeyDown={() =>
+                                    setState({ show_chart: !show_chart })
+                                }
                                 role="presentation"
                             />
                         </div>
@@ -372,7 +439,9 @@ const Auction = () => {
                                         <Tabs
                                             className="round-tab"
                                             selectedIndex={selectedData}
-                                            onSelect={(index) => setSelectedData(index)}
+                                            onSelect={(index) =>
+                                                setSelectedData(index)
+                                            }
                                         >
                                             <TabList>
                                                 <Tab className="w-100">
@@ -398,7 +467,8 @@ const Auction = () => {
                                                                 <div>
                                                                     Round
                                                                     {" " +
-                                                                        roundH?.getAuctionByNumber
+                                                                        roundH
+                                                                            ?.getAuctionByNumber
                                                                             ?.round}
                                                                 </div>
                                                             </div>
@@ -437,7 +507,9 @@ const Auction = () => {
                                         <Tabs
                                             className="statistics-tab"
                                             selectedIndex={tabIndex}
-                                            onSelect={(index) => setState({ tabIndex: index })}
+                                            onSelect={(index) =>
+                                                setState({ tabIndex: index })
+                                            }
                                         >
                                             <TabPanel>
                                                 <table>
@@ -445,7 +517,9 @@ const Auction = () => {
                                                         <tr>
                                                             <th className="border-0 py-2">
                                                                 <img
-                                                                    src={GreenCup}
+                                                                    src={
+                                                                        GreenCup
+                                                                    }
                                                                     alt="Green Cup"
                                                                 />
                                                             </th>
@@ -462,17 +536,20 @@ const Auction = () => {
                                                             (item, idx) => (
                                                                 <tr key={idx}>
                                                                     <td className="border-0 ps-6px py-2">
-                                                                        {idx + 1}
+                                                                        {idx +
+                                                                            1}
                                                                     </td>
                                                                     <td className="py-2">
-                                                                        {item.prefix + item.name}
+                                                                        {item.prefix +
+                                                                            item.name}
                                                                     </td>
                                                                     <td className="py-2 text-end">
                                                                         <span className="txt-green">
                                                                             {
                                                                                 Currencies[
                                                                                     currencyId
-                                                                                ].symbol
+                                                                                ]
+                                                                                    .symbol
                                                                             }{" "}
                                                                         </span>
                                                                         {calcPriceFromUsd(
@@ -482,14 +559,15 @@ const Auction = () => {
                                                                 </tr>
                                                             )
                                                         )}
-                                                        {fnSelectedBidhistoryData()?.length ===
-                                                            0 && (
+                                                        {fnSelectedBidhistoryData()
+                                                            ?.length === 0 && (
                                                             <tr>
                                                                 <td
                                                                     className="text-uppercase mx-auto fs-14px"
                                                                     colSpan={3}
                                                                 >
-                                                                    no records found
+                                                                    no records
+                                                                    found
                                                                 </td>
                                                             </tr>
                                                         )}
@@ -544,7 +622,11 @@ const Auction = () => {
                                                 </p>
                                                 <p className="value">
                                                     <span className="txt-green">
-                                                        {Currencies[currencyId].symbol}
+                                                        {
+                                                            Currencies[
+                                                                currencyId
+                                                            ].symbol
+                                                        }
                                                     </span>{" "}
                                                     {fnAverateMinBid}
                                                 </p>
@@ -591,7 +673,9 @@ const Auction = () => {
                                                     setState({ bidModal: true })
                                                 }}
                                             >
-                                                {!isBid ? "Place Bid" : "Increase bid"}
+                                                {!isBid
+                                                    ? "Place Bid"
+                                                    : "Increase bid"}
                                             </button>
                                         </div>
                                     )}
@@ -599,47 +683,72 @@ const Auction = () => {
                             </div>
 
                             <div className="auction-right col-lg-8 col-md-7">
-                                <div className={`place-bid ${isBid && "d-none"}`}>
-                                    <h3 className="range-label">amount of token</h3>
+                                <div
+                                    className={`place-bid ${isBid && "d-none"}`}
+                                >
+                                    <h3 className="range-label">
+                                        amount of token
+                                    </h3>
                                     <div className="d-flex align-items-center mb-4">
                                         <input
                                             type="number"
                                             value={Math.max(1, amount)}
-                                            onChange={(e) => setState({ amount: e.target.value })}
+                                            onChange={(e) =>
+                                                setState({
+                                                    amount: e.target.value,
+                                                })
+                                            }
                                             className="range-input"
                                         />
                                         <Slider
                                             value={Math.max(1, amount)}
-                                            onChange={(value) => setState({ amount: value })}
+                                            onChange={(value) =>
+                                                setState({ amount: value })
+                                            }
                                             min={1}
                                             max={fnSelectedRoundData()?.token}
                                             step={1}
                                         />
                                     </div>
-                                    <h3 className="range-label">Per token price</h3>
+                                    <h3 className="range-label">
+                                        Per token price
+                                    </h3>
                                     <div className="d-flex align-items-center mb-4">
                                         <input
                                             type="number"
                                             value={price}
                                             onChange={(e) =>
-                                                setState({ price: calcPriceToUsd(e.target.value) })
+                                                setState({
+                                                    price: calcPriceToUsd(
+                                                        e.target.value
+                                                    ),
+                                                })
                                             }
                                             className="range-input"
                                         />
                                         <Slider
                                             value={price}
                                             onChange={(value) =>
-                                                setState({ price: calcPriceToUsd(value) })
+                                                setState({
+                                                    price: calcPriceToUsd(
+                                                        value
+                                                    ),
+                                                })
                                             }
                                             min={Math.ceil(
-                                                calcPriceFromUsd(fnSelectedRoundData()?.minPrice)
+                                                calcPriceFromUsd(
+                                                    fnSelectedRoundData()
+                                                        ?.minPrice
+                                                )
                                             )}
                                             max={10000}
                                             step={100}
                                         />
                                     </div>
                                     <div className="d-flex align-items-center">
-                                        <span className="range-label">Total price</span>
+                                        <span className="range-label mb-0">
+                                            Total price
+                                        </span>
                                         <input
                                             className="total-input"
                                             type="text"
@@ -647,7 +756,8 @@ const Auction = () => {
                                                 Number(
                                                     calcPriceFromUsd(
                                                         Math.max(
-                                                            fnSelectedRoundData()?.minPrice,
+                                                            fnSelectedRoundData()
+                                                                ?.minPrice,
                                                             price * amount
                                                         )
                                                     ),
@@ -696,7 +806,10 @@ const Auction = () => {
                                                             options={options}
                                                             value={selectLabel}
                                                             onChange={(v) =>
-                                                                setState({ selectLabel: v })
+                                                                setState({
+                                                                    selectLabel:
+                                                                        v,
+                                                                })
                                                             }
                                                         />
                                                     </div>
@@ -712,9 +825,15 @@ const Auction = () => {
                                                                                 : "btn-disabled"
                                                                         }`}
                                                                         onClick={() => {
-                                                                            if (!pricce) {
-                                                                                setPrice(true)
-                                                                                setVolume(true)
+                                                                            if (
+                                                                                !pricce
+                                                                            ) {
+                                                                                setPrice(
+                                                                                    true
+                                                                                )
+                                                                                setVolume(
+                                                                                    true
+                                                                                )
                                                                                 setPriceVolume(
                                                                                     false
                                                                                 )
@@ -732,9 +851,15 @@ const Auction = () => {
                                                                                 : "btn-disabled"
                                                                         }`}
                                                                         onClick={() => {
-                                                                            if (!volume) {
-                                                                                setPrice(true)
-                                                                                setVolume(true)
+                                                                            if (
+                                                                                !volume
+                                                                            ) {
+                                                                                setPrice(
+                                                                                    true
+                                                                                )
+                                                                                setVolume(
+                                                                                    true
+                                                                                )
                                                                                 setPriceVolume(
                                                                                     false
                                                                                 )
@@ -752,14 +877,23 @@ const Auction = () => {
                                                                                 : "btn-disabled"
                                                                         }`}
                                                                         onClick={() => {
-                                                                            if (!price_volume) {
-                                                                                setPrice(false)
-                                                                                setVolume(false)
-                                                                                setPriceVolume(true)
+                                                                            if (
+                                                                                !price_volume
+                                                                            ) {
+                                                                                setPrice(
+                                                                                    false
+                                                                                )
+                                                                                setVolume(
+                                                                                    false
+                                                                                )
+                                                                                setPriceVolume(
+                                                                                    true
+                                                                                )
                                                                             }
                                                                         }}
                                                                     >
-                                                                        Price Volume
+                                                                        Price
+                                                                        Volume
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -775,16 +909,23 @@ const Auction = () => {
                                                                                 : "btn-disabled"
                                                                         }`}
                                                                         onClick={() => {
-                                                                            if (!reser_price) {
-                                                                                setReserPrice(true)
-                                                                                setSoldPrice(true)
+                                                                            if (
+                                                                                !reser_price
+                                                                            ) {
+                                                                                setReserPrice(
+                                                                                    true
+                                                                                )
+                                                                                setSoldPrice(
+                                                                                    true
+                                                                                )
                                                                                 setPerformance(
                                                                                     false
                                                                                 )
                                                                             }
                                                                         }}
                                                                     >
-                                                                        Reserved Price
+                                                                        Reserved
+                                                                        Price
                                                                     </button>
                                                                 </div>
                                                                 <div className="col-4 ps-0 pe-1 m-0">
@@ -795,16 +936,23 @@ const Auction = () => {
                                                                                 : "btn-disabled"
                                                                         }`}
                                                                         onClick={() => {
-                                                                            if (!sold_price) {
-                                                                                setReserPrice(true)
-                                                                                setSoldPrice(true)
+                                                                            if (
+                                                                                !sold_price
+                                                                            ) {
+                                                                                setReserPrice(
+                                                                                    true
+                                                                                )
+                                                                                setSoldPrice(
+                                                                                    true
+                                                                                )
                                                                                 setPerformance(
                                                                                     false
                                                                                 )
                                                                             }
                                                                         }}
                                                                     >
-                                                                        Price Sold
+                                                                        Price
+                                                                        Sold
                                                                     </button>
                                                                 </div>
                                                                 <div className="col-4 ps-0 pe-0 m-0">
@@ -815,10 +963,18 @@ const Auction = () => {
                                                                                 : "btn-disabled"
                                                                         }`}
                                                                         onClick={() => {
-                                                                            if (!performance) {
-                                                                                setReserPrice(false)
-                                                                                setSoldPrice(false)
-                                                                                setPerformance(true)
+                                                                            if (
+                                                                                !performance
+                                                                            ) {
+                                                                                setReserPrice(
+                                                                                    false
+                                                                                )
+                                                                                setSoldPrice(
+                                                                                    false
+                                                                                )
+                                                                                setPerformance(
+                                                                                    true
+                                                                                )
                                                                             }
                                                                         }}
                                                                     >
@@ -842,7 +998,9 @@ const Auction = () => {
                                                                 color: "#000000",
                                                             }}
                                                         >
-                                                            {AUCTION_TOOLTIP_CONTENT1}
+                                                            {
+                                                                AUCTION_TOOLTIP_CONTENT1
+                                                            }
                                                         </div>
                                                     </ReactTooltip>
 
@@ -852,7 +1010,9 @@ const Auction = () => {
                                                         className="ms-3 d-none d-sm-block"
                                                         data-for="tooltip1"
                                                         data-tip="tooltip1"
-                                                        style={{ cursor: "pointer" }}
+                                                        style={{
+                                                            cursor: "pointer",
+                                                        }}
                                                     />
                                                 </div>
                                             </div>
@@ -864,33 +1024,47 @@ const Auction = () => {
                                         volume &&
                                         !bid_perform.loading &&
                                         !bid_perform.error && (
-                                            <BidsChart1 data={bid_perform?.data} period={period} />
+                                            <BidsChart1
+                                                data={bid_perform?.data}
+                                                period={period}
+                                            />
                                         )}
                                     {selectLabel.value === "bid_performance" &&
                                         price_volume &&
                                         !bid_perform.loading &&
                                         !bid_perform.error && (
-                                            <BidsChart2 data={bid_perform?.data} period={period} />
+                                            <BidsChart2
+                                                data={bid_perform?.data}
+                                                period={period}
+                                            />
                                         )}
 
-                                    {selectLabel.value === "round_performance" &&
+                                    {selectLabel.value ===
+                                        "round_performance" &&
                                         reser_price &&
                                         sold_price &&
                                         !round_perform1.loading &&
                                         !round_perform1.error && (
-                                            <RoundsChart1 data={round_perform1?.data} />
+                                            <RoundsChart1
+                                                data={round_perform1?.data}
+                                            />
                                         )}
-                                    {selectLabel.value === "round_performance" &&
+                                    {selectLabel.value ===
+                                        "round_performance" &&
                                         performance &&
                                         !round_perform2.loading &&
                                         !round_perform2.error && (
-                                            <RoundsChart2 data={round_perform2?.data} />
+                                            <RoundsChart2
+                                                data={round_perform2?.data}
+                                            />
                                         )}
                                     {selectLabel.value === "round_chance" &&
                                         !round_chance.loading &&
                                         !round_chance.error && (
                                             <React.Fragment>
-                                                <ChanceChart data={round_chance?.data} />
+                                                <ChanceChart
+                                                    data={round_chance?.data}
+                                                />
                                             </React.Fragment>
                                         )}
                                     {selectLabel.value !== "round_chance" && (
@@ -925,7 +1099,9 @@ const Auction = () => {
                                             </button>
                                             <button
                                                 className={`btn-no-border-green text-uppercase ${
-                                                    period == "1M" ? "btn-active-green" : ""
+                                                    period == "1M"
+                                                        ? "btn-active-green"
+                                                        : ""
                                                 }`}
                                                 onClick={() => {
                                                     setPeriod("1M")
@@ -977,7 +1153,12 @@ const Auction = () => {
                                 role="button"
                                 tabIndex="0"
                             >
-                                <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                                <img
+                                    width="14px"
+                                    height="14px"
+                                    src={CloseIcon}
+                                    alt="close"
+                                />
                             </div>
                         </div>
                         <div className="desktop-view">
@@ -986,12 +1167,16 @@ const Auction = () => {
                                 <input
                                     type="number"
                                     value={amount}
-                                    onChange={(e) => setState({ amount: e.target.value })}
+                                    onChange={(e) =>
+                                        setState({ amount: e.target.value })
+                                    }
                                     className="range-input rounded-0"
                                 />
                                 <Slider
                                     value={amount}
-                                    onChange={(value) => setState({ amount: value })}
+                                    onChange={(value) =>
+                                        setState({ amount: value })
+                                    }
                                     min={1}
                                     max={fnSelectedRoundData()?.token}
                                     step={1}
@@ -1003,13 +1188,21 @@ const Auction = () => {
                                     type="number"
                                     value={calcPriceFromUsd(price)}
                                     onChange={(e) =>
-                                        setState({ price: calcPriceToUsd(e.target.value) })
+                                        setState({
+                                            price: calcPriceToUsd(
+                                                e.target.value
+                                            ),
+                                        })
                                     }
                                     className="range-input rounded-0"
                                 />
                                 <Slider
                                     value={calcPriceFromUsd(price)}
-                                    onChange={(value) => setState({ price: calcPriceToUsd(value) })}
+                                    onChange={(value) =>
+                                        setState({
+                                            price: calcPriceToUsd(value),
+                                        })
+                                    }
                                     min={fnSelectedRoundData()?.minPrice}
                                     max={10000}
                                     step={100}
@@ -1024,7 +1217,8 @@ const Auction = () => {
                                         Number(
                                             calcPriceFromUsd(
                                                 Math.max(
-                                                    fnSelectedRoundData()?.minPrice,
+                                                    fnSelectedRoundData()
+                                                        ?.minPrice,
                                                     price * amount
                                                 )
                                             ),
@@ -1033,7 +1227,9 @@ const Auction = () => {
                                     )}
                                     readOnly
                                 />
-                                <h3 className="symbol-label">{Currencies[currencyId].label}</h3>
+                                <h3 className="symbol-label">
+                                    {Currencies[currencyId].label}
+                                </h3>
                             </div>
                             <button
                                 className="btn-primary text-uppercase w-100 mt-4"
@@ -1050,7 +1246,9 @@ const Auction = () => {
                             <input
                                 type="number"
                                 value={amount}
-                                onChange={(e) => setState({ amount: e.target.value })}
+                                onChange={(e) =>
+                                    setState({ amount: e.target.value })
+                                }
                                 placeholder="Type the Token Amount Here"
                                 className="range-input"
                             />
@@ -1058,7 +1256,9 @@ const Auction = () => {
                             <input
                                 type="number"
                                 value={price}
-                                onChange={(e) => setState({ price: e.target.value })}
+                                onChange={(e) =>
+                                    setState({ price: e.target.value })
+                                }
                                 placeholder="Type the price per Token Here"
                                 className="range-input"
                             />
@@ -1091,7 +1291,7 @@ const Auction = () => {
                         </div>
                     </Modal>
                 </main>
-            </>
+            </AuctionProvider>
         )
 }
 
