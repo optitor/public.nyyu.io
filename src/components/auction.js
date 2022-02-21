@@ -8,7 +8,6 @@ import Select from "react-select"
 import Modal from "react-modal"
 import ReactTooltip from "react-tooltip"
 import axios from "axios"
-
 import Header from "./header"
 import BidsChart1 from "./chart/BidsChart1"
 import RoundsChart1 from "./chart/RoundsChart1"
@@ -37,22 +36,11 @@ import {
     GET_ROUND_CHANCE,
     GET_ROUND_PERFORMANCE2,
 } from "../apollo/graghqls/querys/Statistics"
-import {
-    AUCTION_TOOLTIP_CONTENT1,
-    AUCTION_TOOLTIP_CONTENT2,
-    NDB_TOKEN_CONTENT,
-    Currencies,
-} from "../utilities/staticData"
-import {
-    numberWithCommas,
-    numberWithLength,
-    getTimeDiffOverall,
-    getDiffOverall,
-    isInbetween,
-} from "../utilities/number"
+import { AUCTION_TOOLTIP_CONTENT1, Currencies } from "../utilities/staticData"
+import { numberWithCommas, numberWithLength } from "../utilities/number"
 import PercentageBar from "./auction/percentage-bar"
-import AuctionProvider from "./auction/auction-context"
-
+import AuctionProvider, { useAuction } from "./auction/auction-context"
+import AuctionRoundNavigator from "./auction/auction-round-navigator"
 const options = [
     { value: "bid_performance", label: "BIDS PERFORMANCE" },
     { value: "round_performance", label: "ROUNDS PERFORMANCE" },
@@ -272,16 +260,6 @@ const Auction = () => {
 
     const hData = fnSelectedBidhistoryData()
 
-    const distanceToDate = getTimeDiffOverall(
-        fnSelectedRoundData()?.startedAt,
-        fnSelectedRoundData()?.endedAt
-    )
-    const duration = getDiffOverall(
-        fnSelectedRoundData()?.startedAt,
-        fnSelectedRoundData()?.endedAt
-    ) //getSecTomorrow()
-    const percentage = (distanceToDate / duration) * 100
-
     const [PlaceBid] = useMutation(PLACE_BID, {
         onError: (err) => {
             console.log("received Mutation data", err)
@@ -443,72 +421,15 @@ const Auction = () => {
                                                 setSelectedData(index)
                                             }
                                         >
-                                            <TabList>
-                                                <Tab className="w-100">
-                                                    <div className="d-flex justify-content-center flex-column align-items-center">
-                                                        <div className="d-flex justify-content-between align-items-center w-100">
-                                                            <div>
-                                                                <svg
-                                                                    className="icon-25px"
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    viewBox="0 0 24 24"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M15 19l-7-7 7-7"
-                                                                    ></path>
-                                                                </svg>
-                                                            </div>
-                                                            <div className="fw-bold text-uppercase fs-30px border-bottom border-3 border-success px-2">
-                                                                <div>
-                                                                    Round
-                                                                    {" " +
-                                                                        roundH
-                                                                            ?.getAuctionByNumber
-                                                                            ?.round}
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <svg
-                                                                    className="icon-25px"
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    viewBox="0 0 24 24"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                >
-                                                                    <path
-                                                                        stroke-linecap="round"
-                                                                        stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M9 5l7 7-7 7"
-                                                                    ></path>
-                                                                </svg>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-3">
-                                                            <span className="text-[#959595]">
-                                                                Token Available{" "}
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {numberWithCommas(
-                                                                    fnSelectedRoundData()
-                                                                        ?.totalToken
-                                                                )}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </Tab>
-                                            </TabList>
+                                            <AuctionRoundNavigator />
                                         </Tabs>
                                         <Tabs
                                             className="statistics-tab"
                                             selectedIndex={tabIndex}
                                             onSelect={(index) =>
-                                                setState({ tabIndex: index })
+                                                setState({
+                                                    tabIndex: index,
+                                                })
                                             }
                                         >
                                             <TabPanel>
@@ -670,7 +591,9 @@ const Auction = () => {
                                             <button
                                                 className="btn-primary btn-increase"
                                                 onClick={() => {
-                                                    setState({ bidModal: true })
+                                                    setState({
+                                                        bidModal: true,
+                                                    })
                                                 }}
                                             >
                                                 {!isBid
@@ -1139,6 +1062,7 @@ const Auction = () => {
                             </div>
                         </div>
                     </section>
+
                     <Modal
                         isOpen={bidModal}
                         onRequestClose={() => setState({ bidModal: false })}
