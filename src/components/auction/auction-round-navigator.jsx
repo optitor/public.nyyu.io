@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { useAuction } from "./auction-context"
 import { Tab, TabList } from "react-tabs"
 import { numberWithCommas } from "../../utilities/number"

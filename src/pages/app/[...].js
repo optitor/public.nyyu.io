@@ -3,6 +3,7 @@ import { Router } from "@reach/router"
 import { navigate } from "gatsby"
 import Loading from "../../components/common/Loading"
 import { useAuth } from "../../hooks/useAuth"
+import AuctionWrapper from "../../components/auction/auction-wrapper"
 
 const Profile = lazy(() => import("../../components/Profile"))
 const PrivateRoute = lazy(() => import("../../components/common/PrivateRoute"))
@@ -14,7 +15,6 @@ const ForgotPassword = lazy(() => import("../../components/auth/forgot-password"
 const NewPassword = lazy(() => import("../../components/auth/new-password"))
 const VerifyID = lazy(() => import("../../components/auth/verify-id"))
 const VerifyCompany = lazy(() => import("../../components/auth/verify-company"))
-const Auction = lazy(() => import("../../components/auction"))
 const ChangePassword = lazy(() => import("../../components/auth/change-password"))
 const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
 const Wallet = lazy(() => import("../../components/wallet"))
@@ -50,7 +50,7 @@ const App = () => {
                         <ChangePassword path="change-password" />
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
-                        <Auction path="auction" />
+                        <AuctionWrapper path="auction" />
                         <Wallet path="wallet" />
 
                         <PrivateRoute path="/profile" component={Profile} />
