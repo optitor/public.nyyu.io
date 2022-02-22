@@ -12,6 +12,7 @@ export default function AuctionRoundDetails() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
+    const soldTokensPercentage = (current.sold / current.totalToken) * 100
 
     // Methods
     const findMinBid = () => {
@@ -32,7 +33,11 @@ export default function AuctionRoundDetails() {
     if (!currentRoundBidList) return <></>
     return (
         <div className="auction-left__bottom">
-            <PercentageBar percentage={20} />
+            <PercentageBar
+                percentage={soldTokensPercentage}
+                sold={current.sold}
+                total={current.totalToken}
+            />
             <div className="d-flex justify-content-between mt-4">
                 {minBidValue !== 0 ? (
                     <div>
