@@ -607,7 +607,7 @@ const Auction = () => {
                                 </div>
                                 <div className="mt-3 mb-2">
                                     <p className="text-secondary fw-500 text-[#959595]">
-                                        Audited by Cyberunit
+                                        Audited by CertiK
                                     </p>
                                 </div>
                                 <button
