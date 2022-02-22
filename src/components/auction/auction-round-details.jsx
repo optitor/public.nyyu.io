@@ -1,85 +1,85 @@
-import { useQuery } from "@apollo/client"
-import React from "react"
-import { useState } from "react"
-import { TabPanel, Tabs } from "react-tabs"
-import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
-import CustomSpinner from "../../components/common/custom-spinner"
-import { GreenCup } from "../../utilities/imgImport"
+import PercentageBar from "./percentage-bar"
 import { useAuction } from "./auction-context"
+import React, { useState, useEffect } from "react"
 import { Currencies } from "../../utilities/staticData"
+import { numberWithLength } from "../../utilities/number"
 
 export default function AuctionRoundDetails() {
-    // Containers
+    // Container
     const auction = useAuction()
-    const { currentRoundNumber } = auction
-    const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
-    const loadingData = !currentRoundBidList
+    const [minBidValue, setMinBidValue] = useState(Infinity)
+    const { auctions, currentRoundNumber, currentRoundBidList } = auction
+    const current = auctions?.filter(
+        (auction) => auction.round === currentRoundNumber
+    )[0]
 
-    // Webservices
-    useQuery(GET_BIDLIST_BY_ROUND, {
-        variables: {
-            round: currentRoundNumber,
-        },
-        onCompleted: (data) => {
-            setCurrentRoundBidList(data.getBidListByRound)
-        },
-        onError: (error) => console.log(error),
-    })
+    // Methods
+    const findMinBid = () => {
+        if (!currentRoundBidList || currentRoundBidList?.length === 0)
+            return setMinBidValue(0.0)
+
+        let min = Infinity
+        currentRoundBidList.forEach((item) => {
+            if (item.totalPrice < min) min = item.totalPrice
+        })
+
+        return setMinBidValue(min)
+    }
+
+    useEffect(() => findMinBid(), [currentRoundBidList])
+
     // Render
-    if (loadingData)
-        return (
-            <div className="text-center mt-4">
-                <CustomSpinner />
-            </div>
-        )
+    if (!currentRoundBidList) return <></>
     return (
-        <>
-            <Tabs className="statistics-tab" selectedIndex={0}>
-                <TabPanel>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th className="border-0 py-2">
-                                    <img src={GreenCup} alt="Green Cup" />
-                                </th>
-                                <th className="fw-500 py-2">Placement</th>
-                                <th className="fw-500 text-end py-2">
-                                    Highest Bids
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentRoundBidList.map((item, index) => (
-                                <tr key={index}>
-                                    <td className="border-0 ps-6px py-2">
-                                        {index + 1}
-                                    </td>
-                                    <td className="py-2">
-                                        {item.prefix + item.name}
-                                    </td>
-                                    <td className="py-2 text-end">
-                                        <span className="txt-green">
-                                            {Currencies[0].symbol}{" "}
-                                        </span>
-                                        {/* {calcPriceFromUsd(item.totalPrice)} */}
-                                        {item.totalPrice}
-                                    </td>
-                                </tr>
-                            ))}
-                            {currentRoundBidList.length === 0 && (
-                                <tr>
-                                    <td
-                                        className="text-uppercase mx-auto fs-14px"
-                                        colSpan={3}
-                                    >
-                                        no records found
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </TabPanel>
-            </Tabs>
-        </>
+        <div className="auction-left__bottom">
+            <PercentageBar percentage={20} />
+            <div className="d-flex justify-content-between mt-4">
+                {minBidValue !== 0 ? (
+                    <div>
+                        <p className="caption text-[#959595]">Minimum Bid</p>
+                        <p className="value">
+                            <span className="txt-green">
+                                {Currencies[0].symbol}
+                            </span>
+                            {minBidValue}
+                        </p>
+                    </div>
+                ) : (
+                    <div></div>
+                )}
+                <div>
+                    <p className="caption text-end text-[#959595]">
+                        Available Until
+                    </p>
+                    <p className="value text-end">
+                        {numberWithLength(
+                            parseInt(new Date(current.endedAt).getHours())
+                        )}
+                        :
+                        {numberWithLength(
+                            parseInt(new Date(current.endedAt).getMinutes())
+                        )}
+                        :
+                        {numberWithLength(
+                            parseInt(new Date(current.endedAt).getSeconds())
+                        )}
+                    </p>
+                </div>
+            </div>
+            {/* {size.width <= 1024 && (
+                <div className="text-center my-5">
+                    <button
+                        className="btn-primary btn-increase"
+                        onClick={() => {
+                            setState({
+                                bidModal: true,
+                            })
+                        }}
+                    >
+                        {!isBid ? "Place Bid" : "Increase bid"}
+                    </button>
+                </div>
+            )} */}
+        </div>
     )
 }
