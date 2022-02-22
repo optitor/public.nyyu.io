@@ -68,64 +68,6 @@ export default function AuctionPlaceBidModal({ isBid }) {
                     />
                 </div>
             </div>
-            <div className="desktop-view">
-                <h3 className="range-label">amount of Token</h3>
-                <div className="d-flex align-items-center mb-4">
-                    <input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        className="range-input rounded-0"
-                    />
-                    <Slider
-                        value={amount}
-                        onChange={(value) => setAmount(value)}
-                        min={1}
-                        max={current.token}
-                        step={1}
-                    />
-                </div>
-                <h3 className="range-label">Per token price</h3>
-                <div className="d-flex align-items-center mb-4">
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        className="range-input rounded-0"
-                    />
-                    <Slider
-                        value={price}
-                        onChange={(value) => setPrice(value)}
-                        min={current.minPrice}
-                        max={10000}
-                        step={100}
-                    />
-                </div>
-                <div className="d-flex align-items-center">
-                    <span className="range-label">Total price</span>
-                    <input
-                        className="total-input rounded-0"
-                        type="text"
-                        value={numberWithCommas(
-                            Number(
-                                Math.max(current.minPrice, price * amount),
-                                ","
-                            )
-                        )}
-                        readOnly
-                    />
-                    <h3 className="symbol-label">{Currencies[0].label}</h3>
-                </div>
-                <button
-                    className="btn-primary text-uppercase w-100 mt-4"
-                    onClick={() => {
-                        auction.setBidModal(false)
-                        bidMutation()
-                    }}
-                >
-                    {!isBid ? "Place Bid" : "Increase Bid"}
-                </button>
-            </div>
             <div className="tablet-view">
                 <h4 className="range-label">amount of Token</h4>
                 <input

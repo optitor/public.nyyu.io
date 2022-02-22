@@ -53,22 +53,34 @@ export default function AuctionRoundDetails() {
                     <div></div>
                 )}
                 <div>
-                    <p className="caption text-end text-[#959595]">
-                        Available Until
-                    </p>
-                    <p className="value text-end">
-                        {numberWithLength(
-                            parseInt(new Date(current.endedAt).getHours())
-                        )}
-                        :
-                        {numberWithLength(
-                            parseInt(new Date(current.endedAt).getMinutes())
-                        )}
-                        :
-                        {numberWithLength(
-                            parseInt(new Date(current.endedAt).getSeconds())
-                        )}
-                    </p>
+                    {current.endedAt > new Date().getTime() ? (
+                        <>
+                            <p className="caption text-end text-[#959595]">
+                                Available Until
+                            </p>
+                            <p className="value text-end">
+                                {numberWithLength(
+                                    parseInt(
+                                        new Date(current.endedAt).getHours()
+                                    )
+                                )}
+                                :
+                                {numberWithLength(
+                                    parseInt(
+                                        new Date(current.endedAt).getMinutes()
+                                    )
+                                )}
+                                :
+                                {numberWithLength(
+                                    parseInt(
+                                        new Date(current.endedAt).getSeconds()
+                                    )
+                                )}
+                            </p>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </div>
             {/* {size.width <= 1024 && (

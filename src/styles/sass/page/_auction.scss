@@ -127,9 +127,6 @@
             }
             .round-tab {
                 margin-top: 16px;
-                @include mq("tablet", max) {
-                    display: none;
-                }
                 .react-tabs__tab-list {
                     .react-tabs__tab {
                         display: flex;

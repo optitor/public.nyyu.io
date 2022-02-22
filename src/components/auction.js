@@ -1,18 +1,18 @@
-import React, { useState } from "react"
-import { useSelector } from "react-redux"
-import { Tabs } from "react-tabs"
-import ReactTooltip from "react-tooltip"
-import Header from "./header"
-import Loading from "./common/Loading"
 import Seo from "./seo"
+import Header from "./header"
+import { Tabs } from "react-tabs"
+import React, { useState } from "react"
+import Loading from "./common/Loading"
+import ReactTooltip from "react-tooltip"
+import { useSelector } from "react-redux"
 import { Qmark } from "../utilities/imgImport"
-import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData"
 import { useAuction } from "./auction/auction-context"
-import AuctionRoundNavigator from "./auction/auction-round-navigator"
+import AuctionPlaceBid from "./auction/auction-place-bid"
 import AuctionRoundBidList from "./auction/auction-round-bid-list"
 import AuctionRoundDetails from "./auction/auction-round-details"
-import AuctionPlaceBid from "./auction/auction-place-bid"
+import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData"
 import AuctionPlaceBidModal from "./auction/auction-place-bid-modal"
+import AuctionRoundNavigator from "./auction/auction-round-navigator"
 
 const Auction = () => {
     const auction = useAuction()
@@ -26,17 +26,6 @@ const Auction = () => {
             <main className="auction-page">
                 <Header />
                 <section className="section-auction container">
-                    <div className="current-round">
-                        <div>
-                            <h4>Round 1</h4>
-                            <p>
-                                <span className="text-secondary">
-                                    Token Available
-                                </span>{" "}
-                                <span>100,000</span>
-                            </p>
-                        </div>
-                    </div>
                     <div className="row h-100">
                         <div className="auction-left col-lg-4 col-md-5 position-relative d-block">
                             <div className="d-flex">
@@ -79,6 +68,15 @@ const Auction = () => {
                                 </div>
                             </div>
                             <AuctionRoundDetails />
+
+                            <div className="d-block d-sm-none">
+                                <div
+                                    className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
+                                    onClick={() => auction.setBidModal(true)}
+                                >
+                                    place bid
+                                </div>
+                            </div>
                         </div>
 
                         <div className="auction-right col-lg-8 col-md-7">

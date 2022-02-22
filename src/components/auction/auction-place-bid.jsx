@@ -20,7 +20,7 @@ export default function AuctionPlaceBid({ isBid }) {
         (auction) => auction.round === currentRoundNumber
     )[0]
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(1)
+    const [price, setPrice] = useState(current.minPrice)
 
     // Webservice
     const [PlaceBid] = useMutation(PLACE_BID, {
@@ -46,68 +46,74 @@ export default function AuctionPlaceBid({ isBid }) {
     // Render
     return (
         <>
-            <div className={`place-bid ${isBid && "d-none"}`}>
-                <h3 className="range-label">amount of token</h3>
-                <div className="d-flex align-items-center mb-4">
-                    <input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        className="range-input"
-                    />
-                    <Slider
-                        value={amount}
-                        onChange={(value) => setAmount(value)}
-                        min={1}
-                        max={current.token}
-                        step={1}
-                    />
+            {current.endedAt < new Date().getTime() ? (
+                <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-90">
+                    round is over
                 </div>
-                <h3 className="range-label">per token price</h3>
-                <div className="d-flex align-items-center mb-4">
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(value) => setPrice(value)}
-                        className="range-input"
-                    />
-                    <Slider
-                        value={price}
-                        onChange={(value) => setPrice(value)}
-                        min={Math.ceil(current.minPrice)}
-                        max={10000}
-                        step={100}
-                    />
+            ) : (
+                <div className={`place-bid ${isBid && "d-none"}`}>
+                    <h3 className="range-label">amount of token</h3>
+                    <div className="d-flex align-items-center mb-4">
+                        <input
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            className="range-input"
+                        />
+                        <Slider
+                            value={amount}
+                            onChange={(value) => setAmount(value)}
+                            min={1}
+                            max={100}
+                            step={1}
+                        />
+                    </div>
+                    <h3 className="range-label">per token price</h3>
+                    <div className="d-flex align-items-center mb-4">
+                        <input
+                            type="number"
+                            value={price}
+                            onChange={(value) => setPrice(value)}
+                            className="range-input"
+                        />
+                        <Slider
+                            value={price}
+                            onChange={(value) => setPrice(value)}
+                            min={current.minPrice}
+                            max={10000}
+                            step={100}
+                        />
+                    </div>
+                    <div className="d-flex align-items-center">
+                        <span className="range-label mb-0">Total price</span>
+                        <input
+                            className="total-input"
+                            type="text"
+                            value={numberWithCommas(
+                                Number(
+                                    Math.max(current.minPrice, price * amount),
+                                    " "
+                                )
+                            )}
+                            readOnly
+                        />
+                        <h3 className="symbol-label">{Currencies[0].label}</h3>
+                    </div>
+                    <div className="mt-3 mb-2">
+                        <p className="text-secondary fw-500 text-[#959595]">
+                            Audited by CertiK
+                        </p>
+                    </div>
+                    <button
+                        className="btn-primary text-uppercase w-100"
+                        onClick={() => {
+                            bidMutation()
+                        }}
+                    >
+                        {!isBid ? "Place Bid" : "Increase Bid"}
+                    </button>
                 </div>
-                <div className="d-flex align-items-center">
-                    <span className="range-label mb-0">Total price</span>
-                    <input
-                        className="total-input"
-                        type="text"
-                        value={numberWithCommas(
-                            Number(
-                                Math.max(current.minPrice, price * amount),
-                                " "
-                            )
-                        )}
-                        readOnly
-                    />
-                    <h3 className="symbol-label">{Currencies[0].label}</h3>
-                </div>
-                <div className="mt-3 mb-2">
-                    <p className="text-secondary fw-500 text-[#959595]">
-                        Audited by CertiK
-                    </p>
-                </div>
-                <button
-                    className="btn-primary text-uppercase w-100"
-                    onClick={() => {
-                        bidMutation()
-                    }}
-                >
-                    {!isBid ? "Place Bid" : "Increase Bid"}
-                </button>
-            </div>
+            )}
         </>
     )
 }
