@@ -183,7 +183,7 @@
                 display: none;
             }
         }
-        
+
         .cryptocoin-tab {
             button {
                 font-size: 18px;
@@ -298,8 +298,16 @@
                     }
                 }
                 .css-1pahdxg-control {
+                    // border: none;
                     @include mq("laptop", max) {
                         border: 1px solid white;
+                    }
+                    .wallet-select__value {
+                        color: white;
+                        text-transform: uppercase;
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 22px;
                     }
                 }
                 .css-26l3qy-menu {
