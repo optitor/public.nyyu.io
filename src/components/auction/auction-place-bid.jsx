@@ -47,7 +47,7 @@ export default function AuctionPlaceBid({ isBid }) {
     return (
         <>
             {current.endedAt < new Date().getTime() ? (
-                <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-90">
+                <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
                     round is over
                 </div>
             ) : (
