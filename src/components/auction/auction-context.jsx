@@ -1,10 +1,7 @@
 import { useQuery } from "@apollo/client"
 import React, { useContext } from "react"
 import { useState } from "react"
-import {
-    GET_AUCTION,
-    GET_CURRENT_ROUND,
-} from "../../apollo/graghqls/querys/Auction"
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction"
 
 export const AuctionContext = React.createContext()
 export const useAuction = () => useContext(AuctionContext)
@@ -12,22 +9,15 @@ export const useAuction = () => useContext(AuctionContext)
 const AuctionProvider = ({ children }) => {
     // Containers
     const [auctions, setAuctions] = useState(null)
-    const [currentRound, setCurrentRound] = useState(null)
     const [currentRoundNumber, setCurrentRoundNumber] = useState(-1)
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
-    const loading = !(auctions && currentRound)
+    const loading = !auctions
 
     // Webservices
     useQuery(GET_AUCTION, {
-        onCompleted: (data) => setAuctions(data.getAuctions),
-        onError: (error) => console.log(error),
-        errorPolicy: "ignore",
-        fetchPolicy: "network-only",
-    })
-    useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => {
-            setCurrentRound(data.getCurrentRound)
-            setCurrentRoundNumber(data.getCurrentRound.auction.round)
+            setAuctions(data.getAuctions)
+            setCurrentRoundNumber(data.getAuctions.length)
         },
         onError: (error) => console.log(error),
         errorPolicy: "ignore",
@@ -38,7 +28,6 @@ const AuctionProvider = ({ children }) => {
     const providerValue = {
         loading,
         auctions,
-        currentRound,
 
         // current round number
         currentRoundNumber,

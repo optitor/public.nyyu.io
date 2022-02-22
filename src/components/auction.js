@@ -37,12 +37,12 @@ import {
     GET_ROUND_PERFORMANCE2,
 } from "../apollo/graghqls/querys/Statistics"
 import { AUCTION_TOOLTIP_CONTENT1, Currencies } from "../utilities/staticData"
-import { numberWithCommas, numberWithLength } from "../utilities/number"
-import PercentageBar from "./auction/percentage-bar"
+import { numberWithCommas } from "../utilities/number"
 import { useAuction } from "./auction/auction-context"
 import AuctionRoundNavigator from "./auction/auction-round-navigator"
 import AuctionRoundBidList from "./auction/auction-round-bid-list"
 import AuctionRoundDetails from "./auction/auction-round-details"
+import AuctionPlaceBid from "./auction/auction-place-bid"
 const options = [
     { value: "bid_performance", label: "BIDS PERFORMANCE" },
     { value: "round_performance", label: "ROUNDS PERFORMANCE" },
@@ -454,100 +454,7 @@ const Auction = () => {
                         </div>
 
                         <div className="auction-right col-lg-8 col-md-7">
-                            <div className={`place-bid ${isBid && "d-none"}`}>
-                                <h3 className="range-label">amount of token</h3>
-                                <div className="d-flex align-items-center mb-4">
-                                    <input
-                                        type="number"
-                                        value={Math.max(1, amount)}
-                                        onChange={(e) =>
-                                            setState({
-                                                amount: e.target.value,
-                                            })
-                                        }
-                                        className="range-input"
-                                    />
-                                    <Slider
-                                        value={Math.max(1, amount)}
-                                        onChange={(value) =>
-                                            setState({
-                                                amount: value,
-                                            })
-                                        }
-                                        min={1}
-                                        max={fnSelectedRoundData()?.token}
-                                        step={1}
-                                    />
-                                </div>
-                                <h3 className="range-label">Per token price</h3>
-                                <div className="d-flex align-items-center mb-4">
-                                    <input
-                                        type="number"
-                                        value={price}
-                                        onChange={(e) =>
-                                            setState({
-                                                price: calcPriceToUsd(
-                                                    e.target.value
-                                                ),
-                                            })
-                                        }
-                                        className="range-input"
-                                    />
-                                    <Slider
-                                        value={price}
-                                        onChange={(value) =>
-                                            setState({
-                                                price: calcPriceToUsd(value),
-                                            })
-                                        }
-                                        min={Math.ceil(
-                                            calcPriceFromUsd(
-                                                fnSelectedRoundData()?.minPrice
-                                            )
-                                        )}
-                                        max={10000}
-                                        step={100}
-                                    />
-                                </div>
-                                <div className="d-flex align-items-center">
-                                    <span className="range-label mb-0">
-                                        Total price
-                                    </span>
-                                    <input
-                                        className="total-input"
-                                        type="text"
-                                        value={numberWithCommas(
-                                            Number(
-                                                calcPriceFromUsd(
-                                                    Math.max(
-                                                        fnSelectedRoundData()
-                                                            ?.minPrice,
-                                                        price * amount
-                                                    )
-                                                ),
-                                                " "
-                                            )
-                                        )}
-                                        readOnly
-                                    />
-                                    <h3 className="symbol-label">
-                                        {Currencies[currencyId].label}
-                                    </h3>
-                                </div>
-                                <div className="mt-3 mb-2">
-                                    <p className="text-secondary fw-500 text-[#959595]">
-                                        Audited by CertiK
-                                    </p>
-                                </div>
-                                <button
-                                    className="btn-primary text-uppercase w-100"
-                                    onClick={() => {
-                                        bidMutation()
-                                    }}
-                                >
-                                    {!isBid ? "Place Bid" : "Increase Bid"}
-                                </button>
-                            </div>
+                            <AuctionPlaceBid isBid={isBid} />
                             <div
                                 className={`chart-area ${size.width <= 768
                                     ? show_chart
@@ -834,7 +741,7 @@ const Auction = () => {
                                         }}
                                     >
                                         <button
-                                            className="btn-no-border-green text-uppercase  "
+                                            className="btn-no-border-green text-uppercase"
                                             onClick={() => {
                                                 setPeriod("1D")
                                             }}
@@ -842,7 +749,7 @@ const Auction = () => {
                                             1D
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase  "
+                                            className="btn-no-border-green text-uppercase"
                                             onClick={() => {
                                                 setPeriod("5D")
                                             }}
@@ -861,7 +768,7 @@ const Auction = () => {
                                             1M
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase "
+                                            className="btn-no-border-green text-uppercase"
                                             onClick={() => {
                                                 setPeriod("6M")
                                             }}
@@ -869,7 +776,7 @@ const Auction = () => {
                                             6M
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase   "
+                                            className="btn-no-border-green text-uppercase"
                                             onClick={() => {
                                                 setPeriod("1Y")
                                             }}
@@ -877,7 +784,7 @@ const Auction = () => {
                                             1Y
                                         </button>
                                         <button
-                                            className="btn-no-border-green text-uppercase   "
+                                            className="btn-no-border-green text-uppercase"
                                             onClick={() => {
                                                 setPeriod("ALL")
                                             }}
