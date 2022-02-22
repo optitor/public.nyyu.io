@@ -41,10 +41,10 @@ export default function AuctionRoundDetails() {
             <div className="d-flex justify-content-between mt-4">
                 {minBidValue !== 0 ? (
                     <div>
-                        <p className="caption text-[#959595]">Minimum Bid</p>
+                        <p className="caption text-[#959595]">Minimum Bid </p>
                         <p className="value">
                             <span className="txt-green">
-                                {Currencies[0].symbol}
+                                {Currencies[0].symbol + " "}
                             </span>
                             {minBidValue}
                         </p>

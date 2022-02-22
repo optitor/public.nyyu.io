@@ -4,19 +4,44 @@ import { Tab, TabList } from "react-tabs"
 import { numberWithCommas } from "../../utilities/number"
 
 export default function AuctionRoundNavigator() {
+    // Containers
     const auction = useAuction()
     const { auctions, currentRoundNumber } = auction
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
+    const canGoNext = auctions?.length !== currentRoundNumber
+    const canGoBack = currentRoundNumber !== 1
+
+    // Methods
+    const reset = () => {
+        auction.setCurrentRoundBidList(null)
+    }
+    const goBack = () => {
+        if (canGoBack) {
+            auction.setCurrentRoundNumber(auction.currentRoundNumber - 1)
+            reset()
+        }
+    }
+    const goNext = () => {
+        if (canGoNext) {
+            auction.setCurrentRoundNumber(auction.currentRoundNumber + 1)
+            reset()
+        }
+    }
+
+    // Render
     return (
         <TabList>
             <Tab className="w-100">
                 <div className="d-flex justify-content-center flex-column align-items-center">
                     <div className="d-flex justify-content-between align-items-center w-100">
-                        <div>
+                        <div className="cursor-pointer" onClick={goBack}>
+                            {/* Previous */}
                             <svg
-                                className="icon-25px"
+                                className={`icon-25px ${
+                                    !canGoBack && "text-secondary"
+                                }`}
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -36,9 +61,12 @@ export default function AuctionRoundNavigator() {
                                 {" " + current?.round}
                             </div>
                         </div>
-                        <div>
+                        <div className="cursor-pointer" onClick={goNext}>
+                            {/* Next */}
                             <svg
-                                className="icon-25px"
+                                className={`icon-25px ${
+                                    !canGoNext && "text-secondary"
+                                }`}
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"

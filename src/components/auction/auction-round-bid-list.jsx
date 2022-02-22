@@ -12,7 +12,7 @@ export default function AuctionRoundBidList() {
     const auction = useAuction()
     const { currentRoundNumber } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
-    const loadingData = !currentRoundBidList
+    const loadingData = !(currentRoundBidList && auction.currentRoundBidList)
 
     // Webservices
     useQuery(GET_BIDLIST_BY_ROUND, {
@@ -69,7 +69,7 @@ export default function AuctionRoundBidList() {
                             {currentRoundBidList.length === 0 && (
                                 <tr>
                                     <td
-                                        className="text-uppercase mx-auto fs-14px"
+                                        className="text-uppercase text-center mx-auto fs-14px border-0 py-2"
                                         colSpan={3}
                                     >
                                         no records found

@@ -39,7 +39,12 @@ const AuctionProvider = ({ children }) => {
         loading,
         auctions,
         currentRound,
+
+        // current round number
         currentRoundNumber,
+        setCurrentRoundNumber,
+
+        // curren round bid list
         currentRoundBidList,
         setCurrentRoundBidList,
     }
