@@ -11,6 +11,7 @@ const AuctionProvider = ({ children }) => {
     const [auctions, setAuctions] = useState(null)
     const [currentRoundNumber, setCurrentRoundNumber] = useState(-1)
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
+    const [bidModal, setBidModal] = useState(false)
     const loading = !auctions
 
     // Webservices
@@ -36,6 +37,10 @@ const AuctionProvider = ({ children }) => {
         // curren round bid list
         currentRoundBidList,
         setCurrentRoundBidList,
+
+        // bid modal
+        bidModal,
+        setBidModal,
     }
 
     // Render
