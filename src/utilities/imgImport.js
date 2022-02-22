@@ -111,6 +111,10 @@ import attachmentIcon from "../images/support/attachment.svg"
 import menuIcon from "../images/support/menu.svg"
 import greenCup from "../images/icons/green-cup.svg"
 
+import plaid from "../images/plaid.svg"
+import paypalFiat from "../images/paypal-fiat.svg"
+import stripe from "../images/stripe.svg"
+
 export const Logo = logo
 export const Bell = bell
 export const NotificationBell = notificationBell
@@ -217,4 +221,8 @@ export const ChatButton = chatButton
 export const GloabIcon = glotbIcon
 export const AttachmentIcon = attachmentIcon
 export const MenuIcon = menuIcon
+
+export const Plaid = plaid
+export const PaypalFiat = paypalFiat
+export const Stripe = stripe
 export const GreenCup = greenCup

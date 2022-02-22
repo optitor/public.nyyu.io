@@ -170,22 +170,27 @@ const CardSection = ({ amount, round }) => {
                         </div>
                     </div>
                 )}
-                <input
-                    type="text"
-                    style={style.base}
-                    className="border border-light border-1 p-2 col-12 mb-3 bg-transparent placeholder:text-light"
-                    placeholder="Card holder"
-                    value={cardHolder}
-                    onChange={(e) => setCardHolder(e.target.value)}
-                />
-                <CardNumberElement
-                    className="border border-light border-1 p-2 col-12 mb-3"
-                    options={{
-                        style,
-                        placeholder: "Card number",
-                    }}
-                />
-                <div className="col-6 ps-0">
+
+                <div className="col-6 ps-0 pe-1">
+                    <input
+                        type="text"
+                        style={style.base}
+                        className="border border-light border-1 p-2 w-100 mb-3 placeholder:text-light form-control"
+                        placeholder="Card holder"
+                        value={cardHolder}
+                        onChange={(e) => setCardHolder(e.target.value)}
+                    />
+                </div>
+                <div className="col-6 pe-0 ps-0">
+                    <CardNumberElement
+                        className="border border-light border-1 p-2 w-100 mb-3"
+                        options={{
+                            style,
+                            placeholder: "Card number",
+                        }}
+                    />
+                </div>
+                <div className="col-6 ps-0 pe-1">
                     <CardExpiryElement
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{
@@ -194,7 +199,7 @@ const CardSection = ({ amount, round }) => {
                         }}
                     />
                 </div>
-                <div className="col-6 pe-0">
+                <div className="col-6 pe-0 ps-0">
                     <CardCvcElement
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{

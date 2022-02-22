@@ -82,7 +82,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                     />
                 </div>
                 <img src={icons[data.symbol]?.icon?? NickToken} alt="coin" className="me-2" width="30" />
-                <div>
+                <div style={{width: '100%', paddingRight: 20}}>
                     <p className="coin-abbr">{data.symbol}</p>
                     <p className="coin-name">{data.name}</p>
                 </div>

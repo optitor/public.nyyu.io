@@ -183,7 +183,7 @@
                 display: none;
             }
         }
-        
+
         .cryptocoin-tab {
             button {
                 font-size: 18px;
@@ -243,6 +243,7 @@
                 justify-content: space-between;
                 background-color: white;
                 padding: 13px;
+                margin-top: 8px;
                 cursor: pointer;
                 code {
                     font-family: "Montserrat";
@@ -260,8 +261,8 @@
             }
             .qr-code {
                 text-align: center;
-                width: 110px;
-                height: 110px;
+                width: 165px;
+                height: 165px;
                 margin-left: 18px;
                 flex-shrink: 0;
                 img {
@@ -297,9 +298,16 @@
                     }
                 }
                 .css-1pahdxg-control {
-                    border: none;
+                    // border: none;
                     @include mq("laptop", max) {
                         border: 1px solid white;
+                    }
+                    .wallet-select__value {
+                        color: white;
+                        text-transform: uppercase;
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 22px;
                     }
                 }
                 .css-26l3qy-menu {

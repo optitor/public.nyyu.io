@@ -28,7 +28,6 @@ const AuthRoute = ({ component: Component, location, ...rest }) => {
         navigate(`/app/profile/`, { replace: true })
         return null
     }
-
     return <Component {...rest} />
 }
 

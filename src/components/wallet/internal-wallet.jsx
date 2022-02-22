@@ -72,11 +72,11 @@ export default function InternalWallet() {
         }, 1000 * REFRESH_TIME)
     }, [])
 
-    const { data: balances } = useQuery(GET_BALANCES, {
+    const { loading: loadingOfAssets } = useQuery(GET_BALANCES, {
         fetchPolicy: "network-only",
-        onCompleted: () => {
-            if (balances.getBalances) {
-                let assets = balances.getBalances?.map((item) => {
+        onCompleted: data => {
+            if (data.getBalances) {
+                let assets = data.getBalances?.map((item) => {
                     return { ...item, symbol: svgToDataURL(item.symbol) }
                 })
                 assets = _.mapKeys(assets, "tokenSymbol")
@@ -227,10 +227,11 @@ export default function InternalWallet() {
                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                         <div className="col-6 pe-2">
                             <button
-                                className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
+                                className={`btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4 ${loadingOfAssets? 'disabled': ''}`}
                                 onClick={() => {
                                     setIsDepositOpen(true)
                                 }}
+                                disabled={loadingOfAssets}
                             >
                                 deposit
                             </button>
@@ -257,6 +258,7 @@ export default function InternalWallet() {
                             <DepositModal
                                 showModal={isDepositOpen}
                                 setShowModal={setIsDepositOpen}
+                                myAssets={Object.values(myAssets)}
                             />
                         )}
                     </div>
@@ -265,10 +267,15 @@ export default function InternalWallet() {
                 <div>
                     <table className="my-3">
                         <tbody>
-                            {_.map(_.orderBy(myAssets, ["balance"], ["desc"]), (item) => (
+                            {loadingOfAssets && (
+                                <div className="text-center">
+                                    <CustomSpinner />
+                                </div>
+                            )}
+                            {!loadingOfAssets && _.map(_.orderBy(myAssets, ["balance"], ["desc"]), (item) => (
                                 <Asset item={item} key={item.tokenName} />
                             ))}
-                            {Object.values(myAssets).length === 0 && (
+                            {!loadingOfAssets && Object.values(myAssets).length === 0 && (
                                 <div className="text-center fw-500 text-uppercase text-light">
                                     No assets found
                                 </div>
