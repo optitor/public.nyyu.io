@@ -24,7 +24,7 @@ import ConnectWalletTab from "../components/profile/connect-wallet-tab"
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
 import Seo from './../components/seo'
 import CreditCardTab from "../components/payment/credit-card-tab"
-// import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
+import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
 import OrderSummary from "../components/payment/order-summary"
 import OrderSummaryOfCoinPayments from './../components/payment/OrderSummaryOfCoinPayments'
 
@@ -128,11 +128,10 @@ const Payment = () => {
                                     </div>
                                 )}{" "}
                                 {tabIndex === 1 && (
-                                    // <CoinPaymentsTab
-                                    //     currentRound={currentRound}
-                                    //     bidAmount={bidAmount}
-                                    // />
-                                    <></>
+                                    <CoinPaymentsTab
+                                        currentRound={currentRound}
+                                        bidAmount={bidAmount}
+                                    />
                                 )}
                                 {tabIndex === 2 && (
                                     <CreditCardTab amount={bidAmount} round={currentRound} />
