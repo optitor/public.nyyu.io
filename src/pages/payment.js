@@ -1,7 +1,9 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState } from "react"
+import React, { useCallback, useReducer, useState, useEffect } from "react"
 import { useSelector } from "react-redux"
+import { useQuery } from "@apollo/client";
+import { GET_AUCTION } from "../apollo/graghqls/querys/Auction"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
 import Header from "../components/header"
@@ -63,6 +65,15 @@ const CustomSingleValue = (props) => {
 const Payment = () => {
     const currentRound = useSelector((state) => state?.placeBid.round_id)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
+    const [totalRounds, setTotalRounds] = useState(0)
+    const [barProgress, setBarProgress] = useState(0)
+    const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
+
+    const targetCap = 1000000000000
+
+    function toCommas(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         allow_fraction: false,
@@ -80,6 +91,22 @@ const Payment = () => {
         },
         [allow_fraction]
     )
+
+    useQuery(GET_AUCTION, {
+        onCompleted: (data) => {
+            setTotalRounds(data.getAuctions.length)
+            setBarProgress((currentCap * 100) / targetCap)
+        },
+        onError: (error) => console.log(error),
+        errorPolicy: "ignore",
+        fetchPolicy: "network-only",
+    })
+
+    useEffect(() => { 
+        if (barProgress < 1) {
+            setBarProgress(1)
+        }
+    }, [barProgress])
 
     return (
         <>
@@ -268,11 +295,11 @@ const Payment = () => {
                     <div className="remain-token__value col-md-12 mx-auto">
                         <div className="d-flex justify-content-between">
                             <p className="current-value">
-                                current token value&nbsp;
-                                <span className="txt-green">123.421</span>
+                                current cap&nbsp;
+                                <span className="txt-green">{toCommas(currentCap)}</span>
                             </p>
                             <p className="end-value">
-                                end token value&nbsp;
+                                target cap&nbsp;
                                 <span className="txt-green">1 Trillion</span>
                             </p>
                         </div>
@@ -280,14 +307,14 @@ const Payment = () => {
                             <div
                                 className="timeleft"
                                 style={{
-                                    width: "25%",
+                                    width: `${barProgress}%`,
                                     background:
                                         "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)",
                                 }}
                             >
                                 <div className="timeleft__value">
                                     Round &nbsp;
-                                    <span className="txt-green">1</span>
+                                    <span className="txt-green">{totalRounds}</span>
                                 </div>
                             </div>
                         </div>
