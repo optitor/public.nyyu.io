@@ -252,7 +252,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                     onClick={create_Crypto_Payment}
                                     disabled={!network}
                                 >
-                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'confirm'}
+                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit address'}
                                 </button>
                             </>
                         ) : (
