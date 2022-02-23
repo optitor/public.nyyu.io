@@ -12,7 +12,7 @@ export default function AuctionRoundDetails() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
-    const soldTokensPercentage = (current.sold / current.totalToken) * 100
+    const soldTokensPercentage = (current?.sold / current?.totalToken) * 100
 
     // Methods
     const findMinBid = () => {

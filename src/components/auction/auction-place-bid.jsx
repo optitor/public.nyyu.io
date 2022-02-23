@@ -20,7 +20,7 @@ export default function AuctionPlaceBid({ isBid }) {
         (auction) => auction.round === currentRoundNumber
     )[0]
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(current.minPrice)
+    const [price, setPrice] = useState(current?.minPrice)
 
     // Webservice
     const [PlaceBid] = useMutation(PLACE_BID, {
@@ -46,7 +46,7 @@ export default function AuctionPlaceBid({ isBid }) {
     // Render
     return (
         <>
-            {current.endedAt < new Date().getTime() ? (
+            {current?.endedAt < new Date().getTime() ? (
                 <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
                     round is over
                 </div>
@@ -79,7 +79,7 @@ export default function AuctionPlaceBid({ isBid }) {
                         <Slider
                             value={price}
                             onChange={(value) => setPrice(value)}
-                            min={current.minPrice}
+                            min={current?.minPrice}
                             max={10000}
                             step={100}
                         />
@@ -91,7 +91,7 @@ export default function AuctionPlaceBid({ isBid }) {
                             type="text"
                             value={numberWithCommas(
                                 Number(
-                                    Math.max(current.minPrice, price * amount),
+                                    Math.max(current?.minPrice, price * amount),
                                     " "
                                 )
                             )}
