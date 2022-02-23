@@ -5,15 +5,11 @@ export const PLACE_BID = gql`
         $roundId: Int!
         $tokenAmount: Float!
         $tokenPrice: Float!
-        $payment: Int!
-        $cryptoType: String!
     ) {
         placeBid(
             roundId: $roundId
             tokenAmount: $tokenAmount
             tokenPrice: $tokenPrice
-            payment: $payment
-            cryptoType: $cryptoType
         ) {
             userId
             prefix
@@ -47,15 +43,11 @@ export const INCREASE_BID = gql`
         $roundId: Int!
         $tokenAmount: Float!
         $tokenPrice: Float!
-        $payment: Int!
-        $cryptoType: String!
     ) {
         increaseBid(
             roundId: $roundId
             tokenAmount: $tokenAmount
             tokenPrice: $tokenPrice
-            payment: $payment
-            cryptoType: $cryptoType
         ) {
             userId
             prefix

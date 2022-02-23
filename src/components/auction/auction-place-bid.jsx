@@ -56,8 +56,6 @@ export default function AuctionPlaceBid() {
                     roundId: current.id,
                     tokenAmount: amount,
                     tokenPrice: price,
-                    payment: 1,
-                    cryptoType: "BTC",
                 },
             })
         } else {
@@ -66,8 +64,6 @@ export default function AuctionPlaceBid() {
                     roundId: current.id,
                     tokenAmount: amount,
                     tokenPrice: price,
-                    payment: 1,
-                    cryptoType: "BTC",
                 },
             })
         }
