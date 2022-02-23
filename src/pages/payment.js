@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect, useRef } from "react"
+import React, { useCallback, useReducer, useState } from "react"
 import { useSelector } from "react-redux"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
@@ -27,6 +27,7 @@ import CreditCardTab from "../components/payment/credit-card-tab"
 import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
 // import { numberWithCommas } from "../utilities/number"
 import OrderSummary from "../components/payment/order-summary"
+import OrderSummaryOfCoinPayments from './../components/payment/OrderSummaryOfCoinPayments'
 
 const { Option, SingleValue } = components
 
@@ -262,7 +263,8 @@ const Payment = () => {
                             )}
                         </div>
                     </div>
-                    <OrderSummary bidAmount={bidAmount} />
+                    {tabIndex === 1 && <OrderSummaryOfCoinPayments bidAmount={bidAmount} />}
+                    {tabIndex !== 1 && <OrderSummary bidAmount={bidAmount} />}
                 </div>
                 <div className="remain-token__value col-md-12 mx-auto">
                     <div className="d-flex justify-content-between">
