@@ -39,7 +39,15 @@ export default function CreditCardTab({ amount, round }) {
                     <CustomSpinner />
                 </div>
             ) : (
-                <Elements stripe={loadStripe(stripePublicKey)}>
+                <Elements options={{
+                    fonts: [
+                    {
+                        cssSrc:
+                        'https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap%27'
+                    }
+                    ]
+                }}
+                stripe={loadStripe(stripePublicKey)}>
                     <CardSection amount={amount} round={round} />
                 </Elements>
             )}
@@ -56,10 +64,12 @@ const CardSection = ({ amount, round }) => {
     const [allowFractionBox, setAllowFractionBox] = useState(false)
     const [successfulPayment, setSuccessfulPayment] = useState(false)
     const [requestPending, setRequestPending] = useState(false)
+
+
     const style = {
         base: {
             color: "#E3E3E3",
-            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontFamily: "Montserrat",
             fontSmoothing: "antialiased",
             fontSize: "16px",
             backgroundColor: "transparent",
@@ -200,6 +210,7 @@ const CardSection = ({ amount, round }) => {
                     />
                 </div>
                 <div className="col-6 ps-0 pe-1">
+
                     <CardExpiryElement
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{
@@ -266,7 +277,7 @@ const CardSection = ({ amount, round }) => {
                 </div>
             </div>
             <button
-                className={`btn btn-outline-light rounded-0 text-uppercase confir fw-bold py-3 m-payment w-100 mt-4 ${
+                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-4 ${
                     requestPending && "disabled"
                 }`}
                 onClick={requestPending ? null : submitPayment}
