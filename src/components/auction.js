@@ -17,7 +17,10 @@ import AuctionRoundNavigator from "./auction/auction-round-navigator"
 const Auction = () => {
     const auction = useAuction()
     const currencyId = useSelector((state) => state?.placeBid.currencyId)
-
+    const { auctions, currentRoundNumber } = auction
+    const current = auctions?.filter(
+        (auction) => auction.round === currentRoundNumber
+    )[0]
 
     if (auction.loading) return <Loading />
     return (
@@ -68,15 +71,18 @@ const Auction = () => {
                                 </div>
                             </div>
                             <AuctionRoundDetails />
-
-                            <div className="d-block d-sm-none">
-                                <div
-                                    className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
-                                    onClick={() => auction.setBidModal(true)}
-                                >
-                                    place bid
+                            {current.status !== 3 && (
+                                <div className="d-block d-sm-none">
+                                    <div
+                                        className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
+                                        onClick={() =>
+                                            auction.setBidModal(true)
+                                        }
+                                    >
+                                        place bid
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
 
                         <div className="auction-right col-lg-8 col-md-7">
@@ -84,7 +90,7 @@ const Auction = () => {
                         </div>
                     </div>
                 </section>
-                <AuctionPlaceBidModal />
+                {current.status !== 3 && <AuctionPlaceBidModal />}
             </main>
         </>
     )
