@@ -49,6 +49,7 @@ export default function AuctionPlaceBid() {
     // Methods
     const bidMutation = () => {
         setReqPending(true)
+        setError("")
         if (auction.isBid) {
             placeBid({
                 variables: {
@@ -81,6 +82,8 @@ export default function AuctionPlaceBid() {
                 <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
                     round is over
                 </div>
+            ) : !auction.currentRoundBidList ? (
+                <></>
             ) : (
                 <div className="place-bid">
                     <h3 className="range-label">amount of token</h3>

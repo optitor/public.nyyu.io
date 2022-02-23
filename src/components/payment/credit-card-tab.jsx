@@ -78,7 +78,8 @@ const CardSection = ({ amount, round }) => {
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
         onCompleted: async (data) => {
             setRequestPending(false)
-            if (data.stripePayment.error) return setError(data.stripePayment.error)
+            if (data.stripePayment.error)
+                return setError(data.stripePayment.error)
             const { clientSecret } = data.stripePayment
             if (clientSecret) return setSuccessfulPayment(true)
             return setError("Invalid Payment")
@@ -141,10 +142,18 @@ const CardSection = ({ amount, round }) => {
                         transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 95.6963 48.1067)"
                         fill="#F2F2F2"
                     />
-                    <circle cx="63" cy="63" r="56.5" stroke="#F2F2F2" stroke-width="13" />
+                    <circle
+                        cx="63"
+                        cy="63"
+                        r="56.5"
+                        stroke="#F2F2F2"
+                        stroke-width="13"
+                    />
                 </svg>
             </div>
-            <div className="text-capitalize text-light fs-28px fw-bold">payment successful</div>
+            <div className="text-capitalize text-light fs-28px fw-bold">
+                payment successful
+            </div>
         </div>
     ) : (
         <>
@@ -238,7 +247,8 @@ const CardSection = ({ amount, round }) => {
                     />
                 </div>
                 <p className="payment-expire my-auto">
-                    payment expires in <span className="txt-green">10 minutes</span>
+                    payment expires in{" "}
+                    <span className="txt-green">10 minutes</span>
                 </p>
             </div>
             <div className="mt-2 d-flex justify-content-between">
@@ -256,7 +266,7 @@ const CardSection = ({ amount, round }) => {
                 </div>
             </div>
             <button
-                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment w-100 mt-4 ${
+                className={`btn btn-outline-light rounded-0 text-uppercase confir fw-bold py-3 m-payment w-100 mt-4 ${
                     requestPending && "disabled"
                 }`}
                 onClick={requestPending ? null : submitPayment}
