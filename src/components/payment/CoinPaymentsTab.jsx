@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback, useReducer, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import axios from "axios"
 import _ from 'lodash'
 import { useQuery } from "@apollo/client"
 import Select, { components } from "react-select"
 import ReactTooltip from 'react-tooltip';
-import { FontAwesomeIcon, faQuestionCircle } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import CircularProgress from '@mui/material/CircularProgress';
 import NumberFormat from 'react-number-format';
 import { useMutation } from '@apollo/client';
@@ -18,6 +20,7 @@ import { Copy } from '../../utilities/imgImport';
 import { GET_EXCHANGE_RATE } from './../../apollo/graghqls/querys/Payment'
 import CustomSpinner from "../common/custom-spinner"
 import { numberWithCommas } from './../../utilities/number';
+import { set_Temp_Data } from './../../redux/actions/tempAction'
 
 const { Option } = components
 
@@ -43,7 +46,7 @@ const FOO_COINS = [
         { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN' },
     ] },
     { value: "ETH", label: "ETH", networks: [
-        { label: 'Ether', value: 'ETH' },
+        { label: 'Ethereum', value: 'ETH' },
         { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2' },
         { label: 'Ethereum Token (BSC Chain)', value: 'ETH.BEP20' },
     ] },
@@ -76,6 +79,7 @@ const QUOTE = "USDT"
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
 
 const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
+    const dispatch = useDispatch();
     const [copied, setCopied] = useState(false);
 
     const [fooCoins, setFooCoins] = useState([])
@@ -87,16 +91,13 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const networks = useMemo(() => coin.networks, [coin]);
     const [network, setNetwork] = useState(null)
     const [pending, setPending] = useState(false);
+
+    const [coinQuantity, setCoinQuantity] = useState(0);
     
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        cardholder: "",
-        cardnumber: "",
-        expire: "",
-        code: "",
-        bill: "",
         allow_fraction: false,
     })
-    const { cardholder, cardnumber, expire, code, bill, allow_fraction } = state
+    const { allow_fraction } = state
 
     useQuery(GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
@@ -123,20 +124,29 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         get_BTCPrice()
     }, [])
 
-    const coinQuantity = useMemo(() => {
-        const coinPrice = BTCPrice * coin?.detail?.rate_btc;
-        return parseFloat((bidAmount / coinPrice).toFixed(9));
-    }, [bidAmount, coin, BTCPrice])
+    useEffect(() => {
+        let coinPrice = BTCPrice * coin?.detail?.rate_btc;
+
+        let precision = 4;
+        if(coin.value === 'BTC') precision = 9;
+
+        let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
+        if(quantity === Infinity) quantity = null;
+        setCoinQuantity(quantity);
+        dispatch(set_Temp_Data({coinValue: quantity, coinSymbol: coin.value}));
+    }, [bidAmount, coin, BTCPrice, dispatch])
 
     const [coinQRCode, setCoinQRCode] = useState("");
     const [depositAddress, setDepositAddress] = useState('')
 
-    useEffect(async () => {
-        if (depositAddress) {
-            const qrCode = await generateQR(depositAddress)
-            setCoinQRCode(qrCode)
-        }
-        return ""
+    useEffect(() => {
+        (async function() {
+            if (depositAddress) {
+                const qrCode = await generateQR(depositAddress)
+                setCoinQRCode(qrCode)
+            }
+            return ""
+        })()
     }, [depositAddress])
 
     const [getDepositAddressMutation] = useMutation(GET_DEPOSIT_ADDRESS, {
@@ -194,35 +204,48 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                 }}
                             />
                             <div className="w-75">
-                                <NumberFormat
-                                    className='black_input'
-                                    value={coinQuantity}
-                                    thousandSeparator={true}
-                                    readOnly
-                                />
+                                <div className='show_value'>
+                                    <NumberFormat
+                                        className='coin_value'
+                                        displayType={'text'}
+                                        value={coinQuantity}
+                                        thousandSeparator={true}
+                                        renderText={(value, props) => <p {...props}>{value}</p>}
+                                    />
+                                    <NumberFormat
+                                        className='order_value'
+                                        displayType={'text'}
+                                        value={bidAmount}
+                                        suffix={` USD`}
+                                        thousandSeparator={true}
+                                        renderText={(value, props) => <p {...props}>~ {value}</p>}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div className="d-flex justify-content-between w-100">
-                            <Select
-                                className="w-100"
-                                options={networks}
-                                value={network}
-                                onChange={(v) => {
-                                    setNetwork(v)
-                                    setDepositAddress('')
-                                }}
-                                styles={customSelectStyles}
-                                placeholder="SELELCT NETWORK"
-                            />
-                        </div>
                         {!depositAddress ? (
-                            <button
-                                className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
-                                onClick={get_Deposit_Address}
-                                disabled={!network}
-                            >
-                                {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit Address'}
-                            </button>
+                            <>
+                                <div className="d-flex justify-content-between w-100">
+                                    <Select
+                                        className="w-100"
+                                        options={networks}
+                                        value={network}
+                                        onChange={(v) => {
+                                            setNetwork(v)
+                                            setDepositAddress('')
+                                        }}
+                                        styles={customSelectStyles}
+                                        placeholder="SELELCT NETWORK"
+                                    />
+                                </div>
+                                <button
+                                    className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
+                                    onClick={get_Deposit_Address}
+                                    disabled={!network}
+                                >
+                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit Address'}
+                                </button>
+                            </>
                         ) : (
                             <>
                                 <CopyToClipboard
@@ -253,6 +276,11 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                         </div>
                     )}
                 </div>
+                {depositAddress && (
+                    <p className='inform'>
+                        Send only <span>{coin.value}</span> to this deposit address. Ensure the network is <span>{network.label}</span>
+                    </p>
+                )}
                 <div className="mt-3 d-flex justify-content-between">
                     <div className="d-flex flex-row ">
                         <CheckBox
@@ -285,10 +313,12 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                             className="fa-2x ms-2 cursor-pointer text-light"
                         />
                     </div>
-                    <p className="payment-expire my-auto">
-                        payment expires in{" "}
-                        <span className="txt-green">10 minutes</span>
-                    </p>
+                    {depositAddress && (
+                        <p className="payment-expire my-auto">
+                            payment expires in{" "}
+                            <span className="txt-green">10 minutes</span>
+                        </p>
+                    )}
                 </div>
             </div>
         </div>

@@ -259,10 +259,18 @@
                     }
                 }
             }
+            p.inform {
+                font-size: 14px;
+                color: #919191;
+                margin-top: 10px;
+                span {
+                    color: $green;
+                }
+            }
             .qr-code {
                 text-align: center;
-                width: 165px;
-                height: 165px;
+                width: 120px;
+                height: 120px;
                 margin-left: 18px;
                 flex-shrink: 0;
                 img {
@@ -424,7 +432,17 @@
                 letter-spacing: -0.01em;
                 font-size: 14px;
                 line-height: 90%;
-                color: #ffffff;
+                color: dimgray;
+            }
+            &__detail {
+                letter-spacing: -0.01em;
+                font-size: 14px;
+                line-height: 90%;
+                color: lightgray;
+            }
+            &-coinpayment {
+                padding: 40px 0 30px;
+                border-bottom: 1px solid #ffffff;
             }
         }
         .order-total {
@@ -568,11 +586,21 @@
                 width: 100%;
             }
         }
-        input.black_input {
+        .show_value {
             height: 48px;
-            font-size: 20px;
-            font-weight: 600;
-            padding-left: 25px;
+            border: 1px solid white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .coin_value {
+                font-size: 20px;
+                font-weight: 600;
+                padding-left: 20px;
+            }
+            .order_value {
+                color: dimgray;
+                padding-right: 10px;
+            }
         }
         @include mq("phone", max) {
             display: block;

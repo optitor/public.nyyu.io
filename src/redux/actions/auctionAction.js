@@ -27,7 +27,7 @@ export const get_Auctions = () => async dispatch => {
         const { data } = await client.query({
             query: Query.GET_AUCTIONS
         });
-        const dataList = _.mapKeys(data.getAuctions, 'id');
+        const dataList = _.mapKeys(data.getAuctions, 'round');
         dispatch({
             type: types.FETCH_DATA,
             payload: dataList
