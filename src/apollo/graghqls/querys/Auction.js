@@ -113,3 +113,26 @@ export const GET_NEW_ROUND = gql`
         getNewRound
     }
 `
+
+export const GET_BID = gql`
+    query getBid($roundId: Int!) {
+        getBid(roundId: $roundId) {
+            userId
+            prefix
+            name
+            roundId
+            tokenAmount
+            totalPrice
+            tokenPrice
+            tempTokenAmount
+            tempTokenPrice
+            delta
+            pendingIncrease
+            payType
+            cryptoType
+            placedAt
+            updatedAt
+            status
+        }
+    }
+`

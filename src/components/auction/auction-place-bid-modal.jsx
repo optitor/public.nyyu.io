@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import Slider from "rc-slider"
 import Modal from "react-modal"
 import { useAuction } from "./auction-context"
 import { CloseIcon } from "../../utilities/imgImport"
@@ -8,11 +7,10 @@ import { useDispatch } from "react-redux"
 import { PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 import { useMutation } from "@apollo/client"
 import { ROUTES } from "../../utilities/routes"
-import { Currencies } from "../../utilities/staticData"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { navigate } from "gatsby"
 
-export default function AuctionPlaceBidModal({ isBid }) {
+export default function AuctionPlaceBidModal() {
     // Containers
     const auction = useAuction()
     const dispatch = useDispatch()
@@ -101,7 +99,7 @@ export default function AuctionPlaceBidModal({ isBid }) {
                         auction.setBidModal(false)
                     }}
                 >
-                    {!isBid ? "Place Bid" : "Increase Bid"}
+                    {!auction.isBid ? "Place Bid" : "Increase Bid"}
                 </button>
             </div>
         </Modal>

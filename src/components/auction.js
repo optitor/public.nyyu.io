@@ -17,7 +17,7 @@ import AuctionRoundNavigator from "./auction/auction-round-navigator"
 const Auction = () => {
     const auction = useAuction()
     const currencyId = useSelector((state) => state?.placeBid.currencyId)
-    const [isBid, setIsBid] = useState(false)
+
 
     if (auction.loading) return <Loading />
     return (
@@ -80,11 +80,11 @@ const Auction = () => {
                         </div>
 
                         <div className="auction-right col-lg-8 col-md-7">
-                            <AuctionPlaceBid isBid={isBid} />
+                            <AuctionPlaceBid />
                         </div>
                     </div>
                 </section>
-                <AuctionPlaceBidModal isBid={isBid} />
+                <AuctionPlaceBidModal />
             </main>
         </>
     )

@@ -41,3 +41,45 @@ export const PLACE_BID = gql`
         }
     }
 `
+
+export const INCREASE_BID = gql`
+    mutation increaseBid(
+        $roundId: Int!
+        $tokenAmount: Float!
+        $tokenPrice: Float!
+        $payment: Int!
+        $cryptoType: String!
+    ) {
+        increaseBid(
+            roundId: $roundId
+            tokenAmount: $tokenAmount
+            tokenPrice: $tokenPrice
+            payment: $payment
+            cryptoType: $cryptoType
+        ) {
+            userId
+            prefix
+            name
+            roundId
+            tokenAmount
+            totalPrice
+            tokenPrice
+            tempTokenAmount
+            tempTokenPrice
+            delta
+            pendingIncrease
+            holdings {
+                key
+                value {
+                    crypto
+                    usd
+                }
+            }
+            payType
+            cryptoType
+            placedAt
+            updatedAt
+            status
+        }
+    }
+`

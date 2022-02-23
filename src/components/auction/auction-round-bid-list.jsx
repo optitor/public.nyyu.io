@@ -6,12 +6,16 @@ import CustomSpinner from "../common/custom-spinner"
 import { GreenCup } from "../../utilities/imgImport"
 import { Currencies } from "../../utilities/staticData"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
+import { GET_BID } from "../../apollo/graghqls/querys/Auction"
 
 export default function AuctionRoundBidList() {
     // Containers
     const auction = useAuction()
-    const { currentRoundNumber } = auction
+    const { auctions, currentRoundNumber } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
+    const current = auctions?.filter(
+        (auction) => auction.round === currentRoundNumber
+    )[0]
     const loadingData = !(currentRoundBidList && auction.currentRoundBidList)
 
     // Webservices
@@ -25,6 +29,17 @@ export default function AuctionRoundBidList() {
         },
         onError: (error) => console.log(error),
     })
+
+    useQuery(GET_BID, {
+        variables: {
+            roundId: current.id,
+        },
+        onCompleted: (data) => {
+            if (data.getBid === null) return auction.setIsBid(true)
+            return auction.setIsBid(false)
+        },
+    })
+
     // Render
     if (loadingData)
         return (
@@ -61,7 +76,6 @@ export default function AuctionRoundBidList() {
                                         <span className="txt-green">
                                             {Currencies[0].symbol}{" "}
                                         </span>
-                                        {/* {calcPriceFromUsd(item.totalPrice)} */}
                                         {item.totalPrice}
                                     </td>
                                 </tr>

@@ -4,14 +4,14 @@ import { useAuction } from "./auction-context"
 import { Currencies } from "../../utilities/staticData"
 import { navigate } from "gatsby"
 import { numberWithCommas } from "../../utilities/number"
-import { PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 import { useMutation } from "@apollo/client"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { useState } from "react"
 import { ROUTES } from "../../utilities/routes"
 import { useDispatch } from "react-redux"
 
-export default function AuctionPlaceBid({ isBid }) {
+export default function AuctionPlaceBid() {
     // Containers
     const auction = useAuction()
     const dispatch = useDispatch()
@@ -19,29 +19,59 @@ export default function AuctionPlaceBid({ isBid }) {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
-    console.log(current)
     const [amount, setAmount] = useState(1)
     const [price, setPrice] = useState(current.minPrice)
+    const [error, setError] = useState("")
+    const [reqPending, setReqPending] = useState(false)
 
     // Webservice
-    const [PlaceBid] = useMutation(PLACE_BID, {
-        onError: (err) => console.log(err),
+    const [placeBid] = useMutation(PLACE_BID, {
+        onCompleted: () => {
+            navigate(ROUTES.payment)
+            setReqPending(false)
+        },
+        onError: (err) => {
+            setError(err.message)
+            setReqPending(false)
+        },
+    })
+    const [increaseBid] = useMutation(INCREASE_BID, {
+        onCompleted: () => {
+            navigate(ROUTES.payment)
+            setReqPending(false)
+        },
+        onError: (err) => {
+            setError(err.message)
+            setReqPending(false)
+        },
     })
 
     // Methods
     const bidMutation = () => {
-        PlaceBid({
-            variables: {
-                roundId: current.id,
-                tokenAmount: amount,
-                tokenPrice: price,
-                payment: 1,
-                cryptoType: "BTC",
-            },
-        })
-        dispatch(setBidInfo(Number(Math.max(current.minPrice, price * amount))))
+        setReqPending(true)
+        if (auction.isBid) {
+            placeBid({
+                variables: {
+                    roundId: current.id,
+                    tokenAmount: amount,
+                    tokenPrice: price,
+                    payment: 1,
+                    cryptoType: "BTC",
+                },
+            })
+        } else {
+            increaseBid({
+                variables: {
+                    roundId: current.id,
+                    tokenAmount: amount,
+                    tokenPrice: price,
+                    payment: 1,
+                    cryptoType: "BTC",
+                },
+            })
+        }
+        dispatch(setBidInfo(Number(price * amount)))
         dispatch(setCurrentRound(current.id))
-        navigate(ROUTES.payment)
     }
 
     // Render
@@ -52,7 +82,7 @@ export default function AuctionPlaceBid({ isBid }) {
                     round is over
                 </div>
             ) : (
-                <div className={`place-bid ${isBid && "d-none"}`}>
+                <div className="place-bid">
                     <h3 className="range-label">amount of token</h3>
                     <div className="d-flex align-items-center mb-4">
                         <input
@@ -100,18 +130,46 @@ export default function AuctionPlaceBid({ isBid }) {
                         />
                         <h3 className="symbol-label">{Currencies[0].label}</h3>
                     </div>
-                    <div className="mt-3 mb-2">
+                    <div className="mt-3 mb-1">
                         <p className="text-secondary fw-500 text-[#959595]">
                             Audited by CertiK
                         </p>
                     </div>
+                    {error && (
+                        <div className="mt-1 mb-2">
+                            <div className="d-flex align-items-center gap-2">
+                                <svg
+                                    class="icon-23px text-danger"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    ></path>
+                                </svg>
+                                <p className="text-danger text-capitalize fw-500 text-[#959595]">
+                                    {error}
+                                </p>
+                            </div>
+                        </div>
+                    )}
                     <button
-                        className="btn-primary text-uppercase w-100"
+                        className="btn btn-outline-light rounded-0 text-uppercase w-100 fw-bold py-12px fs-20px"
                         onClick={() => {
                             bidMutation()
                         }}
+                        disabled={reqPending}
                     >
-                        {!isBid ? "Place Bid" : "Increase Bid"}
+                        {reqPending
+                            ? "processing..."
+                            : auction.isBid
+                            ? "Place Bid"
+                            : "Increase Bid"}
                     </button>
                 </div>
             )}
