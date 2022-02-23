@@ -53,7 +53,7 @@ export default function AuctionRoundDetails() {
                     <div></div>
                 )}
                 <div>
-                    {current.endedAt > new Date().getTime() ? (
+                    {current.status !== 3 ? (
                         <>
                             <p className="caption text-end text-[#959595]">
                                 Available Until
@@ -83,20 +83,6 @@ export default function AuctionRoundDetails() {
                     )}
                 </div>
             </div>
-            {/* {size.width <= 1024 && (
-                <div className="text-center my-5">
-                    <button
-                        className="btn-primary btn-increase"
-                        onClick={() => {
-                            setState({
-                                bidModal: true,
-                            })
-                        }}
-                    >
-                        {!isBid ? "Place Bid" : "Increase bid"}
-                    </button>
-                </div>
-            )} */}
         </div>
     )
 }
