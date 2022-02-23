@@ -7,6 +7,7 @@ import { GET_AUCTION } from "../apollo/graghqls/querys/Auction"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
 import Header from "../components/header"
+import { numberWithCommas } from "../utilities/number"
 import { CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
@@ -70,10 +71,6 @@ const Payment = () => {
     const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
 
     const targetCap = 1000000000000
-
-    function toCommas(value) {
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         allow_fraction: false,
@@ -296,7 +293,7 @@ const Payment = () => {
                         <div className="d-flex justify-content-between">
                             <p className="current-value">
                                 current cap&nbsp;
-                                <span className="txt-green">{toCommas(currentCap)}</span>
+                                <span className="txt-green">{numberWithCommas(currentCap)}</span>
                             </p>
                             <p className="end-value">
                                 target cap&nbsp;
