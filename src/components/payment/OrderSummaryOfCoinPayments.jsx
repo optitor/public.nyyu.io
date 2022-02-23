@@ -30,7 +30,9 @@ export default function OrderSummary({ bidAmount }) {
                     </div>
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Recieved so far</p>
-                        <p className="order-list__detail">0 {coinData.coinSymbol}</p>
+                        <p className="order-list__detail">
+                            {coinData.coinValue && `0 ${coinData.coinSymbol}`}
+                        </p>
                     </div>
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Time left to confirm funds</p>
@@ -39,7 +41,7 @@ export default function OrderSummary({ bidAmount }) {
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Deposit Address</p>
                         <p className="order-list__detail">
-                            {truncateMiddle(coinData?.dipositAddress, 20)}
+                            {coinData?.dipositAddress && truncateMiddle(coinData?.dipositAddress, 20)}
                         </p>
                     </div>
                 </div>

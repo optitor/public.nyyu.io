@@ -64,7 +64,8 @@ const CustomSingleValue = (props) => {
 const Payment = () => {
     const currentRound = useSelector((state) => state?.placeBid.round_id)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    if(!currentRound) navigate('/app/auction')
+    const isSSR = typeof window === "undefined"
+    if(!isSSR && !currentRound) navigate('/app/auction')
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         allow_fraction: false,
