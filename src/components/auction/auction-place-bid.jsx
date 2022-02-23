@@ -19,6 +19,7 @@ export default function AuctionPlaceBid({ isBid }) {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
+    console.log(current)
     const [amount, setAmount] = useState(1)
     const [price, setPrice] = useState(current.minPrice)
 

@@ -3,6 +3,7 @@ import { gql } from "@apollo/client"
 export const GET_AUCTION = gql`
     query {
         getAuctions {
+            id
             round
             startedAt
             endedAt
