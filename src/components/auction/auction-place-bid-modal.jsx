@@ -4,7 +4,7 @@ import { useAuction } from "./auction-context"
 import { CloseIcon } from "../../utilities/imgImport"
 import { numberWithCommas } from "../../utilities/number"
 import { useDispatch } from "react-redux"
-import { PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 import { useMutation } from "@apollo/client"
 import { ROUTES } from "../../utilities/routes"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
@@ -19,27 +19,61 @@ export default function AuctionPlaceBidModal() {
         (auction) => auction.round === currentRoundNumber
     )[0]
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(1)
+    const [price, setPrice] = useState(current.minPrice)
+    const [error, setError] = useState("")
+    const [reqPending, setReqPending] = useState(false)
 
     // Webservice
-    const [PlaceBid] = useMutation(PLACE_BID, {
-        onError: (err) => console.log(err),
+    const [placeBid] = useMutation(PLACE_BID, {
+        onCompleted: () => {
+            navigate(ROUTES.payment)
+            setReqPending(false)
+            auction.setBidModal(false)
+        },
+        onError: (err) => {
+            setError(err.message)
+            setReqPending(false)
+        },
+    })
+    const [increaseBid] = useMutation(INCREASE_BID, {
+        onCompleted: () => {
+            navigate(ROUTES.payment)
+            setReqPending(false)
+            auction.setBidModal(false)
+        },
+        onError: (err) => {
+            setError(err.message)
+            setReqPending(false)
+        },
     })
 
     // Methods
     const bidMutation = () => {
-        PlaceBid({
-            variables: {
-                roundId: current.id,
-                tokenAmount: amount,
-                tokenPrice: price,
-                payment: 1,
-                cryptoType: "BTC",
-            },
-        })
-        dispatch(setBidInfo(Number(Math.max(current.minPrice, price * amount))))
+        setReqPending(true)
+        setError("")
+        if (auction.isBid) {
+            placeBid({
+                variables: {
+                    roundId: current.id,
+                    tokenAmount: amount,
+                    tokenPrice: price,
+                    payment: 1,
+                    cryptoType: "BTC",
+                },
+            })
+        } else {
+            increaseBid({
+                variables: {
+                    roundId: current.id,
+                    tokenAmount: amount,
+                    tokenPrice: price,
+                    payment: 1,
+                    cryptoType: "BTC",
+                },
+            })
+        }
+        dispatch(setBidInfo(Number(price * amount)))
         dispatch(setCurrentRound(current.id))
-        navigate(ROUTES.payment)
     }
 
     // Render
@@ -67,7 +101,30 @@ export default function AuctionPlaceBidModal() {
                 </div>
             </div>
             <div className="tablet-view">
-                <h4 className="range-label">amount of Token</h4>
+                {error && (
+                    <div className="mt-1 mb-4">
+                        <div className="d-flex align-items-center gap-2 text-start">
+                            <svg
+                                class="icon-23px text-danger"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                ></path>
+                            </svg>
+                            <p className="text-danger text-capitalize fw-500 text-[#959595]">
+                                {error}
+                            </p>
+                        </div>
+                    </div>
+                )}
+                <h4 className="range-label text-start mb-0">amount of Token</h4>
                 <input
                     type="number"
                     value={amount}
@@ -75,7 +132,7 @@ export default function AuctionPlaceBidModal() {
                     placeholder="Type the Token Amount Here"
                     className="range-input"
                 />
-                <h4 className="range-label">Per token price</h4>
+                <h4 className="range-label text-start mb-0">Per token price</h4>
                 <input
                     type="number"
                     value={price}
@@ -83,7 +140,7 @@ export default function AuctionPlaceBidModal() {
                     placeholder="Type the price per Token Here"
                     className="range-input"
                 />
-                <h4 className="range-label">Total price</h4>
+                <h4 className="range-label text-start mb-0">Total price</h4>
                 <input
                     className="total-input"
                     type="text"
@@ -93,13 +150,15 @@ export default function AuctionPlaceBidModal() {
                     readOnly
                 />
                 <button
-                    className="btn-primary text-uppercase"
-                    onClick={() => {
-                        bidMutation()
-                        auction.setBidModal(false)
-                    }}
+                    className="btn btn-outline-light rounded-0 fw-bold w-100 fs-20px py-3 text-uppercase"
+                    onClick={() => bidMutation()}
+                    disabled={reqPending}
                 >
-                    {!auction.isBid ? "Place Bid" : "Increase Bid"}
+                    {reqPending
+                        ? "processing..."
+                        : auction.isBid
+                        ? "Place Bid"
+                        : "Increase Bid"}
                 </button>
             </div>
         </Modal>
