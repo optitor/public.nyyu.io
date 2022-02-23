@@ -20,7 +20,7 @@ export default function AuctionPlaceBid() {
         (auction) => auction.round === currentRoundNumber
     )[0]
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(current.minPrice)
+    const [price, setPrice] = useState(current?.minPrice)
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
 
@@ -53,7 +53,7 @@ export default function AuctionPlaceBid() {
         if (auction.isBid) {
             placeBid({
                 variables: {
-                    roundId: current.id,
+                    roundId: current?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
@@ -61,20 +61,20 @@ export default function AuctionPlaceBid() {
         } else {
             increaseBid({
                 variables: {
-                    roundId: current.id,
+                    roundId: current?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
             })
         }
         dispatch(setBidInfo(Number(price * amount)))
-        dispatch(setCurrentRound(current.id))
+        dispatch(setCurrentRound(current?.id))
     }
 
     // Render
     return (
         <>
-            {current.status === 3 ? (
+            {current?.status === 3 ? (
                 <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
                     round is over
                 </div>

@@ -27,6 +27,7 @@ import CreditCardTab from "../components/payment/credit-card-tab"
 import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
 import OrderSummary from "../components/payment/order-summary"
 import OrderSummaryOfCoinPayments from './../components/payment/OrderSummaryOfCoinPayments'
+import { navigate } from "gatsby"
 
 const { Option, SingleValue } = components
 
@@ -63,6 +64,7 @@ const CustomSingleValue = (props) => {
 const Payment = () => {
     const currentRound = useSelector((state) => state?.placeBid.round_id)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
+    if(!currentRound) navigate('/app/auction')
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         allow_fraction: false,
