@@ -195,7 +195,7 @@ const CardSection = ({ amount, round }) => {
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{
                             style,
-                            placeholder: "Expiration date",
+                            placeholder: "MM/YY",
                         }}
                     />
                 </div>
