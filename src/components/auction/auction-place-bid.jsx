@@ -109,7 +109,7 @@ export default function AuctionPlaceBid() {
                         <Slider
                             value={price}
                             onChange={(value) => setPrice(value)}
-                            min={current.minPrice}
+                            min={current?.minPrice}
                             max={10000}
                             step={100}
                         />
@@ -121,7 +121,7 @@ export default function AuctionPlaceBid() {
                             type="text"
                             value={numberWithCommas(
                                 Number(
-                                    Math.max(current.minPrice, price * amount),
+                                    Math.max(current?.minPrice, price * amount),
                                     " "
                                 )
                             )}

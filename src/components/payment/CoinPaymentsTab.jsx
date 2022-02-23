@@ -11,13 +11,13 @@ import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import CircularProgress from '@mui/material/CircularProgress';
 import NumberFormat from 'react-number-format';
 import { useMutation } from '@apollo/client';
-import { GET_DEPOSIT_ADDRESS } from '../../apollo/graghqls/mutations/Payment';
+import * as Mutation from '../../apollo/graghqls/mutations/Payment';
+import * as Query from './../../apollo/graghqls/querys/Payment'
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from '../../utilities/staticData';
 import icons from "base64-cryptocurrency-icons"
 import { generateQR } from '../../utilities/string';
 import { Input, CheckBox } from '../common/FormControl';
 import { Copy } from '../../utilities/imgImport';
-import { GET_EXCHANGE_RATE } from './../../apollo/graghqls/querys/Payment'
 import CustomSpinner from "../common/custom-spinner"
 import { numberWithCommas } from './../../utilities/number';
 import { set_Temp_Data } from './../../redux/actions/tempAction'
@@ -41,13 +41,13 @@ const SelectOption = (props) => {
 const FOO_COINS = [
     { value: "BTC", label: "BTC", networks: [
         { label: 'Bitcoin', value: 'BTC' },
-        { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2' },
+        // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2' },
         { label: 'Bitcoin/BTCB Token (BSC Chain)', value: 'BTC.BEP20' },
-        { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN' },
+        // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN' },
     ] },
     { value: "ETH", label: "ETH", networks: [
         { label: 'Ethereum', value: 'ETH' },
-        { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2' },
+        // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2' },
         { label: 'Ethereum Token (BSC Chain)', value: 'ETH.BEP20' },
     ] },
     { value: "BNB", label: "BNB", networks: [
@@ -62,7 +62,7 @@ const FOO_COINS = [
     ] },
     { value: "USDT", label: "USDT", networks: [
         { label: 'Tether USD (Omni Layer)', value: 'USDT' },
-        { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2' },
+        // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2' },
         { label: 'Tether USD (BSC Chain)', value: 'USDT.BEP20' },
         { label: 'Tether USD (ERC20)', value: 'USDT.ERC20' },
         { label: 'Tether USD (Solana)', value: 'USDT.SOL' },
@@ -91,7 +91,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const networks = useMemo(() => coin.networks, [coin]);
     const [network, setNetwork] = useState(null)
     const [pending, setPending] = useState(false);
-
+console.log(currentRound)
     const [coinQuantity, setCoinQuantity] = useState(0);
     
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -99,7 +99,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     })
     const { allow_fraction } = state
 
-    useQuery(GET_EXCHANGE_RATE, {
+    useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
                 const temp = JSON.parse(data.getExchangeRate)
@@ -149,9 +149,9 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         })()
     }, [depositAddress])
 
-    const [getDepositAddressMutation] = useMutation(GET_DEPOSIT_ADDRESS, {
+    const [getDepositAddressMutation] = useMutation(Mutation.CREATE_CRYPTO_PAYMENT, {
         onCompleted: data => {
-            if(data.getDepositAddress) {
+            if(data.createCryptoPaymentForAuction) {
                 setDepositAddress(data.getDepositAddress);
                 setPending(false);
             }
@@ -243,7 +243,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                     onClick={get_Deposit_Address}
                                     disabled={!network}
                                 >
-                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit Address'}
+                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'confirm'}
                                 </button>
                             </>
                         ) : (
@@ -291,7 +291,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                             className="text-uppercase"
                         ></CheckBox>
                         <div className="allow-text text-light">
-                            Do you allow fraction of order compleation?
+                            Do you allow fraction of order completion?
                         </div>
                         <ReactTooltip
                             place="right"
@@ -331,6 +331,9 @@ const customSelectStyles = {
     option: (provided, state) => ({
       ...provided,
       color: 'white',
+      ':hover': {
+            backgroundColor: '#23c865'
+        }
     }),
     control: (provided) => ({
       ...provided,

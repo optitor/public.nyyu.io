@@ -141,7 +141,7 @@ export default function AuctionPlaceBidModal() {
                     className="total-input"
                     type="text"
                     value={numberWithCommas(
-                        Number(Math.max(current.minPrice, price * amount), ",")
+                        Number(Math.max(current?.minPrice, price * amount), ",")
                     )}
                     readOnly
                 />

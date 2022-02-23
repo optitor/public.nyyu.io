@@ -9,7 +9,7 @@ export default function OrderSummary({ bidAmount }) {
     return (
         <div className="col-lg-4 d-flex flex-column justify-content-between">
             <div className="order-summary ">
-                <h4>Order Summary</h4>
+                <h4>ORDER SUMMARY</h4>
 
                 <div className="order-list-coinpayment">
                     <div className="d-flex justify-content-between">
