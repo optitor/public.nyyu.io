@@ -3,6 +3,7 @@ import { gql } from "@apollo/client"
 export const GET_AUCTION = gql`
     query {
         getAuctions {
+            id
             round
             startedAt
             endedAt
@@ -110,5 +111,28 @@ export const GET_AUCTIONS = gql`
 export const GET_NEW_ROUND = gql`
     query {
         getNewRound
+    }
+`
+
+export const GET_BID = gql`
+    query getBid($roundId: Int!) {
+        getBid(roundId: $roundId) {
+            userId
+            prefix
+            name
+            roundId
+            tokenAmount
+            totalPrice
+            tokenPrice
+            tempTokenAmount
+            tempTokenPrice
+            delta
+            pendingIncrease
+            payType
+            cryptoType
+            placedAt
+            updatedAt
+            status
+        }
     }
 `
