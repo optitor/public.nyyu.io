@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Slider from "rc-slider"
 import { useAuction } from "./auction-context"
 import { Currencies } from "../../utilities/staticData"
@@ -16,7 +16,7 @@ export default function AuctionPlaceBid() {
     // Containers
     const auction = useAuction()
     const dispatch = useDispatch()
-    const { auctions, currentRoundNumber } = auction
+    const { auctions, currentRoundNumber, getBid, isBid } = auction
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
@@ -72,6 +72,13 @@ export default function AuctionPlaceBid() {
         dispatch(setCurrentRound(current?.id))
     }
 
+    useEffect(() => {
+        if (getBid) {
+            setPrice(isBid ? current.placeBid : getBid.tokenPrice)
+            setAmount(isBid ? 1 : getBid.tokenAmount)
+        }
+    }, [getBid])
+
     // Render
     return (
         <>
@@ -104,14 +111,14 @@ export default function AuctionPlaceBid() {
                         <input
                             type="number"
                             value={price}
-                            onChange={(value) => setPrice(value)}
+                            onChange={(e) => setPrice(e.target.value)}
                             className="range-input"
                         />
                         <Slider
                             value={price}
                             onChange={(value) => setPrice(value)}
                             min={current?.minPrice}
-                            max={10000}
+                            max={100}
                             step={1}
                         />
                     </div>

@@ -7,8 +7,13 @@ export const GET_STRIPE_PUB_KEY = gql`
 `
 
 export const STRIPE_PAYMENT = gql`
-    mutation ($roundId: Int, $amount: Float, $paymentIntentId: String, $paymentMethodId: String) {
-        stripePayment(
+    mutation (
+        $roundId: Int
+        $amount: Float
+        $paymentIntentId: String
+        $paymentMethodId: String
+    ) {
+        payStripeForAuction(
             roundId: $roundId
             amount: $amount
             paymentIntentId: $paymentIntentId

@@ -89,10 +89,10 @@ const CardSection = ({ amount, round }) => {
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
         onCompleted: async (data) => {
             setRequestPending(false)
-            if (data.stripePayment.error)
-                return setError(data.stripePayment.error)
-            const { clientSecret, requires_action } = data.stripePayment
-            if (requires_action === false) return setSuccessfulPayment(true)
+            if (data.payStripeForAuction.error)
+                return setError(data.payStripeForAuction.error)
+            const { clientSecret, requiresAction } = data.payStripeForAuction
+            if (requiresAction === false) return setSuccessfulPayment(true)
             if (clientSecret)
                 return stripe.handleCardAction(clientSecret).then((result) => {
                     if (result.error) return setSuccessfulPayment(false)
