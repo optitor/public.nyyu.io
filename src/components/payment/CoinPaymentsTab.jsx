@@ -344,12 +344,22 @@ const customSelectWithIconStyles = {
         ...provided,
         position: 'absolute'
     }),
+    option: (provided, state) => ({
+        ...provided,
+        backgroundColor: state.isSelected? '#23c865': undefined,
+        borderBottom: '1px solid dimgrey',
+        cursor: 'pointer'
+    }),
 };
 
 const customSelectStyles = {
-    option: (provided) => ({
+    option: (provided, state) => ({
         ...provided,
-        color: 'lightgrey',
+        color: 'white',
+        fontWeight: 500,
+        backgroundColor: state.isSelected? '#23c865': undefined,
+        borderBottom: '1px solid dimgrey',
+        cursor: 'pointer'
     }),
     control: (provided) => ({
       ...provided,
