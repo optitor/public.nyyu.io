@@ -63,7 +63,7 @@ const CardSection = ({ amount, round }) => {
     const [error, setError] = useState("")
     const [cardHolder, setCardHolder] = useState("")
     const [allowFractionBox, setAllowFractionBox] = useState(false)
-    const [successfulPayment, setSuccessfulPayment] = useState(false)
+    const [successfulPayment, setSuccessfulPayment] = useState(null)
     const [requestPending, setRequestPending] = useState(false)
 
     const style = {
@@ -91,8 +91,12 @@ const CardSection = ({ amount, round }) => {
             setRequestPending(false)
             if (data.stripePayment.error)
                 return setError(data.stripePayment.error)
-            const { clientSecret } = data.stripePayment
-            if (clientSecret) return setSuccessfulPayment(true)
+            const { clientSecret, requires_action } = data.stripePayment
+            if (requires_action === false) return setSuccessfulPayment(true)
+            if (clientSecret)
+                return stripe.handleCardAction(clientSecret).then((result) => {
+                    if (result.error) return setSuccessfulPayment(false)
+                })
             return setError("Invalid Payment")
         },
         onError: (error) => {
@@ -164,6 +168,43 @@ const CardSection = ({ amount, round }) => {
             </div>
             <div className="text-capitalize text-light fs-28px fw-bold">
                 payment successful
+            </div>
+        </div>
+    ) : successfulPayment === false ? (
+        <div className="text-center p-4">
+            <div className="text-danger mb-4">
+                <svg
+                    width="126"
+                    height="126"
+                    viewBox="0 0 126 126"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <rect
+                        width="14.2931"
+                        height="63.0592"
+                        transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 90.6963 46.1069)"
+                        fill="white"
+                    />
+                    <rect
+                        x="36"
+                        y="46.1069"
+                        width="14.2931"
+                        height="63.0592"
+                        transform="rotate(-45 36 46.1069)"
+                        fill="white"
+                    />
+                    <circle
+                        cx="63"
+                        cy="63"
+                        r="56.5"
+                        stroke="white"
+                        stroke-width="13"
+                    />
+                </svg>
+            </div>
+            <div className="text-capitalize text-light fs-28px fw-bold">
+                payment failed
             </div>
         </div>
     ) : (
