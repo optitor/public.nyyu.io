@@ -93,30 +93,29 @@ export default function ProfileChangePasswordModal({
                         onChange={(e) => setPassword(e.target.value)}
                         error={passwordError}
                     />
-                    <PasswordEyeIcon
-                        styles={{
-                            top: "40px",
-                        }}
-                        passwordVisible={passwordVisible}
-                        setPasswordVisible={setPasswordVisible}
-                    />
                 </div>
                 <div className="form-group position-relative">
                     <FormInput
-                        type={confirmPasswordVisible ? "text" : "password"}
+                        type={passwordVisible ? "text" : "password"}
                         label="Confirm New Password"
                         value={confirmPassword}
                         placeholder="Re-enter password"
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         error={confirmPasswordError}
                     />
-                    <PasswordEyeIcon
-                        styles={{
-                            top: "40px",
-                        }}
-                        passwordVisible={confirmPasswordVisible}
-                        setPasswordVisible={setConfirmPasswordVisible}
-                    />
+                </div>
+                <div>
+                    <label className="d-flex align-items-center gap-2">
+                        <input
+                            type="checkbox"
+                            value={passwordVisible}
+                            className="form-check-input p-0 m-0"
+                            onChange={() => setPasswordVisible(!passwordVisible)}
+                        />
+                        <div className="keep-me-signed-in-text">
+                            Show password
+                        </div>
+                    </label>
                 </div>
                 <div className="pwd-modal__footer mt-4">
                     {webserviceError && (
