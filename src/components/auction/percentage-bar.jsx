@@ -5,7 +5,7 @@ export default function PercentageBar({ percentage, sold, total }) {
     const fooPercentage = 100 - percentage
     return (
         <div className="mt-5">
-            <div className="fs-12px text-light">
+            <div className="fs-12px text-light mb-2">
                 {numberWithCommas(sold)}/{numberWithCommas(total)}
             </div>
             <div className="timeframe-bar">
