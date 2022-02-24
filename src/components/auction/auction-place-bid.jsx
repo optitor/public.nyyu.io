@@ -10,6 +10,7 @@ import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { useState } from "react"
 import { ROUTES } from "../../utilities/routes"
 import { useDispatch } from "react-redux"
+import CustomSpinner from "../common/custom-spinner"
 
 export default function AuctionPlaceBid() {
     // Containers
@@ -111,7 +112,7 @@ export default function AuctionPlaceBid() {
                             onChange={(value) => setPrice(value)}
                             min={current?.minPrice}
                             max={10000}
-                            step={100}
+                            step={1}
                         />
                     </div>
                     <div className="d-flex align-items-center">
@@ -164,11 +165,10 @@ export default function AuctionPlaceBid() {
                         }}
                         disabled={reqPending}
                     >
-                        {reqPending
-                            ? "processing..."
-                            : auction.isBid
-                            ? "Place Bid"
-                            : "Increase Bid"}
+                        <div className="d-flex align-items-center justify-content-center gap-3">
+                            {reqPending && <CustomSpinner />}
+                            {auction.isBid ? "Place Bid" : "Increase Bid"}
+                        </div>
                     </button>
                 </div>
             )}

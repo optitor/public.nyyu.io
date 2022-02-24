@@ -282,7 +282,10 @@ const CardSection = ({ amount, round }) => {
                 }`}
                 onClick={requestPending ? null : submitPayment}
             >
-                {requestPending ? "processing. . ." : "confirm payment"}
+                <div className="d-flex align-items-center justify-content-center gap-3">
+                    {requestPending && <CustomSpinner />}
+                    {"confirm payment"}
+                </div>
             </button>
         </>
     )
