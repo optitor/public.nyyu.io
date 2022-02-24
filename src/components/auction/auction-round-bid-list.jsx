@@ -36,6 +36,7 @@ export default function AuctionRoundBidList() {
         },
         onCompleted: (data) => {
             if (data.getBid === null) return auction.setIsBid(true)
+            if (data.getBid.status === 0) return auction.setIsBid(true)
             return auction.setIsBid(false)
         },
     })
