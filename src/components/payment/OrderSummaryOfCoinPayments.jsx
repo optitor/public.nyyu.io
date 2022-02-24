@@ -6,7 +6,7 @@ import truncateMiddle from '@stdlib/string-truncate-middle' ;
 
 export default function OrderSummary({ bidAmount }) {
     const {temp: coinData} = useSelector(state => state)
-    console.log(coinData)
+    
     return (
         <div className="col-lg-4 d-flex flex-column justify-content-between">
             <div className="order-summary ">
@@ -31,7 +31,7 @@ export default function OrderSummary({ bidAmount }) {
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Recieved so far</p>
                         <p className="order-list__detail">
-                            {coinData.coinValue && `0 ${coinData.coinSymbol}`}
+                            {coinData.coinValue? `0 ${coinData.coinSymbol}`: ''}
                         </p>
                     </div>
                     <div className="d-flex justify-content-between my-3">
