@@ -15,7 +15,9 @@ export default function NotificationSetting() {
     const [pendingSwitch, setPendingSwitch] = useState(false)
     const setting = user_data?.getUser.notifySetting
     const [tempSetting, setTempSetting] = useState([])
-    const notificationTypeList = notificationTypes?.getNotificationTypes
+    const [notificationTypeList, setNotificationTypeList] = useState([])
+    
+    
 
     //Webservice
     const { data: user_data, refetch } = useQuery(GET_USER, {
@@ -24,7 +26,10 @@ export default function NotificationSetting() {
         },
     })
     const { data: notificationTypes } = useQuery(GET_NOTICATION_TYPES, {
-        onCompleted: () => setLoadingSection(false),
+        onCompleted: (data) => {
+            setLoadingSection(false)
+            setNotificationTypeList(notificationTypes?.getNotificationTypes)
+        }
     })
     const [changeNotifySetting] = useMutation(USER_NOTIFICATION_SETTING, {
         onCompleted: (data) => {
@@ -90,7 +95,7 @@ export default function NotificationSetting() {
             </div>
         )
     else
-        return (
+        return (  
             <>
                 {notificationTypeList &&
                     notificationTypeList.map(({ type }, index) => (
