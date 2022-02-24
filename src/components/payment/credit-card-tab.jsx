@@ -127,8 +127,8 @@ const CardSection = ({ amount, round }) => {
                                 variables: {
                                     roundId: Number(round),
                                     amount: amount * 100,
-                                    paymentMethodId: paymentMethodId,
-                                    paymentIntentId: null,
+                                    paymentMethodId: null,
+                                    paymentIntentId: result.paymentIntent.id,
                                 },
                             })
                         })
@@ -142,6 +142,7 @@ const CardSection = ({ amount, round }) => {
                     setRequestPending(false)
                     return setSuccessfulPayment(false)
                 }
+                startTimer()
                 return setSuccessfulPayment(true)
             }
         },
