@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { loadStripe } from "@stripe/stripe-js"
 import {
     CardNumberElement,
@@ -16,6 +16,9 @@ import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice"
 import { useMutation, useQuery } from "@apollo/client"
 import CustomSpinner from "../common/custom-spinner"
+import { navigate } from "gatsby"
+import { ROUTES } from "../../utilities/routes"
+import useCountDown from "react-countdown-hook"
 
 export default function CreditCardTab({ amount, round }) {
     // Containers
@@ -65,6 +68,12 @@ const CardSection = ({ amount, round }) => {
     const [allowFractionBox, setAllowFractionBox] = useState(false)
     const [successfulPayment, setSuccessfulPayment] = useState(null)
     const [requestPending, setRequestPending] = useState(false)
+    const initialTime = 10 * 1000
+    const interval = 1000
+    const [timeLeft, { start: startTimer }] = useCountDown(
+        initialTime,
+        interval
+    )
 
     const style = {
         base: {
@@ -92,10 +101,16 @@ const CardSection = ({ amount, round }) => {
             if (data.payStripeForAuction.error)
                 return setError(data.payStripeForAuction.error)
             const { clientSecret, requiresAction } = data.payStripeForAuction
-            if (requiresAction === false) return setSuccessfulPayment(true)
+            if (requiresAction === false) {
+                startTimer()
+                return setSuccessfulPayment(true)
+            }
             if (clientSecret)
                 return stripe.handleCardAction(clientSecret).then((result) => {
-                    if (result.error) return setSuccessfulPayment(false)
+                    if (result.error) {
+                        startTimer()
+                        return setSuccessfulPayment(false)
+                    }
                 })
             return setError("Invalid Payment")
         },
@@ -132,11 +147,18 @@ const CardSection = ({ amount, round }) => {
         return setError("Invalid Card Information")
     }
 
+    useEffect(() => {
+        console.log(timeLeft)
+        if (successfulPayment !== null)
+            if (timeLeft === 0) navigate(ROUTES.auction)
+    }, [timeLeft])
+
     // Render
     return successfulPayment === true ? (
         <div className="text-center p-4">
             <div className="text-danger mb-4">
                 <svg
+                    className="text-success"
                     width="126"
                     height="126"
                     viewBox="0 0 126 126"
@@ -166,8 +188,11 @@ const CardSection = ({ amount, round }) => {
                     />
                 </svg>
             </div>
-            <div className="text-capitalize text-light fs-28px fw-bold">
+            <div className="text-capitalize text-light fs-28px fw-bold text-success">
                 payment successful
+            </div>
+            <div className="text-capitalize text-light fs-18px fw-500 mt-2">
+                you will be redirected in {Math.floor(timeLeft / 1000)} ...
             </div>
         </div>
     ) : successfulPayment === false ? (
@@ -205,6 +230,9 @@ const CardSection = ({ amount, round }) => {
             </div>
             <div className="text-capitalize text-light fs-28px fw-bold">
                 payment failed
+            </div>
+            <div className="text-capitalize text-light fs-18px fw-500 mt-2">
+                you will be redirected in {Math.floor(timeLeft / 1000)} ...
             </div>
         </div>
     ) : (
