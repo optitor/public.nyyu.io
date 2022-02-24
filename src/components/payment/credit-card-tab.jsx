@@ -68,7 +68,12 @@ const CardSection = ({ amount, round }) => {
     const [allowFractionBox, setAllowFractionBox] = useState(false)
     const [successfulPayment, setSuccessfulPayment] = useState(null)
     const [requestPending, setRequestPending] = useState(false)
-    const initialTime = 10 * 1000
+    const [paymentMethodId, setPaymentMethodId] = useState(null)
+    const [stripePaymentSecondCall, setStripePaymentSecondCall] =
+        useState(false)
+
+    // Countdown
+    const initialTime = 5 * 1000
     const interval = 1000
     const [timeLeft, { start: startTimer }] = useCountDown(
         initialTime,
@@ -97,22 +102,48 @@ const CardSection = ({ amount, round }) => {
     // Webservice
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
         onCompleted: async (data) => {
-            setRequestPending(false)
-            if (data.payStripeForAuction.error)
-                return setError(data.payStripeForAuction.error)
-            const { clientSecret, requiresAction } = data.payStripeForAuction
-            if (requiresAction === false) {
-                startTimer()
+            if (stripePaymentSecondCall === false) {
+                setStripePaymentSecondCall(true)
+                if (data.payStripeForAuction.error) {
+                    setRequestPending(false)
+                    return setError(data.payStripeForAuction.error)
+                }
+                const { clientSecret, requiresAction } =
+                    data.payStripeForAuction
+                if (requiresAction === false) {
+                    startTimer()
+                    setRequestPending(false)
+                    return setSuccessfulPayment(true)
+                }
+                if (clientSecret)
+                    return stripe
+                        .handleCardAction(clientSecret)
+                        .then((result) => {
+                            if (result.error) {
+                                startTimer()
+                                return setSuccessfulPayment(false)
+                            }
+                            return stripePayment({
+                                variables: {
+                                    roundId: Number(round),
+                                    amount: amount * 100,
+                                    paymentMethodId: paymentMethodId,
+                                    paymentIntentId: null,
+                                },
+                            })
+                        })
+                return setError("Invalid Payment")
+            } else if (stripePaymentSecondCall === true) {
+                if (
+                    data.payStripeForAuction.error ||
+                    data.payStripeForAuction.requiresAction === true
+                ) {
+                    startTimer()
+                    setRequestPending(false)
+                    return setSuccessfulPayment(false)
+                }
                 return setSuccessfulPayment(true)
             }
-            if (clientSecret)
-                return stripe.handleCardAction(clientSecret).then((result) => {
-                    if (result.error) {
-                        startTimer()
-                        return setSuccessfulPayment(false)
-                    }
-                })
-            return setError("Invalid Payment")
         },
         onError: (error) => {
             console.log(error)
@@ -134,7 +165,8 @@ const CardSection = ({ amount, round }) => {
                 name: cardHolder,
             },
         })
-        if (paymentMethod && "id" in paymentMethod && paymentMethod.id)
+        if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
+            setPaymentMethodId(paymentMethod.id)
             return stripePayment({
                 variables: {
                     roundId: Number(round),
@@ -143,12 +175,12 @@ const CardSection = ({ amount, round }) => {
                     paymentIntentId: null,
                 },
             })
+        }
         setRequestPending(false)
         return setError("Invalid Card Information")
     }
 
     useEffect(() => {
-        console.log(timeLeft)
         if (successfulPayment !== null)
             if (timeLeft === 0) navigate(ROUTES.auction)
     }, [timeLeft])
@@ -353,7 +385,7 @@ const CardSection = ({ amount, round }) => {
             >
                 <div className="d-flex align-items-center justify-content-center gap-3">
                     {requestPending && <CustomSpinner />}
-                    {"confirm payment"}
+                    {stripePaymentSecondCall ? "verifying" : "confirm payment"}
                 </div>
             </button>
         </>
