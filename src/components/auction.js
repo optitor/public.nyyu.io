@@ -13,20 +13,39 @@ import AuctionRoundDetails from "./auction/auction-round-details"
 import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData"
 import AuctionPlaceBidModal from "./auction/auction-place-bid-modal"
 import AuctionRoundNavigator from "./auction/auction-round-navigator"
+import { useEffect } from "react"
 
 const Auction = () => {
     const auction = useAuction()
     const currencyId = useSelector((state) => state?.placeBid.currencyId)
-    const { auctions, currentRoundNumber } = auction
+    const { auctions, presales, currentRound, currentRoundNumber } = auction
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
+    const [loading, setLoading] = useState(true)
 
-    if (auction.loading) return <Loading />
+    useEffect(() => {
+        if (auction.loading === false) {
+            if (currentRound.auction) {
+                auction.setIsAuction(true)
+                auction.setCurrentRoundNumber(auctions.length)
+            } else if (currentRound.presale) {
+                auction.setIsAuction(false)
+                auction.setCurrentRoundNumber(presales.length)
+            } else {
+                auction.setIsAuction(true)
+                auction.setCurrentRoundNumber(auctions.length)
+            }
+            setLoading(false)
+        }
+    }, [auction.loading])
+
+    if (loading) return <Loading />
     return (
         <>
             <Seo title="Sale" />
             <main className="auction-page">
+                {console.log("Is Auction", auction.isAuction)}
                 <Header />
                 <section className="section-auction container">
                     <div className="row h-100">
