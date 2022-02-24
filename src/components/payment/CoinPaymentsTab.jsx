@@ -28,16 +28,18 @@ const { Option } = components
 
 const SelectOption = (props) => {
     const { data } = props;
-    return (<Option {...props}>
-        <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
-            <img
-                src={data.icon}
-                style={{ width: "30px", height: "auto" }}
-                alt={data.value}
-            />
-            <p className="coin-label ms-2">{data.value}</p>
-        </div>
-    </Option>)
+    return (
+        <Option {...props}>
+            <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
+                <img
+                    src={data.icon}
+                    style={{ width: "30px", height: "auto" }}
+                    alt={data.value}
+                />
+                <p className="coin-label ms-2">{data.value}</p>
+            </div>
+        </Option>
+    )
 }
 
 const FOO_COINS = [
@@ -211,6 +213,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                     Option: SelectOption,
                                     SingleValue: SelectOption,
                                 }}
+                                styles={customSelectWithIconStyles}
                             />
                             <div className="w-75">
                                 <div className='show_value'>
@@ -336,23 +339,30 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
 
 export default CoinPaymentsTab;
 
+const customSelectWithIconStyles = {
+    input: provided => ({
+        ...provided,
+        position: 'absolute'
+    }),
+};
+
 const customSelectStyles = {
-    option: (provided, state) => ({
-      ...provided,
-      color: 'white',
-      ':hover': {
-            backgroundColor: '#23c865'
-        }
+    option: (provided) => ({
+        ...provided,
+        color: 'lightgrey',
     }),
     control: (provided) => ({
       ...provided,
       backgroundColor: '#1e1e1e',
-      borderRadius: 0
+      borderColor: 'white',
+      borderRadius: 0,
+      height: 46
     }),
     menu: (provided) => ({
         ...provided,
         backgroundColor: '#1e1e1e',
         border: '1px solid white',
+        borderRadius: 0
     }),
     singleValue: provided => ({
         ...provided,

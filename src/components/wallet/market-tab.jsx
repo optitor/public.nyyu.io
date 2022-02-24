@@ -24,7 +24,7 @@ const RED = "#F6361A"
 
 const { get } = cryptoSymbol({})
 const cryptoSymbolList = get().SNPair;
-const REFRESH_TIME = 15;
+const REFRESH_TIME = 30;
 
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {

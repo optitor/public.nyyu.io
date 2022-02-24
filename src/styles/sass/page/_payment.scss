@@ -179,15 +179,13 @@
             .css-319lph-ValueContainer {
                 padding: 0;
             }
-            .css-6j8wv5-Input {
-                display: none;
-            }
         }
 
         .cryptocoin-tab {
             button {
                 font-size: 18px;
                 width: 300px;
+                height: 46px;
             }
             .cryptocoin-select {
                 margin-bottom: 8px;
@@ -230,7 +228,7 @@
                         font-size: 18px !important;
                         line-height: 22px !important;
                         text-transform: uppercase !important;
-                        color: white !important;
+                        color: lightgray;
                         @include mq("phone", max) {
                             display: none;
                         }
@@ -262,7 +260,7 @@
             p.inform {
                 font-size: 14px;
                 color: #919191;
-                margin-top: 10px;
+                margin-top: 12px;
                 span {
                     color: $green;
                 }
