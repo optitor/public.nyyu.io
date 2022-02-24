@@ -1,15 +1,15 @@
 /* eslint-disable */
 
 import React, { useCallback, useReducer, useState, useEffect } from "react"
+import { navigate } from "gatsby"
 import { useSelector } from "react-redux"
 import { useQuery } from "@apollo/client";
-import { GET_AUCTION } from "../apollo/graghqls/querys/Auction"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
-import Header from "../components/header"
-import Loading from "../components/common/Loading";
-import { numberWithCommas } from "../utilities/number"
-import { CheckBox } from "../components/common/FormControl"
+import Header from "../header"
+import Loading from "../common/Loading";
+import { numberWithCommas } from "../../utilities/number"
+import { CheckBox } from "../common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
@@ -23,15 +23,16 @@ import {
     BTC,
     DOGE,
     PaypalBrand,
-} from "../utilities/imgImport"
-import ConnectWalletTab from "../components/profile/connect-wallet-tab"
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../utilities/staticData"
-import Seo from './../components/seo'
-import CreditCardTab from "../components/payment/credit-card-tab"
-import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
-import OrderSummary from "../components/payment/order-summary"
-import OrderSummaryOfCoinPayments from './../components/payment/OrderSummaryOfCoinPayments'
-import { navigate } from "gatsby"
+} from "../../utilities/imgImport"
+import ConnectWalletTab from "../profile/connect-wallet-tab"
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction"
+import Seo from './../seo'
+import CreditCardTab from "./credit-card-tab"
+import CoinPaymentsTab from "./CoinPaymentsTab"
+import OrderSummary from "./order-summary"
+import OrderSummaryOfCoinPayments from './OrderSummaryOfCoinPayments'
+
 
 const { Option, SingleValue } = components
 
