@@ -21,7 +21,7 @@ import { generateQR } from '../../utilities/string';
 import { Input, CheckBox } from '../common/FormControl';
 import { Copy } from '../../utilities/imgImport';
 import CustomSpinner from "../common/custom-spinner"
-import { numberWithCommas } from './../../utilities/number';
+// import { numberWithCommas } from './../../utilities/number';
 import { set_Temp_Data } from './../../redux/actions/tempAction'
 
 const { Option } = components
