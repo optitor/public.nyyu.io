@@ -19,7 +19,8 @@ export default function OrderSummary({ bidAmount }) {
                     </div>
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Balance remaining</p>
-                        {coinData.coinValue? (<NumberFormat
+                        {coinData.coinValue? (
+                        <NumberFormat
                             className="order-list__detail"
                             displayType={'text'}
                             suffix={` ${coinData.coinSymbol}`}
