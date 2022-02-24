@@ -18,6 +18,7 @@ const VerifyCompany = lazy(() => import("../../components/auth/verify-company"))
 const ChangePassword = lazy(() => import("../../components/auth/change-password"))
 const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
 const Wallet = lazy(() => import("../../components/wallet"))
+const Payment = lazy(() => import("../../components/payment"))
 
 const NotFound = lazy(() => import("./../404"))
 
@@ -54,6 +55,7 @@ const App = () => {
 
                         <PrivateRoute path="/profile" component={Profile} />
                         <PrivateRoute path="select-figure" component={SelectFigure} />
+                        <PrivateRoute path="/payment" component={Payment} />
                         <NotFound default />
                     </Router>
                 </Suspense>
