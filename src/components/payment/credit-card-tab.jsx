@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { loadStripe } from "@stripe/stripe-js"
 import {
     CardNumberElement,
@@ -16,6 +16,9 @@ import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice"
 import { useMutation, useQuery } from "@apollo/client"
 import CustomSpinner from "../common/custom-spinner"
+import { navigate } from "gatsby"
+import { ROUTES } from "../../utilities/routes"
+import useCountDown from "react-countdown-hook"
 
 export default function CreditCardTab({ amount, round }) {
     // Containers
@@ -63,8 +66,14 @@ const CardSection = ({ amount, round }) => {
     const [error, setError] = useState("")
     const [cardHolder, setCardHolder] = useState("")
     const [allowFractionBox, setAllowFractionBox] = useState(false)
-    const [successfulPayment, setSuccessfulPayment] = useState(false)
+    const [successfulPayment, setSuccessfulPayment] = useState(null)
     const [requestPending, setRequestPending] = useState(false)
+    const initialTime = 10 * 1000
+    const interval = 1000
+    const [timeLeft, { start: startTimer }] = useCountDown(
+        initialTime,
+        interval
+    )
 
     const style = {
         base: {
@@ -89,10 +98,20 @@ const CardSection = ({ amount, round }) => {
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
         onCompleted: async (data) => {
             setRequestPending(false)
-            if (data.stripePayment.error)
-                return setError(data.stripePayment.error)
-            const { clientSecret } = data.stripePayment
-            if (clientSecret) return setSuccessfulPayment(true)
+            if (data.payStripeForAuction.error)
+                return setError(data.payStripeForAuction.error)
+            const { clientSecret, requiresAction } = data.payStripeForAuction
+            if (requiresAction === false) {
+                startTimer()
+                return setSuccessfulPayment(true)
+            }
+            if (clientSecret)
+                return stripe.handleCardAction(clientSecret).then((result) => {
+                    if (result.error) {
+                        startTimer()
+                        return setSuccessfulPayment(false)
+                    }
+                })
             return setError("Invalid Payment")
         },
         onError: (error) => {
@@ -128,11 +147,18 @@ const CardSection = ({ amount, round }) => {
         return setError("Invalid Card Information")
     }
 
+    useEffect(() => {
+        console.log(timeLeft)
+        if (successfulPayment !== null)
+            if (timeLeft === 0) navigate(ROUTES.auction)
+    }, [timeLeft])
+
     // Render
     return successfulPayment === true ? (
         <div className="text-center p-4">
             <div className="text-danger mb-4">
                 <svg
+                    className="text-success"
                     width="126"
                     height="126"
                     viewBox="0 0 126 126"
@@ -162,8 +188,51 @@ const CardSection = ({ amount, round }) => {
                     />
                 </svg>
             </div>
-            <div className="text-capitalize text-light fs-28px fw-bold">
+            <div className="text-capitalize text-light fs-28px fw-bold text-success">
                 payment successful
+            </div>
+            <div className="text-capitalize text-light fs-18px fw-500 mt-2">
+                you will be redirected in {Math.floor(timeLeft / 1000)} ...
+            </div>
+        </div>
+    ) : successfulPayment === false ? (
+        <div className="text-center p-4">
+            <div className="text-danger mb-4">
+                <svg
+                    width="126"
+                    height="126"
+                    viewBox="0 0 126 126"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <rect
+                        width="14.2931"
+                        height="63.0592"
+                        transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 90.6963 46.1069)"
+                        fill="white"
+                    />
+                    <rect
+                        x="36"
+                        y="46.1069"
+                        width="14.2931"
+                        height="63.0592"
+                        transform="rotate(-45 36 46.1069)"
+                        fill="white"
+                    />
+                    <circle
+                        cx="63"
+                        cy="63"
+                        r="56.5"
+                        stroke="white"
+                        stroke-width="13"
+                    />
+                </svg>
+            </div>
+            <div className="text-capitalize text-light fs-28px fw-bold">
+                payment failed
+            </div>
+            <div className="text-capitalize text-light fs-18px fw-500 mt-2">
+                you will be redirected in {Math.floor(timeLeft / 1000)} ...
             </div>
         </div>
     ) : (
@@ -282,7 +351,10 @@ const CardSection = ({ amount, round }) => {
                 }`}
                 onClick={requestPending ? null : submitPayment}
             >
-                {requestPending ? "processing. . ." : "confirm payment"}
+                <div className="d-flex align-items-center justify-content-center gap-3">
+                    {requestPending && <CustomSpinner />}
+                    {"confirm payment"}
+                </div>
             </button>
         </>
     )

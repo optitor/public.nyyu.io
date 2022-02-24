@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Slider from "rc-slider"
 import { useAuction } from "./auction-context"
 import { Currencies } from "../../utilities/staticData"
@@ -10,12 +10,13 @@ import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { useState } from "react"
 import { ROUTES } from "../../utilities/routes"
 import { useDispatch } from "react-redux"
+import CustomSpinner from "../common/custom-spinner"
 
 export default function AuctionPlaceBid() {
     // Containers
     const auction = useAuction()
     const dispatch = useDispatch()
-    const { auctions, currentRoundNumber } = auction
+    const { auctions, currentRoundNumber, getBid, isBid } = auction
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
@@ -71,6 +72,13 @@ export default function AuctionPlaceBid() {
         dispatch(setCurrentRound(current?.id))
     }
 
+    useEffect(() => {
+        if (getBid) {
+            setPrice(isBid ? current.placeBid : getBid.tokenPrice)
+            setAmount(isBid ? 1 : getBid.tokenAmount)
+        }
+    }, [getBid])
+
     // Render
     return (
         <>
@@ -103,15 +111,15 @@ export default function AuctionPlaceBid() {
                         <input
                             type="number"
                             value={price}
-                            onChange={(value) => setPrice(value)}
+                            onChange={(e) => setPrice(e.target.value)}
                             className="range-input"
                         />
                         <Slider
                             value={price}
                             onChange={(value) => setPrice(value)}
                             min={current?.minPrice}
-                            max={10000}
-                            step={100}
+                            max={100}
+                            step={1}
                         />
                     </div>
                     <div className="d-flex align-items-center">
@@ -164,11 +172,10 @@ export default function AuctionPlaceBid() {
                         }}
                         disabled={reqPending}
                     >
-                        {reqPending
-                            ? "processing..."
-                            : auction.isBid
-                            ? "Place Bid"
-                            : "Increase Bid"}
+                        <div className="d-flex align-items-center justify-content-center gap-3">
+                            {reqPending && <CustomSpinner />}
+                            {auction.isBid ? "Place Bid" : "Increase Bid"}
+                        </div>
                     </button>
                 </div>
             )}
