@@ -19,7 +19,7 @@ export default function AuctionPlaceBidModal() {
         (auction) => auction.round === currentRoundNumber
     )[0]
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(current.minPrice)
+    const [price, setPrice] = useState(current?.minPrice)
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
 
@@ -54,7 +54,7 @@ export default function AuctionPlaceBidModal() {
         if (auction.isBid) {
             placeBid({
                 variables: {
-                    roundId: current.id,
+                    roundId: current?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
@@ -62,14 +62,14 @@ export default function AuctionPlaceBidModal() {
         } else {
             increaseBid({
                 variables: {
-                    roundId: current.id,
+                    roundId: current?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
             })
         }
         dispatch(setBidInfo(Number(price * amount)))
-        dispatch(setCurrentRound(current.id))
+        dispatch(setCurrentRound(current?.id))
     }
 
     // Render

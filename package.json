@@ -17,6 +17,7 @@
     "@mui/lab": "^5.0.0-alpha.61",
     "@mui/material": "^5.2.5",
     "@popperjs/core": "^2.11.0",
+    "@stdlib/string-truncate-middle": "^0.0.2",
     "@stripe/react-stripe-js": "^1.7.0",
     "@stripe/stripe-js": "^1.23.0",
     "apollo-upload-client": "^17.0.0",

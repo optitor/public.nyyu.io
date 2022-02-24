@@ -30,6 +30,7 @@ import CreditCardTab from "../components/payment/credit-card-tab"
 import CoinPaymentsTab from "../components/payment/CoinPaymentsTab"
 import OrderSummary from "../components/payment/order-summary"
 import OrderSummaryOfCoinPayments from './../components/payment/OrderSummaryOfCoinPayments'
+import { navigate } from "gatsby"
 
 const { Option, SingleValue } = components
 
@@ -71,6 +72,8 @@ const Payment = () => {
     const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
 
     const targetCap = 1000000000000
+    const isSSR = typeof window === "undefined"
+    if(!isSSR && !currentRound) navigate('/app/auction')
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         allow_fraction: false,

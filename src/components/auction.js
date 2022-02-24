@@ -71,7 +71,7 @@ const Auction = () => {
                                 </div>
                             </div>
                             <AuctionRoundDetails />
-                            {current.status !== 3 && (
+                            {current?.status !== 3 && (
                                 <div className="d-block d-sm-none">
                                     <div
                                         className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
@@ -90,7 +90,7 @@ const Auction = () => {
                         </div>
                     </div>
                 </section>
-                {current.status !== 3 && <AuctionPlaceBidModal />}
+                {current?.status !== 3 && <AuctionPlaceBidModal />}
             </main>
         </>
     )

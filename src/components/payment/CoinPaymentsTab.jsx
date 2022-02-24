@@ -14,7 +14,9 @@ import { useMutation } from '@apollo/client';
 import * as Mutation from '../../apollo/graghqls/mutations/Payment';
 import * as Query from './../../apollo/graghqls/querys/Payment'
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from '../../utilities/staticData';
-import icons from "base64-cryptocurrency-icons"
+import {
+    BTC, ETH, BNB, USDC, USDT, DAI
+} from './../../utilities/imgImport'
 import { generateQR } from '../../utilities/string';
 import { Input, CheckBox } from '../common/FormControl';
 import { Copy } from '../../utilities/imgImport';
@@ -29,7 +31,7 @@ const SelectOption = (props) => {
     return (<Option {...props}>
         <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
             <img
-                src={icons[data.value]?.icon}
+                src={data.icon}
                 style={{ width: "30px", height: "auto" }}
                 alt={data.value}
             />
@@ -39,39 +41,39 @@ const SelectOption = (props) => {
 }
 
 const FOO_COINS = [
-    { value: "BTC", label: "BTC", networks: [
-        { label: 'Bitcoin', value: 'BTC' },
-        // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2' },
-        { label: 'Bitcoin/BTCB Token (BSC Chain)', value: 'BTC.BEP20' },
-        // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN' },
+    { value: "BTC", label: "BTC", icon: BTC, networks: [
+        { label: 'Bitcoin', value: 'BTC', network: 'BTC' },
+        // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2', network: 'BEP2' },
+        { label: 'Bitcoin/BTCB Token (BSC Chain)', value: 'BTC.BEP20', network: 'BEP20' },
+        // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN', network: 'LN' },
     ] },
-    { value: "ETH", label: "ETH", networks: [
-        { label: 'Ethereum', value: 'ETH' },
-        // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2' },
-        { label: 'Ethereum Token (BSC Chain)', value: 'ETH.BEP20' },
+    { value: "ETH", label: "ETH", icon: ETH, networks: [
+        { label: 'Ethereum', value: 'ETH', network: 'ERC20' },
+        // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
+        { label: 'Ethereum Token (BSC Chain)', value: 'ETH.BEP20', network: 'BEP20' },
     ] },
-    { value: "BNB", label: "BNB", networks: [
-        { label: 'BNB Coin (Mainnet)', value: 'BNB' },
-        { label: 'BNB Coin (BSC Chain)', value: 'BNB.BSC' },
-        { label: 'BNB Coin (ERC-20)', value: 'BNB.ERC20' },
+    { value: "BNB", label: "BNB", icon: BNB, networks: [
+        { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
+        { label: 'BNB Coin (BSC Chain)', value: 'BNB.BSC', network: 'BEP20' },
+        { label: 'BNB Coin (ERC-20)', value: 'BNB.ERC20', network: 'ERC20' },
     ] },
-    { value: "USDC", label: "USDC", networks: [
-        { label: 'USD Coin (ERC20)', value: 'USDC' },
-        { label: 'USD Coin (BSC Chain)', value: 'USDC.BEP20' },
-        { label: 'USD Coin (Tron/TRC20)', value: 'USDC.TRC20' },
+    { value: "USDC", label: "USDC", icon: USDC, networks: [
+        { label: 'USD Coin (ERC20)', value: 'USDC', network: 'ERC20' },
+        { label: 'USD Coin (BSC Chain)', value: 'USDC.BEP20', network: 'BEP20' },
+        { label: 'USD Coin (Tron/TRC20)', value: 'USDC.TRC20', network: 'TRC20' },
     ] },
-    { value: "USDT", label: "USDT", networks: [
-        { label: 'Tether USD (Omni Layer)', value: 'USDT' },
-        // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2' },
-        { label: 'Tether USD (BSC Chain)', value: 'USDT.BEP20' },
-        { label: 'Tether USD (ERC20)', value: 'USDT.ERC20' },
-        { label: 'Tether USD (Solana)', value: 'USDT.SOL' },
-        { label: 'Tether USD (Tron/TRC20)', value: 'USDT.TRC20' },
-        { label: 'TetherUSD (Waves Token)', value: 'USDT.Waves' },
+    { value: "USDT", label: "USDT", icon: USDT, networks: [
+        { label: 'Tether USD (Omni Layer)', value: 'USDT', network: 'USDT' },
+        // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
+        { label: 'Tether USD (BSC Chain)', value: 'USDT.BEP20', network: 'BEP20' },
+        { label: 'Tether USD (ERC20)', value: 'USDT.ERC20', network: 'ERC20' },
+        { label: 'Tether USD (Solana)', value: 'USDT.SOL', network: 'SOL' },
+        { label: 'Tether USD (Tron/TRC20)', value: 'USDT.TRC20', network: 'TRC20' },
+        { label: 'TetherUSD (Waves Token)', value: 'USDT.Waves', network: 'Waves' },
     ] },
-    { value: "DAI", label: "DAI", networks: [
-        { label: 'Dai (ERC20)', value: 'DAI' },
-        { label: 'Dai Token (BSC Chain)', value: 'DAI.BEP20' },
+    { value: "DAI", label: "DAI", icon: DAI, networks: [
+        { label: 'Dai (ERC20)', value: 'DAI', network: 'ERC20' },
+        { label: 'Dai Token (BSC Chain)', value: 'DAI.BEP20', network: 'BEP20' },
     ] },
 ]
 
@@ -91,13 +93,16 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const networks = useMemo(() => coin.networks, [coin]);
     const [network, setNetwork] = useState(null)
     const [pending, setPending] = useState(false);
-console.log(currentRound)
+    
     const [coinQuantity, setCoinQuantity] = useState(0);
     
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         allow_fraction: false,
     })
     const { allow_fraction } = state
+
+    const [coinQRCode, setCoinQRCode] = useState("");
+    const [depositAddress, setDepositAddress] = useState('')
 
     useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
@@ -133,11 +138,8 @@ console.log(currentRound)
         let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
         if(quantity === Infinity) quantity = null;
         setCoinQuantity(quantity);
-        dispatch(set_Temp_Data({coinValue: quantity, coinSymbol: coin.value}));
-    }, [bidAmount, coin, BTCPrice, dispatch])
-
-    const [coinQRCode, setCoinQRCode] = useState("");
-    const [depositAddress, setDepositAddress] = useState('')
+        dispatch(set_Temp_Data({coinValue: quantity, coinSymbol: coin.value, dipositAddress: depositAddress}));
+    }, [bidAmount, coin, BTCPrice, depositAddress, dispatch])
 
     useEffect(() => {
         (async function() {
@@ -149,10 +151,11 @@ console.log(currentRound)
         })()
     }, [depositAddress])
 
-    const [getDepositAddressMutation] = useMutation(Mutation.CREATE_CRYPTO_PAYMENT, {
+    const [createCryptoPaymentMutation] = useMutation(Mutation.CREATE_CRYPTO_PAYMENT, {
         onCompleted: data => {
             if(data.createCryptoPaymentForAuction) {
-                setDepositAddress(data.getDepositAddress);
+                const resData = data.createCryptoPaymentForAuction;
+                setDepositAddress(resData?.depositAddress);
                 setPending(false);
             }
         },
@@ -162,12 +165,18 @@ console.log(currentRound)
         }
     })
 
-    const get_Deposit_Address = () => {
+    const create_Crypto_Payment = () => {
         setPending(true);
-        getDepositAddressMutation({
-            variables: {
-                currency: network.value
-            }
+        const createData = {
+            roundId: currentRound,
+            amount: bidAmount,
+            cryptoType: coin.value,
+            network: network.network,
+            coin: network.value
+        };
+        
+        createCryptoPaymentMutation({
+            variables: { ...createData }
         });
     };
 
@@ -240,10 +249,10 @@ console.log(currentRound)
                                 </div>
                                 <button
                                     className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
-                                    onClick={get_Deposit_Address}
+                                    onClick={create_Crypto_Payment}
                                     disabled={!network}
                                 >
-                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'confirm'}
+                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit address'}
                                 </button>
                             </>
                         ) : (

@@ -32,7 +32,7 @@ export default function AuctionRoundBidList() {
 
     useQuery(GET_BID, {
         variables: {
-            roundId: current.id,
+            roundId: current?.id,
         },
         onCompleted: (data) => {
             if (data.getBid === null) return auction.setIsBid(true)

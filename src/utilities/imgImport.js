@@ -35,6 +35,8 @@ import ltc from "../images/ltc.svg"
 import doge from "../images/doge.svg"
 import usdc from "../images/usdc.svg"
 import volt from "../images/volt.svg"
+import usdt from '../images/usdt.svg'
+import bnb from '../images/bnb.svg'
 import nickToken from "../images/nickToken.svg";
 
 import ndb from "../images/ndb.svg"
@@ -157,6 +159,8 @@ export const Copy = copy
 export const Copy2 = copy2
 export const NDB = ndb
 export const VOLT = volt
+export const USDT = usdt
+export const BNB = bnb
 export const Airdrop = airdrop
 export const NickToken = nickToken
 
