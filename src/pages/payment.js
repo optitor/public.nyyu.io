@@ -7,6 +7,7 @@ import { GET_AUCTION } from "../apollo/graghqls/querys/Auction"
 import ReactTooltip from "react-tooltip"
 import Select, { components } from "react-select"
 import Header from "../components/header"
+import Loading from "../components/common/Loading";
 import { numberWithCommas } from "../utilities/number"
 import { CheckBox } from "../components/common/FormControl"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -70,6 +71,7 @@ const Payment = () => {
     const [totalRounds, setTotalRounds] = useState(0)
     const [barProgress, setBarProgress] = useState(0)
     const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
+    const [loading, setLoading] = useState(true)
 
     const targetCap = 1000000000000
     const isSSR = typeof window === "undefined"
@@ -96,6 +98,7 @@ const Payment = () => {
         onCompleted: (data) => {
             setTotalRounds(data.getAuctions.length)
             setBarProgress((currentCap * 100) / targetCap)
+            setLoading(false);
         },
         onError: (error) => console.log(error),
         errorPolicy: "ignore",
@@ -107,7 +110,7 @@ const Payment = () => {
             setBarProgress(1)
         }
     }, [barProgress])
-
+    if (loading) return <Loading />
     return (
         <>
             <Seo title="Payment" />
