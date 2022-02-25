@@ -28,8 +28,11 @@ export default function AuctionRoundBidList() {
             round: currentRoundNumber,
         },
         onCompleted: (data) => {
-            setCurrentRoundBidList(data.getBidListByRound)
-            auction.setCurrentRoundBidList(data.getBidListByRound)
+            const list = data.getBidListByRound.sort(
+                (item1, item2) => item2.totalPrice - item1.totalPrice
+            )
+            setCurrentRoundBidList(list)
+            auction.setCurrentRoundBidList(list)
         },
         onError: (error) => console.log(error),
     })
