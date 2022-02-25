@@ -44,7 +44,7 @@ export default function AuctionRoundBidList() {
             auction.setGetBid(data?.getBid)
             if (data?.getBid === null) return auction.setIsBid(true)
             if (data?.getBid.status === 0) return auction.setIsBid(true)
-            return auction.setIsBid(false)
+            return auction.setIsBid(false)      
         },
     })
 
@@ -56,7 +56,7 @@ export default function AuctionRoundBidList() {
             </div>
         )
     return (
-        <>
+        <>          
             <Tabs className="statistics-tab" selectedIndex={0}>
                 <TabPanel>
                     <table>
