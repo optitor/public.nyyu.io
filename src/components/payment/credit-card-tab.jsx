@@ -86,7 +86,7 @@ const CardSection = ({ amount, round }) => {
             fontFamily: "Montserrat",
             fontWeight: "500",
             fontSmoothing: "antialiased",
-            fontSize: "16px",
+            fontSize: "14px",
             backgroundColor: "transparent",
             border: "1px solid white",
             "::placeholder": {
@@ -317,7 +317,7 @@ const CardSection = ({ amount, round }) => {
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{
                             style,
-                            placeholder: "MM/YY",
+                            placeholder: "Expiration date (MM/YY)",
                         }}
                     />
                 </div>
