@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { loadStripe } from "@stripe/stripe-js"
 import {
     CardNumberElement,
@@ -68,7 +68,6 @@ const CardSection = ({ amount, round }) => {
     const [allowFractionBox, setAllowFractionBox] = useState(false)
     const [successfulPayment, setSuccessfulPayment] = useState(null)
     const [requestPending, setRequestPending] = useState(false)
-    const [paymentMethodId, setPaymentMethodId] = useState(null)
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false)
 
@@ -167,7 +166,6 @@ const CardSection = ({ amount, round }) => {
             },
         })
         if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
-            setPaymentMethodId(paymentMethod.id)
             return stripePayment({
                 variables: {
                     roundId: Number(round),
