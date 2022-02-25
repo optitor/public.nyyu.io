@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useReducer, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import {useQuery} from '@apollo/client'
 import axios from "axios"
 import _ from 'lodash'
-import { useQuery } from "@apollo/client"
 import Select, { components } from "react-select"
 import ReactTooltip from 'react-tooltip';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,35 +12,16 @@ import CircularProgress from '@mui/material/CircularProgress';
 import NumberFormat from 'react-number-format';
 import { useMutation } from '@apollo/client';
 import * as Mutation from '../../apollo/graghqls/mutations/Payment';
-import * as Query from './../../apollo/graghqls/querys/Payment'
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from '../../utilities/staticData';
 import {
-    BTC, ETH, BNB, USDC, USDT, DAI
+    BTC, ETH, BNB, USDC, USDT, DAI, SOL, DOGE, SHIB
 } from './../../utilities/imgImport'
 import { generateQR } from '../../utilities/string';
-import { Input, CheckBox } from '../common/FormControl';
+import { CheckBox } from '../common/FormControl';
 import { Copy } from '../../utilities/imgImport';
 import CustomSpinner from "../common/custom-spinner"
-// import { numberWithCommas } from './../../utilities/number';
 import { set_Temp_Data } from './../../redux/actions/tempAction'
-
-const { Option } = components
-
-const SelectOption = (props) => {
-    const { data } = props;
-    return (
-        <Option {...props}>
-            <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
-                <img
-                    src={data.icon}
-                    style={{ width: "30px", height: "auto" }}
-                    alt={data.value}
-                />
-                <p className="coin-label ms-2">{data.value}</p>
-            </div>
-        </Option>
-    )
-}
+import * as Query from './../../apollo/graghqls/querys/Payment'
 
 const FOO_COINS = [
     { value: "BTC", label: "BTC", icon: BTC, networks: [
@@ -77,10 +58,39 @@ const FOO_COINS = [
         { label: 'Dai (ERC20)', value: 'DAI', network: 'ERC20' },
         { label: 'Dai Token (BSC Chain)', value: 'DAI.BEP20', network: 'BEP20' },
     ] },
+    { value: "DOGE", label: "DOGE", icon: DOGE, networks: [
+        { label: 'Dogecoin', value: 'DOGE', network: 'DOGE' },
+        { label: 'Dogecoin (BSC Chain)', value: 'DOGE.BEP20', network: 'BEP20' },
+    ] },
+    { value: "SHIB", label: "SHIB", icon: SHIB, networks: [
+        { label: 'SHIBA INU (ERC20)', value: 'SHIB', network: 'ERC20' },
+        { label: 'SHIBA INU (BSC Chain)', value: 'SHIB.BEP20', network: 'BEP20' },
+    ] },
+    { value: "SOL", label: "SOL", icon: SOL, networks: [
+        { label: 'Solana', value: 'SOL', network: 'SOL' },
+    ] },
 ]
 
 const QUOTE = "USDT"
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
+
+const { Option } = components
+
+const SelectOption = (props) => {
+    const { data } = props;
+    return (
+        <Option {...props}>
+            <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
+                <img
+                    src={data.icon}
+                    style={{ width: "30px", height: "30px" }}
+                    alt={data.value}
+                />
+                <p className="coin-label ms-2">{data.value}</p>
+            </div>
+        </Option>
+    )
+}
 
 const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const dispatch = useDispatch();
@@ -123,12 +133,11 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     })
 
     useEffect(() => {
-        const get_BTCPrice = () => {
-            axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
-                setBTCPrice(res.data.lastPrice)
-            })
-        }
-        get_BTCPrice()
+        (async function() {
+            // Fetch the price of BTC
+            const { data: BTCPriceData } = await axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } });
+            setBTCPrice(BTCPriceData.lastPrice)
+        })();
     }, [])
 
     useEffect(() => {
