@@ -348,7 +348,10 @@ const customSelectWithIconStyles = {
         ...provided,
         backgroundColor: state.isSelected? '#23c865': undefined,
         borderBottom: '1px solid dimgrey',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        ':hover': {
+            backgroundColor: 'inherit'
+        }
     }),
 };
 
@@ -372,7 +375,8 @@ const customSelectStyles = {
         ...provided,
         backgroundColor: '#1e1e1e',
         border: '1px solid white',
-        borderRadius: 0
+        borderRadius: 0,
+        padding: 0
     }),
     singleValue: provided => ({
         ...provided,
