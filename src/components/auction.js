@@ -53,7 +53,7 @@ const Auction = () => {
                                 <div className="w-100">
                                     <Tabs
                                         className="round-tab"
-                                        selectedIndex={0}
+                                        defaultIndex={0}
                                     >
                                         <AuctionRoundNavigator />
                                     </Tabs>

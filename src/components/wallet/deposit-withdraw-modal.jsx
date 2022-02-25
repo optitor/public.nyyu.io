@@ -94,7 +94,7 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                     d="M19 9l-7 7-7-7"
                                 ></path>
                             </svg>
