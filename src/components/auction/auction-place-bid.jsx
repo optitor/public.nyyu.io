@@ -95,8 +95,11 @@ export default function AuctionPlaceBid() {
                         <input
                             type="number"
                             value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
+                            onChange={(e) =>
+                                setAmount(e.target.value ? e.target.value : 1)
+                            }
                             className="range-input"
+                            min={1}
                         />
                         <Slider
                             value={amount}
@@ -111,8 +114,15 @@ export default function AuctionPlaceBid() {
                         <input
                             type="number"
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            onChange={(e) =>
+                                setPrice(
+                                    e.target.value
+                                        ? e.target.value
+                                        : current.minPrice
+                                )
+                            }
                             className="range-input"
+                            min={current.minPrice}
                         />
                         <Slider
                             value={price}
