@@ -105,7 +105,7 @@ export default function AuctionPlaceBid() {
                             value={amount}
                             onChange={(value) => setAmount(value)}
                             min={1}
-                            max={100}
+                            max={current.totalToken}
                             step={1}
                         />
                     </div>
