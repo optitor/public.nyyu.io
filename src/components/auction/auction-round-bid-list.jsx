@@ -29,7 +29,7 @@ export default function AuctionRoundBidList() {
         },
         onCompleted: (data) => {
             const list = data.getBidListByRound.sort(
-                (item1, item2) => item2.totalPrice - item1.totalPrice
+                (item1, item2) => item2.totalAmount - item1.totalAmount
             )
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
@@ -85,7 +85,7 @@ export default function AuctionRoundBidList() {
                                         <span className="txt-green">
                                             {Currencies[0].symbol}{" "}
                                         </span>
-                                        {item.totalPrice}
+                                        {item.totalAmount}
                                     </td>
                                 </tr>
                             ))}

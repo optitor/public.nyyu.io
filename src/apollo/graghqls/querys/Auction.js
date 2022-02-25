@@ -137,7 +137,8 @@ export const GET_BID = gql`
             name
             roundId
             tokenAmount
-            totalPrice
+            totalAmount
+            paidAmount
             tokenPrice
             tempTokenAmount
             tempTokenPrice

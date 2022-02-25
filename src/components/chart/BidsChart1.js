@@ -28,7 +28,7 @@ const BidsChart1 = ({ data, period }) => {
         setStartDate(tmpData.startDate)
 
         tmpData.fData.forEach((ele) => {
-            tTotal.push({ value: [new Date(ele.placedAt), ele.totalPrice] })
+            tTotal.push({ value: [new Date(ele.placedAt), ele.totalAmount] })
             tAmount.push({ value: [new Date(ele.placedAt), ele.tokenAmount] })
         })
 
@@ -51,14 +51,14 @@ const BidsChart1 = ({ data, period }) => {
                 right: 10,
                 top: "10%",
                 height: "60%",
-                containLabel:true
+                containLabel: true
             },
             {
                 left: 25,
                 right: 10,
                 top: "70%",
                 height: "30%",
-                containLabel:true
+                containLabel: true
             },
         ],
         axisPointer: {
@@ -81,7 +81,7 @@ const BidsChart1 = ({ data, period }) => {
                         show: false,
                     },
                 },
-                min:stDate
+                min: stDate
             },
             {
                 type: "time",
@@ -110,8 +110,8 @@ const BidsChart1 = ({ data, period }) => {
                 },
                 axisLabel: {
                     margin: 18,
-                    showMinLabel:false,
-                    hideOverlap:true,
+                    showMinLabel: false,
+                    hideOverlap: true,
                 },
                 scale: true,
             },
@@ -170,7 +170,7 @@ const BidsChart1 = ({ data, period }) => {
                 },
                 offset: 20,
                 gridIndex: 1,
-                splitNumber:2
+                splitNumber: 2
             },
         ],
         series: [
