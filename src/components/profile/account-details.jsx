@@ -1,13 +1,13 @@
-import { Link } from "gatsby"
+import {Link} from "gatsby"
 import React from "react"
-import { ROUTES } from "../../utilities/routes"
+import {ROUTES} from "../../utilities/routes"
 
 export default function AccountDetails({
-    setIsPasswordModalOpen,
-    user,
-    displayName,
-    shuftReference,
-}) {
+                                           setIsPasswordModalOpen,
+                                           user,
+                                           displayName,
+                                           shuftReference,
+                                       }) {
     return (
         <div className="account-details">
             <div className="row w-100 mx-auto">
@@ -24,6 +24,14 @@ export default function AccountDetails({
                 <div className="col-6 col-sm-4 col-md-6 br">Password</div>
                 <div className="col-6 col-sm-8 col-md-6 justify-content-sm-between justify-content-end">
                     <p>********</p>
+                    <button
+                        className="btn-primary change-pwd"
+                        onClick={() => setIsPasswordModalOpen(true)}
+                    >
+                        Change Password
+                    </button>
+                </div>
+                <div className="col-12 justify-content-center">
                     <button
                         className="btn-primary change-pwd"
                         onClick={() => setIsPasswordModalOpen(true)}

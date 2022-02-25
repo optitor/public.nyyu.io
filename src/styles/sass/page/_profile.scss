@@ -230,6 +230,22 @@
                         }
                     }
                 }
+                .col-12 {
+                    display: none;
+                    padding: 25px 12px;
+                    @include mq("phone", max) {
+                        display: flex;
+                    }
+                    .change-pwd {
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 22px;
+                        letter-spacing: 0.04em;
+                        text-transform: uppercase;
+                        padding: 15px 26px;
+                        background: #1e1e1e;
+                    }
+                }
             }
             .change-password {
                 .col-6 {
