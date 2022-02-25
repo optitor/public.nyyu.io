@@ -45,7 +45,6 @@ const Auction = () => {
         <>
             <Seo title="Sale" />
             <main className="auction-page">
-                {console.log("Is Auction", auction.isAuction)}
                 <Header />
                 <section className="section-auction container">
                     <div className="row h-100">
