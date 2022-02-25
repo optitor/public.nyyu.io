@@ -12,7 +12,7 @@ const BidsChart2 = ({ data }) => {
         let tamount = []
 
         data?.getBidList.forEach((ele) => {
-            ttotal.push(ele.totalPrice)
+            ttotal.push(ele.totalAmount)
             tamount.push(ele.tokenAmount)
         })
 

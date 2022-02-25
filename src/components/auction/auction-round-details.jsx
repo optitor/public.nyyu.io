@@ -21,7 +21,7 @@ export default function AuctionRoundDetails() {
 
         let min = Infinity
         currentRoundBidList.forEach((item) => {
-            if (item.totalPrice < min) min = item.totalPrice
+            if (item.totalAmount < min) min = item.totalAmount
         })
 
         return setMinBidValue(min)

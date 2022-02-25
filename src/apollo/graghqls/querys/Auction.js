@@ -15,6 +15,21 @@ export const GET_AUCTION = gql`
         }
     }
 `
+
+export const GET_PRESALES = gql`
+    {
+        getPreSales {
+            id
+            round
+            startedAt
+            endedAt
+            tokenAmount
+            tokenPrice
+            sold
+            status
+        }
+    }
+`
 export const GET_CURRENT_ROUND = gql`
     {
         getCurrentRound {
@@ -122,7 +137,8 @@ export const GET_BID = gql`
             name
             roundId
             tokenAmount
-            totalPrice
+            totalAmount
+            paidAmount
             tokenPrice
             tempTokenAmount
             tempTokenPrice

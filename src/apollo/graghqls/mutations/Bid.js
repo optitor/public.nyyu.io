@@ -16,7 +16,8 @@ export const PLACE_BID = gql`
             name
             roundId
             tokenAmount
-            totalPrice
+            totalAmount
+            paidAmount
             tokenPrice
             tempTokenAmount
             tempTokenPrice
@@ -54,7 +55,8 @@ export const INCREASE_BID = gql`
             name
             roundId
             tokenAmount
-            totalPrice
+            totalAmount
+            paidAmount
             tokenPrice
             tempTokenAmount
             tempTokenPrice

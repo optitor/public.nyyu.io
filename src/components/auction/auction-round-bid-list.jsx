@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useQuery } from "@apollo/client"
 import { TabPanel, Tabs } from "react-tabs"
+import _ from 'lodash'
 import { useAuction } from "./auction-context"
 import CustomSpinner from "../common/custom-spinner"
 import { GreenCup } from "../../utilities/imgImport"
@@ -28,8 +29,9 @@ export default function AuctionRoundBidList() {
             round: currentRoundNumber,
         },
         onCompleted: (data) => {
-            setCurrentRoundBidList(data?.getBidListByRound)
-            auction.setCurrentRoundBidList(data?.getBidListByRound)
+            const list = _.orderBy(data.getBidListByRound, ['totalAmount'], ['desc']);
+            setCurrentRoundBidList(list)
+            auction.setCurrentRoundBidList(list)
         },
         onError: (error) => console.log(error),
     })
@@ -82,7 +84,7 @@ export default function AuctionRoundBidList() {
                                         <span className="txt-green">
                                             {Currencies[0].symbol}{" "}
                                         </span>
-                                        {item.totalPrice}
+                                        {item.totalAmount}
                                     </td>
                                 </tr>
                             ))}
