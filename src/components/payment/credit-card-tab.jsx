@@ -132,7 +132,7 @@ const CardSection = ({ amount, round }) => {
                                 },
                             })
                         })
-                return setError("Invalid Payment")
+                return setError("Invalid payment")
             } else if (stripePaymentSecondCall === true) {
                 if (
                     data.payStripeForAuction.error ||
@@ -178,7 +178,7 @@ const CardSection = ({ amount, round }) => {
             })
         }
         setRequestPending(false)
-        return setError("Invalid Card Information")
+        return setError("Invalid card information")
     }
 
     useEffect(() => {
