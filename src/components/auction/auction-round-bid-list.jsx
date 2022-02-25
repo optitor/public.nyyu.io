@@ -28,8 +28,8 @@ export default function AuctionRoundBidList() {
             round: currentRoundNumber,
         },
         onCompleted: (data) => {
-            setCurrentRoundBidList(data.getBidListByRound)
-            auction.setCurrentRoundBidList(data.getBidListByRound)
+            setCurrentRoundBidList(data?.getBidListByRound)
+            auction.setCurrentRoundBidList(data?.getBidListByRound)
         },
         onError: (error) => console.log(error),
     })
@@ -39,9 +39,9 @@ export default function AuctionRoundBidList() {
             roundId: current?.id,
         },
         onCompleted: (data) => {
-            auction.setGetBid(data.getBid)
-            if (data.getBid === null) return auction.setIsBid(true)
-            if (data.getBid.status === 0) return auction.setIsBid(true)
+            auction.setGetBid(data?.getBid)
+            if (data?.getBid === null) return auction.setIsBid(true)
+            if (data?.getBid.status === 0) return auction.setIsBid(true)
             return auction.setIsBid(false)
         },
     })
