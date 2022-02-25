@@ -19,6 +19,7 @@ import CustomSpinner from "../common/custom-spinner"
 import { navigate } from "gatsby"
 import { ROUTES } from "../../utilities/routes"
 import useCountDown from "react-countdown-hook"
+import { Qmark } from "../../utilities/imgImport"
 
 export default function CreditCardTab({ amount, round }) {
     // Containers
@@ -296,7 +297,7 @@ const CardSection = ({ amount, round }) => {
                         type="text"
                         style={style.base}
                         className="border border-light border-1 p-2 w-100 mb-3 placeholder:text-light form-control"
-                        placeholder="Card holder"
+                        placeholder="Card holder (John Smith)"
                         value={cardHolder}
                         onChange={(e) => setCardHolder(e.target.value)}
                     />
@@ -306,7 +307,8 @@ const CardSection = ({ amount, round }) => {
                         className="border border-light border-1 p-2 w-100 mb-3"
                         options={{
                             style,
-                            placeholder: "Card number",
+                            placeholder:
+                                "Card number (4563 9999 8883 7777 2888)",
                         }}
                     />
                 </div>
@@ -324,7 +326,7 @@ const CardSection = ({ amount, round }) => {
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{
                             style,
-                            placeholder: "CVC code",
+                            placeholder: "CVC (123)",
                         }}
                     />
                 </div>
@@ -341,7 +343,12 @@ const CardSection = ({ amount, round }) => {
                     <div className="allow-text text-light">
                         Do you allow fraction of order compleation?
                     </div>
-                    <ReactTooltip place="right" type="light" effect="solid">
+                    <ReactTooltip
+                        id="question-mark-tooltip"
+                        place="right"
+                        type="light"
+                        effect="solid"
+                    >
                         <div
                             className="text-justify"
                             style={{
@@ -351,10 +358,12 @@ const CardSection = ({ amount, round }) => {
                             {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                         </div>
                     </ReactTooltip>
-                    <FontAwesomeIcon
-                        data-tip="React-tooltip"
-                        icon={faQuestionCircle}
-                        className="fa-2x ms-2 cursor-pointer text-light"
+
+                    <img
+                        src={Qmark}
+                        data-tip
+                        data-for="question-mark-tooltip"
+                        className="ms-2 cursor-pointer text-light"
                     />
                 </div>
                 <p className="payment-expire my-auto">
