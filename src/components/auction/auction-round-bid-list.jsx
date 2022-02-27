@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useSelector } from "react-redux"
 import { useQuery } from "@apollo/client"
 import { TabPanel, Tabs } from "react-tabs"
 import _ from "lodash"
@@ -10,6 +11,7 @@ import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
 import { GET_BID } from "../../apollo/graghqls/querys/Auction"
 
 export default function AuctionRoundBidList() {
+    const currentUser = useSelector(state => state.auth.user)
     // Containers
     const auction = useAuction()
     const { auctions, currentRoundNumber } = auction
@@ -17,7 +19,7 @@ export default function AuctionRoundBidList() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
-
+    console.log(currentRoundBidList)
     const loadingData = !(
         currentRoundBidList &&
         auction.currentRoundBidList &&
@@ -30,11 +32,12 @@ export default function AuctionRoundBidList() {
             round: currentRoundNumber,
         },
         onCompleted: (data) => {
-            const list = _.orderBy(
+            let list = _.orderBy(
                 data.getBidListByRound,
                 ['ranking', 'tokenPrice'],
                 ['asc', 'desc']
             );
+            list = list.map(item => ({ ...item, totalAmount: item.tokenPrice * item.tokenAmount }));
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
         },
@@ -84,7 +87,7 @@ export default function AuctionRoundBidList() {
                         </thead>
                         <tbody>
                             {currentRoundBidList.map((item, index) => (
-                                <tr key={index}>
+                                <tr key={index} style={{fontWeight: currentUser?.id === item.userId? 'bold': 'unset'}}>
                                     <td className="border-0 ps-6px py-2">
                                         {index + 1}
                                     </td>
