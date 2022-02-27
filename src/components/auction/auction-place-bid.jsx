@@ -73,10 +73,11 @@ export default function AuctionPlaceBid() {
     }
 
     useEffect(() => {
-        if (getBid) {
-            setPrice(isBid ? current.placeBid : getBid.tokenPrice)
-            setAmount(isBid ? 1 : getBid.tokenAmount)
-        }
+        if (getBid)
+            if (Object.keys(getBid).length !== 0) {
+                setPrice(isBid ? current.placeBid : getBid.tokenPrice)
+                setAmount(isBid ? 1 : getBid.tokenAmount)
+            }
     }, [getBid])
 
     // Render
