@@ -36,7 +36,7 @@ const FOO_COINS = [
         { label: 'Ethereum Token (BSC Chain)', value: 'ETH.BEP20', network: 'BEP20' },
     ] },
     { value: "BNB", label: "BNB", icon: BNB, networks: [
-        { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
+        // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
         { label: 'BNB Coin (BSC Chain)', value: 'BNB.BSC', network: 'BEP20' },
         { label: 'BNB Coin (ERC-20)', value: 'BNB.ERC20', network: 'ERC20' },
     ] },

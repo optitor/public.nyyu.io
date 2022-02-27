@@ -21,6 +21,7 @@ export const GET_BIDLIST_BY_ROUND = gql`
             roundId
             tokenAmount
             totalAmount
+            ranking
             paidAmount
             tokenPrice
             tempTokenAmount

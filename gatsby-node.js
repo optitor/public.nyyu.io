@@ -60,18 +60,5 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins }) => {
                 Buffer: ['buffer/', 'Buffer'],
             })]
         });
-        actions.setWebpackConfig({
-            resolve: {
-                alias: {
-                    process: 'process/browser',
-                },
-                fallback: {
-                    crypto: require.resolve('crypto-browserify'),
-                    https: require.resolve('https-browserify'),
-                    stream: require.resolve('stream-browserify'),
-                    util: require.resolve("util/")
-                }
-            }
-        })
     }
 };
