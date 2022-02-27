@@ -39,6 +39,7 @@ export const GET_BIDLIST_BY_ROUND = gql`
             placedAt
             updatedAt
             status
+            ranking
         }
     }
 `

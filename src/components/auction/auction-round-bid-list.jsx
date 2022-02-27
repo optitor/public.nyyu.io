@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useQuery } from "@apollo/client"
 import { TabPanel, Tabs } from "react-tabs"
-import _ from 'lodash'
+import _ from "lodash"
 import { useAuction } from "./auction-context"
 import CustomSpinner from "../common/custom-spinner"
 import { GreenCup } from "../../utilities/imgImport"
@@ -29,7 +29,11 @@ export default function AuctionRoundBidList() {
             round: currentRoundNumber,
         },
         onCompleted: (data) => {
-            const list = _.orderBy(data.getBidListByRound, ['totalAmount'], ['desc']);
+            const list = _.orderBy(
+                data.getBidListByRound,
+                ["ranking"],
+                ["desc"]
+            )
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
         },
@@ -41,10 +45,17 @@ export default function AuctionRoundBidList() {
             roundId: current?.id,
         },
         onCompleted: (data) => {
+            console.log(data.getBid)
+            if (data?.getBid === null) {
+                auction.setGetBid({})
+                return auction.setIsBid(true)
+            }
+            if (data?.getBid.status === 0) {
+                auction.setGetBid({})
+                return auction.setIsBid(true)
+            }
             auction.setGetBid(data?.getBid)
-            if (data?.getBid === null) return auction.setIsBid(true)
-            if (data?.getBid.status === 0) return auction.setIsBid(true)
-            return auction.setIsBid(false)      
+            return auction.setIsBid(false)
         },
     })
 
@@ -56,7 +67,7 @@ export default function AuctionRoundBidList() {
             </div>
         )
     return (
-        <>          
+        <>
             <Tabs className="statistics-tab" selectedIndex={0}>
                 <TabPanel>
                     <table>
