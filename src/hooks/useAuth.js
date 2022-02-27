@@ -6,6 +6,7 @@ import {
   LOGGED_OUT_KEY,
   logout,
 } from "../utilities/auth"
+import { ROUTES } from './../utilities/routes'
 // import {NOTIFICATION_SUBSCRIPTION} from "../apollo/graghqls/subscriptions/notification"
 // import { useSubscription } from "@apollo/client"
 import { navigate } from "gatsby"
@@ -22,7 +23,7 @@ export const useAuth = () => useContext(AuthContext)
 
 const syncLoginStatus = (event) => {
   if (event.key === LOGGED_OUT_KEY && isLoggedOut()) {
-    logout(navigate("/auction/"))
+    logout(navigate(ROUTES.signIn))
   }
 }
 

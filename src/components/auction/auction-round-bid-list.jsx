@@ -17,10 +17,11 @@ export default function AuctionRoundBidList() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
+
     const loadingData = !(
         currentRoundBidList &&
         auction.currentRoundBidList &&
-        auction.getBid
+        (auction.getBid || auction.isBid)
     )
 
     // Webservices
@@ -29,7 +30,8 @@ export default function AuctionRoundBidList() {
             round: currentRoundNumber,
         },
         onCompleted: (data) => {
-            const list = _.orderBy(data.getBidListByRound, ['totalAmount'], ['desc']);
+            const list = _.orderBy(data.getBidListByRound, ['ranking', 'tokenPrice'], ['asc', 'desc']);
+            console.log(list)
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
         },
@@ -44,7 +46,7 @@ export default function AuctionRoundBidList() {
             auction.setGetBid(data?.getBid)
             if (data?.getBid === null) return auction.setIsBid(true)
             if (data?.getBid.status === 0) return auction.setIsBid(true)
-            return auction.setIsBid(false)      
+            return auction.setIsBid(false)
         },
     })
 
