@@ -40,9 +40,9 @@ export default function OrderSummary({ bidAmount }) {
                         <p className="order-list__detail">8h 0m 0s</p>
                     </div>
                     <div className="d-flex justify-content-between my-3">
-                        <p className="order-list__label">Deposit Address</p>
+                        <p className="order-list__label">Payment ID</p>
                         <p className="order-list__detail">
-                            {coinData?.dipositAddress && truncateMiddle(coinData?.dipositAddress, 20)}
+                            {coinData?.paymentId? coinData?.paymentId: '' }
                         </p>
                     </div>
                 </div>

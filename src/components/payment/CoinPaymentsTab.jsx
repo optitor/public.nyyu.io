@@ -115,6 +115,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
 
     const [coinQRCode, setCoinQRCode] = useState("");
     const [depositAddress, setDepositAddress] = useState('')
+    const [paymentId, setPaymentId] = useState(null)
 
     useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
@@ -149,8 +150,10 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
         if(quantity === Infinity) quantity = null;
         setCoinQuantity(quantity);
-        dispatch(set_Temp_Data({coinValue: quantity, coinSymbol: coin.value, dipositAddress: depositAddress}));
-    }, [bidAmount, coin, BTCPrice, depositAddress, dispatch])
+
+        const tempData = {coinValue: quantity, coinSymbol: coin.value, paymentId};
+        dispatch(set_Temp_Data(tempData));
+    }, [bidAmount, coin, BTCPrice, paymentId, dispatch])
 
     useEffect(() => {
         (async function() {
@@ -166,7 +169,9 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         onCompleted: data => {
             if(data.createCryptoPaymentForAuction) {
                 const resData = data.createCryptoPaymentForAuction;
+                console.log(resData)
                 setDepositAddress(resData?.depositAddress);
+                setPaymentId(resData?.id);
                 setPending(false);
             }
         },
