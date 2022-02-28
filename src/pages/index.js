@@ -200,7 +200,7 @@ const IndexPage = () => {
                                 : currentRound.presale
                                 ? presaleContent
                                 : noContent}
-                            {noContent}
+                            {/* {noContent} */}
                             <div className="col-md-1 d-none d-sm-block"></div>
                             <div className="right-part col-md-5 d-none d-sm-block d-md-flex">
                                 <img
