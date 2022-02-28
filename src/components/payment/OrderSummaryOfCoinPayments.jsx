@@ -2,7 +2,6 @@ import React from "react"
 import { useSelector } from 'react-redux'
 import { numberWithCommas } from "../../utilities/number"
 import NumberFormat from "react-number-format"
-import truncateMiddle from '@stdlib/string-truncate-middle' ;
 
 export default function OrderSummary({ bidAmount }) {
     const {temp: coinData} = useSelector(state => state)
@@ -43,6 +42,20 @@ export default function OrderSummary({ bidAmount }) {
                         <p className="order-list__label">Payment ID</p>
                         <p className="order-list__detail">
                             {coinData?.paymentId? coinData?.paymentId: '' }
+                        </p>
+                    </div>
+                    <div className="d-flex justify-content-between my-3">
+                        <p className="order-list__label">Transaction fee</p>
+                        <p className="order-list__detail">
+                            {coinData?.transactionFee? (
+                                <NumberFormat
+                                className="order-list__detail"
+                                displayType={'text'}
+                                suffix={` USD`}
+                                value={coinData?.transactionFee}
+                                thousandSeparator={true}
+                                renderText={(value, props) => <p {...props}>{value}</p>}
+                            />): ''}
                         </p>
                     </div>
                 </div>

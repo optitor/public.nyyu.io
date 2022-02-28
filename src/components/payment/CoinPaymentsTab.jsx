@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useReducer, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {useQuery} from '@apollo/client'
 import axios from "axios"
@@ -94,15 +94,17 @@ const SelectOption = (props) => {
 
 const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user)
+
     const [copied, setCopied] = useState(false);
 
     const [fooCoins, setFooCoins] = useState([])
     const [BTCPrice, setBTCPrice] = useState(null)
+    const [allFees, setAllFees] = useState({})
 
-    const loadingData = _.isEmpty(fooCoins) || !BTCPrice;
+    const loadingData = _.isEmpty(fooCoins) || !BTCPrice || _.isEmpty(allFees);
 
     const [coin, setCoin] = useState({})
-    const networks = useMemo(() => coin.networks, [coin]);
     const [network, setNetwork] = useState(null)
     const [pending, setPending] = useState(false);
     
@@ -116,6 +118,16 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     const [coinQRCode, setCoinQRCode] = useState("");
     const [depositAddress, setDepositAddress] = useState('')
     const [paymentId, setPaymentId] = useState(null)
+
+    const networks = useMemo(() => coin.networks, [coin]);
+    const transactionFee = useMemo(() => {
+        const fee = allFees[user?.tierLevel]?.fee;
+        const txnFee = bidAmount * ( 0.5 + fee ) / 100;
+        if(txnFee === NaN) return null;
+        return txnFee.toFixed(4);
+    }, [allFees, bidAmount, user ])
+
+    console.log(transactionFee)
 
     useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
@@ -131,6 +143,18 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         onError: (err) => {
             console.log("get exchange rate: ", err)
         },
+    })
+
+    useQuery(Query.GET_ALL_FEES, {
+        onCompleted: data => {
+            if(data.getAllFees) {
+                const temp = _.mapKeys(data.getAllFees, 'tierLevel')
+                setAllFees(temp)
+            }
+        },
+        onError: err => {
+            console.log('get All Fees', err)
+        }
     })
 
     useEffect(() => {
@@ -151,9 +175,9 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         if(quantity === Infinity) quantity = null;
         setCoinQuantity(quantity);
 
-        const tempData = {coinValue: quantity, coinSymbol: coin.value, paymentId};
+        const tempData = {coinValue: quantity, coinSymbol: coin.value, paymentId, transactionFee};
         dispatch(set_Temp_Data(tempData));
-    }, [bidAmount, coin, BTCPrice, paymentId, dispatch])
+    }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, dispatch])
 
     useEffect(() => {
         (async function() {
@@ -169,7 +193,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         onCompleted: data => {
             if(data.createCryptoPaymentForAuction) {
                 const resData = data.createCryptoPaymentForAuction;
-                console.log(resData)
+                
                 setDepositAddress(resData?.depositAddress);
                 setPaymentId(resData?.id);
                 setPending(false);
@@ -262,7 +286,8 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                             setDepositAddress('')
                                         }}
                                         styles={customSelectStyles}
-                                        placeholder="SELELCT NETWORK"
+                                        placeholder="SELECT NETWORK"
+                                        isSearchable={false}
                                     />
                                 </div>
                                 <button
@@ -392,7 +417,8 @@ const customSelectStyles = {
       backgroundColor: '#1e1e1e',
       borderColor: 'white',
       borderRadius: 0,
-      height: 46
+      height: 46,
+      cursor: 'pointer'
     }),
     menu: (provided) => ({
         ...provided,
@@ -418,12 +444,13 @@ const customSelectStyles = {
         color: 'white',
         padding: 8,
         fontSize: 18,
-        fontWeight: 600
+        fontWeight: 600,
     }),
     placeholder: provided => ({
         ...provided,
         padding: 8,
         fontSize: 18,
-        fontWeight: 600
+        fontWeight: 600,
+        color: '#ffffff',
     })
 };

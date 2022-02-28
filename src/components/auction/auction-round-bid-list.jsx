@@ -19,7 +19,7 @@ export default function AuctionRoundBidList() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
-    console.log(currentRoundBidList)
+    
     const loadingData = !(
         currentRoundBidList &&
         auction.currentRoundBidList &&
@@ -69,6 +69,7 @@ export default function AuctionRoundBidList() {
                 <CustomSpinner />
             </div>
         )
+
     return (
         <>
             <Tabs className="statistics-tab" selectedIndex={0}>
