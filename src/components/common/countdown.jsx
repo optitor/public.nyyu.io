@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { numberWithLength } from "../../utilities/number"
 
-const CountDown = ({ start, end }) => {
+const CountDown = ({ deadline }) => {
     const [curTime, setCurTime] = useState({
         hours: 0,
         minutes: 0,
@@ -21,8 +21,8 @@ const CountDown = ({ start, end }) => {
 
     useEffect(() => {
         const id = setInterval(() => {
-            start = new Date().getTime()
-            const difference = end - start
+            const currentTimeMilliSeconds = new Date().getTime()
+            const difference = Math.abs(deadline - currentTimeMilliSeconds)
             msToTime(difference)
         }, 1000)
         return () => {
