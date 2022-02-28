@@ -176,10 +176,6 @@ const IndexPage = () => {
         </div>
     )
 
-    // Methods
-    const placeABidButtonClick = () =>
-        auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
-
     // Render
     if (loading) return <Loading />
     return (
