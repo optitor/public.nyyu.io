@@ -37,6 +37,10 @@ const IndexPage = () => {
     const auctionStart = currentRound?.auction?.startedAt
     const auctionEnd = currentRound?.auction?.endedAt
 
+    // Methods
+    const placeABidButtonClick = () =>
+        auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
+
     const auctionContent = (
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <h3 className="home-title d-sm-block d-none">
@@ -100,10 +104,6 @@ const IndexPage = () => {
     const presaleContent = auctionContent
 
     const noContent = <></>
-
-    // Methods
-    const placeABidButtonClick = () =>
-        auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
 
     // Render
     if (loading) return <Loading />
