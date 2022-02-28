@@ -174,15 +174,6 @@
                 }
             }
         }
-        .verify-delete {
-            display: flex;
-            justify-content: space-between;
-            .delete-account-link {
-                color: red;
-                cursor: pointer;
-                text-decoration: underline;
-            }
-        }
         .account-details,
         .tier-details {
             h4 {
@@ -515,6 +506,7 @@
 
 .pwd-modal {
     max-width: 539px;
+    border: none;
     &__header {
         display: flex;
         justify-content: space-between;
@@ -543,6 +535,13 @@
             line-height: 22px;
             padding: 15px 95px;
         }
+    }
+    .form-check-input {
+        border: 1px solid #ffffff;
+        background-color: $black;
+        width: 18px;
+        height: 18px;
+        border-radius: unset;
     }
     .form {
         padding: 18px 51px;

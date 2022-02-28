@@ -56,8 +56,8 @@
         }
 
         .timeframe-bar {
-            margin-top: 50px;
             background: linear-gradient(270deg, #23c865 0%, #23c865 35.94%, #e8503a 57.81%);
+            margin-top: 0px;
             .timeleft {
                 &__value {
                     font-weight: 500;
@@ -100,7 +100,7 @@
                 .react-tabs__tab-list {
                     display: flex;
                     justify-content: space-between;
-                    border-bottom: 2px solid #464646;
+                    border-bottom: none;
                     .react-tabs__tab {
                         font-weight: 600;
                         font-size: 14px;
@@ -127,9 +127,6 @@
             }
             .round-tab {
                 margin-top: 16px;
-                @include mq("tablet", max) {
-                    display: none;
-                }
                 .react-tabs__tab-list {
                     .react-tabs__tab {
                         display: flex;
@@ -173,7 +170,7 @@
                 .react-tabs__tab-list {
                     display: flex;
                     justify-content: space-between;
-                    border-bottom: 2px solid #464646;
+                    border-bottom: none;
                     .react-tabs__tab {
                         width: 50%;
                     }
@@ -204,15 +201,11 @@
                             font-size: 12px;
                             line-height: 141.4%;
                             letter-spacing: 0.03em;
+                            border-bottom: 1px solid #525252;
                         }
                         td {
                             font-size: 16px;
                             line-height: 141.4%;
-                        }
-                        tr {
-                            display: flex;
-                            justify-content: space-between;
-                            padding: 3px 0;
                             border-bottom: 1px solid #525252;
                         }
                     }
@@ -246,7 +239,6 @@
             &__bottom {
                 position: absolute;
                 width: calc(100% - 70px);
-                top: 373px;
                 @include mq("phone", max) {
                     position: relative;
                     bottom: unset;
@@ -262,8 +254,8 @@
 
             .place-bid {
                 display: none;
-                margin-top: 65px;
-                margin-left: 43px;
+                margin-top: 58px;
+                margin-left: 50px;
                 @include mq("laptop") {
                     display: block;
                 }
@@ -350,9 +342,10 @@
     }
     .range-label {
         font-weight: bold;
-        font-size: 30px;
-        line-height: 37px;
+        font-size: 24px;
+        line-height: 29px;
         text-transform: uppercase;
+        margin-bottom: 21px;
     }
     .range-input,
     .total-input {

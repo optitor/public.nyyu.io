@@ -179,14 +179,13 @@
             .css-319lph-ValueContainer {
                 padding: 0;
             }
-            .css-6j8wv5-Input {
-                display: none;
-            }
         }
+
         .cryptocoin-tab {
             button {
                 font-size: 18px;
                 width: 300px;
+                height: 46px;
             }
             .cryptocoin-select {
                 margin-bottom: 8px;
@@ -229,7 +228,7 @@
                         font-size: 18px !important;
                         line-height: 22px !important;
                         text-transform: uppercase !important;
-                        color: white !important;
+                        color: white;
                         @include mq("phone", max) {
                             display: none;
                         }
@@ -242,6 +241,7 @@
                 justify-content: space-between;
                 background-color: white;
                 padding: 13px;
+                margin-top: 8px;
                 cursor: pointer;
                 code {
                     font-family: "Montserrat";
@@ -257,10 +257,18 @@
                     }
                 }
             }
+            p.inform {
+                font-size: 14px;
+                color: #919191;
+                margin-top: 12px;
+                span {
+                    color: $green;
+                }
+            }
             .qr-code {
                 text-align: center;
-                width: 110px;
-                height: 110px;
+                width: 120px;
+                height: 120px;
                 margin-left: 18px;
                 flex-shrink: 0;
                 img {
@@ -296,9 +304,16 @@
                     }
                 }
                 .css-1pahdxg-control {
-                    border: none;
+                    // border: none;
                     @include mq("laptop", max) {
                         border: 1px solid white;
+                    }
+                    .wallet-select__value {
+                        color: white;
+                        text-transform: uppercase;
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 22px;
                     }
                 }
                 .css-26l3qy-menu {
@@ -422,7 +437,17 @@
                 letter-spacing: -0.01em;
                 font-size: 14px;
                 line-height: 90%;
-                color: #ffffff;
+                color: dimgray;
+            }
+            &__detail {
+                letter-spacing: -0.01em;
+                font-size: 14px;
+                line-height: 90%;
+                color: lightgray;
+            }
+            &-coinpayment {
+                padding: 40px 0 30px;
+                border-bottom: 1px solid #ffffff;
             }
         }
         .order-total {
@@ -564,6 +589,22 @@
             @include mq("phone", max) {
                 display: block;
                 width: 100%;
+            }
+        }
+        .show_value {
+            height: 48px;
+            border: 1px solid white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .coin_value {
+                font-size: 20px;
+                font-weight: 600;
+                padding-left: 20px;
+            }
+            .order_value {
+                color: dimgray;
+                padding-right: 10px;
             }
         }
         @include mq("phone", max) {

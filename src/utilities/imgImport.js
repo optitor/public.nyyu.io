@@ -32,9 +32,13 @@ import btc from "../images/btc.svg"
 import bch from "../images/bch.svg"
 import dai from "../images/dai.svg"
 import ltc from "../images/ltc.svg"
-import doge from "../images/doge.svg"
 import usdc from "../images/usdc.svg"
 import volt from "../images/volt.svg"
+import usdt from '../images/usdt.svg'
+import sol from '../images/sol.svg'
+import shib from '../images/shib.svg'
+import doge from '../images/doge.svg'
+import bnb from '../images/bnb.svg'
 import nickToken from "../images/nickToken.svg";
 
 import ndb from "../images/ndb.svg"
@@ -107,6 +111,16 @@ import greenCoin from "../images/green-coin.svg"
 import questionMark from "../images/icons/question-mark.svg"
 import chatButton from "../images/icons/chat.svg"
 import glotbIcon from "../images/support/globe.svg"
+import attachmentIcon from "../images/support/attachment.svg"
+import menuIcon from "../images/support/menu.svg"
+import greenCup from "../images/icons/green-cup.svg"
+
+import plaid from "../images/plaid.svg"
+import paypalFiat from "../images/paypal-fiat.svg"
+import stripe from "../images/stripe.svg"
+
+import certik from "../images/home/certik.svg"
+import munichre from "../images/home/munichre.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -145,11 +159,15 @@ export const BCH = bch
 export const DAI = dai
 export const USDC = usdc
 export const LTC = ltc
-export const DOGE = doge
 export const Copy = copy
 export const Copy2 = copy2
 export const NDB = ndb
 export const VOLT = volt
+export const USDT = usdt
+export const SOL = sol
+export const SHIB = shib
+export const DOGE = doge
+export const BNB = bnb
 export const Airdrop = airdrop
 export const NickToken = nickToken
 
@@ -212,3 +230,13 @@ export const GreenCoin = greenCoin
 export const QuestionMark = questionMark
 export const ChatButton = chatButton
 export const GloabIcon = glotbIcon
+export const AttachmentIcon = attachmentIcon
+export const MenuIcon = menuIcon
+
+export const Plaid = plaid
+export const PaypalFiat = paypalFiat
+export const Stripe = stripe
+export const GreenCup = greenCup
+
+export const Certik = certik
+export const MunichRE = munichre

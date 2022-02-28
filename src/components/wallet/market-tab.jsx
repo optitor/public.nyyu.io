@@ -10,7 +10,7 @@ import ReactECharts from "echarts-for-react"
 import { cryptoSymbol } from 'crypto-symbol';
 import _ from 'lodash';
 import {NickToken} from "./../../utilities/imgImport";
-import Loading from "./../admin/shared/Loading";
+import Skeleton from '@mui/material/Skeleton';
 
 const QUOTE = "USDT"
 
@@ -24,7 +24,7 @@ const RED = "#F6361A"
 
 const { get } = cryptoSymbol({})
 const cryptoSymbolList = get().SNPair;
-const REFRESH_TIME = 15;
+const REFRESH_TIME = 30;
 
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
@@ -73,16 +73,16 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <tr onClick={doAction}>
+        <tr>
             <td className="d-flex align-items-start ps-2">
-                <div>
+                <div className="star_selected" onClick={doAction}>
                     <Icon
                         icon="bx:bxs-star"
                         className={`star-checkbox ${favours[data.symbol]? "txt-green" : "txt-grey"}`}
                     />
                 </div>
                 <img src={icons[data.symbol]?.icon?? NickToken} alt="coin" className="me-2" width="30" />
-                <div>
+                <div style={{width: '100%', paddingRight: 20}}>
                     <p className="coin-abbr">{data.symbol}</p>
                     <p className="coin-name">{data.name}</p>
                 </div>
@@ -100,38 +100,42 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                 </p>
             </td>
             <td className="laptop-not price-chart">
-                <ReactECharts
-                    option={{
-                        color: percent >= 0 ? GREEN : RED,
-                        backgroundColor: "transparent",
-                        xAxis: {
-                            type: "category",
-                            show: false,
-                        },
-                        yAxis: {
-                            type: "value",
-                            show: false,
-                            min: min,
-                        },
-                        series: [
-                            {
-                                data: chart,
-                                type: "line",
-                                smooth: true,
-                                showSymbol: false,
+                {
+                    _.isEmpty(chart)?
+                    <Skeleton variant="text" animation="wave" sx={{ bgcolor: '#d3d3d353' }}/>:
+                    <ReactECharts
+                        option={{
+                            color: percent >= 0 ? GREEN : RED,
+                            backgroundColor: "transparent",
+                            xAxis: {
+                                type: "category",
+                                show: false,
                             },
-                        ],
-                        grid: {
-                            show: false,
-                            top: "10%",
-                            bottom: "10%",
-                            left: "0",
-                            right: "0",
-                        },
-                    }}
-                    style={{ height: "50px", width: "150px", margin: "auto !important" }}
-                    className="echarts-for-echarts"
-                />
+                            yAxis: {
+                                type: "value",
+                                show: false,
+                                min: min,
+                            },
+                            series: [
+                                {
+                                    data: chart,
+                                    type: "line",
+                                    smooth: true,
+                                    showSymbol: false,
+                                },
+                            ],
+                            grid: {
+                                show: false,
+                                top: "10%",
+                                bottom: "10%",
+                                left: "0",
+                                right: "0",
+                            },
+                        }}
+                        style={{ height: "50px", width: "150px", margin: "auto !important" }}
+                        className="echarts-for-echarts"
+                    />
+                }
             </td>
             <td className="mobile-not text-center">{!volume ? '' : '$'+volume}</td>
         </tr>
@@ -139,9 +143,9 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 }
 const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
     return (
-        <tr onClick={doAction}>
+        <tr>
             <td className="d-flex align-items-start ps-2">
-                <div>
+                <div className="star_selected" onClick={doAction}>
                     <Icon
                         icon="bx:bxs-star"
                         className={`star-checkbox ${favours[data.symbol]? "txt-green" : "txt-grey"}`}
@@ -153,11 +157,6 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
                     <p className="coin-name">{data.name}</p>
                 </div>
             </td>
-            <td className="text-center">
-                <p className="coin-price text-center"></p>
-            </td>
-            <td className="laptop-not price-chart">                
-            </td>
             <td className="mobile-not text-center"></td>
         </tr>
     )
@@ -167,7 +166,6 @@ export default function MarketTab() {
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [sortOption, setSortOption] = useState({});
-    const [loading, setLoading] = useState(false);
 
     const InitialFavours = {
         BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
@@ -191,13 +189,12 @@ export default function MarketTab() {
         });
     }, []);
 
-    const [favoursData, setFavoursData] = useState({});
+    const [favoursData, setFavoursData] = useState(InitialFavours);
 
     useDeepCompareEffect(() => {
         (async function() {
             let assets = { ...favours };
             let price = 0, percent = 0, volume = 0;
-            if(_.isEmpty(favoursData)) setLoading(true);
             
             for(const favour of Object.values(favours)) {
                 const res = await axios.get(TICKER_24hr, { params: { symbol: favour.symbol + QUOTE } });
@@ -206,12 +203,9 @@ export default function MarketTab() {
                 volume = Number(res.data.quoteVolume);
                 assets[favour.symbol] = { ...favour, price, percent, volume };
             }
-            if(_.isEmpty(favoursData)) setLoading(false);
             setFavoursData({ ...assets })
         })()
     }, [favours, favoursData])
-    // console.log(favoursData)
-    // console.log(sortOption)
 
     const set_Favourite_Crypto = item => {
         if(favours[item.symbol]) {
@@ -277,18 +271,15 @@ export default function MarketTab() {
                 </tr>
             </thead>
             <tbody>
-                {loading && <Loading />}
-                {!loading && (<>
-                    {searchValue && _.map( _.filter(cryptoList, item => 
-                        item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                        item.symbol.toLowerCase().includes(searchValue.toLowerCase())
-                    ), item => (
-                        <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
-                    ))}
-                    {!searchValue && _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
-                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
-                    ))}
-                </>)}
+                {searchValue && _.map( _.filter(cryptoList, item => 
+                    item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    item.symbol.toLowerCase().includes(searchValue.toLowerCase())
+                ), item => (
+                    <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                ))}
+                {!searchValue && _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
+                    <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                ))}
             </tbody>
         </table>
     );

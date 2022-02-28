@@ -1,32 +1,37 @@
 import React, { useReducer, useState } from "react"
 import { Link, navigate } from "gatsby"
 import validator from "validator"
-import { passwordValidatorOptions, social_links } from "../../utilities/staticData"
+import {
+    passwordValidatorOptions,
+    social_links,
+} from "../../utilities/staticData"
 import { FormInput } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
 import CustomSpinner from "../common/custom-spinner"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import { ROUTES } from "../../utilities/routes"
-import PasswordEyeIcon from "../common/password-eye-icon"
 import * as GraphQL from "../../apollo/graghqls/mutations/Auth"
 import { useMutation } from "@apollo/client"
 import VerifyMutliFA from "./verify-multiFA"
 import TwoFactorModal from "../profile/two-factor-modal"
 
 const Signin = ({ error }) => {
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        email: "",
-        pwd: "",
-        remember: false,
-        emailError: "",
-        pwdError: "",
-        authError: false,
-        pwdVisible: false,
-        tempToken: "",
-        twoStep: [],
-        tfaOpen: false,
-    })
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            email: "",
+            pwd: "",
+            remember: false,
+            emailError: "",
+            pwdError: "",
+            authError: false,
+            pwdVisible: false,
+            tempToken: "",
+            twoStep: [],
+            tfaOpen: false,
+        }
+    )
 
     const {
         email,
@@ -46,7 +51,10 @@ const Signin = ({ error }) => {
     const [signinMutation, { loading }] = useMutation(GraphQL.SIGNIN, {
         retry: 1,
         onCompleted: (data) => {
-            setState({ tempToken: data.signin.token, twoStep: data.signin.twoStep })
+            setState({
+                tempToken: data.signin.token,
+                twoStep: data.signin.twoStep,
+            })
 
             if (data.signin.status === "Failed") {
                 setState({ authError: true })
@@ -72,7 +80,10 @@ const Signin = ({ error }) => {
             setState({ emailError: "Invalid email address" })
             error = true
         }
-        if (!pwd || !validator.isStrongPassword(pwd, passwordValidatorOptions)) {
+        if (
+            !pwd ||
+            !validator.isStrongPassword(pwd, passwordValidatorOptions)
+        ) {
             setState({
                 pwdError:
                     "Password must contain at least 8 characters, including UPPER/lowercase and numbers!",
@@ -119,7 +130,9 @@ const Signin = ({ error }) => {
                                 type="text"
                                 label="Email"
                                 value={email}
-                                onChange={(e) => setState({ email: e.target.value })}
+                                onChange={(e) =>
+                                    setState({ email: e.target.value })
+                                }
                                 placeholder="Enter email"
                                 error={emailError}
                             />
@@ -129,41 +142,60 @@ const Signin = ({ error }) => {
                                 type={pwdVisible ? "text" : "password"}
                                 label="Password"
                                 value={pwd}
-                                onChange={(e) => setState({ pwd: e.target.value })}
+                                onChange={(e) =>
+                                    setState({ pwd: e.target.value })
+                                }
                                 placeholder="Enter password"
                                 error={pwdError}
                             />
-                            <PasswordEyeIcon
-                                passwordVisible={pwdVisible}
-                                setPasswordVisible={(res) => setState({ pwdVisible: res })}
-                            />
                         </div>
-                        <div className="form-group d-flex justify-content-between align-items-center mb-5">
+                        <div className="form-group d-flex justify-content-between align-items-center">
+                            <label className="d-flex align-items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value={pwdVisible}
+                                    className="form-check-input"
+                                    onChange={() =>
+                                        setState({ pwdVisible: !pwdVisible })
+                                    }
+                                />
+                                <div className="keep-me-signed-in-text">
+                                    Show password
+                                </div>
+                            </label>
+                            <Link
+                                className="txt-green forget-pwd"
+                                to={ROUTES.forgotPassword}
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
+                        <div className="form-group  mb-5">
                             <label className="d-flex align-items-center gap-2">
                                 <input
                                     type="checkbox"
                                     name="remember"
                                     value={remember}
                                     className="form-check-input"
-                                    onChange={() => setState({ remember: !remember })}
+                                    onChange={() =>
+                                        setState({ remember: !remember })
+                                    }
                                 />
                                 <div className="keep-me-signed-in-text">
                                     Keep me signed in in this device
                                 </div>
                             </label>
-                            <Link className="txt-green forget-pwd" to={ROUTES.forgotPassword}>
-                                Forgot password?
-                            </Link>
                         </div>
                         {authError && (
                             <span className="errorsapn">
-                                <FontAwesomeIcon icon={faExclamationCircle} /> {tempToken}
+                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                {tempToken}
                             </span>
                         )}
                         {error && error.split(".")[0] === "InvalidProvider" && (
                             <span className="errorsapn">
-                                <FontAwesomeIcon icon={faExclamationCircle} /> Your are already
-                                signed up with{" "}
+                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                Your are already signed up with{" "}
                                 <span className="text-uppercase errorsapn">
                                     {error.split(".")[1]}
                                 </span>
@@ -172,7 +204,8 @@ const Signin = ({ error }) => {
                         )}
                         {error && error.split(".")[0] === "error" && (
                             <span className="errorsapn">
-                                <FontAwesomeIcon icon={faExclamationCircle} /> {error.split(".")[1]}
+                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                {error.split(".")[1]}
                             </span>
                         )}
                         <button
@@ -181,10 +214,16 @@ const Signin = ({ error }) => {
                             disabled={loading}
                             onClick={signUserIn}
                         >
-                            <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                            <div
+                                className={`${
+                                    loading ? "opacity-1" : "opacity-0"
+                                }`}
+                            >
                                 <CustomSpinner />
                             </div>
-                            <div className={`${loading ? "ms-3" : "pe-4"}`}>sign in</div>
+                            <div className={`${loading ? "ms-3" : "pe-4"}`}>
+                                sign in
+                            </div>
                         </button>
                     </form>
                     <ul className="social-links">

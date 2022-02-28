@@ -14,10 +14,11 @@ const ForgotPassword = lazy(() => import("../../components/auth/forgot-password"
 const NewPassword = lazy(() => import("../../components/auth/new-password"))
 const VerifyID = lazy(() => import("../../components/auth/verify-id"))
 const VerifyCompany = lazy(() => import("../../components/auth/verify-company"))
-const Auction = lazy(() => import("../../components/auction"))
 const ChangePassword = lazy(() => import("../../components/auth/change-password"))
 const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
 const Wallet = lazy(() => import("../../components/wallet"))
+const AuctionWrapper = lazy(() => import("../../components/auction/auction-wrapper"))
+const Payment = lazy(() => import("../../components/payment"))
 
 const NotFound = lazy(() => import("./../404"))
 
@@ -28,7 +29,6 @@ const AuthRoute = ({ component: Component, location, ...rest }) => {
         navigate(`/app/profile/`, { replace: true })
         return null
     }
-
     return <Component {...rest} />
 }
 
@@ -50,11 +50,13 @@ const App = () => {
                         <ChangePassword path="change-password" />
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
-                        <Auction path="auction" />
                         <Wallet path="wallet" />
 
-                        <PrivateRoute path="/profile" component={Profile} />
+                        <PrivateRoute path="profile" component={Profile} />
                         <PrivateRoute path="select-figure" component={SelectFigure} />
+                        <PrivateRoute path="auction" component={AuctionWrapper} />
+                        <PrivateRoute path="payment" component={Payment} />
+                        
                         <NotFound default />
                     </Router>
                 </Suspense>

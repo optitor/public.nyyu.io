@@ -113,14 +113,14 @@ const FAQ = () => {
                                     </div>
                                     <div className="d-flex justify-content-md-between mt-3">
                                         <div>
-                                            <p
-                                                className="text-danger text-decoration-underline cursor-pointer"
+                                            <div
+                                                className="text-light border border-1 border-light text-center delete-account-btn mt-5"
                                                 onClick={() => setIsDeleteAccountModalOpen(true)}
                                             >
-                                                Delete account
-                                            </p>
+                                                DELETE ACCOUNT
+                                            </div>
                                         </div>
-                                        <div className="cursor-pointer position-absolute end-20px bottom-20px">
+                                        <div className="cursor-pointer position-fixed end-20px bottom-20px" style={{zIndex: 99999}}>
                                             {
                                                 !isChatModalOpen && <img
                                                     src={ChatButton}

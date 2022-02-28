@@ -22,7 +22,7 @@ export const isTokenExpired = authToken => {
 
 export const isLoggedOut = () => {
   const loggedOutTime = getLoggedOutTime()
-  return loggedOutTime && loggedOutTime <= Date.now()
+  return loggedOutTime && Date.now() >= loggedOutTime
 }
 
 

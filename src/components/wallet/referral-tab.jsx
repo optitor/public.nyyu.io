@@ -41,12 +41,12 @@ export default function ReferralTab() {
                                     width="8.83087"
                                     height="11.5384"
                                     stroke="#1E1E1E"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                 />
                                 <path
                                     d="M5 8.92285V19.9997H11.7693"
                                     stroke="#1E1E1E"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                 />
                             </svg>
                         </div>
@@ -71,12 +71,12 @@ export default function ReferralTab() {
                                     width="8.83087"
                                     height="11.5384"
                                     stroke="#1E1E1E"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                 />
                                 <path
                                     d="M5 8.92285V19.9997H11.7693"
                                     stroke="#1E1E1E"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                 />
                             </svg>
                         </div>

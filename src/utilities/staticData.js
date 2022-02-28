@@ -1457,16 +1457,16 @@ export const VerificationStepThreeDocumentTypes = [
         value: "driving_license",
     },
     {
-        label: "Utility bill",
-        value: "utility_bill",
+        label: "Employer letter",
+        value: "employer_letter",
     },
     {
         label: "Rent agreement",
         value: "rent_agreement",
     },
     {
-        label: "Employer letter",
-        value: "employer_letter",
+        label: "Utility bill",
+        value: "utility_bill",
     },
     {
         label: "Tax bill",
@@ -1476,11 +1476,7 @@ export const VerificationStepThreeDocumentTypes = [
         label: "Bank statement",
         value: "bank_statement",
     },
-    {
-        label: "Insurence agreement",
-        value: "insurance_agreement",
-    },
 ]
 
-export const CLIENT_ID = "ISUy34ab8A1BdS1brJHiPnBvo4UBsQWTKp49McJGTDkpXdmANb1644242820"
-export const SECRET = "$2y$10$yKLchUJfFQxR93lTRC7PWOEGpQNcPLqkZz8cxHhG5w2RqXtnpor2W"
+export const CLIENT_ID = "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425"
+export const SECRET = "$2y$10$501VfRCMRXitkUmuHhJCPelM5MYTdvzO3S8qlY319L9bnDdVJp24C"
