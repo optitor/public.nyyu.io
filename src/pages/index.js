@@ -44,6 +44,10 @@ const IndexPage = () => {
     const presaleStart = currentRound?.presale?.startedAt
     const presaleEnd = currentRound?.presale?.endedAt
 
+    // Methods
+    const placeABidButtonClick = () =>
+        auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
+
     const auctionContent = (
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <h3 className="home-title d-sm-block d-none">
@@ -200,7 +204,7 @@ const IndexPage = () => {
                                 : currentRound.presale
                                 ? presaleContent
                                 : noContent}
-                            {/* {noContent} */}
+                            {noContent}
                             <div className="col-md-1 d-none d-sm-block"></div>
                             <div className="right-part col-md-5 d-none d-sm-block d-md-flex">
                                 <img
