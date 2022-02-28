@@ -5,3 +5,13 @@ export const GET_EXCHANGE_RATE = gql`
         getExchangeRate
     }
 `
+
+export const GET_ALL_FEES = gql`
+    query {
+        getAllFees {
+            id
+            tierLevel
+            fee
+        }
+    }
+`
