@@ -382,7 +382,10 @@ const customSelectStyles = {
         fontWeight: 500,
         backgroundColor: state.isSelected? '#000000': undefined,
         borderBottom: '1px solid dimgrey',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        ':hover': {
+            backgroundColor: 'inherit'
+        }
     }),
     control: (provided) => ({
       ...provided,
