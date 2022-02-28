@@ -79,7 +79,7 @@ const { Option } = components
 const SelectOption = (props) => {
     const { data } = props;
     return (
-        <Option {...props} style={{borderBottom: data.value === 'SOL'? '': '1px solid dimgrey'}}>
+        <Option {...props}>
             <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
                 <img
                     src={data.icon}
@@ -368,6 +368,11 @@ const customSelectWithIconStyles = {
             backgroundColor: 'inherit'
         }
     }),
+    menuList: provided => ({
+        ...provided,
+        margin: 0,
+        padding: 0
+    })
 };
 
 const customSelectStyles = {
@@ -376,7 +381,11 @@ const customSelectStyles = {
         color: 'white',
         fontWeight: 500,
         backgroundColor: state.isSelected? '#000000': undefined,
-        cursor: 'pointer'
+        borderBottom: '1px solid dimgrey',
+        cursor: 'pointer',
+        ':hover': {
+            backgroundColor: 'inherit'
+        }
     }),
     control: (provided) => ({
       ...provided,
