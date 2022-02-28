@@ -11,7 +11,7 @@ import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
 import { GET_BID } from "../../apollo/graghqls/querys/Auction"
 
 export default function AuctionRoundBidList() {
-    const currentUser = useSelector(state => state.auth.user)
+    const currentUser = useSelector((state) => state.auth.user)
     // Containers
     const auction = useAuction()
     const { auctions, currentRoundNumber } = auction
@@ -19,7 +19,6 @@ export default function AuctionRoundBidList() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
-    console.log(currentRoundBidList)
     const loadingData = !(
         currentRoundBidList &&
         auction.currentRoundBidList &&
@@ -34,14 +33,21 @@ export default function AuctionRoundBidList() {
         onCompleted: (data) => {
             let list = _.orderBy(
                 data.getBidListByRound,
-                ['ranking', 'tokenPrice'],
-                ['asc', 'desc']
-            );
-            list = list.map(item => ({ ...item, totalAmount: item.tokenPrice * item.tokenAmount }));
+                ["ranking", "tokenPrice"],
+                ["asc", "desc"]
+            )
+            list = list.map((item) => ({
+                ...item,
+                totalAmount: item.tokenPrice * item.tokenAmount,
+            }))
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
         },
         onError: (error) => console.log(error),
+        fetchPolicy: "no-cache",
+        errorPolicy: "ignore",
+        pollInterval: 3000,
+        notifyOnNetworkStatusChange: true,
     })
 
     useQuery(GET_BID, {
@@ -87,7 +93,15 @@ export default function AuctionRoundBidList() {
                         </thead>
                         <tbody>
                             {currentRoundBidList.map((item, index) => (
-                                <tr key={index} style={{fontWeight: currentUser?.id === item.userId? 'bold': 'unset'}}>
+                                <tr
+                                    key={index}
+                                    style={{
+                                        fontWeight:
+                                            currentUser?.id === item.userId
+                                                ? "bold"
+                                                : "unset",
+                                    }}
+                                >
                                     <td className="border-0 ps-6px py-2">
                                         {index + 1}
                                     </td>
