@@ -79,7 +79,7 @@ const { Option } = components
 const SelectOption = (props) => {
     const { data } = props;
     return (
-        <Option {...props}>
+        <Option {...props} style={{borderBottom: data.value === 'SOL'? '': '1px solid dimgrey'}}>
             <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
                 <img
                     src={data.icon}
@@ -222,6 +222,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                     setCoin(v)
                                     setNetwork(null)
                                     setDepositAddress('')
+                                    setPaymentId(null)
                                 }}
                                 components={{
                                     Option: SelectOption,
@@ -360,7 +361,7 @@ const customSelectWithIconStyles = {
     }),
     option: (provided, state) => ({
         ...provided,
-        backgroundColor: state.isSelected? '#23c865': undefined,
+        backgroundColor: state.isSelected? '#000000': undefined,
         borderBottom: '1px solid dimgrey',
         cursor: 'pointer',
         ':hover': {
@@ -374,8 +375,7 @@ const customSelectStyles = {
         ...provided,
         color: 'white',
         fontWeight: 500,
-        backgroundColor: state.isSelected? '#23c865': undefined,
-        borderBottom: '1px solid dimgrey',
+        backgroundColor: state.isSelected? '#000000': undefined,
         cursor: 'pointer'
     }),
     control: (provided) => ({
@@ -390,6 +390,11 @@ const customSelectStyles = {
         backgroundColor: '#1e1e1e',
         border: '1px solid white',
         borderRadius: 0,
+        padding: 0
+    }),
+    menuList: provided => ({
+        ...provided,
+        margin: 0,
         padding: 0
     }),
     singleValue: provided => ({
