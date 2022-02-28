@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react"
-import { numberWithLength, getSecTomorrow } from "../../utilities/number"
+import { numberWithLength } from "../../utilities/number"
 
-const CountDown = () => {
+const CountDown = ({ start, end }) => {
     const [curTime, setCurTime] = useState({
         hours: 0,
         minutes: 0,
         seconds: 0,
     })
+
+    const msToTime = (difference) => {
+        const seconds = Math.floor((difference / 1000) % 60)
+        const minutes = Math.floor((difference / (1000 * 60)) % 60)
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
+        setCurTime({
+            hours: hours < 10 ? "0" + hours : hours,
+            minutes: minutes < 10 ? "0" + minutes : minutes,
+            seconds: seconds < 10 ? "0" + seconds : seconds,
+        })
+    }
+
     useEffect(() => {
         const id = setInterval(() => {
-            setCurTime({
-                hours: parseInt(getSecTomorrow() / (60 * 60)),
-                minutes: parseInt((getSecTomorrow() % (60 * 60)) / 60),
-                seconds: parseInt(getSecTomorrow() % 60),
-            })
+            start = new Date().getTime()
+            const difference = end - start
+            msToTime(difference)
         }, 1000)
         return () => {
             clearInterval(id)
