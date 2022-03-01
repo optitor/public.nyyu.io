@@ -120,9 +120,14 @@ const IndexPage = () => {
                 <CountDownPending deadline={auctionStart} />
             </h3>
             <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
-                <div className="mb-3">
-                    <span className="txt-green">round {auctionRound - 1}</span>{" "}
-                    ended
+                <div className="mb-3 fs-36px">
+                    <div className="mb-3">
+                        <span className="txt-green">
+                            round {auctionRound - 1}
+                        </span>{" "}
+                        ended
+                    </div>
+                    <div>next round starts</div>
                 </div>
                 <CountDownPending deadline={auctionStart} />
             </h3>

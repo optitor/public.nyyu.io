@@ -158,13 +158,9 @@
             font-size: 72px;
             line-height: 92px;
             letter-spacing: 0.05em;
-            @include mq("tablet", max) {
-                font-size: 37.8092px;
-                line-height: 46px;
-            }
             @include mq("phone", max) {
-                font-size: 64px;
-                line-height: 78px;
+                font-size: 58px;
+                line-height: 64px;
                 letter-spacing: -0.02em;
             }
             &-text {
@@ -174,12 +170,8 @@
                 letter-spacing: -0.02em;
                 text-transform: uppercase;
                 color: #8f8f8f;
-                @include mq("tablet", max) {
-                    font-size: 14x;
-                    line-height: 15px;
-                }
-                @include mq("mobile", max) {
-                    font-size: 17x;
+                @include mq("phone", max) {
+                    font-size: 17px;
                     line-height: 15px;
                 }
             }
