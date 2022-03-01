@@ -157,7 +157,7 @@ const IndexPage = () => {
         </div>
     )
 
-    const presaleContent = (
+    const presaleStartedContent = (
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <h3 className="home-title d-sm-block d-none">
                 <div>
@@ -193,6 +193,58 @@ const IndexPage = () => {
                         onClick={placeABidButtonClick}
                     >
                         place a bid
+                    </button>
+                    <br />
+                    <div
+                        className="learn-more mt-3 mt-sm-0"
+                        onClick={() => setIsModalOpen(true)}
+                        onKeyDown={() => setIsModalOpen(true)}
+                        role="presentation"
+                    >
+                        Refer to friends
+                    </div>
+                </div>
+                <div className="mx-auto col-lg-8 mt-5 col-10">
+                    <div className="d-flex align-items-center justify-content-center">
+                        <div className="mt-9px">
+                            <img src={Certik} alt="audited by certik" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+
+    const presalePendingContent = (
+        <div className="left-part col-md-6 px-0 pe-sm-auto">
+            <h3 className="home-title d-sm-block d-none text-center pe-0">
+                <div className="mb-4">
+                    <div>
+                        <span className="txt-green">
+                            round {presaleRound - 1}
+                        </span>{" "}
+                        ended
+                    </div>
+                    <div>next round starts</div>
+                </div>
+                <CountDownPending deadline={presaleStart} />
+            </h3>
+            <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
+                <div className="mb-3 fs-36px">
+                    <div className="mb-3">
+                        <span className="txt-green">
+                            round {presaleRound - 1}
+                        </span>{" "}
+                        ended
+                    </div>
+                    <div>next round starts</div>
+                </div>
+                <CountDownPending deadline={presaleStart} />
+            </h3>
+            <div className="tokens-lower-part mt-sm-0">
+                <div className="cta mt-sm-0 px-1 px-sm-0">
+                    <button className="btn btn-green white-space-nowrap">
+                        get notify
                     </button>
                     <br />
                     <div
@@ -251,7 +303,9 @@ const IndexPage = () => {
                                     ? auctionPendingContent
                                     : auctionStartedContent
                                 : currentRound.presale
-                                ? presaleContent
+                                ? presaleStatus === 1
+                                    ? presalePendingContent
+                                    : presaleStartedContent
                                 : noContent}
                             <div className="col-md-1 d-none d-sm-block"></div>
                             <div className="right-part col-md-5 d-none d-sm-block d-md-flex">
