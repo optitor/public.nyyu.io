@@ -25,6 +25,7 @@ const UserTiersPanel = () => {
             <TableHead>
                 <div className='name'>TIER NAME</div>
                 <div className='threshold'>THRESHOLD</div>
+                <div className='txnFee'>TRANSACETION FEE</div>
                 <div className='edit'></div>
             </TableHead>
             {loading?
@@ -55,8 +56,9 @@ const TableHead = styled.div`
     &>div {
         padding: 8px 2px;
     }
-    &>div.name {width: 50%; padding-left: 16px;}
-    &>div.threshold {width: 40%;}
+    &>div.name {width: 33%; padding-left: 16px;}
+    &>div.threshold {width: 25%;}
+    &>div.txnFee {width: 35%;}
     &>div.edit {width: 10%}
     @media screen and (max-width: ${device['phone']}){
         &>div.edit {width: 0;}

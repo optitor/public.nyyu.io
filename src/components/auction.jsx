@@ -1,7 +1,7 @@
 import Seo from "./seo"
 import Header from "./header"
 import { Tabs } from "react-tabs"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Loading from "./common/Loading"
 import ReactTooltip from "react-tooltip"
 import { useSelector } from "react-redux"
@@ -13,7 +13,8 @@ import AuctionRoundDetails from "./auction/auction-round-details"
 import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData"
 import AuctionPlaceBidModal from "./auction/auction-place-bid-modal"
 import AuctionRoundNavigator from "./auction/auction-round-navigator"
-import { useEffect } from "react"
+import AuctionChart from "./chart"
+import { PillarChartIcon, BidIcon } from './../utilities/imgImport'
 
 const Auction = () => {
     const auction = useAuction()
@@ -23,6 +24,7 @@ const Auction = () => {
         (auction) => auction.round === currentRoundNumber
     )[0]
     const [loading, setLoading] = useState(true)
+    const [isBidStep, setIsBidStep] = useState(true);
 
     useEffect(() => {
         if (auction.loading === false) {
@@ -90,25 +92,43 @@ const Auction = () => {
                             </div>
                             <AuctionRoundDetails />
                             {current?.status !== 3 && (
-                                <div className="d-block d-sm-none">
-                                    <div
-                                        className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
-                                        onClick={() =>
-                                            auction.setBidModal(true)
-                                        }
+                                <>
+                                    <div className="d-block d-sm-none">
+                                        <div
+                                            className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
+                                            onClick={() =>
+                                                auction.setBidModal(true)
+                                            }
+                                        >
+                                            place bid
+                                        </div>
+                                    </div>
+                                    <AuctionPlaceBidModal />
+                                </>
+                            )}
+                        </div>
+                        <div className="auction-right col-lg-8 col-md-7">
+                            {current?.status !== 3 && (
+                                <div id='switch_btns'>
+                                    <div className="switch_btn"
+                                        onClick={() => setIsBidStep(false)}
+                                        style={{opacity: isBidStep? 0.4: 1}}
                                     >
-                                        place bid
+                                        <img src={PillarChartIcon} alt="chart" />
+                                    </div>
+                                    <div className="switch_btn"
+                                        onClick={() => setIsBidStep(true)}
+                                        style={{opacity: isBidStep? 1: 0.4}}
+                                    >
+                                        <img src={BidIcon} alt="bid" />
                                     </div>
                                 </div>
                             )}
-                        </div>
-
-                        <div className="auction-right col-lg-8 col-md-7">
-                            <AuctionPlaceBid />
+                            {isBidStep && <AuctionPlaceBid />}
+                            {!isBidStep && <AuctionChart />}
                         </div>
                     </div>
                 </section>
-                {current?.status !== 3 && <AuctionPlaceBidModal />}
             </main>
         </>
     )
