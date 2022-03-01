@@ -28,7 +28,7 @@ const CountDownPending = ({ deadline }) => {
         return () => {
             clearInterval(id)
         }
-    }, [])
+    }, [deadline])
     return (
         <div className="countdown-pending-wrapper d-flex justify-content-center">
             <div className="time-section">

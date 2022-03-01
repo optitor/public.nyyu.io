@@ -28,7 +28,7 @@ const CountDown = ({ deadline, pending }) => {
         return () => {
             clearInterval(id)
         }
-    }, [])
+    }, [deadline])
     return (
         <div
             className={`countdown-wrapper d-flex ${
