@@ -20,6 +20,7 @@ export default function AuctionRoundBidList() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
+    const pollIntervalValue = 10000
 
     const loadingData = !(
         currentRoundBidList &&
@@ -28,7 +29,7 @@ export default function AuctionRoundBidList() {
     )
 
     // Webservices
-    useQuery(GET_BIDLIST_BY_ROUND, {
+    const { startPolling, stopPolling } = useQuery(GET_BIDLIST_BY_ROUND, {
         variables: {
             round: currentRoundNumber,
         },
@@ -48,7 +49,7 @@ export default function AuctionRoundBidList() {
         onError: (error) => console.log(error),
         fetchPolicy: "no-cache",
         errorPolicy: "ignore",
-        ...(current.status === 2 && { pollInterval: 10000 }),
+        pollInterval: pollIntervalValue,
         notifyOnNetworkStatusChange: true,
     })
 
@@ -69,6 +70,11 @@ export default function AuctionRoundBidList() {
             return auction.setIsBid(false)
         },
     })
+
+    useEffect(() => {
+        if (current.status === 2) return startPolling(pollIntervalValue)
+        return stopPolling()
+    }, [current])
 
     // Render
     if (loadingData)
