@@ -9,6 +9,7 @@ import { GreenCup } from "../../utilities/imgImport"
 import { Currencies } from "../../utilities/staticData"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
 import { GET_BID } from "../../apollo/graghqls/querys/Auction"
+import { useEffect } from "react"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
@@ -47,7 +48,7 @@ export default function AuctionRoundBidList() {
         onError: (error) => console.log(error),
         fetchPolicy: "no-cache",
         errorPolicy: "ignore",
-        pollInterval: 3000,
+        ...(current.status === 2 && { pollInterval: 10000 }),
         notifyOnNetworkStatusChange: true,
     })
 
