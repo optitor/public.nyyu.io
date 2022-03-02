@@ -179,7 +179,7 @@ const CardSection = ({ amount, round }) => {
     useEffect(() => {
         if (successfulPayment !== null)
             if (timeLeft === 0) navigate(ROUTES.auction)
-    }, [timeLeft])
+    }, [timeLeft, successfulPayment])
 
     // Render
     return successfulPayment === true ? (
@@ -357,6 +357,7 @@ const CardSection = ({ amount, round }) => {
 
                     <img
                         src={Qmark}
+                        alt="Question mark"
                         data-tip
                         data-for="question-mark-tooltip"
                         className="ms-2 cursor-pointer text-light"

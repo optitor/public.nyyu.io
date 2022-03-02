@@ -4,7 +4,6 @@ import { Tabs } from "react-tabs"
 import React, { useState } from "react"
 import Loading from "./common/Loading"
 import ReactTooltip from "react-tooltip"
-import { useSelector } from "react-redux"
 import { Qmark } from "../utilities/imgImport"
 import { useAuction } from "./auction/auction-context"
 import AuctionPlaceBid from "./auction/auction-place-bid"
@@ -17,7 +16,6 @@ import { useEffect } from "react"
 
 const Auction = () => {
     const auction = useAuction()
-    const currencyId = useSelector((state) => state?.placeBid.currencyId)
     const { auctions, presales, currentRound, currentRoundNumber } = auction
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
@@ -38,7 +36,15 @@ const Auction = () => {
             }
             setLoading(false)
         }
-    }, [auction.loading])
+    }, [
+        auction.loading,
+        auctions,
+        auction,
+        currentRound?.auction,
+        currentRound?.presale,
+        auctions?.length,
+        presales?.length,
+    ])
 
     if (loading) return <Loading />
     return (
@@ -91,14 +97,14 @@ const Auction = () => {
                             <AuctionRoundDetails />
                             {current?.status !== 3 && (
                                 <div className="d-block d-sm-none">
-                                    <div
+                                    <button
                                         className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
                                         onClick={() =>
                                             auction.setBidModal(true)
                                         }
                                     >
                                         place bid
-                                    </div>
+                                    </button>
                                 </div>
                             )}
                         </div>

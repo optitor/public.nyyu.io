@@ -78,7 +78,7 @@ export default function AuctionPlaceBid() {
                 setPrice(isBid ? current.placeBid : getBid.tokenPrice)
                 setAmount(isBid ? 1 : getBid.tokenAmount)
             }
-    }, [getBid])
+    }, [getBid, current.placeBid, isBid])
 
     // Render
     return (

@@ -74,7 +74,7 @@ export default function AuctionRoundBidList() {
     useEffect(() => {
         if (current.status === 2) return startPolling(pollIntervalValue)
         return stopPolling()
-    }, [current])
+    }, [current, startPolling, stopPolling])
 
     // Render
     if (loadingData)
