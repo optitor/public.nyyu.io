@@ -50,10 +50,10 @@ const App = () => {
                         <ChangePassword path="change-password" />
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
-                        <Wallet path="wallet" />
 
                         <PrivateRoute path="profile" component={Profile} />
                         <PrivateRoute path="select-figure" component={SelectFigure} />
+                        <PrivateRoute path="wallet" component={Wallet} />
                         <PrivateRoute path="auction" component={AuctionWrapper} />
                         <PrivateRoute path="payment" component={Payment} />
                         

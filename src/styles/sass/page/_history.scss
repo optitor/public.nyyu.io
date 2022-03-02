@@ -541,7 +541,7 @@
             width: 100%;
         }
         div.button-group {
-            margin-top: 50px;
+            margin-top: 30px;
             display: flex;
             justify-content: space-between;
             button.btn {
@@ -556,71 +556,93 @@
             }
         }
         div.select_div {
-            margin-top: 20px;
-            p.subtitle {
-                color: dimgray;
-            }
+            margin-top: 15px;
         }
-        button.confirm {
-            margin-top: 40px;
-            color: black;
-            background-color: white;
-            width: 100%;
-            border-radius: 0;
-            font-size: 18px;
-            font-weight: 600;
-            &:hover {
-                color: #03b94c;
-            }
+        p.subtitle {
+            color: dimgray;
+            margin-bottom: 3px;
+        }
+        button.btn {
+            height: 47px;
         }
         div.address_div {
-            p.subtitle {
-                color: dimgray;
-            }
-            div.clipboard {
-                background-color: white;
+            div.clip_div {
                 display: flex;
                 justify-content: space-between;
-                padding: 10px;
-                div.address {
-                    width: 90%;
-                    word-wrap: break-word;
-                }
-                div.copy_icon {
-                    width: 10%;
+                div.clipboard {
+                    width: 82%;
+                    background-color: white;
                     display: flex;
-                    justify-content: flex-end;
                     align-items: center;
-                    svg {
-                        font-size: 22px;
+                    justify-content: space-between;
+                    padding: 10px;
+                    div.address {
+                        width: 90%;
+                        word-wrap: break-word;
+                    }
+                    div.copy_icon {
+                        width: 10%;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        svg {
+                            font-size: 22px;
+                        }
                     }
                 }
-            }
-            div.qr_code {
-                padding: 20px;
-                img {
-                    display: block;
-                    margin: auto;
-                    width: 90px;
-                }
-            }
-            div.stats {
-                padding-top: 10px;
-                display: flex;
-                p.topic {
-                    width: 40%;
-                    color: dimgray;
-                }
-                p.content {
-                    width: 60%;
-                    text-align: right;
-                }
-                @include mq("phone", max) {
-                    flex-direction: column;
-                    p.topic,
-                    p.content {
+                div.qr_code {
+                    width: 15%;
+                    img {
+                        display: block;
+                        margin: auto;
                         width: 100%;
                     }
+                }
+                @include mq('phone', max) {
+                    flex-direction: column;
+                    div.clipboard {
+                        width: 100%;
+                        div.address {
+                            font-size: 11px;
+                        }
+                    }
+                    div.qr_code {
+                        margin: auto;
+                        width: 20%;
+                        margin-top: 10px;
+                    }
+                }
+            }
+            p.desc {
+                margin-top: 10px;
+                span {
+                    color: $green;
+                }
+            }
+            div.stats_div {
+                margin-top: 50px;
+                div.stats {
+                    padding-top: 10px;
+                    display: flex;
+                    p.topic {
+                        width: 40%;
+                        color: dimgray;
+                    }
+                    p.content {
+                        width: 60%;
+                        text-align: right;
+                    }
+                    @include mq("phone", max) {
+                        flex-direction: column;
+                        p.topic,
+                        p.content {
+                            width: 100%;
+                        }
+                    }
+                }
+                hr {
+                    color: white;
+                    margin-top: 25px;
                 }
             }
         }

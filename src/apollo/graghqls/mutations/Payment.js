@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
 
 export const CREATE_CRYPTO_PAYMENT = gql`
     mutation CreateCryptoPaymentForAuction(
@@ -30,7 +30,7 @@ export const CREATE_CRYPTO_PAYMENT = gql`
             bidId
         }
     }
-`
+`;
 
 export const GET_DEPOSIT_ADDRESS = gql`
     mutation GetDepositAddress(
@@ -40,4 +40,30 @@ export const GET_DEPOSIT_ADDRESS = gql`
             currency: $currency
         )
     }
-`
+`;
+
+export const CREATE_CHARGE_FOR_DEPOSIT = gql`
+    mutation CreateChargeForDeposit(
+        $coin: String
+        $network: String
+        $cryptoType: String
+    ) {
+        createChargeForDeposit(
+            coin: $coin
+            network: $network
+            cryptoType: $cryptoType
+        ) {
+            id
+            userId
+            amount
+            createdAt
+            status
+            cryptoType
+            network
+            cryptoAmount
+            confirmedAt
+            depositAddress
+            coin
+        }
+    }
+`;
