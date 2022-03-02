@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { useQuery } from "@apollo/client"
-import { TabPanel, Tabs } from "react-tabs"
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import _ from "lodash"
 import { useAuction } from "./auction-context"
 import CustomSpinner from "../common/custom-spinner"
@@ -86,7 +86,10 @@ export default function AuctionRoundBidList() {
 
     return (
         <>
-            <Tabs className="statistics-tab" selectedIndex={0}>
+            <Tabs className="statistics-tab">
+                <TabList>
+                    <Tab></Tab>
+                </TabList>
                 <TabPanel>
                     <table>
                         <thead>
