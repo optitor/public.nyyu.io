@@ -1,74 +1,187 @@
-import React, { useState, useEffect, useCallback, useReducer, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import {useQuery} from '@apollo/client'
+import React, {
+    useState,
+    useEffect,
+    useCallback,
+    useReducer,
+    useMemo,
+} from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { CopyToClipboard } from "react-copy-to-clipboard"
+import { useQuery } from "@apollo/client"
 import axios from "axios"
-import _ from 'lodash'
+import _ from "lodash"
 import Select, { components } from "react-select"
-import ReactTooltip from 'react-tooltip';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ReactTooltip from "react-tooltip"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import CircularProgress from '@mui/material/CircularProgress';
-import NumberFormat from 'react-number-format';
-import { useMutation } from '@apollo/client';
-import * as Mutation from '../../apollo/graghqls/mutations/Payment';
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from '../../utilities/staticData';
+import CircularProgress from "@mui/material/CircularProgress"
+import NumberFormat from "react-number-format"
+import { useMutation } from "@apollo/client"
+import * as Mutation from "../../apollo/graghqls/mutations/Payment"
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
 import {
-    BTC, ETH, BNB, USDC, USDT, DAI, SOL, DOGE, SHIB
-} from './../../utilities/imgImport'
-import { generateQR } from '../../utilities/string';
-import { CheckBox } from '../common/FormControl';
-import { Copy } from '../../utilities/imgImport';
+    BTC,
+    ETH,
+    BNB,
+    USDC,
+    USDT,
+    DAI,
+    SOL,
+    DOGE,
+    SHIB,
+} from "./../../utilities/imgImport"
+import { generateQR } from "../../utilities/string"
+import { CheckBox } from "../common/FormControl"
+import { Copy } from "../../utilities/imgImport"
 import CustomSpinner from "../common/custom-spinner"
-import { set_Temp_Data } from './../../redux/actions/tempAction'
-import * as Query from './../../apollo/graghqls/querys/Payment'
+import { set_Temp_Data } from "./../../redux/actions/tempAction"
+import * as Query from "./../../apollo/graghqls/querys/Payment"
 
 const FOO_COINS = [
-    { value: "BTC", label: "BTC", icon: BTC, networks: [
-        { label: 'Bitcoin', value: 'BTC', network: 'BTC' },
-        // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2', network: 'BEP2' },
-        { label: 'Bitcoin/BTCB Token (BSC Chain)', value: 'BTC.BEP20', network: 'BEP20' },
-        // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN', network: 'LN' },
-    ] },
-    { value: "ETH", label: "ETH", icon: ETH, networks: [
-        { label: 'Ethereum', value: 'ETH', network: 'ERC20' },
-        // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
-        { label: 'Ethereum Token (BSC Chain)', value: 'ETH.BEP20', network: 'BEP20' },
-    ] },
-    { value: "BNB", label: "BNB", icon: BNB, networks: [
-        // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
-        { label: 'BNB Coin (BSC Chain)', value: 'BNB.BSC', network: 'BEP20' },
-        { label: 'BNB Coin (ERC-20)', value: 'BNB.ERC20', network: 'ERC20' },
-    ] },
-    { value: "USDC", label: "USDC", icon: USDC, networks: [
-        { label: 'USD Coin (ERC20)', value: 'USDC', network: 'ERC20' },
-        { label: 'USD Coin (BSC Chain)', value: 'USDC.BEP20', network: 'BEP20' },
-        { label: 'USD Coin (Tron/TRC20)', value: 'USDC.TRC20', network: 'TRC20' },
-    ] },
-    { value: "USDT", label: "USDT", icon: USDT, networks: [
-        { label: 'Tether USD (Omni Layer)', value: 'USDT', network: 'USDT' },
-        // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
-        { label: 'Tether USD (BSC Chain)', value: 'USDT.BEP20', network: 'BEP20' },
-        { label: 'Tether USD (ERC20)', value: 'USDT.ERC20', network: 'ERC20' },
-        { label: 'Tether USD (Solana)', value: 'USDT.SOL', network: 'SOL' },
-        { label: 'Tether USD (Tron/TRC20)', value: 'USDT.TRC20', network: 'TRC20' },
-        { label: 'TetherUSD (Waves Token)', value: 'USDT.Waves', network: 'Waves' },
-    ] },
-    { value: "DAI", label: "DAI", icon: DAI, networks: [
-        { label: 'Dai (ERC20)', value: 'DAI', network: 'ERC20' },
-        { label: 'Dai Token (BSC Chain)', value: 'DAI.BEP20', network: 'BEP20' },
-    ] },
-    { value: "DOGE", label: "DOGE", icon: DOGE, networks: [
-        { label: 'Dogecoin', value: 'DOGE', network: 'DOGE' },
-        { label: 'Dogecoin (BSC Chain)', value: 'DOGE.BEP20', network: 'BEP20' },
-    ] },
-    { value: "SHIB", label: "SHIB", icon: SHIB, networks: [
-        { label: 'SHIBA INU (ERC20)', value: 'SHIB', network: 'ERC20' },
-        { label: 'SHIBA INU (BSC Chain)', value: 'SHIB.BEP20', network: 'BEP20' },
-    ] },
-    { value: "SOL", label: "SOL", icon: SOL, networks: [
-        { label: 'Solana', value: 'SOL', network: 'SOL' },
-    ] },
+    {
+        value: "BTC",
+        label: "BTC",
+        icon: BTC,
+        networks: [
+            { label: "Bitcoin", value: "BTC", network: "BTC" },
+            // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2', network: 'BEP2' },
+            {
+                label: "Bitcoin/BTCB Token (BSC Chain)",
+                value: "BTC.BEP20",
+                network: "BEP20",
+            },
+            // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN', network: 'LN' },
+        ],
+    },
+    {
+        value: "ETH",
+        label: "ETH",
+        icon: ETH,
+        networks: [
+            { label: "Ethereum", value: "ETH", network: "ERC20" },
+            // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
+            {
+                label: "Ethereum Token (BSC Chain)",
+                value: "ETH.BEP20",
+                network: "BEP20",
+            },
+        ],
+    },
+    {
+        value: "BNB",
+        label: "BNB",
+        icon: BNB,
+        networks: [
+            // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
+            {
+                label: "BNB Coin (BSC Chain)",
+                value: "BNB.BSC",
+                network: "BEP20",
+            },
+            {
+                label: "BNB Coin (ERC-20)",
+                value: "BNB.ERC20",
+                network: "ERC20",
+            },
+        ],
+    },
+    {
+        value: "USDC",
+        label: "USDC",
+        icon: USDC,
+        networks: [
+            { label: "USD Coin (ERC20)", value: "USDC", network: "ERC20" },
+            {
+                label: "USD Coin (BSC Chain)",
+                value: "USDC.BEP20",
+                network: "BEP20",
+            },
+            {
+                label: "USD Coin (Tron/TRC20)",
+                value: "USDC.TRC20",
+                network: "TRC20",
+            },
+        ],
+    },
+    {
+        value: "USDT",
+        label: "USDT",
+        icon: USDT,
+        networks: [
+            {
+                label: "Tether USD (Omni Layer)",
+                value: "USDT",
+                network: "USDT",
+            },
+            // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
+            {
+                label: "Tether USD (BSC Chain)",
+                value: "USDT.BEP20",
+                network: "BEP20",
+            },
+            {
+                label: "Tether USD (ERC20)",
+                value: "USDT.ERC20",
+                network: "ERC20",
+            },
+            { label: "Tether USD (Solana)", value: "USDT.SOL", network: "SOL" },
+            {
+                label: "Tether USD (Tron/TRC20)",
+                value: "USDT.TRC20",
+                network: "TRC20",
+            },
+            {
+                label: "TetherUSD (Waves Token)",
+                value: "USDT.Waves",
+                network: "Waves",
+            },
+        ],
+    },
+    {
+        value: "DAI",
+        label: "DAI",
+        icon: DAI,
+        networks: [
+            { label: "Dai (ERC20)", value: "DAI", network: "ERC20" },
+            {
+                label: "Dai Token (BSC Chain)",
+                value: "DAI.BEP20",
+                network: "BEP20",
+            },
+        ],
+    },
+    {
+        value: "DOGE",
+        label: "DOGE",
+        icon: DOGE,
+        networks: [
+            { label: "Dogecoin", value: "DOGE", network: "DOGE" },
+            {
+                label: "Dogecoin (BSC Chain)",
+                value: "DOGE.BEP20",
+                network: "BEP20",
+            },
+        ],
+    },
+    {
+        value: "SHIB",
+        label: "SHIB",
+        icon: SHIB,
+        networks: [
+            { label: "SHIBA INU (ERC20)", value: "SHIB", network: "ERC20" },
+            {
+                label: "SHIBA INU (BSC Chain)",
+                value: "SHIB.BEP20",
+                network: "BEP20",
+            },
+        ],
+    },
+    {
+        value: "SOL",
+        label: "SOL",
+        icon: SOL,
+        networks: [{ label: "Solana", value: "SOL", network: "SOL" }],
+    },
 ]
 
 const QUOTE = "USDT"
@@ -77,7 +190,7 @@ const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
 const { Option } = components
 
 const SelectOption = (props) => {
-    const { data } = props;
+    const { data } = props
     return (
         <Option {...props}>
             <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
@@ -92,40 +205,43 @@ const SelectOption = (props) => {
     )
 }
 
-const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
-    const dispatch = useDispatch();
-    const user = useSelector(state => state.auth.user)
+const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
+    const dispatch = useDispatch()
+    const user = useSelector((state) => state.auth.user)
 
-    const [copied, setCopied] = useState(false);
+    const [copied, setCopied] = useState(false)
 
     const [fooCoins, setFooCoins] = useState([])
     const [BTCPrice, setBTCPrice] = useState(null)
     const [allFees, setAllFees] = useState({})
 
-    const loadingData = _.isEmpty(fooCoins) || !BTCPrice || _.isEmpty(allFees);
+    const loadingData = _.isEmpty(fooCoins) || !BTCPrice || _.isEmpty(allFees)
 
     const [coin, setCoin] = useState({})
     const [network, setNetwork] = useState(null)
-    const [pending, setPending] = useState(false);
-    
-    const [coinQuantity, setCoinQuantity] = useState(0);
-    
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        allow_fraction: false,
-    })
+    const [pending, setPending] = useState(false)
+
+    const [coinQuantity, setCoinQuantity] = useState(0)
+
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            allow_fraction: false,
+        }
+    )
     const { allow_fraction } = state
 
-    const [coinQRCode, setCoinQRCode] = useState("");
-    const [depositAddress, setDepositAddress] = useState('')
+    const [coinQRCode, setCoinQRCode] = useState("")
+    const [depositAddress, setDepositAddress] = useState("")
     const [paymentId, setPaymentId] = useState(null)
 
-    const networks = useMemo(() => coin.networks, [coin]);
+    const networks = useMemo(() => coin.networks, [coin])
     const transactionFee = useMemo(() => {
-        const fee = allFees[user?.tierLevel]?.fee;
-        const txnFee = bidAmount * ( 0.5 + fee ) / 100;
-        if(txnFee === NaN) return null;
-        return txnFee.toFixed(4);
-    }, [allFees, bidAmount, user ])
+        const fee = allFees[user?.tierLevel]?.fee
+        const txnFee = (bidAmount * (0.5 + fee)) / 100
+        if (txnFee === NaN) return null
+        return txnFee.toFixed(4)
+    }, [allFees, bidAmount, user])
 
     console.log(transactionFee)
 
@@ -146,41 +262,48 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
     })
 
     useQuery(Query.GET_ALL_FEES, {
-        onCompleted: data => {
-            if(data.getAllFees) {
-                const temp = _.mapKeys(data.getAllFees, 'tierLevel')
+        onCompleted: (data) => {
+            if (data.getAllFees) {
+                const temp = _.mapKeys(data.getAllFees, "tierLevel")
                 setAllFees(temp)
             }
         },
-        onError: err => {
-            console.log('get All Fees', err)
-        }
+        onError: (err) => {
+            console.log("get All Fees", err)
+        },
     })
 
     useEffect(() => {
-        (async function() {
+        ;(async function () {
             // Fetch the price of BTC
-            const { data: BTCPriceData } = await axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } });
+            const { data: BTCPriceData } = await axios.get(TICKER_24hr, {
+                params: { symbol: "BTC" + QUOTE },
+            })
             setBTCPrice(BTCPriceData.lastPrice)
-        })();
+        })()
     }, [])
 
     useEffect(() => {
-        let coinPrice = BTCPrice * coin?.detail?.rate_btc;
+        let coinPrice = BTCPrice * coin?.detail?.rate_btc
 
-        let precision = 4;
-        if(coin.value === 'BTC') precision = 9;
+        let precision = 4
+        if (coin.value === "BTC") precision = 9
 
-        let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
-        if(quantity === Infinity) quantity = null;
-        setCoinQuantity(quantity);
+        let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision))
+        if (quantity === Infinity) quantity = null
+        setCoinQuantity(quantity)
 
-        const tempData = {coinValue: quantity, coinSymbol: coin.value, paymentId, transactionFee};
-        dispatch(set_Temp_Data(tempData));
+        const tempData = {
+            coinValue: quantity,
+            coinSymbol: coin.value,
+            paymentId,
+            transactionFee,
+        }
+        dispatch(set_Temp_Data(tempData))
     }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, dispatch])
 
     useEffect(() => {
-        (async function() {
+        ;(async function () {
             if (depositAddress) {
                 const qrCode = await generateQR(depositAddress)
                 setCoinQRCode(qrCode)
@@ -189,36 +312,39 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         })()
     }, [depositAddress])
 
-    const [createCryptoPaymentMutation] = useMutation(Mutation.CREATE_CRYPTO_PAYMENT, {
-        onCompleted: data => {
-            if(data.createCryptoPaymentForAuction) {
-                const resData = data.createCryptoPaymentForAuction;
-                
-                setDepositAddress(resData?.depositAddress);
-                setPaymentId(resData?.id);
-                setPending(false);
-            }
-        },
-        onError: err => {
-            console.log('get deposit address: ', err);
-            setPending(false);
+    const [createCryptoPaymentMutation] = useMutation(
+        Mutation.CREATE_CRYPTO_PAYMENT,
+        {
+            onCompleted: (data) => {
+                if (data.createCryptoPaymentForAuction) {
+                    const resData = data.createCryptoPaymentForAuction
+
+                    setDepositAddress(resData?.depositAddress)
+                    setPaymentId(resData?.id)
+                    setPending(false)
+                }
+            },
+            onError: (err) => {
+                console.log("get deposit address: ", err)
+                setPending(false)
+            },
         }
-    })
+    )
 
     const create_Crypto_Payment = () => {
-        setPending(true);
+        setPending(true)
         const createData = {
             roundId: currentRound,
             amount: bidAmount,
             cryptoType: coin.value,
             network: network.network,
-            coin: network.value
-        };
-        
+            coin: network.value,
+        }
+
         createCryptoPaymentMutation({
-            variables: { ...createData }
-        });
-    };
+            variables: { ...createData },
+        })
+    }
 
     const handleAllowFraction = useCallback(
         (e) => {
@@ -228,11 +354,11 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         [allow_fraction]
     )
 
-    return loadingData?
-    <div className='text-center'>
-        <CustomSpinner />
-    </div>:
-    (
+    return loadingData ? (
+        <div className="text-center">
+            <CustomSpinner />
+        </div>
+    ) : (
         <div className="cryptocoin-tab">
             <div className="payment-content">
                 <div className="set-cryptocoin">
@@ -245,7 +371,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                 onChange={(v) => {
                                     setCoin(v)
                                     setNetwork(null)
-                                    setDepositAddress('')
+                                    setDepositAddress("")
                                     setPaymentId(null)
                                 }}
                                 components={{
@@ -255,21 +381,25 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                 styles={customSelectWithIconStyles}
                             />
                             <div className="w-75">
-                                <div className='show_value'>
+                                <div className="show_value">
                                     <NumberFormat
-                                        className='coin_value'
-                                        displayType={'text'}
+                                        className="coin_value"
+                                        displayType={"text"}
                                         value={coinQuantity}
                                         thousandSeparator={true}
-                                        renderText={(value, props) => <p {...props}>{value}</p>}
+                                        renderText={(value, props) => (
+                                            <p {...props}>{value}</p>
+                                        )}
                                     />
                                     <NumberFormat
-                                        className='order_value'
-                                        displayType={'text'}
+                                        className="order_value"
+                                        displayType={"text"}
                                         value={bidAmount}
                                         suffix={` USD`}
                                         thousandSeparator={true}
-                                        renderText={(value, props) => <p {...props}>~ {value}</p>}
+                                        renderText={(value, props) => (
+                                            <p {...props}>~ {value}</p>
+                                        )}
                                     />
                                 </div>
                             </div>
@@ -283,7 +413,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                         value={network}
                                         onChange={(v) => {
                                             setNetwork(v)
-                                            setDepositAddress('')
+                                            setDepositAddress("")
                                         }}
                                         styles={customSelectStyles}
                                         placeholder="SELECT NETWORK"
@@ -295,7 +425,14 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                                     onClick={create_Crypto_Payment}
                                     disabled={!network}
                                 >
-                                    {pending? <CircularProgress sx={{color: 'black'}} size={20}/>: 'get deposit address'}
+                                    {pending ? (
+                                        <CircularProgress
+                                            sx={{ color: "black" }}
+                                            size={20}
+                                        />
+                                    ) : (
+                                        "get deposit address"
+                                    )}
                                 </button>
                             </>
                         ) : (
@@ -329,8 +466,10 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                     )}
                 </div>
                 {depositAddress && (
-                    <p className='inform'>
-                        Send only <span>{coin.value}</span> to this deposit address. Ensure the network is <span>{network.label}</span>
+                    <p className="inform">
+                        Send only <span>{coin.value}</span> to this deposit
+                        address. Ensure the network is{" "}
+                        <span>{network.label}</span>
                     </p>
                 )}
                 <div className="mt-3 d-flex justify-content-between">
@@ -345,11 +484,7 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                         <div className="allow-text text-light">
                             Do you allow fraction of order completion?
                         </div>
-                        <ReactTooltip
-                            place="right"
-                            type="light"
-                            effect="solid"
-                        >
+                        <ReactTooltip place="right" type="light" effect="solid">
                             <div
                                 className="text-justify"
                                 style={{
@@ -374,83 +509,83 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default CoinPaymentsTab;
+export default CoinPaymentsTab
 
 const customSelectWithIconStyles = {
-    input: provided => ({
+    input: (provided) => ({
         ...provided,
-        position: 'absolute'
+        position: "absolute",
     }),
     option: (provided, state) => ({
         ...provided,
-        backgroundColor: state.isSelected? '#000000': undefined,
-        borderBottom: '1px solid dimgrey',
-        cursor: 'pointer',
-        ':hover': {
-            backgroundColor: 'inherit'
-        }
+        backgroundColor: state.isSelected ? "#000000" : undefined,
+        borderBottom: "1px solid dimgrey",
+        cursor: "pointer",
+        ":hover": {
+            backgroundColor: "inherit",
+        },
     }),
-    menuList: provided => ({
+    menuList: (provided) => ({
         ...provided,
         margin: 0,
-        padding: 0
-    })
-};
+        padding: 0,
+    }),
+}
 
 const customSelectStyles = {
     option: (provided, state) => ({
         ...provided,
-        color: 'white',
+        color: "white",
         fontWeight: 500,
-        backgroundColor: state.isSelected? '#000000': undefined,
-        borderBottom: '1px solid dimgrey',
-        cursor: 'pointer',
-        ':hover': {
-            backgroundColor: 'inherit'
-        }
+        backgroundColor: state.isSelected ? "#000000" : undefined,
+        borderBottom: "1px solid dimgrey",
+        cursor: "pointer",
+        ":hover": {
+            backgroundColor: "inherit",
+        },
     }),
     control: (provided) => ({
-      ...provided,
-      backgroundColor: '#1e1e1e',
-      borderColor: 'white',
-      borderRadius: 0,
-      height: 46,
-      cursor: 'pointer'
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        borderColor: "white",
+        borderRadius: 0,
+        height: 46,
+        cursor: "pointer",
     }),
     menu: (provided) => ({
         ...provided,
-        backgroundColor: '#1e1e1e',
-        border: '1px solid white',
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
         borderRadius: 0,
-        padding: 0
+        padding: 0,
     }),
-    menuList: provided => ({
+    menuList: (provided) => ({
         ...provided,
         margin: 0,
-        padding: 0
+        padding: 0,
     }),
-    singleValue: provided => ({
+    singleValue: (provided) => ({
         ...provided,
-        color: 'white',
-        padding: 8,
-        fontSize: 18,
-        fontWeight: 600
-    }),
-    input: provided => ({
-        ...provided,
-        color: 'white',
+        color: "white",
         padding: 8,
         fontSize: 18,
         fontWeight: 600,
     }),
-    placeholder: provided => ({
+    input: (provided) => ({
+        ...provided,
+        color: "white",
+        padding: 8,
+        fontSize: 18,
+        fontWeight: 600,
+    }),
+    placeholder: (provided) => ({
         ...provided,
         padding: 8,
         fontSize: 18,
         fontWeight: 600,
-        color: '#ffffff',
-    })
-};
+        color: "#ffffff",
+    }),
+}

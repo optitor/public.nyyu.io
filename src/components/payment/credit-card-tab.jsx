@@ -11,8 +11,6 @@ import {
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
 import ReactTooltip from "react-tooltip"
 import { CheckBox } from "../common/FormControl"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice"
 import { useMutation, useQuery } from "@apollo/client"
 import CustomSpinner from "../common/custom-spinner"
@@ -22,16 +20,14 @@ import useCountDown from "react-countdown-hook"
 import { Qmark } from "../../utilities/imgImport"
 
 export default function CreditCardTab({ amount, round }) {
+    console.log("amount", amount)
     // Containers
-    const [loading, setLoading] = useState(true)
     const [stripePublicKey, setStripePublicKey] = useState(null)
+    const loading = !stripePublicKey
 
     // Webservice
     useQuery(GET_STRIPE_PUB_KEY, {
-        onCompleted: (data) => {
-            setStripePublicKey(data.getStripePubKey)
-            setLoading(false)
-        },
+        onCompleted: (data) => setStripePublicKey(data.getStripePubKey),
         onError: (error) => console.log(error),
     })
 
