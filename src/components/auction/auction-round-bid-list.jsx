@@ -1,15 +1,18 @@
 import React, { useState } from "react"
+import { useSelector } from "react-redux"
 import { useQuery } from "@apollo/client"
-import { TabPanel, Tabs } from "react-tabs"
-import _ from 'lodash'
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
+import _ from "lodash"
 import { useAuction } from "./auction-context"
 import CustomSpinner from "../common/custom-spinner"
 import { GreenCup } from "../../utilities/imgImport"
 import { Currencies } from "../../utilities/staticData"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
 import { GET_BID } from "../../apollo/graghqls/querys/Auction"
+import { useEffect } from "react"
 
 export default function AuctionRoundBidList() {
+    const currentUser = useSelector((state) => state.auth.user)
     // Containers
     const auction = useAuction()
     const { auctions, currentRoundNumber } = auction
@@ -17,6 +20,8 @@ export default function AuctionRoundBidList() {
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
+    const pollIntervalValue = 10000
+
     const loadingData = !(
         currentRoundBidList &&
         auction.currentRoundBidList &&
@@ -24,16 +29,28 @@ export default function AuctionRoundBidList() {
     )
 
     // Webservices
-    useQuery(GET_BIDLIST_BY_ROUND, {
+    const { startPolling, stopPolling } = useQuery(GET_BIDLIST_BY_ROUND, {
         variables: {
             round: currentRoundNumber,
         },
         onCompleted: (data) => {
-            const list = _.orderBy(data.getBidListByRound, ['totalAmount'], ['desc']);
+            let list = _.orderBy(
+                data.getBidListByRound,
+                ["ranking", "tokenPrice"],
+                ["asc", "desc"]
+            )
+            list = list.map((item) => ({
+                ...item,
+                totalAmount: item.tokenPrice * item.tokenAmount,
+            }))
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
         },
         onError: (error) => console.log(error),
+        fetchPolicy: "no-cache",
+        errorPolicy: "ignore",
+        pollInterval: pollIntervalValue,
+        notifyOnNetworkStatusChange: true,
     })
 
     useQuery(GET_BID, {
@@ -41,12 +58,23 @@ export default function AuctionRoundBidList() {
             roundId: current?.id,
         },
         onCompleted: (data) => {
+            if (data?.getBid === null) {
+                auction.setGetBid({})
+                return auction.setIsBid(true)
+            }
+            if (data?.getBid.status === 0) {
+                auction.setGetBid({})
+                return auction.setIsBid(true)
+            }
             auction.setGetBid(data?.getBid)
-            if (data?.getBid === null) return auction.setIsBid(true)
-            if (data?.getBid.status === 0) return auction.setIsBid(true)
-            return auction.setIsBid(false)      
+            return auction.setIsBid(false)
         },
     })
+
+    useEffect(() => {
+        if (current.status === 2) return startPolling(pollIntervalValue)
+        return stopPolling()
+    }, [current, startPolling, stopPolling])
 
     // Render
     if (loadingData)
@@ -55,9 +83,13 @@ export default function AuctionRoundBidList() {
                 <CustomSpinner />
             </div>
         )
+
     return (
-        <>          
-            <Tabs className="statistics-tab" selectedIndex={0}>
+        <>
+            <Tabs className="statistics-tab">
+                <TabList>
+                    <Tab></Tab>
+                </TabList>
                 <TabPanel>
                     <table>
                         <thead>
@@ -73,7 +105,15 @@ export default function AuctionRoundBidList() {
                         </thead>
                         <tbody>
                             {currentRoundBidList.map((item, index) => (
-                                <tr key={index}>
+                                <tr
+                                    key={index}
+                                    style={{
+                                        fontWeight:
+                                            currentUser?.id === item.userId
+                                                ? "bold"
+                                                : "unset",
+                                    }}
+                                >
                                     <td className="border-0 ps-6px py-2">
                                         {index + 1}
                                     </td>

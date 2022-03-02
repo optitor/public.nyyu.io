@@ -101,7 +101,7 @@ export default function AuctionPlaceBidModal() {
                     <div className="mt-1 mb-4">
                         <div className="d-flex align-items-center gap-2 text-start">
                             <svg
-                                class="icon-23px text-danger"
+                                className="icon-23px text-danger"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"

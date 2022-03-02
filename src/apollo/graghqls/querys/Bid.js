@@ -20,7 +20,6 @@ export const GET_BIDLIST_BY_ROUND = gql`
             name
             roundId
             tokenAmount
-            totalAmount
             paidAmount
             tokenPrice
             tempTokenAmount
@@ -39,6 +38,7 @@ export const GET_BIDLIST_BY_ROUND = gql`
             placedAt
             updatedAt
             status
+            ranking
         }
     }
 `

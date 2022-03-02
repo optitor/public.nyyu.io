@@ -40,6 +40,7 @@ export const GET_CURRENT_ROUND = gql`
                 updateDate
                 deleted
                 round
+                startedAt
                 endedAt
                 totalToken
                 minPrice

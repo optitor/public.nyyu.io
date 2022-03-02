@@ -27,7 +27,10 @@ export default function OrderSummary({ bidAmount }) {
                     className="d-flex justify-content-between"
                     style={{ paddingTop: "11px", paddingBottom: "25px" }}
                 >
-                    <p className="order-list__label" style={{ color: "#959595" }}>
+                    <p
+                        className="order-list__label"
+                        style={{ color: "#959595" }}
+                    >
                         Order total:
                     </p>
                     <p className="order-total">
@@ -35,12 +38,6 @@ export default function OrderSummary({ bidAmount }) {
                     </p>
                 </div>
             </div>
-
-            {/* {tabIndex === 2 && (
-                <button className="btn-primary text-uppercase confirm-payment">
-                    Confirm Payment
-                </button>
-            )} */}
         </div>
     )
 }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { loadStripe } from "@stripe/stripe-js"
+import React, { useState, useEffect } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import {
     CardNumberElement,
     CardCvcElement,
@@ -7,33 +7,33 @@ import {
     Elements,
     useStripe,
     useElements,
-} from "@stripe/react-stripe-js"
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
-import ReactTooltip from "react-tooltip"
-import { CheckBox } from "../common/FormControl"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice"
-import { useMutation, useQuery } from "@apollo/client"
-import CustomSpinner from "../common/custom-spinner"
-import { navigate } from "gatsby"
-import { ROUTES } from "../../utilities/routes"
-import useCountDown from "react-countdown-hook"
-import { Qmark } from "../../utilities/imgImport"
+} from "@stripe/react-stripe-js";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+import ReactTooltip from "react-tooltip";
+import { CheckBox } from "../common/FormControl";
+import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice";
+import { useMutation, useQuery } from "@apollo/client";
+import CustomSpinner from "../common/custom-spinner";
+import { navigate } from "gatsby";
+import { ROUTES } from "../../utilities/routes";
+import useCountDown from "react-countdown-hook";
+import { Qmark } from "../../utilities/imgImport";
+import { getStripePaymentFee } from "../../utilities/utility-methods";
+import { useSelector } from "react-redux";
 
 export default function CreditCardTab({ amount, round }) {
     // Containers
-    const [loading, setLoading] = useState(true)
-    const [stripePublicKey, setStripePublicKey] = useState(null)
+    const [stripePublicKey, setStripePublicKey] = useState(null);
+    const user = useSelector((state) => state.auth.user);
+    const { allFees } = useSelector((state) => state);
+    const stripePaymentFee = getStripePaymentFee(user, allFees, amount);
+    const loading = !stripePublicKey;
 
     // Webservice
     useQuery(GET_STRIPE_PUB_KEY, {
-        onCompleted: (data) => {
-            setStripePublicKey(data.getStripePubKey)
-            setLoading(false)
-        },
+        onCompleted: (data) => setStripePublicKey(data.getStripePubKey),
         onError: (error) => console.log(error),
-    })
+    });
 
     // Render
     return (
@@ -53,32 +53,35 @@ export default function CreditCardTab({ amount, round }) {
                     }}
                     stripe={loadStripe(stripePublicKey)}
                 >
-                    <CardSection amount={amount} round={round} />
+                    <CardSection
+                        amount={Number(amount) + Number(stripePaymentFee)}
+                        round={round}
+                    />
                 </Elements>
             )}
         </div>
-    )
+    );
 }
 
 const CardSection = ({ amount, round }) => {
     // Containers
-    const stripe = useStripe()
-    const elements = useElements()
-    const [error, setError] = useState("")
-    const [cardHolder, setCardHolder] = useState("")
-    const [allowFractionBox, setAllowFractionBox] = useState(false)
-    const [successfulPayment, setSuccessfulPayment] = useState(null)
-    const [requestPending, setRequestPending] = useState(false)
+    const stripe = useStripe();
+    const elements = useElements();
+    const [error, setError] = useState("");
+    const [cardHolder, setCardHolder] = useState("");
+    const [allowFractionBox, setAllowFractionBox] = useState(false);
+    const [successfulPayment, setSuccessfulPayment] = useState(null);
+    const [requestPending, setRequestPending] = useState(false);
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
-        useState(false)
+        useState(false);
 
     // Countdown
-    const initialTime = 5 * 1000
-    const interval = 1000
+    const initialTime = 5 * 1000;
+    const interval = 1000;
     const [timeLeft, { start: startTimer }] = useCountDown(
         initialTime,
         interval
-    )
+    );
 
     const style = {
         base: {
@@ -97,31 +100,31 @@ const CardSection = ({ amount, round }) => {
             color: "#fa755a",
             iconColor: "#fa755a",
         },
-    }
+    };
 
     // Webservice
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
         onCompleted: async (data) => {
             if (stripePaymentSecondCall === false) {
-                setStripePaymentSecondCall(true)
+                setStripePaymentSecondCall(true);
                 if (data.payStripeForAuction.error) {
-                    setRequestPending(false)
-                    return setError(data.payStripeForAuction.error)
+                    setRequestPending(false);
+                    return setError(data.payStripeForAuction.error);
                 }
                 const { clientSecret, requiresAction } =
-                    data.payStripeForAuction
+                    data.payStripeForAuction;
                 if (requiresAction === false) {
-                    startTimer()
-                    setRequestPending(false)
-                    return setSuccessfulPayment(true)
+                    startTimer();
+                    setRequestPending(false);
+                    return setSuccessfulPayment(true);
                 }
                 if (clientSecret)
                     return stripe
                         .handleCardAction(clientSecret)
                         .then((result) => {
                             if (result.error) {
-                                startTimer()
-                                return setSuccessfulPayment(false)
+                                startTimer();
+                                return setSuccessfulPayment(false);
                             }
                             return stripePayment({
                                 variables: {
@@ -130,34 +133,34 @@ const CardSection = ({ amount, round }) => {
                                     paymentMethodId: null,
                                     paymentIntentId: result.paymentIntent.id,
                                 },
-                            })
-                        })
-                return setError("Invalid payment")
+                            });
+                        });
+                return setError("Invalid payment");
             } else if (stripePaymentSecondCall === true) {
                 if (
                     data.payStripeForAuction.error ||
                     data.payStripeForAuction.requiresAction === true
                 ) {
-                    startTimer()
-                    setRequestPending(false)
-                    return setSuccessfulPayment(false)
+                    startTimer();
+                    setRequestPending(false);
+                    return setSuccessfulPayment(false);
                 }
-                startTimer()
-                return setSuccessfulPayment(true)
+                startTimer();
+                return setSuccessfulPayment(true);
             }
         },
         onError: (error) => {
-            console.log(error)
-            setRequestPending(false)
+            console.log(error);
+            setRequestPending(false);
         },
-    })
+    });
 
     // Methods
     const submitPayment = async (e) => {
-        e.preventDefault()
-        setError("")
-        setRequestPending(true)
-        if (!stripe || !elements) return
+        e.preventDefault();
+        setError("");
+        setRequestPending(true);
+        if (!stripe || !elements) return;
 
         const { paymentMethod } = await stripe.createPaymentMethod({
             type: "card",
@@ -165,7 +168,7 @@ const CardSection = ({ amount, round }) => {
             billing_details: {
                 name: cardHolder,
             },
-        })
+        });
         if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
             return stripePayment({
                 variables: {
@@ -174,16 +177,16 @@ const CardSection = ({ amount, round }) => {
                     paymentMethodId: paymentMethod.id,
                     paymentIntentId: null,
                 },
-            })
+            });
         }
-        setRequestPending(false)
-        return setError("Invalid card information")
-    }
+        setRequestPending(false);
+        return setError("Invalid card information");
+    };
 
     useEffect(() => {
         if (successfulPayment !== null)
-            if (timeLeft === 0) navigate(ROUTES.auction)
-    }, [timeLeft])
+            if (timeLeft === 0) navigate(ROUTES.auction);
+    }, [timeLeft, successfulPayment]);
 
     // Render
     return successfulPayment === true ? (
@@ -274,7 +277,7 @@ const CardSection = ({ amount, round }) => {
                     <div className="text-danger fs-16px ps-0 mb-2">
                         <div className="d-flex align-items-center gap-2">
                             <svg
-                                class="icon-23px"
+                                className="icon-23px"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -361,6 +364,7 @@ const CardSection = ({ amount, round }) => {
 
                     <img
                         src={Qmark}
+                        alt="Question mark"
                         data-tip
                         data-for="question-mark-tooltip"
                         className="ms-2 cursor-pointer text-light"
@@ -397,5 +401,5 @@ const CardSection = ({ amount, round }) => {
                 </div>
             </button>
         </>
-    )
-}
+    );
+};

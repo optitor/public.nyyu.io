@@ -9,18 +9,15 @@ import { COLOR_LOAD, COLOR_OFF, COLOR_ON } from "../../utilities/staticData"
 import CustomSpinner from "../common/custom-spinner"
 
 export default function NotificationSetting() {
-
     // Containers
     const [loadingSection, setLoadingSection] = useState(true)
     const [pendingSwitch, setPendingSwitch] = useState(false)
     const setting = user_data?.getUser.notifySetting
     const [tempSetting, setTempSetting] = useState([])
     const [notificationTypeList, setNotificationTypeList] = useState([])
-    
-    
 
     //Webservice
-    const { data: user_data, refetch } = useQuery(GET_USER, {
+    const { data: user_data } = useQuery(GET_USER, {
         onCompleted: () => {
             console.log("refetch method")
         },
@@ -29,7 +26,7 @@ export default function NotificationSetting() {
         onCompleted: (data) => {
             setLoadingSection(false)
             setNotificationTypeList(notificationTypes?.getNotificationTypes)
-        }
+        },
     })
     const [changeNotifySetting] = useMutation(USER_NOTIFICATION_SETTING, {
         onCompleted: (data) => {
@@ -95,25 +92,41 @@ export default function NotificationSetting() {
             </div>
         )
     else
-        return (  
+        return (
             <>
                 {notificationTypeList &&
                     notificationTypeList.map(({ type }, index) => (
                         <div className="notification-item" key={index}>
                             <p>{type}</p>
                             <Switch
-                                onColor={tempSetting[index]?.loading ? COLOR_LOAD : COLOR_ON}
-                                offColor={tempSetting[index]?.loading ? COLOR_LOAD : COLOR_OFF}
+                                onColor={
+                                    tempSetting[index]?.loading
+                                        ? COLOR_LOAD
+                                        : COLOR_ON
+                                }
+                                offColor={
+                                    tempSetting[index]?.loading
+                                        ? COLOR_LOAD
+                                        : COLOR_OFF
+                                }
                                 height={3}
                                 width={35}
                                 disabled={pendingSwitch}
                                 handleDiameter={12}
-                                onHandleColor={tempSetting[index]?.loading ? COLOR_LOAD : COLOR_ON}
+                                onHandleColor={
+                                    tempSetting[index]?.loading
+                                        ? COLOR_LOAD
+                                        : COLOR_ON
+                                }
                                 offHandleColor={
-                                    tempSetting[index]?.loading ? COLOR_LOAD : COLOR_OFF
+                                    tempSetting[index]?.loading
+                                        ? COLOR_LOAD
+                                        : COLOR_OFF
                                 }
                                 onChange={() => setChecked(index)}
-                                checked={tempSetting[index]?.status ? true : false}
+                                checked={
+                                    tempSetting[index]?.status ? true : false
+                                }
                             />
                         </div>
                     ))}

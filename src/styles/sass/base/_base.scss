@@ -147,14 +147,14 @@ input[type="number"]::-webkit-outer-spin-button {
     width: 316px !important;
 }
 // Font Sizes
-@for $size from 12 to 48 {
+@for $size from 12 to 96 {
     .fs-#{$size}px {
         font-size: #{$size}px !important;
     }
 }
 
 // Line Heights
-@for $size from 12 to 48 {
+@for $size from 12 to 96 {
     .lh-#{$size}px {
         line-height: #{$size}px !important;
     }
@@ -301,4 +301,12 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .h-85 {
     height: 85% !important;
+}
+
+.mt-9px {
+    margin-top: 9px !important;
+}
+
+.mb-5px {
+    margin-bottom: 5px !important;
 }
