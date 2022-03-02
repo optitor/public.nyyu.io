@@ -1,18 +1,19 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect } from "react"
-import { navigate } from "gatsby"
-import { useSelector } from "react-redux"
+import React, { useCallback, useReducer, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { navigate } from "gatsby";
+import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
-import ReactTooltip from "react-tooltip"
-import Select, { components } from "react-select"
-import Header from "../header"
+import ReactTooltip from "react-tooltip";
+import Select, { components } from "react-select";
+import Header from "../header";
 import Loading from "../common/Loading";
-import { numberWithCommas } from "../../utilities/number"
-import { CheckBox } from "../common/FormControl"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { numberWithCommas } from "../../utilities/number";
+import { CheckBox } from "../common/FormControl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
     CryptoCoin,
     Paypal,
@@ -23,15 +24,16 @@ import {
     BTC,
     DOGE,
     PaypalBrand,
-} from "../../utilities/imgImport"
-import ConnectWalletTab from "../profile/connect-wallet-tab"
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
-import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction"
-import Seo from './../seo'
-import CreditCardTab from "./credit-card-tab"
-import CoinPaymentsTab from "./CoinPaymentsTab"
-import OrderSummary from "./order-summary"
-import OrderSummaryOfCoinPayments from './OrderSummaryOfCoinPayments'
+} from "../../utilities/imgImport";
+import ConnectWalletTab from "../profile/connect-wallet-tab";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import Seo from './../seo';
+import CreditCardTab from "./credit-card-tab";
+import CoinPaymentsTab from "./CoinPaymentsTab";
+import OrderSummary from "./order-summary";
+import OrderSummaryOfCoinPayments from './OrderSummaryOfCoinPayments';
 
 
 const { Option, SingleValue } = components
@@ -67,6 +69,8 @@ const CustomSingleValue = (props) => {
 }
 
 const Payment = () => {
+    const dispatch = useDispatch();
+
     const currentRound = useSelector((state) => state?.placeBid.round_id)
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
     const [totalRounds, setTotalRounds] = useState(0)
@@ -104,6 +108,18 @@ const Payment = () => {
         onError: (error) => console.log(error),
         errorPolicy: "ignore",
         fetchPolicy: "network-only",
+    })
+
+    useQuery(GET_ALL_FEES, {
+        onCompleted: data => {
+            if(data.getAllFees) {
+                const temp = _.mapKeys(data.getAllFees, 'tierLevel')
+                setAllFees(temp)
+            }
+        },
+        onError: err => {
+            console.log('get All Fees', err)
+        }
     })
 
     useEffect(() => { 

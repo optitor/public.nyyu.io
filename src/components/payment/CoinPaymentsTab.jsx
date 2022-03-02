@@ -127,8 +127,6 @@ const CoinPaymentsTab = ({ currentRound , bidAmount }) => {
         return txnFee.toFixed(4);
     }, [allFees, bidAmount, user ])
 
-    console.log(transactionFee)
-
     useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
