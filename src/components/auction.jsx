@@ -4,7 +4,6 @@ import { Tabs } from "react-tabs"
 import React, { useState, useEffect } from "react"
 import Loading from "./common/Loading"
 import ReactTooltip from "react-tooltip"
-import { useSelector } from "react-redux"
 import { Qmark } from "../utilities/imgImport"
 import { useAuction } from "./auction/auction-context"
 import AuctionPlaceBid from "./auction/auction-place-bid"
@@ -13,36 +12,40 @@ import AuctionRoundDetails from "./auction/auction-round-details"
 import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData"
 import AuctionPlaceBidModal from "./auction/auction-place-bid-modal"
 import AuctionRoundNavigator from "./auction/auction-round-navigator"
-import AuctionChart from "./chart"
-import { PillarChartIcon, BidIcon } from './../utilities/imgImport'
 
 const Auction = () => {
-    const auction = useAuction()
-    const currencyId = useSelector((state) => state?.placeBid.currencyId)
-    const { auctions, presales, currentRound, currentRoundNumber } = auction
+    const auction = useAuction();
+    const { auctions, presales, currentRound, currentRoundNumber } = auction;
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
     const [loading, setLoading] = useState(true)
-    const [isBidStep, setIsBidStep] = useState(true);
-
+    
     useEffect(() => {
         if (auction.loading === false) {
             if (currentRound.auction) {
-                auction.setIsAuction(true)
-                auction.setCurrentRoundNumber(auctions.length)
+                auction.setIsAuction(true);
+                auction.setCurrentRoundNumber(auctions.length);
             } else if (currentRound.presale) {
-                auction.setIsAuction(false)
-                auction.setCurrentRoundNumber(presales.length)
+                auction.setIsAuction(false);
+                auction.setCurrentRoundNumber(presales.length);
             } else {
-                auction.setIsAuction(true)
-                auction.setCurrentRoundNumber(auctions.length)
+                auction.setIsAuction(true);
+                auction.setCurrentRoundNumber(auctions.length);
             }
-            setLoading(false)
+            setLoading(false);
         }
-    }, [auction.loading])
+    }, [
+        auction.loading,
+        auctions,
+        auction,
+        currentRound?.auction,
+        currentRound?.presale,
+        auctions?.length,
+        presales?.length,
+    ]);
 
-    if (loading) return <Loading />
+    if (loading) return <Loading />;
     return (
         <>
             <Seo title="Sale" />
@@ -108,30 +111,13 @@ const Auction = () => {
                             )}
                         </div>
                         <div className="auction-right col-lg-8 col-md-7">
-                            {current?.status !== 3 && (
-                                <div id='switch_btns'>
-                                    <div className="switch_btn"
-                                        onClick={() => setIsBidStep(false)}
-                                        style={{opacity: isBidStep? 0.4: 1}}
-                                    >
-                                        <img src={PillarChartIcon} alt="chart" />
-                                    </div>
-                                    <div className="switch_btn"
-                                        onClick={() => setIsBidStep(true)}
-                                        style={{opacity: isBidStep? 1: 0.4}}
-                                    >
-                                        <img src={BidIcon} alt="bid" />
-                                    </div>
-                                </div>
-                            )}
-                            {isBidStep && <AuctionPlaceBid />}
-                            {!isBidStep && <AuctionChart />}
+                            <AuctionPlaceBid />
                         </div>
                     </div>
                 </section>
             </main>
         </>
-    )
-}
+    );
+};
 
-export default Auction
+export default Auction;

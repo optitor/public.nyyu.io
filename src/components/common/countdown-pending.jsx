@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { numberWithLength } from "../../utilities/number"
 
-const CountDown = ({ deadline, pending }) => {
+const CountDownPending = ({ deadline }) => {
     const [curTime, setCurTime] = useState({
         hours: 0,
         minutes: 0,
@@ -30,11 +30,7 @@ const CountDown = ({ deadline, pending }) => {
         }
     }, [deadline])
     return (
-        <div
-            className={`countdown-wrapper d-flex ${
-                !pending && " justify-content-md-end"
-            } justify-content-center`}
-        >
+        <div className="countdown-pending-wrapper d-flex justify-content-center">
             <div className="time-section">
                 <p className="time">{numberWithLength(curTime.hours, 2)}</p>
                 <small className="time-text">hrs</small>
@@ -57,4 +53,4 @@ const CountDown = ({ deadline, pending }) => {
     )
 }
 
-export default CountDown
+export default CountDownPending

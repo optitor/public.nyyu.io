@@ -148,6 +148,37 @@
     }
 }
 
+.countdown-pending-wrapper {
+    line-height: 6px;
+    .time-section {
+        text-align: center;
+        .time {
+            font-weight: bold;
+            font-weight: bold;
+            font-size: 72px;
+            line-height: 92px;
+            letter-spacing: 0.05em;
+            @include mq("phone", max) {
+                font-size: 58px;
+                line-height: 64px;
+                letter-spacing: -0.02em;
+            }
+            &-text {
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 36px;
+                letter-spacing: -0.02em;
+                text-transform: uppercase;
+                color: #8f8f8f;
+                @include mq("phone", max) {
+                    font-size: 17px;
+                    line-height: 15px;
+                }
+            }
+        }
+    }
+}
+
 .refer-modal {
     max-width: 539px;
     border: unset;
