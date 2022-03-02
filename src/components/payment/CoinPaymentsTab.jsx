@@ -4,21 +4,21 @@ import React, {
     useCallback,
     useReducer,
     useMemo,
-} from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { CopyToClipboard } from "react-copy-to-clipboard"
-import { useQuery } from "@apollo/client"
-import axios from "axios"
-import _ from "lodash"
-import Select, { components } from "react-select"
-import ReactTooltip from "react-tooltip"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import CircularProgress from "@mui/material/CircularProgress"
-import NumberFormat from "react-number-format"
-import { useMutation } from "@apollo/client"
-import * as Mutation from "../../apollo/graghqls/mutations/Payment"
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useQuery } from "@apollo/client";
+import axios from "axios";
+import _ from "lodash";
+import Select, { components } from "react-select";
+import ReactTooltip from "react-tooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import CircularProgress from "@mui/material/CircularProgress";
+import NumberFormat from "react-number-format";
+import { useMutation } from "@apollo/client";
+import * as Mutation from "../../apollo/graghqls/mutations/Payment";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import {
     BTC,
     ETH,
@@ -29,13 +29,13 @@ import {
     SOL,
     DOGE,
     SHIB,
-} from "./../../utilities/imgImport"
-import { generateQR } from "../../utilities/string"
-import { CheckBox } from "../common/FormControl"
-import { Copy } from "../../utilities/imgImport"
-import CustomSpinner from "../common/custom-spinner"
-import { set_Temp_Data } from "./../../redux/actions/tempAction"
-import * as Query from "./../../apollo/graghqls/querys/Payment"
+} from "./../../utilities/imgImport";
+import { generateQR } from "../../utilities/string";
+import { CheckBox } from "../common/FormControl";
+import { Copy } from "../../utilities/imgImport";
+import CustomSpinner from "../common/custom-spinner";
+import { set_Temp_Data } from "./../../redux/actions/tempAction";
+import * as Query from "./../../apollo/graghqls/querys/Payment";
 
 const FOO_COINS = [
     {
@@ -182,15 +182,15 @@ const FOO_COINS = [
         icon: SOL,
         networks: [{ label: "Solana", value: "SOL", network: "SOL" }],
     },
-]
+];
 
-const QUOTE = "USDT"
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
+const QUOTE = "USDT";
+const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
 
-const { Option } = components
+const { Option } = components;
 
 const SelectOption = (props) => {
-    const { data } = props
+    const { data } = props;
     return (
         <Option {...props}>
             <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
@@ -202,157 +202,157 @@ const SelectOption = (props) => {
                 <p className="coin-label ms-2">{data.value}</p>
             </div>
         </Option>
-    )
-}
+    );
+};
 
 const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
-    const dispatch = useDispatch()
-    const user = useSelector((state) => state.auth.user)
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
 
-    const [copied, setCopied] = useState(false)
+    const [copied, setCopied] = useState(false);
 
-    const [fooCoins, setFooCoins] = useState([])
-    const [BTCPrice, setBTCPrice] = useState(null)
-    const [allFees, setAllFees] = useState({})
+    const [fooCoins, setFooCoins] = useState([]);
+    const [BTCPrice, setBTCPrice] = useState(null);
+    const [allFees, setAllFees] = useState({});
 
-    const loadingData = _.isEmpty(fooCoins) || !BTCPrice || _.isEmpty(allFees)
+    const loadingData = _.isEmpty(fooCoins) || !BTCPrice || _.isEmpty(allFees);
 
-    const [coin, setCoin] = useState({})
-    const [network, setNetwork] = useState(null)
-    const [pending, setPending] = useState(false)
+    const [coin, setCoin] = useState({});
+    const [network, setNetwork] = useState(null);
+    const [pending, setPending] = useState(false);
 
-    const [coinQuantity, setCoinQuantity] = useState(0)
+    const [coinQuantity, setCoinQuantity] = useState(0);
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
         {
             allow_fraction: false,
         }
-    )
-    const { allow_fraction } = state
+    );
+    const { allow_fraction } = state;
 
-    const [coinQRCode, setCoinQRCode] = useState("")
-    const [depositAddress, setDepositAddress] = useState("")
-    const [paymentId, setPaymentId] = useState(null)
+    const [coinQRCode, setCoinQRCode] = useState("");
+    const [depositAddress, setDepositAddress] = useState("");
+    const [paymentId, setPaymentId] = useState(null);
 
-    const networks = useMemo(() => coin.networks, [coin])
+    const networks = useMemo(() => coin.networks, [coin]);
     const transactionFee = useMemo(() => {
-        const fee = allFees[user?.tierLevel]?.fee
-        const txnFee = (bidAmount * (0.5 + fee)) / 100
-        if (txnFee === NaN) return null
-        return txnFee.toFixed(4)
-    }, [allFees, bidAmount, user])
+        const fee = allFees[user?.tierLevel]?.fee;
+        const txnFee = (bidAmount * (0.5 + fee)) / 100;
+        if (txnFee === NaN) return null;
+        return txnFee.toFixed(4);
+    }, [allFees, bidAmount, user]);
 
-    console.log(transactionFee)
+    console.log(transactionFee);
 
     useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
-                const temp = JSON.parse(data.getExchangeRate)
+                const temp = JSON.parse(data.getExchangeRate);
                 const coins = FOO_COINS.map((item) => {
-                    return { ...item, detail: temp?.result[item.value] }
-                })
-                setFooCoins(coins)
-                setCoin(coins[0])
+                    return { ...item, detail: temp?.result[item.value] };
+                });
+                setFooCoins(coins);
+                setCoin(coins[0]);
             }
         },
         onError: (err) => {
-            console.log("get exchange rate: ", err)
+            console.log("get exchange rate: ", err);
         },
-    })
+    });
 
     useQuery(Query.GET_ALL_FEES, {
         onCompleted: (data) => {
             if (data.getAllFees) {
-                const temp = _.mapKeys(data.getAllFees, "tierLevel")
-                setAllFees(temp)
+                const temp = _.mapKeys(data.getAllFees, "tierLevel");
+                setAllFees(temp);
             }
         },
         onError: (err) => {
-            console.log("get All Fees", err)
+            console.log("get All Fees", err);
         },
-    })
+    });
 
     useEffect(() => {
-        ;(async function () {
+        (async function () {
             // Fetch the price of BTC
             const { data: BTCPriceData } = await axios.get(TICKER_24hr, {
                 params: { symbol: "BTC" + QUOTE },
-            })
-            setBTCPrice(BTCPriceData.lastPrice)
-        })()
-    }, [])
+            });
+            setBTCPrice(BTCPriceData.lastPrice);
+        })();
+    }, []);
 
     useEffect(() => {
-        let coinPrice = BTCPrice * coin?.detail?.rate_btc
+        let coinPrice = BTCPrice * coin?.detail?.rate_btc;
 
-        let precision = 4
-        if (coin.value === "BTC") precision = 9
+        let precision = 4;
+        if (coin.value === "BTC") precision = 9;
 
-        let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision))
-        if (quantity === Infinity) quantity = null
-        setCoinQuantity(quantity)
+        let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
+        if (quantity === Infinity) quantity = null;
+        setCoinQuantity(quantity);
 
         const tempData = {
             coinValue: quantity,
             coinSymbol: coin.value,
             paymentId,
             transactionFee,
-        }
-        dispatch(set_Temp_Data(tempData))
-    }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, dispatch])
+        };
+        dispatch(set_Temp_Data(tempData));
+    }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, dispatch]);
 
     useEffect(() => {
-        ;(async function () {
+        (async function () {
             if (depositAddress) {
-                const qrCode = await generateQR(depositAddress)
-                setCoinQRCode(qrCode)
+                const qrCode = await generateQR(depositAddress);
+                setCoinQRCode(qrCode);
             }
-            return ""
-        })()
-    }, [depositAddress])
+            return "";
+        })();
+    }, [depositAddress]);
 
     const [createCryptoPaymentMutation] = useMutation(
         Mutation.CREATE_CRYPTO_PAYMENT,
         {
             onCompleted: (data) => {
                 if (data.createCryptoPaymentForAuction) {
-                    const resData = data.createCryptoPaymentForAuction
+                    const resData = data.createCryptoPaymentForAuction;
 
-                    setDepositAddress(resData?.depositAddress)
-                    setPaymentId(resData?.id)
-                    setPending(false)
+                    setDepositAddress(resData?.depositAddress);
+                    setPaymentId(resData?.id);
+                    setPending(false);
                 }
             },
             onError: (err) => {
-                console.log("get deposit address: ", err)
-                setPending(false)
+                console.log("get deposit address: ", err);
+                setPending(false);
             },
         }
-    )
+    );
 
     const create_Crypto_Payment = () => {
-        setPending(true)
+        setPending(true);
         const createData = {
             roundId: currentRound,
             amount: bidAmount,
             cryptoType: coin.value,
             network: network.network,
             coin: network.value,
-        }
+        };
 
         createCryptoPaymentMutation({
             variables: { ...createData },
-        })
-    }
+        });
+    };
 
     const handleAllowFraction = useCallback(
         (e) => {
-            e.preventDefault()
-            setState({ allow_fraction: !allow_fraction })
+            e.preventDefault();
+            setState({ allow_fraction: !allow_fraction });
         },
         [allow_fraction]
-    )
+    );
 
     return loadingData ? (
         <div className="text-center">
@@ -369,10 +369,10 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                 options={fooCoins}
                                 value={coin}
                                 onChange={(v) => {
-                                    setCoin(v)
-                                    setNetwork(null)
-                                    setDepositAddress("")
-                                    setPaymentId(null)
+                                    setCoin(v);
+                                    setNetwork(null);
+                                    setDepositAddress("");
+                                    setPaymentId(null);
                                 }}
                                 components={{
                                     Option: SelectOption,
@@ -412,8 +412,8 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                         options={networks}
                                         value={network}
                                         onChange={(v) => {
-                                            setNetwork(v)
-                                            setDepositAddress("")
+                                            setNetwork(v);
+                                            setDepositAddress("");
                                         }}
                                         styles={customSelectStyles}
                                         placeholder="SELECT NETWORK"
@@ -509,10 +509,10 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default CoinPaymentsTab
+export default CoinPaymentsTab;
 
 const customSelectWithIconStyles = {
     input: (provided) => ({
@@ -533,7 +533,7 @@ const customSelectWithIconStyles = {
         margin: 0,
         padding: 0,
     }),
-}
+};
 
 const customSelectStyles = {
     option: (provided, state) => ({
@@ -588,4 +588,4 @@ const customSelectStyles = {
         fontWeight: 600,
         color: "#ffffff",
     }),
-}
+};

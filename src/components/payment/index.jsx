@@ -1,18 +1,18 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect } from "react"
-import { navigate } from "gatsby"
-import { useSelector } from "react-redux"
-import { useQuery } from "@apollo/client"
-import ReactTooltip from "react-tooltip"
-import Select, { components } from "react-select"
-import Header from "../header"
-import Loading from "../common/Loading"
-import { numberWithCommas } from "../../utilities/number"
-import { CheckBox } from "../common/FormControl"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import React, { useCallback, useReducer, useState, useEffect } from "react";
+import { navigate } from "gatsby";
+import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "@apollo/client";
+import ReactTooltip from "react-tooltip";
+import Select, { components } from "react-select";
+import Header from "../header";
+import Loading from "../common/Loading";
+import { numberWithCommas } from "../../utilities/number";
+import { CheckBox } from "../common/FormControl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
     CryptoCoin,
     Paypal,
@@ -23,25 +23,26 @@ import {
     BTC,
     DOGE,
     PaypalBrand,
-} from "../../utilities/imgImport"
-import ConnectWalletTab from "../profile/connect-wallet-tab"
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
-import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction"
-import Seo from "./../seo"
-import CreditCardTab from "./credit-card-tab"
-import CoinPaymentsTab from "./CoinPaymentsTab"
-import OrderSummary from "./order-summary"
-import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments"
-import OrderSummaryOfCreditCard from "./order-summary-of-credit-card"
-import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment"
+} from "../../utilities/imgImport";
+import ConnectWalletTab from "../profile/connect-wallet-tab";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
+import Seo from "./../seo";
+import CreditCardTab from "./credit-card-tab";
+import CoinPaymentsTab from "./CoinPaymentsTab";
+import OrderSummary from "./order-summary";
+import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
+import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import { set_All_Fees } from "../../redux/actions/allFeesAction";
 
-const { Option, SingleValue } = components
+const { Option, SingleValue } = components;
 
 const balances = [
     { value: "3,002,565", label: "ETH", icon: ETH },
     { value: "225,489", label: "BTC", icon: BTC },
     { value: "489,809", label: "DOGE", icon: DOGE },
-]
+];
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
     { icon: Credit, value: "creditcard", label: "Credit / Debit card" },
@@ -52,7 +53,7 @@ const payment_types = [
         value: "externalwallets",
         label: "External Wallets",
     },
-]
+];
 
 const CustomOption = (props) => (
     <Option {...props}>
@@ -61,7 +62,7 @@ const CustomOption = (props) => (
             <p className="ms-4">{props.data.label}</p>
         </div>
     </Option>
-)
+);
 const CustomSingleValue = (props) => {
     return (
         <SingleValue {...props}>
@@ -69,24 +70,25 @@ const CustomSingleValue = (props) => {
                 {props.data.value + " - " + props.data.label}
             </p>
         </SingleValue>
-    )
-}
+    );
+};
 
 const Payment = () => {
-    const user = useSelector((state) => state.auth.user)
-    const currentRound = useSelector((state) => state?.placeBid.round_id)
-    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    const [totalRounds, setTotalRounds] = useState(null)
-    const [barProgress, setBarProgress] = useState(null)
-    const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
-    const [allFees, setAllFees] = useState(null)
-    const [stripeFee, setStripeFee] = useState(0)
+    const user = useSelector((state) => state.auth.user);
+    const currentRound = useSelector((state) => state?.placeBid.round_id);
+    const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
+    const [totalRounds, setTotalRounds] = useState(null);
+    const [barProgress, setBarProgress] = useState(null);
+    const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
+    const [allFees, setAllFees] = useState(null);
+    const [stripeFee, setStripeFee] = useState(0);
+    const dispatch = useDispatch();
 
-    const loading = !(totalRounds && barProgress && allFees)
+    const loading = !(totalRounds && barProgress && allFees);
 
-    const targetCap = 1000000000000
-    const isSSR = typeof window === "undefined"
-    if (!isSSR && !currentRound) navigate("/app/auction")
+    const targetCap = 1000000000000;
+    const isSSR = typeof window === "undefined";
+    if (!isSSR && !currentRound) navigate("/app/auction");
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
@@ -94,47 +96,48 @@ const Payment = () => {
             allow_fraction: false,
             getAddress: false,
         }
-    )
-    const { allow_fraction, getAddress } = state
+    );
+    const { allow_fraction, getAddress } = state;
 
-    const [balance, setBalance] = useState(null)
-    const [tabIndex, setTabIndex] = useState(0)
+    const [balance, setBalance] = useState(null);
+    const [tabIndex, setTabIndex] = useState(0);
 
     const handleAllowFraction = useCallback(
         (e) => {
-            e.preventDefault()
-            setState({ allow_fraction: !allow_fraction })
+            e.preventDefault();
+            setState({ allow_fraction: !allow_fraction });
         },
         [allow_fraction]
-    )
+    );
 
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
-            setTotalRounds(data.getAuctions.length)
-            setBarProgress((currentCap * 100) / targetCap)
+            setTotalRounds(data.getAuctions.length);
+            setBarProgress((currentCap * 100) / targetCap);
         },
         onError: (error) => console.log(error),
         errorPolicy: "ignore",
         fetchPolicy: "network-only",
-    })
+    });
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
-            setAllFees(data.getAllFees)
-            const allFees = data.getAllFees
+            setAllFees(data.getAllFees);
+            const allFees = data.getAllFees;
             if (allFees) {
+                dispatch(set_All_Fees(allFees));
                 const fee = allFees.filter(
                     (item) => item.tierLevel === user.tierLevel
-                )[0].fee
-                setStripeFee(((2.9 + fee) * bidAmount) / 100 + 0.3)
+                )[0].fee;
+                setStripeFee(((2.9 + fee) * bidAmount) / 100 + 0.3);
             }
         },
         onError: (error) => console.log(error),
-    })
+    });
 
     useEffect(() => {
-        if (barProgress < 1) setBarProgress(1)
-    }, [barProgress])
-    if (loading) return <Loading />
+        if (barProgress < 1) setBarProgress(1);
+    }, [barProgress]);
+    if (loading) return <Loading />;
     return (
         <>
             <Seo title="Payment" />
@@ -407,7 +410,7 @@ const Payment = () => {
                 </section>
             </main>
         </>
-    )
-}
+    );
+};
 
-export default Payment
+export default Payment;

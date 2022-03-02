@@ -1,7 +1,10 @@
-import React from "react"
-import { numberWithCommas } from "../../utilities/number"
+import React from "react";
+import { useSelector } from "react-redux";
+import { numberWithCommas } from "../../utilities/number";
 
 export default function OrderSummaryOfCreditCard({ bidAmount, fee }) {
+    console.log(useSelector((state) => state));
+
     return (
         <div className="col-lg-4 d-flex flex-column justify-content-between">
             <div className="order-summary">
@@ -36,5 +39,5 @@ export default function OrderSummaryOfCreditCard({ bidAmount, fee }) {
                 </div>
             </div>
         </div>
-    )
+    );
 }
