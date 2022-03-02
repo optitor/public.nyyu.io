@@ -157,7 +157,7 @@ export default function AuctionPlaceBid() {
                         <div className="mt-1 mb-2">
                             <div className="d-flex align-items-center gap-2">
                                 <svg
-                                    class="icon-23px text-danger"
+                                    className="icon-23px text-danger"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"

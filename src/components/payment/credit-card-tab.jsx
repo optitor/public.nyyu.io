@@ -270,7 +270,7 @@ const CardSection = ({ amount, round }) => {
                     <div className="text-danger fs-16px ps-0 mb-2">
                         <div className="d-flex align-items-center gap-2">
                             <svg
-                                class="icon-23px"
+                                className="icon-23px"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
