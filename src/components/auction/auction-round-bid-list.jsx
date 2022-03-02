@@ -1,22 +1,24 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { useQuery } from "@apollo/client"
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import _ from "lodash"
+import { useQuery } from "@apollo/client"
+
+import { GET_BID } from "../../apollo/graghqls/querys/Auction"
+import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
+
 import { useAuction } from "./auction-context"
 import CustomSpinner from "../common/custom-spinner"
+
 import { GreenCup } from "../../utilities/imgImport"
-import { Currencies } from "../../utilities/staticData"
-import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
-import { GET_BID } from "../../apollo/graghqls/querys/Auction"
-import { useEffect } from "react"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
-    // Containers
     const auction = useAuction()
     const { auctions, currentRoundNumber } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
+    const [displayedBitList, setDisplayedBidList] = useState(null)
+    const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
+    const [currentUserBidData, setCurrentUserBidData] = useState(null);
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
@@ -72,9 +74,29 @@ export default function AuctionRoundBidList() {
     })
 
     useEffect(() => {
+        if (currentRoundBidList && currentRoundBidList.length) {
+            if (currentRoundBidList.length > 5 ) {
+                const currentUserBidInfo = currentRoundBidList?.filter(
+                    (auction) => auction.userId === 405
+                )[0]
+                if (currentUserBidInfo && currentUserBidInfo.ranking !== currentRoundBidList.length - 2) {
+                    setCurrentUserBidData(currentUserBidInfo)
+                    setCurrentAuctionUserExist(true)
+                    setDisplayedBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 2))
+                } else {
+                    setDisplayedBidList(currentRoundBidList.slice(0, 4))
+                }
+            } else {
+                setDisplayedBidList(currentRoundBidList)
+            }
+        }
+
+    }, [currentRoundBidList]);
+
+    useEffect(() => {
         if (current.status === 2) return startPolling(pollIntervalValue)
         return stopPolling()
-    }, [current])
+    }, [current, startPolling, stopPolling])
 
     // Render
     if (loadingData)
@@ -85,63 +107,53 @@ export default function AuctionRoundBidList() {
         )
 
     return (
-        <>
-            <Tabs className="statistics-tab">
-                <TabList>
-                    <Tab></Tab>
-                </TabList>
-                <TabPanel>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th className="border-0 py-2">
-                                    <img src={GreenCup} alt="Green Cup" />
-                                </th>
-                                <th className="fw-500 py-2">Placement</th>
-                                <th className="fw-500 text-end py-2">
-                                    Highest Bids
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentRoundBidList.map((item, index) => (
-                                <tr
-                                    key={index}
-                                    style={{
-                                        fontWeight:
-                                            currentUser?.id === item.userId
-                                                ? "bold"
-                                                : "unset",
-                                    }}
-                                >
-                                    <td className="border-0 ps-6px py-2">
-                                        {index + 1}
-                                    </td>
-                                    <td className="py-2">
-                                        {item.prefix + item.name}
-                                    </td>
-                                    <td className="py-2 text-end">
-                                        <span className="txt-green">
-                                            {Currencies[0].symbol}{" "}
-                                        </span>
-                                        {item.totalAmount}
-                                    </td>
-                                </tr>
-                            ))}
-                            {currentRoundBidList.length === 0 && (
-                                <tr>
-                                    <td
-                                        className="text-uppercase text-center mx-auto fs-14px border-0 py-2"
-                                        colSpan={3}
-                                    >
-                                        no records found
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </TabPanel>
-            </Tabs>
-        </>
+        <div className="d-flex flex-column align-items-center pt-5">
+            <div className="w-100 d-flex justify-content-between align-items-center border-bottom-scorpion p-2">
+                <div className="d-flex align-items-center justify-content-start">
+                    <img src={GreenCup} alt="Green Cup" />
+                    <div className="text-white pl-1 fw-bold">{" "}/ {currentRoundBidList.length}</div>
+                </div>
+                <div className="d-flex align-items-center justify-content-start">
+                    <div className="text-white fw-bold">Bidder</div>
+                </div>
+                <div className="d-flex align-items-center justify-content-end fw-bold">
+                    <div className="text-white">Bid
+                        <span className="text-success"> (USD)</span>
+                    </div>
+                </div>
+            </div>
+            <div className="auction-bid-list-content-group">
+                {displayedBitList.map((item, index) =>
+                    <div className="w-100 d-flex justify-content-between align-items-center border-bottom-scorpion p-2" key={index}>
+                        <div className="d-flex align-items-center justify-content-start">
+                            <div className={item.userId === 405 ? "txt-cinnabar fw-bold" : "text-white fw-500"}>{item.ranking}</div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-start">
+                            <div className={item.userId === 405 ? "txt-cinnabar fw-bold" : "text-white"}>{item.prefix + "." + item.name}</div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-end">
+                            <div className="d-flex flex-column">
+                                <div className="text-white align-self-end fw-500">{item.tokenPrice}</div>
+                                <div className="txt-scorpion align-self-end fs-12px">{item.tokenAmount}</div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            {currentAuctionUserExist && <div className="w-100 d-flex justify-content-between align-items-center border-bottom-scorpion p-2">
+                <div className="d-flex align-items-center justify-content-start">
+                    <div className="txt-cinnabar fw-bold">{currentUserBidData.ranking}</div>
+                </div>
+                <div className="d-flex align-items-center justify-content-start">
+                    <div className="txt-cinnabar fw-bold">{currentUserBidData.prefix + "." + currentUserBidData.name}</div>
+                </div>
+                <div className="d-flex align-items-center justify-content-end">
+                    <div className="d-flex flex-column">
+                        <div className="text-white align-self-end fw-500">{currentUserBidData.tokenPrice}</div>
+                        <div className="txt-scorpion align-self-end fs-12px">{currentUserBidData.tokenAmount}</div>
+                    </div>
+                </div>
+            </div>}
+        </div>
     )
 }

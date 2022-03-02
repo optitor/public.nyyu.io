@@ -1,6 +1,7 @@
-import React, { useEffect } from "react"
-import { useAuction } from "./auction-context"
+import React from "react"
 import { Tab, TabList } from "react-tabs"
+
+import { useAuction } from "./auction-context"
 import { numberWithCommas } from "../../utilities/number"
 
 export default function AuctionRoundNavigator() {

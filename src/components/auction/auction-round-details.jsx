@@ -1,7 +1,7 @@
+import React, { useState, useEffect } from "react"
+
 import PercentageBar from "./percentage-bar"
 import { useAuction } from "./auction-context"
-import React, { useState, useEffect } from "react"
-import { Currencies } from "../../utilities/staticData"
 import { numberWithLength } from "../../utilities/number"
 
 export default function AuctionRoundDetails() {
@@ -41,12 +41,12 @@ export default function AuctionRoundDetails() {
             <div className="d-flex justify-content-between mt-4">
                 {minBidValue !== 0 ? (
                     <div>
-                        <p className="caption text-[#959595]">Minimum Bid </p>
+                        <p className="caption text-[#959595]">Reserved Price </p>
                         <p className="value">
+                            {minBidValue + " "}
                             <span className="txt-green">
-                                {Currencies[0].symbol + " "}
+                                USD
                             </span>
-                            {minBidValue}
                         </p>
                     </div>
                 ) : (
@@ -56,7 +56,7 @@ export default function AuctionRoundDetails() {
                     {current.status !== 3 ? (
                         <>
                             <p className="caption text-end text-[#959595]">
-                                Available Until
+                                Time Remaining
                             </p>
                             <p className="value text-end">
                                 {numberWithLength(
