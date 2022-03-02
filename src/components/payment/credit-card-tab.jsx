@@ -18,10 +18,15 @@ import { navigate } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
 import useCountDown from "react-countdown-hook";
 import { Qmark } from "../../utilities/imgImport";
+import { getStripePaymentFee } from "../../utilities/utility-methods";
+import { useSelector } from "react-redux";
 
 export default function CreditCardTab({ amount, round }) {
     // Containers
     const [stripePublicKey, setStripePublicKey] = useState(null);
+    const user = useSelector((state) => state.auth.user);
+    const { allFees } = useSelector((state) => state);
+    const stripePaymentFee = getStripePaymentFee(user, allFees, amount);
     const loading = !stripePublicKey;
 
     // Webservice
@@ -48,7 +53,10 @@ export default function CreditCardTab({ amount, round }) {
                     }}
                     stripe={loadStripe(stripePublicKey)}
                 >
-                    <CardSection amount={amount} round={round} />
+                    <CardSection
+                        amount={Number(amount) + Number(stripePaymentFee)}
+                        round={round}
+                    />
                 </Elements>
             )}
         </div>

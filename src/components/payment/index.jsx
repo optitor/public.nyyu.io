@@ -74,14 +74,12 @@ const CustomSingleValue = (props) => {
 };
 
 const Payment = () => {
-    const user = useSelector((state) => state.auth.user);
     const currentRound = useSelector((state) => state?.placeBid.round_id);
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
-    const [stripeFee, setStripeFee] = useState(0);
     const dispatch = useDispatch();
 
     const loading = !(totalRounds && barProgress && allFees);
@@ -123,12 +121,9 @@ const Payment = () => {
         onCompleted: (data) => {
             setAllFees(data.getAllFees);
             const allFees = data.getAllFees;
+            console.log(allFees);
             if (allFees) {
                 dispatch(set_All_Fees(allFees));
-                const fee = allFees.filter(
-                    (item) => item.tierLevel === user.tierLevel
-                )[0].fee;
-                setStripeFee(((2.9 + fee) * bidAmount) / 100 + 0.3);
             }
         },
         onError: (error) => console.log(error),
@@ -202,10 +197,7 @@ const Payment = () => {
                                 )}
                                 {tabIndex === 2 && (
                                     <CreditCardTab
-                                        amount={(
-                                            Number(bidAmount) +
-                                            Number(stripeFee)
-                                        ).toFixed(2)}
+                                        amount={Number(bidAmount).toFixed(2)}
                                         round={currentRound}
                                     />
                                 )}
@@ -367,10 +359,7 @@ const Payment = () => {
                             <OrderSummaryOfCoinPayments bidAmount={bidAmount} />
                         )}
                         {tabIndex === 2 && (
-                            <OrderSummaryOfCreditCard
-                                bidAmount={bidAmount}
-                                fee={stripeFee}
-                            />
+                            <OrderSummaryOfCreditCard bidAmount={bidAmount} />
                         )}
                         {tabIndex !== 1 && tabIndex !== 2 && (
                             <OrderSummary bidAmount={bidAmount} />
