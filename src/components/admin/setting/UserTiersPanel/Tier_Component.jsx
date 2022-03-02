@@ -36,6 +36,15 @@ const TierComponent = ({tier = {}}) => {
                         renderText={(value, props) => <p {...props}>{value}</p>}
                     />
                 </div>
+                <div className='txnFee'>
+                    <NumberFormat
+                        value={0.1}
+                        displayType={'text'}
+                        suffix={' %'}
+                        thousandSeparator={true}
+                        renderText={(value, props) => <p {...props}>{value}</p>}
+                    />
+                </div>
                 <div className='edit'>
                     <p><span className='edit'><Icon icon="clarity:note-edit-line" onClick={() => setIsEditOpen(true)}/></span></p>                    
                     <p><span className='delete'><Icon icon="akar-icons:trash-can" onClick={() => setIsConfirmOpen(true)}/></span></p>
@@ -67,10 +76,16 @@ const Container = styled.div`
         }
     }
     &>div.name {
-        width: 43%;
+        width: 26%;
     }
     &>div.threshold {
-        width: 40%;
+        width: 25%;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 2%;
+    }
+    &>div.txnFee {
+        width: 35%;
         display: flex;
         justify-content: space-between;
         padding-right: 2%;
@@ -91,18 +106,15 @@ const Container = styled.div`
         }
     }
     @media screen and (max-width: ${device['laptop-md']}){
-        &>div.image {width: 10%}
-        &>div.name {width: 40%}
-        &>div.threshold {
-            width: 10%
+        &>div {
             p span {
                 font-size: 18px;
             }
         }
     }
     @media screen and (max-width: ${device['tablet']}){
-        &>div.image {width: 12%}
-        &>div.name {width: 38%}
+        &>div.image {width: 10%}
+        &>div.name {width: 20%}
     }
     @media screen and (max-width: ${device['phone']}){
         &>div.image {
@@ -112,7 +124,7 @@ const Container = styled.div`
                 height: 30px;
             }
         }
-        &>div.name {width: 45%;}
+        &>div.name {width: 30%;}
         &>div.threshold {width: 30%;}
         &>div.edit {width: 20%;}
     }

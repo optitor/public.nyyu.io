@@ -208,12 +208,12 @@ const SelectOption = (props) => {
 const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
-
+    const { allFees } = useSelector(state => state);
+    
     const [copied, setCopied] = useState(false);
 
     const [fooCoins, setFooCoins] = useState([]);
     const [BTCPrice, setBTCPrice] = useState(null);
-    const [allFees, setAllFees] = useState({});
 
     const loadingData = _.isEmpty(fooCoins) || !BTCPrice || _.isEmpty(allFees);
 
@@ -236,15 +236,14 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const [paymentId, setPaymentId] = useState(null);
 
     const networks = useMemo(() => coin.networks, [coin]);
+    
     const transactionFee = useMemo(() => {
         const fee = allFees[user?.tierLevel]?.fee;
         const txnFee = (bidAmount * (0.5 + fee)) / 100;
         if (txnFee === NaN) return null;
         return txnFee.toFixed(4);
     }, [allFees, bidAmount, user]);
-
-    console.log(transactionFee);
-
+    
     useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
@@ -258,18 +257,6 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         },
         onError: (err) => {
             console.log("get exchange rate: ", err);
-        },
-    });
-
-    useQuery(Query.GET_ALL_FEES, {
-        onCompleted: (data) => {
-            if (data.getAllFees) {
-                const temp = _.mapKeys(data.getAllFees, "tierLevel");
-                setAllFees(temp);
-            }
-        },
-        onError: (err) => {
-            console.log("get All Fees", err);
         },
     });
 

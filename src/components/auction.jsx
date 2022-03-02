@@ -1,27 +1,26 @@
-import Seo from "./seo";
-import Header from "./header";
-import { Tabs } from "react-tabs";
-import React, { useState } from "react";
-import Loading from "./common/Loading";
-import ReactTooltip from "react-tooltip";
-import { Qmark } from "../utilities/imgImport";
-import { useAuction } from "./auction/auction-context";
-import AuctionPlaceBid from "./auction/auction-place-bid";
-import AuctionRoundBidList from "./auction/auction-round-bid-list";
-import AuctionRoundDetails from "./auction/auction-round-details";
-import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData";
-import AuctionPlaceBidModal from "./auction/auction-place-bid-modal";
-import AuctionRoundNavigator from "./auction/auction-round-navigator";
-import { useEffect } from "react";
+import Seo from "./seo"
+import Header from "./header"
+import { Tabs } from "react-tabs"
+import React, { useState, useEffect } from "react"
+import Loading from "./common/Loading"
+import ReactTooltip from "react-tooltip"
+import { Qmark } from "../utilities/imgImport"
+import { useAuction } from "./auction/auction-context"
+import AuctionPlaceBid from "./auction/auction-place-bid"
+import AuctionRoundBidList from "./auction/auction-round-bid-list"
+import AuctionRoundDetails from "./auction/auction-round-details"
+import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData"
+import AuctionPlaceBidModal from "./auction/auction-place-bid-modal"
+import AuctionRoundNavigator from "./auction/auction-round-navigator"
 
 const Auction = () => {
     const auction = useAuction();
     const { auctions, presales, currentRound, currentRoundNumber } = auction;
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
-    )[0];
-    const [loading, setLoading] = useState(true);
-
+    )[0]
+    const [loading, setLoading] = useState(true)
+    
     useEffect(() => {
         if (auction.loading === false) {
             if (currentRound.auction) {
@@ -96,25 +95,26 @@ const Auction = () => {
                             </div>
                             <AuctionRoundDetails />
                             {current?.status !== 3 && (
-                                <div className="d-block d-sm-none">
-                                    <button
-                                        className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
-                                        onClick={() =>
-                                            auction.setBidModal(true)
-                                        }
-                                    >
-                                        place bid
-                                    </button>
-                                </div>
+                                <>
+                                    <div className="d-block d-sm-none">
+                                        <div
+                                            className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
+                                            onClick={() =>
+                                                auction.setBidModal(true)
+                                            }
+                                        >
+                                            place bid
+                                        </div>
+                                    </div>
+                                    <AuctionPlaceBidModal />
+                                </>
                             )}
                         </div>
-
                         <div className="auction-right col-lg-8 col-md-7">
                             <AuctionPlaceBid />
                         </div>
                     </div>
                 </section>
-                {current?.status !== 3 && <AuctionPlaceBidModal />}
             </main>
         </>
     );

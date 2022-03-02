@@ -89,6 +89,8 @@ import credit from "../images/payment/credit.svg"
 import ndbWallet from "../images/payment/ndb-wallet.svg"
 import externalWallet from "../images/payment/external-wallet.svg"
 import paypal from "../images/payment/paypal.svg"
+import bidIcon from "../images/payment/bid.svg"
+import pillarChartIcon from "../images/payment/chart.svg"
 import paypalBrand from "../images/payment/paypal-brand.svg"
 
 import verifyIdStep1 from "../images/verify-id/verify-id-step-1.svg"
@@ -209,6 +211,8 @@ export const Credit = credit
 export const NdbWallet = ndbWallet
 export const ExternalWallet = externalWallet
 export const Paypal = paypal
+export const BidIcon = bidIcon
+export const PillarChartIcon = pillarChartIcon
 export const PaypalBrand = paypalBrand
 
 export const VerifyIdStep1 = verifyIdStep1

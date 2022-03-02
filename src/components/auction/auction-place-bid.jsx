@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+    import React, { useEffect } from "react"
 import Slider from "rc-slider"
 import { useAuction } from "./auction-context"
 import { Currencies } from "../../utilities/staticData"
