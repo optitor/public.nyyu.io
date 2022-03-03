@@ -88,6 +88,7 @@ const Payment = () => {
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
     // if (!isSSR && !currentRound) navigate("/app/auction");
+    // TODO: uncomment the above line later on.
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),

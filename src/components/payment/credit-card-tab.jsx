@@ -69,6 +69,7 @@ const CardSection = ({ amount, round }) => {
     const elements = useElements();
     const [error, setError] = useState("");
     const [cardHolder, setCardHolder] = useState("");
+    const [billingCode, setBillingCode] = useState("");
     const [allowFractionBox, setAllowFractionBox] = useState(false);
     const [successfulPayment, setSuccessfulPayment] = useState(null);
     const [requestPending, setRequestPending] = useState(false);
@@ -168,6 +169,14 @@ const CardSection = ({ amount, round }) => {
             card: elements.getElement(CardNumberElement),
             billing_details: {
                 name: cardHolder,
+                address: {
+                    city: null,
+                    country: null,
+                    line1: null,
+                    line2: null,
+                    postal_code: billingCode,
+                    state: null,
+                },
             },
         });
         if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
@@ -319,15 +328,67 @@ const CardSection = ({ amount, round }) => {
                         </div>
                     )}
 
-                    <div className="col-6 ps-0 pe-1">
-                        <input
-                            type="text"
-                            style={style.base}
-                            className="border border-light border-1 p-2 w-100 mb-3 placeholder:text-light form-control"
-                            placeholder="Card holder (John Smith)"
-                            value={cardHolder}
-                            onChange={(e) => setCardHolder(e.target.value)}
-                        />
+
+                <div className="col-6 ps-0 pe-1">
+                    <input
+                        type="text"
+                        style={style.base}
+                        className="border border-light border-1 p-2 w-100 mb-3 placeholder:text-light form-control"
+                        placeholder="Card holder (John Smith)"
+                        value={cardHolder}
+                        onChange={(e) => setCardHolder(e.target.value)}
+                    />
+                </div>
+                <div className="col-6 pe-0 ps-0">
+                    <CardNumberElement
+                        className="border border-light border-1 p-2 w-100 mb-3"
+                        options={{
+                            style,
+                            placeholder:
+                                "Card number (4563 9999 8883 7777 2888)",
+                        }}
+                    />
+                </div>
+                <div className="col-4 ps-0 pe-1">
+                    <CardExpiryElement
+                        className="border border-light border-1 p-2 mb-3 w-100"
+                        options={{
+                            style,
+                            placeholder: "Expiration date (MM/YY)",
+                        }}
+                    />
+                </div>
+                <div className="col-4">
+                    <CardCvcElement
+                        className="border border-light border-1 p-2 mb-3 w-100"
+                        options={{
+                            style,
+                            placeholder: "CVC (123)",
+                        }}
+                    />
+                </div>
+                <div className="col-4 pe-0">
+                    <input
+                        type="text"
+                        style={style.base}
+                        className="border border-light border-1 p-2 w-100 mb-3 placeholder:text-light form-control"
+                        placeholder="Billing zip/postal code"
+                        value={billingCode}
+                        onChange={(e) => setBillingCode(e.target.value)}
+                    />
+                </div>
+            </form>
+            <div className="mt-3 d-flex justify-content-between">
+                <div className="d-flex flex-row align-items-center">
+                    <CheckBox
+                        type="checkbox"
+                        name="allow_fraction"
+                        value={allowFractionBox}
+                        onChange={(e) => setAllowFractionBox(e.target.checked)}
+                        className="text-uppercase"
+                    ></CheckBox>
+                    <div className="allow-text text-light">
+                        Do you allow fraction of order compleation?
                     </div>
                     <div className="col-6 pe-0 ps-0">
                         <CardNumberElement
