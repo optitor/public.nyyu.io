@@ -1,10 +1,10 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
 
 export const GET_STRIPE_PUB_KEY = gql`
     {
         getStripePubKey
     }
-`
+`;
 
 export const STRIPE_PAYMENT = gql`
     mutation (
@@ -12,12 +12,14 @@ export const STRIPE_PAYMENT = gql`
         $amount: Float
         $paymentIntentId: String
         $paymentMethodId: String
+        $isSaveCard: Boolean
     ) {
         payStripeForAuction(
             roundId: $roundId
             amount: $amount
             paymentIntentId: $paymentIntentId
             paymentMethodId: $paymentMethodId
+            isSaveCard: $isSaveCard
         ) {
             clientSecret
             paymentIntentId
@@ -25,4 +27,4 @@ export const STRIPE_PAYMENT = gql`
             error
         }
     }
-`
+`;
