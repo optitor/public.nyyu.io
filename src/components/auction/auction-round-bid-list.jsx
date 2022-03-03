@@ -109,7 +109,7 @@ export default function AuctionRoundBidList() {
         )
 
     return (
-        <div className="d-flex flex-column align-items-center pt-5">
+        <div className="d-flex flex-column align-items-center pt-5 list-part">
             <AuctionListHeader totalCount={currentRoundBidList.length} auctionType="Bidder" auctionTitle="Bid" />
             <div className="auction-bid-list-content-group">
                 {displayedBidList && displayedBidList.map((item, index) =>
@@ -124,7 +124,8 @@ export default function AuctionRoundBidList() {
                     />
                 )}
             </div>
-            {currentAuctionUserExist &&
+            <div className="auction-bid-list-content-final">
+                {currentAuctionUserExist &&
                 <AuctionList
                     ranking={currentUserBidData.ranking}
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
@@ -132,7 +133,8 @@ export default function AuctionRoundBidList() {
                     tokenAmount={currentUserBidData.tokenAmount}
                     winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1 }
                     isCurrentUser={true}/>
-            }
+                }
+            </div>
         </div>
     )
 }

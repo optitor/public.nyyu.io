@@ -85,7 +85,7 @@
             }
         }
         .auction-left {
-            padding-right: 20px;
+            padding-right: 50px;
             @include mq("tablet") {
                 display: block !important;
             }
@@ -245,12 +245,42 @@
         }
     }
 }
+.list-part {
+    & > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        & > * {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+}
 
 .auction-bid-list-content-group {
     width: 100%;
-    max-height: 305px;
+    max-height: 295px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    & > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        & > * {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+}
+
+.auction-bid-list-content-final {
+    width: 100%;
+    & > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        & > * {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
 }
 
 .place-bid {
