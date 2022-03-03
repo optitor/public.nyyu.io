@@ -69,6 +69,7 @@ const CardSection = ({ amount, round }) => {
     const elements = useElements();
     const [error, setError] = useState("");
     const [cardHolder, setCardHolder] = useState("");
+    const [billingCode, setBillingCode] = useState("");
     const [allowFractionBox, setAllowFractionBox] = useState(false);
     const [successfulPayment, setSuccessfulPayment] = useState(null);
     const [requestPending, setRequestPending] = useState(false);
@@ -167,6 +168,14 @@ const CardSection = ({ amount, round }) => {
             card: elements.getElement(CardNumberElement),
             billing_details: {
                 name: cardHolder,
+                address: {
+                    city: null,
+                    country: null,
+                    line1: null,
+                    line2: null,
+                    postal_code: billingCode,
+                    state: null,
+                },
             },
         });
         if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
@@ -315,7 +324,7 @@ const CardSection = ({ amount, round }) => {
                         }}
                     />
                 </div>
-                <div className="col-6 ps-0 pe-1">
+                <div className="col-4 ps-0 pe-1">
                     <CardExpiryElement
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{
@@ -324,13 +333,23 @@ const CardSection = ({ amount, round }) => {
                         }}
                     />
                 </div>
-                <div className="col-6 pe-0 ps-0">
+                <div className="col-4">
                     <CardCvcElement
                         className="border border-light border-1 p-2 mb-3 w-100"
                         options={{
                             style,
                             placeholder: "CVC (123)",
                         }}
+                    />
+                </div>
+                <div className="col-4 pe-0">
+                    <input
+                        type="text"
+                        style={style.base}
+                        className="border border-light border-1 p-2 w-100 mb-3 placeholder:text-light form-control"
+                        placeholder="Billing zip/postal code"
+                        value={billingCode}
+                        onChange={(e) => setBillingCode(e.target.value)}
                     />
                 </div>
             </form>

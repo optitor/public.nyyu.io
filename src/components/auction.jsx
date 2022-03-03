@@ -23,10 +23,10 @@ const Auction = () => {
     
     useEffect(() => {
         if (auction.loading === false) {
-            if (currentRound.auction) {
+            if (currentRound.auction && auctions) {
                 auction.setIsAuction(true);
                 auction.setCurrentRoundNumber(auctions.length);
-            } else if (currentRound.presale) {
+            } else if (currentRound.presale && presales) {
                 auction.setIsAuction(false);
                 auction.setCurrentRoundNumber(presales.length);
             } else {
