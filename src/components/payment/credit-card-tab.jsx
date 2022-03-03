@@ -75,6 +75,7 @@ const CardSection = ({ amount, round }) => {
     const [isNewCard, setIsNewCard] = useState(true);
     const [postalCode, setPostalCode] = useState("");
     const [country, setCountry] = useState("");
+    const [isSaveCard, setIsSaveCard] = useState(false);
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
 
@@ -187,6 +188,7 @@ const CardSection = ({ amount, round }) => {
                     amount: amount * 100,
                     paymentMethodId: paymentMethod.id,
                     paymentIntentId: null,
+                    isSaveCard,
                 },
             });
         }
@@ -484,9 +486,9 @@ const CardSection = ({ amount, round }) => {
                             <CheckBox
                                 type="checkbox"
                                 name="allow_fraction"
-                                value={allowFractionBox}
+                                value={isSaveCard}
                                 onChange={(e) =>
-                                    setAllowFractionBox(e.target.checked)
+                                    setIsSaveCard(e.target.checked)
                                 }
                                 className="text-uppercase"
                             ></CheckBox>
