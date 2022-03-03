@@ -7,7 +7,7 @@ import { bidReducer } from "./bidReducer";
 import { tasksReducer, userTierReducer } from "./settingReducer";
 import { dataReducer } from './dataReducer';
 import { kycSettingsReducer } from "./settingReducer";
-import { tempReducer } from './tempReducer';
+import { tempReducer, profileTabReducer } from './tempReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -19,7 +19,8 @@ const rootReducer = combineReducers({
     kycSettings: kycSettingsReducer,
     tasks: tasksReducer,
     data: dataReducer,
-    temp: tempReducer
+    temp: tempReducer,
+    profileTab: profileTabReducer,
 })
 
 export default rootReducer
