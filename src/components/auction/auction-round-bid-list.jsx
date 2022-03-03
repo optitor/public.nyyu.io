@@ -24,6 +24,7 @@ export default function AuctionRoundBidList() {
         (auction) => auction.round === currentRoundNumber
     )[0]
     const pollIntervalValue = 10000
+    const limitDisplayBidCount = 5
 
     const loadingData = !(
         currentRoundBidList &&
@@ -76,16 +77,16 @@ export default function AuctionRoundBidList() {
 
     useEffect(() => {
         if (currentRoundBidList && currentRoundBidList.length) {
-            if (currentRoundBidList.length > 5 ) {
+            if (currentRoundBidList.length > limitDisplayBidCount ) {
                 const currentUserBidInfo = currentRoundBidList?.filter(
                     (auction) => auction.userId === currentUser.id
                 )[0]
-                if (currentUserBidInfo) {
+                if (currentUserBidInfo && currentUserBidInfo.ranking > limitDisplayBidCount) {
                     setCurrentUserBidData(currentUserBidInfo)
                     setCurrentAuctionUserExist(true)
                     setDisplayedBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 1))
                 } else {
-                    setDisplayedBidList(currentRoundBidList.slice(0, 5))
+                    setDisplayedBidList(currentRoundBidList.slice(0, limitDisplayBidCount))
                 }
             } else {
                 setDisplayedBidList(currentRoundBidList)
