@@ -11,7 +11,12 @@ import {
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import ReactTooltip from "react-tooltip";
 import { CheckBox } from "../common/FormControl";
-import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./payment-webservice";
+import {
+    DELETE_CARD,
+    GET_SAVED_CARDS,
+    GET_STRIPE_PUB_KEY,
+    STRIPE_PAYMENT,
+} from "./payment-webservice";
 import { useMutation, useQuery } from "@apollo/client";
 import CustomSpinner from "../common/custom-spinner";
 import { navigate } from "gatsby";
@@ -27,11 +32,16 @@ export default function CreditCardTab({ amount, round }) {
     const user = useSelector((state) => state.auth.user);
     const { allFees } = useSelector((state) => state);
     const stripePaymentFee = getStripePaymentFee(user, allFees, amount);
-    const loading = !stripePublicKey;
+    const [savedCards, setSavedCards] = useState([]);
+    const loading = !(stripePublicKey && savedCards);
 
     // Webservice
     useQuery(GET_STRIPE_PUB_KEY, {
         onCompleted: (data) => setStripePublicKey(data.getStripePubKey),
+        onError: (error) => console.log(error),
+    });
+    useQuery(GET_SAVED_CARDS, {
+        onCompleted: (data) => setSavedCards(data.getSavedCards),
         onError: (error) => console.log(error),
     });
 
@@ -56,6 +66,8 @@ export default function CreditCardTab({ amount, round }) {
                     <CardSection
                         amount={Number(amount) + Number(stripePaymentFee)}
                         round={round}
+                        savedCards={savedCards}
+                        setSavedCards={setSavedCards}
                     />
                 </Elements>
             )}
@@ -63,7 +75,7 @@ export default function CreditCardTab({ amount, round }) {
     );
 }
 
-const CardSection = ({ amount, round }) => {
+const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
     // Containers
     const stripe = useStripe();
     const elements = useElements();
@@ -76,6 +88,9 @@ const CardSection = ({ amount, round }) => {
     const [postalCode, setPostalCode] = useState("");
     const [country, setCountry] = useState("");
     const [isSaveCard, setIsSaveCard] = useState(false);
+    const [selectedSavedCard, setSelectedSavedCard] = useState(0);
+    const [deleteCardRequestPending, setDeleteCardRequestPending] =
+        useState(false);
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
 
@@ -107,6 +122,12 @@ const CardSection = ({ amount, round }) => {
     };
 
     // Webservice
+    const [deleteCard] = useMutation(DELETE_CARD, {
+        onCompleted: (data) => {
+            setDeleteCardRequestPending(false);
+        },
+        onError: (error) => console.log(error),
+    });
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
         onCompleted: async (data) => {
             if (stripePaymentSecondCall === false) {
@@ -160,6 +181,15 @@ const CardSection = ({ amount, round }) => {
     });
 
     // Methods
+    const deleteCardMethod = (id) => {
+        setDeleteCardRequestPending(true);
+        setSavedCards(savedCards.filter((item) => item.id !== id));
+        deleteCard({
+            variables: {
+                id,
+            },
+        });
+    };
     const submitPayment = async (e) => {
         e.preventDefault();
         setError("");
@@ -390,6 +420,10 @@ const CardSection = ({ amount, round }) => {
                         />
                     </div>
                 </form>
+            ) : deleteCardRequestPending ? (
+                <div className="credit-card-save-cards d-flex align-items-center justify-content-center w-100">
+                    <CustomSpinner />
+                </div>
             ) : (
                 <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-2">
                     <div className="credit-card-save-cards-cta col-lg-6 col-12 pe-sm-2 px-0 fw-500 mb-3 mb-sm-2">
@@ -400,7 +434,8 @@ const CardSection = ({ amount, round }) => {
                             + Add new card
                         </div>
                     </div>
-                    {[1, 2, 3, 4, 5, 6].map((item, index) => {
+
+                    {savedCards.map((item, index) => {
                         return (
                             <div
                                 key={index}
@@ -411,8 +446,9 @@ const CardSection = ({ amount, round }) => {
                                 }`}
                             >
                                 <div
+                                    onClick={() => setSelectedSavedCard(index)}
                                     className={`col-12 ${
-                                        index === 0 && "active"
+                                        index === selectedSavedCard && "active"
                                     }`}
                                 >
                                     <div className="d-flex align-items-start">
@@ -422,11 +458,17 @@ const CardSection = ({ amount, round }) => {
                                             className="me-4"
                                         />
                                         <div className="credit-card-save-cards-item-details">
-                                            **** **** **** **57 <br />
-                                            07/30 <br />
+                                            **** **** **** {item.last4} <br />
+                                            {item.expMonth}/{item.expYear}{" "}
+                                            <br />
                                             Card holder's name
                                         </div>
-                                        <button className="btn text-underline text-light mt-0 pt-0 fs-13px ms-auto">
+                                        <button
+                                            onClick={() =>
+                                                deleteCardMethod(item.id)
+                                            }
+                                            className="btn text-underline text-light mt-0 pt-0 fs-13px ms-auto"
+                                        >
                                             Delete card
                                         </button>
                                     </div>
