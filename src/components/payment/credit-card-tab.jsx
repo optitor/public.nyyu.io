@@ -17,7 +17,7 @@ import CustomSpinner from "../common/custom-spinner";
 import { navigate } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
 import useCountDown from "react-countdown-hook";
-import { Qmark } from "../../utilities/imgImport";
+import { Amex, Qmark } from "../../utilities/imgImport";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 
@@ -359,7 +359,46 @@ const CardSection = ({ amount, round }) => {
                     </div>
                 </form>
             ) : (
-                <></>
+                <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-0">
+                    <div className="credit-card-save-cards-cta col-lg-6 col-12 ps-sm-0 px-0 fw-500 mb-3 mb-sm-2">
+                        <div
+                            onClick={() => setIsNewCard(true)}
+                            className="col-12 d-flex align-items-center justify-content-center fs-14px cursor-pointer"
+                        >
+                            + Add new card
+                        </div>
+                    </div>
+                    {[1, 2, 3, 4, 5, 6].map((item, index) => {
+                        return (
+                            <div
+                                key={index}
+                                className={`credit-card-save-cards-item mb-3 mb-sm-2 col-lg-6 col-12 ${
+                                    index % 2 === 0
+                                        ? "ps-sm-2 px-0"
+                                        : "pe-sm-2 px-0"
+                                }`}
+                            >
+                                <div className="col-12">
+                                    <div className="d-flex align-items-start">
+                                        <img
+                                            src={Amex}
+                                            alt="Amex"
+                                            className="me-4"
+                                        />
+                                        <div className="credit-card-save-cards-item-details">
+                                            **** **** **** **57 <br />
+                                            07/30 <br />
+                                            Card holder's name
+                                        </div>
+                                        <button className="btn text-underline text-light mt-0 pt-0 fs-13px ms-auto">
+                                            Delete card
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             )}
             {isNewCard && (
                 <>
@@ -425,7 +464,7 @@ const CardSection = ({ amount, round }) => {
                 </>
             )}
             <button
-                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-4 ${
+                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-2 ${
                     requestPending && "disabled"
                 }`}
                 onClick={requestPending ? null : submitPayment}

@@ -70,7 +70,7 @@
             position: relative;
             border-bottom: 1px solid #ffffff;
             padding-bottom: 10px;
-            margin-bottom: 27px;
+            margin-bottom: 22px;
             text-align: center;
             .left-arrow {
                 position: absolute;
@@ -610,5 +610,49 @@
         @include mq("phone", max) {
             display: block;
         }
+    }
+}
+
+.credit-card-save-cards {
+    height: 300px;
+    @include mq("phone") {
+        height: 200px;
+    }
+    overflow-y: auto;
+    padding-right: 10px;
+    &-item {
+        & > div {
+            height: 110px;
+            padding: 15px 10px;
+            border: 1px solid #959595;
+            @include mq("phone") {
+                height: 84px;
+                padding: 15px 21px;
+            }
+        }
+        &-details {
+            font-size: 14px;
+            font-weight: 500;
+            color: #959595;
+        }
+    }
+    &-cta {
+        & > div {
+            height: 110px;
+            border: 1px solid #959595;
+            @include mq("phone") {
+                height: 84px;
+            }
+        }
+    }
+    &::-webkit-scrollbar {
+        width: 2px;
+        height: 0px !important;
+    }
+    &::-webkit-scrollbar-track {
+        background: #666666 !important;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #ffffff !important;
     }
 }
