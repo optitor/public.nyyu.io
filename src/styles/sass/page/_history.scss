@@ -513,6 +513,10 @@
 }
 
 .deposit-modal {
+    max-width: 800px;
+    p {
+        font-size: 14px;
+    }
     .css-lv2wyh-option {
         background-color: transparent !important;
         border-radius: 0px !important;
@@ -520,17 +524,29 @@
     .css-xmxkze-menu {
         border-radius: 0px !important;
     }
-    max-width: 800px;
+    
     svg.icon {
         color: white;
         cursor: pointer;
         font-size: 32px;
     }
-    div.step1 {
+
+    .step1 {
         width: 60%;
+        margin: auto;
     }
-    div.step2 {
+    .step2 {
+        width: 80%;
+        margin: auto;
+    }
+    .step3 {
         width: 75%;
+        margin: auto;
+    }
+    @include mq('phone', max) {
+        .step1, .step2, .step3 {
+            width: 100%;
+        }
     }
     div.deposit {
         min-height: 400px;
@@ -549,6 +565,7 @@
                 border: 1px solid #ffffff;
                 border-radius: 0;
                 width: 49%;
+                height: 40px;
             }
             button.selected {
                 color: black;
@@ -576,6 +593,7 @@
                     align-items: center;
                     justify-content: space-between;
                     padding: 10px;
+                    cursor: pointer;
                     div.address {
                         width: 90%;
                         word-wrap: break-word;
@@ -645,6 +663,10 @@
                     margin-top: 25px;
                 }
             }
+        }
+        .col-sm-6 {
+            padding-left: 1%;
+            padding-right: 1%;
         }
     }
 }

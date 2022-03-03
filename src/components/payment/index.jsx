@@ -36,6 +36,7 @@ import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
 import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
 import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { set_All_Fees } from "../../redux/actions/allFeesAction";
+import { ROUTES } from "../../utilities/routes";
 
 const { Option, SingleValue } = components;
 
@@ -87,7 +88,7 @@ const Payment = () => {
 
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    if (!isSSR && !currentRound) navigate("/app/auction");
+    if (!isSSR && !currentRound) navigate(ROUTES.auction);
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
