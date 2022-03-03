@@ -1,7 +1,7 @@
 import Seo from "./seo";
 import Header from "./header";
 import { Tabs } from "react-tabs";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Loading from "./common/Loading";
 import ReactTooltip from "react-tooltip";
 import { Qmark } from "../utilities/imgImport";
@@ -12,7 +12,6 @@ import AuctionRoundDetails from "./auction/auction-round-details";
 import { AUCTION_TOOLTIP_CONTENT1 } from "../utilities/staticData";
 import AuctionPlaceBidModal from "./auction/auction-place-bid-modal";
 import AuctionRoundNavigator from "./auction/auction-round-navigator";
-import { useEffect } from "react";
 
 const Auction = () => {
     const auction = useAuction();
@@ -24,10 +23,10 @@ const Auction = () => {
 
     useEffect(() => {
         if (auction.loading === false) {
-            if (currentRound.auction) {
+            if (currentRound.auction && auctions) {
                 auction.setIsAuction(true);
                 auction.setCurrentRoundNumber(auctions.length);
-            } else if (currentRound.presale) {
+            } else if (currentRound.presale && presales) {
                 auction.setIsAuction(false);
                 auction.setCurrentRoundNumber(presales.length);
             } else {
@@ -96,25 +95,26 @@ const Auction = () => {
                             </div>
                             <AuctionRoundDetails />
                             {current?.status !== 3 && (
-                                <div className="d-block d-sm-none">
-                                    <button
-                                        className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
-                                        onClick={() =>
-                                            auction.setBidModal(true)
-                                        }
-                                    >
-                                        place bid
-                                    </button>
-                                </div>
+                                <>
+                                    <div className="d-block d-sm-none">
+                                        <div
+                                            className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
+                                            onClick={() =>
+                                                auction.setBidModal(true)
+                                            }
+                                        >
+                                            place bid
+                                        </div>
+                                    </div>
+                                    <AuctionPlaceBidModal />
+                                </>
                             )}
                         </div>
-
                         <div className="auction-right col-lg-8 col-md-7">
                             <AuctionPlaceBid />
                         </div>
                     </div>
                 </section>
-                {current?.status !== 3 && <AuctionPlaceBidModal />}
             </main>
         </>
     );

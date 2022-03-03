@@ -1,14 +1,14 @@
 /* eslint-disable */
 
-import React, { useState, useEffect } from "react"
-import Modal from "react-modal"
-import _ from "lodash"
-import svgToDataURL from "svg-to-dataurl"
-import Select, { components } from "react-select"
-import { Icon } from "@iconify/react"
-import { CopyToClipboard } from "react-copy-to-clipboard"
-import { generateQR } from "../../utilities/string"
-import { Plaid, PaypalFiat, Stripe } from '../../utilities/imgImport'
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
+import _ from "lodash";
+import Select, { components } from "react-select";
+import { Icon } from "@iconify/react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { generateQR } from "../../utilities/string";
+import CustomSpinner from "../common/custom-spinner";
+import { Plaid, PaypalFiat, Stripe } from '../../utilities/imgImport';
 
 const { Option } = components
 
@@ -101,9 +101,11 @@ export default function DepositModal({ showModal, setShowModal, transactionType,
                                         value={selectedAsset}
                                         onChange={(selected) => setSelectedAsset(selected)}
                                         styles={customSelectStyles}
+                                        placeholder="Select Coin"
                                         components={{
                                             Option: SelectOption,
                                             SingleValue: SelectOption,
+                                            IndicatorSeparator: null                                            
                                         }}
                                     />
                                 </div>
@@ -180,30 +182,43 @@ export default function DepositModal({ showModal, setShowModal, transactionType,
 }
 
 const customSelectStyles = {
+    input: provided => ({
+        ...provided,
+        position: 'absolute'
+    }),
     option: (provided, state) => ({
         ...provided,
         color: "white",
-        backgroundColor: state.isSelected ? "#0b7e39" : "#1e1e1e",
+        backgroundColor: state.isSelected? '#000000': undefined,
         fontSize: 14,
+        cursor: 'pointer',
+        ':hover': {
+            backgroundColor: 'inherit'
+        }
     }),
     control: (provided) => ({
         ...provided,
         backgroundColor: "#1e1e1e",
         border: "none",
         borderRadius: 0,
+        height: 50
     }),
     menu: (provided) => ({
         ...provided,
         backgroundColor: "#1e1e1e",
         border: "1px solid white",
     }),
+    menuList: provided => ({
+        ...provided,
+        margin: 0,
+        padding: 0
+    }),
     singleValue: (provided) => ({
         ...provided,
         color: "white",
     }),
-    input: (provided) => ({
+    placeholder: provided => ({
         ...provided,
-        color: "white",
-        display: "none"
-    }),
+        color: 'dimgrey'
+    })
 }

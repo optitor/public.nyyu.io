@@ -35,7 +35,7 @@ export default function AuctionRoundBidList() {
         },
         onCompleted: (data) => {
             let list = _.orderBy(
-                data.getBidListByRound,
+                data?.getBidListByRound,
                 ["ranking", "tokenPrice"],
                 ["asc", "desc"]
             )
@@ -107,24 +107,25 @@ export default function AuctionRoundBidList() {
                             {currentRoundBidList.map((item, index) => (
                                 <tr
                                     key={index}
-                                    style={{
-                                        fontWeight:
-                                            currentUser?.id === item.userId
-                                                ? "bold"
-                                                : "unset",
-                                    }}
                                 >
-                                    <td className="border-0 ps-6px py-2">
+                                    <td className="border-0 ps-6px py-2"
+                                        style={{color: currentUser?.id === item.userId? "#23c865": "#ffffff" }}
+                                    >
                                         {index + 1}
                                     </td>
-                                    <td className="py-2">
-                                        {item.prefix + item.name}
+                                    <td className="py-2"
+                                        style={{color: currentUser?.id === item.userId? "#23c865": "#ffffff" }}
+                                    >
+                                        {item.prefix + '.' + item.name} {currentUser?.id === item.userId? ' (You)': ''}
                                     </td>
                                     <td className="py-2 text-end">
                                         <span className="txt-green">
                                             {Currencies[0].symbol}{" "}
                                         </span>
-                                        {item.totalAmount}
+                                        {item.totalAmount}<br />
+                                        <span style={{color: 'dimgray', fontSize: 14}}>
+                                            0.0054
+                                        </span>
                                     </td>
                                 </tr>
                             ))}

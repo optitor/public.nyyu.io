@@ -1,21 +1,21 @@
 /* eslint-disable */
 
-import React, { useEffect, useState, useMemo } from "react"
-import _ from "lodash"
-import svgToDataURL from "svg-to-dataurl"
-import axios from "axios"
-import DepositWithdrawModal from "./deposit-withdraw-modal"
-import DepositModal from "./DepositModal"
-import CustomSpinner from "../common/custom-spinner"
-import { TRANSACTION_TYPES } from "../../utilities/staticData"
-import NumberFormat from "react-number-format"
-import { useQuery } from "@apollo/client"
-import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth"
-import { Icon } from "@iconify/react"
+import React, { useEffect, useState, useMemo } from "react";
+import _ from "lodash";
+import svgToDataURL from "svg-to-dataurl";
+import axios from "axios";
+import DepositWithdrawModal from "./deposit-withdraw-modal";
+import DepositModal from "./DepositModal";
+import CustomSpinner from "../common/custom-spinner";
+import { TRANSACTION_TYPES } from "../../utilities/staticData";
+import NumberFormat from "react-number-format";
+import { useQuery } from "@apollo/client";
+import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth";
+import { Icon } from "@iconify/react";
 
-const QUOTE = "USDT"
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
-const REFRESH_TIME = 30
+const QUOTE = "USDT";
+const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
+const REFRESH_TIME = 30;
 
 const Asset = ({ item }) => {
     return (
@@ -40,29 +40,35 @@ const Asset = ({ item }) => {
             </td>
         </tr>
     )
-}
+};
 
 export default function InternalWallet() {
-    const InitialAssets = {}
-    const [myAssets, setMyAssets] = useState(InitialAssets)
-    const [BTCPrice, setBTCPrice] = useState(10000)
+    const InitialAssets = {};
+    const [myAssets, setMyAssets] = useState(InitialAssets);
+    const [BTCPrice, setBTCPrice] = useState(10000);
 
-    const [hideValues, setHideValues] = useState(false)
-    const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit)
-    const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false)
-    const [isDepositOpen, setIsDepositOpen] = useState(false)
-    const obscureValueString = "******"
-    const [btcOrUsd, setBtcOrUsd] = useState("USD")
+    const [hideValues, setHideValues] = useState(false);
+    const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit);
+    const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false);
+    const [isDepositOpen, setIsDepositOpen] = useState(false);
+    const obscureValueString = "******";
+    const [btcOrUsd, setBtcOrUsd] = useState("USD");
 
-    // console.log(myAssets)
     const totalBalance = useMemo(() => {
         if (!Object.values(myAssets)) return 0
         return _.sumBy(Object.values(myAssets), "balance") ?? 0
-    }, [myAssets])
+    }, [myAssets]);
+
+    const depositAssets = useMemo(() => {
+        const temp = {...myAssets};
+        if(temp['NDB']) delete temp['NDB'];
+        if(temp['VOLT']) delete temp['VOLT'];
+        return { ...temp };
+    }, [myAssets]);
 
     useEffect(() => {
         const get_BTCPrice = () => {
-            axios.get(TICKER_24hr, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
+            axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
                 setBTCPrice(res.data.lastPrice)
             })
         }
@@ -70,64 +76,64 @@ export default function InternalWallet() {
         setInterval(() => {
             get_BTCPrice()
         }, 1000 * REFRESH_TIME)
-    }, [])
+    }, []);
 
     const { loading: loadingOfAssets } = useQuery(GET_BALANCES, {
         fetchPolicy: "network-only",
         onCompleted: data => {
             if (data.getBalances) {
                 let assets = data.getBalances?.map((item) => {
-                    return { ...item, symbol: svgToDataURL(item.symbol) }
+                    return { ...item, symbol: svgToDataURL(item.symbol) };
                 })
-                assets = _.mapKeys(assets, "tokenSymbol")
-                setMyAssets({ ...myAssets, ...assets })
+                assets = _.mapKeys(assets, "tokenSymbol");
+                setMyAssets({ ...myAssets, ...assets });
             }
         },
-    })
+    });
 
     useEffect(() => {
         (async function () {
             const get_Balances_Price = async () => {
-                let assets = { ...myAssets }
-                if (_.isEqual(myAssets, InitialAssets)) return
-
+                let assets = { ...myAssets };
+                if (_.isEqual(myAssets, InitialAssets)) return;
+                
                 for (const item of Object.values(myAssets)) {
-                    let price = 0
+                    let price = 0;
                     if (
                         !item.tokenSymbol ||
                         item.tokenSymbol === "NDB" ||
                         item.tokenSymbol === "VOLT"
                     ) {
-                        price = 0
+                        price = 0;
                     } else {
-                        const res = await axios.get(TICKER_24hr, {
+                        const res = await axios.get(TICKER_price, {
                             params: { symbol: item.tokenSymbol + QUOTE },
-                        })
-                        price = res.data.lastPrice
+                        });
+                        price = res.data.price;
                     }
-                    const balance = (item.hold + item.free) * price
-                    assets[item.tokenSymbol] = { ...item, price, balance: balance }
+                    const balance = (item.hold + item.free) * price;
+                    assets[item.tokenSymbol] = { ...item, price, balance: balance, value: item.tokenSymbol };
                 }
-                setMyAssets({ ...assets })
+                setMyAssets({ ...assets });
             }
 
-            get_Balances_Price()
+            get_Balances_Price();
             const interval1 = setInterval(() => {
-                get_Balances_Price()
-            }, 1000 * REFRESH_TIME)
+                get_Balances_Price();
+            }, 1000 * REFRESH_TIME);
 
-            return () => clearInterval(interval1)
+            return () => clearInterval(interval1);
         })()
-    }, [Object.keys(myAssets).length])
+    }, [Object.keys(myAssets).length]);
 
-    const loadingSection = !myAssets
+    const loadingSection = !myAssets;
 
     if (loadingSection)
         return (
             <div className="text-center my-5">
                 <CustomSpinner />
             </div>
-        )
+        );
     else
         return (
             <div>
@@ -258,7 +264,7 @@ export default function InternalWallet() {
                             <DepositModal
                                 showModal={isDepositOpen}
                                 setShowModal={setIsDepositOpen}
-                                myAssets={Object.values(myAssets)}
+                                myAssets={Object.values(depositAssets)}
                             />
                         )}
                     </div>
@@ -284,5 +290,5 @@ export default function InternalWallet() {
                     </table>
                 </div>
             </div>
-        )
-}
+        );
+};

@@ -5,6 +5,7 @@ import { navigate } from "gatsby";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
 import ReactTooltip from "react-tooltip";
+import _ from "lodash";
 import Select, { components } from "react-select";
 import Header from "../header";
 import Loading from "../common/Loading";
@@ -86,7 +87,8 @@ const Payment = () => {
 
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    if (!isSSR && !currentRound) navigate("/app/auction");
+    // if (!isSSR && !currentRound) navigate("/app/auction");
+    // TODO: uncomment the above line later on.
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
@@ -120,8 +122,7 @@ const Payment = () => {
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
             setAllFees(data.getAllFees);
-            const allFees = data.getAllFees;
-            console.log(allFees);
+            const allFees = _.mapKeys(data.getAllFees, "tierLevel");
             if (allFees) {
                 dispatch(set_All_Fees(allFees));
             }

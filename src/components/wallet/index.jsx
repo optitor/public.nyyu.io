@@ -138,6 +138,7 @@ const Wallet = () => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
     }, [])
+    
     const handleJoinAirdrop = () => {
         setState({ joinAirdrop: true })
     }
