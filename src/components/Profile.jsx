@@ -2,7 +2,7 @@ import Select from "react-select"
 import Loading from "./common/Loading"
 import { navigate } from "gatsby"
 import { useQuery } from "@apollo/client"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import Header from "../components/header"
 import { ROUTES } from "../utilities/routes"
 import SignOutTab from "./profile/sign-out-tab"
@@ -35,13 +35,14 @@ import {
 } from "../utilities/utility-methods"
 
 const Profile = () => {
+    const tab = useSelector(state => state.profileTab);
     const dispatch = useDispatch()
-    const [tabIndex, setTabIndex] = useState(0)
+    const [tabIndex, setTabIndex] = useState(tab)
     const [displayName, setDisplayName] = useState("")
     const [userTiersData, setUserTiersData] = useState(null)
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
-    const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[0])
+    const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[tab])
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
         useState(false)
     const [shuftiStatus, setShuftiStatus] = useState(null)
@@ -98,7 +99,10 @@ const Profile = () => {
     const handleProfileTab = (value) => {
         setCurrentProfileTab(value)
         setTabIndex(value.index)
+        console.log("kek1")
     }
+
+    useEffect(() => {return setTabIndex(tab)}, [])
 
     const getSecurityStatus = (key) =>
         user?.security?.find((f) => f?.authType === key && f?.tfaEnabled)
@@ -218,10 +222,11 @@ const Profile = () => {
                                 <Tabs
                                     className="profile-tab"
                                     onSelect={(index) => setTabIndex(index)}
+                                    defaultIndex={tab}
                                 >
                                     <TabList>
                                         {profile_tabs.map((item, idx) => (
-                                            <Tab key={idx}>{item.label}</Tab>
+                                            <Tab selected = {tabIndex == idx} focus = {tabIndex == idx} lkey={idx}>{item.label}</Tab>
                                         ))}
                                     </TabList>
                                     <Select
