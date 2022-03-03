@@ -83,6 +83,9 @@ const AuctionProvider = ({ children }) => {
         // is auction or not
         isAuction,
         setIsAuction,
+
+        presales,
+        setPresales
     }
 
     // Render

@@ -36,7 +36,7 @@ const Auction = () => {
             }
             setLoading(false)
         }
-    }, [auction.loading])
+    }, [auction.loading, presales])
 
     if (loading) return <Loading/>
     return (

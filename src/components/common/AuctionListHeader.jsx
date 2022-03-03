@@ -1,0 +1,24 @@
+import React from "react"
+import { GreenCup } from "../../utilities/imgImport"
+
+const AuctionListHeader = ({ totalCount, auctionType, auctionTitle }) => {
+
+    return (
+        <div className="w-100 d-flex justify-content-between align-items-center border-bottom-scorpion p-2">
+            <div className="d-flex align-items-center justify-content-start">
+                <img src={GreenCup} alt="Green Cup"/>
+                <div className="text-white pl-1 fw-bold">{" "}/ {totalCount}</div>
+            </div>
+            <div className="d-flex align-items-center justify-content-start">
+                <div className="text-white fw-bold">{auctionType}</div>
+            </div>
+            <div className="d-flex align-items-center justify-content-end fw-bold">
+                <div className="text-white">{auctionTitle}
+                    <span className="text-success"> (USD)</span>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default AuctionListHeader

@@ -9,7 +9,8 @@ import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
 import { useAuction } from "./auction-context"
 import CustomSpinner from "../common/custom-spinner"
 
-import { GreenCup } from "../../utilities/imgImport"
+import AuctionListHeader from "../common/AuctionListHeader"
+import AuctionList from "../common/AuctionList"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
@@ -18,7 +19,7 @@ export default function AuctionRoundBidList() {
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
     const [displayedBitList, setDisplayedBidList] = useState(null)
     const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
-    const [currentUserBidData, setCurrentUserBidData] = useState(null);
+    const [currentUserBidData, setCurrentUserBidData] = useState(null)
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
@@ -108,52 +109,27 @@ export default function AuctionRoundBidList() {
 
     return (
         <div className="d-flex flex-column align-items-center pt-5">
-            <div className="w-100 d-flex justify-content-between align-items-center border-bottom-scorpion p-2">
-                <div className="d-flex align-items-center justify-content-start">
-                    <img src={GreenCup} alt="Green Cup" />
-                    <div className="text-white pl-1 fw-bold">{" "}/ {currentRoundBidList.length}</div>
-                </div>
-                <div className="d-flex align-items-center justify-content-start">
-                    <div className="text-white fw-bold">Bidder</div>
-                </div>
-                <div className="d-flex align-items-center justify-content-end fw-bold">
-                    <div className="text-white">Bid
-                        <span className="text-success"> (USD)</span>
-                    </div>
-                </div>
-            </div>
+            <AuctionListHeader totalCount={currentRoundBidList.length} auctionType="Bidder" auctionTitle="Bid" />
             <div className="auction-bid-list-content-group">
-                {displayedBitList.map((item, index) =>
-                    <div className="w-100 d-flex justify-content-between align-items-center border-bottom-scorpion p-2" key={index}>
-                        <div className="d-flex align-items-center justify-content-start">
-                            <div className={item.userId === 405 ? "txt-cinnabar fw-bold" : "text-white fw-500"}>{item.ranking}</div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-start">
-                            <div className={item.userId === 405 ? "txt-cinnabar fw-bold" : "text-white"}>{item.prefix + "." + item.name}</div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-end">
-                            <div className="d-flex flex-column">
-                                <div className="text-white align-self-end fw-500">{item.tokenPrice}</div>
-                                <div className="txt-scorpion align-self-end fs-12px">{item.tokenAmount}</div>
-                            </div>
-                        </div>
-                    </div>
+                {displayedBitList && displayedBitList.map((item, index) =>
+                    <AuctionList
+                        key={index}
+                        ranking={item.ranking}
+                        fullName={item.prefix + "." + item.name}
+                        tokenPrice={item.tokenPrice}
+                        tokenAmount={item.tokenAmount}
+                        isCurrentUser={item.userId === 405}
+                    />
                 )}
             </div>
-            {currentAuctionUserExist && <div className="w-100 d-flex justify-content-between align-items-center border-bottom-scorpion p-2">
-                <div className="d-flex align-items-center justify-content-start">
-                    <div className="txt-cinnabar fw-bold">{currentUserBidData.ranking}</div>
-                </div>
-                <div className="d-flex align-items-center justify-content-start">
-                    <div className="txt-cinnabar fw-bold">{currentUserBidData.prefix + "." + currentUserBidData.name}</div>
-                </div>
-                <div className="d-flex align-items-center justify-content-end">
-                    <div className="d-flex flex-column">
-                        <div className="text-white align-self-end fw-500">{currentUserBidData.tokenPrice}</div>
-                        <div className="txt-scorpion align-self-end fs-12px">{currentUserBidData.tokenAmount}</div>
-                    </div>
-                </div>
-            </div>}
+            {currentAuctionUserExist &&
+                <AuctionList
+                    ranking={currentUserBidData.ranking}
+                    fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
+                    tokenPrice={currentUserBidData.tokenPrice}
+                    tokenAmount={currentUserBidData.tokenAmount}
+                    isCurrentUser={true}/>
+            }
         </div>
     )
 }
