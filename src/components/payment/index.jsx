@@ -1,18 +1,19 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect } from "react"
-import { navigate } from "gatsby"
-import { useSelector } from "react-redux"
+import React, { useCallback, useReducer, useState, useEffect } from "react";
+import { navigate } from "gatsby";
+import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
-import ReactTooltip from "react-tooltip"
-import Select, { components } from "react-select"
-import Header from "../header"
+import ReactTooltip from "react-tooltip";
+import _ from "lodash";
+import Select, { components } from "react-select";
+import Header from "../header";
 import Loading from "../common/Loading";
-import { numberWithCommas } from "../../utilities/number"
-import { CheckBox } from "../common/FormControl"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { numberWithCommas } from "../../utilities/number";
+import { CheckBox } from "../common/FormControl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
     CryptoCoin,
     Paypal,
@@ -23,32 +24,37 @@ import {
     BTC,
     DOGE,
     PaypalBrand,
-} from "../../utilities/imgImport"
-import ConnectWalletTab from "../profile/connect-wallet-tab"
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
-import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction"
-import Seo from './../seo'
-import CreditCardTab from "./credit-card-tab"
-import CoinPaymentsTab from "./CoinPaymentsTab"
-import OrderSummary from "./order-summary"
-import OrderSummaryOfCoinPayments from './OrderSummaryOfCoinPayments'
+} from "../../utilities/imgImport";
+import ConnectWalletTab from "../profile/connect-wallet-tab";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
+import Seo from "./../seo";
+import CreditCardTab from "./credit-card-tab";
+import CoinPaymentsTab from "./CoinPaymentsTab";
+import OrderSummary from "./order-summary";
+import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
+import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import { set_All_Fees } from "../../redux/actions/allFeesAction";
 
-
-const { Option, SingleValue } = components
-
+const { Option, SingleValue } = components;
 
 const balances = [
     { value: "3,002,565", label: "ETH", icon: ETH },
     { value: "225,489", label: "BTC", icon: BTC },
     { value: "489,809", label: "DOGE", icon: DOGE },
-]
+];
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
     { icon: Credit, value: "creditcard", label: "Credit / Debit card" },
     { icon: Paypal, value: "paypal", label: "PayPal" },
     { icon: NdbWallet, value: "ndb_wallet", label: "Ndb wallet" },
-    { icon: ExternalWallet, value: "externalwallets", label: "External Wallets" },
-]
+    {
+        icon: ExternalWallet,
+        value: "externalwallets",
+        label: "External Wallets",
+    },
+];
 
 const CustomOption = (props) => (
     <Option {...props}>
@@ -57,61 +63,77 @@ const CustomOption = (props) => (
             <p className="ms-4">{props.data.label}</p>
         </div>
     </Option>
-)
+);
 const CustomSingleValue = (props) => {
     return (
         <SingleValue {...props}>
-            <p className="wallet-select__value">{props.data.value + " - " + props.data.label}</p>
+            <p className="wallet-select__value">
+                {props.data.value + " - " + props.data.label}
+            </p>
         </SingleValue>
-    )
-}
+    );
+};
 
 const Payment = () => {
-    const currentRound = useSelector((state) => state?.placeBid.round_id)
-    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    const [totalRounds, setTotalRounds] = useState(0)
-    const [barProgress, setBarProgress] = useState(0)
-    const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
-    const [loading, setLoading] = useState(true)
+    const currentRound = useSelector((state) => state?.placeBid.round_id);
+    const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
+    const [totalRounds, setTotalRounds] = useState(null);
+    const [barProgress, setBarProgress] = useState(null);
+    const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
+    const [allFees, setAllFees] = useState(null);
+    const dispatch = useDispatch();
 
-    const targetCap = 1000000000000
-    const isSSR = typeof window === "undefined"
-    if(!isSSR && !currentRound) navigate('/app/auction')
+    const loading = !(totalRounds && barProgress && allFees);
 
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        allow_fraction: false,
-        getAddress: false,
-    })
-    const { allow_fraction, getAddress } = state
+    const targetCap = 1000000000000;
+    const isSSR = typeof window === "undefined";
+    // if (!isSSR && !currentRound) navigate("/app/auction");
+    // TODO: uncomment the above line later on.
 
-    const [balance, setBalance] = useState(null)
-    const [tabIndex, setTabIndex] = useState(0)
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            allow_fraction: false,
+            getAddress: false,
+        }
+    );
+    const { allow_fraction, getAddress } = state;
+
+    const [balance, setBalance] = useState(null);
+    const [tabIndex, setTabIndex] = useState(0);
 
     const handleAllowFraction = useCallback(
         (e) => {
-            e.preventDefault()
-            setState({ allow_fraction: !allow_fraction })
+            e.preventDefault();
+            setState({ allow_fraction: !allow_fraction });
         },
         [allow_fraction]
-    )
+    );
 
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
-            setTotalRounds(data.getAuctions.length)
-            setBarProgress((currentCap * 100) / targetCap)
-            setLoading(false);
+            setTotalRounds(data.getAuctions.length);
+            setBarProgress((currentCap * 100) / targetCap);
         },
         onError: (error) => console.log(error),
         errorPolicy: "ignore",
         fetchPolicy: "network-only",
-    })
+    });
+    useQuery(GET_ALL_FEES, {
+        onCompleted: (data) => {
+            setAllFees(data.getAllFees);
+            const allFees = _.mapKeys(data.getAllFees, "tierLevel");
+            if (allFees) {
+                dispatch(set_All_Fees(allFees));
+            }
+        },
+        onError: (error) => console.log(error),
+    });
 
-    useEffect(() => { 
-        if (barProgress < 1) {
-            setBarProgress(1)
-        }
-    }, [barProgress])
-    if (loading) return <Loading />
+    useEffect(() => {
+        if (barProgress < 1) setBarProgress(1);
+    }, [barProgress]);
+    if (loading) return <Loading />;
     return (
         <>
             <Seo title="Payment" />
@@ -142,10 +164,18 @@ const Payment = () => {
                                             <div
                                                 className="payment-type"
                                                 key={idx}
-                                                onClick={() => setTabIndex(idx + 1)}
+                                                onClick={() =>
+                                                    setTabIndex(idx + 1)
+                                                }
                                                 style={{
-                                                    width: idx === 0 ? "100%" : "calc(50% - 6px)",
-                                                    marginRight: idx % 2 === 0 ? "0" : "12px",
+                                                    width:
+                                                        idx === 0
+                                                            ? "100%"
+                                                            : "calc(50% - 6px)",
+                                                    marginRight:
+                                                        idx % 2 === 0
+                                                            ? "0"
+                                                            : "12px",
                                                 }}
                                             >
                                                 <img
@@ -153,7 +183,9 @@ const Payment = () => {
                                                     src={item.icon}
                                                     alt="payment type"
                                                 />
-                                                <p className="payment-type__name">{item.label}</p>
+                                                <p className="payment-type__name">
+                                                    {item.label}
+                                                </p>
                                             </div>
                                         ))}
                                     </div>
@@ -165,14 +197,20 @@ const Payment = () => {
                                     />
                                 )}
                                 {tabIndex === 2 && (
-                                    <CreditCardTab amount={bidAmount} round={currentRound} />
+                                    <CreditCardTab
+                                        amount={Number(bidAmount).toFixed(2)}
+                                        round={currentRound}
+                                    />
                                 )}
                                 {tabIndex === 3 && (
                                     <div className="paypal-tab">
                                         <div className="payment-content">
                                             <button className="paypal-checkout btn-second">
                                                 Check out with &nbsp;
-                                                <img src={PaypalBrand} alt="paypal" />
+                                                <img
+                                                    src={PaypalBrand}
+                                                    alt="paypal"
+                                                />
                                             </button>
                                         </div>
                                     </div>
@@ -186,16 +224,24 @@ const Payment = () => {
                                                     options={balances}
                                                     value={balance}
                                                     placeholder="YOUR BALANCE"
-                                                    onChange={(v) => setBalance(v)}
+                                                    onChange={(v) =>
+                                                        setBalance(v)
+                                                    }
                                                     components={{
                                                         Option: CustomOption,
-                                                        SingleValue: CustomSingleValue,
+                                                        SingleValue:
+                                                            CustomSingleValue,
                                                     }}
                                                 />
                                                 <div className="col-lg-8 d-flex pl-8px">
                                                     <div className="choosed-icon">
                                                         {balance?.icon && (
-                                                            <img src={balance?.icon} alt="coin" />
+                                                            <img
+                                                                src={
+                                                                    balance?.icon
+                                                                }
+                                                                alt="coin"
+                                                            />
                                                         )}
                                                     </div>
                                                     <input
@@ -212,11 +258,14 @@ const Payment = () => {
                                                         type="checkbox"
                                                         name="allow_fraction"
                                                         value={allow_fraction}
-                                                        onChange={handleAllowFraction}
+                                                        onChange={
+                                                            handleAllowFraction
+                                                        }
                                                         className="text-uppercase"
                                                     ></CheckBox>
                                                     <div className="allow-text">
-                                                        Do you allow fraction of order compleation?
+                                                        Do you allow fraction of
+                                                        order compleation?
                                                     </div>
                                                     <ReactTooltip
                                                         place="right"
@@ -229,7 +278,9 @@ const Payment = () => {
                                                                 width: "300px",
                                                             }}
                                                         >
-                                                            {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                            {
+                                                                PAYMENT_FRACTION_TOOLTIP_CONTENT
+                                                            }
                                                         </div>
                                                     </ReactTooltip>
                                                     <FontAwesomeIcon
@@ -240,7 +291,9 @@ const Payment = () => {
                                                 </p>
                                                 <p className="payment-expire my-auto">
                                                     payment expires in{" "}
-                                                    <span className="txt-green">10 minutes</span>
+                                                    <span className="txt-green">
+                                                        10 minutes
+                                                    </span>
                                                 </p>
                                             </div>
                                         </div>
@@ -248,7 +301,10 @@ const Payment = () => {
                                 )}
                                 {tabIndex === 5 && (
                                     <div className="externalwallets-tab">
-                                        <div className="payment-content" style={{ display: "block" }}>
+                                        <div
+                                            className="payment-content"
+                                            style={{ display: "block" }}
+                                        >
                                             <ConnectWalletTab />
 
                                             <div className="mt-1 d-flex justify-content-between">
@@ -257,11 +313,14 @@ const Payment = () => {
                                                         type="checkbox"
                                                         name="allow_fraction"
                                                         value={allow_fraction}
-                                                        onChange={handleAllowFraction}
+                                                        onChange={
+                                                            handleAllowFraction
+                                                        }
                                                         className="text-uppercase"
                                                     ></CheckBox>
                                                     <div className="allow-text">
-                                                        Do you allow fraction of order compleation?
+                                                        Do you allow fraction of
+                                                        order compleation?
                                                     </div>
                                                     <ReactTooltip
                                                         place="right"
@@ -274,7 +333,9 @@ const Payment = () => {
                                                                 width: "300px",
                                                             }}
                                                         >
-                                                            {PAYMENT_FRACTION_TOOLTIP_CONTENT}
+                                                            {
+                                                                PAYMENT_FRACTION_TOOLTIP_CONTENT
+                                                            }
                                                         </div>
                                                     </ReactTooltip>
                                                     <FontAwesomeIcon
@@ -285,7 +346,9 @@ const Payment = () => {
                                                 </p>
                                                 <p className="payment-expire my-auto">
                                                     payment expires in{" "}
-                                                    <span className="txt-green">10 minutes</span>
+                                                    <span className="txt-green">
+                                                        10 minutes
+                                                    </span>
                                                 </p>
                                             </div>
                                         </div>
@@ -293,14 +356,23 @@ const Payment = () => {
                                 )}
                             </div>
                         </div>
-                        {tabIndex === 1 && <OrderSummaryOfCoinPayments bidAmount={bidAmount} />}
-                        {tabIndex !== 1 && <OrderSummary bidAmount={bidAmount} />}
+                        {tabIndex === 1 && (
+                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} />
+                        )}
+                        {tabIndex === 2 && (
+                            <OrderSummaryOfCreditCard bidAmount={bidAmount} />
+                        )}
+                        {tabIndex !== 1 && tabIndex !== 2 && (
+                            <OrderSummary bidAmount={bidAmount} />
+                        )}
                     </div>
                     <div className="remain-token__value col-md-12 mx-auto">
                         <div className="d-flex justify-content-between">
                             <p className="current-value">
                                 current cap&nbsp;
-                                <span className="txt-green">{numberWithCommas(currentCap)}</span>
+                                <span className="txt-green">
+                                    {numberWithCommas(currentCap)}
+                                </span>
                             </p>
                             <p className="end-value">
                                 target cap&nbsp;
@@ -318,7 +390,9 @@ const Payment = () => {
                             >
                                 <div className="timeleft__value">
                                     Round &nbsp;
-                                    <span className="txt-green">{totalRounds}</span>
+                                    <span className="txt-green">
+                                        {totalRounds}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +400,7 @@ const Payment = () => {
                 </section>
             </main>
         </>
-    )
-}
+    );
+};
 
-export default Payment
+export default Payment;

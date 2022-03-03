@@ -39,7 +39,7 @@ export default function AuctionRoundBidList() {
         },
         onCompleted: (data) => {
             let list = _.orderBy(
-                data.getBidListByRound,
+                data?.getBidListByRound,
                 ["ranking", "tokenPrice"],
                 ["asc", "desc"]
             )

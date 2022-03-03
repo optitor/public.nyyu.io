@@ -161,16 +161,29 @@
             }
         }
         .auction-right {
+            position: relative;
             border-left: 2px solid #464646;
             @include mq("tablet", max) {
-                border: none;
+                display: none;
+            }
+
+            #switch_btns {
+                position: absolute;
+                right: 18px;
+                top: 63px;
+                display: flex;
+                .switch_btn {
+                    margin: 5px;
+                    opacity: 0.4;
+                    cursor: pointer;
+                }
             }
 
             .place-bid {
                 display: none;
                 margin-top: 58px;
                 margin-left: 50px;
-                @include mq("laptop") {
+                @include mq("tablet") {
                     display: block;
                 }
             }

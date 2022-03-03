@@ -1,28 +1,28 @@
-import axios from "axios"
-import { CLIENT_ID, SECRET } from "./staticData"
+import axios from "axios";
+import { CLIENT_ID, SECRET } from "./staticData";
 
 export const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = (error) => reject(error)
-    })
-}
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+};
 
 export const getCurrentDate = () => {
-    let today = new Date()
-    const dd = String(today.getDate()).padStart(2, "0")
-    const mm = String(today.getMonth() + 1).padStart(2, "0")
-    const yyyy = today.getFullYear()
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const yyyy = today.getFullYear();
 
-    today = mm + "/" + dd + "/" + yyyy
-    return today
-}
+    today = mm + "/" + dd + "/" + yyyy;
+    return today;
+};
 
 export const getShuftiStatusByReference = async (reference) => {
-    if (!reference) return "INVALID"
-    const output = {}
+    if (!reference) return "INVALID";
+    const output = {};
     const response = await axios
         .post(
             "https://api.shuftipro.com/status",
@@ -35,67 +35,87 @@ export const getShuftiStatusByReference = async (reference) => {
                 },
             }
         )
-        .catch((error) => (output["event"] = "request.invalid"))
+        .catch((error) => (output["event"] = "request.invalid"));
 
     if ("event" in output) {
-        output["docStatus"] = false
-        output["addrStatus"] = false
-        output["conStatus"] = false
-        output["selfieStatus"] = false
-        return output
+        output["docStatus"] = false;
+        output["addrStatus"] = false;
+        output["conStatus"] = false;
+        output["selfieStatus"] = false;
+        return output;
     }
     if (response && "data" in response) {
-        const { data } = response
+        const { data } = response;
         if ("verification_result" in data && "event" in data) {
-            if (data.event === null) output["event"] = "request.invalid"
-            else output["event"] = data.event
+            if (data.event === null) output["event"] = "request.invalid";
+            else output["event"] = data.event;
 
             // Document
             if ("document" in data.verification_result)
                 output["docStatus"] =
                     data.verification_result.document.document === 1 ||
-                    (data.verification_result.document.document_must_not_be_expired === 1 &&
-                        data.verification_result.document.document_visibility === 1)
-            else output["docStatus"] = true
+                    (data.verification_result.document
+                        .document_must_not_be_expired === 1 &&
+                        data.verification_result.document
+                            .document_visibility === 1);
+            else output["docStatus"] = true;
 
             // Address
             if ("address" in data.verification_result)
                 output["addrStatus"] =
                     data.verification_result.address.full_address === 1 &&
-                    data.verification_result.address.match_address_proofs_with_document_proofs ===
-                    1 &&
-                    data.verification_result.address.address_document_must_not_be_expired === 1 &&
-                    data.verification_result.address.address_document_visibility === 1 &&
-                    data.verification_result.address.address_document === 1
-            else output["addrStatus"] = true
+                    data.verification_result.address
+                        .match_address_proofs_with_document_proofs === 1 &&
+                    data.verification_result.address
+                        .address_document_must_not_be_expired === 1 &&
+                    data.verification_result.address
+                        .address_document_visibility === 1 &&
+                    data.verification_result.address.address_document === 1;
+            else output["addrStatus"] = true;
 
             //Consent
             if ("consent" in data.verification_result)
-                output["conStatus"] = data.verification_result.consent.consent === 1
-            else output["conStatus"] = true
+                output["conStatus"] =
+                    data.verification_result.consent.consent === 1;
+            else output["conStatus"] = true;
 
             // Selfie
             if ("face" in data.verification_result)
-                output["selfieStatus"] = data.verification_result.face === 1
-            else output["selfieStatus"] = true
+                output["selfieStatus"] = data.verification_result.face === 1;
+            else output["selfieStatus"] = true;
 
-            return output
+            return output;
         }
-        return "PENDING"
+        return "PENDING";
     }
 
-    return "UNSET"
-}
+    return "UNSET";
+};
 
 export const createPaymentIntent = (paymentMethodId, amount) => {
-    const apiBaseUrl = "https://api.stripe.com/v1/payment_intents"
+    const apiBaseUrl = "https://api.stripe.com/v1/payment_intents";
     const response = axios.post(apiBaseUrl, {
         paymentMethodId,
         amount,
         currency: "usd",
         confirmation_method: "manual",
         confirm: "true",
-    })
+    });
     if (response && "data" in response) {
     }
-}
+};
+
+export const getStripePaymentFee = (user, allFees, bidAmount) => {
+    // getting data from redux.
+    const allFeesArray = Object.values(allFees);
+
+    // finding the fee.
+    let userTierLevel = user?.tierLevel;
+    if (userTierLevel === 0)
+        userTierLevel = 1
+    const userFee = allFeesArray.filter(
+        (item) => item?.tierLevel === userTierLevel
+    )[0]?.fee;
+    const stripePaymentFee = ((2.9 + userFee) * bidAmount) / 100 + 0.3;
+    return stripePaymentFee.toFixed(2);
+};

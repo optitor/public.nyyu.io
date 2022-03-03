@@ -89,6 +89,8 @@ import credit from "../images/payment/credit.svg"
 import ndbWallet from "../images/payment/ndb-wallet.svg"
 import externalWallet from "../images/payment/external-wallet.svg"
 import paypal from "../images/payment/paypal.svg"
+import bidIcon from "../images/payment/bid.svg"
+import pillarChartIcon from "../images/payment/chart.svg"
 import paypalBrand from "../images/payment/paypal-brand.svg"
 
 import verifyIdStep1 from "../images/verify-id/verify-id-step-1.svg"
@@ -121,6 +123,7 @@ import stripe from "../images/stripe.svg"
 
 import certik from "../images/home/certik.svg"
 import munichre from "../images/home/munichre.svg"
+import amex from "../images/payment/amex.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -209,6 +212,8 @@ export const Credit = credit
 export const NdbWallet = ndbWallet
 export const ExternalWallet = externalWallet
 export const Paypal = paypal
+export const BidIcon = bidIcon
+export const PillarChartIcon = pillarChartIcon
 export const PaypalBrand = paypalBrand
 
 export const VerifyIdStep1 = verifyIdStep1
@@ -240,3 +245,4 @@ export const GreenCup = greenCup
 
 export const Certik = certik
 export const MunichRE = munichre
+export const Amex = amex

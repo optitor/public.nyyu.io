@@ -41,9 +41,9 @@ const Auction = () => {
     if (loading) return <Loading/>
     return (
         <>
-            <Seo title="Sale"/>
+            <Seo title="Sale" />
             <main className="auction-page">
-                <Header/>
+                <Header />
                 <section className="section-auction container">
                     <div className="row h-100">
                         <div className="auction-left col-lg-4 col-md-5 position-relative d-block">
@@ -60,16 +60,19 @@ const Auction = () => {
                             </div>
                             <AuctionRoundDetails/>
                             {current?.status !== 3 && (
-                                <div className="d-block d-sm-none">
-                                    <div
-                                        className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
-                                        onClick={() =>
-                                            auction.setBidModal(true)
-                                        }
-                                    >
-                                        place bid
+                                <>
+                                    <div className="d-block d-sm-none">
+                                        <div
+                                            className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
+                                            onClick={() =>
+                                                auction.setBidModal(true)
+                                            }
+                                        >
+                                            place bid
+                                        </div>
                                     </div>
-                                </div>
+                                    <AuctionPlaceBidModal />
+                                </>
                             )}
                         </div>
 
