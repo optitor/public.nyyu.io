@@ -635,6 +635,9 @@
             font-weight: 500;
             color: #959595;
         }
+        .active {
+            border: 1px solid $green;
+        }
     }
     &-cta {
         & > div {

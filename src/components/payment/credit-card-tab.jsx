@@ -359,8 +359,8 @@ const CardSection = ({ amount, round }) => {
                     </div>
                 </form>
             ) : (
-                <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-0">
-                    <div className="credit-card-save-cards-cta col-lg-6 col-12 ps-sm-0 px-0 fw-500 mb-3 mb-sm-2">
+                <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-2">
+                    <div className="credit-card-save-cards-cta col-lg-6 col-12 pe-sm-2 px-0 fw-500 mb-3 mb-sm-2">
                         <div
                             onClick={() => setIsNewCard(true)}
                             className="col-12 d-flex align-items-center justify-content-center fs-14px cursor-pointer"
@@ -378,7 +378,11 @@ const CardSection = ({ amount, round }) => {
                                         : "pe-sm-2 px-0"
                                 }`}
                             >
-                                <div className="col-12">
+                                <div
+                                    className={`col-12 ${
+                                        index === 0 && "active"
+                                    }`}
+                                >
                                     <div className="d-flex align-items-start">
                                         <img
                                             src={Amex}
