@@ -17,7 +17,7 @@ export default function AuctionRoundBidList() {
     const auction = useAuction()
     const { auctions, currentRoundNumber } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
-    const [displayedBitList, setDisplayedBidList] = useState(null)
+    const [displayedBidList, setDisplayedBidList] = useState(null)
     const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
     const [currentUserBidData, setCurrentUserBidData] = useState(null)
     const current = auctions?.filter(
@@ -78,21 +78,21 @@ export default function AuctionRoundBidList() {
         if (currentRoundBidList && currentRoundBidList.length) {
             if (currentRoundBidList.length > 5 ) {
                 const currentUserBidInfo = currentRoundBidList?.filter(
-                    (auction) => auction.userId === 405
+                    (auction) => auction.userId === currentUser.id
                 )[0]
-                if (currentUserBidInfo && currentUserBidInfo.ranking !== currentRoundBidList.length - 2) {
+                if (currentUserBidInfo) {
                     setCurrentUserBidData(currentUserBidInfo)
                     setCurrentAuctionUserExist(true)
-                    setDisplayedBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 2))
+                    setDisplayedBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 1))
                 } else {
-                    setDisplayedBidList(currentRoundBidList.slice(0, 4))
+                    setDisplayedBidList(currentRoundBidList.slice(0, 5))
                 }
             } else {
                 setDisplayedBidList(currentRoundBidList)
             }
         }
 
-    }, [currentRoundBidList]);
+    }, [currentRoundBidList, currentUser.id]);
 
     useEffect(() => {
         if (current.status === 2) return startPolling(pollIntervalValue)
@@ -111,14 +111,15 @@ export default function AuctionRoundBidList() {
         <div className="d-flex flex-column align-items-center pt-5">
             <AuctionListHeader totalCount={currentRoundBidList.length} auctionType="Bidder" auctionTitle="Bid" />
             <div className="auction-bid-list-content-group">
-                {displayedBitList && displayedBitList.map((item, index) =>
+                {displayedBidList && displayedBidList.map((item, index) =>
                     <AuctionList
                         key={index}
                         ranking={item.ranking}
                         fullName={item.prefix + "." + item.name}
                         tokenPrice={item.tokenPrice}
                         tokenAmount={item.tokenAmount}
-                        isCurrentUser={item.userId === 405}
+                        winningResult={item.status !== 0 && item.status === 1 }
+                        isCurrentUser={item.userId === currentUser.id}
                     />
                 )}
             </div>
@@ -128,6 +129,7 @@ export default function AuctionRoundBidList() {
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
                     tokenPrice={currentUserBidData.tokenPrice}
                     tokenAmount={currentUserBidData.tokenAmount}
+                    winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1 }
                     isCurrentUser={true}/>
             }
         </div>

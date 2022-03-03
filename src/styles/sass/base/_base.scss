@@ -103,15 +103,16 @@ input[type="number"]::-webkit-outer-spin-button {
     width: max-content !important;
 }
 
-.mt-16px {
-    margin-top: 16px;
-}
-
 .placeholder\:text-light {
     &::placeholder {
         color: #e3e3e3 !important;
     }
 }
+
+.mt-16px {
+    margin-top: 16px;
+}
+
 .py-12px {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -128,8 +129,18 @@ input[type="number"]::-webkit-outer-spin-button {
     padding-left: 100px;
     padding-right: 100px;
 }
-.pl-8px {
-    padding-left: 8px;
+
+//padding left
+@for $size from 4 to 96 {
+    .pl-#{$size}px {
+        padding-left: #{$size}px !important;
+    }
+}
+
+@for $size from 4 to 96 {
+    .pr-#{$size}px {
+        padding-right: #{$size}px !important;
+    }
 }
 
 .hover\:bg-dark {
@@ -143,11 +154,14 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: justify !important;
 }
 
-.w-316px {
-    width: 316px !important;
+@for $size from 8 to 500 {
+    .w-#{$size}px {
+        width: #{$size}px !important;
+    }
 }
+
 // Font Sizes
-@for $size from 12 to 96 {
+@for $size from 8 to 96 {
     .fs-#{$size}px {
         font-size: #{$size}px !important;
     }
@@ -170,11 +184,19 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .border-bottom-scorpion {
-    border-bottom: 1px solid #626161 !important;
+    border-bottom: 1px solid $scorpion !important;
 }
 
 .border-bottom-2-dark-gray {
     border-bottom: 2px solid #464646;
+}
+
+.border-cinnabar {
+    border: 1px solid $cinnabar;
+}
+
+.border-mountainMeadow {
+    border: 1px solid $mountainMeadow;
 }
 
 .fv-small-caps {
@@ -223,6 +245,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .ml-45px {
     margin-left: 45px !important;
+}
+.ml-8px {
+    margin-left: 8px;
 }
 
 .bg-black-10 {
