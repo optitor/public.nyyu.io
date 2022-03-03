@@ -123,6 +123,7 @@ import stripe from "../images/stripe.svg"
 
 import certik from "../images/home/certik.svg"
 import munichre from "../images/home/munichre.svg"
+import amex from "../images/payment/amex.svg"
 
 export const Logo = logo
 export const Bell = bell
@@ -244,3 +245,4 @@ export const GreenCup = greenCup
 
 export const Certik = certik
 export const MunichRE = munichre
+export const Amex = amex
