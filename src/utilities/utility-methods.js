@@ -110,9 +110,12 @@ export const getStripePaymentFee = (user, allFees, bidAmount) => {
     const allFeesArray = Object.values(allFees);
 
     // finding the fee.
+    let userTierLevel = user?.tierLevel;
+    if (userTierLevel === 0)
+        userTierLevel = 1
     const userFee = allFeesArray.filter(
-        (item) => item?.tierLevel === user?.tierLevel
+        (item) => item?.tierLevel === userTierLevel
     )[0]?.fee;
     const stripePaymentFee = ((2.9 + userFee) * bidAmount) / 100 + 0.3;
-    return stripePaymentFee;
+    return stripePaymentFee.toFixed(2);
 };
