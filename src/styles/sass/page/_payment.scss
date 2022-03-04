@@ -19,6 +19,38 @@
         @include mq("phone", max) {
             padding-top: 65px;
         }
+        input {
+            &::placeholder {
+                color: dimgray;
+                opacity: 0.4;
+            }
+        }
+        .credit_deposit {
+            .depositTitle {
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid white;
+                p {
+                    width: 95%;
+                    font-size: 18px;
+                    font-weight: 600;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+                .close_icon {
+                    width: 5%;
+                    color: white;
+                    font-size: 25px;
+                    cursor: pointer;
+                }
+            }
+            h4 {
+                font-size: 18px;
+                text-align: center;
+                text-transform: uppercase;
+                margin-bottom: 20px;
+            }
+        }
     }
     & > section {
         .title {
@@ -153,7 +185,7 @@
             }
             input {
                 &::placeholder {
-                    color: white;
+                    color: dimgray;
                     opacity: 0.95;
                 }
             }

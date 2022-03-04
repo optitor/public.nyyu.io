@@ -120,6 +120,9 @@ import greenCup from "../images/icons/green-cup.svg"
 import plaid from "../images/plaid.svg"
 import paypalFiat from "../images/paypal-fiat.svg"
 import stripe from "../images/stripe.svg"
+import visa from "../images/visa.svg"
+import amexDeposit from "../images/amexDeposit.svg"
+import masterCard from "../images/masterCard.svg"
 
 import certik from "../images/home/certik.svg"
 import munichre from "../images/home/munichre.svg"
@@ -241,6 +244,9 @@ export const MenuIcon = menuIcon
 export const Plaid = plaid
 export const PaypalFiat = paypalFiat
 export const Stripe = stripe
+export const Visa = visa
+export const AmexDeposit = amexDeposit
+export const MasterCard = masterCard
 export const GreenCup = greenCup
 
 export const Certik = certik

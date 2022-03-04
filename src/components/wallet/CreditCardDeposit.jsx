@@ -8,74 +8,97 @@ import {
     useStripe,
     useElements,
 } from "@stripe/react-stripe-js";
+import { Icon } from '@iconify/react';
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import ReactTooltip from "react-tooltip";
+import NumberFormat from "react-number-format";
 import { CheckBox } from "../common/FormControl";
-import {
-    DELETE_CARD,
-    GET_SAVED_CARDS,
-    GET_STRIPE_PUB_KEY,
-    STRIPE_PAYMENT,
-} from "./payment-webservice";
+import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./../payment/payment-webservice";
+import OroderSummaryOfCreditCard from "../payment/order-summary-of-credit-card";
 import { useMutation, useQuery } from "@apollo/client";
 import CustomSpinner from "../common/custom-spinner";
-import { navigate } from "gatsby";
+import Seo from './../seo';
+import Header from './../header';
+import { navigate, Link } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
 import useCountDown from "react-countdown-hook";
 import { Amex, Qmark } from "../../utilities/imgImport";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 
-export default function CreditCardTab({ amount, round }) {
+export default function CreditCardTab() {
     // Containers
     const [stripePublicKey, setStripePublicKey] = useState(null);
     const user = useSelector((state) => state.auth.user);
     const { allFees } = useSelector((state) => state);
     const stripePaymentFee = getStripePaymentFee(user, allFees, amount);
-    const [savedCards, setSavedCards] = useState([]);
-    const loading = !(stripePublicKey && savedCards);
+    const loading = !stripePublicKey;
+    const amount = 1000
 
     // Webservice
     useQuery(GET_STRIPE_PUB_KEY, {
         onCompleted: (data) => setStripePublicKey(data.getStripePubKey),
         onError: (error) => console.log(error),
     });
-    useQuery(GET_SAVED_CARDS, {
-        onCompleted: (data) => setSavedCards(data.getSavedCards),
-        onError: (error) => console.log(error),
-    });
 
     // Render
     return (
-        <div>
-            {loading ? (
-                <div className="text-center mx-auto mt-2">
-                    <CustomSpinner />
+    <>
+        <Seo title="Deposit" />
+        <main className="payment-page">
+            <Header />
+            <section className="container position-relative">
+                <div className="row payment-wrapper">
+                    <div className="col-lg-8 payment-select credit_deposit">
+                        <div className="depositTitle">
+                            <div className="close_icon">
+                                <Link to={ROUTES.wallet}>
+                                    <Icon icon='akar-icons:arrow-left' />
+                                </Link>
+                            </div>
+                            <p>Deposit for Credit / debit Card</p>
+                        </div>
+                        <div className="payment-type__tab">
+                            <div>
+                                {loading ? (
+                                    <div className="text-center mx-auto mt-2">
+                                        <CustomSpinner />
+                                    </div>
+                                ) : (
+                                <>
+                                    <p className="mt-3">Deposit Amount</p>
+                                    <NumberFormat className="black_input"
+                                        thousandSeparator={true}
+                                        prefix='$ '
+                                        allowNegative={false}
+                                    />
+                                    <Elements
+                                        options={{
+                                            fonts: [
+                                                {
+                                                    cssSrc: "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap%27",
+                                                },
+                                            ],
+                                        }}
+                                        stripe={loadStripe(stripePublicKey)}
+                                    >
+                                        <CardSection
+                                            amount={Number(amount)}
+                                        />
+                                    </Elements>
+                                </>)}
+                            </div>
+                        </div>
+                    </div>
+                    <OroderSummaryOfCreditCard />
                 </div>
-            ) : (
-                <Elements
-                    options={{
-                        fonts: [
-                            {
-                                cssSrc: "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap%27",
-                            },
-                        ],
-                    }}
-                    stripe={loadStripe(stripePublicKey)}
-                >
-                    <CardSection
-                        amount={Number(amount) + Number(stripePaymentFee)}
-                        round={round}
-                        savedCards={savedCards}
-                        setSavedCards={setSavedCards}
-                    />
-                </Elements>
-            )}
-        </div>
+            </section>
+        </main>
+    </>
     );
 }
 
-const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
+const CardSection = ({ amount, round }) => {
     // Containers
     const stripe = useStripe();
     const elements = useElements();
@@ -88,9 +111,6 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
     const [postalCode, setPostalCode] = useState("");
     const [country, setCountry] = useState("");
     const [isSaveCard, setIsSaveCard] = useState(false);
-    const [selectedSavedCard, setSelectedSavedCard] = useState(0);
-    const [deleteCardRequestPending, setDeleteCardRequestPending] =
-        useState(false);
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
 
@@ -122,12 +142,6 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
     };
 
     // Webservice
-    const [deleteCard] = useMutation(DELETE_CARD, {
-        onCompleted: (data) => {
-            setDeleteCardRequestPending(false);
-        },
-        onError: (error) => console.log(error),
-    });
     const [stripePayment] = useMutation(STRIPE_PAYMENT, {
         onCompleted: async (data) => {
             if (stripePaymentSecondCall === false) {
@@ -181,15 +195,6 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
     });
 
     // Methods
-    const deleteCardMethod = (id) => {
-        setDeleteCardRequestPending(true);
-        setSavedCards(savedCards.filter((item) => item.id !== id));
-        deleteCard({
-            variables: {
-                id,
-            },
-        });
-    };
     const submitPayment = async (e) => {
         e.preventDefault();
         setError("");
@@ -342,20 +347,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                     {error && (
                         <div className="text-danger fs-16px ps-0 mb-2">
                             <div className="d-flex align-items-center gap-2">
-                                <svg
-                                    className="icon-23px"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    ></path>
-                                </svg>
+                                <Icon icon='ci:error-outline' style={{fontSize: 25}} />
                                 <div>{error}</div>
                             </div>
                         </div>
@@ -420,22 +412,17 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                         />
                     </div>
                 </form>
-            ) : deleteCardRequestPending ? (
-                <div className="credit-card-save-cards d-flex align-items-center justify-content-center w-100">
-                    <CustomSpinner />
-                </div>
             ) : (
                 <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-2">
                     <div className="credit-card-save-cards-cta col-lg-6 col-12 pe-sm-2 px-0 fw-500 mb-3 mb-sm-2">
-                        <button
+                        <div
                             onClick={() => setIsNewCard(true)}
-                            className="btn col-12 d-flex align-items-center justify-content-center fs-15px mt-0 rounded-0 text-light"
+                            className="col-12 d-flex align-items-center justify-content-center fs-14px cursor-pointer"
                         >
                             + Add new card
-                        </button>
+                        </div>
                     </div>
-
-                    {savedCards.map((item, index) => {
+                    {[1, 2, 3, 4, 5, 6].map((item, index) => {
                         return (
                             <div
                                 key={index}
@@ -445,10 +432,9 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                                         : "pe-sm-2 px-0"
                                 }`}
                             >
-                                <button
-                                    onClick={() => setSelectedSavedCard(index)}
-                                    className={`btn rounded-0 mt-0 col-12 ${
-                                        index === selectedSavedCard && "active"
+                                <div
+                                    className={`col-12 ${
+                                        index === 0 && "active"
                                     }`}
                                 >
                                     <div className="d-flex align-items-start">
@@ -458,21 +444,15 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                                             className="me-4"
                                         />
                                         <div className="credit-card-save-cards-item-details">
-                                            **** **** **** {item.last4} <br />
-                                            {item.expMonth}/{item.expYear}{" "}
-                                            <br />
+                                            **** **** **** **57 <br />
+                                            07/30 <br />
                                             Card holder's name
                                         </div>
-                                        <button
-                                            onClick={() =>
-                                                deleteCardMethod(item.id)
-                                            }
-                                            className="btn text-underline text-light mt-0 pt-0 fs-13px ms-auto"
-                                        >
+                                        <button className="btn text-underline text-light mt-0 pt-0 fs-13px ms-auto">
                                             Delete card
                                         </button>
                                     </div>
-                                </button>
+                                </div>
                             </div>
                         );
                     })}
@@ -480,49 +460,6 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
             )}
             {isNewCard && (
                 <>
-                    <div className="mt-3 d-flex justify-content-between">
-                        <div className="d-flex flex-row align-items-center">
-                            <CheckBox
-                                type="checkbox"
-                                name="allow_fraction"
-                                value={allowFractionBox}
-                                onChange={(e) =>
-                                    setAllowFractionBox(e.target.checked)
-                                }
-                                className="text-uppercase"
-                            ></CheckBox>
-                            <div className="allow-text text-light">
-                                Do you allow fraction of order compleation?
-                            </div>
-                            <ReactTooltip
-                                id="question-mark-tooltip"
-                                place="right"
-                                type="light"
-                                effect="solid"
-                            >
-                                <div
-                                    className="text-justify"
-                                    style={{
-                                        width: "300px",
-                                    }}
-                                >
-                                    {PAYMENT_FRACTION_TOOLTIP_CONTENT}
-                                </div>
-                            </ReactTooltip>
-
-                            <img
-                                src={Qmark}
-                                alt="Question mark"
-                                data-tip
-                                data-for="question-mark-tooltip"
-                                className="ms-2 cursor-pointer text-light"
-                            />
-                        </div>
-                        <p className="payment-expire my-auto">
-                            payment expires in{" "}
-                            <span className="txt-green">10 minutes</span>
-                        </p>
-                    </div>
                     <div className="mt-2 d-flex justify-content-between">
                         <div className="d-flex flex-row align-items-center">
                             <CheckBox
@@ -538,6 +475,10 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                                 save card details for future purchase
                             </div>
                         </div>
+                        <p className="payment-expire my-auto">
+                            payment expires in{" "}
+                            <span className="txt-green">10 minutes</span>
+                        </p>
                     </div>
                 </>
             )}

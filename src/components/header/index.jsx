@@ -142,12 +142,14 @@ const Menu = () => {
                                 window.location.pathname === ROUTES.wallet ||
                                 window.location.pathname === ROUTES.auction ||
                                 window.location.pathname === ROUTES.payment ||
+                                window.location.pathname === ROUTES.creditDeposit ||
                                 window.location.pathname.includes(ROUTES.admin)) && (
                                 <div className="d-none d-md-flex justify-content-between gap-5">
                                     <Link
                                         to={ROUTES.wallet}
                                         className={`${
-                                            window.location.pathname === ROUTES.wallet &&
+                                            (window.location.pathname === ROUTES.wallet ||
+                                            window.location.pathname === ROUTES.creditDeposit ) &&
                                             "txt-green"
                                         }`}
                                     >

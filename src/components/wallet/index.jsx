@@ -20,8 +20,6 @@ import { GET_BID_LIST_BY_USER } from "./../../apollo/graghqls/querys/Bid"
 import InternalWallet from "../wallet/internal-wallet"
 import Seo from "../seo"
 
-
-
 const airdrops = [
     {
         icon: Airdrop,
@@ -138,7 +136,7 @@ const Wallet = () => {
         e.preventDefault()
         setState({ [e.target.name]: e.target.value })
     }, [])
-    
+
     const handleJoinAirdrop = () => {
         setState({ joinAirdrop: true })
     }

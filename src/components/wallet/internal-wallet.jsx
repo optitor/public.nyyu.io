@@ -69,7 +69,7 @@ export default function InternalWallet() {
     useEffect(() => {
         const get_BTCPrice = () => {
             axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
-                setBTCPrice(res.data.lastPrice)
+                setBTCPrice(res.data.price)
             })
         }
         get_BTCPrice()
