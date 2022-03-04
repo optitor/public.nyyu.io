@@ -445,9 +445,9 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                                         : "pe-sm-2 px-0"
                                 }`}
                             >
-                                <div
+                                <button
                                     onClick={() => setSelectedSavedCard(index)}
-                                    className={`col-12 ${
+                                    className={`btn rounded-0 mt-0 col-12 ${
                                         index === selectedSavedCard && "active"
                                     }`}
                                 >
@@ -472,7 +472,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                                             Delete card
                                         </button>
                                     </div>
-                                </div>
+                                </button>
                             </div>
                         );
                     })}
