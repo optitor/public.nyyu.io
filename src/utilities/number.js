@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-export const numberWithLength = (num, len) => {
+export const numberWithLength = (num, len=2) => {
     return `${num}`.padStart(len, "0")
 }
 export const getSecTomorrow = () => {

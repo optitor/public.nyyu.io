@@ -33,12 +33,8 @@ export const CREATE_CRYPTO_PAYMENT = gql`
 `;
 
 export const GET_DEPOSIT_ADDRESS = gql`
-    mutation GetDepositAddress(
-        $currency: String!
-    ) {
-        getDepositAddress (
-            currency: $currency
-        )
+    mutation GetDepositAddress($currency: String!) {
+        getDepositAddress(currency: $currency)
     }
 `;
 
@@ -64,6 +60,27 @@ export const CREATE_CHARGE_FOR_DEPOSIT = gql`
             confirmedAt
             depositAddress
             coin
+        }
+    }
+`;
+export const PAYPAL_FOR_AUCTION = gql`
+    mutation PaypalForAuction(
+        $roundId: Int
+        $amount: Float
+        $currencyCode: String
+    ) {
+        paypalForAuction(
+            roundId: $roundId,
+            amount: $amount,
+            currencyCode: $currencyCode
+        ) {
+            id
+            status
+            links {
+                href
+                rel
+                method
+            }
         }
     }
 `;
