@@ -61,7 +61,8 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
             setRequestPending(false);
         },
         onError: error => {
-            setError(error.message);
+            // setError(error.message);
+            setError("Insufficient funds");
             setRequestPending(false);
         },
     });
