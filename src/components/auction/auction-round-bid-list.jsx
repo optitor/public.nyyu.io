@@ -93,7 +93,7 @@ export default function AuctionRoundBidList() {
             }
         }
 
-    }, [currentRoundBidList, currentUser.id]);
+    }, [currentRoundBidList, currentUser.id])
 
     useEffect(() => {
         if (current.status === 2) return startPolling(pollIntervalValue)
@@ -118,7 +118,7 @@ export default function AuctionRoundBidList() {
                         ranking={item.ranking}
                         fullName={item.prefix + "." + item.name}
                         tokenPrice={item.tokenPrice}
-                        tokenAmount={item.tokenAmount}
+                        mainAmount={item.tokenAmount * item.tokenPrice}
                         winningResult={item.status !== 0 && item.status === 1 }
                         isCurrentUser={item.userId === currentUser.id}
                     />
@@ -130,7 +130,7 @@ export default function AuctionRoundBidList() {
                     ranking={currentUserBidData.ranking}
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
                     tokenPrice={currentUserBidData.tokenPrice}
-                    tokenAmount={currentUserBidData.tokenAmount}
+                    mainAmount={currentUserBidData.tokenAmount * currentUserBidData.tokenPrice}
                     winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1 }
                     isCurrentUser={true}/>
                 }
