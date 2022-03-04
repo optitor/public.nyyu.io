@@ -4,6 +4,7 @@ import React, { useCallback, useReducer, useState, useEffect } from "react";
 import { navigate } from "gatsby";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
+import {useMutation} from "@apollo/client"
 import ReactTooltip from "react-tooltip";
 import _ from "lodash";
 import Select, { components } from "react-select";
@@ -36,6 +37,7 @@ import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
 import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
 import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { set_All_Fees } from "../../redux/actions/allFeesAction";
+import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 
 const { Option, SingleValue } = components;
 
@@ -81,9 +83,10 @@ const Payment = () => {
     const [barProgress, setBarProgress] = useState(null);
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
+    const [payPalLoading, setPayPalLoading] = useState(false);
     const dispatch = useDispatch();
 
-    const loading = !(totalRounds && barProgress && allFees);
+    const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
 
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
@@ -133,6 +136,59 @@ const Payment = () => {
     useEffect(() => {
         if (barProgress < 1) setBarProgress(1);
     }, [barProgress]);
+
+    const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
+        onCompleted: (data) => {
+            let links = data.paypalForAuction.links
+            for (let i = 0; i < links.length; i++) {
+                if (links[i].rel === 'approve') {
+                    window.location.href = links[i].href;
+                }
+            }
+        },
+        onError: (err) => {
+            console.log(err);
+            // Sample response! It's on the onError callback because the mutation is throwing an error:
+            let data = {
+                paypalForAuction: {
+                    links: [
+                        {
+                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
+                            "rel": "self",
+                            "method": "GET"
+                        },
+                        {
+                            "href": "https://www.sandbox.paypal.com/checkoutnow?token=9K104858HE196213T",
+                            "rel": "approve",
+                            "method": "GET"
+                        },
+                        {
+                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
+                            "rel": "update",
+                            "method": "PATCH"
+                        },
+                        {
+                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T/capture",
+                            "rel": "capture",
+                            "method": "POST"
+                        }
+                    ]
+                }
+            }
+            let links = data.paypalForAuction.links
+            for (let i = 0; i < links.length; i++) {
+                if (links[i].rel === 'approve') {
+                    window.location.href = links[i].href;
+                }
+            }
+        },
+    })
+    
+    const initPaypal = () => {
+        setPayPalLoading(true);
+        createPayPalOrder({variables: {roundId: currentRound, amount: bidAmount, currency_code: 'USD'}});
+    }
+    
     if (loading) return <Loading />;
     return (
         <>
@@ -204,7 +260,10 @@ const Payment = () => {
                                 )}
                                 {tabIndex === 3 && (
                                     <div className="paypal-tab">
-                                        <div className="payment-content">
+                                        <div 
+                                        className="payment-content"
+                                        onClick={() => initPaypal()}
+                                        >
                                             <button className="paypal-checkout btn-second">
                                                 Check out with &nbsp;
                                                 <img
