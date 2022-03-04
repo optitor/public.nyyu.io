@@ -123,6 +123,7 @@ import stripe from "../images/stripe.svg"
 import visa from "../images/visa.svg"
 import amexDeposit from "../images/amexDeposit.svg"
 import masterCard from "../images/masterCard.svg"
+import creditCards from "../images/creditCards.svg"
 
 import certik from "../images/home/certik.svg"
 import munichre from "../images/home/munichre.svg"
@@ -248,6 +249,7 @@ export const Visa = visa
 export const AmexDeposit = amexDeposit
 export const MasterCard = masterCard
 export const GreenCup = greenCup
+export const CreditCards = creditCards
 
 export const Certik = certik
 export const MunichRE = munichre

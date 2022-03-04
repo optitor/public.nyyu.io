@@ -3,8 +3,7 @@
 import React, { useCallback, useReducer, useState, useEffect } from "react";
 import { navigate } from "gatsby";
 import { useDispatch, useSelector } from "react-redux";
-import { useQuery } from "@apollo/client";
-import {useMutation} from "@apollo/client"
+import { useQuery, useMutation } from "@apollo/client";
 import ReactTooltip from "react-tooltip";
 import _ from "lodash";
 import Select, { components } from "react-select";

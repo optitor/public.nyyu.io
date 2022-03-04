@@ -98,13 +98,12 @@ export default function CreditCardTab() {
     );
 }
 
-const CardSection = ({ amount, round }) => {
+const CardSection = ({ amount }) => {
     // Containers
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState("");
     const [cardHolder, setCardHolder] = useState("");
-    const [allowFractionBox, setAllowFractionBox] = useState(false);
     const [successfulPayment, setSuccessfulPayment] = useState(null);
     const [requestPending, setRequestPending] = useState(false);
     const [isNewCard, setIsNewCard] = useState(true);
@@ -167,7 +166,6 @@ const CardSection = ({ amount, round }) => {
                             }
                             return stripePayment({
                                 variables: {
-                                    roundId: Number(round),
                                     amount: amount * 100,
                                     paymentMethodId: null,
                                     paymentIntentId: result.paymentIntent.id,
@@ -219,7 +217,6 @@ const CardSection = ({ amount, round }) => {
         if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
             return stripePayment({
                 variables: {
-                    roundId: Number(round),
                     amount: amount * 100,
                     paymentMethodId: paymentMethod.id,
                     paymentIntentId: null,

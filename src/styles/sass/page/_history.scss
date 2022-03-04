@@ -531,20 +531,24 @@
         font-size: 32px;
     }
 
-    .step1 {
+    .width1 {
         width: 60%;
         margin: auto;
     }
-    .step2 {
+    .width2 {
         width: 80%;
         margin: auto;
     }
-    .step3 {
+    .width3 {
         width: 75%;
         margin: auto;
     }
+    .width4 {
+        width: 70%;
+        margin: auto;
+    }
     @include mq('phone', max) {
-        .step1, .step2, .step3 {
+        .width1, .width2, .width3, .width4 {
             width: 100%;
         }
     }
@@ -576,11 +580,73 @@
             margin-top: 15px;
         }
         p.subtitle {
-            color: dimgray;
-            margin-bottom: 3px;
+            color: $lightgrey;
+            margin-bottom: 5px;
+        }
+        p.desc {
+            margin-bottom: 5px;
+            span {
+                color: $green;
+            }
         }
         button.btn {
             height: 47px;
+        }
+        .black_input {
+            height: 49px;
+        }
+        div.transfer_input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            input#transferAmount {
+                background-color: inherit;
+                color: white;
+                border: unset;
+            }
+            div {
+                color: white;
+                margin-left: 5px;
+                margin-right: 5px;
+                span {
+                    color: $green;
+                }
+            }
+            @include mq('phone', max) {
+                input {
+                    width: 95%;
+                }
+                flex-direction: column;
+                height: auto;
+                align-items: flex-start;
+            }
+        }
+        div.usdt_div {
+            display: flex;
+            align-items: center;
+            img {
+                width: 34px;
+            }
+        }
+        div.transfer_data_div {
+            display: flex;
+            p.subtitle {
+                width: 24%;
+            }
+            p.value {
+                svg {
+                    font-size: 24px;
+                    color: $lightgrey;
+                    margin-left: 10px;
+                    cursor: pointer;
+                }
+            }
+            @include mq('phone', max) {
+                flex-direction: column;
+                p.subtitle {
+                    width: 100%;
+                }
+            }
         }
         div.address_div {
             div.clip_div {
@@ -631,12 +697,7 @@
                     }
                 }
             }
-            p.desc {
-                margin-top: 10px;
-                span {
-                    color: $green;
-                }
-            }
+            
             div.stats_div {
                 margin-top: 50px;
                 div.stats {
