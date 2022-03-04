@@ -1,14 +1,30 @@
-import PercentageBar from "./percentage-bar";
-import { useAuction } from "./auction-context";
-import React, { useState, useEffect } from "react";
-import { Currencies } from "../../utilities/staticData";
-import { numberWithLength } from "../../utilities/number";
+import React, { useState, useEffect } from "react"
+
+import PercentageBar from "./percentage-bar"
+import { useAuction } from "./auction-context"
+import { numberWithLength } from "../../utilities/number"
 
 export default function AuctionRoundDetails() {
     // Container
-    const auction = useAuction();
-    const [minBidValue, setMinBidValue] = useState(Infinity);
-    const { auctions, currentRoundNumber, currentRoundBidList } = auction;
+    const auction = useAuction()
+    const [minBidValue, setMinBidValue] = useState(Infinity)
+    const { auctions, currentRoundNumber, currentRoundBidList } = auction
+    const [restTime, setRestTime] = useState({
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+    })
+    const getRemainingRoundTime = (difference) => {
+        const seconds = Math.floor((difference / 1000) % 60)
+        const minutes = Math.floor((difference / (1000 * 60)) % 60)
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
+        setRestTime({
+            hours: hours < 10 ? "0" + hours : hours,
+            minutes: minutes < 10 ? "0" + minutes : minutes,
+            seconds: seconds < 10 ? "0" + seconds : seconds,
+        })
+    }
+
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0];
@@ -29,6 +45,17 @@ export default function AuctionRoundDetails() {
 
     useEffect(() => findMinBid(), [currentRoundBidList]);
 
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const currentTimeMilliSeconds = new Date().getTime()
+            const difference = Math.abs(current.endedAt - currentTimeMilliSeconds)
+            getRemainingRoundTime(difference)
+        }, 1000)
+        return () => {
+            clearInterval(timer)
+        }
+    }, [current])
+
     // Render
     if (!currentRoundBidList) return <></>;
     return (
@@ -41,41 +68,29 @@ export default function AuctionRoundDetails() {
             <div className="d-flex justify-content-between mt-4">
                 {minBidValue !== 0 ? (
                     <div>
-                        <p className="caption text-[#959595]">Minimum Bid </p>
+                        <p className="caption text-[#959595]">Reserved Price </p>
                         <p className="value">
+                            {minBidValue + " "}
                             <span className="txt-green">
-                                {Currencies[0].symbol + " "}
+                                USD
                             </span>
-                            {minBidValue}
                         </p>
                     </div>
                 ) : (
-                    <div></div>
+                    ""
                 )}
                 <div>
                     {current.status !== 3 ? (
                         <>
                             <p className="caption text-end text-[#959595]">
-                                Available Until
+                                Time Remaining
                             </p>
                             <p className="value text-end">
-                                {numberWithLength(
-                                    parseInt(
-                                        new Date(current.endedAt).getHours()
-                                    )
-                                )}
+                                {numberWithLength(restTime.hours,2)}
                                 :
-                                {numberWithLength(
-                                    parseInt(
-                                        new Date(current.endedAt).getMinutes()
-                                    )
-                                )}
+                                {numberWithLength(restTime.minutes, 2)}
                                 :
-                                {numberWithLength(
-                                    parseInt(
-                                        new Date(current.endedAt).getSeconds()
-                                    )
-                                )}
+                                {numberWithLength(restTime.seconds, 2)}
                             </p>
                         </>
                     ) : (
