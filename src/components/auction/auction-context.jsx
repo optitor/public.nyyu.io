@@ -1,6 +1,6 @@
+import React, { useContext, useState } from "react"
 import { useQuery } from "@apollo/client"
-import React, { useContext } from "react"
-import { useState } from "react"
+
 import {
     GET_AUCTION,
     GET_CURRENT_ROUND,
@@ -83,6 +83,9 @@ const AuctionProvider = ({ children }) => {
         // is auction or not
         isAuction,
         setIsAuction,
+
+        presales,
+        setPresales
     }
 
     // Render

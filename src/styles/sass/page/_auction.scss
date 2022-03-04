@@ -57,7 +57,7 @@
 
         .timeframe-bar {
             background: linear-gradient(270deg, #23c865 0%, #23c865 35.94%, #e8503a 57.81%);
-            margin-top: 0px;
+            margin-top: 0;
             .timeleft {
                 &__value {
                     font-weight: 500;
@@ -85,7 +85,7 @@
             }
         }
         .auction-left {
-            padding-right: 20px;
+            padding-right: 50px;
             @include mq("tablet") {
                 display: block !important;
             }
@@ -159,92 +159,6 @@
                     line-height: 22px;
                 }
             }
-            .statistics-tab {
-                margin-top: 32px;
-                @include mq("tablet", max) {
-                    margin-top: 16px;
-                }
-                @include mq("phone", max) {
-                    margin-top: 32px;
-                }
-                .react-tabs__tab-list {
-                    display: flex;
-                    justify-content: space-between;
-                    border-bottom: none;
-                    .react-tabs__tab {
-                        width: 50%;
-                    }
-                    @include mq("tablet", max) {
-                        justify-content: flex-start;
-                    }
-                }
-                .react-tabs__tab-panel {
-                    .text {
-                        padding-top: 27px;
-                        white-space: pre-line;
-                        font-weight: normal;
-                        font-size: 12px;
-                        line-height: 17px;
-                        @include mq("tablet", max) {
-                            font-size: 18px;
-                            line-height: 141.4%;
-                        }
-                        @include mq("phone", max) {
-                            font-size: 12px;
-                            line-height: 17px;
-                        }
-                    }
-                    table {
-                        width: 100%;
-                        th {
-                            font-weight: 600;
-                            font-size: 12px;
-                            line-height: 141.4%;
-                            letter-spacing: 0.03em;
-                            border-bottom: 1px solid #525252;
-                        }
-                        td {
-                            font-size: 16px;
-                            line-height: 141.4%;
-                            border-bottom: 1px solid #525252;
-                        }
-                    }
-                    .caption {
-                        font-size: 18px;
-                        line-height: 22px;
-                        letter-spacing: -0.02em;
-                        color: $grey;
-                        @include mq("phone", max) {
-                            font-size: 14px;
-                            line-height: 17px;
-                        }
-                    }
-                    .value {
-                        font-weight: 600;
-                        font-size: 18px;
-                        line-height: 22px;
-                        @include mq("phone", max) {
-                            font-size: 14px;
-                            line-height: 17px;
-                        }
-                    }
-                    .btn-increase {
-                        font-weight: bold;
-                        font-size: 30px;
-                        line-height: 20px;
-                        padding: 14px 35px;
-                    }
-                }
-            }
-            &__bottom {
-                position: absolute;
-                width: calc(100% - 70px);
-                @include mq("phone", max) {
-                    position: relative;
-                    bottom: unset;
-                    width: 100%;
-                }
-            }
         }
         .auction-right {
             position: relative;
@@ -275,7 +189,7 @@
             }
             .chart-area {
                 margin: 0 auto;
-                padding: 40px 0px 40px 40px;
+                padding: 40px 0 40px 40px;
                 @include mq("laptop") {
                     display: none;
                 }
@@ -341,6 +255,43 @@
                     margin: 45px 0 25px;
                 }
             }
+        }
+    }
+}
+.list-part {
+    & > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        & > * {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+}
+
+.auction-bid-list-content-group {
+    width: 100%;
+    max-height: 295px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    & > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        & > * {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+}
+
+.auction-bid-list-content-final {
+    width: 100%;
+    & > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        & > * {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
         }
     }
 }

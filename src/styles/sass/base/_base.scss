@@ -103,33 +103,62 @@ input[type="number"]::-webkit-outer-spin-button {
     width: max-content !important;
 }
 
-.mt-16px {
-    margin-top: 16px;
-}
-
 .placeholder\:text-light {
     &::placeholder {
         color: #e3e3e3 !important;
     }
 }
-.py-12px {
-    padding-top: 12px;
-    padding-bottom: 12px;
+
+@for $size from 4 to 100 {
+    .py-#{$size}px {
+        padding-top: #{$size}px !important;
+        padding-bottom: #{$size}px !important;
+    }
 }
-.py-10px {
-    padding-top: 10px;
-    padding-bottom: 10px;
+
+@for $size from 4 to 96 {
+    .px-#{$size}px {
+        padding-left: #{$size}px !important;
+        padding-right: #{$size}px !important;
+    }
 }
-.px-55px {
-    padding-left: 55px;
-    padding-right: 55px;
+
+@for $size from 4 to 96 {
+    .ml-#{$size}px {
+        margin-left: #{$size}px !important;
+    }
 }
-.px-100px {
-    padding-left: 100px;
-    padding-right: 100px;
+
+@for $size from 4 to 96 {
+    .mr-#{$size}px {
+        margin-right: #{$size}px !important;
+    }
 }
-.pl-8px {
-    padding-left: 8px;
+
+@for $size from 3 to 96 {
+    .mt-#{$size}px {
+        margin-top: #{$size}px !important;
+    }
+}
+
+.mt-1 {
+    margin-top: 1px !important;
+}
+.mb-5px {
+    margin-bottom: 5px !important;
+}
+
+//padding left
+@for $size from 0 to 96 {
+    .pl-#{$size}px {
+        padding-left: #{$size}px !important;
+    }
+}
+
+@for $size from 4 to 96 {
+    .pr-#{$size}px {
+        padding-right: #{$size}px !important;
+    }
 }
 
 .hover\:bg-dark {
@@ -143,11 +172,14 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: justify !important;
 }
 
-.w-316px {
-    width: 316px !important;
+@for $size from 8 to 500 {
+    .w-#{$size}px {
+        width: #{$size}px !important;
+    }
 }
+
 // Font Sizes
-@for $size from 12 to 96 {
+@for $size from 8 to 96 {
     .fs-#{$size}px {
         font-size: #{$size}px !important;
     }
@@ -168,6 +200,23 @@ input[type="number"]::-webkit-outer-spin-button {
 .border-bottom-1px {
     border-bottom: 1px !important;
 }
+
+.border-bottom-scorpion {
+    border-bottom: 1px solid $scorpion !important;
+}
+
+.border-bottom-2-dark-gray {
+    border-bottom: 2px solid #464646;
+}
+
+.border-cinnabar {
+    border: 1px solid $cinnabar;
+}
+
+.border-mountainMeadow {
+    border: 1px solid $mountainMeadow;
+}
+
 .fv-small-caps {
     font-variant: small-caps !important;
 }
@@ -198,22 +247,11 @@ input[type="number"]::-webkit-outer-spin-button {
 .bg-gray {
     background: $grey;
 }
-.mt-1 {
-    margin-top: 1px !important;
-}
+
 //End: Background Color
 
 .scale-70 {
     transform: scale(0.7, 0.7);
-}
-.mt-30px {
-    margin-top: 30px;
-}
-.mt-3px {
-    margin-top: 3px !important;
-}
-.ml-45px {
-    margin-left: 45px !important;
 }
 
 .bg-black-10 {
@@ -224,20 +262,11 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-left: 40px;
 }
 
-.mt-40px {
-    margin-top: 40px;
-}
-
 .first-letter\:text-green {
     color: white !important;
     &::first-letter {
         color: $green !important;
     }
-}
-
-.py-12px {
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
 }
 
 .w-max-content {
@@ -253,14 +282,10 @@ input[type="number"]::-webkit-outer-spin-button {
     white-space: nowrap !important;
 }
 
-.border-bottom-2-dark-gray {
-    border-bottom: 2px solid #464646;
-}
-
 .hover\:shadow-light {
     transition: 500ms;
     &:hover {
-        box-shadow: 0px 0px 8px lightgrey;
+        box-shadow: 0 0 8px lightgrey;
     }
 }
 .hover\:scale-125 {
@@ -303,10 +328,3 @@ input[type="number"]::-webkit-outer-spin-button {
     height: 85% !important;
 }
 
-.mt-9px {
-    margin-top: 9px !important;
-}
-
-.mb-5px {
-    margin-bottom: 5px !important;
-}

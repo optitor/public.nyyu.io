@@ -1,26 +1,30 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
-import { useQuery } from "@apollo/client"
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
 import _ from "lodash"
+import { useQuery } from "@apollo/client"
+
+import { GET_BID } from "../../apollo/graghqls/querys/Auction"
+import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
+
 import { useAuction } from "./auction-context"
 import CustomSpinner from "../common/custom-spinner"
-import { GreenCup } from "../../utilities/imgImport"
-import { Currencies } from "../../utilities/staticData"
-import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
-import { GET_BID } from "../../apollo/graghqls/querys/Auction"
-import { useEffect } from "react"
+
+import AuctionListHeader from "../common/AuctionListHeader"
+import AuctionList from "../common/AuctionList"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
-    // Containers
     const auction = useAuction()
     const { auctions, currentRoundNumber } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
+    const [displayedBidList, setDisplayedBidList] = useState(null)
+    const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
+    const [currentUserBidData, setCurrentUserBidData] = useState(null)
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
     )[0]
     const pollIntervalValue = 10000
+    const limitDisplayBidCount = 5
 
     const loadingData = !(
         currentRoundBidList &&
@@ -72,6 +76,26 @@ export default function AuctionRoundBidList() {
     })
 
     useEffect(() => {
+        if (currentRoundBidList && currentRoundBidList.length) {
+            if (currentRoundBidList.length > limitDisplayBidCount ) {
+                const currentUserBidInfo = currentRoundBidList?.filter(
+                    (auction) => auction.userId === currentUser.id
+                )[0]
+                if (currentUserBidInfo && currentUserBidInfo.ranking > limitDisplayBidCount) {
+                    setCurrentUserBidData(currentUserBidInfo)
+                    setCurrentAuctionUserExist(true)
+                    setDisplayedBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 1))
+                } else {
+                    setDisplayedBidList(currentRoundBidList.slice(0, limitDisplayBidCount))
+                }
+            } else {
+                setDisplayedBidList(currentRoundBidList)
+            }
+        }
+
+    }, [currentRoundBidList, currentUser.id]);
+
+    useEffect(() => {
         if (current.status === 2) return startPolling(pollIntervalValue)
         return stopPolling()
     }, [current, startPolling, stopPolling])
@@ -85,64 +109,32 @@ export default function AuctionRoundBidList() {
         )
 
     return (
-        <>
-            <Tabs className="statistics-tab">
-                <TabList>
-                    <Tab></Tab>
-                </TabList>
-                <TabPanel>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th className="border-0 py-2">
-                                    <img src={GreenCup} alt="Green Cup" />
-                                </th>
-                                <th className="fw-500 py-2">Placement</th>
-                                <th className="fw-500 text-end py-2">
-                                    Highest Bids
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentRoundBidList.map((item, index) => (
-                                <tr
-                                    key={index}
-                                >
-                                    <td className="border-0 ps-6px py-2"
-                                        style={{color: currentUser?.id === item.userId? "#23c865": "#ffffff" }}
-                                    >
-                                        {index + 1}
-                                    </td>
-                                    <td className="py-2"
-                                        style={{color: currentUser?.id === item.userId? "#23c865": "#ffffff" }}
-                                    >
-                                        {item.prefix + '.' + item.name} {currentUser?.id === item.userId? ' (You)': ''}
-                                    </td>
-                                    <td className="py-2 text-end">
-                                        <span className="txt-green">
-                                            {Currencies[0].symbol}{" "}
-                                        </span>
-                                        {item.totalAmount}<br />
-                                        <span style={{color: 'dimgray', fontSize: 14}}>
-                                            0.0054
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-                            {currentRoundBidList.length === 0 && (
-                                <tr>
-                                    <td
-                                        className="text-uppercase text-center mx-auto fs-14px border-0 py-2"
-                                        colSpan={3}
-                                    >
-                                        no records found
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </TabPanel>
-            </Tabs>
-        </>
+        <div className="d-flex flex-column align-items-center pt-5 list-part">
+            <AuctionListHeader totalCount={currentRoundBidList.length} auctionType="Bidder" auctionTitle="Bid" />
+            <div className="auction-bid-list-content-group">
+                {displayedBidList && displayedBidList.map((item, index) =>
+                    <AuctionList
+                        key={index}
+                        ranking={item.ranking}
+                        fullName={item.prefix + "." + item.name}
+                        tokenPrice={item.tokenPrice}
+                        tokenAmount={item.tokenAmount}
+                        winningResult={item.status !== 0 && item.status === 1 }
+                        isCurrentUser={item.userId === currentUser.id}
+                    />
+                )}
+            </div>
+            <div className="auction-bid-list-content-final">
+                {currentAuctionUserExist &&
+                <AuctionList
+                    ranking={currentUserBidData.ranking}
+                    fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
+                    tokenPrice={currentUserBidData.tokenPrice}
+                    tokenAmount={currentUserBidData.tokenAmount}
+                    winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1 }
+                    isCurrentUser={true}/>
+                }
+            </div>
+        </div>
     )
 }

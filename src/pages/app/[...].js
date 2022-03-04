@@ -19,6 +19,7 @@ const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
 const Wallet = lazy(() => import("../../components/wallet"))
 const AuctionWrapper = lazy(() => import("../../components/auction/auction-wrapper"))
 const Payment = lazy(() => import("../../components/payment"))
+const Presale = lazy(() => import("../../components/presale"))
 
 const NotFound = lazy(() => import("./../404"))
 
@@ -56,7 +57,8 @@ const App = () => {
                         <PrivateRoute path="select-figure" component={SelectFigure} />
                         <PrivateRoute path="auction" component={AuctionWrapper} />
                         <PrivateRoute path="payment" component={Payment} />
-                        
+                        <PrivateRoute path="presale" component={Presale} />
+
                         <NotFound default />
                     </Router>
                 </Suspense>
