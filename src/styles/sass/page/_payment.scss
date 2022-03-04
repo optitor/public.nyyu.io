@@ -1,4 +1,7 @@
 .payment-page {
+    .menu {
+        border-bottom: 2px solid #464646;
+    }
     .container {
         @include mq("tablet", max) {
             width: auto !important;
