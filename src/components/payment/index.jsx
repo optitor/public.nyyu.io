@@ -48,8 +48,8 @@ const payment_types = [
 ];
 
 const Payment = () => {
-    const currentRound = useSelector((state) => state?.placeBid.round_id);
-    const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
+    const currentRound = useSelector(state => state?.placeBid.round_id);
+    const bidAmount = useSelector(state => state?.placeBid.bid_amount);
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
@@ -76,7 +76,7 @@ const Payment = () => {
     const [tabIndex, setTabIndex] = useState(0);
 
     const handleAllowFraction = useCallback(
-        (e) => {
+        e => {
             e.preventDefault();
             setState({ allow_fraction: !allow_fraction });
         },
@@ -84,23 +84,23 @@ const Payment = () => {
     );
 
     useQuery(GET_AUCTION, {
-        onCompleted: (data) => {
+        onCompleted: data => {
             setTotalRounds(data.getAuctions.length);
             setBarProgress((currentCap * 100) / targetCap);
         },
-        onError: (error) => console.log(error),
+        onError: error => console.log(error),
         errorPolicy: "ignore",
         fetchPolicy: "network-only",
     });
     useQuery(GET_ALL_FEES, {
-        onCompleted: (data) => {
+        onCompleted: data => {
             setAllFees(data.getAllFees);
             const allFees = _.mapKeys(data.getAllFees, "tierLevel");
             if (allFees) {
                 dispatch(set_All_Fees(allFees));
             }
         },
-        onError: (error) => console.log(error),
+        onError: error => console.log(error),
     });
 
     useEffect(() => {
@@ -108,7 +108,7 @@ const Payment = () => {
     }, [barProgress]);
 
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
-        onCompleted: (data) => {
+        onCompleted: data => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
@@ -116,7 +116,7 @@ const Payment = () => {
                 }
             }
         },
-        onError: (err) => {
+        onError: err => {
             console.log(err);
             // Sample response! It's on the onError callback because the mutation is throwing an error:
             let data = {
@@ -251,7 +251,10 @@ const Payment = () => {
                                     </div>
                                 )}
                                 {tabIndex === 4 && (
-                                    <NDBWalletTab bidAmount={bidAmount} />
+                                    <NDBWalletTab
+                                        bidAmount={bidAmount}
+                                        currentRound={currentRound}
+                                    />
                                 )}
                                 {tabIndex === 5 && (
                                     <div className="externalwallets-tab">
