@@ -124,6 +124,8 @@ const Menu = () => {
         document.addEventListener("keydown", handleEscKeyPress)
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
+
+
     // Render
     if (loading) return <Loading/>
     else
@@ -140,12 +142,14 @@ const Menu = () => {
                                 window.location.pathname === ROUTES.wallet ||
                                 window.location.pathname === ROUTES.auction ||
                                 window.location.pathname === ROUTES.payment ||
+                                window.location.pathname === ROUTES.creditDeposit ||
                                 window.location.pathname.includes(ROUTES.admin)) && (
                                 <div className="d-none d-md-flex justify-content-between gap-5">
                                     <Link
                                         to={ROUTES.wallet}
                                         className={`${
-                                            window.location.pathname === ROUTES.wallet &&
+                                            (window.location.pathname === ROUTES.wallet ||
+                                            window.location.pathname === ROUTES.creditDeposit ) &&
                                             "txt-green"
                                         }`}
                                     >
@@ -216,7 +220,7 @@ const Menu = () => {
                                     <li className="scale-75 cursor-pointer">
                                         {newNotification ? (
                                             <Link to={ROUTES.profile}>
-                                                <img src={NotificationBell} alt="Bell Icon"/>
+                                                <img onClick={() => {dispatch({ type: 'CREATE_NOTIFICATION_ROUTE' })}}  src={NotificationBell} alt="Bell Icon"/>
                                             </Link>
                                         ) : (
                                             <img

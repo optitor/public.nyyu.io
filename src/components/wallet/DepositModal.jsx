@@ -10,7 +10,7 @@ import { useMutation } from '@apollo/client';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
-import { Plaid, PaypalFiat, Visa, Amex, MasterCard } from '../../utilities/imgImport';
+import { Plaid, PaypalFiat, Visa, AmexDeposit, MasterCard } from '../../utilities/imgImport';
 import { SUPPORED_COINS } from "../../utilities/staticData2";
 import { CREATE_CHARGE_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
@@ -203,7 +203,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         <FiatButton className="active" onClick={handleCreditDeposit}>
                                             <img src={Visa} alt="visa" />
                                             <img src={MasterCard} alt="masterCard" />
-                                            <img src={Amex} alt="amex" />
+                                            <img src={AmexDeposit} alt="amex" />
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
