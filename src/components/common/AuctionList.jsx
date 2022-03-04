@@ -1,6 +1,6 @@
 import React from "react"
 
-const AuctionList = ({ ranking, fullName, tokenPrice, tokenAmount, winningResult, isCurrentUser }) => {
+const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult, isCurrentUser }) => {
     return (
         <div className="w-100 row border-bottom-scorpion p-2 bid-list-item px-12px">
             <div className="col-3 d-flex align-items-center justify-content-start">
@@ -16,7 +16,7 @@ const AuctionList = ({ ranking, fullName, tokenPrice, tokenAmount, winningResult
                 <div className="d-flex align-items-center justify-content-end">
                     <div className="d-flex flex-column">
                         <div className="text-white align-self-end fw-500">{tokenPrice}</div>
-                        <div className="txt-scorpion align-self-end fs-12px">{tokenAmount}</div>
+                        <div className="txt-scorpion align-self-end fs-12px">{mainAmount}</div>
                     </div>
                 </div>
             </div>
