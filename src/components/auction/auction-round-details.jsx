@@ -9,9 +9,21 @@ export default function AuctionRoundDetails() {
     const auction = useAuction()
     const [minBidValue, setMinBidValue] = useState(Infinity)
     const { auctions, currentRoundNumber, currentRoundBidList } = auction
-
-    const [currentDate, setCurrentDate] = useState(new Date())
-    const [restInterval, setRestInterval] = useState(0)
+    const [restTime, setRestTime] = useState({
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+    })
+    const getRemainingRoundTime = (difference) => {
+        const seconds = Math.floor((difference / 1000) % 60)
+        const minutes = Math.floor((difference / (1000 * 60)) % 60)
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
+        setRestTime({
+            hours: hours < 10 ? "0" + hours : hours,
+            minutes: minutes < 10 ? "0" + minutes : minutes,
+            seconds: seconds < 10 ? "0" + seconds : seconds,
+        })
+    }
 
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
@@ -35,14 +47,15 @@ export default function AuctionRoundDetails() {
     useEffect(() => findMinBid(), [currentRoundBidList])
 
     useEffect(() => {
-        const timer = setInterval(()=> setCurrentDate(new Date()), 1000 )
-        if (current) {
-            setRestInterval(current.endedAt - currentDate)
-        }
-        return function() {
+        const timer = setInterval(() => {
+            const currentTimeMilliSeconds = new Date().getTime()
+            const difference = Math.abs(current.endedAt - currentTimeMilliSeconds)
+            getRemainingRoundTime(difference)
+        }, 1000)
+        return () => {
             clearInterval(timer)
         }
-    }, [current, currentDate])
+    }, [current])
 
     // Render
     if (!currentRoundBidList) return <></>
@@ -74,23 +87,11 @@ export default function AuctionRoundDetails() {
                                 Time Remaining
                             </p>
                             <p className="value text-end">
-                                {numberWithLength(
-                                    parseInt(
-                                        new Date(restInterval).getHours()
-                                    )
-                                )}
+                                {numberWithLength(restTime.hours,2)}
                                 :
-                                {numberWithLength(
-                                    parseInt(
-                                        new Date(restInterval).getMinutes()
-                                    )
-                                )}
+                                {numberWithLength(restTime.minutes, 2)}
                                 :
-                                {numberWithLength(
-                                    parseInt(
-                                        new Date(restInterval).getSeconds()
-                                    )
-                                )}
+                                {numberWithLength(restTime.seconds, 2)}
                             </p>
                         </>
                     ) : (
