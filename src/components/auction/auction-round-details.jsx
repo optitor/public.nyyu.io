@@ -1,36 +1,36 @@
-import PercentageBar from "./percentage-bar"
-import { useAuction } from "./auction-context"
-import React, { useState, useEffect } from "react"
-import { Currencies } from "../../utilities/staticData"
-import { numberWithLength } from "../../utilities/number"
+import PercentageBar from "./percentage-bar";
+import { useAuction } from "./auction-context";
+import React, { useState, useEffect } from "react";
+import { Currencies } from "../../utilities/staticData";
+import { numberWithLength } from "../../utilities/number";
 
 export default function AuctionRoundDetails() {
     // Container
-    const auction = useAuction()
-    const [minBidValue, setMinBidValue] = useState(Infinity)
-    const { auctions, currentRoundNumber, currentRoundBidList } = auction
+    const auction = useAuction();
+    const [minBidValue, setMinBidValue] = useState(Infinity);
+    const { auctions, currentRoundNumber, currentRoundBidList } = auction;
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
-    )[0]
-    const soldTokensPercentage = (current?.sold / current?.totalToken) * 100
+    )[0];
+    const soldTokensPercentage = (current?.sold / current?.totalToken) * 100;
 
     // Methods
     const findMinBid = () => {
         if (!currentRoundBidList || currentRoundBidList?.length === 0)
-            return setMinBidValue(0.0)
+            return setMinBidValue(0.0);
 
-        let min = Infinity
+        let min = Infinity;
         currentRoundBidList.forEach((item) => {
-            if (item.totalAmount < min) min = item.totalAmount
-        })
+            if (item.totalAmount < min) min = item.totalAmount;
+        });
 
-        return setMinBidValue(min)
-    }
+        return setMinBidValue(min);
+    };
 
-    useEffect(() => findMinBid(), [currentRoundBidList])
+    useEffect(() => findMinBid(), [currentRoundBidList]);
 
     // Render
-    if (!currentRoundBidList) return <></>
+    if (!currentRoundBidList) return <></>;
     return (
         <div className="auction-left__bottom">
             <PercentageBar
@@ -84,5 +84,5 @@ export default function AuctionRoundDetails() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
