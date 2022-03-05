@@ -1,16 +1,17 @@
-    import React, { useEffect } from "react"
-import Slider from "rc-slider"
-import { useAuction } from "./auction-context"
-import { Currencies } from "../../utilities/staticData"
-import { navigate } from "gatsby"
-import { numberWithCommas } from "../../utilities/number"
-import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
-import { useMutation } from "@apollo/client"
-import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
-import { useState } from "react"
-import { ROUTES } from "../../utilities/routes"
+import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
+import Slider from "rc-slider"
+import { navigate } from "gatsby"
+import { useMutation } from "@apollo/client"
+
+import { useAuction } from "../../providers/auction-context"
+import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
+
 import CustomSpinner from "../common/custom-spinner"
+import { Currencies } from "../../utilities/staticData"
+import { numberWithCommas } from "../../utilities/number"
+import { ROUTES } from "../../utilities/routes"
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 
 export default function AuctionPlaceBid() {
     // Containers
@@ -168,7 +169,7 @@ export default function AuctionPlaceBid() {
                                         strokeLinejoin="round"
                                         strokeWidth="2"
                                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    ></path>
+                                    />
                                 </svg>
                                 <p className="text-danger fw-500 text-[#959595]">
                                     {error}
@@ -181,6 +182,7 @@ export default function AuctionPlaceBid() {
                         onClick={() => {
                             bidMutation()
                         }}
+
                         disabled={reqPending}
                     >
                         <div className="d-flex align-items-center justify-content-center gap-3">

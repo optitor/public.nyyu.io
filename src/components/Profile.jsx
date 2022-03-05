@@ -1,38 +1,40 @@
-import Select from "react-select"
-import Loading from "./common/Loading"
-import { navigate } from "gatsby"
-import { useQuery } from "@apollo/client"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import Select from "react-select"
+import ReactTooltip from "react-tooltip"
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
+import { useQuery } from "@apollo/client"
+import { navigate } from "gatsby"
+
+import { setCurrentAuthInfo } from "../redux/actions/authAction"
+
+import Seo from "./seo"
+import Loading from "./common/Loading"
 import Header from "../components/header"
-import { ROUTES } from "../utilities/routes"
+import Avatar from "../components/dress-up/avatar"
 import SignOutTab from "./profile/sign-out-tab"
+import ConnectWalletTab from "./profile/connect-wallet-tab"
+import TwoFactorModal from "./profile/two-factor-modal"
+import DeleteAccountModal from "./profile/delete-account-modal"
+import NotificationSetting from "./profile/notification-setting-switch"
+import NotificationRecent from "./profile/notification-recent-switch"
+import TierDetailsTab from "./profile/tier-details-tab"
+import ProfileChangePasswordModal from "./profile/change-password-modal"
+import { logout } from "../utilities/auth"
+import {
+    getShuftiStatusByReference,
+} from "../utilities/utility-methods"
+import AccountDetails from "./profile/account-details"
+
+import { GET_USER } from "../apollo/graghqls/querys/Auth"
+import { GET_USER_TIERS } from "./profile/profile-queries"
 import {
     profile_tabs,
     TWO_FACTOR_AUTH_TOOLTIP_CONTENT,
 } from "../utilities/staticData"
-import Seo from "./seo"
-import TwoFactorModal from "./profile/two-factor-modal"
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { GET_USER } from "../apollo/graghqls/querys/Auth"
-import ConnectWalletTab from "./profile/connect-wallet-tab"
-import React, { useEffect, useState } from "react"
-import DeleteAccountModal from "./profile/delete-account-modal"
-import { setCurrentAuthInfo } from "../redux/actions/authAction"
-import NotificationRecent from "./profile/notification-recent-switch"
-import NotificationSetting from "./profile/notification-setting-switch"
-import ProfileChangePasswordModal from "./profile/change-password-modal"
-import TierDetailsTab from "./profile/tier-details-tab"
-import Avatar from "../components/dress-up/avatar"
-import { GET_USER_TIERS } from "./profile/profile-queries"
-import { QuestionMark } from "../utilities/imgImport"
-import AccountDetails from "./profile/account-details"
-import ReactTooltip from "react-tooltip"
+import { ROUTES } from "../utilities/routes"
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
-import { logout } from "../utilities/auth"
-import {
-    getCurrentDate,
-    getShuftiStatusByReference,
-} from "../utilities/utility-methods"
+import { QuestionMark } from "../utilities/imgImport"
 
 const Profile = () => {
     const tab = useSelector(state => state.profileTab);
@@ -116,7 +118,7 @@ const Profile = () => {
                     className={`status ${
                         config ? "active" : "deactive"
                     } mt-3px`}
-                ></div>
+                />
                 <div className="security-item">
                     <p className="security-name">{title}</p>
 
@@ -216,7 +218,7 @@ const Profile = () => {
                                                     100
                                                 }%`,
                                             }}
-                                        ></div>
+                                        />
                                     </div>
                                 </div>
                                 <Tabs
@@ -226,7 +228,7 @@ const Profile = () => {
                                 >
                                     <TabList>
                                         {profile_tabs.map((item, idx) => (
-                                            <Tab selected = {tabIndex == idx} focus = {tabIndex == idx} lkey={idx}>{item.label}</Tab>
+                                            <Tab selected = {tabIndex === idx} focus = {tabIndex === idx} key={idx}>{item.label}</Tab>
                                         ))}
                                     </TabList>
                                     <Select

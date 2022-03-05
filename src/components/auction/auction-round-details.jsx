@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
 
-import PercentageBar from "./percentage-bar"
-import { useAuction } from "./auction-context"
+import { useAuction } from "../../providers/auction-context"
 import { numberWithLength } from "../../utilities/number"
+import PercentageBar from "./percentage-bar"
 
 export default function AuctionRoundDetails() {
     // Container

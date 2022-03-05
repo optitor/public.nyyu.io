@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/client"
 import { GET_BID } from "../../apollo/graghqls/querys/Auction"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
 
-import { useAuction } from "./auction-context"
+import { useAuction } from "../../providers/auction-context"
 import CustomSpinner from "../common/custom-spinner"
 
 import AuctionListHeader from "../common/AuctionListHeader"
@@ -94,6 +94,8 @@ export default function AuctionRoundBidList() {
         }
 
     }, [currentRoundBidList, currentUser.id])
+
+    console.log(currentRoundBidList)
 
     useEffect(() => {
         if (current.status === 2) return startPolling(pollIntervalValue)

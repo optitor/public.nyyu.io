@@ -6,7 +6,7 @@ import Seo from "../seo"
 import Loading from "../common/Loading"
 import Header from "../header"
 
-import { useAuction } from "./auction-context"
+import { useAuction } from "../../providers/auction-context"
 import AuctionRoundNavigator from "./auction-round-navigator"
 import AuctionRoundBidList from "./auction-round-bid-list"
 import AuctionRoundDetails from "./auction-round-details"

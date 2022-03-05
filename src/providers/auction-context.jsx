@@ -5,7 +5,7 @@ import {
     GET_AUCTION,
     GET_CURRENT_ROUND,
     GET_PRESALES,
-} from "../../apollo/graghqls/querys/Auction"
+} from "../apollo/graghqls/querys/Auction"
 
 export const AuctionContext = React.createContext()
 export const useAuction = () => useContext(AuctionContext)

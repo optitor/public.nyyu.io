@@ -1,6 +1,8 @@
 import React from "react";
-import { useAuction } from "./auction-context";
 import { Tab, TabList } from "react-tabs";
+
+import { useAuction } from "../../providers/auction-context";
+
 import { numberWithCommas } from "../../utilities/number";
 
 export default function AuctionRoundNavigator() {
@@ -55,7 +57,7 @@ export default function AuctionRoundNavigator() {
                                     strokeLinejoin="round"
                                     strokeWidth="2"
                                     d="M15 19l-7-7 7-7"
-                                ></path>
+                                />
                             </svg>
                         </button>
                         <div className="fw-bold text-uppercase fs-30px border-bottom border-3 border-success px-2">
@@ -83,7 +85,7 @@ export default function AuctionRoundNavigator() {
                                     strokeLinejoin="round"
                                     strokeWidth="2"
                                     d="M9 5l7 7-7 7"
-                                ></path>
+                                />
                             </svg>
                         </button>
                     </div>
