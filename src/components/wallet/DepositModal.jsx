@@ -186,7 +186,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                     <Icon
                         className="icon"
                         icon="carbon:arrow-left"
-                        onClick={() => setCurrentStep(3)}
+                        onClick={() => {
+                            setCurrentStep(3);
+                            setCopyText('');
+                        }}
                     />
                 )}
                 <div className="fw-bold h4 text-light"> </div>
