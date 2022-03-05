@@ -27,24 +27,23 @@ export default function AuctionRoundDetails() {
 
     const current = auctions?.filter(
         (auction) => auction.round === currentRoundNumber
-    )[0]
-    const soldTokensPercentage = (current?.sold / current?.totalToken) * 100
+    )[0];
+    const soldTokensPercentage = (current?.sold / current?.totalToken) * 100;
 
     // Methods
     const findMinBid = () => {
         if (!currentRoundBidList || currentRoundBidList?.length === 0)
-            return setMinBidValue(0.0)
+            return setMinBidValue(0.0);
 
-        let min = Infinity
+        let min = Infinity;
         currentRoundBidList.forEach((item) => {
-            if (item.totalAmount < min) min = item.totalAmount
-        })
+            if (item.totalAmount < min) min = item.totalAmount;
+        });
 
-        return setMinBidValue(min)
-    }
+        return setMinBidValue(min);
+    };
 
-
-    useEffect(() => findMinBid(), [currentRoundBidList])
+    useEffect(() => findMinBid(), [currentRoundBidList]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -58,7 +57,7 @@ export default function AuctionRoundDetails() {
     }, [current])
 
     // Render
-    if (!currentRoundBidList) return <></>
+    if (!currentRoundBidList) return <></>;
     return (
         <div className="auction-left__bottom">
             <PercentageBar
@@ -100,5 +99,5 @@ export default function AuctionRoundDetails() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
