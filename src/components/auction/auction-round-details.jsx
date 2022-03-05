@@ -94,7 +94,7 @@ export default function AuctionRoundDetails() {
                             </p>
                         </>
                     ) : (
-                        <></>
+                        <p className="value text-end">Finished</p>
                     )}
                 </div>
             </div>

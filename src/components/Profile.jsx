@@ -101,7 +101,6 @@ const Profile = () => {
     const handleProfileTab = (value) => {
         setCurrentProfileTab(value)
         setTabIndex(value.index)
-        console.log("kek1")
     }
 
     useEffect(() => {return setTabIndex(tab)}, [])
