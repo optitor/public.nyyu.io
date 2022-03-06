@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {useSelector, useDispatch} from "react-redux"
 import {useQuery, useMutation} from "@apollo/client"
 import {Link} from "gatsby"
-import {isBrowser} from "./../../utilities/auth"
+import {isBrowser} from "./../../utilities/auth";
 import {Bell, Logo, NotificationBell} from "../../utilities/imgImport"
 import Loading from "../common/FadeLoading"
 import {useAuth} from "../../hooks/useAuth"
@@ -103,7 +103,15 @@ const Menu = () => {
             url: "https://ndb.money/#contactUs",
             active: false,
         },
-    ]
+    ];
+
+    const isShowNavLinks = isBrowser && (window.location.pathname === ROUTES.profile ||
+        window.location.pathname === ROUTES.faq ||
+        window.location.pathname === ROUTES.wallet ||
+        window.location.pathname === ROUTES.auction ||
+        window.location.pathname === ROUTES.payment ||
+        window.location.pathname === ROUTES.creditDeposit ||
+        window.location.pathname.includes(ROUTES.admin));
 
     // Methods
     useEffect(() => {
@@ -136,75 +144,68 @@ const Menu = () => {
                         <Link to="/" className="menu__logo d-flex" title="Logo">
                             <img src={Logo} alt="NDB Brand Logo"/>
                         </Link>
-                        {isBrowser &&
-                            (window.location.pathname === ROUTES.profile ||
-                                window.location.pathname === ROUTES.faq ||
-                                window.location.pathname === ROUTES.wallet ||
-                                window.location.pathname === ROUTES.auction ||
-                                window.location.pathname === ROUTES.payment ||
-                                window.location.pathname === ROUTES.creditDeposit ||
-                                window.location.pathname.includes(ROUTES.admin)) && (
-                                <div className="d-none d-md-flex justify-content-between gap-5">
-                                    <Link
-                                        to={ROUTES.wallet}
-                                        className={`${
-                                            (window.location.pathname === ROUTES.wallet ||
-                                            window.location.pathname === ROUTES.creditDeposit ) &&
-                                            "txt-green"
-                                        }`}
-                                    >
-                                        wallet
-                                    </Link>
-                                    <Link
-                                        to={ROUTES.auction}
-                                        className={`${
-                                            (window.location.pathname === ROUTES.auction ||
-                                                window.location.pathname === ROUTES.payment) &&
-                                            "txt-green"
-                                        }`}
-                                    >
-                                        sale
-                                    </Link>
-                                    <Link
-                                        to={ROUTES.profile}
-                                        className={`${
-                                            window.location.pathname === ROUTES.profile &&
-                                            "txt-green"
-                                        }`}
-                                    >
-                                        profile
-                                    </Link>
-                                    <div
-                                        onClick={() => setIsDressUPModalOpen(true)}
-                                        onKeyDown={() => setIsDressUPModalOpen(true)}
-                                        className="cursor-pointer hover:text-green"
-                                        role="presentation"
-                                    >
-                                        dressup
-                                    </div>
-                                    <Link
-                                        to={ROUTES.faq}
-                                        className={`${
-                                            window.location.pathname === ROUTES.faq && "txt-green"
-                                        }`}
-                                    >
-                                        support
-                                    </Link>
-                                    {user?.role && user?.role?.includes("ROLE_ADMIN") ? (
-                                        <Link
-                                            to={ROUTES.admin}
-                                            className={`${
-                                                window.location.pathname.includes(ROUTES.admin) &&
-                                                "txt-green"
-                                            }`}
-                                        >
-                                            admin
-                                        </Link>
-                                    ) : (
-                                        ""
-                                    )}
+                        {isShowNavLinks && (
+                            <div className="d-none d-md-flex justify-content-between gap-5">
+                                <Link
+                                    to={ROUTES.wallet}
+                                    className={`${
+                                        (window.location.pathname === ROUTES.wallet ||
+                                        window.location.pathname === ROUTES.creditDeposit ) &&
+                                        "txt-green"
+                                    }`}
+                                >
+                                    wallet
+                                </Link>
+                                <Link
+                                    to={ROUTES.auction}
+                                    className={`${
+                                        (window.location.pathname === ROUTES.auction ||
+                                            window.location.pathname === ROUTES.payment) &&
+                                        "txt-green"
+                                    }`}
+                                >
+                                    sale
+                                </Link>
+                                <Link
+                                    to={ROUTES.profile}
+                                    className={`${
+                                        window.location.pathname === ROUTES.profile &&
+                                        "txt-green"
+                                    }`}
+                                >
+                                    profile
+                                </Link>
+                                <div
+                                    onClick={() => setIsDressUPModalOpen(true)}
+                                    onKeyDown={() => setIsDressUPModalOpen(true)}
+                                    className="cursor-pointer hover:text-green"
+                                    role="presentation"
+                                >
+                                    dressup
                                 </div>
-                            )}
+                                <Link
+                                    to={ROUTES.faq}
+                                    className={`${
+                                        window.location.pathname === ROUTES.faq && "txt-green"
+                                    }`}
+                                >
+                                    support
+                                </Link>
+                                {user?.role && user?.role?.includes("ROLE_ADMIN") ? (
+                                    <Link
+                                        to={ROUTES.admin}
+                                        className={`${
+                                            window.location.pathname.includes(ROUTES.admin) &&
+                                            "txt-green"
+                                        }`}
+                                    >
+                                        admin
+                                    </Link>
+                                ) : (
+                                    ""
+                                )}
+                            </div>
+                        )}
                     </div>
                     <div className="d-flex align-items-center">
                         <div>
