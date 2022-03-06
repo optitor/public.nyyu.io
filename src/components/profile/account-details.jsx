@@ -1,20 +1,20 @@
-import {Link} from "gatsby"
-import React from "react"
-import {ROUTES} from "../../utilities/routes"
+import { Link } from "gatsby";
+import React from "react";
+import { ROUTES } from "../../utilities/routes";
 
 export default function AccountDetails({
-
     setIsPasswordModalOpen,
     user,
     displayName,
-    shuftReference,
     shuftiStatus,
 }) {
     return (
         <div className="account-details">
             <div className="row w-100 mx-auto">
                 <div className="col-6 col-sm-4 col-md-6 br">Display name</div>
-                <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">{displayName}</div>
+                <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
+                    {displayName}
+                </div>
             </div>
             <div className="row w-100 mx-auto">
                 <div className="col-6 col-sm-4 col-md-6 br">email</div>
@@ -43,7 +43,9 @@ export default function AccountDetails({
                 </div>
             </div>
             <div className="row w-100 mx-auto">
-                <div className="col-6 col-sm-4 col-md-6 br">kyc/aml verification</div>
+                <div className="col-6 col-sm-4 col-md-6 br">
+                    kyc/aml verification
+                </div>
                 <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
                     {shuftiStatus === "UNSET" ? (
                         <div className="d-flex align-items-center gap-2">
@@ -69,7 +71,8 @@ export default function AccountDetails({
                                 to={ROUTES.verifyId}
                                 className="text-light fs-15px fw-500 text-capitalize"
                             >
-                                Failed, <span className="text-underline">Retry</span>
+                                Failed,{" "}
+                                <span className="text-underline">Retry</span>
                             </Link>
                         </div>
                     ) : shuftiStatus?.event === "request.invalid" ||
@@ -95,5 +98,5 @@ export default function AccountDetails({
                 </div>
             </div>
         </div>
-    )
+    );
 }
