@@ -52,6 +52,7 @@ const Asset = ({ item }) => {
 
 export default function InternalWallet() {
     const currency = useSelector(state => state.placeBid.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
 
     const InitialAssets = {};
     const [myAssets, setMyAssets] = useState(InitialAssets);
@@ -205,7 +206,7 @@ export default function InternalWallet() {
                                         isShowBTC === false
                                             ? totalBalance === 0
                                                 ? 0
-                                                : totalBalance?.toFixed(2)
+                                                : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
                                             : totalBalance === 0
                                             ? 0
                                             : (totalBalance / BTCPrice).toFixed(9)
@@ -227,7 +228,7 @@ export default function InternalWallet() {
                                                 : (totalBalance / BTCPrice).toFixed(9)
                                             : totalBalance === 0
                                             ? 0
-                                            : totalBalance?.toFixed(2)
+                                            : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
                                     }
                                     className="max-value mt-3"
                                     displayType="text"

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Icon } from '@iconify/react';
 import Select, { components } from 'react-select';
 import { useDispatch } from "react-redux";
+import { isBrowser } from "./../../utilities/auth";
 import axios from 'axios';
 import getSymbolFromCurrency from 'currency-symbol-map';
 import { ROUTES } from "../../utilities/routes";
@@ -26,7 +27,7 @@ export default function CurrencyChoice({ classNames }) {
         })();
     }, [dispatch]);
 
-    const isShowCurrencyChoice = (window.location.pathname === ROUTES.auction ||
+    const isShowCurrencyChoice = isBrowser && (window.location.pathname === ROUTES.auction ||
         window.location.pathname === ROUTES.wallet ||
         window.location.pathname === ROUTES.profile ||
         window.location.pathname === ROUTES.presale_auction);
@@ -41,7 +42,7 @@ export default function CurrencyChoice({ classNames }) {
     
     return (
         <div className={`${classNames} mx-1`}>
-            {typeof window !== `undefined` && isShowCurrencyChoice && (
+            {isShowCurrencyChoice && (
                     <div>
                         <Select
                             className={loading? 'disabled': ''}

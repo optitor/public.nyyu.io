@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {useSelector, useDispatch} from "react-redux"
 import {useQuery, useMutation} from "@apollo/client"
 import {Link} from "gatsby"
-import {isBrowser} from "./../../utilities/auth"
+import {isBrowser} from "./../../utilities/auth";
 import {Bell, Logo, NotificationBell} from "../../utilities/imgImport"
 import Loading from "../common/FadeLoading"
 import {useAuth} from "../../hooks/useAuth"
@@ -105,13 +105,13 @@ const Menu = () => {
         },
     ];
 
-    const isShowNavLinks = window.location.pathname === ROUTES.profile ||
+    const isShowNavLinks = isBrowser && (window.location.pathname === ROUTES.profile ||
         window.location.pathname === ROUTES.faq ||
         window.location.pathname === ROUTES.wallet ||
         window.location.pathname === ROUTES.auction ||
         window.location.pathname === ROUTES.payment ||
         window.location.pathname === ROUTES.creditDeposit ||
-        window.location.pathname.includes(ROUTES.admin);
+        window.location.pathname.includes(ROUTES.admin));
 
     // Methods
     useEffect(() => {
@@ -144,7 +144,7 @@ const Menu = () => {
                         <Link to="/" className="menu__logo d-flex" title="Logo">
                             <img src={Logo} alt="NDB Brand Logo"/>
                         </Link>
-                        {isBrowser && isShowNavLinks && (
+                        {isShowNavLinks && (
                             <div className="d-none d-md-flex justify-content-between gap-5">
                                 <Link
                                     to={ROUTES.wallet}
