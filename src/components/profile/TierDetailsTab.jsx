@@ -1,40 +1,53 @@
-import React from "react"
-import { useQuery } from "@apollo/client"
-import { GET_TASK_SETTING, GET_USER_TIERS, GET_USER_TIER_TASK } from "./profile-queries"
-import { useState } from "react"
-import CustomSpinner from "../common/custom-spinner"
-import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import React from "react";
+import { useQuery } from "@apollo/client";
+import {
+    GET_TASK_SETTING,
+    GET_USER_TIERS,
+    GET_USER_TIER_TASK,
+} from "./profile-queries";
+import { useState } from "react";
+import CustomSpinner from "../common/custom-spinner";
+import { GET_USER } from "../../apollo/graghqls/querys/Auth";
 
-export default function TierDetailsTab() {
+export default function TierDetailsTab({ shuftiStatus }) {
     // Webserivce
-    const { data: gainPoints } = useQuery(GET_USER_TIER_TASK, {
+    useQuery(GET_USER_TIER_TASK, {
         fetchPolicy: "network-only",
-        onCompleted: () => setGainPointsData(gainPoints.getUserTierTask),
-    })
+        onCompleted: (data) => setGainPointsData(data.getUserTierTask),
+    });
 
-    const { data: taskSetting } = useQuery(GET_TASK_SETTING, {
+    useQuery(GET_TASK_SETTING, {
         fetchPolicy: "network-only",
-        onCompleted: () => setTaskSettingData(taskSetting.getTaskSetting),
-    })
+        onCompleted: (data) => setTaskSettingData(data.getTaskSetting),
+    });
 
-    const { data: userTiers } = useQuery(GET_USER_TIERS, {
+    useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
-        onCompleted: () => setUserTiersData(userTiers.getUserTiers),
-    })
+        onCompleted: (data) => setUserTiersData(data.getUserTiers),
+    });
 
-    const { data: user } = useQuery(GET_USER, {
+    useQuery(GET_USER, {
         fetchPolicy: "network-only",
-        onCompleted: () => setUserData(user.getUser),
-    })
+        onCompleted: (data) => setUserData(data.getUser),
+    });
 
     // Containers
-    const [gainPointsData, setGainPointsData] = useState(null)
-    const [taskSettingData, setTaskSettingData] = useState(null)
-    const [userTiersData, setUserTiersData] = useState(null)
-    const [userData, setUserData] = useState(null)
-    const loadingSection = !(gainPointsData && taskSettingData && userTiers && userData)
-    const currentTier = userTiersData?.filter((item) => item?.level === userData?.tierLevel)
-    const nextTier = userTiersData?.filter((item) => item?.level === userData?.tierLevel + 1)
+    const [gainPointsData, setGainPointsData] = useState(null);
+    const [taskSettingData, setTaskSettingData] = useState(null);
+    const [userTiersData, setUserTiersData] = useState(null);
+    const [userData, setUserData] = useState(null);
+    const loadingSection = !(
+        gainPointsData &&
+        taskSettingData &&
+        userTiersData &&
+        userData
+    );
+    const currentTier = userTiersData?.filter(
+        (item) => item?.level === userData?.tierLevel
+    );
+    const nextTier = userTiersData?.filter(
+        (item) => item?.level === userData?.tierLevel + 1
+    );
     // Methods
 
     if (loadingSection)
@@ -42,7 +55,7 @@ export default function TierDetailsTab() {
             <div className="d-flex justify-content-center my-5">
                 <CustomSpinner />
             </div>
-        )
+        );
     else
         return (
             <>
@@ -53,19 +66,25 @@ export default function TierDetailsTab() {
                             {currentTier?.length > 0 ? (
                                 <div
                                     className="me-3"
-                                    dangerouslySetInnerHTML={{ __html: currentTier[0]?.svg }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: currentTier[0]?.svg,
+                                    }}
                                 />
                             ) : (
                                 <></>
                             )}
 
-                            {currentTier?.length > 0 ? currentTier[0]?.name : ""}
+                            {currentTier?.length > 0
+                                ? currentTier[0]?.name
+                                : ""}
                         </div>
                     </div>
                     <div className="row w-100 mx-auto">
                         <div className="col-6 br">Point to next tier</div>
                         <div className="col-6 text-end text-sm-start">
-                            {nextTier?.length > 0 ? nextTier[0]?.point - userData?.tierPoint : ""}
+                            {nextTier?.length > 0
+                                ? nextTier[0]?.point - userData?.tierPoint
+                                : ""}
                         </div>
                     </div>
                     <div className="row w-100 mx-auto pt-5">
@@ -76,7 +95,10 @@ export default function TierDetailsTab() {
                         <div className="col-6 d-flex align-items-center br">
                             <div
                                 className={`status me-2 ${
-                                    gainPointsData.verification === false ? "deactive" : "active"
+                                    shuftiStatus?.event !==
+                                    "verification.accepted"
+                                        ? "deactive"
+                                        : "active"
                                 }`}
                             ></div>
                             KYC/AML completion
@@ -90,7 +112,9 @@ export default function TierDetailsTab() {
                         <div className="col-6 d-flex align-items-center br">
                             <div
                                 className={`status me-2 ${
-                                    gainPointsData.wallet === 0 ? "deactive" : "active"
+                                    gainPointsData.wallet === 0
+                                        ? "deactive"
+                                        : "active"
                                 }`}
                             ></div>
                             Wallet balance
@@ -102,16 +126,19 @@ export default function TierDetailsTab() {
                         <div className="col-6 d-flex align-items-center br">
                             <div
                                 className={`status me-2 ${
-                                    gainPointsData.auctions === null ? "deactive" : "active"
+                                    gainPointsData.auctions?.length
+                                        ? "active"
+                                        : "deactive"
                                 }`}
                             ></div>
                             Auction participation
                         </div>
                         <div className="col-6 text-end text-sm-start">
-                            {taskSettingData.auction}
+                            {taskSettingData.auction *
+                                gainPointsData.auctions?.length || 0}
                         </div>
                     </div>
                 </div>
             </>
-        )
+        );
 }

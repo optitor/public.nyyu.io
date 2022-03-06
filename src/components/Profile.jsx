@@ -1,114 +1,115 @@
-import Select from "react-select"
-import Loading from "./common/Loading"
-import { navigate } from "gatsby"
-import { useQuery } from "@apollo/client"
-import { useDispatch, useSelector } from "react-redux"
-import Header from "../components/header"
-import { ROUTES } from "../utilities/routes"
-import SignOutTab from "./profile/sign-out-tab"
+import Select from "react-select";
+import Loading from "./common/Loading";
+import { navigate } from "gatsby";
+import { useQuery } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import Header from "../components/header";
+import { ROUTES } from "../utilities/routes";
+import SignOutTab from "./profile/sign-out-tab";
 import {
     profile_tabs,
     TWO_FACTOR_AUTH_TOOLTIP_CONTENT,
-} from "../utilities/staticData"
-import Seo from "./seo"
-import TwoFactorModal from "./profile/two-factor-modal"
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
-import { GET_USER } from "../apollo/graghqls/querys/Auth"
-import ConnectWalletTab from "./profile/connect-wallet-tab"
-import React, { useEffect, useState } from "react"
-import DeleteAccountModal from "./profile/delete-account-modal"
-import { setCurrentAuthInfo } from "../redux/actions/authAction"
-import NotificationRecent from "./profile/notification-recent-switch"
-import NotificationSetting from "./profile/notification-setting-switch"
-import ProfileChangePasswordModal from "./profile/change-password-modal"
-import TierDetailsTab from "./profile/tier-details-tab"
-import Avatar from "../components/dress-up/avatar"
-import { GET_USER_TIERS } from "./profile/profile-queries"
-import { QuestionMark } from "../utilities/imgImport"
-import AccountDetails from "./profile/account-details"
-import ReactTooltip from "react-tooltip"
-import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice"
-import { logout } from "../utilities/auth"
-import {
-    getCurrentDate,
-    getShuftiStatusByReference,
-} from "../utilities/utility-methods"
+} from "../utilities/staticData";
+import Seo from "./seo";
+import TwoFactorModal from "./profile/two-factor-modal";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { GET_USER } from "../apollo/graghqls/querys/Auth";
+import ConnectWalletTab from "./profile/connect-wallet-tab";
+import React, { useEffect, useState } from "react";
+import DeleteAccountModal from "./profile/delete-account-modal";
+import { setCurrentAuthInfo } from "../redux/actions/authAction";
+import NotificationRecent from "./profile/notification-recent-switch";
+import NotificationSetting from "./profile/notification-setting-switch";
+import ProfileChangePasswordModal from "./profile/change-password-modal";
+import TierDetailsTab from "./profile/TierDetailsTab";
+import Avatar from "../components/dress-up/avatar";
+import { GET_USER_TIERS } from "./profile/profile-queries";
+import { QuestionMark } from "../utilities/imgImport";
+import AccountDetails from "./profile/account-details";
+import ReactTooltip from "react-tooltip";
+import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice";
+import { logout } from "../utilities/auth";
+import { getShuftiStatusByReference } from "../utilities/utility-methods";
 
 const Profile = () => {
-    const tab = useSelector(state => state.profileTab);
-    const dispatch = useDispatch()
-    const [tabIndex, setTabIndex] = useState(tab)
-    const [displayName, setDisplayName] = useState("")
-    const [userTiersData, setUserTiersData] = useState(null)
-    const [is2FAModalOpen, setIs2FAModalOpen] = useState(false)
-    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false)
-    const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[tab])
+    const tab = useSelector((state) => state.profileTab);
+    const dispatch = useDispatch();
+    const [tabIndex, setTabIndex] = useState(tab);
+    const [displayName, setDisplayName] = useState("");
+    const [userTiersData, setUserTiersData] = useState(null);
+    const [is2FAModalOpen, setIs2FAModalOpen] = useState(false);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [currentProfileTab, setCurrentProfileTab] = useState(
+        profile_tabs[tab]
+    );
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
-        useState(false)
-    const [shuftiStatus, setShuftiStatus] = useState(null)
-    const [shuftReference, setShuftiReference] = useState(null)
-    const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true)
+        useState(false);
+    const [shuftiStatus, setShuftiStatus] = useState(null);
+    const [shuftReference, setShuftiReference] = useState(null);
+    const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
 
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
             if (!userData.getUser) {
                 return logout(() => {
-                    navigate(ROUTES.home)
-                })
+                    navigate(ROUTES.home);
+                });
             }
             if (userData.getUser?.avatar) {
-                const { prefix, name } = userData.getUser.avatar
+                const { prefix, name } = userData.getUser.avatar;
                 if (prefix && name) {
-                    return setDisplayName(prefix + "." + name)
-                } else return navigate(ROUTES.selectFigure)
+                    return setDisplayName(prefix + "." + name);
+                } else return navigate(ROUTES.selectFigure);
             }
-            return navigate(ROUTES.selectFigure)
+            return navigate(ROUTES.selectFigure);
         },
         fetchPolicy: "network-only",
-    })
+    });
     useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-            return setUserTiersData(data.getUserTiers)
+            return setUserTiersData(data.getUserTiers);
         },
-    })
+    });
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
-            setShuftiReference(data.getShuftiReference)
-            return setShuftiReferenceLoading(false)
+            setShuftiReference(data.getShuftiReference);
+            return setShuftiReferenceLoading(false);
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
-    })
-    const loadingPage = !(displayName && userTiersData && shuftiStatus)
+    });
+    const loadingPage = !(displayName && userTiersData && shuftiStatus);
     // Containers
-    const user = userData?.getUser
+    const user = userData?.getUser;
     const twoStep = user?.security
         ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
-        : []
+        : [];
 
     const currentTier = userTiersData?.filter(
         (item) => item?.level === user?.tierLevel
-    )
+    );
     const nextTier = userTiersData?.filter(
         (item) => item?.level === user?.tierLevel + 1
-    )
+    );
 
     // Methods
     const handleProfileTab = (value) => {
-        setCurrentProfileTab(value)
-        setTabIndex(value.index)
-        console.log("kek1")
-    }
+        setCurrentProfileTab(value);
+        setTabIndex(value.index);
+        console.log("kek1");
+    };
 
-    useEffect(() => {return setTabIndex(tab)}, [])
+    useEffect(() => {
+        return setTabIndex(tab);
+    }, []);
 
     const getSecurityStatus = (key) =>
-        user?.security?.find((f) => f?.authType === key && f?.tfaEnabled)
+        user?.security?.find((f) => f?.authType === key && f?.tfaEnabled);
 
     const TfaConfig = ({ title, method }) => {
-        const config = !!getSecurityStatus(method)
+        const config = !!getSecurityStatus(method);
 
         return (
             <>
@@ -144,21 +145,21 @@ const Profile = () => {
                     </div>
                 )}
             </>
-        )
-    }
+        );
+    };
 
-    useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user])
+    useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user]);
 
     useEffect(async () => {
         if (!shuftiReferenceLoading) {
             const response = await getShuftiStatusByReference(
                 shuftReference?.reference
-            )
-            return setShuftiStatus(response)
+            );
+            return setShuftiStatus(response);
         }
-    }, [shuftiReferenceLoading])
+    }, [shuftiReferenceLoading]);
 
-    if (loadingPage) return <Loading />
+    if (loadingPage) return <Loading />;
     else {
         return (
             <>
@@ -172,7 +173,7 @@ const Profile = () => {
                         twoStep={twoStep}
                         onResult={(res) => {
                             if (res) {
-                                refetch()
+                                refetch();
                             }
                         }}
                     />
@@ -226,7 +227,13 @@ const Profile = () => {
                                 >
                                     <TabList>
                                         {profile_tabs.map((item, idx) => (
-                                            <Tab selected = {tabIndex == idx} focus = {tabIndex == idx} lkey={idx}>{item.label}</Tab>
+                                            <Tab
+                                                selected={tabIndex == idx}
+                                                focus={tabIndex == idx}
+                                                lkey={idx}
+                                            >
+                                                {item.label}
+                                            </Tab>
                                         ))}
                                     </TabList>
                                     <Select
@@ -333,7 +340,9 @@ const Profile = () => {
                                                 </div>
                                             </TabPanel>
                                             <TabPanel>
-                                                <TierDetailsTab />
+                                                <TierDetailsTab
+                                                    shuftiStatus={shuftiStatus}
+                                                />
                                             </TabPanel>
                                         </Tabs>
                                     </>
@@ -384,8 +393,8 @@ const Profile = () => {
                     />
                 </main>
             </>
-        )
+        );
     }
-}
+};
 
-export default Profile
+export default Profile;
