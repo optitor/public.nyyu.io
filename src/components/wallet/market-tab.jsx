@@ -1,12 +1,14 @@
 /* eslint-disable */
 
-import React, { useReducer, useEffect, useState } from "react"
+import React, { useReducer, useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 import useDeepCompareEffect from 'use-deep-compare-effect';
-import axios from "axios"
-import { numberSign, numberWithCommas, numFormatter } from "../../utilities/number"
-import icons from "base64-cryptocurrency-icons"
-import { Icon } from "@iconify/react"
-import ReactECharts from "echarts-for-react"
+import axios from "axios";
+import NumberFormat from "react-number-format";
+import { numberSign, numFormatter } from "../../utilities/number";
+import icons from "base64-cryptocurrency-icons";
+import { Icon } from "@iconify/react";
+import ReactECharts from "echarts-for-react";
 import { cryptoSymbol } from 'crypto-symbol';
 import _ from 'lodash';
 import {NickToken} from "./../../utilities/imgImport";
@@ -28,14 +30,17 @@ const REFRESH_TIME = 30;
 
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
+    const currency = useSelector(state => state.placeBid.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
+
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         chart: [],
         min: 0,
         percent: "",
         price: "",
         volume: "",
-    })
-    const { chart, min, price, percent, volume } = state
+    });
+    const { chart, min, price, percent, volume } = state;
 
     useEffect(() => {
         if(!data.symbol) return;
@@ -55,23 +60,24 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                     max: Math.max(data),
                     chart: data,
                 })
-            })
+            });
         const getTicker24hr = () => {
             if(!data.symbol) return;
             axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } }).then((res) => {
                 setState({
-                    price: numberWithCommas(res.data.lastPrice),
+                    price: res.data.lastPrice,
                     percent: res.data.priceChangePercent,
-                    volume: numFormatter(res.data.quoteVolume, 2),
+                    volume: res.data.quoteVolume,
                 })
             })
-        }
-        getTicker24hr()
-        setInterval(() => {
+        };
+        getTicker24hr();
+        const interval1 = setInterval(() => {
             getTicker24hr()
-        }, 1000 * REFRESH_TIME)
+        }, 1000 * REFRESH_TIME);
+        return () => clearInterval(interval1);
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+    
     return (
         <tr>
             <td className="d-flex align-items-start ps-2">
@@ -88,7 +94,19 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                 </div>
             </td>
             <td className="text-center">
-                <p className="coin-price text-center">{price? '$'+price: ''}</p>
+                <p className="coin-price text-center">
+                    {price && currencyRates[currency.value]?
+                    // currency.symbol + ' ' + Math.round(price * Number(currencyRates[currency.value]).toFixed(3) * 10**8) / 10**8:
+                    <NumberFormat
+                        value={Math.round(price * Number(currencyRates[currency.value]).toFixed(2) * 10**8) / 10**8}
+                        thousandSeparator={true}
+                        displayType='text'
+                        prefix={currency.symbol + ' '}
+                        allowNegative={false}
+                        renderText={(value, props) => <span {...props}>{value}</span>}
+                    />:
+                    ''}
+                </p>
                 <p
                     className={
                         numberSign(percent) === "+"
@@ -137,7 +155,9 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                     />
                 }
             </td>
-            <td className="mobile-not text-center">{!volume ? '' : '$'+volume}</td>
+            <td className="mobile-not text-center">
+                {!volume ? '' : currency.symbol + ' '+ numFormatter(volume * Number(currencyRates[currency.value]), 2)}
+            </td>
         </tr>
     )
 }
@@ -163,6 +183,8 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
 }
 
 export default function MarketTab() {
+    const currency = useSelector(state => state.placeBid.currency);
+
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [sortOption, setSortOption] = useState({});
@@ -248,7 +270,7 @@ export default function MarketTab() {
                         />
                     </th>
                     <th className="text-center">
-                        Price
+                        Price ({currency.label})
                         <Icon icon={sortOption['price'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
                             className={sortOption['price']? 'text-green': ''}
                             onClick={() => set_SortOption('price')}

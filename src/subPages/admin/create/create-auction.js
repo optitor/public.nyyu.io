@@ -372,7 +372,7 @@ const IndexPage = () => {
                                         <div className="col-sm-4 col-6 mb-4">
                                             <div className="item">
                                                 <p>Round ID</p>
-                                                <p>{roundData.roundId}</p>
+                                                <p>Auto-generated</p>
                                             </div>
                                             <div className="item">
                                                 <p>Round Number</p>

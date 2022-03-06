@@ -24,3 +24,21 @@ export const CREATE_AUCTION = gql`
         }
     }
 `;
+
+export const CREATE_NEW_PRESALE = gql`
+    mutation CreateNewPresale(
+        $startedAt: Float!
+        $endedAt: Float!
+        $tokenAmount: Float!
+        $tokenPrice: Float!
+        $conditions: [PreSaleConditionInput!]!
+    ) {
+        createNewPresale(
+            startedAt: $startedAt
+            endedAt: $endedAt
+            tokenAmount: $tokenAmount
+            tokenPrice: $tokenPrice
+            conditions: $conditions
+        )
+    }
+`;

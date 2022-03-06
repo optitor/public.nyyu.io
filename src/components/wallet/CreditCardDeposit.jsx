@@ -9,8 +9,8 @@ import {
     useElements,
 } from "@stripe/react-stripe-js";
 import { Icon } from '@iconify/react';
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import ReactTooltip from "react-tooltip";
+// import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+// import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
 import { CheckBox } from "../common/FormControl";
 import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./../payment/payment-webservice";
