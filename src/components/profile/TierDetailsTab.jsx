@@ -61,7 +61,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
             <>
                 <div className="tier-details">
                     <div className="row w-100 mx-auto">
-                        <div className="col-6 br">Tier</div>
+                        <div className="col-6 my-auto br">Tier</div>
                         <div className="col-6 text-end text-sm-start d-flex align-items-center justify-content-end justify-content-sm-start">
                             {currentTier?.length > 0 ? (
                                 <div
@@ -119,7 +119,9 @@ export default function TierDetailsTab({ shuftiStatus }) {
                             ></div>
                             Wallet balance
                         </div>
-                        <div className="col-6 text-end text-sm-start">500</div>
+                        <div className="col-6 text-end text-sm-start">
+                            {gainPointsData.wallet}
+                        </div>
                     </div>
 
                     <div className="row mx-0">
