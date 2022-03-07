@@ -19,7 +19,7 @@ import UserTier from "./user-tier";
 import ReactTooltip from "react-tooltip";
 
 const Menu = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     // Webservice
     const {data: user_data} = useQuery(GET_USER)
     const {data: allUnReadNotifications} = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
@@ -28,7 +28,7 @@ const Menu = () => {
             if (!response.getAllUnReadNotifications) return
             setNewNotification(response.getAllUnReadNotifications?.length !== 0)
         },
-    })
+    });
     const [updateAvatarSet, {loading}] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
             dispatch(getAuthInfo())
