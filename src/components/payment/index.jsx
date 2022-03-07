@@ -38,6 +38,7 @@ import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { set_All_Fees } from "../../redux/actions/allFeesAction";
 import { ROUTES } from "../../utilities/routes";
 import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
+import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 
 const { Option, SingleValue } = components;
 
@@ -85,6 +86,7 @@ const Payment = () => {
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
     const dispatch = useDispatch();
+    let paypalRedirectLink = null;
 
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
 
@@ -139,16 +141,19 @@ const Payment = () => {
 
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
-            let links = data.paypalForAuction.links
+            let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
-                    window.location.href = links[i].href;
+                    let token = links[i].href.split('token=')[1];
+                    paypalRedirectLink = links[i].href;
+                    captureOrderForAuction({variables: {orderId: token}});
+                    break;
                 }
             }
         },
         onError: (err) => {
             console.log(err);
-            // Sample response! It's on the onError callback because the mutation is throwing an error:
+            // This is just an example for testing. It will be removed
             let data = {
                 paypalForAuction: {
                     links: [
@@ -174,19 +179,39 @@ const Payment = () => {
                         }
                     ]
                 }
-            }
-            let links = data.paypalForAuction.links
+            };
+            let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
-                    window.location.href = links[i].href;
+                    let token = links[i].href.split('token=')[1];
+                    paypalRedirectLink = links[i].href;
+                    captureOrderForAuction({variables: {orderId: token}});
+                    break;
                 }
             }
+        },
+    })
+
+    const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
+        onCompleted: (data) => {
+            if (data.captureOrderForAuction) {
+                window.location.href = paypalRedirectLink;
+            } else {
+                alert('Error in checkout with PayPal');
+                paypalRedirectLink = null;
+                setPayPalLoading(false);
+            }
+        },
+        onError: (err) => {
+            alert('Error in checkout with PayPal');
+            paypalRedirectLink = null;
+            setPayPalLoading(false);
         },
     })
     
     const initPaypal = () => {
         setPayPalLoading(true);
-        createPayPalOrder({variables: {roundId: currentRound, amount: bidAmount, currency_code: 'USD'}});
+        createPayPalOrder({variables: {roundId: currentRound, currency_code: 'USD'}});
     }
     
     if (loading) return <Loading />;
