@@ -129,6 +129,9 @@ import certik from "../images/home/certik.svg"
 import munichre from "../images/home/munichre.svg"
 import amex from "../images/payment/amex.svg"
 
+import europeanflag from "../images/europeanflag.svg"
+
+
 export const Logo = logo
 export const Bell = bell
 export const NotificationBell = notificationBell
@@ -254,3 +257,5 @@ export const CreditCards = creditCards
 export const Certik = certik
 export const MunichRE = munichre
 export const Amex = amex
+
+export const EuropeanFlag = europeanflag
