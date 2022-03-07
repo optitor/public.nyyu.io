@@ -153,7 +153,6 @@ export default function DepositModal({ showModal, setShowModal }) {
     };
 
     const handleCopyToClipboard = (text) => {
-        console.log(text)
         /* Copy the text inside the text field */
         navigator.clipboard.writeText(text);
         setCopyText(text);

@@ -22,7 +22,7 @@ import Header from './../header';
 import { navigate, Link } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
 import useCountDown from "react-countdown-hook";
-import { Amex, Qmark } from "../../utilities/imgImport";
+import { Amex } from "../../utilities/imgImport";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 
