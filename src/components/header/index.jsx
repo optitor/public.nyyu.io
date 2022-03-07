@@ -224,12 +224,9 @@ const Menu = () => {
                                                 <img onClick={() => {dispatch({ type: 'CREATE_NOTIFICATION_ROUTE' })}}  src={NotificationBell} alt="Bell Icon"/>
                                             </Link>
                                         ) : (
-                                            <img
-                                                src={Bell}
-                                                alt="Bell Icon"
-                                                data-tip
-                                                data-for="bell-icon-tooltip"
-                                            />
+                                            <Link to={ROUTES.profile}>
+                                                <img onClick={() => {dispatch({ type: 'CREATE_NOTIFICATION_ROUTE' })}}  src={Bell} alt="Bell Icon"/>
+                                            </Link>
                                         )}
                                         <ReactTooltip
                                             id="bell-icon-tooltip"
