@@ -61,6 +61,11 @@ const FAQ = () => {
             icon: SupportTag,
             clickEvent: () => setIsDepositMissingModalOpen(true),
         },
+        {
+            id: 5,
+            label: "Suspend/Delete Account",
+            clickEvent: () => setIsDeleteAccountModalOpen(true),
+        },
     ]
 
     const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
@@ -104,7 +109,10 @@ const FAQ = () => {
                                                     onClick={item.clickEvent}
                                                 >
                                                     <div className="text-light border border-1 border-light text-center support-self-security-item col-12 mb-2">
-                                                        <img src={item.icon} alt="item figure" />
+                                                        {
+                                                            item?.icon &&
+                                                            <img src={item.icon} alt="item figure" />
+                                                        }
                                                         <div>{item.label}</div>
                                                     </div>
                                                 </div>
@@ -112,15 +120,7 @@ const FAQ = () => {
                                         })}
                                     </div>
                                     <div className="d-flex justify-content-md-between mt-3">
-                                        <div>
-                                            <div
-                                                className="text-light border border-1 border-light text-center delete-account-btn mt-5"
-                                                onClick={() => setIsDeleteAccountModalOpen(true)}
-                                            >
-                                                DELETE ACCOUNT
-                                            </div>
-                                        </div>
-                                        <div className="cursor-pointer position-fixed end-20px bottom-20px" style={{zIndex: 99999}}>
+                                        <div className="cursor-pointer position-fixed end-20px bottom-20px" style={{ zIndex: 99999 }}>
                                             {
                                                 !isChatModalOpen && <img
                                                     src={ChatButton}
