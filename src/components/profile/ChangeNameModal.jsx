@@ -8,8 +8,21 @@ import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
 
 export default function ChangeNameModal({ isOpen, setIsOpen }) {
+    // Containers
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [newName, setNewName] = useState("");
+    // Methods
+    const containsSpecialCharacter = (text) => {
+        const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        return format.test(text);
+    };
+    const submitNameChange = (e) => {
+        e.preventDefault();
+        if (containsSpecialCharacter(newName))
+            return setError("Cannot include special characters");
+    };
+    // Render
     return (
         <Modal
             isOpen={isOpen}
@@ -48,10 +61,12 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                             <FormInput
                                 type="text"
                                 label="Email"
+                                value={newName}
+                                onChange={(e) => setNewName(e.target.value)}
                                 placeholder="Enter a new name"
                             />
                         </div>
-                        <div className="mt-4 mb-3">
+                        <div className="mb-3">
                             {error && (
                                 <span className="errorsapn">
                                     <FontAwesomeIcon
@@ -75,6 +90,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                                     className={`fs-20px ${
                                         loading ? "ms-3" : "pe-4"
                                     }`}
+                                    onClick={submitNameChange}
                                 >
                                     confirm
                                 </div>
