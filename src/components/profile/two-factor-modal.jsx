@@ -16,9 +16,9 @@ import "react-phone-number-input/style.css";
 import ConnectMobile from "./connect-mobile";
 
 const two_factors = [
-    { label: "Email", method: "email" },
-    { label: "SMS", method: "phone" },
     { label: "Authenticator App", method: "app" },
+    { label: "SMS", method: "phone" },
+    { label: "Email", method: "email" },
 ];
 const initial = {
     result_code: "",
@@ -141,6 +141,12 @@ export default function TwoFactorModal({
                                     const enable = !!twoStep
                                         ? twoStep.includes(item.method)
                                         : false;
+                                    let available = true;
+                                    if (item.method === "phone") {
+                                        if (twoStep.includes("app")) available = false;
+                                    } else if (item.method === "app") {
+                                        if (twoStep.includes("phone")) available = false;
+                                    }
                                     return (
                                         <div key={idx} className="tfa-line">
                                             <div className="tfa-line_labels">
@@ -197,7 +203,7 @@ export default function TwoFactorModal({
                                                             </div>
                                                         </button>
                                                     </>
-                                                ) : (
+                                                ) : available === true ? (
                                                     <button
                                                         disabled={
                                                             (!!twoStep &&
@@ -240,6 +246,13 @@ export default function TwoFactorModal({
                                                         >
                                                             Enable
                                                         </div>
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        disabled
+                                                        className="btn btn-light rounded-0 select-tfa d-flex align-items-center justify-content-center enable disabled"
+                                                    >
+                                                        Unavailable
                                                     </button>
                                                 )}
                                             </div>
