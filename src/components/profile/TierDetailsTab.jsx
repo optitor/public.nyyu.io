@@ -160,7 +160,9 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                 </div>
                             </ReactTooltip>
                         </div>
-                        <div className="col-6 text-end text-sm-start">{gainPointsData.wallet}</div>
+                        <div className="col-6 text-end text-sm-start">
+                            {gainPointsData.wallet}/6000
+                        </div>
                     </div>
 
                     <div className="row mx-0">
