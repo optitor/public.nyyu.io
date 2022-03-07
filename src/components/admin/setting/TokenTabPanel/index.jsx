@@ -6,9 +6,8 @@ import TokenDataRow from './TokenDataRow';
 import { width } from './columnWidth';
 import Loading from './../../shared/Loading';
 import PaginationBar from './../../PaginationBar';
-import SearchBar from '../../shared/SearchBar';
-import { set_Page } from './../../../../redux/actions/paginationAction';
-import { get_Tokens } from './../../../../redux/actions/tokenAction';
+import { set_Page } from "../../../../redux/actions/paginationAction";
+import { get_Tokens } from "../../../../redux/actions/tokenAction";
 
 const TokenTable = () => {
     const dispatch = useDispatch();

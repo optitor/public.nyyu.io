@@ -18,7 +18,7 @@ import TwoFactorModal from "./profile/two-factor-modal"
 import DeleteAccountModal from "./profile/delete-account-modal"
 import NotificationSetting from "./profile/notification-setting-switch"
 import NotificationRecent from "./profile/notification-recent-switch"
-import TierDetailsTab from "./profile/tier-details-tab"
+import TierDetailsTab from "./profile/TierDetailsTab"
 import ProfileChangePasswordModal from "./profile/change-password-modal"
 import { logout } from "../utilities/auth"
 import {

@@ -10,7 +10,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons"
 import {countries, passwordValidatorOptions, social_links} from "../../utilities/staticData"
 import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf"
-import PasswordEyeIcon from "../common/password-eye-icon"
 import {useMutation} from "@apollo/client"
 import {ROUTES} from "../../utilities/routes"
 

@@ -18,7 +18,7 @@ export default function AuctionRoundNavigator() {
 
     useEffect(() => {
         setCanGoBack(currentRoundNumber !== 1)
-    }, [])
+    }, [currentRoundNumber])
 
     // Methods
     const reset = () => {
@@ -26,13 +26,13 @@ export default function AuctionRoundNavigator() {
     };
     const goBack = () => {
         if (canGoBack) {
-            setCurrentRoundNumber(auction.currentRoundNumber - 1);
+            setCurrentRoundNumber(currentRoundNumber - 1);
             reset();
         }
     };
     const goNext = () => {
         if (canGoNext) {
-            setCurrentRoundNumber(auction.currentRoundNumber + 1);
+            setCurrentRoundNumber(currentRoundNumber + 1);
             reset();
         }
     };
@@ -47,7 +47,6 @@ export default function AuctionRoundNavigator() {
                             className="btn text-light cursor-pointer"
                             onClick={goBack}
                         >
-                            {/* Previous */}
                             <svg
                                 className={`icon-25px ${
                                     !canGoBack && "text-secondary"
