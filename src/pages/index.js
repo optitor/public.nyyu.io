@@ -40,7 +40,7 @@ const IndexPage = () => {
 
     const presaleRound = currentRound?.presale?.round
     const presaleStatus = currentRound?.presale?.status
-    const presaleTotalToken = currentRound?.presale?.totalToken
+    const presaleTotalToken = currentRound?.presale?.tokenAmount
     const presaleSold = currentRound?.presale?.sold
     const presaleStart = currentRound?.presale?.startedAt
     const presaleEnd = currentRound?.presale?.endedAt
@@ -303,10 +303,10 @@ const IndexPage = () => {
                                     ? auctionPendingContent
                                     : auctionStartedContent
                                 : currentRound.presale
-                                ? presaleStatus === 1
-                                    ? presalePendingContent
-                                    : presaleStartedContent
-                                : noContent}
+                                    ? presaleStatus === 1
+                                        ? presalePendingContent
+                                        : presaleStartedContent
+                                    : noContent}
                             <div className="col-md-1 d-none d-sm-block"></div>
                             <div className="right-part col-md-5 d-none d-sm-block d-md-flex">
                                 <img
