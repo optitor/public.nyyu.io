@@ -1,7 +1,10 @@
-import React, { useState, useMemo } from "react"
-import { Link } from "gatsby"
+import React, { useState, useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "gatsby";
 import { Icon } from '@iconify/react';
+import { useQuery } from "@apollo/client";
 import validator from "validator";
+import NumberFormat from "react-number-format";
 
 import Seo from "../../../components/seo"
 import Stepper from "../../../components/admin/Stepper";
@@ -13,17 +16,32 @@ import Alert from '@mui/material/Alert';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { MobileDateTimePicker   } from '@mui/lab';
+import * as Query from "../../../apollo/graghqls/querys/Auction";
+import { create_New_Presale } from "../../../redux/actions/auctionAction";
 
 const IndexPage = () => {
+    const dispatch = useDispatch();
+
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
+    const [pending, setPending] = useState(false);
     const totalTokenAmount = 100000000;
     const prevReservedPrice = 5000;
 
     //------- Round Data and Validation
     // Round Data
-    const initialRoundData = { roundId: '', roundNumber: '', startTime:  Date.now(), endTime:  Date.now() };
+    const initialRoundData = { roundNumber: '', startTime:  Date.now(), endTime:  Date.now() };
     const [roundData, setRoundData] = useState(initialRoundData);
+
+    const { data: newRound } = useQuery(Query.GET_NEW_ROUND, {
+        fetchPolicy: "network-only",
+        onCompleted: () => {
+            if(newRound.getNewRound) {
+                setRoundData({ ...roundData, roundNumber: newRound.getNewRound });
+            }
+        },
+    });
+
     const duration = useMemo(() => {
         if(!roundData.startTime || !roundData.endTime) return '';
         if(new Date(roundData.endTime) <= new Date(roundData.startTime)) return '';
@@ -33,16 +51,14 @@ const IndexPage = () => {
     // Round Data Validation
     let roundDataError = {};
     roundDataError = useMemo(() => {
-        if(!roundData.roundId) return {roundId: 'Round ID is required'};
         if(!roundData.roundNumber) return {roundNumber: 'Round Number is required'};
-        if(!validator.isNumeric(roundData.roundNumber)) return {roundNumber: 'Round Number must be number'};
         if(!roundData.startTime) return {startTime: 'Round Start Time is required'};
         if(!validator.isDate(new Date(roundData.startTime))) return {startTime: 'Round Start Time is invalid'};        
         if(!roundData.endTime) return {endTime: 'Round End Time is required'};
         if(!validator.isDate(new Date(roundData.endTime))) return {endTime: 'Round End Time is invalid'};
         if(Math.round((new Date(roundData.endTime) - new Date(roundData.startTime))) <= 0) return {endTime: 'Round End Time must be after Start Time'};
         return {};
-    }, [roundData]);    
+    }, [roundData]);
 
     //-------- Token Data and Validation
     // Token Data
@@ -62,8 +78,8 @@ const IndexPage = () => {
     //--------- Task Data and Validation
     // Task Data
     const [taskData, setTaskData] = useState([
-        { title: '', url: '' },
-        { title: '', url: '' },
+        { task: '', url: '' },
+        { task: '', url: '' },
     ]);
 
     const deleteTask = index => {
@@ -75,10 +91,10 @@ const IndexPage = () => {
     const taskDataError = useMemo(() => {
         if(!taskData.length) return {item: 'noTask', desc: 'One task is required at least'};
         for(let i = 0; i < taskData.length; i++) {
-            if(!taskData[i].title) return {index: i, item: 'title', desc: 'Input is required'};
+            if(!taskData[i].task) return {index: i, item: 'task', desc: 'Input is required'};
             if(!taskData[i].url) return {index: i, item: 'url', desc: 'Input is required'};
             if(!validator.isURL(taskData[i].url)) return {index: i, item: 'url', desc: 'Please enter a URL'};
-        }    
+        }
         return {};
     }, [taskData]);
    
@@ -104,13 +120,22 @@ const IndexPage = () => {
         if(taskDataError.item) {
             setShowError(true);
             return;
-        };
+        }
         setCurrentStep(4);
         setShowError(false);
     };
 
-    const handleSubmit = () => {
-        alert('Created Direct Pruchase Round Successfully')
+    const handleSubmit = async () => {
+        setPending(true);
+        const createData = {
+            startedAt: Number(roundData.startTime),
+            endedAt: Number(roundData.endTime),
+            tokenAmount: Number(tokenData.tokenAmount),
+            tokenPrice: Number(tokenData.ReservedPrice),
+            conditions: taskData,
+        };
+        await dispatch(create_New_Presale(createData));
+        setPending(false);
     };
 
     return (
@@ -128,18 +153,18 @@ const IndexPage = () => {
                                 <div className="div1">
                                     <div>
                                         <p>Round ID</p>
-                                        <input className={`black_input ${showError && roundDataError.roundId? 'error': ''}`}  
-                                            value={roundData.roundId} 
-                                            onChange={e => setRoundData({...roundData, roundId: e.target.value})}
-                                        />
+                                        <input className="black_input disabled" placeholder="Auto-Generated" disabled />
                                     </div>
                                     <div>
                                         <p>Round Number</p>
-                                        <input className={`black_input ${showError && roundDataError.roundNumber? 'error': ''}`}
-                                            value={roundData.roundNumber} 
-                                            onChange={e => setRoundData({...roundData, roundNumber: e.target.value})}
+                                        <NumberFormat className={`black_input disabled`}
+                                            placeholder='Auto-Generated'
+                                            thousandSeparator={true}
+                                            allowNegative={false}
+                                            value={roundData.roundNumber}
+                                            readOnly
                                         />
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div className="div2 mt-4">
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -240,10 +265,10 @@ const IndexPage = () => {
                                     return (
                                         <div className="condition_div" key={index}>
                                             <div className="task_div">
-                                                <input className={`black_input ${showError && taskDataError.index === index && taskDataError.item === 'title'? 'error': ''}`}
-                                                    value={task.title}
-                                                    onChange={e => { taskData[index].title = e.target.value; setTaskData([...taskData]); }}
-                                                    placeholder="Title"
+                                                <input className={`black_input ${showError && taskDataError.index === index && taskDataError.item === 'task'? 'error': ''}`}
+                                                    value={task.task}
+                                                    onChange={e => { taskData[index].task = e.target.value; setTaskData([...taskData]); }}
+                                                    placeholder="Task"
                                                 />
                                                 <input className={`black_input ${showError && taskDataError.index === index && taskDataError.item === 'url'? 'error': ''}`}
                                                     value={task.url}
@@ -274,7 +299,7 @@ const IndexPage = () => {
                                     <div className="col-sm-4 col-6">
                                         <div className="item">
                                             <p>Round ID</p>
-                                            <p>{roundData.roundId}</p>
+                                            <p>Auto-generated</p>
                                         </div>                                        
                                         <div className="item">
                                             <p>Round Number</p>
@@ -299,7 +324,7 @@ const IndexPage = () => {
                                         <div className="item">
                                             <p>Task</p>
                                             {taskData.map((task, index) => {
-                                                return <p key={index}>{task.title}</p>
+                                                return <p key={index}>{task.task}</p>
                                             })}
                                         </div>  
                                     </div>
@@ -307,7 +332,7 @@ const IndexPage = () => {
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(3)}>Previous</button>
-                                <button className="btn next" onClick={handleSubmit}>Save</button>
+                                <button className="btn next" onClick={handleSubmit} disabled={pending}>{pending? 'Saving. . .': 'Save'}</button>
                             </div>
                         </>
                     )}

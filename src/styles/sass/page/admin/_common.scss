@@ -136,7 +136,7 @@ p.disabled {
     color: dimgray;
 }
 
-input.disabled {
+input.disabled, div.disabled {
     border: 1px solid dimgray !important;
 }
 

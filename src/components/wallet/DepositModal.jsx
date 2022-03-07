@@ -1,19 +1,54 @@
 /* eslint-disable */
 import React, { useState, useEffect, useMemo } from "react";
+import jq from 'jquery';
 import Modal from "react-modal";
 import { navigate } from 'gatsby';
 import _ from "lodash";
 import styled from 'styled-components';
 import Select, { components } from "react-select";
+import NumberFormat from "react-number-format";
 import { Icon } from "@iconify/react";
 import { useMutation } from '@apollo/client';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
-import { Plaid, PaypalFiat, Visa, AmexDeposit, MasterCard } from '../../utilities/imgImport';
+import { Plaid, PaypalFiat, CreditCards, USDT } from '../../utilities/imgImport';
 import { SUPPORED_COINS } from "../../utilities/staticData2";
 import { CREATE_CHARGE_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
+
+const CURRENCIES = [
+    {label: 'USD', value: 'USD', symbol: '$'},
+    {label: 'GBP', value: 'GBP', symbol: '£'},
+    {label: 'EUR', value: 'EUR', symbol: '€'},
+];
+
+const TransferData = {
+    EUR: {
+        'Account holder': 'Voltamond',
+        'BIC': 'TRWIBEB1XXX',
+        'IBAN': 'BE36 9672 2651 6281',
+        'Address': 'Avenue Louise 54, Room S52, Brussels, 1050, Belgium',
+        'Reference': '123456789'
+    },
+    GBP: {
+        'Account holder': 'Voltamond',
+        'Sort code': '23-14-70',
+        'Account number': '22063784',
+        'IBAN': 'GB29 TRWI 2314 7022 0637 84',
+        'Address': '56 Shoreditch High Street, London, E1 6JJ, United Kingdom',
+    },
+    USD: {
+        'Account holder': 'Voltamond',
+        'Routing number': '084009519',
+        'Account number': '9600001149793466',
+        'Account type': 'Checking',
+        'Address': '19 W 24th Street, New York NY 10010, United States',
+    }
+};
+
+
+const TransferFee = 0.03; 
 
 const { Option } = components;
 
@@ -46,7 +81,11 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [network, setNetwork] = useState(networks[0]);
     const [depositData, setDepositData] = useState({});
 
-    // console.log(network)
+    // Variables for bank transfer
+    const [currency, setCurrency] = useState(CURRENCIES[0]);
+    const [transferAmount, setTransferAmount] = useState('')
+
+    const [copyText, setCopyText] = useState('');
 
 
     useEffect(() => {
@@ -78,6 +117,12 @@ export default function DepositModal({ showModal, setShowModal }) {
         }
     );
 
+    const goBackToFiat = () => {
+        setCurrentStep(1);
+        setCurrency(CURRENCIES[0]);
+        setTransferAmount('');
+    };
+
     const create_Charge_For_Deposit = () => {
         setPending(true);
         const createData = {
@@ -105,7 +150,14 @@ export default function DepositModal({ showModal, setShowModal }) {
         setTimeout(() => {
             setCopied(false)
         }, 1000)
-    }
+    };
+
+    const handleCopyToClipboard = (text) => {
+        console.log(text)
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(text);
+        setCopyText(text);
+    };
 
     return (
         <Modal
@@ -123,13 +175,30 @@ export default function DepositModal({ showModal, setShowModal }) {
                         onClick={() => setCurrentStep(1)}
                     />
                 )}
+                {currentStep === 3 && (
+                    <Icon
+                        className="icon"
+                        icon="carbon:arrow-left"
+                        onClick={goBackToFiat}
+                    />
+                )}
+                {currentStep === 4 && (
+                    <Icon
+                        className="icon"
+                        icon="carbon:arrow-left"
+                        onClick={() => {
+                            setCurrentStep(3);
+                            setCopyText('');
+                        }}
+                    />
+                )}
                 <div className="fw-bold h4 text-light"> </div>
                 <Icon className="icon" icon="carbon:close" onClick={closeModal} />
             </div>
             <>
                 {currentStep === 1 && (
                     <div className="deposit">
-                        <div className="step1">
+                        <div className="width1">
                             <h4 className="text-center mb-4">Deposit</h4>
                             <div className="button-group">
                                 <button className={`btn ${tabIndex === 1? 'selected': ''}`}
@@ -141,7 +210,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         {tabIndex === 1 && (
-                            <div className="step1">
+                            <div className="width1">
                                 <div className="select_div">
                                     <p className="subtitle">Select coin</p>
                                     <Select
@@ -185,7 +254,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         )}
                         {tabIndex === 2 && (
-                            <div className="step2 mt-5">
+                            <div className="width2 mt-5">
                                 <div className="row">
                                     <div className="col-sm-6">
                                         <FiatButton className="inactive">
@@ -201,13 +270,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 <div className="row">
                                     <div className="col-sm-6">
                                         <FiatButton className="active" onClick={handleCreditDeposit}>
-                                            <img src={Visa} alt="visa" />
-                                            <img src={MasterCard} alt="masterCard" />
-                                            <img src={AmexDeposit} alt="amex" />
+                                            <img src={CreditCards} alt="creditcards" />
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
-                                        <FiatButton className="inactive">
+                                        <FiatButton className="active" onClick={() => setCurrentStep(3)}>
                                             <p>Standard bank transfer</p>
                                         </FiatButton>
                                     </div>
@@ -217,7 +284,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                     </div>
                 )}
                 {currentStep === 2 && !_.isEmpty(depositData) && (
-                    <div className="deposit step3">
+                    <div className="deposit width3">
                         <div className="address_div">
                             <p className="subtitle">Deposit Address</p>
                             <div className="clip_div">
@@ -271,6 +338,92 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                )}
+                {currentStep === 3 && (
+                    <div className="deposit width2">
+                        <div>
+                            <p className="subtitle">Deposit Address</p>
+                            <Select
+                                className="black_input"
+                                options={CURRENCIES}
+                                value={currency}
+                                onChange={(selected) => {
+                                    setCurrency(selected)
+                                }}
+                                styles={customSelectStyles}
+                                components={{
+                                    IndicatorSeparator: null                                            
+                                }}
+                            />
+                        </div>
+                        <div className="mt-3">
+                            <p className="subtitle">Amount</p>
+                            <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                <NumberFormat id="transferAmount" className="ms-2"
+                                    thousandSeparator={true}
+                                    prefix={currency.symbol + ' '}
+                                    allowNegative={false}
+                                    value={transferAmount}
+                                    onValueChange={values => setTransferAmount(values.value)}
+                                    autoComplete='off'
+                                />
+                                <div>
+                                    Bank transfer fee{' '}
+                                    <NumberFormat
+                                        thousandSeparator={true}
+                                        suffix={' ' + currency.symbol}
+                                        displayType='text'
+                                        allowNegative={false}
+                                        value={Number(transferAmount) * TransferFee}
+                                        decimalScale={2}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-3">
+                            <p className="desc">
+                                The <span>{currency.label}</span> will be converted to <span>USDT</span> and deposited to the wallet
+                            </p>
+                            <div className="black_input usdt_div">
+                                <img src={USDT} alt='usdt' className="ms-2" />
+                                <p className="ms-2">USDT</p>
+                            </div>
+                        </div>
+                        <button
+                            className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
+                            onClick={() => setCurrentStep(4)}
+                            disabled={!transferAmount}
+                        >
+                            NEXT
+                        </button>
+                    </div>
+                )}
+                {currentStep === 4 && (
+                    <div className="deposit width2">
+                        <h4 className="text-center">{currency.label} Deposits Only</h4>
+                        <p className="subtitle mb-4">
+                            <Icon icon='akar-icons:clock' className="me-2" style={{fontSize: 18}}/>
+                            Incoming payments can take 3 working days to be added to your wallet
+                        </p>
+                        {_.map(TransferData[currency.value], (val, key) => (
+                            <div className="transfer_data_div" key={key}>
+                                <p className="subtitle pe-2">{key}:</p>
+                                <p className="value">
+                                    {val}
+                                    <Icon icon={copyText === val? 'fluent:copy-20-filled': 'fluent:copy-24-regular'} onClick={() => handleCopyToClipboard(val)} />
+                                </p>
+                            </div>
+                        ))}
+                        <p className="subtitle mt-4">
+                            Please make sure you use the reference number indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.
+                        </p>
+                        <button
+                            className="btn btn-outline-light rounded-0 w-100 mt-30px fw-bold"
+                            // onClick={()}
+                        >
+                            CONFIRM
+                        </button>
                     </div>
                 )}
             </>

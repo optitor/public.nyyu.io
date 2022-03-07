@@ -9,11 +9,11 @@ import {
     useElements,
 } from "@stripe/react-stripe-js";
 import { Icon } from '@iconify/react';
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import ReactTooltip from "react-tooltip";
+// import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+// import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
 import { CheckBox } from "../common/FormControl";
-import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./../payment/payment-webservice";
+import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "../payment/payment-webservice";
 import OroderSummaryOfCreditCard from "../payment/order-summary-of-credit-card";
 import { useMutation, useQuery } from "@apollo/client";
 import CustomSpinner from "../common/custom-spinner";
@@ -22,7 +22,7 @@ import Header from './../header';
 import { navigate, Link } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
 import useCountDown from "react-countdown-hook";
-import { Amex, Qmark } from "../../utilities/imgImport";
+import { Amex } from "../../utilities/imgImport";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 
@@ -98,13 +98,12 @@ export default function CreditCardTab() {
     );
 }
 
-const CardSection = ({ amount, round }) => {
+const CardSection = ({ amount }) => {
     // Containers
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState("");
     const [cardHolder, setCardHolder] = useState("");
-    const [allowFractionBox, setAllowFractionBox] = useState(false);
     const [successfulPayment, setSuccessfulPayment] = useState(null);
     const [requestPending, setRequestPending] = useState(false);
     const [isNewCard, setIsNewCard] = useState(true);
@@ -167,7 +166,6 @@ const CardSection = ({ amount, round }) => {
                             }
                             return stripePayment({
                                 variables: {
-                                    roundId: Number(round),
                                     amount: amount * 100,
                                     paymentMethodId: null,
                                     paymentIntentId: result.paymentIntent.id,
@@ -219,7 +217,6 @@ const CardSection = ({ amount, round }) => {
         if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
             return stripePayment({
                 variables: {
-                    roundId: Number(round),
                     amount: amount * 100,
                     paymentMethodId: paymentMethod.id,
                     paymentIntentId: null,

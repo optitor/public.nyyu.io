@@ -22,6 +22,23 @@ export const create_Auction = createData => async dispatch => {
     }
 };
 
+export const create_New_Presale = createData => async dispatch => {
+    try {
+        await client.mutate({
+            mutation: Mutation.CREATE_NEW_PRESALE,
+            variables: { ...createData }
+        });
+        showSuccessAlarm('Direct Purchase Round created successfully');
+    } catch(err) {
+        // console.log(err.message);
+        if(err.message === 'started_auction') {
+            showFailAlarm('Action failed', 'Auction already started');
+        } else {
+            showFailAlarm('Action failed', err.message);
+        }
+    }
+};
+
 export const get_Auctions = () => async dispatch => {
     try {
         const { data } = await client.query({

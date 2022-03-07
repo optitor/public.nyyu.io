@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import React, { useEffect, useState, useMemo } from "react";
+import { useSelector } from 'react-redux';
 import _ from "lodash";
 import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
@@ -18,6 +19,9 @@ const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
 const REFRESH_TIME = 30;
 
 const Asset = ({ item }) => {
+    const currency = useSelector(state => state.placeBid.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
+
     return (
         <tr>
             <td className="d-flex align-items-center ps-2">
@@ -27,15 +31,19 @@ const Asset = ({ item }) => {
                 </div>
             </td>
             <td>
-                <p className="coin-price fw-bold">
-                    {item.free + item.hold} {item.tokenSymbol}
-                </p>
                 <NumberFormat
-                    value={item.balance?.toFixed(2)}
+                    value={Math.round((item.free + item.hold) * 10**8) / 10**8}
+                    className="coin-price fw-bold"
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    renderText={(value, props) => <p {...props}>{value} {item.tokenSymbol}</p>}
+                />
+                <NumberFormat
+                    value={Number(item.balance  * currencyRates[currency.value]).toFixed(2)}
                     className="coin-percent"
                     displayType={"text"}
                     thousandSeparator={true}
-                    renderText={(value, props) => <p {...props}>{value} USD</p>}
+                    renderText={(value, props) => <p {...props}>{value} {currency.value}</p>}
                 />
             </td>
         </tr>
@@ -43,6 +51,9 @@ const Asset = ({ item }) => {
 };
 
 export default function InternalWallet() {
+    const currency = useSelector(state => state.placeBid.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
+
     const InitialAssets = {};
     const [myAssets, setMyAssets] = useState(InitialAssets);
     const [BTCPrice, setBTCPrice] = useState(10000);
@@ -52,7 +63,7 @@ export default function InternalWallet() {
     const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false);
     const [isDepositOpen, setIsDepositOpen] = useState(false);
     const obscureValueString = "******";
-    const [btcOrUsd, setBtcOrUsd] = useState("USD");
+    const [isShowBTC, setIsShowBTC] = useState(true);
 
     const totalBalance = useMemo(() => {
         if (!Object.values(myAssets)) return 0
@@ -72,10 +83,11 @@ export default function InternalWallet() {
                 setBTCPrice(res.data.price)
             })
         }
-        get_BTCPrice()
-        setInterval(() => {
+        get_BTCPrice();
+        const interval = setInterval(() => {
             get_BTCPrice()
-        }, 1000 * REFRESH_TIME)
+        }, 1000 * REFRESH_TIME);
+        return () => clearInterval(interval);
     }, []);
 
     const { loading: loadingOfAssets } = useQuery(GET_BALANCES, {
@@ -141,7 +153,7 @@ export default function InternalWallet() {
                     <div className="value-box">
                         <div className="value-label d-flex justify-content-between align-items-center">
                             <div className="d-flex align-items-center">
-                                Equity Value (BTC)
+                                Equity Value ({isShowBTC? 'BTC': currency.value})
                                 {!hideValues && (
                                     <Icon
                                         className="value-label-eye-icon"
@@ -161,10 +173,10 @@ export default function InternalWallet() {
                             <div className="d-flex gap-2">
                                 <div
                                     className={`cursor-pointer ${
-                                        btcOrUsd === "BTC" && "fw-bold text-white"
+                                        isShowBTC === true? "fw-bold text-white": ''
                                     }`}
-                                    onClick={() => setBtcOrUsd("BTC")}
-                                    onKeyDown={() => setBtcOrUsd("BTC")}
+                                    onClick={() => setIsShowBTC(true)}
+                                    onKeyDown={() => setIsShowBTC(true)}
                                     role="presentation"
                                 >
                                     BTC
@@ -172,13 +184,13 @@ export default function InternalWallet() {
                                 <div>|</div>
                                 <div
                                     className={`cursor-pointer ${
-                                        btcOrUsd === "USD" && "fw-bold text-white"
+                                        isShowBTC === false? "fw-bold text-white": ''
                                     }`}
-                                    onClick={() => setBtcOrUsd("USD")}
-                                    onKeyDown={() => setBtcOrUsd("USD")}
+                                    onClick={() => setIsShowBTC(false)}
+                                    onKeyDown={() => setIsShowBTC(false)}
                                     role="presentation"
                                 >
-                                    USD
+                                    {currency.value}
                                 </div>
                             </div>
                         </div>
@@ -191,10 +203,10 @@ export default function InternalWallet() {
                             <>
                                 <NumberFormat
                                     value={
-                                        btcOrUsd === "USD"
+                                        isShowBTC === false
                                             ? totalBalance === 0
                                                 ? 0
-                                                : totalBalance?.toFixed(2)
+                                                : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
                                             : totalBalance === 0
                                             ? 0
                                             : (totalBalance / BTCPrice).toFixed(9)
@@ -204,26 +216,26 @@ export default function InternalWallet() {
                                     thousandSeparator={true}
                                     renderText={(value, props) => (
                                         <p {...props}>
-                                            {value} {btcOrUsd === "USD" ? "USD" : "BTC"}
+                                            {value} {isShowBTC === false ? currency.value : "BTC"}
                                         </p>
                                     )}
                                 />
                                 <NumberFormat
                                     value={
-                                        btcOrUsd === "USD"
+                                        isShowBTC === false
                                             ? totalBalance === 0
                                                 ? 0
                                                 : (totalBalance / BTCPrice).toFixed(9)
                                             : totalBalance === 0
                                             ? 0
-                                            : totalBalance?.toFixed(2)
+                                            : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
                                     }
                                     className="max-value mt-3"
                                     displayType="text"
                                     thousandSeparator={true}
                                     renderText={(value, props) => (
                                         <p {...props}>
-                                            ~ {value} {btcOrUsd === "USD" ? "BTC" : "USD"}
+                                            ~ {value} {isShowBTC === false ? "BTC" : currency.value}
                                         </p>
                                     )}
                                 />
