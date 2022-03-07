@@ -7,8 +7,7 @@ import PercentageBar from "./percentage-bar"
 export default function AuctionRoundDetails() {
     // Container
     const auction = useAuction()
-    const [minBidValue, setMinBidValue] = useState(Infinity)
-    const { auctions, currentRoundNumber, currentRoundBidList } = auction
+    const { optCurrentRound, currentRoundBidList, isAuction } = auction
     const [restTime, setRestTime] = useState({
         hours: 0,
         minutes: 0,
@@ -25,36 +24,18 @@ export default function AuctionRoundDetails() {
         })
     }
 
-    const current = auctions?.filter(
-        (auction) => auction.round === currentRoundNumber
-    )[0];
-    const soldTokensPercentage = (current?.sold / current?.totalToken) * 100;
-
-    // Methods
-    const findMinBid = () => {
-        if (!currentRoundBidList || currentRoundBidList?.length === 0)
-            return setMinBidValue(0.0);
-
-        let min = Infinity;
-        currentRoundBidList.forEach((item) => {
-            if (item.totalAmount < min) min = item.totalAmount;
-        });
-
-        return setMinBidValue(min);
-    };
-
-    useEffect(() => findMinBid(), [currentRoundBidList]);
+    const soldTokensPercentage = (optCurrentRound?.sold / optCurrentRound?.totalToken) * 100;
 
     useEffect(() => {
         const timer = setInterval(() => {
             const currentTimeMilliSeconds = new Date().getTime()
-            const difference = Math.abs(current.endedAt - currentTimeMilliSeconds)
+            const difference = Math.abs(optCurrentRound.endedAt - currentTimeMilliSeconds)
             getRemainingRoundTime(difference)
         }, 1000)
         return () => {
             clearInterval(timer)
         }
-    }, [current])
+    }, [optCurrentRound])
 
     // Render
     if (!currentRoundBidList) return <></>;
@@ -62,35 +43,27 @@ export default function AuctionRoundDetails() {
         <div className="auction-left__bottom">
             <PercentageBar
                 percentage={soldTokensPercentage}
-                sold={current.sold}
-                total={current.totalToken}
+                sold={optCurrentRound.sold}
+                total={isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount}
             />
             <div className="d-flex justify-content-between mt-4">
-                {minBidValue !== 0 ? (
-                    <div>
-                        <p className="caption text-[#959595]">Reserved Price </p>
-                        <p className="value">
-                            {minBidValue + " "}
-                            <span className="txt-green">
-                                USD
-                            </span>
-                        </p>
-                    </div>
-                ) : (
-                    ""
-                )}
                 <div>
-                    {current.status !== 3 ? (
+                    <p className="caption text-[#959595]">{isAuction ? "Reserved Price" : "Token Price"} </p>
+                    <p className="value">
+                        {isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice + " "}
+                        <span className="txt-green">
+                            USD
+                        </span>
+                    </p>
+                </div>
+                <div>
+                    {optCurrentRound.status !== 3 ? (
                         <>
                             <p className="caption text-end text-[#959595]">
-                                Time Remaining
+                                {isAuction ? "Time Remaining" : "Tokens Remaining"}
                             </p>
                             <p className="value text-end">
-                                {numberWithLength(restTime.hours,2)}
-                                :
-                                {numberWithLength(restTime.minutes, 2)}
-                                :
-                                {numberWithLength(restTime.seconds, 2)}
+                                {isAuction ? numberWithLength(restTime.hours,2)+":"+numberWithLength(restTime.minutes, 2)+":"+numberWithLength(restTime.seconds, 2) : optCurrentRound.tokenAmount - optCurrentRound.sold}
                             </p>
                         </>
                     ) : (

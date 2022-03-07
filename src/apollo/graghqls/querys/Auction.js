@@ -4,6 +4,7 @@ export const GET_AUCTION = gql`
     query {
         getAuctions {
             id
+            kind
             round
             startedAt
             endedAt
@@ -20,6 +21,7 @@ export const GET_PRESALES = gql`
     {
         getPreSales {
             id
+            kind
             round
             startedAt
             endedAt

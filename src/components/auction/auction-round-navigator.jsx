@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react"
 import { Tab, TabList } from "react-tabs";
 
 import { useAuction } from "../../providers/auction-context";
@@ -8,12 +8,17 @@ import { numberWithCommas } from "../../utilities/number";
 export default function AuctionRoundNavigator() {
     // Containers
     const auction = useAuction();
-    const { auctions, currentRoundNumber } = auction;
-    const current = auctions?.filter(
-        (auction) => auction.round === currentRoundNumber
-    )[0];
-    const canGoNext = auctions?.length !== currentRoundNumber;
-    const canGoBack = currentRoundNumber !== 1;
+    const { optCurrentRound, entireRounds, currentRoundNumber, setCurrentRoundNumber, isAuction } = auction;
+    const [canGoNext, setCanGoNext] = useState(true)
+    const [canGoBack, setCanGoBack] = useState(true)
+
+    useEffect(() => {
+        setCanGoNext(entireRounds?.length !== currentRoundNumber)
+    }, [entireRounds, currentRoundNumber])
+
+    useEffect(() => {
+        setCanGoBack(currentRoundNumber !== 1)
+    }, [])
 
     // Methods
     const reset = () => {
@@ -21,13 +26,13 @@ export default function AuctionRoundNavigator() {
     };
     const goBack = () => {
         if (canGoBack) {
-            auction.setCurrentRoundNumber(auction.currentRoundNumber - 1);
+            setCurrentRoundNumber(auction.currentRoundNumber - 1);
             reset();
         }
     };
     const goNext = () => {
         if (canGoNext) {
-            auction.setCurrentRoundNumber(auction.currentRoundNumber + 1);
+            setCurrentRoundNumber(auction.currentRoundNumber + 1);
             reset();
         }
     };
@@ -63,7 +68,7 @@ export default function AuctionRoundNavigator() {
                         <div className="fw-bold text-uppercase fs-30px border-bottom border-3 border-success px-2">
                             <div>
                                 Round
-                                {" " + current?.round}
+                                {" " + optCurrentRound?.round}
                             </div>
                         </div>
                         <button
@@ -92,7 +97,7 @@ export default function AuctionRoundNavigator() {
                     <div className="mt-3">
                         <span className="text-[#959595]">Token Available </span>
                         <span className="fw-500">
-                            {numberWithCommas(current?.totalToken)}
+                            {numberWithCommas(isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)}
                         </span>
                     </div>
                 </div>

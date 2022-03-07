@@ -13,6 +13,7 @@ export const useAuction = () => useContext(AuctionContext)
 const AuctionProvider = ({ children }) => {
     // Containers
     const [auctions, setAuctions] = useState(null)
+    const [presales, setPresales] = useState(null)
     const [currentRoundNumber, setCurrentRoundNumber] = useState(-1)
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
     const [bidModal, setBidModal] = useState(false)
@@ -20,9 +21,10 @@ const AuctionProvider = ({ children }) => {
     const [isBid, setIsBid] = useState(null)
     const [isAuction, setIsAuction] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
-
-    // PreSale
-    const [presales, setPresales] = useState(null)
+    const [entireRounds, setEntireRounds] = useState(null)
+    const [optCurrentRound, setOptCurrentRound] = useState(null)
+    const [presalePlaceOrderStage, setPresalePlaceOrderStage] = useState(0)
+    const [presaleNdbAmount, setPresaleNdbAmount] = useState(1)
 
     const loading = !(auctions && presales && currentRound)
 
@@ -85,7 +87,19 @@ const AuctionProvider = ({ children }) => {
         setIsAuction,
 
         presales,
-        setPresales
+        setPresales,
+
+        entireRounds,
+        setEntireRounds,
+
+        optCurrentRound,
+        setOptCurrentRound,
+
+        presaleNdbAmount,
+        setPresaleNdbAmount,
+
+        presalePlaceOrderStage,
+        setPresalePlaceOrderStage
     }
 
     // Render
