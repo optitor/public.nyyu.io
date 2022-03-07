@@ -230,7 +230,7 @@ const Profile = () => {
                                             <Tab
                                                 selected={tabIndex == idx}
                                                 focus={tabIndex == idx}
-                                                lkey={idx}
+                                                key={idx}
                                             >
                                                 {item.label}
                                             </Tab>
