@@ -18,7 +18,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { MobileDateTimePicker   } from '@mui/lab';
 import Select from 'react-select';
-import { fetch_Avatars } from './../../../redux/actions/avatarAction';
+import { fetch_Avatars } from "../../../redux/actions/avatarAction";
 import AvatarImage from './../../../components/admin/shared/AvatarImage';
 import { create_Auction } from "../../../redux/actions/auctionAction";
 
@@ -372,7 +372,7 @@ const IndexPage = () => {
                                         <div className="col-sm-4 col-6 mb-4">
                                             <div className="item">
                                                 <p>Round ID</p>
-                                                <p>{roundData.roundId}</p>
+                                                <p>Auto-generated</p>
                                             </div>
                                             <div className="item">
                                                 <p>Round Number</p>

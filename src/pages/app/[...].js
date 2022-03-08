@@ -19,7 +19,7 @@ const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
 const Wallet = lazy(() => import("../../components/wallet"))
 const AuctionWrapper = lazy(() => import("../../components/auction/auction-wrapper"))
 const Payment = lazy(() => import("../../components/payment"))
-const Presale = lazy(() => import("../../components/presale"))
+const CreditCardDeposit = lazy(() => import("../../components/wallet/CreditCardDeposit"));
 
 const NotFound = lazy(() => import("./../404"))
 
@@ -51,13 +51,13 @@ const App = () => {
                         <ChangePassword path="change-password" />
                         <VerifyID path="verify-id" />
                         <VerifyCompany path="verify-company" />
-                        <Wallet path="wallet" />
 
                         <PrivateRoute path="profile" component={Profile} />
                         <PrivateRoute path="select-figure" component={SelectFigure} />
+                        <PrivateRoute path="wallet" component={Wallet} />
                         <PrivateRoute path="auction" component={AuctionWrapper} />
                         <PrivateRoute path="payment" component={Payment} />
-                        <PrivateRoute path="presale" component={Presale} />
+                        <PrivateRoute path="creditDeposit" component={CreditCardDeposit} />
 
                         <NotFound default />
                     </Router>

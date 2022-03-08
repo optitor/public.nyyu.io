@@ -119,3 +119,4 @@ export const getStripePaymentFee = (user, allFees, bidAmount) => {
     const stripePaymentFee = ((2.9 + userFee) * bidAmount) / 100 + 0.3;
     return stripePaymentFee.toFixed(2);
 };
+

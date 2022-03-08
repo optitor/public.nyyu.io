@@ -17,4 +17,5 @@ export const ROUTES = {
     admin: "/admin",
     presale_auction: "/pre-sale/auction",
     presale_home: "/pre-sale/home",
+    creditDeposit: '/app/creditDeposit',
 }

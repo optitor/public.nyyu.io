@@ -38,6 +38,31 @@ export const GET_DEPOSIT_ADDRESS = gql`
     }
 `;
 
+export const CREATE_CHARGE_FOR_DEPOSIT = gql`
+    mutation CreateChargeForDeposit(
+        $coin: String
+        $network: String
+        $cryptoType: String
+    ) {
+        createChargeForDeposit(
+            coin: $coin
+            network: $network
+            cryptoType: $cryptoType
+        ) {
+            id
+            userId
+            amount
+            createdAt
+            status
+            cryptoType
+            network
+            cryptoAmount
+            confirmedAt
+            depositAddress
+            coin
+        }
+    }
+`;
 export const PAYPAL_FOR_AUCTION = gql`
     mutation PaypalForAuction(
         $roundId: Int

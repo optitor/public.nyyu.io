@@ -19,7 +19,7 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                         <div className="d-flex justify-content-between my-3">
                             <p className="order-list__label">Total order</p>
                             <p className="order-list__detail">
-                                {bidAmount} usd
+                                {bidAmount} USD
                             </p>
                         </div>
                         <div className="d-flex justify-content-between my-3">

@@ -49,7 +49,7 @@
                     border-bottom: 2px solid #464646;
                     width: calc(100% - 26px);
                     th {
-                        padding: 16px 0px;
+                        padding: 16px 0;
                     }
                 }
                 th {
@@ -70,7 +70,7 @@
                         max-height: 350px;
                     }
                     display: block;
-                    padding-right: 0px;
+                    padding-right: 0;
                     min-height: 50px;
                     tr {
                         // margin-bottom: 23px;
@@ -356,7 +356,7 @@
                     border-bottom: 2px solid #464646;
                     width: 100%;
                     th {
-                        padding: 16px 0px;
+                        padding: 16px 0;
                         svg {
                             cursor: pointer;
                             margin-left: 4px;
@@ -513,24 +513,44 @@
 }
 
 .deposit-modal {
+    max-width: 800px;
+    p {
+        font-size: 14px;
+    }
     .css-lv2wyh-option {
         background-color: transparent !important;
-        border-radius: 0px !important;
+        border-radius: 0 !important;
     }
     .css-xmxkze-menu {
-        border-radius: 0px !important;
+        border-radius: 0 !important;
     }
-    max-width: 800px;
+    
     svg.icon {
         color: white;
         cursor: pointer;
         font-size: 32px;
     }
-    div.step1 {
+
+    .width1 {
         width: 60%;
+        margin: auto;
     }
-    div.step2 {
+    .width2 {
+        width: 80%;
+        margin: auto;
+    }
+    .width3 {
         width: 75%;
+        margin: auto;
+    }
+    .width4 {
+        width: 70%;
+        margin: auto;
+    }
+    @include mq('phone', max) {
+        .width1, .width2, .width3, .width4 {
+            width: 100%;
+        }
     }
     div.deposit {
         min-height: 400px;
@@ -541,7 +561,7 @@
             width: 100%;
         }
         div.button-group {
-            margin-top: 50px;
+            margin-top: 30px;
             display: flex;
             justify-content: space-between;
             button.btn {
@@ -549,6 +569,7 @@
                 border: 1px solid #ffffff;
                 border-radius: 0;
                 width: 49%;
+                height: 40px;
             }
             button.selected {
                 color: black;
@@ -556,73 +577,157 @@
             }
         }
         div.select_div {
-            margin-top: 20px;
-            p.subtitle {
-                color: dimgray;
+            margin-top: 15px;
+        }
+        p.subtitle {
+            color: $lightgrey;
+            margin-bottom: 5px;
+        }
+        p.desc {
+            margin-bottom: 5px;
+            span {
+                color: $green;
             }
         }
-        button.confirm {
-            margin-top: 40px;
-            color: black;
-            background-color: white;
-            width: 100%;
-            border-radius: 0;
-            font-size: 18px;
-            font-weight: 600;
-            &:hover {
-                color: #03b94c;
+        button.btn {
+            height: 47px;
+        }
+        .black_input {
+            height: 49px;
+        }
+        div.transfer_input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            input#transferAmount {
+                background-color: inherit;
+                color: white;
+                border: unset;
+            }
+            div {
+                color: white;
+                margin-left: 5px;
+                margin-right: 5px;
+                span {
+                    color: $green;
+                }
+            }
+            @include mq('phone', max) {
+                input {
+                    width: 95%;
+                }
+                flex-direction: column;
+                height: auto;
+                align-items: flex-start;
+            }
+        }
+        div.usdt_div {
+            display: flex;
+            align-items: center;
+            img {
+                width: 34px;
+            }
+        }
+        div.transfer_data_div {
+            display: flex;
+            p.subtitle {
+                width: 24%;
+            }
+            p.value {
+                svg {
+                    font-size: 24px;
+                    color: $lightgrey;
+                    margin-left: 10px;
+                    cursor: pointer;
+                }
+            }
+            @include mq('phone', max) {
+                flex-direction: column;
+                p.subtitle {
+                    width: 100%;
+                }
             }
         }
         div.address_div {
-            p.subtitle {
-                color: dimgray;
-            }
-            div.clipboard {
-                background-color: white;
+            div.clip_div {
                 display: flex;
                 justify-content: space-between;
-                padding: 10px;
-                div.address {
-                    width: 90%;
-                    word-wrap: break-word;
-                }
-                div.copy_icon {
-                    width: 10%;
+                div.clipboard {
+                    width: 82%;
+                    background-color: white;
                     display: flex;
-                    justify-content: flex-end;
                     align-items: center;
-                    svg {
-                        font-size: 22px;
+                    justify-content: space-between;
+                    padding: 10px;
+                    cursor: pointer;
+                    div.address {
+                        width: 90%;
+                        word-wrap: break-word;
+                    }
+                    div.copy_icon {
+                        width: 10%;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        svg {
+                            font-size: 22px;
+                        }
                     }
                 }
-            }
-            div.qr_code {
-                padding: 20px;
-                img {
-                    display: block;
-                    margin: auto;
-                    width: 90px;
-                }
-            }
-            div.stats {
-                padding-top: 10px;
-                display: flex;
-                p.topic {
-                    width: 40%;
-                    color: dimgray;
-                }
-                p.content {
-                    width: 60%;
-                    text-align: right;
-                }
-                @include mq("phone", max) {
-                    flex-direction: column;
-                    p.topic,
-                    p.content {
+                div.qr_code {
+                    width: 15%;
+                    img {
+                        display: block;
+                        margin: auto;
                         width: 100%;
                     }
                 }
+                @include mq('phone', max) {
+                    flex-direction: column;
+                    div.clipboard {
+                        width: 100%;
+                        div.address {
+                            font-size: 11px;
+                        }
+                    }
+                    div.qr_code {
+                        margin: auto;
+                        width: 20%;
+                        margin-top: 10px;
+                    }
+                }
             }
+            
+            div.stats_div {
+                margin-top: 50px;
+                div.stats {
+                    padding-top: 10px;
+                    display: flex;
+                    p.topic {
+                        width: 40%;
+                        color: dimgray;
+                    }
+                    p.content {
+                        width: 60%;
+                        text-align: right;
+                    }
+                    @include mq("phone", max) {
+                        flex-direction: column;
+                        p.topic,
+                        p.content {
+                            width: 100%;
+                        }
+                    }
+                }
+                hr {
+                    color: white;
+                    margin-top: 25px;
+                }
+            }
+        }
+        .col-sm-6 {
+            padding-left: 1%;
+            padding-right: 1%;
         }
     }
 }
@@ -867,7 +972,7 @@
     }
     td,
     th {
-        padding: 10px 0px;
+        padding: 10px 0;
         height: 70px;
     }
 }
