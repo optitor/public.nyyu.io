@@ -148,6 +148,18 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-bottom: 5px !important;
 }
 
+@for $size from 0 to 96 {
+    .pt-#{$size}px {
+        padding-top: #{$size}px !important;
+    }
+}
+
+@for $size from 0 to 96 {
+    .pb-#{$size}px {
+        padding-bottom: #{$size}px !important;
+    }
+}
+
 //padding left
 @for $size from 0 to 96 {
     .pl-#{$size}px {
@@ -206,7 +218,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .border-bottom-2-dark-gray {
-    border-bottom: 2px solid #464646;
+    border-bottom: 2px solid $dimgrey;
 }
 
 .border-cinnabar {
@@ -216,12 +228,22 @@ input[type="number"]::-webkit-outer-spin-button {
 .border-mountainMeadow {
     border: 1px solid $mountainMeadow;
 }
+.border-white {
+    border: 1px solid $white;
+}
+
+.border-dimgray {
+    border: 1px solid $dimgrey;
+}
 
 .fv-small-caps {
     font-variant: small-caps !important;
 }
 .fw-500 {
     font-weight: 500 !important;
+}
+.fw-700 {
+    font-weight: 700 !important;
 }
 .lh-25px {
     line-height: 25px !important;
@@ -326,5 +348,45 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .h-85 {
     height: 85% !important;
+}
+
+.txt-green {
+    color: $green;
+}
+.txt-grey {
+    color: $grey;
+}
+.txt-red {
+    color: $red;
+}
+.txt-light-red {
+    color: $light-red;
+}
+.txt-cyan {
+    color: $cyan;
+}
+.txt-scorpion {
+    color: $scorpion;
+}
+.txt-cinnabar {
+    color: $cinnabar;
+}
+.txt-mountainMeadow {
+    color: $mountainMeadow;
+}
+.txt-dustGray {
+    color: $dustGray;
+}
+
+.txt-underline {
+    text-decoration: underline;
+}
+
+.top-0px {
+    top: 0 !important;
+}
+
+.left-0px {
+    left: 0 !important;
 }
 

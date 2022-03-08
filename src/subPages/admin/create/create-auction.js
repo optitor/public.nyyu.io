@@ -18,7 +18,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { MobileDateTimePicker   } from '@mui/lab';
 import Select from 'react-select';
-import { fetch_Avatars } from './../../../redux/actions/avatarAction';
+import { fetch_Avatars } from "../../../redux/actions/avatarAction";
 import AvatarImage from './../../../components/admin/shared/AvatarImage';
 import { create_Auction } from "../../../redux/actions/auctionAction";
 

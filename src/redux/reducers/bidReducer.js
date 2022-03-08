@@ -2,7 +2,7 @@ import * as Types from "../actionTypes"
 
 const initailState = {
     bid_amount: 1,
-    currency: { label: 'USD', value: 'USD', symbol: '$' },
+    currency: { label: 'USD', value: 'USD', sign: '$' },
     round_id: 0,
 }
 

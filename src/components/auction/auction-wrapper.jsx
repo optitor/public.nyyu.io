@@ -1,5 +1,5 @@
 import React from "react"
-import AuctionProvider from "./auction-context"
+import AuctionProvider from "../../providers/auction-context"
 import Auction from "./index"
 
 const AuctionWrapper = () => {

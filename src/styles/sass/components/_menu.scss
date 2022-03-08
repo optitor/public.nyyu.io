@@ -278,3 +278,17 @@
         right: 20px;
     }
 }
+
+.flag_div {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+    img {
+        width: 160%;
+        object-fit: cover;
+    }
+}

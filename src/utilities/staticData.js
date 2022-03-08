@@ -1112,6 +1112,23 @@ export const wallets = {
     },
 }
 
+export const externalWallets = [
+    {
+        icon: MetaMask,
+        title: "MetaMask Wallet"
+    }, {
+        icon: WalletConnect,
+        title: "WalletConnect"
+    }, {
+        icon: Coinbase,
+        title: "Coinbase account"
+    }, {
+        icon: TrustWallet,
+        title: "Trust Wallet"
+    },
+
+]
+
 export const profile_tabs = [
     {
         value: "account details",
