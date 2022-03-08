@@ -44,7 +44,7 @@ const Profile = () => {
 
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
-        onCompleted: res => {
+        onCompleted: (res) => {
             if (!userData.getUser) {
                 return logout(() => {
                     navigate(ROUTES.home);
@@ -62,12 +62,12 @@ const Profile = () => {
     });
     useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
-        onCompleted: data => {
+        onCompleted: (data) => {
             return setUserTiersData(data.getUserTiers);
         },
     });
     useQuery(GET_SHUFT_REFERENCE, {
-        onCompleted: data => {
+        onCompleted: (data) => {
             setShuftiReference(data.getShuftiReference);
             return setShuftiReferenceLoading(false);
         },
@@ -78,14 +78,14 @@ const Profile = () => {
     // Containers
     const user = userData?.getUser;
     const twoStep = user?.security
-        ? user.security.filter(f => f.tfaEnabled).map(m => m.authType)
+        ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
         : [];
 
     const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel);
     const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1);
 
     // Methods
-    const handleProfileTab = value => {
+    const handleProfileTab = (value) => {
         setCurrentProfileTab(value);
         setTabIndex(value.index);
     };
@@ -94,8 +94,8 @@ const Profile = () => {
         return setTabIndex(tab);
     }, []);
 
-    const getSecurityStatus = key =>
-        user?.security?.find(f => f?.authType === key && f?.tfaEnabled);
+    const getSecurityStatus = (key) =>
+        user?.security?.find((f) => f?.authType === key && f?.tfaEnabled);
 
     const TfaConfig = ({ title, method }) => {
         const config = !!getSecurityStatus(method);
@@ -166,13 +166,13 @@ const Profile = () => {
                         email={user?.email}
                         phone={user?.phone}
                         twoStep={twoStep}
-                        onResult={res => {
+                        onResult={(res) => {
                             if (res) {
                                 refetch();
                             }
                         }}
                     />
-                    <Header />
+                    <Header setTabIndex={setTabIndex} setCurrentProfileTab={setCurrentProfileTab} />
                     <section className="container position-relative h-100">
                         <div className="row">
                             <div className="col-lg-3 profile-page__left border-light border-0 border-end">
@@ -216,7 +216,7 @@ const Profile = () => {
                                 </div>
                                 <Tabs
                                     className="profile-tab"
-                                    onSelect={index => setTabIndex(index)}
+                                    onSelect={(index) => setTabIndex(index)}
                                     defaultIndex={tab}
                                 >
                                     <TabList>
@@ -234,7 +234,7 @@ const Profile = () => {
                                         isSearchable={false}
                                         options={profile_tabs}
                                         value={currentProfileTab}
-                                        onChange={v => handleProfileTab(v)}
+                                        onChange={(v) => handleProfileTab(v)}
                                         className="profile-tab__select mb-3"
                                     />
                                     <TabPanel>0</TabPanel>
