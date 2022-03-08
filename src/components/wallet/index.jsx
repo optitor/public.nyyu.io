@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useReducer, useCallback } from "react"
+import React, { useReducer, useCallback } from "react";
 import { useQuery } from "@apollo/client"
 import Header from "./../header"
 import Select, { components } from "react-select"

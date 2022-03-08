@@ -15,7 +15,7 @@ import AuctionPlaceBidModal from "./auction-place-bid-modal"
 import PresalePlaceOrder from "./presale-place-order"
 
 const Auction = () => {
-    const auction = useAuction()
+    const auction = useAuction();
     const currencyId = useSelector((state) => state?.placeBid.currencyId)
     const { auctions, presales, entireRounds, setEntireRounds, currentRound, currentRoundNumber, optCurrentRound, setOptCurrentRound, isAuction } = auction
 
