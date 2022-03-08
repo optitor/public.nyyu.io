@@ -120,7 +120,7 @@ const IndexPage = () => {
         if(taskDataError.item) {
             setShowError(true);
             return;
-        };
+        }
         setCurrentStep(4);
         setShowError(false);
     };

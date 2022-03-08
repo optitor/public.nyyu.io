@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Icon } from '@iconify/react';
 import Select, { components } from 'react-select';
 import { useDispatch } from "react-redux";
-import { isBrowser } from "./../../utilities/auth";
+import { isBrowser } from "../../utilities/auth";
 import axios from 'axios';
 import { ROUTES } from "../../utilities/routes";
 import { SUPPORTED_CURRENCIES } from './../../utilities/staticData2';

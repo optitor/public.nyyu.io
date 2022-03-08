@@ -1,25 +1,24 @@
 import React, { useState } from "react"
 import Modal from "react-modal"
-import { useAuction } from "./auction-context"
-import { CloseIcon } from "../../utilities/imgImport"
-import { numberWithCommas } from "../../utilities/number"
 import { useDispatch } from "react-redux"
-import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
-import { useMutation } from "@apollo/client"
-import { ROUTES } from "../../utilities/routes"
-import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { navigate } from "gatsby"
+import { useMutation } from "@apollo/client"
+
+import { useAuction } from "../../providers/auction-context"
+import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
+
+import { numberWithCommas } from "../../utilities/number"
+import { CloseIcon } from "../../utilities/imgImport"
+import { ROUTES } from "../../utilities/routes"
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 
 export default function AuctionPlaceBidModal() {
     // Containers
     const auction = useAuction()
     const dispatch = useDispatch()
-    const { auctions, currentRoundNumber } = auction
-    const current = auctions?.filter(
-        (auction) => auction.round === currentRoundNumber
-    )[0]
+    const { optCurrentRound, isAuction } = auction
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(current?.minPrice)
+    const [price, setPrice] = useState(isAuction ? optCurrentRound?.minPrice : optCurrentRound?.tokenPrice)
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
 
@@ -54,7 +53,7 @@ export default function AuctionPlaceBidModal() {
         if (auction.isBid) {
             placeBid({
                 variables: {
-                    roundId: current?.id,
+                    roundId: optCurrentRound?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
@@ -62,14 +61,14 @@ export default function AuctionPlaceBidModal() {
         } else {
             increaseBid({
                 variables: {
-                    roundId: current?.id,
+                    roundId: optCurrentRound?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
             })
         }
         dispatch(setBidInfo(Number(price * amount)))
-        dispatch(setCurrentRound(current?.id))
+        dispatch(setCurrentRound(optCurrentRound?.id))
     }
 
     // Render
@@ -112,7 +111,7 @@ export default function AuctionPlaceBidModal() {
                                     strokeLinejoin="round"
                                     strokeWidth="2"
                                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
+                                />
                             </svg>
                             <p className="text-danger text-capitalize fw-500 text-[#959595]">
                                 {error}
@@ -141,7 +140,7 @@ export default function AuctionPlaceBidModal() {
                     className="total-input"
                     type="text"
                     value={numberWithCommas(
-                        Number(Math.max(current?.minPrice, price * amount), ",")
+                        Number(Math.max(optCurrentRound?.minPrice, price * amount), ",")
                     )}
                     readOnly
                 />

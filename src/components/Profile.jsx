@@ -6,10 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/header";
 import { ROUTES } from "../utilities/routes";
 import SignOutTab from "./profile/sign-out-tab";
-import {
-    profile_tabs,
-    TWO_FACTOR_AUTH_TOOLTIP_CONTENT,
-} from "../utilities/staticData";
+import { profile_tabs, TWO_FACTOR_AUTH_TOOLTIP_CONTENT } from "../utilities/staticData";
 import Seo from "./seo";
 import TwoFactorModal from "./profile/two-factor-modal";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -39,18 +36,15 @@ const Profile = () => {
     const [userTiersData, setUserTiersData] = useState(null);
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-    const [currentProfileTab, setCurrentProfileTab] = useState(
-        profile_tabs[tab]
-    );
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
-        useState(false);
+    const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[tab]);
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
     const [shuftiStatus, setShuftiStatus] = useState(null);
     const [shuftReference, setShuftiReference] = useState(null);
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
 
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
-        onCompleted: (res) => {
+        onCompleted: res => {
             if (!userData.getUser) {
                 return logout(() => {
                     navigate(ROUTES.home);
@@ -68,12 +62,12 @@ const Profile = () => {
     });
     useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
+        onCompleted: data => {
             return setUserTiersData(data.getUserTiers);
         },
     });
     useQuery(GET_SHUFT_REFERENCE, {
-        onCompleted: (data) => {
+        onCompleted: data => {
             setShuftiReference(data.getShuftiReference);
             return setShuftiReferenceLoading(false);
         },
@@ -84,53 +78,56 @@ const Profile = () => {
     // Containers
     const user = userData?.getUser;
     const twoStep = user?.security
-        ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
+        ? user.security.filter(f => f.tfaEnabled).map(m => m.authType)
         : [];
 
-    const currentTier = userTiersData?.filter(
-        (item) => item?.level === user?.tierLevel
-    );
-    const nextTier = userTiersData?.filter(
-        (item) => item?.level === user?.tierLevel + 1
-    );
+    const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel);
+    const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1);
 
     // Methods
-    const handleProfileTab = (value) => {
+    const handleProfileTab = value => {
         setCurrentProfileTab(value);
         setTabIndex(value.index);
-        console.log("kek1");
     };
 
     useEffect(() => {
         return setTabIndex(tab);
     }, []);
 
-    const getSecurityStatus = (key) =>
-        user?.security?.find((f) => f?.authType === key && f?.tfaEnabled);
+    const getSecurityStatus = key =>
+        user?.security?.find(f => f?.authType === key && f?.tfaEnabled);
 
     const TfaConfig = ({ title, method }) => {
         const config = !!getSecurityStatus(method);
 
+        let available = true;
+        if (method === "phone") {
+            if (twoStep.includes("app")) available = false;
+        } else if (method === "app") {
+            if (twoStep.includes("phone")) available = false;
+        }
+
         return (
             <>
-                <div
-                    className={`status ${
-                        config ? "active" : "deactive"
-                    } mt-3px`}
-                ></div>
+                <div className={`status ${config ? "active" : "deactive"} mt-3px`}></div>
                 <div className="security-item">
                     <p className="security-name">{title}</p>
 
-                    {!config && (
-                        <p
-                            className="txt-green security-link"
-                            onClick={() => setIs2FAModalOpen(true)}
-                            onKeyDown={() => setIs2FAModalOpen(true)}
-                            role="presentation"
-                        >
-                            Setup
-                        </p>
-                    )}
+                    {!config &&
+                        (available ? (
+                            <p
+                                className="txt-green security-link"
+                                onClick={() => setIs2FAModalOpen(true)}
+                                onKeyDown={() => setIs2FAModalOpen(true)}
+                                role="presentation"
+                            >
+                                Setup
+                            </p>
+                        ) : (
+                            <p className="text-secondary security-link text-decoration-none">
+                                Unavailable
+                            </p>
+                        ))}
                 </div>
                 {config && (
                     <div className="security-item-disable">
@@ -152,9 +149,7 @@ const Profile = () => {
 
     useEffect(async () => {
         if (!shuftiReferenceLoading) {
-            const response = await getShuftiStatusByReference(
-                shuftReference?.reference
-            );
+            const response = await getShuftiStatusByReference(shuftReference?.reference);
             return setShuftiStatus(response);
         }
     }, [shuftiReferenceLoading]);
@@ -171,7 +166,7 @@ const Profile = () => {
                         email={user?.email}
                         phone={user?.phone}
                         twoStep={twoStep}
-                        onResult={(res) => {
+                        onResult={res => {
                             if (res) {
                                 refetch();
                             }
@@ -180,7 +175,7 @@ const Profile = () => {
                     <Header />
                     <section className="container position-relative h-100">
                         <div className="row">
-                            <div className="col-lg-3 profile-page__left border-md-end border-white">
+                            <div className="col-lg-3 profile-page__left border-light border-0 border-end">
                                 <div className="user-info">
                                     <div className="my-5 user-info__avatar">
                                         <Avatar />
@@ -212,17 +207,16 @@ const Profile = () => {
                                                 width: `${
                                                     (user?.tierPoint /
                                                         (nextTier?.length > 0 ??
-                                                            nextTier[0]
-                                                                ?.point)) *
+                                                            nextTier[0]?.point)) *
                                                     100
                                                 }%`,
                                             }}
-                                        ></div>
+                                        />
                                     </div>
                                 </div>
                                 <Tabs
                                     className="profile-tab"
-                                    onSelect={(index) => setTabIndex(index)}
+                                    onSelect={index => setTabIndex(index)}
                                     defaultIndex={tab}
                                 >
                                     <TabList>
@@ -230,7 +224,7 @@ const Profile = () => {
                                             <Tab
                                                 selected={tabIndex == idx}
                                                 focus={tabIndex == idx}
-                                                lkey={idx}
+                                                key={idx}
                                             >
                                                 {item.label}
                                             </Tab>
@@ -240,7 +234,7 @@ const Profile = () => {
                                         isSearchable={false}
                                         options={profile_tabs}
                                         value={currentProfileTab}
-                                        onChange={(v) => handleProfileTab(v)}
+                                        onChange={v => handleProfileTab(v)}
                                         className="profile-tab__select mb-3"
                                     />
                                     <TabPanel>0</TabPanel>
@@ -255,14 +249,10 @@ const Profile = () => {
                                         <Tabs className="detail-tab">
                                             <TabList>
                                                 <Tab>
-                                                    <div className="pt-3">
-                                                        account detaiLs
-                                                    </div>
+                                                    <div className="pt-3">account detaiLs</div>
                                                 </Tab>
                                                 <Tab>
-                                                    <div className="pt-3">
-                                                        tier Details
-                                                    </div>
+                                                    <div className="pt-3">tier Details</div>
                                                 </Tab>
                                             </TabList>
                                             <TabPanel>
@@ -272,29 +262,20 @@ const Profile = () => {
                                                             setIsPasswordModalOpen
                                                         }
                                                         user={user}
-                                                        displayName={
-                                                            displayName
-                                                        }
-                                                        shuftReference={
-                                                            shuftReference
-                                                        }
-                                                        shuftiStatus={
-                                                            shuftiStatus
-                                                        }
+                                                        displayName={displayName}
+                                                        shuftReference={shuftReference}
+                                                        shuftiStatus={shuftiStatus}
                                                     />
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">
                                                             <div>
-                                                                Increase your
-                                                                account security
+                                                                Increase your account security
                                                             </div>
                                                             <img
                                                                 data-tip
                                                                 data-for="question-mark-tooltip"
                                                                 className="cursor-pointer ms-2"
-                                                                src={
-                                                                    QuestionMark
-                                                                }
+                                                                src={QuestionMark}
                                                                 alt="Question Mark"
                                                             />
                                                             <ReactTooltip
@@ -340,9 +321,7 @@ const Profile = () => {
                                                 </div>
                                             </TabPanel>
                                             <TabPanel>
-                                                <TierDetailsTab
-                                                    shuftiStatus={shuftiStatus}
-                                                />
+                                                <TierDetailsTab shuftiStatus={shuftiStatus} />
                                             </TabPanel>
                                         </Tabs>
                                     </>
@@ -352,14 +331,10 @@ const Profile = () => {
                                         <Tabs className="notification-tab">
                                             <TabList>
                                                 <Tab>
-                                                    <div className="pt-3 pb-2">
-                                                        Recent
-                                                    </div>
+                                                    <div className="pt-3 pb-2">Recent</div>
                                                 </Tab>
                                                 <Tab>
-                                                    <div className="py-3 pb-2">
-                                                        Setup
-                                                    </div>
+                                                    <div className="py-3 pb-2">Setup</div>
                                                 </Tab>
                                             </TabList>
                                             <TabPanel>
@@ -387,9 +362,7 @@ const Profile = () => {
                     />
                     <DeleteAccountModal
                         isDeleteAccountModalOpen={isDeleteAccountModalOpen}
-                        setIsDeleteAccountModalOpen={
-                            setIsDeleteAccountModalOpen
-                        }
+                        setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
                     />
                 </main>
             </>

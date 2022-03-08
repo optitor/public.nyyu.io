@@ -1,27 +1,25 @@
-    import React, { useEffect } from "react"
-import Slider from "rc-slider"
-import { useAuction } from "./auction-context"
-import { Currencies } from "../../utilities/staticData"
-import { navigate } from "gatsby"
-import { numberWithCommas } from "../../utilities/number"
-import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
-import { useMutation } from "@apollo/client"
-import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
-import { useState } from "react"
-import { ROUTES } from "../../utilities/routes"
+import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
+import Slider from "rc-slider"
+import { navigate } from "gatsby"
+import { useMutation } from "@apollo/client"
+
+import { useAuction } from "../../providers/auction-context"
+import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
+
 import CustomSpinner from "../common/custom-spinner"
+import { numberWithCommas } from "../../utilities/number"
+import { Currencies } from "../../utilities/staticData"
+import { ROUTES } from "../../utilities/routes"
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 
 export default function AuctionPlaceBid() {
     // Containers
     const auction = useAuction();
     const dispatch = useDispatch()
-    const { auctions, currentRoundNumber, getBid, isBid } = auction
-    const current = auctions?.filter(
-        (auction) => auction.round === currentRoundNumber
-    )[0]
+    const { optCurrentRound, getBid, isBid } = auction
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(current?.minPrice)
+    const [price, setPrice] = useState(optCurrentRound?.minPrice)
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
 
@@ -54,7 +52,7 @@ export default function AuctionPlaceBid() {
         if (auction.isBid) {
             placeBid({
                 variables: {
-                    roundId: current?.id,
+                    roundId: optCurrentRound?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
@@ -62,28 +60,28 @@ export default function AuctionPlaceBid() {
         } else {
             increaseBid({
                 variables: {
-                    roundId: current?.id,
+                    roundId: optCurrentRound?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
             })
         }
         dispatch(setBidInfo(Number(price * amount)))
-        dispatch(setCurrentRound(current?.id))
+        dispatch(setCurrentRound(optCurrentRound?.id))
     }
 
     useEffect(() => {
         if (getBid)
             if (Object.keys(getBid).length !== 0) {
-                setPrice(isBid ? current.placeBid : getBid.tokenPrice)
+                setPrice(isBid ? optCurrentRound.placeBid : getBid.tokenPrice)
                 setAmount(isBid ? 1 : getBid.tokenAmount)
             }
-    }, [getBid, current.placeBid, isBid])
+    }, [getBid, optCurrentRound?.placeBid, isBid])
 
     // Render
     return (
         <>
-            {current?.status === 3 ? (
+            {optCurrentRound?.status === 3 ? (
                 <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
                     round is over
                 </div>
@@ -106,7 +104,7 @@ export default function AuctionPlaceBid() {
                             value={amount}
                             onChange={(value) => setAmount(value)}
                             min={1}
-                            max={current.totalToken}
+                            max={optCurrentRound.totalToken}
                             step={1}
                         />
                     </div>
@@ -119,28 +117,28 @@ export default function AuctionPlaceBid() {
                                 setPrice(
                                     e.target.value
                                         ? e.target.value
-                                        : current.minPrice
+                                        : optCurrentRound?.minPrice
                                 )
                             }
                             className="range-input"
-                            min={current.minPrice}
+                            min={optCurrentRound?.minPrice}
                         />
                         <Slider
                             value={price}
                             onChange={(value) => setPrice(value)}
-                            min={current?.minPrice}
+                            min={optCurrentRound?.minPrice}
                             max={100}
                             step={1}
                         />
                     </div>
                     <div className="d-flex align-items-center">
-                        <span className="range-label mb-0">Total price</span>
+                    <span className="range-label mb-0">Total price</span>
                         <input
                             className="total-input"
                             type="text"
                             value={numberWithCommas(
                                 Number(
-                                    Math.max(current?.minPrice, price * amount),
+                                    Math.max(optCurrentRound?.minPrice, price * amount),
                                     " "
                                 )
                             )}
@@ -168,7 +166,7 @@ export default function AuctionPlaceBid() {
                                         strokeLinejoin="round"
                                         strokeWidth="2"
                                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    ></path>
+                                    />
                                 </svg>
                                 <p className="text-danger fw-500 text-[#959595]">
                                     {error}
@@ -181,6 +179,7 @@ export default function AuctionPlaceBid() {
                         onClick={() => {
                             bidMutation()
                         }}
+
                         disabled={reqPending}
                     >
                         <div className="d-flex align-items-center justify-content-center gap-3">
