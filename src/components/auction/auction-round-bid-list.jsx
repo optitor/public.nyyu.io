@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/client"
 import { GET_BID } from "../../apollo/graghqls/querys/Auction"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
 
-import { useAuction } from "./auction-context"
+import { useAuction } from "../../providers/auction-context"
 import CustomSpinner from "../common/custom-spinner"
 
 import AuctionListHeader from "../common/AuctionListHeader"
@@ -15,14 +15,11 @@ import AuctionList from "../common/AuctionList"
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
     const auction = useAuction()
-    const { auctions, currentRoundNumber } = auction
+    const { optCurrentRound, currentRoundNumber, isAuction } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
     const [displayedBidList, setDisplayedBidList] = useState(null)
     const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
     const [currentUserBidData, setCurrentUserBidData] = useState(null)
-    const current = auctions?.filter(
-        (auction) => auction.round === currentRoundNumber
-    )[0]
     const pollIntervalValue = 10000
     const limitDisplayBidCount = 5
 
@@ -59,7 +56,7 @@ export default function AuctionRoundBidList() {
 
     useQuery(GET_BID, {
         variables: {
-            roundId: current?.id,
+            roundId: optCurrentRound?.id,
         },
         onCompleted: (data) => {
             if (data?.getBid === null) {
@@ -96,9 +93,9 @@ export default function AuctionRoundBidList() {
     }, [currentRoundBidList, currentUser.id])
 
     useEffect(() => {
-        if (current.status === 2) return startPolling(pollIntervalValue)
+        if (optCurrentRound && optCurrentRound.status === 2) return startPolling(pollIntervalValue)
         return stopPolling()
-    }, [current, startPolling, stopPolling])
+    }, [optCurrentRound, startPolling, stopPolling])
 
     // Render
     if (loadingData)
@@ -110,7 +107,7 @@ export default function AuctionRoundBidList() {
 
     return (
         <div className="d-flex flex-column align-items-center pt-5 list-part">
-            <AuctionListHeader totalCount={currentRoundBidList.length} auctionType="Bidder" auctionTitle="Bid" />
+            <AuctionListHeader totalCount={currentRoundBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"} auctionTitle={isAuction ? "Bid" : "Order"} />
             <div className="auction-bid-list-content-group">
                 {displayedBidList && displayedBidList.map((item, index) =>
                     <AuctionList

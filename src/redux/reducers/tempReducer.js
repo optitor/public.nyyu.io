@@ -1,4 +1,3 @@
-import { type } from 'jquery';
 import * as types from './../actionTypes';
 
 export const tempReducer = (state ={}, action) => {

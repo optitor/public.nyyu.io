@@ -11,7 +11,7 @@ import { Icon } from "@iconify/react";
 import ReactECharts from "echarts-for-react";
 import { cryptoSymbol } from 'crypto-symbol';
 import _ from 'lodash';
-import {NickToken} from "./../../utilities/imgImport";
+import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 
 const QUOTE = "USDT"
@@ -96,12 +96,12 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             <td className="text-center">
                 <p className="coin-price text-center">
                     {price && currencyRates[currency.value]?
-                    // currency.symbol + ' ' + Math.round(price * Number(currencyRates[currency.value]).toFixed(3) * 10**8) / 10**8:
+                    // currency.sign + ' ' + Math.round(price * Number(currencyRates[currency.value]).toFixed(3) * 10**8) / 10**8:
                     <NumberFormat
                         value={Math.round(price * Number(currencyRates[currency.value]).toFixed(2) * 10**8) / 10**8}
                         thousandSeparator={true}
                         displayType='text'
-                        prefix={currency.symbol + ' '}
+                        prefix={currency.sign + ' '}
                         allowNegative={false}
                         renderText={(value, props) => <span {...props}>{value}</span>}
                     />:
@@ -156,7 +156,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                 }
             </td>
             <td className="mobile-not text-center">
-                {!volume ? '' : currency.symbol + ' '+ numFormatter(volume * Number(currencyRates[currency.value]), 2)}
+                {!volume ? '' : currency.sign + ' '+ numFormatter(volume * Number(currencyRates[currency.value]), 2)}
             </td>
         </tr>
     )
