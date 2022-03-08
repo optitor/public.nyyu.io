@@ -36,7 +36,7 @@ const Menu = () => {
         onError: (err) => {
             console.log("received Mutation data", err)
         },
-    })
+    });
 
     // Containers
     const auth = useAuth()

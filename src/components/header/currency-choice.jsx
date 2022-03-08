@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import { Icon } from '@iconify/react';
 import Select, { components } from 'react-select';
 import { useDispatch } from "react-redux";
@@ -36,8 +37,10 @@ const SelectOption = (props) => {
 };
 
 export default function CurrencyChoice({ classNames }) {
-    const dispatch = useDispatch()
-    const [selectedCurrency, setSelectedCurrency] = useState(Currencies[0])
+    const savedCurrency = useSelector(state => state.placeBid.currency);
+    const dispatch = useDispatch();
+
+    const [selectedCurrency, setSelectedCurrency] = useState(savedCurrency);
     const [loading, setLoading] = useState(false);
     
     useEffect(() => {
@@ -93,7 +96,7 @@ const customSelectStyles = {
     container: provided => ({
         ...provided,
         border: '1px solid white',
-        width: 120,
+        width: 130,
     }),
     option: (provided, state) => ({
         ...provided,

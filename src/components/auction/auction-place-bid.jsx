@@ -14,7 +14,7 @@ import CustomSpinner from "../common/custom-spinner"
 
 export default function AuctionPlaceBid() {
     // Containers
-    const auction = useAuction()
+    const auction = useAuction();
     const dispatch = useDispatch()
     const { auctions, currentRoundNumber, getBid, isBid } = auction
     const current = auctions?.filter(
