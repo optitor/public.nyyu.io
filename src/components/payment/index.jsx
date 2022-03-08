@@ -1,52 +1,39 @@
 /* eslint-disable */
-
-import React, { useCallback, useReducer, useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useQuery } from "@apollo/client"
-import { useMutation } from "@apollo/client"
-import ReactTooltip from "react-tooltip"
-import Select, { components } from "react-select"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import _ from "lodash"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-
-import Seo from "./../seo"
-import Header from "../header"
-import Loading from "../common/Loading"
-import { numberWithCommas } from "../../utilities/number"
-import { CheckBox } from "../common/FormControl"
-import ConnectWalletTab from "../profile/connect-wallet-tab"
-import CreditCardTab from "./credit-card-tab"
-import CoinPaymentsTab from "./CoinPaymentsTab"
-import OrderSummary from "./order-summary"
-import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments"
-import OrderSummaryOfCreditCard from "./order-summary-of-credit-card"
-import { set_All_Fees } from "../../redux/actions/allFeesAction"
-
+import React, { useCallback, useReducer, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import ReactTooltip from "react-tooltip";
+import _ from "lodash";
+import Header from "../header";
+import Loading from "../common/Loading";
+import { numberWithCommas } from "../../utilities/number";
+import { CheckBox } from "../common/FormControl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
     CryptoCoin,
     Paypal,
     Credit,
     NdbWallet,
     ExternalWallet,
-    ETH,
-    BTC,
-    DOGE,
-    PaypalBrand
-} from "../../utilities/imgImport"
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
-import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction"
-import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment"
-import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment"
+    PaypalBrand,
+} from "../../utilities/imgImport";
+import ConnectWalletTab from "../profile/connect-wallet-tab";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
+import Seo from "./../seo";
+import CreditCardTab from "./credit-card-tab";
+import CoinPaymentsTab from "./CoinPaymentsTab";
+import OrderSummary from "./order-summary";
+import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
+import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import { set_All_Fees } from "../../redux/actions/allFeesAction";
+import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
+import NDBWalletTab from "./NDBWalletTab";
 
-const { Option, SingleValue } = components
-
-const balances = [
-    { value: "3,002,565", label: "ETH", icon: ETH },
-    { value: "225,489", label: "BTC", icon: BTC },
-    { value: "489,809", label: "DOGE", icon: DOGE }
-]
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
     { icon: Credit, value: "creditcard", label: "Credit / Debit card" },
@@ -59,34 +46,15 @@ const payment_types = [
     }
 ]
 
-const CustomOption = (props) => (
-    <Option {...props}>
-        <div className="custom-option">
-            <p>{props.data.value}</p>
-            <p className="ms-4">{props.data.label}</p>
-        </div>
-    </Option>
-)
-const CustomSingleValue = (props) => {
-    return (
-        <SingleValue {...props}>
-            <p className="wallet-select__value">
-                {props.data.value + " - " + props.data.label}
-            </p>
-        </SingleValue>
-    )
-}
-
 const Payment = () => {
-    const currentRound = useSelector((state) => state?.placeBid.round_id)
-    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
-    const [totalRounds, setTotalRounds] = useState(null)
-    const [barProgress, setBarProgress] = useState(null)
-    const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
-    const [allFees, setAllFees] = useState(null)
-    const [payPalLoading, setPayPalLoading] = useState(false)
-    const dispatch = useDispatch()
-
+    const currentRound = useSelector(state => state?.placeBid.round_id);
+    const bidAmount = useSelector(state => state?.placeBid.bid_amount);
+    const [totalRounds, setTotalRounds] = useState(null);
+    const [barProgress, setBarProgress] = useState(null);
+    const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
+    const [allFees, setAllFees] = useState(null);
+    const [payPalLoading, setPayPalLoading] = useState(false);
+    const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading)
 
     const targetCap = 1000000000000
@@ -103,94 +71,104 @@ const Payment = () => {
     )
     const { allow_fraction } = state
 
-    const [balance, setBalance] = useState(null)
-    const [tabIndex, setTabIndex] = useState(0)
+    const [tabIndex, setTabIndex] = useState(0);
 
     const handleAllowFraction = useCallback(
-        (e) => {
-            e.preventDefault()
-            setState({ allow_fraction: !allow_fraction })
+        e => {
+            e.preventDefault();
+            setState({ allow_fraction: !allow_fraction });
+
         },
         [allow_fraction]
     )
 
     useQuery(GET_AUCTION, {
-        onCompleted: (data) => {
-            setTotalRounds(data.getAuctions.length)
-            setBarProgress((currentCap * 100) / targetCap)
+        onCompleted: data => {
+            setTotalRounds(data.getAuctions.length);
+            setBarProgress((currentCap * 100) / targetCap);
+
         },
-        onError: (error) => console.log(error),
+        onError: error => console.log(error),
         errorPolicy: "ignore",
         fetchPolicy: "network-only"
     })
     useQuery(GET_ALL_FEES, {
-        onCompleted: (data) => {
-            setAllFees(data.getAllFees)
-            const allFees = _.mapKeys(data.getAllFees, "tierLevel")
+        onCompleted: data => {
+            setAllFees(data.getAllFees);
+            const allFees = _.mapKeys(data.getAllFees, "tierLevel");
+
             if (allFees) {
                 dispatch(set_All_Fees(allFees))
             }
         },
-        onError: (error) => console.log(error)
-    })
+        onError: error => console.log(error),
+    });
+
 
     useEffect(() => {
         if (barProgress < 1) setBarProgress(1)
     }, [barProgress])
 
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
-        onCompleted: (data) => {
-            let links = data.paypalForAuction.links
+        onCompleted: data => {
+            let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
-                    window.location.href = links[i].href
+                    window.location.href = links[i].href;
                 }
             }
         },
-        onError: (err) => {
-            console.log(err)
+        onError: err => {
+            console.log(err);
+
             // Sample response! It's on the onError callback because the mutation is throwing an error:
             let data = {
                 paypalForAuction: {
                     links: [
                         {
-                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
-                            "rel": "self",
-                            "method": "GET"
+                            href: "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
+                            rel: "self",
+                            method: "GET",
                         },
                         {
-                            "href": "https://www.sandbox.paypal.com/checkoutnow?token=9K104858HE196213T",
-                            "rel": "approve",
-                            "method": "GET"
+                            href: "https://www.sandbox.paypal.com/checkoutnow?token=9K104858HE196213T",
+                            rel: "approve",
+                            method: "GET",
                         },
                         {
-                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
-                            "rel": "update",
-                            "method": "PATCH"
+                            href: "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
+                            rel: "update",
+                            method: "PATCH",
                         },
                         {
-                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T/capture",
-                            "rel": "capture",
-                            "method": "POST"
-                        }
-                    ]
-                }
-            }
-            let links = data.paypalForAuction.links
+                            href: "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T/capture",
+                            rel: "capture",
+                            method: "POST",
+                        },
+                    ],
+                },
+            };
+            let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
-                    window.location.href = links[i].href
+                    window.location.href = links[i].href;
                 }
             }
-        }
-    })
+        },
+    });
 
     const initPaypal = () => {
-        setPayPalLoading(true)
-        createPayPalOrder({ variables: { roundId: currentRound, amount: bidAmount, currency_code: "USD" } })
-    }
+        setPayPalLoading(true);
+        createPayPalOrder({
+            variables: {
+                roundId: currentRound,
+                amount: bidAmount,
+                currency_code: "USD",
+            },
+        });
+    };
 
-    if (loading) return <Loading/>
+    if (loading) return <Loading />;
     return (
         <>
             <Seo title="Payment"/>
@@ -276,88 +254,10 @@ const Payment = () => {
                                     </div>
                                 )}
                                 {tabIndex === 4 && (
-                                    <div className="wallet-tab">
-                                        <div className="payment-content">
-                                            <div className="row">
-                                                <Select
-                                                    className="balance-select col-lg-4 pe-0"
-                                                    options={balances}
-                                                    value={balance}
-                                                    placeholder="YOUR BALANCE"
-                                                    onChange={(v) =>
-                                                        setBalance(v)
-                                                    }
-                                                    components={{
-                                                        Option: CustomOption,
-                                                        SingleValue:
-                                                        CustomSingleValue
-                                                    }}
-                                                />
-                                                <div className="col-lg-8 d-flex pl-8px">
-                                                    <div className="choosed-icon">
-                                                        {balance?.icon && (
-                                                            <img
-                                                                src={
-                                                                    balance?.icon
-                                                                }
-                                                                alt="coin"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                    <input
-                                                        type="number"
-                                                        className="form-control"
-                                                        value={bidAmount}
-                                                        disabled
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="mt-3 d-flex justify-content-between">
-                                                <p className="d-flex flex-row">
-                                                    <CheckBox
-                                                        type="checkbox"
-                                                        name="allow_fraction"
-                                                        value={allow_fraction}
-                                                        onChange={
-                                                            handleAllowFraction
-                                                        }
-                                                        className="text-uppercase"
-                                                    />
-                                                    <div className="allow-text">
-                                                        Do you allow fraction of
-                                                        order compleation?
-                                                    </div>
-                                                    <ReactTooltip
-                                                        place="right"
-                                                        type="light"
-                                                        effect="solid"
-                                                    >
-                                                        <div
-                                                            className="text-justify"
-                                                            style={{
-                                                                width: "300px"
-                                                            }}
-                                                        >
-                                                            {
-                                                                PAYMENT_FRACTION_TOOLTIP_CONTENT
-                                                            }
-                                                        </div>
-                                                    </ReactTooltip>
-                                                    <FontAwesomeIcon
-                                                        data-tip="React-tooltip"
-                                                        icon={faQuestionCircle}
-                                                        className="fa-xl ms-2 cursor-pointer"
-                                                    />
-                                                </p>
-                                                <p className="payment-expire my-auto">
-                                                    payment expires in{" "}
-                                                    <span className="txt-green">
-                                                        10 minutes
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <NDBWalletTab
+                                        bidAmount={bidAmount}
+                                        currentRound={currentRound}
+                                    />
                                 )}
                                 {tabIndex === 5 && (
                                     <div className="externalwallets-tab">
