@@ -63,15 +63,14 @@ export const CREATE_CHARGE_FOR_DEPOSIT = gql`
         }
     }
 `;
+
 export const PAYPAL_FOR_AUCTION = gql`
     mutation PaypalForAuction(
         $roundId: Int
-        $amount: Float
         $currencyCode: String
     ) {
         paypalForAuction(
             roundId: $roundId,
-            amount: $amount,
             currencyCode: $currencyCode
         ) {
             id
@@ -82,5 +81,15 @@ export const PAYPAL_FOR_AUCTION = gql`
                 method
             }
         }
+    }
+`;
+
+export const CAPTURE_ORDER_FOR_AUCTION = gql`
+    mutation CaptureOrderForAuction(
+        $orderId: String
+    ) {
+        captureOrderForAuction(
+            orderId: $orderId
+        )
     }
 `;
