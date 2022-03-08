@@ -32,6 +32,7 @@ import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
 import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { set_All_Fees } from "../../redux/actions/allFeesAction";
 import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
+import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 import NDBWalletTab from "./NDBWalletTab";
 
 const payment_types = [
@@ -110,18 +111,19 @@ const Payment = () => {
     }, [barProgress])
 
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
-        onCompleted: data => {
+        onCompleted: (data) => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === "approve") {
+                if (links[i].rel === 'approve') {
+                    let token = links[i].href.split('token=')[1];
                     window.location.href = links[i].href;
+                    break;
                 }
             }
         },
         onError: err => {
             console.log(err);
-
-            // Sample response! It's on the onError callback because the mutation is throwing an error:
+            // This is just an example for testing. It will be removed
             let data = {
                 paypalForAuction: {
                     links: [
@@ -141,32 +143,45 @@ const Payment = () => {
                             method: "PATCH",
                         },
                         {
-                            href: "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T/capture",
-                            rel: "capture",
-                            method: "POST",
-                        },
-                    ],
-                },
+                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T/capture",
+                            "rel": "capture",
+                            "method": "POST"
+                        }
+                    ]
+                }
             };
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === "approve") {
+                if (links[i].rel === 'approve') {
                     window.location.href = links[i].href;
+                    break;
                 }
             }
         },
-    });
+    })
 
+    const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
+        onCompleted: (data) => {
+            if (data.captureOrderForAuction) {
+                alert('Your checkout was successfully!')
+            } else {
+                alert('Error in checkout with PayPal');
+            }
+        },
+        onError: (err) => {
+            alert('Error in checkout with PayPal');
+        },
+    })
+    
     const initPaypal = () => {
         setPayPalLoading(true);
-        createPayPalOrder({
-            variables: {
-                roundId: currentRound,
-                amount: bidAmount,
-                currency_code: "USD",
-            },
-        });
-    };
+        createPayPalOrder({variables: {roundId: currentRound, currency_code: 'USD'}});
+    }
+
+    if (window.location.href.includes('token=')) {
+        let token = window.location.href.split('token=')[1]
+        captureOrderForAuction({variables: {orderId: token}});
+    }
 
     if (loading) return <Loading />;
     return (
