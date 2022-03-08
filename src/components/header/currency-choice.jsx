@@ -4,14 +4,36 @@ import Select, { components } from 'react-select';
 import { useDispatch } from "react-redux";
 import { isBrowser } from "../../utilities/auth";
 import axios from 'axios';
-import getSymbolFromCurrency from 'currency-symbol-map';
 import { ROUTES } from "../../utilities/routes";
+import { SUPPORTED_CURRENCIES } from './../../utilities/staticData2';
 import { setCurrencyInfo, setCurrencyRates } from "../../redux/actions/bidAction";
+import { EuropeanFlag } from './../../utilities/imgImport';
 
 const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.currencyfreaks.com/latest';
 const API_KEY = '49cd7eb3c5f54f638e0e2bb4ce3ba8e2';
-const SYMBOLS = 'USD,EUR,GBP,CNY,JPY,CAD,AUD,AED,CHF,RUB,ARS,CLP,CZK,DKK,EGP,HKD,HRK,HUF,INR,MXN,NGN,NZD,RON,SEK,SGD,TRY,UAH,UYU,VND,BHD,SAR,BRL';
-const Currencies = SYMBOLS.split(',').map(item => ({label: item, value: item, symbol: getSymbolFromCurrency(item)}));
+const Currencies = SUPPORTED_CURRENCIES.map(item => ({label: item.symbol, value: item.symbol, sign: item.sign}));
+const SYMBOLS = SUPPORTED_CURRENCIES.map(item => item.symbol).join(',');
+
+const CurrencyIconEndpoint = 'https://currencyfreaks.com/photos/flags';
+
+const { Option } = components;
+
+const SelectOption = (props) => {
+    const { data } = props;
+    return (
+        <Option {...props}>
+            <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
+                <div className='flag_div'>
+                    <img
+                        src={data.value !=='EUR'? `${CurrencyIconEndpoint}/${String(data.value).toLowerCase()}.png`: EuropeanFlag}
+                        alt={data.value}
+                    />
+                </div>
+                <p className="coin-label ms-2">{data.value}</p>
+            </div>
+        </Option>
+    );
+};
 
 export default function CurrencyChoice({ classNames }) {
     const dispatch = useDispatch()
@@ -55,7 +77,9 @@ export default function CurrencyChoice({ classNames }) {
                             styles={customSelectStyles}
                             components={{
                                 IndicatorSeparator: null,
-                                DropdownIndicator
+                                DropdownIndicator,
+                                Option: SelectOption,
+                                SingleValue: SelectOption,
                             }}
                             isDisabled={loading}
                         />
@@ -69,15 +93,17 @@ const customSelectStyles = {
     container: provided => ({
         ...provided,
         border: '1px solid white',
-        width: 95,
+        width: 120,
     }),
     option: (provided, state) => ({
         ...provided,
-        color: "white",
         backgroundColor: state.isSelected? '#000000': undefined,
         fontSize: 14,
         borderBottom: '1px solid dimgrey',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        ":hover": {
+            backgroundColor: "inherit",
+        },
     }),
     control: (provided) => ({
         ...provided,
@@ -85,11 +111,12 @@ const customSelectStyles = {
         border: 'none',
         borderRadius: 0,
         height: 47,
+        color: 'lightgrey',
         cursor: 'pointer'
     }),
     input: provided => ({
         ...provided,
-        color: 'lightgrey'
+        position: 'absolute'
     }),
     menu: (provided) => ({
         ...provided,

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="270"
+   height="180"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="JWP SVG UNION FLAG.svg">
+  <title
+     id="title3799">FLAG OF THE EUROPEAN UNION</title>
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.3"
+     inkscape:cx="135"
+     inkscape:cy="90.509064"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-to-guides="true"
+     objecttolerance="10"
+     guidetolerance="10"
+     showguides="false"
+     inkscape:guide-bbox="true"
+     inkscape:snap-global="true"
+     inkscape:snap-grids="false"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:bbox-paths="true"
+     inkscape:window-width="781"
+     inkscape:window-height="792"
+     inkscape:window-x="804"
+     inkscape:window-y="18"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="10"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       spacingy="10px"
+       spacingx="10px" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="135,100"
+       id="guide2989" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="135.21739,89.565217"
+       id="guide2991" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="135,100"
+       id="guide2993" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="135,100"
+       id="guide2995" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="149.1073,90.079255"
+       id="guide3773" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>FLAG OF THE EUROPEAN UNION</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-872.36218)">
+    <rect
+       style="fill:#003399;fill-opacity:1"
+       id="rect2997"
+       width="270.86957"
+       height="180"
+       x="0.43478259"
+       y="-0.43478259"
+       transform="translate(0,872.36218)"
+       inkscape:export-filename="F:\FLAG OF THE EUROPEAN UNION.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#ffcc00;fill-opacity:1"
+       id="path3775"
+       sodipodi:sides="5"
+       sodipodi:cx="135.21739"
+       sodipodi:cy="90.434784"
+       sodipodi:r1="10.437047"
+       sodipodi:r2="4.4349494"
+       sodipodi:arg1="-1.5916265"
+       sodipodi:arg2="-0.96330799"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 135,80.000001 2.74889,6.793316 7.32539,0.210192 -5.61137,4.713599 2.06377,7.031814 -6.21691,-3.880151 -6.04992,4.135708 1.76911,-7.111665 -5.80281,-4.475805 7.31028,-0.5151 z"
+       transform="translate(-52,842.36218)"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3775"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3777"
+       transform="translate(82,82)"
+       width="270"
+       height="180" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3777"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3779"
+       transform="translate(-60,-104)"
+       width="270"
+       height="180" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3779"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3781"
+       width="270"
+       height="180"
+       transform="translate(0,104)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3781"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3783"
+       transform="translate(60,-104)"
+       width="270"
+       height="180" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3783"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3785"
+       width="270"
+       height="180"
+       transform="translate(-82,82)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3785"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3787"
+       transform="translate(104,-60)"
+       width="270"
+       height="180" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3787"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3789"
+       transform="translate(8,30)"
+       width="270"
+       height="180" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3789"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3791"
+       width="270"
+       height="180"
+       transform="translate(-120,0)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3791"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3793"
+       transform="translate(60,60)"
+       width="270"
+       height="180" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use3793"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3795"
+       width="270"
+       height="180"
+       transform="translate(0,-120)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path3775"
+       inkscape:transform-center-x="0.067177204"
+       inkscape:transform-center-y="-0.93254379"
+       id="use3797"
+       transform="translate(104,60)"
+       width="270"
+       height="180" />
+  </g>
+</svg>
