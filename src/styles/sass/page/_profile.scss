@@ -344,7 +344,7 @@
                     @include custom-scroll(250px);
                     overflow-x: hidden;
                     overflow-y: auto;
-                    height: 520px;
+                    height: 400px;
                 }
                 .recent-item,
                 .notification-item {
@@ -952,5 +952,31 @@
     }
     &-danger {
         background-color: $red;
+    }
+}
+
+.pagination {
+    margin-top: 15px;
+    li {
+        margin-right: 5px;
+        border: 1px solid white;
+        width: 35px;
+        text-align: center;
+        line-height: 35px;
+        &:last-child {
+            margin-right: 0px;
+        }
+    }
+    .active {
+        a {
+            color: #23c865 !important;
+        }
+        font-weight: bold;
+    }
+    .disabled {
+        border-color: gray;
+        a {
+            color: gray;
+        }
     }
 }
