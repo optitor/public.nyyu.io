@@ -13,7 +13,7 @@ import { Icon } from '@iconify/react';
 // import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
 import { CheckBox } from "../common/FormControl";
-import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "./../payment/payment-webservice";
+import { GET_STRIPE_PUB_KEY, STRIPE_PAYMENT } from "../payment/payment-webservice";
 import OroderSummaryOfCreditCard from "../payment/order-summary-of-credit-card";
 import { useMutation, useQuery } from "@apollo/client";
 import CustomSpinner from "../common/custom-spinner";

@@ -11,7 +11,7 @@ import { Icon } from "@iconify/react";
 import ReactECharts from "echarts-for-react";
 import { cryptoSymbol } from 'crypto-symbol';
 import _ from 'lodash';
-import {NickToken} from "./../../utilities/imgImport";
+import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 
 const QUOTE = "USDT"

@@ -1,19 +1,29 @@
 /* eslint-disable */
 
-import React, { useCallback, useReducer, useState, useEffect } from "react";
-import { navigate } from "gatsby";
-import { useDispatch, useSelector } from "react-redux";
-import { useQuery, useMutation } from "@apollo/client";
-import ReactTooltip from "react-tooltip";
-import _ from "lodash";
-import Select, { components } from "react-select";
-import Header from "../header";
-import Loading from "../common/Loading";
-import { numberWithCommas } from "../../utilities/number";
-import { CheckBox } from "../common/FormControl";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import React, { useCallback, useReducer, useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useQuery } from "@apollo/client"
+import { useMutation } from "@apollo/client"
+import ReactTooltip from "react-tooltip"
+import Select, { components } from "react-select"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import _ from "lodash"
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+
+import Seo from "./../seo"
+import Header from "../header"
+import Loading from "../common/Loading"
+import { numberWithCommas } from "../../utilities/number"
+import { CheckBox } from "../common/FormControl"
+import ConnectWalletTab from "../profile/connect-wallet-tab"
+import CreditCardTab from "./credit-card-tab"
+import CoinPaymentsTab from "./CoinPaymentsTab"
+import OrderSummary from "./order-summary"
+import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments"
+import OrderSummaryOfCreditCard from "./order-summary-of-credit-card"
+import { set_All_Fees } from "../../redux/actions/allFeesAction"
+
 import {
     CryptoCoin,
     Paypal,
@@ -23,29 +33,20 @@ import {
     ETH,
     BTC,
     DOGE,
-    PaypalBrand,
-} from "../../utilities/imgImport";
-import ConnectWalletTab from "../profile/connect-wallet-tab";
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
-import Seo from "./../seo";
-import CreditCardTab from "./credit-card-tab";
-import CoinPaymentsTab from "./CoinPaymentsTab";
-import OrderSummary from "./order-summary";
-import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
-import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
-import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
-import { set_All_Fees } from "../../redux/actions/allFeesAction";
-import { ROUTES } from "../../utilities/routes";
-import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
+    PaypalBrand
+} from "../../utilities/imgImport"
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData"
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction"
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment"
+import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment"
 
-const { Option, SingleValue } = components;
+const { Option, SingleValue } = components
 
 const balances = [
     { value: "3,002,565", label: "ETH", icon: ETH },
     { value: "225,489", label: "BTC", icon: BTC },
-    { value: "489,809", label: "DOGE", icon: DOGE },
-];
+    { value: "489,809", label: "DOGE", icon: DOGE }
+]
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
     { icon: Credit, value: "creditcard", label: "Credit / Debit card" },
@@ -54,9 +55,9 @@ const payment_types = [
     {
         icon: ExternalWallet,
         value: "externalwallets",
-        label: "External Wallets",
-    },
-];
+        label: "External Wallets"
+    }
+]
 
 const CustomOption = (props) => (
     <Option {...props}>
@@ -65,7 +66,7 @@ const CustomOption = (props) => (
             <p className="ms-4">{props.data.label}</p>
         </div>
     </Option>
-);
+)
 const CustomSingleValue = (props) => {
     return (
         <SingleValue {...props}>
@@ -73,23 +74,23 @@ const CustomSingleValue = (props) => {
                 {props.data.value + " - " + props.data.label}
             </p>
         </SingleValue>
-    );
-};
+    )
+}
 
 const Payment = () => {
-    const currentRound = useSelector((state) => state?.placeBid.round_id);
-    const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
-    const [totalRounds, setTotalRounds] = useState(null);
-    const [barProgress, setBarProgress] = useState(null);
-    const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
-    const [allFees, setAllFees] = useState(null);
-    const [payPalLoading, setPayPalLoading] = useState(false);
-    const dispatch = useDispatch();
+    const currentRound = useSelector((state) => state?.placeBid.round_id)
+    const bidAmount = useSelector((state) => state?.placeBid.bid_amount)
+    const [totalRounds, setTotalRounds] = useState(null)
+    const [barProgress, setBarProgress] = useState(null)
+    const [currentCap, setCurrentCap] = useState(120000000000) // Hardcoded value
+    const [allFees, setAllFees] = useState(null)
+    const [payPalLoading, setPayPalLoading] = useState(false)
+    const dispatch = useDispatch()
 
-    const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
+    const loading = !(totalRounds && barProgress && allFees && !payPalLoading)
 
-    const targetCap = 1000000000000;
-    const isSSR = typeof window === "undefined";
+    const targetCap = 1000000000000
+    const isSSR = typeof window === "undefined"
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
@@ -97,57 +98,57 @@ const Payment = () => {
         (old, action) => ({ ...old, ...action }),
         {
             allow_fraction: false,
-            getAddress: false,
+            getAddress: false
         }
-    );
-    const { allow_fraction, getAddress } = state;
+    )
+    const { allow_fraction } = state
 
-    const [balance, setBalance] = useState(null);
-    const [tabIndex, setTabIndex] = useState(0);
+    const [balance, setBalance] = useState(null)
+    const [tabIndex, setTabIndex] = useState(0)
 
     const handleAllowFraction = useCallback(
         (e) => {
-            e.preventDefault();
-            setState({ allow_fraction: !allow_fraction });
+            e.preventDefault()
+            setState({ allow_fraction: !allow_fraction })
         },
         [allow_fraction]
-    );
+    )
 
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
-            setTotalRounds(data.getAuctions.length);
-            setBarProgress((currentCap * 100) / targetCap);
+            setTotalRounds(data.getAuctions.length)
+            setBarProgress((currentCap * 100) / targetCap)
         },
         onError: (error) => console.log(error),
         errorPolicy: "ignore",
-        fetchPolicy: "network-only",
-    });
+        fetchPolicy: "network-only"
+    })
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
-            setAllFees(data.getAllFees);
-            const allFees = _.mapKeys(data.getAllFees, "tierLevel");
+            setAllFees(data.getAllFees)
+            const allFees = _.mapKeys(data.getAllFees, "tierLevel")
             if (allFees) {
-                dispatch(set_All_Fees(allFees));
+                dispatch(set_All_Fees(allFees))
             }
         },
-        onError: (error) => console.log(error),
-    });
+        onError: (error) => console.log(error)
+    })
 
     useEffect(() => {
-        if (barProgress < 1) setBarProgress(1);
-    }, [barProgress]);
+        if (barProgress < 1) setBarProgress(1)
+    }, [barProgress])
 
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
             let links = data.paypalForAuction.links
             for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === 'approve') {
-                    window.location.href = links[i].href;
+                if (links[i].rel === "approve") {
+                    window.location.href = links[i].href
                 }
             }
         },
         onError: (err) => {
-            console.log(err);
+            console.log(err)
             // Sample response! It's on the onError callback because the mutation is throwing an error:
             let data = {
                 paypalForAuction: {
@@ -177,24 +178,24 @@ const Payment = () => {
             }
             let links = data.paypalForAuction.links
             for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === 'approve') {
-                    window.location.href = links[i].href;
+                if (links[i].rel === "approve") {
+                    window.location.href = links[i].href
                 }
             }
-        },
+        }
     })
-    
+
     const initPaypal = () => {
-        setPayPalLoading(true);
-        createPayPalOrder({variables: {roundId: currentRound, amount: bidAmount, currency_code: 'USD'}});
+        setPayPalLoading(true)
+        createPayPalOrder({ variables: { roundId: currentRound, amount: bidAmount, currency_code: "USD" } })
     }
-    
-    if (loading) return <Loading />;
+
+    if (loading) return <Loading/>
     return (
         <>
-            <Seo title="Payment" />
+            <Seo title="Payment"/>
             <main className="payment-page">
-                <Header />
+                <Header/>
                 <section className="container position-relative">
                     <div className="row payment-wrapper">
                         <div className="col-lg-8 payment-select">
@@ -231,7 +232,7 @@ const Payment = () => {
                                                     marginRight:
                                                         idx % 2 === 0
                                                             ? "0"
-                                                            : "12px",
+                                                            : "12px"
                                                 }}
                                             >
                                                 <img
@@ -260,9 +261,9 @@ const Payment = () => {
                                 )}
                                 {tabIndex === 3 && (
                                     <div className="paypal-tab">
-                                        <div 
-                                        className="payment-content"
-                                        onClick={() => initPaypal()}
+                                        <div
+                                            className="payment-content"
+                                            onClick={() => initPaypal()}
                                         >
                                             <button className="paypal-checkout btn-second">
                                                 Check out with &nbsp;
@@ -289,7 +290,7 @@ const Payment = () => {
                                                     components={{
                                                         Option: CustomOption,
                                                         SingleValue:
-                                                            CustomSingleValue,
+                                                        CustomSingleValue
                                                     }}
                                                 />
                                                 <div className="col-lg-8 d-flex pl-8px">
@@ -321,7 +322,7 @@ const Payment = () => {
                                                             handleAllowFraction
                                                         }
                                                         className="text-uppercase"
-                                                    ></CheckBox>
+                                                    />
                                                     <div className="allow-text">
                                                         Do you allow fraction of
                                                         order compleation?
@@ -334,7 +335,7 @@ const Payment = () => {
                                                         <div
                                                             className="text-justify"
                                                             style={{
-                                                                width: "300px",
+                                                                width: "300px"
                                                             }}
                                                         >
                                                             {
@@ -364,7 +365,7 @@ const Payment = () => {
                                             className="payment-content"
                                             style={{ display: "block" }}
                                         >
-                                            <ConnectWalletTab />
+                                            <ConnectWalletTab/>
 
                                             <div className="mt-1 d-flex justify-content-between">
                                                 <p className="d-flex flex-row">
@@ -376,7 +377,7 @@ const Payment = () => {
                                                             handleAllowFraction
                                                         }
                                                         className="text-uppercase"
-                                                    ></CheckBox>
+                                                    />
                                                     <div className="allow-text">
                                                         Do you allow fraction of
                                                         order compleation?
@@ -389,7 +390,7 @@ const Payment = () => {
                                                         <div
                                                             className="text-justify"
                                                             style={{
-                                                                width: "300px",
+                                                                width: "300px"
                                                             }}
                                                         >
                                                             {
@@ -416,13 +417,13 @@ const Payment = () => {
                             </div>
                         </div>
                         {tabIndex === 1 && (
-                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} />
+                            <OrderSummaryOfCoinPayments bidAmount={bidAmount}/>
                         )}
                         {tabIndex === 2 && (
-                            <OrderSummaryOfCreditCard bidAmount={bidAmount} />
+                            <OrderSummaryOfCreditCard bidAmount={bidAmount}/>
                         )}
                         {tabIndex !== 1 && tabIndex !== 2 && (
-                            <OrderSummary bidAmount={bidAmount} />
+                            <OrderSummary bidAmount={bidAmount}/>
                         )}
                     </div>
                     <div className="remain-token__value col-md-12 mx-auto">
@@ -444,7 +445,7 @@ const Payment = () => {
                                 style={{
                                     width: `${barProgress}%`,
                                     background:
-                                        "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)",
+                                        "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)"
                                 }}
                             >
                                 <div className="timeleft__value">
@@ -459,7 +460,7 @@ const Payment = () => {
                 </section>
             </main>
         </>
-    );
-};
+    )
+}
 
-export default Payment;
+export default Payment

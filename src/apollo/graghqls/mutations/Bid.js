@@ -77,3 +77,30 @@ export const INCREASE_BID = gql`
         }
     }
 `
+
+export const PLACE_PRESALE_ORDER = gql`
+    mutation PlacePreSaleOrder(
+        $presaleId: Int!
+        $ndbAmount: Float!
+        $destination: Int!
+        $extAddr: String!
+    ) {
+        placePreSaleOrder(
+            presaleId: $presaleId
+            ndbAmount: $ndbAmount
+            destination: $destination
+            extAddr: $extAddr
+        ) {
+            id,
+            userId,
+            presaleId,
+            destination,
+            extAddr,
+            ndbAmount,
+            ndbPrice,
+            status,
+            createdAt,
+            updatedAt
+        }
+    }
+`
