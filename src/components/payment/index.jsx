@@ -56,7 +56,6 @@ const Payment = () => {
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
     const dispatch = useDispatch();
-    let paypalRedirectLink = null;
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading)
 
     const targetCap = 1000000000000
@@ -117,8 +116,7 @@ const Payment = () => {
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
                     let token = links[i].href.split('token=')[1];
-                    paypalRedirectLink = links[i].href;
-                    captureOrderForAuction({variables: {orderId: token}});
+                    window.location.href = links[i].href;
                     break;
                 }
             }
@@ -155,9 +153,7 @@ const Payment = () => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
-                    let token = links[i].href.split('token=')[1];
-                    paypalRedirectLink = links[i].href;
-                    captureOrderForAuction({variables: {orderId: token}});
+                    window.location.href = links[i].href;
                     break;
                 }
             }
@@ -167,17 +163,13 @@ const Payment = () => {
     const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
         onCompleted: (data) => {
             if (data.captureOrderForAuction) {
-                window.location.href = paypalRedirectLink;
+                alert('Your checkout was successfully!')
             } else {
                 alert('Error in checkout with PayPal');
-                paypalRedirectLink = null;
-                setPayPalLoading(false);
             }
         },
         onError: (err) => {
             alert('Error in checkout with PayPal');
-            paypalRedirectLink = null;
-            setPayPalLoading(false);
         },
     })
     
@@ -185,7 +177,12 @@ const Payment = () => {
         setPayPalLoading(true);
         createPayPalOrder({variables: {roundId: currentRound, currency_code: 'USD'}});
     }
-    
+
+    if (window.location.href.includes('token=')) {
+        let token = window.location.href.split('token=')[1]
+        captureOrderForAuction({variables: {orderId: token}});
+    }
+
     if (loading) return <Loading />;
     return (
         <>
