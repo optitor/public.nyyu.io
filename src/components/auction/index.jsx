@@ -21,7 +21,6 @@ const Auction = () => {
 
     useEffect(() => {
         const tempRounds = auctions?.concat(presales)
-
         tempRounds && tempRounds.length && setEntireRounds(tempRounds.sort((a, b) => {
             return a.round - b.round
         }))
