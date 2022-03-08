@@ -29,7 +29,7 @@ import { logout } from "../utilities/auth";
 import { getShuftiStatusByReference } from "../utilities/utility-methods";
 
 const Profile = () => {
-    const tab = useSelector((state) => state.profileTab);
+    const [tab, setTab] = useState(useSelector((state) => state.profileTab));
     const dispatch = useDispatch();
     const [tabIndex, setTabIndex] = useState(tab);
     const [displayName, setDisplayName] = useState("");
@@ -172,7 +172,11 @@ const Profile = () => {
                             }
                         }}
                     />
-                    <Header setTabIndex={setTabIndex} setCurrentProfileTab={setCurrentProfileTab} />
+                    <Header
+                        setTabIndex={setTabIndex}
+                        setCurrentProfileTab={setCurrentProfileTab}
+                        setTab={setTab}
+                    />
                     <section className="container position-relative h-100">
                         <div className="row">
                             <div className="col-lg-3 profile-page__left border-light border-0 border-end">
@@ -217,13 +221,13 @@ const Profile = () => {
                                 <Tabs
                                     className="profile-tab"
                                     onSelect={(index) => setTabIndex(index)}
-                                    defaultIndex={tab}
+                                    selectedIndex={tabIndex}
                                 >
                                     <TabList>
                                         {profile_tabs.map((item, idx) => (
                                             <Tab
-                                                selected={tabIndex == idx}
-                                                focus={tabIndex == idx}
+                                                // selected={tabIndex == idx}
+                                                // focus={tabIndex == idx}
                                                 key={idx}
                                             >
                                                 {item.label}

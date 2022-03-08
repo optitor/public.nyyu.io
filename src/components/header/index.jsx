@@ -19,11 +19,11 @@ import UserTier from "./user-tier";
 import ReactTooltip from "react-tooltip";
 import { profile_tabs } from "../../utilities/staticData";
 
-const Menu = ({ setTabIndex, setCurrentProfileTab }) => {
+const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch();
     // Webservice
     const { data: user_data } = useQuery(GET_USER);
-    const { data: allUnReadNotifications } = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
+    useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         onCompleted: (response) => {
             if (!response.getAllUnReadNotifications) return;
@@ -228,6 +228,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab }) => {
                                                         ? () => {
                                                               setTabIndex(1);
                                                               setCurrentProfileTab(profile_tabs[1]);
+                                                              setTab(1);
                                                           }
                                                         : () => {
                                                               dispatch({
@@ -255,7 +256,14 @@ const Menu = ({ setTabIndex, setCurrentProfileTab }) => {
                                     </li>
                                     <li className="px-sm-3 px-0 scale-75">
                                         <Link to={ROUTES.profile}>
-                                            <Avatar className="user-avatar" />
+                                            <Avatar
+                                                onClick={() => {
+                                                    dispatch({
+                                                        type: "DISABLE_NOTIFICATION_ROUTE",
+                                                    });
+                                                }}
+                                                className="user-avatar"
+                                            />
                                             <UserTier />
                                         </Link>
                                     </li>
