@@ -29,6 +29,12 @@ export const STRIPE_PAYMENT = gql`
     }
 `;
 
+export const PAY_WALLLET_FOR_AUCTION = gql`
+    mutation ($roundId: Int, $cryptoType: String) {
+        payWalletForAuction(roundId: $roundId, cryptoType: $cryptoType)
+    }
+`;
+
 export const GET_SAVED_CARDS = gql`
     {
         getSavedCards {

@@ -42,62 +42,63 @@ const Profile = () => {
     const [shuftReference, setShuftiReference] = useState(null);
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
 
-
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
-        onCompleted: (res) => {
+        onCompleted: res => {
             if (!userData.getUser) {
                 return logout(() => {
-                    navigate(ROUTES.home)
-                })
+                    navigate(ROUTES.home);
+                });
             }
             if (userData.getUser?.avatar) {
-                const { prefix, name } = userData.getUser.avatar
+                const { prefix, name } = userData.getUser.avatar;
                 if (prefix && name) {
-                    return setDisplayName(prefix + "." + name)
-                } else return navigate(ROUTES.selectFigure)
+                    return setDisplayName(prefix + "." + name);
+                } else return navigate(ROUTES.selectFigure);
             }
-            return navigate(ROUTES.selectFigure)
+            return navigate(ROUTES.selectFigure);
         },
         fetchPolicy: "network-only",
-    })
+    });
     useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-            return setUserTiersData(data.getUserTiers)
+        onCompleted: data => {
+            return setUserTiersData(data.getUserTiers);
         },
-    })
+    });
     useQuery(GET_SHUFT_REFERENCE, {
-        onCompleted: (data) => {
-            setShuftiReference(data.getShuftiReference)
-            return setShuftiReferenceLoading(false)
+        onCompleted: data => {
+            setShuftiReference(data.getShuftiReference);
+            return setShuftiReferenceLoading(false);
         },
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
-    })
-    const loadingPage = !(displayName && userTiersData && shuftiStatus)
+    });
+    const loadingPage = !(displayName && userTiersData && shuftiStatus);
     // Containers
-    const user = userData?.getUser
+    const user = userData?.getUser;
     const twoStep = user?.security
-        ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
-        : []
+        ? user.security.filter(f => f.tfaEnabled).map(m => m.authType)
+        : [];
 
     const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel);
     const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1);
 
     // Methods
-    const handleProfileTab = (value) => {
-        setCurrentProfileTab(value)
-        setTabIndex(value.index)
-    }
+    const handleProfileTab = value => {
+        setCurrentProfileTab(value);
+        setTabIndex(value.index);
+    };
 
-    useEffect(() => {return setTabIndex(tab)}, [])
+    useEffect(() => {
+        return setTabIndex(tab);
+    }, []);
 
-    const getSecurityStatus = (key) =>
-        user?.security?.find((f) => f?.authType === key && f?.tfaEnabled)
+    const getSecurityStatus = key =>
+        user?.security?.find(f => f?.authType === key && f?.tfaEnabled);
 
     const TfaConfig = ({ title, method }) => {
-        const config = !!getSecurityStatus(method)
+        const config = !!getSecurityStatus(method);
 
         let available = true;
         if (method === "phone") {
@@ -141,19 +142,19 @@ const Profile = () => {
                     </div>
                 )}
             </>
-        )
-    }
+        );
+    };
 
-    useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user])
+    useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user]);
 
     useEffect(async () => {
         if (!shuftiReferenceLoading) {
             const response = await getShuftiStatusByReference(shuftReference?.reference);
             return setShuftiStatus(response);
         }
-    }, [shuftiReferenceLoading])
+    }, [shuftiReferenceLoading]);
 
-    if (loadingPage) return <Loading />
+    if (loadingPage) return <Loading />;
     else {
         return (
             <>
@@ -165,16 +166,16 @@ const Profile = () => {
                         email={user?.email}
                         phone={user?.phone}
                         twoStep={twoStep}
-                        onResult={(res) => {
+                        onResult={res => {
                             if (res) {
-                                refetch()
+                                refetch();
                             }
                         }}
                     />
                     <Header />
                     <section className="container position-relative h-100">
                         <div className="row">
-                            <div className="col-lg-3 profile-page__left border-md-end border-white">
+                            <div className="col-lg-3 profile-page__left border-light border-0 border-end">
                                 <div className="user-info">
                                     <div className="my-5 user-info__avatar">
                                         <Avatar />
@@ -215,7 +216,7 @@ const Profile = () => {
                                 </div>
                                 <Tabs
                                     className="profile-tab"
-                                    onSelect={(index) => setTabIndex(index)}
+                                    onSelect={index => setTabIndex(index)}
                                     defaultIndex={tab}
                                 >
                                     <TabList>
@@ -233,7 +234,7 @@ const Profile = () => {
                                         isSearchable={false}
                                         options={profile_tabs}
                                         value={currentProfileTab}
-                                        onChange={(v) => handleProfileTab(v)}
+                                        onChange={v => handleProfileTab(v)}
                                         className="profile-tab__select mb-3"
                                     />
                                     <TabPanel>0</TabPanel>
@@ -365,8 +366,8 @@ const Profile = () => {
                     />
                 </main>
             </>
-        )
+        );
     }
-}
+};
 
-export default Profile
+export default Profile;
