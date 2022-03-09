@@ -178,7 +178,7 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
                     <p className="coin-name">{data.name}</p>
                 </div>
             </td>
-            <td className="mobile-not text-center"></td>
+            <td className="mobile-not text-center"/>
         </tr>
     )
 }

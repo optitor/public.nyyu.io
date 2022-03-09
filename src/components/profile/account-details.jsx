@@ -83,7 +83,7 @@ export default function AccountDetails({
                     <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
                         {shuftiStatus === "UNSET" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-dark"></div>
+                                <div className="circle circle-dark"/>
                                 <Link
                                     to={ROUTES.verifyId}
                                     className="text-success fs-15px fw-bold text-underline text-capitalize"
@@ -93,14 +93,14 @@ export default function AccountDetails({
                             </div>
                         ) : shuftiStatus?.event === "verification.accepted" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-success"></div>
+                                <div className="circle circle-success"/>
                                 <div className="txt-green fs-15px fw-bold text-capitalize">
                                     verified
                                 </div>
                             </div>
                         ) : shuftiStatus?.event === "verification.declined" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-danger"></div>
+                                <div className="circle circle-danger"/>
                                 <Link
                                     to={ROUTES.verifyId}
                                     className="text-light fs-15px fw-500 text-capitalize"
@@ -115,14 +115,14 @@ export default function AccountDetails({
                           shuftiStatus?.event === "review.pending" ||
                           shuftiStatus === "PENDING" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-warning"></div>
+                                <div className="circle circle-warning"/>
                                 <div className="text-light fs-15px fw-500 text-capitalize">
                                     under review
                                 </div>
                             </div>
                         ) : (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-dark"></div>
+                                <div className="circle circle-dark"/>
                                 <Link
                                     to={ROUTES.verifyId}
                                     className="text-success fs-15px fw-bold text-underline text-capitalize"

@@ -7,7 +7,7 @@ import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import DeleteConfirmModal from '../../DeleteConfirmModal';
 import EditTokenModal from '../../editModals/EditTokenModal';
-import { delete_Token } from './../../../../redux/actions/tokenAction'
+import { delete_Token } from "../../../../redux/actions/tokenAction"
 
 const TokenDataRow = ({ datum = {} }) => {
     const dispatch = useDispatch();

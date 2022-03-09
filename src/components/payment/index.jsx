@@ -123,40 +123,8 @@ const Payment = () => {
         },
         onError: err => {
             console.log(err);
-            // This is just an example for testing. It will be removed
-            let data = {
-                paypalForAuction: {
-                    links: [
-                        {
-                            href: "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
-                            rel: "self",
-                            method: "GET",
-                        },
-                        {
-                            href: "https://www.sandbox.paypal.com/checkoutnow?token=9K104858HE196213T",
-                            rel: "approve",
-                            method: "GET",
-                        },
-                        {
-                            href: "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T",
-                            rel: "update",
-                            method: "PATCH",
-                        },
-                        {
-                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/9K104858HE196213T/capture",
-                            "rel": "capture",
-                            "method": "POST"
-                        }
-                    ]
-                }
-            };
-            let links = data.paypalForAuction.links;
-            for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === 'approve') {
-                    window.location.href = links[i].href;
-                    break;
-                }
-            }
+            alert('Error in PayPal checkout')
+            setPayPalLoading(false);
         },
     })
 
@@ -175,11 +143,15 @@ const Payment = () => {
     
     const initPaypal = () => {
         setPayPalLoading(true);
-        createPayPalOrder({variables: {roundId: currentRound, currency_code: 'USD'}});
+        createPayPalOrder({variables: {roundId: currentRound, currencyCode: 'USD'}});
     }
 
-    if (window.location.href.includes('token=')) {
-        let token = window.location.href.split('token=')[1]
+    let orderCaptured = false;
+
+    if (window.location.href.includes('token=') && !orderCaptured) {
+        var url = new URL(window.location.href);
+        let token = url.searchParams.get("token");
+        orderCaptured = true;
         captureOrderForAuction({variables: {orderId: token}});
     }
 

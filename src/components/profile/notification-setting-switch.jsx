@@ -1,8 +1,8 @@
 import Switch from "react-switch";
-import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import CustomSpinner from "../common/custom-spinner";
 import { useQuery, useMutation } from "@apollo/client";
+
 import { COLOR_LOAD, COLOR_OFF, COLOR_ON } from "../../utilities/staticData";
 import { GET_NOTICATION_TYPES } from "../../apollo/graghqls/querys/Notification";
 import { USER_NOTIFICATION_SETTING } from "../../apollo/graghqls/mutations/Notification";
@@ -115,7 +115,7 @@ export default function NotificationSetting() {
                                     tempSetting[index]?.loading ? COLOR_LOAD : COLOR_OFF
                                 }
                                 onChange={() => setChecked(index)}
-                                checked={tempSetting[index]?.status ? true : false}
+                                checked={!!tempSetting[index]?.status}
                             />
                         </div>
                     ))}

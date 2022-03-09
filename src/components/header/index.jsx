@@ -5,20 +5,22 @@ import Cookies from 'js-cookie';
 import { Link } from "gatsby";
 import { isBrowser } from "./../../utilities/auth";
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
+import ReactTooltip from "react-tooltip";
+
+import {useAuth} from "../../hooks/useAuth";
+import {setCurrentAuthInfo, getAuthInfo} from "../../redux/actions/authAction";
+import {fetch_Avatar_Components} from "../../redux/actions/avatarAction";
+
 import Loading from "../common/FadeLoading";
-import { useAuth } from "../../hooks/useAuth";
 import DressupModal from "../dress-up/dressup-user-modal";
-import { ROUTES } from "../../utilities/routes";
 import CurrencyChoice from "./currency-choice";
-import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction";
-import { GET_USER } from "../../apollo/graghqls/querys/Auth";
-import { setCurrentAuthInfo, getAuthInfo } from "../../redux/actions/authAction";
-import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification";
-import { UPDATE_AVATARSET } from "../../apollo/graghqls/mutations/AvatarComponent";
 import Avatar from "../dress-up/avatar";
 import UserTier from "./user-tier";
-import ReactTooltip from "react-tooltip";
 import { profile_tabs } from "../../utilities/staticData";
+import {GET_USER} from "../../apollo/graghqls/querys/Auth";
+import {ROUTES} from "../../utilities/routes";
+import {GET_ALL_UNREAD_NOTIFICATIONS} from "../../apollo/graghqls/querys/Notification";
+import {UPDATE_AVATARSET} from "../../apollo/graghqls/mutations/AvatarComponent";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch();

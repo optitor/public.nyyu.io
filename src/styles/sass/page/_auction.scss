@@ -56,7 +56,7 @@
         }
 
         .timeframe-bar {
-            background: linear-gradient(270deg, #23c865 0%, #23c865 35.94%, #e8503a 57.81%);
+            background: linear-gradient(90deg, rgba(35,200,101,1) 0%, rgba(9,121,86,1) 56%, rgba(232,80,58,1) 100%);
             margin-top: 0;
             .timeleft {
                 &__value {
@@ -237,7 +237,6 @@
                     font-family: "Montserrat";
                     font-style: normal;
                     font-weight: bold;
-                    font-size: 24px;
                     line-height: 29px;
                     & > div {
                         max-height: unset !important;
@@ -309,6 +308,7 @@
         line-height: 29px;
         text-transform: uppercase;
         margin-bottom: 21px;
+        color: white;
     }
     .range-input,
     .total-input {
@@ -401,6 +401,19 @@
             padding: 8px 44px;
         }
     }
+}
+.presale-total-input {
+    width: 100%;
+    padding: 8px 10px;
+    margin-right: 18px;
+    background: #1e1e1e;
+    border: 1px solid #ffffff;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    line-height: 37px;
+    margin-left: 18px;
 }
 .select-internal-wallet {
     border: 1px solid white;
