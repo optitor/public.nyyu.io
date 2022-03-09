@@ -16,7 +16,7 @@ import { Icon } from "@iconify/react";
 
 const QUOTE = "USDT";
 const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
-const REFRESH_TIME = 100;
+const REFRESH_TIME = 30;
 
 const Asset = ({ item }) => {
     const currency = useSelector(state => state.placeBid.currency);
