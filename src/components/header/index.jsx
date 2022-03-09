@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
-import {useQuery, useMutation} from "@apollo/client";
-import {Link} from "gatsby";
-import {isBrowser} from "./../../utilities/auth";
-import {Bell, Logo, NotificationBell} from "../../utilities/imgImport";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useQuery, useMutation } from "@apollo/client";
+import { Link } from "gatsby";
+import { isBrowser } from "./../../utilities/auth";
+import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
 import Loading from "../common/FadeLoading";
-import {useAuth} from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import DressupModal from "../dress-up/dressup-user-modal";
-import {ROUTES} from "../../utilities/routes";
+import { ROUTES } from "../../utilities/routes";
 import CurrencyChoice from "./currency-choice";
-import {fetch_Avatar_Components} from "./../../redux/actions/avatarAction";
-import {GET_USER} from "../../apollo/graghqls/querys/Auth";
-import {setCurrentAuthInfo, getAuthInfo} from "../../redux/actions/authAction";
-import {GET_ALL_UNREAD_NOTIFICATIONS} from "../../apollo/graghqls/querys/Notification";
-import {UPDATE_AVATARSET} from "../../apollo/graghqls/mutations/AvatarComponent";
+import { fetch_Avatar_Components } from "./../../redux/actions/avatarAction";
+import { GET_USER } from "../../apollo/graghqls/querys/Auth";
+import { setCurrentAuthInfo, getAuthInfo } from "../../redux/actions/authAction";
+import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification";
+import { UPDATE_AVATARSET } from "../../apollo/graghqls/mutations/AvatarComponent";
 import Avatar from "../dress-up/avatar";
 import UserTier from "./user-tier";
 import ReactTooltip from "react-tooltip";
@@ -21,31 +21,31 @@ import ReactTooltip from "react-tooltip";
 const Menu = () => {
     const dispatch = useDispatch();
     // Webservice
-    const {data: user_data} = useQuery(GET_USER)
-    const {data: allUnReadNotifications} = useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
+    const { data: user_data } = useQuery(GET_USER);
+    useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         onCompleted: (response) => {
-            if (!response.getAllUnReadNotifications) return
-            setNewNotification(response.getAllUnReadNotifications?.length !== 0)
+            if (!response.getAllUnReadNotifications) return;
+            setNewNotification(response.getAllUnReadNotifications?.length !== 0);
         },
     });
-    const [updateAvatarSet, {loading}] = useMutation(UPDATE_AVATARSET, {
+    const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
-            dispatch(getAuthInfo())
+            dispatch(getAuthInfo());
         },
         onError: (err) => {
-            console.log("received Mutation data", err)
+            console.log("received Mutation data", err);
         },
     });
 
     // Containers
-    const auth = useAuth()
-    const userInfo = user_data?.getUser
-    const [active, setActive] = useState(false)
-    const {avatarComponents} = useSelector((state) => state)
-    const [newNotification, setNewNotification] = useState(false)
-    const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
-    const {user, isAuthenticated} = useSelector((state) => state.auth)
+    const auth = useAuth();
+    const userInfo = user_data?.getUser;
+    const [active, setActive] = useState(false);
+    const { avatarComponents } = useSelector((state) => state);
+    const [newNotification, setNewNotification] = useState(false);
+    const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false);
+    const { user, isAuthenticated } = useSelector((state) => state.auth);
     const navigationLinks = [
         {
             label: "Home",
@@ -105,44 +105,45 @@ const Menu = () => {
         },
     ];
 
-    const isShowNavLinks = isBrowser && (window.location.pathname === ROUTES.profile ||
-        window.location.pathname === ROUTES.faq ||
-        window.location.pathname === ROUTES.wallet ||
-        window.location.pathname === ROUTES.auction ||
-        window.location.pathname === ROUTES.payment ||
-        window.location.pathname === ROUTES.creditDeposit ||
-        window.location.pathname.includes(ROUTES.admin));
+    const isShowNavLinks =
+        isBrowser &&
+        (window.location.pathname === ROUTES.profile ||
+            window.location.pathname === ROUTES.faq ||
+            window.location.pathname === ROUTES.wallet ||
+            window.location.pathname === ROUTES.auction ||
+            window.location.pathname === ROUTES.payment ||
+            window.location.pathname === ROUTES.creditDeposit ||
+            window.location.pathname.includes(ROUTES.admin));
 
     // Methods
     useEffect(() => {
         if (!avatarComponents.loaded) {
-            dispatch(fetch_Avatar_Components())
+            dispatch(fetch_Avatar_Components());
         }
         if (!isAuthenticated && userInfo) {
-            dispatch(setCurrentAuthInfo(userInfo))
+            dispatch(setCurrentAuthInfo(userInfo));
         }
-    }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated])
+    }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated]);
 
     useEffect(() => {
         const handleEscKeyPress = (event) => {
             if (event.key === "Escape" && active) {
-                setActive(false)
+                setActive(false);
             }
-        }
-        document.addEventListener("keydown", handleEscKeyPress)
-        return () => document.removeEventListener("keydown", handleEscKeyPress)
-    })
-
+        };
+        document.addEventListener("keydown", handleEscKeyPress);
+        return () => document.removeEventListener("keydown", handleEscKeyPress);
+    });
 
     // Render
-    if (loading) return <Loading/>
+    if (loading) return <Loading />;
     else
         return (
             <nav className={active ? "menu menu--active" : "menu"}>
                 <div className="px-4 d-flex justify-content-between">
                     <div className="d-flex align-items-center gap-5 text-white text-uppercase fw-bold">
                         <Link to="/" className="menu__logo d-flex" title="Logo">
-                            <img src={Logo} alt="NDB Brand Logo"/>
+                            <img src={Logo} alt="NDB Brand Logo" />
                         </Link>
                         {isShowNavLinks && (
                             <div className="d-none d-md-flex justify-content-between gap-5">
@@ -150,7 +151,7 @@ const Menu = () => {
                                     to={ROUTES.wallet}
                                     className={`${
                                         (window.location.pathname === ROUTES.wallet ||
-                                        window.location.pathname === ROUTES.creditDeposit ) &&
+                                            window.location.pathname === ROUTES.creditDeposit) &&
                                         "txt-green"
                                     }`}
                                 >
@@ -169,8 +170,7 @@ const Menu = () => {
                                 <Link
                                     to={ROUTES.profile}
                                     className={`${
-                                        window.location.pathname === ROUTES.profile &&
-                                        "txt-green"
+                                        window.location.pathname === ROUTES.profile && "txt-green"
                                     }`}
                                 >
                                     profile
@@ -221,11 +221,27 @@ const Menu = () => {
                                     <li className="scale-75 cursor-pointer">
                                         {newNotification ? (
                                             <Link to={ROUTES.profile}>
-                                                <img onClick={() => {dispatch({ type: 'CREATE_NOTIFICATION_ROUTE' })}}  src={NotificationBell} alt="Bell Icon"/>
+                                                <img
+                                                    onClick={() => {
+                                                        dispatch({
+                                                            type: "CREATE_NOTIFICATION_ROUTE",
+                                                        });
+                                                    }}
+                                                    src={NotificationBell}
+                                                    alt="Bell Icon"
+                                                />
                                             </Link>
                                         ) : (
                                             <Link to={ROUTES.profile}>
-                                                <img onClick={() => {dispatch({ type: 'CREATE_NOTIFICATION_ROUTE' })}}  src={Bell} alt="Bell Icon"/>
+                                                <img
+                                                    onClick={() => {
+                                                        dispatch({
+                                                            type: "CREATE_NOTIFICATION_ROUTE",
+                                                        });
+                                                    }}
+                                                    src={Bell}
+                                                    alt="Bell Icon"
+                                                />
                                             </Link>
                                         )}
                                         <ReactTooltip
@@ -236,7 +252,7 @@ const Menu = () => {
                                         >
                                             <div
                                                 className="text-uppercase text-center"
-                                                style={{width: "200px"}}
+                                                style={{ width: "200px" }}
                                             >
                                                 no unread notification
                                             </div>
@@ -244,8 +260,8 @@ const Menu = () => {
                                     </li>
                                     <li className="px-sm-3 px-0 scale-75">
                                         <Link to={ROUTES.profile}>
-                                            <Avatar className="user-avatar"/>
-                                            <UserTier/>
+                                            <Avatar className="user-avatar" />
+                                            <UserTier />
                                         </Link>
                                     </li>
                                     <DressupModal
@@ -253,22 +269,22 @@ const Menu = () => {
                                         isModalOpen={isDressUPModalOpen}
                                         onSave={(res) => {
                                             updateAvatarSet({
-                                                variables: {...res},
-                                            })
+                                                variables: { ...res },
+                                            });
                                         }}
                                     />
                                 </ul>
                             )}
                         </div>
-                        <CurrencyChoice/>
+                        <CurrencyChoice />
                         <button
                             type="button"
                             className="menu__toggler"
                             onClick={() => setActive(!active)}
                         >
-                            <span/>
-                            <span/>
-                            <span/>
+                            <span />
+                            <span />
+                            <span />
                         </button>
                     </div>
 
@@ -292,8 +308,8 @@ const Menu = () => {
                                                             {subLink.isDressup ? (
                                                                 <div
                                                                     onClick={() => {
-                                                                        setActive(false)
-                                                                        setIsDressUPModalOpen(true)
+                                                                        setActive(false);
+                                                                        setIsDressUPModalOpen(true);
                                                                     }}
                                                                     className="fw-500 text-light fs-20px"
                                                                 >
@@ -309,7 +325,7 @@ const Menu = () => {
                                                                 </Link>
                                                             )}
                                                         </li>
-                                                    )
+                                                    );
                                                 })}
                                             </ul>
                                         )}
@@ -320,7 +336,7 @@ const Menu = () => {
                     </div>
                 </div>
             </nav>
-        )
-}
+        );
+};
 
-export default Menu
+export default Menu;
