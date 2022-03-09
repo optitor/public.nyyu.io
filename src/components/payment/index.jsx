@@ -143,7 +143,7 @@ const Payment = () => {
     
     const initPaypal = () => {
         setPayPalLoading(true);
-        createPayPalOrder({variables: {roundId: currentRound, currency_code: 'USD'}});
+        createPayPalOrder({variables: {roundId: currentRound, currencyCode: 'USD'}});
     }
 
     let orderCaptured = false;
