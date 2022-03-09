@@ -77,7 +77,7 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn, resend, load
                                             onClick={(e) => resend(e)}
                                         >
                                             <div className="d-flex align-items-center gap-2">
-                                                <div className="mt-5px">
+                                                <div className="mt-4px">
                                                     {loading ? <CustomSpinner sm /> : <></>}
                                                 </div>
                                                 <div>Resend</div>
