@@ -70,13 +70,6 @@ export default function InternalWallet() {
         return _.sumBy(Object.values(myAssets), "balance") ?? 0
     }, [myAssets]);
 
-    const depositAssets = useMemo(() => {
-        const temp = {...myAssets};
-        if(temp['NDB']) delete temp['NDB'];
-        if(temp['VOLT']) delete temp['VOLT'];
-        return { ...temp };
-    }, [myAssets]);
-
     useEffect(() => {
         const get_BTCPrice = () => {
             axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
@@ -137,7 +130,7 @@ export default function InternalWallet() {
             }, 1000 * REFRESH_TIME);
 
             return () => clearInterval(interval1);
-        })()
+        })();
     }, [Object.keys(myAssets).length]);
 
     const loadingSection = !myAssets;
@@ -278,7 +271,6 @@ export default function InternalWallet() {
                             <DepositModal
                                 showModal={isDepositOpen}
                                 setShowModal={setIsDepositOpen}
-                                myAssets={Object.values(depositAssets)}
                             />
                         )}
                     </div>
@@ -292,7 +284,7 @@ export default function InternalWallet() {
                                     <CustomSpinner />
                                 </div>
                             )}
-                            {!loadingOfAssets && _.map(_.orderBy(myAssets, ["balance"], ["desc"]), (item) => (
+                            {!loadingOfAssets && _.map(_.orderBy(myAssets, ["balance", "tokenSymbol"], ["desc", "asc"]), (item) => (
                                 <Asset item={item} key={item.tokenName} />
                             ))}
                             {!loadingOfAssets && Object.values(myAssets).length === 0 && (
