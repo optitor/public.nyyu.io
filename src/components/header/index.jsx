@@ -17,8 +17,9 @@ import { UPDATE_AVATARSET } from "../../apollo/graghqls/mutations/AvatarComponen
 import Avatar from "../dress-up/avatar";
 import UserTier from "./user-tier";
 import ReactTooltip from "react-tooltip";
+import { profile_tabs } from "../../utilities/staticData";
 
-const Menu = () => {
+const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch();
     // Webservice
     const { data: user_data } = useQuery(GET_USER);
@@ -219,31 +220,26 @@ const Menu = () => {
                                         Sale
                                     </Link>
                                     <li className="scale-75 cursor-pointer">
-                                        {newNotification ? (
-                                            <Link to={ROUTES.profile}>
-                                                <img
-                                                    onClick={() => {
-                                                        dispatch({
-                                                            type: "CREATE_NOTIFICATION_ROUTE",
-                                                        });
-                                                    }}
-                                                    src={NotificationBell}
-                                                    alt="Bell Icon"
-                                                />
-                                            </Link>
-                                        ) : (
-                                            <Link to={ROUTES.profile}>
-                                                <img
-                                                    onClick={() => {
-                                                        dispatch({
-                                                            type: "CREATE_NOTIFICATION_ROUTE",
-                                                        });
-                                                    }}
-                                                    src={Bell}
-                                                    alt="Bell Icon"
-                                                />
-                                            </Link>
-                                        )}
+                                        <Link to={ROUTES.profile}>
+                                            <img
+                                                onClick={
+                                                    isBrowser &&
+                                                    window.location.pathname === ROUTES.profile
+                                                        ? () => {
+                                                              setTabIndex(1);
+                                                              setCurrentProfileTab(profile_tabs[1]);
+                                                              setTab(1);
+                                                          }
+                                                        : () => {
+                                                              dispatch({
+                                                                  type: "CREATE_NOTIFICATION_ROUTE",
+                                                              });
+                                                          }
+                                                }
+                                                src={newNotification ? NotificationBell : Bell}
+                                                alt="Bell Icon"
+                                            />
+                                        </Link>
                                         <ReactTooltip
                                             id="bell-icon-tooltip"
                                             place="bottom"
@@ -260,7 +256,14 @@ const Menu = () => {
                                     </li>
                                     <li className="px-sm-3 px-0 scale-75">
                                         <Link to={ROUTES.profile}>
-                                            <Avatar className="user-avatar" />
+                                            <Avatar
+                                                onClick={() => {
+                                                    dispatch({
+                                                        type: "DISABLE_NOTIFICATION_ROUTE",
+                                                    });
+                                                }}
+                                                className="user-avatar"
+                                            />
                                             <UserTier />
                                         </Link>
                                     </li>
