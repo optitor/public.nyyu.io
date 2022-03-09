@@ -6,22 +6,29 @@ import { useQuery, useMutation } from "@apollo/client";
 import { COLOR_LOAD, COLOR_OFF, COLOR_ON } from "../../utilities/staticData";
 import { GET_NOTICATION_TYPES } from "../../apollo/graghqls/querys/Notification";
 import { USER_NOTIFICATION_SETTING } from "../../apollo/graghqls/mutations/Notification";
+import { GET_USER } from "../../apollo/graghqls/querys/Auth";
 
 export default function NotificationSetting() {
     // Containers
-    const user = useSelector((state) => state.auth.user);
-    const setting = user.notifySetting;
-    const [loadingSection, setLoadingSection] = useState(true);
+    const [user, setUser] = useState(null);
     const [pendingSwitch, setPendingSwitch] = useState(false);
     const [tempSetting, setTempSetting] = useState([]);
-    const [notificationTypeList, setNotificationTypeList] = useState([]);
+    const setting = user?.notifySetting;
 
-    //Webservice
+    const [notificationTypeList, setNotificationTypeList] = useState(null);
+    const loadingSection = !(user && notificationTypeList);
+
+    // Webservice
+    useQuery(GET_USER, {
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+            setUser(data.getUser);
+        },
+    });
     useQuery(GET_NOTICATION_TYPES, {
         onCompleted: (data) => {
-            setLoadingSection(false);
             setNotificationTypeList(
-                data.getNotificationTypes.sort((type1, type2) => type2.index - type1.index)
+                data.getNotificationTypes?.sort((type1, type2) => type2.index - type1.index)
             );
         },
     });
@@ -62,25 +69,25 @@ export default function NotificationSetting() {
         return sMask;
     };
     useEffect(() => {
-        setTempSetting(
-            notificationTypeList
-                ? notificationTypeList.map((n) => {
-                      const settingBinaryString = createBinaryString(setting)
-                          .slice(35 - notificationTypeList?.length, 35)
-                          .split("")
-                          .reverse()
-                          .join("");
-                      console.log(settingBinaryString);
-                      return {
-                          index: n.index,
-                          type: n.type,
-                          status: Number(settingBinaryString[n.index]) !== 0,
-                          loading: false,
-                      };
-                  })
-                : []
-        );
-    }, [notificationTypeList]);
+        if (setting)
+            setTempSetting(
+                notificationTypeList
+                    ? notificationTypeList.map((n) => {
+                          const settingBinaryString = createBinaryString(setting)
+                              .slice(35 - notificationTypeList?.length, 35)
+                              .split("")
+                              .reverse()
+                              .join("");
+                          return {
+                              index: n.index,
+                              type: n.type,
+                              status: Number(settingBinaryString[n.index]) !== 0,
+                              loading: false,
+                          };
+                      })
+                    : []
+            );
+    }, [notificationTypeList, setting]);
 
     // Render
     if (loadingSection)
