@@ -1094,6 +1094,13 @@
     }
 }
 
+div.wallet_balances {
+    img.balance_img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
 .bid-activity {
     @include custom-scroll(250px);
     li {

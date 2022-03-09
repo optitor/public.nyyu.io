@@ -16,7 +16,7 @@ import { Icon } from "@iconify/react";
 
 const QUOTE = "USDT";
 const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
-const REFRESH_TIME = 30;
+const REFRESH_TIME = 100;
 
 const Asset = ({ item }) => {
     const currency = useSelector(state => state.placeBid.currency);
@@ -25,7 +25,7 @@ const Asset = ({ item }) => {
     return (
         <tr>
             <td className="d-flex align-items-center ps-2">
-                <img src={item.symbol} alt="coin icon" className="me-2" />
+                <img className=" me-2 balance_img" src={item.symbol} alt="coin icon" />
                 <div>
                     <p className="coin-abbr text-light">{item.tokenName}</p>
                 </div>
@@ -117,6 +117,8 @@ export default function InternalWallet() {
                         item.tokenSymbol === "VOLT"
                     ) {
                         price = 0;
+                    } else if(item.tokenSymbol === 'USDT') {
+                        price = 1;
                     } else {
                         const res = await axios.get(TICKER_price, {
                             params: { symbol: item.tokenSymbol + QUOTE },
@@ -282,7 +284,7 @@ export default function InternalWallet() {
                     </div>
                 </div>
 
-                <div>
+                <div className="wallet_balances">
                     <table className="my-3">
                         <tbody>
                             {loadingOfAssets && (
