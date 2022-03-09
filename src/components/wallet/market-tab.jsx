@@ -4,6 +4,7 @@ import React, { useReducer, useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import axios from "axios";
+import Cookies from 'js-cookie';
 import NumberFormat from "react-number-format";
 import { numberSign, numFormatter } from "../../utilities/number";
 import icons from "base64-cryptocurrency-icons";
@@ -191,6 +192,7 @@ export default function MarketTab() {
 
     const [favours, setFavours] = useState({});
 
+
     const InitialFavours = {
         BTC: {symbol: 'BTC'},
         ETH: {symbol: 'ETH'},
@@ -203,11 +205,11 @@ export default function MarketTab() {
     };
 
     useEffect(() => {
-        if(sessionStorage.getItem('NDB_FavCoins')) {
-            setFavours(JSON.parse(sessionStorage.getItem('NDB_FavCoins')));
+        if(Cookies.get('NDB_FavCoins')) {
+            setFavours(JSON.parse(Cookies.get('NDB_FavCoins')));
         } else {
             setFavours(InitialFavours);
-            sessionStorage.setItem('NDB_FavCoins', JSON.stringify(InitialFavours));
+            Cookies.set('NDB_FavCoins', JSON.stringify(InitialFavours));
         }
     }, []);
 
@@ -245,13 +247,13 @@ export default function MarketTab() {
             setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
-            sessionStorage.setItem('NDB_FavCoins', JSON.stringify(favours));
+            Cookies.set('NDB_FavCoins', JSON.stringify(favours));
             
             return;
         }
         const temp = { ...favours, [item.symbol]: item };
         setFavours(temp);
-        sessionStorage.setItem('NDB_FavCoins', JSON.stringify(temp));
+        Cookies.set('NDB_FavCoins', JSON.stringify(temp));
     };
 
     // console.log(loading)

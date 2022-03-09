@@ -1,8 +1,11 @@
-import React, {useEffect, useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useQuery, useMutation } from "@apollo/client";
+import Cookies from 'js-cookie';
+import { Link } from "gatsby";
+import { isBrowser } from "./../../utilities/auth";
+import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
 import ReactTooltip from "react-tooltip";
-import {useQuery, useMutation} from "@apollo/client";
-import {Link} from "gatsby";
 
 import {useAuth} from "../../hooks/useAuth";
 import {setCurrentAuthInfo, getAuthInfo} from "../../redux/actions/authAction";
@@ -15,9 +18,7 @@ import Avatar from "../dress-up/avatar";
 import UserTier from "./user-tier";
 import { profile_tabs } from "../../utilities/staticData";
 import {GET_USER} from "../../apollo/graghqls/querys/Auth";
-import {isBrowser} from "../../utilities/auth";
 import {ROUTES} from "../../utilities/routes";
-import {Bell, Logo, NotificationBell} from "../../utilities/imgImport";
 import {GET_ALL_UNREAD_NOTIFICATIONS} from "../../apollo/graghqls/querys/Notification";
 import {UPDATE_AVATARSET} from "../../apollo/graghqls/mutations/AvatarComponent";
 
@@ -40,6 +41,13 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             console.log("received Mutation data", err);
         },
     });
+
+    // Remove the cookies for NDB when component will unmount.
+    useEffect(() => {
+        return () => {
+            Cookies.remove('NDB_FavCoins');
+        };
+    }, []);
 
     // Containers
     const auth = useAuth();
