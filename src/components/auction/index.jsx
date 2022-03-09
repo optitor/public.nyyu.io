@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
 import { Tabs } from "react-tabs"
 
 import Seo from "../seo"
@@ -16,14 +15,15 @@ import PresalePlaceOrder from "./presale-place-order"
 
 const Auction = () => {
     const auction = useAuction()
-    const currencyId = useSelector((state) => state?.placeBid.currencyId)
     const { auctions, presales, entireRounds, setEntireRounds, currentRound, currentRoundNumber, optCurrentRound, setOptCurrentRound, isAuction } = auction
 
     useEffect(() => {
-        const tempRounds = auctions?.concat(presales)
-        tempRounds && tempRounds.length && setEntireRounds(tempRounds.sort((a, b) => {
-            return a.round - b.round
-        }))
+        if (auctions || presales) {
+            const tempRounds = auctions?.concat(presales)
+            tempRounds && tempRounds.length && setEntireRounds(tempRounds.sort((a, b) => {
+                return a.round - b.round
+            }))
+        }
     }, [auctions, presales])
 
     const [loading, setLoading] = useState(true)

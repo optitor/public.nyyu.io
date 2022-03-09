@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react"
 import { useQuery, useMutation } from "@apollo/client"
+
+import CustomSpinner from "../common/custom-spinner"
 import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
 import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification"
-import CustomSpinner from "../common/custom-spinner"
 
 export default function NotificationRecent() {
     const [loadingSection, setLoadingSection] = useState(true)
-    const [last, setLast] = useState(null)
 
     const [NTList, setNTList] = useState([])
 
-    const { data: ntf_list, loading } = useQuery(GET_NOTIFICATIONS, {
+    const { data: ntf_list } = useQuery(GET_NOTIFICATIONS, {
         onCompleted: () => setLoadingSection(false),
         fetchPolicy: "network-only",
     })
@@ -21,10 +21,6 @@ export default function NotificationRecent() {
         if (!tempList) return
         setNTList((d) => [...d, ...tempList])
     }, [tempList])
-
-    const loadMore = () => {
-        if (tempList.length > 0) setLast(tempList ? NTList.slice(-1)[0] : null)
-    }
 
     const [setNotificationReadFlag] = useMutation(SET_NOTIFICATION_READ_FLAG, {
         onCompleted: (data) => {
@@ -78,7 +74,7 @@ export default function NotificationRecent() {
                                             ? "deactive"
                                             : "active"
                                     }`}
-                                ></div>
+                                />
                                 <p>{item?.msg}</p>
                             </div>
                         ))

@@ -1,14 +1,14 @@
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import { useState } from "react"
 import Modal from "react-modal"
-import { CloseIcon } from "../../utilities/imgImport"
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import CustomSpinner from "../common/custom-spinner"
 import { FormInput } from "../common/FormControl"
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { CloseIcon } from "../../utilities/imgImport"
 
 export default function DepositMissingModal({ isOpen, setIsOpen }) {
-    const [sentCode, setSentCode] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     return (

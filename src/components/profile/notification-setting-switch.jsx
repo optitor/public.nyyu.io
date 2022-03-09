@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react"
 import { useQuery, useMutation } from "@apollo/client"
 import Switch from "react-switch"
+
+import CustomSpinner from "../common/custom-spinner"
 import { GET_NOTICATION_TYPES } from "../../apollo/graghqls/querys/Notification"
 import { USER_NOTIFICATION_SETTING } from "../../apollo/graghqls/mutations/Notification"
 import { GET_USER } from "../../apollo/graghqls/querys/Auth"
-
 import { COLOR_LOAD, COLOR_OFF, COLOR_ON } from "../../utilities/staticData"
-import CustomSpinner from "../common/custom-spinner"
 
 export default function NotificationSetting() {
     // Containers
     const [loadingSection, setLoadingSection] = useState(true)
     const [pendingSwitch, setPendingSwitch] = useState(false)
-    const setting = user_data?.getUser.notifySetting
     const [tempSetting, setTempSetting] = useState([])
     const [notificationTypeList, setNotificationTypeList] = useState([])
+    const setting = user_data?.getUser.notifySetting
 
     //Webservice
     const { data: user_data } = useQuery(GET_USER, {
@@ -125,7 +125,7 @@ export default function NotificationSetting() {
                                 }
                                 onChange={() => setChecked(index)}
                                 checked={
-                                    tempSetting[index]?.status ? true : false
+                                    !!tempSetting[index]?.status
                                 }
                             />
                         </div>

@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-import { Icon } from "@iconify/react"
 import Modal from "react-modal"
-import InnerHTML from "dangerously-set-html-content"
-// import PrivacyHTML from "../../assets/files/Privacy Policy.html"
+import { Icon } from "@iconify/react"
 
 export default function PrivacyPolicy({ agree, setAgree, lang }) {
     const [open, setOpen] = useState(false)

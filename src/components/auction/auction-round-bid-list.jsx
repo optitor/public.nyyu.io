@@ -3,14 +3,15 @@ import { useSelector } from "react-redux"
 import _ from "lodash"
 import { useQuery } from "@apollo/client"
 
-import { GET_BID } from "../../apollo/graghqls/querys/Auction"
-import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
-
 import { useAuction } from "../../providers/auction-context"
 import CustomSpinner from "../common/custom-spinner"
 
 import AuctionListHeader from "../common/AuctionListHeader"
 import AuctionList from "../common/AuctionList"
+
+import { GET_BID } from "../../apollo/graghqls/querys/Auction"
+import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
+import { GET_PRESALE_LIST_BY_ROUND } from "../../apollo/graghqls/querys/Presale"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
@@ -30,19 +31,22 @@ export default function AuctionRoundBidList() {
     )
 
     // Webservices
-    const { startPolling, stopPolling } = useQuery(GET_BIDLIST_BY_ROUND, {
-        variables: {
+    const { startPolling, stopPolling } = useQuery(isAuction ? GET_BIDLIST_BY_ROUND : GET_PRESALE_LIST_BY_ROUND, {
+        variables: isAuction ? {
             round: currentRoundNumber,
+        } : {
+            presaleId: optCurrentRound.id
         },
         onCompleted: (data) => {
             let list = _.orderBy(
-                data?.getBidListByRound,
-                ["ranking", "tokenPrice"],
+                isAuction ? data?.getBidListByRound : data?.getPresaleOrders,
+                isAuction ? ["ranking", "tokenPrice"] : ["ndbAmount"],
                 ["asc", "desc"]
             )
             list = list.map((item) => ({
                 ...item,
-                totalAmount: item.tokenPrice * item.tokenAmount,
+                totalAmount: isAuction ? item.tokenPrice * item.tokenAmount : item.ndbAmount * item.ndbPrice,
+                ranking: isAuction ? (item.ranking ? item.ranking : list.indexOf(item) + 1) : list.indexOf(item) + 1,
             }))
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
@@ -74,20 +78,30 @@ export default function AuctionRoundBidList() {
 
     useEffect(() => {
         if (currentRoundBidList && currentRoundBidList.length) {
-            if (currentRoundBidList.length > limitDisplayBidCount ) {
-                const currentUserBidInfo = currentRoundBidList?.filter(
-                    (auction) => auction.userId === currentUser.id
-                )[0]
-                if (currentUserBidInfo && currentUserBidInfo.ranking > limitDisplayBidCount) {
-                    setCurrentUserBidData(currentUserBidInfo)
-                    setCurrentAuctionUserExist(true)
-                    setDisplayedBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 1))
+            if (isAuction) {
+                if (currentRoundBidList.length > limitDisplayBidCount ) {
+                    const currentUserBidInfo = currentRoundBidList?.filter(
+                        (auction) => auction.userId === currentUser.id
+                    )[0]
+                    if (currentUserBidInfo && currentUserBidInfo.ranking > limitDisplayBidCount) {
+                        setCurrentUserBidData(currentUserBidInfo)
+                        setCurrentAuctionUserExist(true)
+                        setDisplayedBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 1))
+                    } else {
+                        setDisplayedBidList(currentRoundBidList.slice(0, limitDisplayBidCount))
+                    }
                 } else {
-                    setDisplayedBidList(currentRoundBidList.slice(0, limitDisplayBidCount))
+                    setDisplayedBidList(currentRoundBidList)
                 }
             } else {
+                if (currentRoundBidList > limitDisplayBidCount) {
+                    const currentUserPresaleInfo = currentRoundBidList?.filter(
+                        (auction) => auction.userId === currentUser.id
+                    )[0]
+                }
                 setDisplayedBidList(currentRoundBidList)
             }
+
         }
 
     }, [currentRoundBidList, currentUser.id])
@@ -114,8 +128,8 @@ export default function AuctionRoundBidList() {
                         key={index}
                         ranking={item.ranking}
                         fullName={item.prefix + "." + item.name}
-                        tokenPrice={item.tokenPrice}
-                        mainAmount={item.tokenAmount * item.tokenPrice}
+                        tokenPrice={isAuction ? item.tokenPrice : item.ndbPrice}
+                        mainAmount={isAuction ? item.tokenAmount * item.tokenPrice : item.ndbAmount}
                         winningResult={item.status !== 0 && item.status === 1 }
                         isCurrentUser={item.userId === currentUser.id}
                     />

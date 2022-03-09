@@ -1,8 +1,9 @@
 import React from "react"
 import { useState } from "react"
 import Modal from "react-modal"
-import { CloseIcon } from "../../utilities/imgImport"
+
 import CustomSpinner from "../common/custom-spinner"
+import { CloseIcon } from "../../utilities/imgImport"
 
 export default function UnlockAccountModal({ isOpen, setIsOpen }) {
     const [loading, setLoading] = useState(false)
