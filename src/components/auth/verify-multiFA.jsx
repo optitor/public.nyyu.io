@@ -1,29 +1,28 @@
-import React, { useState, useReducer } from "react"
-import { Link } from "gatsby"
-import { Input } from "../common/FormControl"
-import { useSignIn2FA } from "../../apollo/model/auth"
-import CustomSpinner from "../common/custom-spinner"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import React, { useState, useReducer } from "react";
+import { Link } from "gatsby";
+import { Input } from "../common/FormControl";
+import { useSignIn2FA } from "../../apollo/model/auth";
+import CustomSpinner from "../common/custom-spinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
-const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn }) => {
+const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn, resend, loading }) => {
     const [code, setCode] = useReducer((old, action) => ({ ...old, ...action }), {
         app: "",
         phone: "",
         email: "",
-    })
-    const [codeError, setCodeError] = useState("")
+    });
+    const [codeError, setCodeError] = useState("");
 
-    const [signin2faMutation, signin2faMutationResults] = useSignIn2FA()
+    const [signin2faMutation, signin2faMutationResults] = useSignIn2FA();
 
     const confirmCodeClick = (e) => {
-        e.preventDefault()
-        let error = false
-        setCodeError("")
-
+        e.preventDefault();
+        let error = false;
+        setCodeError("");
         if (!code || code.length === 0) {
-            setCodeError("Invalid Code.")
-            error = true
+            setCodeError("Invalid Code.");
+            error = true;
         }
         if (!error)
             signin2faMutation(
@@ -33,13 +32,13 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn }) => {
                     return {
                         key: step,
                         value: code[step],
-                    }
+                    };
                 })
-            )
-    }
+            );
+    };
 
-    const pending = signin2faMutationResults.loading
-    const webserviceError = signin2faMutationResults?.data?.confirm2FA?.status === "Failed"
+    const pending = signin2faMutationResults.loading;
+    const webserviceError = signin2faMutationResults?.data?.confirm2FA?.status === "Failed";
 
     return (
         <>
@@ -68,9 +67,22 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn }) => {
                                         )}
                                     </div>
                                     <div className="form-group text-white resend-2fa">
-                                        <Link className="signup-link" to="#">
-                                            Resend
-                                        </Link>
+                                        <button
+                                            disabled={loading}
+                                            className={`signup-link btn mt-0 pe-0 py-0 text-capitalize cursor-pointer ${
+                                                loading
+                                                    ? "text-secondary"
+                                                    : "text-success text-underline"
+                                            }`}
+                                            onClick={(e) => resend(e)}
+                                        >
+                                            <div className="d-flex align-items-center gap-2">
+                                                <div className="mt-5px">
+                                                    {loading ? <CustomSpinner sm /> : <></>}
+                                                </div>
+                                                <div>Resend</div>
+                                            </div>
+                                        </button>
                                     </div>
                                 </div>
                             )
@@ -102,7 +114,7 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn }) => {
                 </Link>
             </p>
         </>
-    )
-}
+    );
+};
 
-export default VerifyMutliFA
+export default VerifyMutliFA;
