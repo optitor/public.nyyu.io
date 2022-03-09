@@ -1,10 +1,11 @@
+import React, { useState } from "react"
 import Select from "react-select"
 import Loading from "../common/Loading"
-import React, { useState } from "react"
+
+import { useVerification } from "./verification-context"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
 import { VerificationDocumentTypes } from "../../utilities/staticData"
-import { useVerification } from "./verification-context"
 
 export default function StepOne() {
     // Containers
@@ -59,19 +60,19 @@ export default function StepOne() {
                             <div className="requirements">
                                 <p className="fs-14px">Photo requirements:</p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>Upload entire document clearly</div>
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>Don`t fold the document</div>
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>No image from another image or device</div>
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>No paper-base document</div>
                                 </p>
                             </div>

@@ -6,9 +6,9 @@ import { useDispatch } from "react-redux";
 import { isBrowser } from "../../utilities/auth";
 import axios from 'axios';
 import { ROUTES } from "../../utilities/routes";
-import { SUPPORTED_CURRENCIES } from './../../utilities/staticData2';
+import { SUPPORTED_CURRENCIES } from "../../utilities/staticData2";
 import { setCurrencyInfo, setCurrencyRates } from "../../redux/actions/bidAction";
-import { EuropeanFlag } from './../../utilities/imgImport';
+import { EuropeanFlag } from "../../utilities/imgImport";
 
 const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.currencyfreaks.com/latest';
 const API_KEY = '49cd7eb3c5f54f638e0e2bb4ce3ba8e2';

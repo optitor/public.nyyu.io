@@ -24,7 +24,7 @@ export default function AuctionRoundDetails() {
         })
     }
 
-    const soldTokensPercentage = (optCurrentRound?.sold / optCurrentRound?.totalToken) * 100;
+    const soldTokensPercentage = (optCurrentRound?.sold / (isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)) * 100;
 
     useEffect(() => {
         const timer = setInterval(() => {

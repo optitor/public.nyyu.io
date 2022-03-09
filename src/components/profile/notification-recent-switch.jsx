@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
+import Pagination from "react-js-pagination";
+
+import CustomSpinner from "../common/custom-spinner";
 import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification";
 import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification";
-import CustomSpinner from "../common/custom-spinner";
-import Pagination from "react-js-pagination";
+
+
 
 export default function NotificationRecent() {
     // Containers
@@ -81,7 +84,7 @@ export default function NotificationRecent() {
                                             ? "deactive"
                                             : "active"
                                     }`}
-                                ></div>
+                                />
                                 <p>{item?.msg}</p>
                             </div>
                         ))}

@@ -109,7 +109,7 @@ const Profile = () => {
 
         return (
             <>
-                <div className={`status ${config ? "active" : "deactive"} mt-3px`}></div>
+                <div className={`status ${config ? "active" : "deactive"} mt-3px`}/>
                 <div className="security-item">
                     <p className="security-name">{title}</p>
 

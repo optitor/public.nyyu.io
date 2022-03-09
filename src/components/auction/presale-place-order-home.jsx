@@ -38,28 +38,32 @@ export default function PresalePlaceOrderHome() {
                     step={1}
                 />
             </div>
-            <div className="d-flex align-items-center">
-                <span className="range-label mb-0">Total price</span>
-                <div className="d-flex flex-column justify-content-center align-items-end">
-                    <input
-                        className="total-input"
-                        type="text"
-                        value={numberWithCommas(
-                            Number(
-                                optCurrentRound?.tokenPrice * amount,
-                                " "
-                            )
-                        )}
-                        readOnly
-                    />
-                    <div className="text-white fw-bold fs-14px mt-8px mr-18px">
-                        PRICE PER TOKEN
-                        <span className="txt-mountainMeadow">
+            <div className="row">
+                <div className="col-md-4"><div className="range-label mt-15px">Total price</div></div>
+                <div className="col-md-8">
+                    <div className="w-100 d-flex justify-content-between align-items-center">
+                        <div className="w-100 d-flex flex-column justify-content-center align-items-end">
+                            <input
+                                className="presale-total-input"
+                                type="text"
+                                value={numberWithCommas(
+                                    Number(
+                                        optCurrentRound?.tokenPrice * amount,
+                                        " "
+                                    )
+                                )}
+                                readOnly
+                            />
+                            <div className="text-white fw-bold fs-14px mt-8px mr-18px">
+                                PRICE PER TOKEN
+                                <span className="txt-mountainMeadow">
                             {` ${optCurrentRound.tokenPrice}`}
                         </span>
+                            </div>
+                        </div>
+                        <h3 className="symbol-label mt-10px">{Currencies[0].label}</h3>
                     </div>
                 </div>
-                <h3 className="symbol-label">{Currencies[0].label}</h3>
             </div>
             <div className="mt-3 mb-1">
                 <p className="text-secondary fw-500 text-[#959595]">
