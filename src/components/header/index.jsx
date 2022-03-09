@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useQuery, useMutation } from "@apollo/client";
-import Cookies from 'js-cookie';
 import { Link } from "gatsby";
 import { isBrowser } from "./../../utilities/auth";
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
@@ -42,12 +41,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         },
     });
 
-    // Remove the cookies for NDB when component will unmount.
-    useEffect(() => {
-        return () => {
-            Cookies.remove('NDB_FavCoins');
-        };
-    }, []);
 
     // Containers
     const auth = useAuth();

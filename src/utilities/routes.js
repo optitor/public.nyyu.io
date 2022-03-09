@@ -12,7 +12,7 @@ export const ROUTES = {
     payment: "/app/payment/",
     auction: "/app/auction/",
     home: "/",
-    faq: "/support/",
+    faq: "/app/support/",
     wallet: "/app/wallet/",
     admin: "/admin",
     presale_auction: "/pre-sale/auction",
