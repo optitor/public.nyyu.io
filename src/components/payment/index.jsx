@@ -178,8 +178,12 @@ const Payment = () => {
         createPayPalOrder({variables: {roundId: currentRound, currency_code: 'USD'}});
     }
 
-    if (window.location.href.includes('token=')) {
-        let token = window.location.href.split('token=')[1]
+    let orderCaptured = false;
+
+    if (window.location.href.includes('token=') && !orderCaptured) {
+        var url = new URL(window.location.href);
+        let token = url.searchParams.get("token");
+        orderCaptured = true;
         captureOrderForAuction({variables: {orderId: token}});
     }
 
