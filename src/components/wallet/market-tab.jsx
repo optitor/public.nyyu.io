@@ -44,39 +44,38 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const { chart, min, price, percent, volume } = state;
 
     useEffect(() => {
-        if(!data.symbol) return;
-        axios
-            .get(KLINE_ENDPOINT, {
-                params: {
-                    symbol: data.symbol + QUOTE,
-                    interval: KLINE_INTERVAL,
-                    startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
-                },
-            })
-            .then((res) => {
-                const data = res.data.map((c) => c[1])
-
-                setState({
-                    min: Math.min(data),
-                    max: Math.max(data),
-                    chart: data,
-                })
-            });
-        const getTicker24hr = () => {
+        (async function() {
             if(!data.symbol) return;
-            axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } }).then((res) => {
+            const res = await axios.get(KLINE_ENDPOINT, {
+                    params: {
+                        symbol: data.symbol + QUOTE,
+                        interval: KLINE_INTERVAL,
+                        startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
+                    },
+                });
+            const chartData = res.data.map((c) => c[1]);
+
+            setState({
+                min: Math.min(chartData),
+                max: Math.max(chartData),
+                chart: chartData,
+            })
+            const getTicker24hr = async () => {
+                if(!data.symbol) return;
+                const res = await axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } });
                 setState({
                     price: res.data.lastPrice,
                     percent: res.data.priceChangePercent,
                     volume: res.data.quoteVolume,
                 })
-            })
-        };
-        getTicker24hr();
-        const interval1 = setInterval(() => {
+            };
+
             getTicker24hr();
-        }, 1000 * REFRESH_TIME);
-        return () => clearInterval(interval1);
+            const interval1 = setInterval(() => {
+                getTicker24hr()
+            }, 1000 * REFRESH_TIME);
+            return () => clearInterval(interval1);
+        })();
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
     
     return (
