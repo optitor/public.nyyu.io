@@ -7,7 +7,7 @@ import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import DeleteConfirmModal from '../../DeleteConfirmModal';
 import EditTokenModal from '../../editModals/EditTokenModal';
-import { delete_Token } from './../../../../redux/actions/tokenAction'
+import { delete_Token } from "../../../../redux/actions/tokenAction"
 
 const TokenDataRow = ({ datum = {} }) => {
     const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const TokenDataRow = ({ datum = {} }) => {
             <DataRow>
                 <div className='image'>
                     <Main>
-                        <img src={svgToDataURL(datum.symbol)} alt="token" />
+                        <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" />
                     </Main>
                 </div>
                 <div className='name'>
@@ -65,7 +65,7 @@ const TokenDataRow = ({ datum = {} }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className='left' style={{width: '10%'}}>
-                            <img src={svgToDataURL(datum.symbol)} alt="token" />
+                            <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" />
                         </div>
                         <div className='left' style={{width: '60%'}}>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.tokenName}</p>

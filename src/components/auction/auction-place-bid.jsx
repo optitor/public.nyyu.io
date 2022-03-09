@@ -15,7 +15,7 @@ import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 
 export default function AuctionPlaceBid() {
     // Containers
-    const auction = useAuction()
+    const auction = useAuction();
     const dispatch = useDispatch()
     const { optCurrentRound, getBid, isBid } = auction
     const [amount, setAmount] = useState(1)

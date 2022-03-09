@@ -13,6 +13,7 @@ import { cryptoSymbol } from 'crypto-symbol';
 import _ from 'lodash';
 import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
+import CustomSpinner from './../common/custom-spinner';
 
 const QUOTE = "USDT"
 
@@ -73,7 +74,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
         };
         getTicker24hr();
         const interval1 = setInterval(() => {
-            getTicker24hr()
+            getTicker24hr();
         }, 1000 * REFRESH_TIME);
         return () => clearInterval(interval1);
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -177,7 +178,7 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
                     <p className="coin-name">{data.name}</p>
                 </div>
             </td>
-            <td className="mobile-not text-center"></td>
+            <td className="mobile-not text-center"/>
         </tr>
     )
 }
@@ -189,17 +190,27 @@ export default function MarketTab() {
     const [cryptoList, setCryptoList] = useState({});
     const [sortOption, setSortOption] = useState({});
 
+    const [favours, setFavours] = useState({});
+
     const InitialFavours = {
-        BTC: {symbol: 'BTC', name: cryptoSymbolList['BTC']},
-        ETH: {symbol: 'ETH', name: cryptoSymbolList['ETH']},
-        SOL: {symbol: 'SOL', name: cryptoSymbolList['SOL']},
-        DOGE: {symbol: 'DOGE', name: cryptoSymbolList['DOGE']},
-        SHIB: {symbol: 'SHIB', name: cryptoSymbolList['SHIB']},
-        LTC: {symbol: 'LTC', name: cryptoSymbolList['LTC']},
-        ADA: {symbol: 'ADA', name: cryptoSymbolList['ADA']},
-        CAKE: {symbol: 'CAKE', name: cryptoSymbolList['CAKE']},
+        BTC: {symbol: 'BTC'},
+        ETH: {symbol: 'ETH'},
+        SOL: {symbol: 'SOL'},
+        DOGE: {symbol: 'DOGE'},
+        SHIB: {symbol: 'SHIB'},
+        LTC: {symbol: 'LTC'},
+        ADA: {symbol: 'ADA'},
+        CAKE: {symbol: 'CAKE'},
     };
-    const [favours, setFavours] = useState(InitialFavours);
+
+    useEffect(() => {
+        if(sessionStorage.getItem('NDB_FavCoins')) {
+            setFavours(JSON.parse(sessionStorage.getItem('NDB_FavCoins')));
+        } else {
+            setFavours(InitialFavours);
+            sessionStorage.setItem('NDB_FavCoins', JSON.stringify(InitialFavours));
+        }
+    }, []);
 
     useEffect(() => {
         axios.get(ALLPRICES).then((res) => {
@@ -223,7 +234,7 @@ export default function MarketTab() {
                 price = Number(res.data.lastPrice);
                 percent = Number(res.data.priceChangePercent);
                 volume = Number(res.data.quoteVolume);
-                assets[favour.symbol] = { ...favour, price, percent, volume };
+                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? item.symbol + 'Coin', price, percent, volume };
             }
             setFavoursData({ ...assets })
         })()
@@ -235,10 +246,13 @@ export default function MarketTab() {
             setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
+            sessionStorage.setItem('NDB_FavCoins', JSON.stringify(favours));
             
             return;
         }
-        setFavours({ ...favours, [item.symbol]: item });
+        const temp = { ...favours, [item.symbol]: item };
+        setFavours(temp);
+        sessionStorage.setItem('NDB_FavCoins', JSON.stringify(temp));
     };
 
     // console.log(loading)
@@ -293,15 +307,23 @@ export default function MarketTab() {
                 </tr>
             </thead>
             <tbody>
-                {searchValue && _.map( _.filter(cryptoList, item => 
-                    item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    item.symbol.toLowerCase().includes(searchValue.toLowerCase())
-                ), item => (
-                    <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
-                ))}
-                {!searchValue && _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
-                    <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
-                ))}
+                {searchValue?
+                    _.map( _.filter(cryptoList, item => 
+                        item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        item.symbol.toLowerCase().includes(searchValue.toLowerCase())
+                    ), item => (
+                        <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                    )) :
+                    _.isEmpty(favoursData)?
+                        (
+                            <div className='d-flex justify-content-center align-items-center mt-4'>
+                                <CustomSpinner />
+                            </div>
+                        ) :
+                        _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
+                            <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                        ))
+                }
             </tbody>
         </table>
     );
