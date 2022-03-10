@@ -120,3 +120,16 @@ export const getStripePaymentFee = (user, allFees, bidAmount) => {
     return stripePaymentFee.toFixed(2);
 };
 
+export const getNDBWalletPaymentFee = (user, allFees, bidAmount) => {
+    // Finding the fee based on the user.
+    const allFeesArray = Object.values(allFees)
+    let userTierLevel = user?.tierLevel;
+    if (userTierLevel === 0)
+        userTierLevel = 1
+    const userFee = allFeesArray.filter(
+        (item) => item?.tierLevel === userTierLevel
+    )[0]?.fee;
+
+    return ((userFee * bidAmount) / 100)
+}
+
