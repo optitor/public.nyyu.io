@@ -5,20 +5,29 @@ import { useQuery } from "@apollo/client";
 import Header from "./../header";
 import Select, { components } from "react-select";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { BTC, DOGE, ETH, Airdrop, Address, Copy2, CloseIcon } from "../../utilities/imgImport";
+import {
+    BTC,
+    DOGE,
+    ETH,
+    Airdrop,
+    Address,
+    Copy2,
+    CloseIcon,
+} from "../../utilities/imgImport";
 import Modal from "react-modal";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Input } from "../common/FormControl";
 import { useWindowSize } from "../../utilities/customHook";
 import AirdropDetail from "../AirdropDetail";
 import MarketTab from "../wallet/market-tab";
-import Transactions from "../wallet/transactions-tab";
+import Transactions from "./transactions/transactions-tab";
 import ReferralTab from "../wallet/referral-tab";
 import StakeTab from "../wallet/stake-tab";
 import BidActivityTab from "../wallet/bid-activity-tab";
 import { GET_BID_LIST_BY_USER } from "../../apollo/graghqls/querys/Bid";
 import InternalWallet from "../wallet/internal-wallet";
 import Seo from "../seo";
+import TransactionsProvider from "./transactions/transactions-context";
 
 const airdrops = [
     {
@@ -91,7 +100,11 @@ const IconOption = (props) => (
 const SelectedValue = (props) => {
     return (
         <SingleValue {...props}>
-            <img src={props.data.icon} style={{ width: 24 }} alt={props.data.label} />
+            <img
+                src={props.data.icon}
+                style={{ width: 24 }}
+                alt={props.data.label}
+            />
             <p>{props.data.label}</p>
         </SingleValue>
     );
@@ -103,18 +116,21 @@ const Wallet = () => {
 
     const copyText = "kjY602GgjsKP23mhs09oOp63bd3n34fsla";
 
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        amount: "",
-        detail_show: false,
-        index: 0,
-        coin: coins[0],
-        copied: false,
-        modalIsOpen: false,
-        airdropModal: false,
-        joinAirdrop: false,
-        facebook_handle: "",
-        telegram_handle: "",
-    });
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            amount: "",
+            detail_show: false,
+            index: 0,
+            coin: coins[0],
+            copied: false,
+            modalIsOpen: false,
+            airdropModal: false,
+            joinAirdrop: false,
+            facebook_handle: "",
+            telegram_handle: "",
+        }
+    );
     const {
         amount,
         detail_show,
@@ -152,7 +168,11 @@ const Wallet = () => {
                             <InternalWallet />
                         </div>
                         <div className="section-history__right col-lg-8 col-md-7">
-                            <Tabs onSelect={() => setState({ detail_show: false })}>
+                            <Tabs
+                                onSelect={() =>
+                                    setState({ detail_show: false })
+                                }
+                            >
                                 <div className="tab-top">
                                     <TabList>
                                         <Tab>market</Tab>
@@ -176,15 +196,20 @@ const Wallet = () => {
                                     <table
                                         className={`${
                                             detail_show &&
-                                            (size.width > 1024 || size.width <= 576) &&
+                                            (size.width > 1024 ||
+                                                size.width <= 576) &&
                                             "d-none"
                                         }`}
                                     >
                                         <thead>
                                             <tr>
-                                                <th className="w-50">Airdrop</th>
+                                                <th className="w-50">
+                                                    Airdrop
+                                                </th>
                                                 <th>Status</th>
-                                                <th className="laptop-not">End</th>
+                                                <th className="laptop-not">
+                                                    End
+                                                </th>
                                                 <th>Reward</th>
                                             </tr>
                                         </thead>
@@ -195,7 +220,9 @@ const Wallet = () => {
                                                     className="airdrop-link"
                                                     onClick={() => {
                                                         handleClick(idx);
-                                                        setState({ airdropModal: true });
+                                                        setState({
+                                                            airdropModal: true,
+                                                        });
                                                     }}
                                                 >
                                                     <td className="w-50">
@@ -217,14 +244,17 @@ const Wallet = () => {
                                                     </td>
                                                     <td
                                                         className={
-                                                            item.status === "Active"
+                                                            item.status ===
+                                                            "Active"
                                                                 ? "coin-status active"
                                                                 : "coin-status deactive"
                                                         }
                                                     >
                                                         {item.status}
                                                     </td>
-                                                    <td className="laptop-not">{item.end}</td>
+                                                    <td className="laptop-not">
+                                                        {item.end}
+                                                    </td>
                                                     <td className="coin-reward">
                                                         ={item.reward} USD
                                                     </td>
@@ -234,7 +264,9 @@ const Wallet = () => {
                                     </table>
                                     <AirdropDetail
                                         clsName={
-                                            (size.width > 1024 || size.width <= 576) && detail_show
+                                            (size.width > 1024 ||
+                                                size.width <= 576) &&
+                                            detail_show
                                                 ? "d-block"
                                                 : "d-none"
                                         }
@@ -243,10 +275,14 @@ const Wallet = () => {
                                     />
                                 </TabPanel>
                                 <TabPanel className="border-0">
-                                    <Transactions />
+                                    <TransactionsProvider>
+                                        <Transactions />
+                                    </TransactionsProvider>
                                 </TabPanel>
                                 <TabPanel>
-                                    <BidActivityTab bids={bidList?.getBidListByUser} />
+                                    <BidActivityTab
+                                        bids={bidList?.getBidListByUser}
+                                    />
                                 </TabPanel>
                             </Tabs>
                         </div>
@@ -267,7 +303,12 @@ const Wallet = () => {
                             role="button"
                             tabIndex="0"
                         >
-                            <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                            <img
+                                width="14px"
+                                height="14px"
+                                src={CloseIcon}
+                                alt="close"
+                            />
                         </div>
                     </div>
                     <Select
@@ -304,12 +345,16 @@ const Wallet = () => {
                                     <img src={Copy2} alt="copy" />
                                 </div>
                             </CopyToClipboard>
-                            {copied ? <span style={{ color: "white" }}>Copied.</span> : null}
+                            {copied ? (
+                                <span style={{ color: "white" }}>Copied.</span>
+                            ) : null}
                             <div className="bitcoin-address">
                                 <img src={Address} alt="bitcoin address" />
                                 <p>Send only Bitcoin to this deposit adress</p>
                             </div>
-                            <button className="btn-second w-100">Share Address</button>
+                            <button className="btn-second w-100">
+                                Share Address
+                            </button>
                         </TabPanel>
                         <TabPanel className="withdraw-panel">
                             <Input
@@ -339,7 +384,9 @@ const Wallet = () => {
                                     SingleValue: SelectedValue,
                                 }}
                             />
-                            <button className="btn-second w-100">Withdraw</button>
+                            <button className="btn-second w-100">
+                                Withdraw
+                            </button>
                         </TabPanel>
                     </Tabs>
                 </Modal>
@@ -357,11 +404,20 @@ const Wallet = () => {
                             role="button"
                             tabIndex="0"
                         >
-                            <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                            <img
+                                width="14px"
+                                height="14px"
+                                src={CloseIcon}
+                                alt="close"
+                            />
                         </div>
                     </div>
                     <AirdropDetail
-                        clsName={size.width <= 1024 && airdropModal ? "d-block" : "d-none"}
+                        clsName={
+                            size.width <= 1024 && airdropModal
+                                ? "d-block"
+                                : "d-none"
+                        }
                         airdrop={airdrops[index]}
                         onJoinClick={handleJoinAirdrop}
                     />
@@ -380,7 +436,9 @@ const Wallet = () => {
                                 alt="coin icon"
                                 className="detail-header__icon me-2"
                             />
-                            <p className="detail-header__name">{airdrops[index].name}</p>
+                            <p className="detail-header__name">
+                                {airdrops[index].name}
+                            </p>
                         </div>
 
                         <div
@@ -389,7 +447,12 @@ const Wallet = () => {
                             role="button"
                             tabIndex="0"
                         >
-                            <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                            <img
+                                width="14px"
+                                height="14px"
+                                src={CloseIcon}
+                                alt="close"
+                            />
                         </div>
                     </div>
                     <div className="join-airdrop">
@@ -397,7 +460,9 @@ const Wallet = () => {
                             {joins.map((item, idx) => (
                                 <li key={idx}>
                                     <p>{item.label}</p>
-                                    <button className="btn-green">{item.btnName}</button>
+                                    <button className="btn-green">
+                                        {item.btnName}
+                                    </button>
                                 </li>
                             ))}
                         </ul>
@@ -420,7 +485,9 @@ const Wallet = () => {
                             />
                         </div>
                         <div className="text-center">
-                            <button className="btn-primary">Join Airdrop</button>
+                            <button className="btn-primary">
+                                Join Airdrop
+                            </button>
                         </div>
                     </div>
                 </Modal>
