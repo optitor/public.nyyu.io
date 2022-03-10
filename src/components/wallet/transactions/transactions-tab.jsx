@@ -12,9 +12,9 @@ export default function Transactions() {
                         <button
                             key={item.index}
                             onClick={() => setCurrentTab(item.index)}
-                            className={`btn rounded-0 w-100 fw-bold text-uppercase ${
+                            className={`btn rounded-0 w-100 fw-bold text-uppercase bg-transparent ${
                                 item.index === currentTab
-                                    ? "btn-outline-light"
+                                    ? "btn-outline-light text-light"
                                     : "btn-outline-secondary"
                             }`}
                         >
