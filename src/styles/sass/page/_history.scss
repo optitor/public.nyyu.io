@@ -36,7 +36,6 @@
                 }
             }
 
-
             table {
                 width: 100%;
                 thead,
@@ -285,7 +284,6 @@
                     }
                 }
                 &__tab-panel {
-                    padding: 0 20px;
                     &--selected {
                         height: 100%;
                         border-top: 2px solid #464646;
@@ -525,7 +523,7 @@
     .css-xmxkze-menu {
         border-radius: 0 !important;
     }
-    
+
     svg.icon {
         color: white;
         cursor: pointer;
@@ -548,8 +546,11 @@
         width: 70%;
         margin: auto;
     }
-    @include mq('phone', max) {
-        .width1, .width2, .width3, .width4 {
+    @include mq("phone", max) {
+        .width1,
+        .width2,
+        .width3,
+        .width4 {
             width: 100%;
         }
     }
@@ -613,7 +614,7 @@
                     color: $green;
                 }
             }
-            @include mq('phone', max) {
+            @include mq("phone", max) {
                 input {
                     width: 95%;
                 }
@@ -642,7 +643,7 @@
                     cursor: pointer;
                 }
             }
-            @include mq('phone', max) {
+            @include mq("phone", max) {
                 flex-direction: column;
                 p.subtitle {
                     width: 100%;
@@ -683,7 +684,7 @@
                         width: 100%;
                     }
                 }
-                @include mq('phone', max) {
+                @include mq("phone", max) {
                     flex-direction: column;
                     div.clipboard {
                         width: 100%;
@@ -698,7 +699,7 @@
                     }
                 }
             }
-            
+
             div.stats_div {
                 margin-top: 50px;
                 div.stats {
