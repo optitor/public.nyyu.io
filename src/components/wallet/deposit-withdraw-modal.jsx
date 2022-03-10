@@ -24,7 +24,7 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                 })
             )
         },
-    })
+    });
 
     // Containers
     const [type, setType] = useState(transactionType)

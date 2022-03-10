@@ -10,7 +10,7 @@ import {
     SHIB,
 } from "./imgImport";
 
-export const SUPPORED_COINS = [
+export const SUPPORTED_COINS = [
     {
         value: "BTC",
         label: "BTC",
