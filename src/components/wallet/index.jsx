@@ -16,7 +16,7 @@ import Transactions from "../wallet/transactions-tab"
 import ReferralTab from "../wallet/referral-tab"
 import StakeTab from "../wallet/stake-tab"
 import BidActivityTab from "../wallet/bid-activity-tab"
-import { GET_BID_LIST_BY_USER } from "./../../apollo/graghqls/querys/Bid"
+import { GET_BID_LIST_BY_USER } from "../../apollo/graghqls/querys/Bid"
 import InternalWallet from "../wallet/internal-wallet"
 import Seo from "../seo"
 

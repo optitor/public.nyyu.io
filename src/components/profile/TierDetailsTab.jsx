@@ -110,7 +110,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                         ? "deactive"
                                         : "active"
                                 }`}
-                            ></div>
+                            />
                             KYC/AML completion
                         </div>
                         <div className="col-6 text-end text-sm-start">
@@ -124,7 +124,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                 className={`status me-2 ${
                                     gainPointsData.wallet === 0 ? "deactive" : "active"
                                 }`}
-                            ></div>
+                            />
 
                             <div className="d-flex align-items-center justify-content-between w-100">
                                 <div>Wallet balance</div>
@@ -171,7 +171,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                 className={`status me-2 ${
                                     gainPointsData.auctions?.length ? "active" : "deactive"
                                 }`}
-                            ></div>
+                            />
                             Auction participation
                         </div>
                         <div className="col-6 text-end text-sm-start">

@@ -1,14 +1,15 @@
 import React, { useState } from "react"
-import { FormInput } from "../common/FormControl"
 import Modal from "react-modal"
+
+import { FormInput } from "../common/FormControl"
+import { useChangePassword } from "../../apollo/model/auth"
+import CustomSpinner from "../common/custom-spinner"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 import { CloseIcon } from "../../utilities/imgImport"
 import { passwordValidatorOptions } from "../../utilities/staticData"
-import { useChangePassword } from "../../apollo/model/auth"
 import validator from "validator"
-import CustomSpinner from "../common/custom-spinner"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import PasswordEyeIcon from "../common/password-eye-icon"
 
 export default function ProfileChangePasswordModal({
     isPasswordModalOpen,
@@ -26,7 +27,6 @@ export default function ProfileChangePasswordModal({
     const successfullRequest =
         changePasswordResults?.data?.changePassword === "Success"
     const [passwordVisible, setPasswordVisible] = useState(false)
-    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
     // Methods
     const changeUserPassword = (e) => {
         e.preventDefault()

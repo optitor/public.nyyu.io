@@ -12,18 +12,19 @@ import axios from "axios";
 import _ from "lodash";
 import Select, { components } from "react-select";
 import ReactTooltip from "react-tooltip";
+import NumberFormat from "react-number-format";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import CircularProgress from "@mui/material/CircularProgress";
-import NumberFormat from "react-number-format";
 import { useMutation } from "@apollo/client";
-import * as Mutation from "../../apollo/graghqls/mutations/Payment";
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+
+import CustomSpinner from "../common/custom-spinner";
 import { generateQR } from "../../utilities/string";
 import { CheckBox } from "../common/FormControl";
+import { set_Temp_Data } from "../../redux/actions/tempAction";
+import * as Mutation from "../../apollo/graghqls/mutations/Payment";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import { Copy } from "../../utilities/imgImport";
-import CustomSpinner from "../common/custom-spinner";
-import { set_Temp_Data } from "./../../redux/actions/tempAction";
 import * as Query from "./../../apollo/graghqls/querys/Payment";
 import { SUPPORED_COINS } from "../../utilities/staticData2";
 
@@ -311,7 +312,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                             value={allow_fraction}
                             onChange={handleAllowFraction}
                             className="text-uppercase"
-                        ></CheckBox>
+                        />
                         <div className="allow-text text-light">
                             Do you allow fraction of order completion?
                         </div>
