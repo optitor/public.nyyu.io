@@ -56,6 +56,11 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
         onCompleted: (data) => {
             setUserBalances(
                 data.getBalances
+                    .filter(
+                        (token) =>
+                            token.tokenName !== "NDB" &&
+                            token.tokenName !== "VOLT"
+                    )
                     .sort((token1, token2) => token2.free - token1.free)
                     .map((item) => ({
                         value: item.free,
