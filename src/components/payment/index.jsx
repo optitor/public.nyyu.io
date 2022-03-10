@@ -115,7 +115,7 @@ const Payment = () => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
-                    let token = links[i].href.split('token=')[1];
+                    setPayPalLoading(false);
                     window.location.href = links[i].href;
                     break;
                 }
