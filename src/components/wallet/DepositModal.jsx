@@ -7,6 +7,7 @@ import _ from "lodash";
 import styled from 'styled-components';
 import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
+import Loading from "../common/Loading";
 import { Icon } from "@iconify/react";
 import { useMutation } from '@apollo/client';
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -14,7 +15,7 @@ import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
 import { Plaid, PaypalFiat, CreditCards, USDT } from '../../utilities/imgImport';
 import { SUPPORED_COINS } from "../../utilities/staticData2";
-import { CREATE_CHARGE_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
+import { CREATE_CHARGE_FOR_DEPOSIT, PAYPAY_FOR_DEPOSIT, CAPTURE_ORDER_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [
@@ -77,6 +78,8 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [pending, setPending] =useState(false);
     const [coinQRCode, setCoinQRCode] = useState("");
 
+    const [loading, setLoading] = useState(false);
+
     const networks = useMemo(() => (selectedAsset.networks), [selectedAsset]);    
     const [network, setNetwork] = useState(networks[0]);
     const [depositData, setDepositData] = useState({});
@@ -87,6 +90,7 @@ export default function DepositModal({ showModal, setShowModal }) {
 
     const [copyText, setCopyText] = useState('');
 
+    const [isPaypalDeposit, setIsPaypalDeposit] = useState(false);
 
     useEffect(() => {
         (async function() {
@@ -158,6 +162,52 @@ export default function DepositModal({ showModal, setShowModal }) {
         setCopyText(text);
     };
 
+    const initPaypalCheckout = () => {
+        setLoading(true);
+        paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
+    }
+
+    const [paypalDeposit] = useMutation(PAYPAY_FOR_DEPOSIT, {
+        onCompleted: (data) => {
+            let links = data.paypalForDeposit.links;
+            for (let i = 0; i < links.length; i++) {
+                if (links[i].rel === 'approve') {
+                    window.location.href = links[i].href;
+                    break;
+                }
+            }
+        },
+        onError: err => {
+            console.log(err);
+            alert('Error in PayPal checkout')
+            setLoading(false);
+        },
+    })
+
+    const [captureOrderForDeposit] = useMutation(CAPTURE_ORDER_FOR_DEPOSIT, {
+        onCompleted: (data) => {
+            if (data.captureOrderForDeposit) {
+                alert('Your checkout was successfully!')
+            } else {
+                alert('Error in checkout with PayPal');
+            }
+        },
+        onError: (err) => {
+            alert('Error in checkout with PayPal');
+        },
+    })
+
+    let orderCaptured = false;
+
+    if (window.location.href.includes('token=') && !orderCaptured) {
+        var url = new URL(window.location.href);
+        let token = url.searchParams.get("token");
+        orderCaptured = true;
+        captureOrderForDeposit({variables: {orderId: token}});
+    }
+
+    if (loading) return <Loading />;
+
     return (
         <Modal
             isOpen={showModal}
@@ -195,7 +245,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 <Icon className="icon" icon="carbon:close" onClick={closeModal} />
             </div>
             <>
-                {currentStep === 1 && (
+                {currentStep === 1 && !isPaypalDeposit && (
                     <div className="deposit">
                         <div className="width1">
                             <h4 className="text-center mb-4">Deposit</h4>
@@ -261,7 +311,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
-                                        <FiatButton className="active">
+                                        <FiatButton className="active" onClick={() => setIsPaypalDeposit(true)}>
                                             <img src={PaypalFiat} alt="paypal" />
                                         </FiatButton>
                                     </div>
@@ -282,7 +332,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         )}
                     </div>
                 )}
-                {currentStep === 2 && !_.isEmpty(depositData) && (
+                {currentStep === 2 && !_.isEmpty(depositData) && !isPaypalDeposit && (
                     <div className="deposit width3">
                         <div className="address_div">
                             <p className="subtitle">Deposit Address</p>
@@ -339,7 +389,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </div>
                     </div>
                 )}
-                {currentStep === 3 && (
+                {currentStep === 3 && !isPaypalDeposit && (
                     <div className="deposit width2">
                         <div>
                             <p className="subtitle">Deposit Address</p>
@@ -398,7 +448,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </button>
                     </div>
                 )}
-                {currentStep === 4 && (
+                {currentStep === 4 && !isPaypalDeposit && (
                     <div className="deposit width2">
                         <h4 className="text-center">{currency.label} Deposits Only</h4>
                         <p className="subtitle mb-4">
@@ -424,6 +474,55 @@ export default function DepositModal({ showModal, setShowModal }) {
                             CONFIRM
                         </button>
                     </div>
+                )}
+
+                {isPaypalDeposit && (
+                    <div className="deposit width2">
+                    <div>
+                        <p className="subtitle">Currency</p>
+                        <Select
+                            className="black_input"
+                            options={CURRENCIES}
+                            value={currency}
+                            onChange={(selected) => {
+                                setCurrency(selected)
+                            }}
+                            styles={customSelectStyles}
+                            components={{
+                                IndicatorSeparator: null                                            
+                            }}
+                        />
+                    </div>
+                    <div className="mt-3">
+                        <p className="subtitle">Amount</p>
+                        <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                            <NumberFormat id="transferAmount" className="ms-2"
+                                thousandSeparator={true}
+                                prefix={currency.symbol + ' '}
+                                allowNegative={false}
+                                value={transferAmount}
+                                onValueChange={values => setTransferAmount(values.value)}
+                                autoComplete='off'
+                            />
+                        </div>
+                    </div>
+                    <div className="mt-3">
+                        <p className="desc">
+                            The <span>{currency.label}</span> will be converted to <span>USDT</span> and deposited to the wallet
+                        </p>
+                        <div className="black_input usdt_div">
+                            <img src={USDT} alt='usdt' className="ms-2" />
+                            <p className="ms-2">USDT</p>
+                        </div>
+                    </div>
+                    <button
+                        className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
+                        onClick={() => {initPaypalCheckout()}}
+                        disabled={!transferAmount}
+                    >
+                        CONTINUE
+                    </button>
+                </div>
                 )}
             </>
         </Modal>
