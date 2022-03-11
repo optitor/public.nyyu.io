@@ -36,7 +36,17 @@ export default function DepositTable() {
                     </th>
                 </tr>
                 {depositTransactions.map(
-                    ({ id, date, time, amount, asset, fee, status }) => (
+                    ({
+                        id,
+                        date,
+                        time,
+                        amount,
+                        asset,
+                        fee,
+                        status,
+                        type,
+                        paymentId,
+                    }) => (
                         <>
                             <tr
                                 className="border-bottom-2-dark-gray cursor-pointer"
@@ -115,7 +125,7 @@ export default function DepositTable() {
                                                     type:
                                                 </span>
                                                 <span className="fw-500">
-                                                    Crypto Deposit
+                                                    {type}
                                                 </span>
                                             </div>
                                             <div>
@@ -123,7 +133,7 @@ export default function DepositTable() {
                                                     amount:
                                                 </span>
                                                 <span className="fw-500">
-                                                    10 BTC
+                                                    {amount + " " + asset}
                                                 </span>
                                             </div>
                                             <div>
@@ -131,7 +141,7 @@ export default function DepositTable() {
                                                     fee:
                                                 </span>
                                                 <span className="fw-500">
-                                                    0.12
+                                                    {fee}
                                                 </span>
                                             </div>
                                             <div>
@@ -139,7 +149,7 @@ export default function DepositTable() {
                                                     date:
                                                 </span>
                                                 <span className="fw-500">
-                                                    28-12-2022 23:30:40 +00:00
+                                                    {date + " " + time}
                                                 </span>
                                             </div>
                                             <div>
@@ -147,7 +157,7 @@ export default function DepositTable() {
                                                     asset:
                                                 </span>
                                                 <span className="fw-500">
-                                                    BTC
+                                                    {asset}
                                                 </span>
                                             </div>
                                         </div>
@@ -157,23 +167,27 @@ export default function DepositTable() {
                                                     Payment-ID:
                                                 </span>
                                                 <span className="fw-500">
-                                                    XXXX-XXXX-XXXX
+                                                    {paymentId}
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    Address:
-                                                </span>
-                                                <span className="fw-500">
-                                                    12hfi6sh...l6shi
-                                                </span>
-                                            </div>
+                                            {type === "Crypto Deposit" && (
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        Address:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        12hfi6sh...l6shi
+                                                    </span>
+                                                </div>
+                                            )}
                                             <div>
                                                 <span className="text-secondary pe-1">
                                                     Status:
                                                 </span>
                                                 <span className="fw-500">
-                                                    Success
+                                                    {status
+                                                        ? "Success"
+                                                        : "Failed"}
                                                 </span>
                                             </div>
                                         </div>
