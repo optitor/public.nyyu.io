@@ -326,6 +326,7 @@
         }
         .wallet-tab {
             .balance-select {
+                height: 49px;
                 @include mq("laptop", max) {
                     margin-bottom: 16px;
                 }
