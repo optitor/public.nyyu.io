@@ -1141,3 +1141,8 @@ div.wallet_balances {
     border-radius: 100%;
     background-color: $dimgrey;
 }
+
+.transaction-section-tables {
+    max-height: 500px;
+    overflow-y: auto;
+}
