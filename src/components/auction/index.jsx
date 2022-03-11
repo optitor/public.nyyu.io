@@ -16,17 +16,18 @@ import PresalePlaceOrder from "./presale-place-order"
 const Auction = () => {
     const auction = useAuction()
     const { auctions, presales, entireRounds, setEntireRounds, currentRound, currentRoundNumber, optCurrentRound, setOptCurrentRound, isAuction } = auction
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (auctions || presales) {
             const tempRounds = auctions?.concat(presales)
             tempRounds && tempRounds.length && setEntireRounds(tempRounds.sort((a, b) => {
-                return a.round - b.round
+                if (a.round || b.round) {
+                    return a.round - b.round
+                }
             }))
         }
     }, [auctions, presales])
-
-    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (auction.loading === false) {

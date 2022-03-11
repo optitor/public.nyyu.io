@@ -29,8 +29,13 @@ export default function AuctionRoundDetails() {
     useEffect(() => {
         const timer = setInterval(() => {
             const currentTimeMilliSeconds = new Date().getTime()
-            const difference = Math.abs(optCurrentRound.endedAt - currentTimeMilliSeconds)
-            getRemainingRoundTime(difference)
+            if (optCurrentRound.status === 2 ) {
+                const difference = Math.abs(optCurrentRound.endedAt - currentTimeMilliSeconds)
+                getRemainingRoundTime(difference)
+            } else if (optCurrentRound.status === 1) {
+                const difference = Math.abs(currentTimeMilliSeconds - optCurrentRound.startedAt)
+                getRemainingRoundTime(difference)
+            }
         }, 1000)
         return () => {
             clearInterval(timer)
