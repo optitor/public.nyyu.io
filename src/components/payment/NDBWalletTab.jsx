@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import Select, { components } from "react-select";
+import _ from 'lodash';
 import ReactTooltip from "react-tooltip";
 import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
@@ -10,6 +11,7 @@ import parser from "html-react-parser";
 import { Qmark } from "../../utilities/imgImport";
 import { PAY_WALLLET_FOR_AUCTION } from "./payment-webservice";
 import PaymentSuccessful from "./PaymentSuccessful";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const { Option, SingleValue } = components;
 const CustomOption = props => (
@@ -42,15 +44,16 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
     // Webservice
     useQuery(GET_BALANCES, {
         onCompleted: data => {
-            setUserBalances(
-                data.getBalances
-                    .sort((token1, token2) => token2.free - token1.free)
-                    .map(item => ({
-                        value: item.free,
-                        label: item.tokenSymbol,
-                        icon: item.symbol,
-                    }))
-            );
+            if(data.getBalances) {
+                console.log(data.getBalances)
+                let list = _.orderBy(data.getBalances, ['free'], ['desc']);
+                list = list.map(item => ({
+                    value: item.free,
+                    label: item.tokenSymbol,
+                    icon: item.symbol
+                }));
+                setUserBalances(list);
+            }
         },
         onError: error => console.log(error),
     });

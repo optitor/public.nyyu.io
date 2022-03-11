@@ -68,7 +68,7 @@ const SelectOption = (props) => {
 };
 
 export default function DepositModal({ showModal, setShowModal }) {
-    const [selectedAsset, setSelectedAsset] = useState(SUPPORED_COINS[0]);
+    const [selectedAsset, setSelectedAsset] = useState(SUPPORTED_COINS[0]);
     const [currentStep, setCurrentStep] = useState(1);
     const [tabIndex, setTabIndex] = useState(1);
     const [copied, setCopied] = useState(false);
@@ -212,7 +212,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <p className="subtitle">Select coin</p>
                                     <Select
                                         className="black_input"
-                                        options={SUPPORED_COINS}
+                                        options={SUPPORTED_COINS}
                                         value={selectedAsset}
                                         onChange={(selected) => {
                                             setSelectedAsset(selected)

@@ -80,17 +80,18 @@ const SelectOption = (props) => {
 };
 
 export default function DepositModal({ showModal, setShowModal, assets }) {
-    const myAssets = assets.filter(item => {
-        return item.value !== 'NDB' && item.value !== 'VOLT';
+    const myAssets = _.orderBy(assets.filter(item => {
+        return item.tokenSymbol !== 'VOLT';
     }).map(item => {
         return {
             value: item.tokenSymbol,
             label: item.tokenSymbol,
             amount: item.free + item.hold,
             icon: item.symbol,
+            balance: item.balance,
             networks: SupportedCoins[item.tokenSymbol]?.networks
         };
-    });
+    }), ['balance'], ['desc']);
     
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [currentStep, setCurrentStep] = useState(1);
@@ -260,7 +261,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     />
                                 </div>
                                 <div className="select_div">
-                                    <p className="subtitle">Destination wallet</p>
+                                    <p className="subtitle">Destination wallet address</p>
                                     <input
                                         className="black_input"
                                         value={withdrawData.destAddress}

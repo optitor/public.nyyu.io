@@ -70,7 +70,6 @@ export default function InternalWallet() {
         return _.sumBy(Object.values(myAssets), "balance") ?? 0
     }, [myAssets]);
 
-
     useEffect(() => {
         const get_BTCPrice = () => {
             axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
