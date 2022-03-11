@@ -1,4 +1,5 @@
 import React from "react";
+import BidTable from "./bid-table";
 import DepositTable from "./deposit-table";
 import { useTransactions } from "./transactions-context";
 import WithdrawTable from "./withdraw-table";
@@ -26,6 +27,7 @@ export default function Transactions() {
             </div>
             {currentTab === 0 && <DepositTable />}
             {currentTab === 1 && <WithdrawTable />}
+            {currentTab === 2 && <BidTable />}
         </div>
     );
 }

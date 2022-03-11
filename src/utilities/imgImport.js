@@ -40,6 +40,7 @@ import shib from '../images/shib.svg'
 import doge from '../images/doge.svg'
 import bnb from '../images/bnb.svg'
 import nickToken from "../images/nickToken.svg";
+import btcGrayIcon from "../images/btc-gray-icon.svg";
 
 import ndb from "../images/ndb.svg"
 import copy from "../images/copy.png"
@@ -261,3 +262,4 @@ export const MunichRE = munichre
 export const Amex = amex
 
 export const EuropeanFlag = europeanflag
+export const BTCGrayIcon = btcGrayIcon
