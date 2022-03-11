@@ -24,7 +24,7 @@ export default function BidTable() {
                 <tr className="border-bottom-2-dark-gray">
                     <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
                         <div className="fw-500">Round 7</div>
-                        <div className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success">
+                        <div className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success white-space-nowrap">
                             Increase bid
                         </div>
                     </td>
@@ -47,7 +47,7 @@ export default function BidTable() {
                         <img src={BTCGrayIcon} alt="" />
                     </td>
                     <td className="d-flex flex-column align-items-end">
-                        <div className="d-flex align-items-center justify-content-end pe-5 pe-sm-0">
+                        <div className="d-flex align-items-center justify-content-end">
                             <div className="gray-bullet me-2"></div>
                             <div>Processing</div>
                         </div>
