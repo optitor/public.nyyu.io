@@ -37,33 +37,45 @@ const TransactionsProvider = ({ children }) => {
 
     // Methods
     const createDateFromDate = (createdTime) => {
-        return createdTime.getMonth().length === 1
-            ? "0" + createdTime.getMonth()
-            : createdTime.getMonth() + "/" + createdTime.getDay().length === 1
-            ? "0" + createdTime.getDay()
-            : createdTime.getDay() + "/" + createdTime.getFullYear();
+        let month = createdTime.getMonth();
+        if (month < 10) month = "0" + month;
+        console.log("month", month);
+        let day = createdTime.getDay();
+        if (day < 10) day = "0" + day;
+
+        let year = createdTime.getFullYear();
+        return month + "/" + day + "/" + year;
     };
 
+    const createTimeFromDate = (createdTime) => {
+        let hours = createdTime.getHours();
+        if (hours < 10) hours = "0" + hours;
+        let minutes = createdTime.getMinutes();
+        if (minutes < 10) minutes = "0" + minutes;
+        let seconds = createdTime.getSeconds();
+        if (seconds < 10) seconds = "0" + seconds;
+
+        return hours + ":" + minutes + ":" + seconds;
+    };
     // Webserver
     useQuery(GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
             const fooList = data.getAllPaypalDepositTxns.map((item) => {
                 const createdTime = new Date(item.createdAt);
-                const date = createDateFromDate(createdTime);
-                const time =
-                    createdTime.getHours() +
-                    ":" +
-                    createdTime.getMinutes() +
-                    ":" +
-                    createdTime.getSeconds();
 
                 return {
-                    date,
-                    time,
+                    id: item.id,
+                    date: createDateFromDate(createdTime),
+                    time: createTimeFromDate(createdTime),
+                    fee: item.fee,
+                    status: item.status,
+                    amount: item.fiatAmount,
+                    type: "Paypal Deposit",
+                    paymentId: item.paypalOrderId,
+                    asset: item.fiatType,
                 };
             });
 
-            console.log([...depositTransactions, ...fooList]);
             setDepositTransactions([...depositTransactions, ...fooList]);
         },
     });

@@ -3,7 +3,7 @@ import { useTransactions } from "./transactions-context";
 
 export default function DepositTable() {
     // Containers
-    const { tabs } = useTransactions();
+    const { tabs, depositTransactions } = useTransactions();
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
 
     // Methods
@@ -35,148 +35,162 @@ export default function DepositTable() {
                         Status
                     </th>
                 </tr>
-                {[...Array(10).keys()].map((item) => (
-                    <>
-                        <tr
-                            className="border-bottom-2-dark-gray"
-                            onClick={() => toggleDetails(item)}
-                        >
-                            <td
-                                scope="row"
-                                className="text-light pe-5 pe-sm-0 fw-light"
+                {depositTransactions.map(
+                    ({ id, date, time, amount, asset, fee, status }) => (
+                        <>
+                            <tr
+                                className="border-bottom-2-dark-gray cursor-pointer"
+                                onClick={() => toggleDetails(id)}
                             >
-                                <div className="fs-16px">12/27/2021</div>
-                                <div className="text-secondary fs-12px mt-1 fw-500">
-                                    21:31:12
-                                </div>
-                            </td>
-                            <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                                <div className="text-sm-end fs-16px">
-                                    120 USD
-                                    <br />
+                                <td
+                                    scope="row"
+                                    className="text-light pe-5 pe-sm-0 fw-light"
+                                >
+                                    <div className="fs-16px">{date}</div>
                                     <div className="text-secondary fs-12px mt-1 fw-500">
-                                        121 USDT
+                                        {time}
                                     </div>
-                                </div>
-                            </td>
-                            <td className="text-end pe-5 pe-sm-0">1.08 USDT</td>
-                            <td className="d-flex align-items-center justify-content-end pe-5 pe-sm-0">
-                                <div className="green-bullet me-2"></div>
-                                <div>Completed</div>
-                                <button className="btn text-light border-0">
-                                    {currentRowsOpen.includes(item) ? (
-                                        <svg
-                                            className="icon-25px ms-2 cursor-pointer"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                    ) : (
-                                        <svg
-                                            className="icon-25px ms-2 cursor-pointer"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                    )}
-                                </button>
-                            </td>
-                        </tr>
-                        <tr
-                            className="text-light d-none px-5"
-                            id={`transaction-details-${item}`}
-                        >
-                            <td colSpan={tabs.length}>
-                                <div className="d-flex align-items-start justify-content-between">
-                                    <div className="text-capitalize fs-12px">
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                type:
-                                            </span>
-                                            <span className="fw-500">
-                                                Crypto Deposit
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                amount:
-                                            </span>
-                                            <span className="fw-500">
-                                                10 BTC
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                fee:
-                                            </span>
-                                            <span className="fw-500">0.12</span>
-                                        </div>
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                date:
-                                            </span>
-                                            <span className="fw-500">
-                                                28-12-2022 23:30:40 +00:00
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                asset:
-                                            </span>
-                                            <span className="fw-500">BTC</span>
+                                </td>
+                                <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
+                                    <div className="text-sm-end fs-16px">
+                                        {amount + "" + asset}
+                                        <br />
+                                        <div className="text-secondary fs-12px mt-1 fw-500">
+                                            121 USDT
                                         </div>
                                     </div>
-                                    <div className="text-capitalize fs-12px">
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                Payment-ID:
-                                            </span>
-                                            <span className="fw-500">
-                                                XXXX-XXXX-XXXX
-                                            </span>
+                                </td>
+                                <td className="text-end pe-5 pe-sm-0">
+                                    {fee + " " + asset}
+                                </td>
+                                <td className="d-flex align-items-center justify-content-end pe-5 pe-sm-0">
+                                    <div
+                                        className={`${
+                                            status
+                                                ? "green-bullet"
+                                                : "red-bullet"
+                                        } me-2`}
+                                    ></div>
+                                    <div>{status ? "Completed" : "Failed"}</div>
+                                    <button className="btn text-light border-0">
+                                        {currentRowsOpen.includes(id) ? (
+                                            <svg
+                                                className="icon-25px ms-2 cursor-pointer"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            <svg
+                                                className="icon-25px ms-2 cursor-pointer"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr
+                                className="text-light d-none px-5"
+                                id={`transaction-details-${id}`}
+                            >
+                                <td colSpan={tabs.length}>
+                                    <div className="d-flex align-items-start justify-content-between">
+                                        <div className="text-capitalize fs-12px">
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    type:
+                                                </span>
+                                                <span className="fw-500">
+                                                    Crypto Deposit
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    amount:
+                                                </span>
+                                                <span className="fw-500">
+                                                    10 BTC
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    fee:
+                                                </span>
+                                                <span className="fw-500">
+                                                    0.12
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    date:
+                                                </span>
+                                                <span className="fw-500">
+                                                    28-12-2022 23:30:40 +00:00
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    asset:
+                                                </span>
+                                                <span className="fw-500">
+                                                    BTC
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                Address:
-                                            </span>
-                                            <span className="fw-500">
-                                                12hfi6sh...l6shi
-                                            </span>
+                                        <div className="text-capitalize fs-12px">
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    Payment-ID:
+                                                </span>
+                                                <span className="fw-500">
+                                                    XXXX-XXXX-XXXX
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    Address:
+                                                </span>
+                                                <span className="fw-500">
+                                                    12hfi6sh...l6shi
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="text-secondary pe-1">
+                                                    Status:
+                                                </span>
+                                                <span className="fw-500">
+                                                    Success
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <span className="text-secondary pe-1">
-                                                Status:
-                                            </span>
-                                            <span className="fw-500">
-                                                Success
-                                            </span>
+                                        <div className="fs-12px">
+                                            <div className="text-success text-decoration-success text-decoration-underline">
+                                                Get PDF Receipt
+                                            </div>
+                                            <div className="text-light text-underline">
+                                                Hide this activity
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="fs-12px">
-                                        <div className="text-success text-decoration-success text-decoration-underline">
-                                            Get PDF Receipt
-                                        </div>
-                                        <div className="text-light text-underline">
-                                            Hide this activity
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </>
-                ))}
+                                </td>
+                            </tr>
+                        </>
+                    )
+                )}
             </table>
         </div>
     );

@@ -22,16 +22,10 @@ export default function BuyTable() {
                     </th>
                 </tr>
                 <tr className="border-bottom-2-dark-gray">
-                    <td
-                        scope="row"
-                        className="text-light pe-5 pe-sm-0 fw-light fs-16px "
-                    >
+                    <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
                         <div className="fw-500">123456789 #</div>
                     </td>
-                    <td
-                        scope="row"
-                        className="text-light pe-5 pe-sm-0 fw-light"
-                    >
+                    <td className="text-light pe-5 pe-sm-0 fw-light">
                         <div className="fs-16px">12/27/2021</div>
                         <div className="text-secondary fs-12px mt-1 fw-500">
                             21:31:12
@@ -62,16 +56,10 @@ export default function BuyTable() {
                 {[...Array(10).keys()].map((item) => (
                     <>
                         <tr className="border-bottom-2-dark-gray">
-                            <td
-                                scope="row"
-                                className="text-light pe-5 pe-sm-0 fw-light fs-16px "
-                            >
+                            <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
                                 <div className="fw-500">Round 7</div>
                             </td>
-                            <td
-                                scope="row"
-                                className="text-light pe-5 pe-sm-0 fw-light"
-                            >
+                            <td className="text-light pe-5 pe-sm-0 fw-light">
                                 <div className="fs-16px">12/27/2021</div>
                                 <div className="text-secondary fs-12px mt-1 fw-500">
                                     21:31:12
@@ -95,16 +83,10 @@ export default function BuyTable() {
                             </td>
                         </tr>
                         <tr className="border-bottom-2-dark-gray">
-                            <td
-                                scope="row"
-                                className="text-light pe-5 pe-sm-0 fw-light fs-16px "
-                            >
+                            <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
                                 <div className="fw-500">Round 7</div>
                             </td>
-                            <td
-                                scope="row"
-                                className="text-light pe-5 pe-sm-0 fw-light"
-                            >
+                            <td className="text-light pe-5 pe-sm-0 fw-light">
                                 <div className="fs-16px">12/27/2021</div>
                                 <div className="text-secondary fs-12px mt-1 fw-500">
                                     21:31:12
