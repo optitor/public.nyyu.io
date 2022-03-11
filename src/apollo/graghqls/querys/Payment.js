@@ -15,3 +15,14 @@ export const GET_ALL_FEES = gql`
         }
     }
 `
+
+export const GET_PAYPAL_DEPOSIT_TXN_BY_USER = gql` {
+	query {
+        getPaypalDepositTxnsByUser {
+		    id
+            deposited
+            fee
+        }
+    }
+}
+`

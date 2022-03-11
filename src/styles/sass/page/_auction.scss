@@ -56,7 +56,12 @@
         }
 
         .timeframe-bar {
-            background: linear-gradient(90deg, rgba(35,200,101,1) 0%, rgba(9,121,86,1) 56%, rgba(232,80,58,1) 100%);
+            background: linear-gradient(
+                90deg,
+                rgba(35, 200, 101, 1) 0%,
+                rgba(9, 121, 86, 1) 56%,
+                rgba(232, 80, 58, 1) 100%
+            );
             margin-top: 0;
             .timeleft {
                 &__value {
@@ -74,7 +79,7 @@
                     position: absolute;
                     height: 21px;
                     width: 2px;
-                    background: #de4934;
+                    background: white;
                     bottom: 0;
                 }
                 &:hover {
@@ -427,7 +432,7 @@
     &:hover {
         background-color: $mountainMeadow;
         cursor: pointer;
-        border: 1px solid $mountainMeadow
+        border: 1px solid $mountainMeadow;
     }
 }
 .select-external-wallet {
@@ -449,7 +454,7 @@
 .internal-wallet {
     background-color: $mountainMeadow;
     cursor: pointer;
-    border: 1px solid $mountainMeadow
+    border: 1px solid $mountainMeadow;
 }
 .external-wallet {
     background-color: $white;

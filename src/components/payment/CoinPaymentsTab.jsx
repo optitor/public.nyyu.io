@@ -316,7 +316,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         <div className="allow-text text-light">
                             Do you allow fraction of order completion?
                         </div>
-                        <ReactTooltip place="right" type="light" effect="solid">
+                        <ReactTooltip place="right" type="light" effect="solid" id='coinpayments-tooltip'>
                             <div
                                 className="text-justify"
                                 style={{
@@ -328,6 +328,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         </ReactTooltip>
                         <FontAwesomeIcon
                             data-tip="React-tooltip"
+                            data-for='coinpayments-tooltip'
                             icon={faQuestionCircle}
                             className="fa-2x ms-2 cursor-pointer text-light"
                         />

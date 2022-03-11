@@ -2,33 +2,56 @@ import { useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import Select, { components } from "react-select";
 import _ from 'lodash';
+import { Icon } from '@iconify/react';
 import ReactTooltip from "react-tooltip";
+import NumberFormat from "react-number-format";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
 import { CheckBox } from "../common/FormControl";
-import parser from "html-react-parser";
-import { Qmark } from "../../utilities/imgImport";
+import svgToDataURL from "svg-to-dataurl";
 import { PAY_WALLLET_FOR_AUCTION } from "./payment-webservice";
 import PaymentSuccessful from "./PaymentSuccessful";
-import { icon } from "@fortawesome/fontawesome-svg-core";
+import { useSelector } from "react-redux";
+import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
 
-const { Option, SingleValue } = components;
-const CustomOption = props => (
-    <Option {...props}>
-        <div className="custom-option">
-            <p>{props.data.value}</p>
-            <p className="ms-4">{props.data.label}</p>
-        </div>
-    </Option>
-);
-const CustomSingleValue = props => {
+const { Option } = components;
+
+const setAmountWithPrecision = (tokenType, amount) => {
+    let precision = 0;
+    if(tokenType === 'BTC') {
+        precision = 8;
+    } else {
+        precision = 4;
+    }
+    return Math.round(amount * Math.pow(10 , precision)) / Math.pow(10 , precision);
+};
+
+const SelectOption = (props) => {
+    const { data } = props;
     return (
-        <SingleValue {...props}>
-            <p className="wallet-select__value">
-                {props.data.value + " - " + props.data.label}
-            </p>
-        </SingleValue>
+        <Option {...props}>
+            <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
+                <img
+                    src={svgToDataURL(data.icon)}
+                    style={{ width: "30px", height: "30px" }}
+                    alt={data.value}
+                />
+                <div className="d-flex justify-content-between w-100 ms-2">
+                    <NumberFormat
+                        className="ms-2"
+                        displayType={'text'}
+                        value={setAmountWithPrecision(data.tokenType, data.amount)}
+                        thousandSeparator={true}
+                        renderText={(value, props) => <p {...props}>{value}</p>}
+                        style={{width: '70%'}}
+                    />
+                    <p style={{width: '30%'}}>{data.tokenType}</p>
+                </div>
+            </div>
+        </Option>
     );
 };
 
@@ -41,29 +64,46 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
     const [error, setError] = useState("");
     const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
-    // Webservice
+    // Getting the fee.
+    const { allFees } = useSelector((state) => state);
+    const user = useSelector((state) => state.auth.user);
+    const NDBWalletPaymentFee = getNDBWalletPaymentFee(
+        user,
+        allFees,
+        bidAmount
+    );
+    const finalPaymentAmount = Number(bidAmount) + Number(NDBWalletPaymentFee);
+
+    // Webserver
     useQuery(GET_BALANCES, {
         onCompleted: data => {
             if(data.getBalances) {
-                console.log(data.getBalances)
-                let list = _.orderBy(data.getBalances, ['free'], ['desc']);
+                let list = data.getBalances?.filter(
+                    (token) => (
+                        token.tokenName !== "NDB" &&
+                        token.tokenName !== "VOLT"
+                    )
+                );
+                list = _.orderBy(list, ['free'], ['desc']);
                 list = list.map(item => ({
-                    value: item.free,
-                    label: item.tokenSymbol,
-                    icon: item.symbol
+                    value: item.free + item.tokenSymbol,
+                    tokenType: item.tokenSymbol,
+                    icon: item.symbol,
+                    amount: item.free
                 }));
                 setUserBalances(list);
+                setBalance(list[0]);
             }
         },
-        onError: error => console.log(error),
+        onError: (error) => console.log(error),
     });
     const [payWalletForAuction] = useMutation(PAY_WALLLET_FOR_AUCTION, {
-        onCompleted: data => {
+        onCompleted: (data) => {
             if (data && data?.payWalletForAuction === "SUCCESS")
                 setPaymentSuccessful(true);
             setRequestPending(false);
         },
-        onError: error => {
+        onError: (error) => {
             // setError(error.message);
             setError("Insufficient funds");
             setRequestPending(false);
@@ -71,14 +111,14 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
     });
 
     // Methods
-    const submitPayment = e => {
+    const submitPayment = (e) => {
         e.preventDefault();
         setError("");
         setRequestPending(true);
         payWalletForAuction({
             variables: {
                 roundId: currentRound,
-                cryptoType: balance.label,
+                cryptoType: balance?.tokenType,
             },
         });
     };
@@ -96,20 +136,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                 {error && (
                     <div className="text-danger fs-16px ps-0 mb-2">
                         <div className="d-flex align-items-center gap-2">
-                            <svg
-                                className="icon-23px"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
+                            <Icon icon='bx:error-circle' className="icon-23px" />
                             <div>{error}</div>
                         </div>
                     </div>
@@ -118,27 +145,28 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                     <PaymentSuccessful />
                 ) : (
                     <>
-                        <div className="row">
-                            <Select
-                                className="balance-select col-lg-4 pe-0"
-                                options={userBalances}
-                                value={balance}
-                                placeholder="YOUR BALANCE"
-                                onChange={v => setBalance(v)}
-                                components={{
-                                    Option: CustomOption,
-                                    SingleValue: CustomSingleValue,
-                                }}
-                            />
-                            <div className="col-lg-8 d-flex pl-8px">
-                                <div className="choosed-icon">
-                                    {balance?.icon && parser(balance.icon)}
-                                </div>
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    value={bidAmount}
-                                    disabled
+                        <div className="select_div">
+                            <div className="col-lg-4">
+                                <p className="text-lightgrey mb-1">Your wallet balance</p>
+                                <Select
+                                    className="balance-select"
+                                    options={userBalances}
+                                    value={balance}
+                                    onChange={(v) => setBalance(v)}
+                                    components={{
+                                        Option: SelectOption,
+                                        SingleValue: SelectOption,
+                                    }}
+                                    styles={customSelectWithIconStyles}
+                                />
+                            </div>
+                            <div className="col-lg-8 pl-8px">
+                                <p className="text-lightgrey mb-1">Payment amount</p>
+                                <NumberFormat
+                                    className="black_input form-control ps-3"
+                                    value={finalPaymentAmount}
+                                    thousandSeparator={true}
+                                    readOnly
                                 />
                             </div>
                         </div>
@@ -167,13 +195,11 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                                         {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                                     </div>
                                 </ReactTooltip>
-
-                                <img
-                                    src={Qmark}
-                                    alt="Question mark"
-                                    data-tip
+                                <FontAwesomeIcon
+                                    data-tip="React-tooltip"
                                     data-for="question-mark-tooltip"
-                                    className="ms-2 cursor-pointer text-light"
+                                    icon={faQuestionCircle}
+                                    className="fa-2x ms-2 cursor-pointer text-light"
                                 />
                             </div>
                             <p className="payment-expire my-auto">
@@ -199,3 +225,31 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
         </div>
     );
 }
+
+const customSelectWithIconStyles = {
+    input: (provided) => ({
+        ...provided,
+        position: "absolute",
+    }),
+    option: (provided, state) => ({
+        ...provided,
+        backgroundColor: state.isSelected ? "#000000" : undefined,
+        borderBottom: "1px solid dimgrey",
+        cursor: "pointer",
+        ":hover": {
+            backgroundColor: "inherit",
+        },
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+        borderRadius: 0,
+        padding: 0,
+    }),
+    menuList: (provided) => ({
+        ...provided,
+        margin: 0,
+        padding: 0,
+    }),
+};
