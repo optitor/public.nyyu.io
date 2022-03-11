@@ -4,9 +4,9 @@ import BuyTable from "./buy-table";
 import DepositTable from "./deposit-table";
 import { useTransactions } from "./transactions-context";
 import WithdrawTable from "./withdraw-table";
-
+import CustomSpinner from "../../common/custom-spinner";
 export default function Transactions() {
-    const { currentTab, setCurrentTab, tabs } = useTransactions();
+    const { loading, currentTab, setCurrentTab, tabs } = useTransactions();
     return (
         <div className="overflow-x-auto">
             <div className="d-flex align-items-center justify-content-between">
@@ -26,10 +26,18 @@ export default function Transactions() {
                     );
                 })}
             </div>
-            {currentTab === 0 && <DepositTable />}
-            {currentTab === 1 && <WithdrawTable />}
-            {currentTab === 2 && <BidTable />}
-            {currentTab === 3 && <BuyTable />}
+            {loading ? (
+                <div className="text-center mt-4">
+                    <CustomSpinner />
+                </div>
+            ) : (
+                <>
+                    {currentTab === 0 && <DepositTable />}
+                    {currentTab === 1 && <WithdrawTable />}
+                    {currentTab === 2 && <BidTable />}
+                    {currentTab === 3 && <BuyTable />}
+                </>
+            )}
         </div>
     );
 }

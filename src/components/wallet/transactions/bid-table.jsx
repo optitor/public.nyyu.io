@@ -1,5 +1,5 @@
 import React from "react";
-import { BTC, BTCGrayIcon } from "../../../utilities/imgImport";
+import { BTCGrayIcon } from "../../../utilities/imgImport";
 
 export default function BidTable() {
     // Containers
