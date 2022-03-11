@@ -247,6 +247,7 @@
                 justify-content: space-between;
                 align-items: center;
                 overflow-x: auto;
+                @include custom-scroll(0vh);
                 @include mq("phone", max) {
                     display: block;
                     .react-tabs__tab-list {
@@ -1148,7 +1149,17 @@ div.wallet_balances {
     background-color: $cinnabar;
 }
 
-.transaction-section-tables {
-    max-height: 500px;
-    overflow-y: auto;
+.transaction-tab {
+    &-list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        overflow-x: auto;
+        @include custom-scroll(0vh);
+    }
+    .transaction-section-tables {
+        max-height: 500px;
+        overflow-y: auto;
+        @include custom-scroll(0vh);
+    }
 }

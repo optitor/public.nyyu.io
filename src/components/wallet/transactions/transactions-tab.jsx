@@ -8,8 +8,8 @@ import CustomSpinner from "../../common/custom-spinner";
 export default function Transactions() {
     const { loading, currentTab, setCurrentTab, tabs } = useTransactions();
     return (
-        <div className="overflow-x-auto">
-            <div className="d-flex align-items-center justify-content-between">
+        <div className="transaction-tab">
+            <div className="transaction-tab-list">
                 {tabs.map((item) => {
                     return (
                         <button

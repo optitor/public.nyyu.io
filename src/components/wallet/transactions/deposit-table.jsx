@@ -21,17 +21,17 @@ export default function DepositTable() {
 
     // Render
     return (
-        <div className="px-4 table-responsive transaction-section-tables">
+        <div className="px-sm-4 px-3 table-responsive transaction-section-tables">
             <table className="wallet-transaction-table w-100">
                 <tr className="border-bottom-2-dark-gray py-3">
                     <th scope="col">Date</th>
                     <th scope="col" className="text-sm-end">
                         FIAT/Crypto
                     </th>
-                    <th scope="col" className="text-sm-end">
+                    <th scope="col" className="text-center text-sm-end">
                         Fee
                     </th>
-                    <th scope="col" className="text-sm-end">
+                    <th scope="col" className="text-center text-sm-end">
                         Status
                     </th>
                 </tr>
@@ -70,10 +70,10 @@ export default function DepositTable() {
                                         </div>
                                     </div>
                                 </td>
-                                <td className="text-end pe-5 pe-sm-0">
+                                <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
                                     {fee + " " + asset}
                                 </td>
-                                <td className="d-flex align-items-center justify-content-end pe-5 pe-sm-0">
+                                <td className="d-flex align-items-center justify-content-end">
                                     <div
                                         className={`${
                                             status
@@ -141,7 +141,7 @@ export default function DepositTable() {
                                                     fee:
                                                 </span>
                                                 <span className="fw-500">
-                                                    {fee}
+                                                    {fee + " " + asset}
                                                 </span>
                                             </div>
                                             <div>
