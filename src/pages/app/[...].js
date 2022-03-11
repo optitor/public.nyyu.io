@@ -44,7 +44,7 @@ const App = () => {
     }, []);
 
     return (
-        <div onUnload>
+        <>
             {!isSSR && (
                 <Suspense fallback={<Loading />}>
                     <Router basepath="app">
@@ -72,7 +72,7 @@ const App = () => {
                     </Router>
                 </Suspense>
             )}
-        </div>
+        </>
     )
 }
 export default App
