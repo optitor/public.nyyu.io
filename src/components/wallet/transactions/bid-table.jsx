@@ -80,7 +80,7 @@ export default function BidTable() {
                             <td className="text-end pe-5 pe-sm-0">
                                 <img src={BTCGrayIcon} alt="" />
                             </td>
-                            <td className="d-flex align-items-center justify-content-end pe-5 pe-sm-0">
+                            <td className="d-flex align-items-center justify-content-end">
                                 <div className="red-bullet me-2"></div>
                                 <div>Lost</div>
                             </td>
@@ -107,7 +107,7 @@ export default function BidTable() {
                             <td className="text-end pe-5 pe-sm-0">
                                 <img src={BTCGrayIcon} alt="" />
                             </td>
-                            <td className="d-flex align-items-center justify-content-end pe-5 pe-sm-0">
+                            <td className="d-flex align-items-center justify-content-end">
                                 <div className="green-bullet me-2"></div>
                                 <div>Won</div>
                             </td>
