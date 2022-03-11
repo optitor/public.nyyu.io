@@ -10,9 +10,11 @@ import parser from "html-react-parser";
 import { Qmark } from "../../utilities/imgImport";
 import { PAY_WALLLET_FOR_AUCTION } from "./payment-webservice";
 import PaymentSuccessful from "./PaymentSuccessful";
+import { useSelector } from "react-redux";
+import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
 
 const { Option, SingleValue } = components;
-const CustomOption = props => (
+const CustomOption = (props) => (
     <Option {...props}>
         <div className="custom-option">
             <p>{props.data.value}</p>
@@ -20,7 +22,7 @@ const CustomOption = props => (
         </div>
     </Option>
 );
-const CustomSingleValue = props => {
+const CustomSingleValue = (props) => {
     return (
         <SingleValue {...props}>
             <p className="wallet-select__value">
@@ -39,28 +41,43 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
     const [error, setError] = useState("");
     const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
-    // Webservice
+    // Getting the fee.
+    const { allFees } = useSelector((state) => state);
+    const user = useSelector((state) => state.auth.user);
+    const NDBWalletPaymentFee = getNDBWalletPaymentFee(
+        user,
+        allFees,
+        bidAmount
+    );
+    const finalPaymentAmount = Number(bidAmount) + Number(NDBWalletPaymentFee);
+
+    // Webserver
     useQuery(GET_BALANCES, {
-        onCompleted: data => {
+        onCompleted: (data) => {
             setUserBalances(
                 data.getBalances
+                    .filter(
+                        (token) =>
+                            token.tokenName !== "NDB" &&
+                            token.tokenName !== "VOLT"
+                    )
                     .sort((token1, token2) => token2.free - token1.free)
-                    .map(item => ({
+                    .map((item) => ({
                         value: item.free,
                         label: item.tokenSymbol,
                         icon: item.symbol,
                     }))
             );
         },
-        onError: error => console.log(error),
+        onError: (error) => console.log(error),
     });
     const [payWalletForAuction] = useMutation(PAY_WALLLET_FOR_AUCTION, {
-        onCompleted: data => {
+        onCompleted: (data) => {
             if (data && data?.payWalletForAuction === "SUCCESS")
                 setPaymentSuccessful(true);
             setRequestPending(false);
         },
-        onError: error => {
+        onError: (error) => {
             // setError(error.message);
             setError("Insufficient funds");
             setRequestPending(false);
@@ -68,7 +85,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
     });
 
     // Methods
-    const submitPayment = e => {
+    const submitPayment = (e) => {
         e.preventDefault();
         setError("");
         setRequestPending(true);
@@ -121,7 +138,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                                 options={userBalances}
                                 value={balance}
                                 placeholder="YOUR BALANCE"
-                                onChange={v => setBalance(v)}
+                                onChange={(v) => setBalance(v)}
                                 components={{
                                     Option: CustomOption,
                                     SingleValue: CustomSingleValue,
@@ -134,7 +151,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                                 <input
                                     type="number"
                                     className="form-control"
-                                    value={bidAmount}
+                                    value={finalPaymentAmount}
                                     disabled
                                 />
                             </div>
