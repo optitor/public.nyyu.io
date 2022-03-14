@@ -1,8 +1,10 @@
 import React from "react";
-import { BTCGrayIcon } from "../../../utilities/imgImport";
+import { BTCGrayIcon, Credit, NdbWallet } from "../../../utilities/imgImport";
+import { useTransactions } from "./transactions-context";
 
 export default function BuyTable() {
     // Containers
+    const { presaleList } = useTransactions();
 
     // Render
     return (
@@ -21,102 +23,73 @@ export default function BuyTable() {
                         Status
                     </th>
                 </tr>
-                <tr className="border-bottom-2-dark-gray">
-                    <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
-                        <div className="fw-500 white-space-nowrap">
-                            123456789 #
-                        </div>
-                    </td>
-                    <td className="text-light pe-5 pe-sm-0 fw-light">
-                        <div className="fs-16px">12/27/2021</div>
-                        <div className="text-secondary fs-12px mt-1 fw-500">
-                            21:31:12
-                        </div>
-                    </td>
-                    <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                        <div className="text-sm-end fs-16px">
-                            120 USD
-                            <br />
-                            <div className="text-secondary fs-12px mt-1 fw-500">
-                                121 USDT
-                            </div>
-                        </div>
-                    </td>
-                    <td className="text-end pe-5 pe-sm-0">
-                        <img src={BTCGrayIcon} alt="" />
-                    </td>
-                    <td className="d-flex flex-column align-items-end">
-                        <div className="d-flex align-items-center justify-content-end">
-                            <div className="gray-bullet me-2"></div>
-                            <div>Processing</div>
-                        </div>
-                        <div className="text-secondary text-decoration-underline text-decoration-secondary fs-14px">
-                            Cancel
-                        </div>
-                    </td>
-                </tr>
-                {[...Array(10).keys()].map((item) => (
-                    <>
-                        <tr className="border-bottom-2-dark-gray">
-                            <td className="text-light pe-5 pe-sm-0 fw-light fs-16px">
-                                <div className="fw-500 white-space-nowrap">
-                                    123456789 #
-                                </div>
-                            </td>
-                            <td className="text-light pe-5 pe-sm-0 fw-light">
-                                <div className="fs-16px">12/27/2021</div>
-                                <div className="text-secondary fs-12px mt-1 fw-500">
-                                    21:31:12
-                                </div>
-                            </td>
-                            <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                                <div className="text-sm-end fs-16px">
-                                    2,497,5000
-                                    <br />
-                                    <div className="text-secondary fs-12px mt-1 fw-bold">
-                                        NDB
+                {presaleList?.length === 0 && (
+                    <tr className="py-4 text-center">
+                        <td
+                            colSpan={5}
+                            className="text-light fs-16px text-uppercase fw-500"
+                        >
+                            no records found
+                        </td>
+                    </tr>
+                )}
+                {presaleList?.map(
+                    ({ transaction, date, time, amount, payment, status }) => (
+                        <>
+                            <tr className="border-bottom-2-dark-gray">
+                                <td className="text-light pe-5 pe-sm-0 fw-light fs-16px">
+                                    <div className="fw-500 white-space-nowrap">
+                                        {transaction}
                                     </div>
-                                </div>
-                            </td>
-                            <td className="text-end pe-5 pe-sm-0">
-                                <img src={BTCGrayIcon} alt="" />
-                            </td>
-                            <td className="d-flex align-items-center justify-content-end">
-                                <div className="red-bullet me-2"></div>
-                                <div>Fail</div>
-                            </td>
-                        </tr>
-                        <tr className="border-bottom-2-dark-gray">
-                            <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
-                                <div className="fw-500 white-space-nowrap">
-                                    123456789 #
-                                </div>
-                            </td>
-                            <td className="text-light pe-5 pe-sm-0 fw-light">
-                                <div className="fs-16px">12/27/2021</div>
-                                <div className="text-secondary fs-12px mt-1 fw-500">
-                                    21:31:12
-                                </div>
-                            </td>
-                            <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                                <div className="text-sm-end fs-16px">
-                                    2,497,5000
-                                    <br />
-                                    <div className="text-secondary fs-12px mt-1 fw-bold">
-                                        NDB
+                                </td>
+                                <td className="text-light pe-5 pe-sm-0 fw-light">
+                                    <div className="fs-16px">{date}</div>
+                                    <div className="text-secondary fs-12px mt-1 fw-500">
+                                        {time}
                                     </div>
-                                </div>
-                            </td>
-                            <td className="text-end pe-5 pe-sm-0">
-                                <img src={BTCGrayIcon} alt="" />
-                            </td>
-                            <td className="d-flex align-items-center justify-content-end">
-                                <div className="green-bullet me-2"></div>
-                                <div>Success</div>
-                            </td>
-                        </tr>
-                    </>
-                ))}
+                                </td>
+                                <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
+                                    <div className="text-sm-end fs-16px">
+                                        {amount + " " + "USD"}
+                                    </div>
+                                </td>
+                                <td className="text-end pe-5 pe-sm-0">
+                                    <img
+                                        src={
+                                            payment === 1
+                                                ? Credit
+                                                : payment === 2
+                                                ? BTCGrayIcon
+                                                : NdbWallet
+                                        }
+                                        alt="Payment icon"
+                                    />
+                                </td>
+                                {status === 0 ? (
+                                    <td className="d-flex flex-column align-items-end">
+                                        <div className="d-flex align-items-center justify-content-end">
+                                            <div className="gray-bullet me-2"></div>
+                                            <div>Processing</div>
+                                        </div>
+                                        <div className="text-secondary text-decoration-underline text-decoration-secondary fs-14px">
+                                            Cancel
+                                        </div>
+                                    </td>
+                                ) : status === 1 ? (
+                                    <td className="d-flex align-items-center justify-content-end">
+                                        <div className="green-bullet me-2"></div>
+                                        <div>Success</div>
+                                    </td>
+                                ) : (
+                                    <td className="d-flex align-items-center justify-content-end">
+                                        <div className="red-bullet me-2"></div>
+                                        <div>Fail</div>
+                                    </td>
+                                )}
+                            </tr>
+                        </>
+                    )
+                )}
             </table>
         </div>
     );

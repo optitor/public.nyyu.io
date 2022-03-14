@@ -43,9 +43,9 @@ const TransactionsProvider = ({ children }) => {
 
     // Methods
     const createDateFromDate = (createdTime) => {
-        let month = createdTime.getMonth();
+        let month = createdTime.getMonth() + 1;
         if (month < 10) month = "0" + month;
-        let day = createdTime.getDay();
+        let day = createdTime.getDate();
         if (day < 10) day = "0" + day;
 
         let year = createdTime.getFullYear();
@@ -120,7 +120,7 @@ const TransactionsProvider = ({ children }) => {
                         transaction: "123456789 #",
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
-                        amount: item.ndbAMount * item.ndbPrice,
+                        amount: item.ndbAmount * item.ndbPrice,
                         payment: 1,
                         status: item.status,
                     };
@@ -137,6 +137,7 @@ const TransactionsProvider = ({ children }) => {
         // data
         depositTransactions,
         bidList,
+        presaleList,
 
         currentTab,
         setCurrentTab,
