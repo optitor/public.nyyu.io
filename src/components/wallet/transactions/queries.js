@@ -37,3 +37,22 @@ export const GET_BID_LIST_BY_USER = gql`
         }
     }
 `;
+
+export const GET_PRESALE_ORDERS_BY_USER = gql`
+    query {
+        getPresaleOrdersByUser {
+            id
+            userId
+            presaleId
+            prefix
+            name
+            destination
+            extAddr
+            ndbAmount
+            ndbPrice
+            status
+            createdAt
+            updatedAt
+        }
+    }
+`;

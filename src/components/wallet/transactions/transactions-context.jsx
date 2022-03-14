@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import {
     GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS,
     GET_BID_LIST_BY_USER,
+    GET_PRESALE_ORDERS_BY_USER,
 } from "./queries";
 
 export const TransactionsContext = React.createContext();
@@ -37,7 +38,8 @@ const TransactionsProvider = ({ children }) => {
     const [currentTab, setCurrentTab] = useState(0);
     const [depositTransactions, setDepositTransactions] = useState(null);
     const [bidList, setBidList] = useState(null);
-    const loading = !(depositTransactions && bidList);
+    const [presaleList, setPresaleList] = useState(null);
+    const loading = !(depositTransactions && bidList && presaleList);
 
     // Methods
     const createDateFromDate = (createdTime) => {
@@ -99,6 +101,31 @@ const TransactionsProvider = ({ children }) => {
                     };
                 });
             setBidList(fooList);
+        },
+        onError: (error) => console.log(error),
+    });
+
+    useQuery(GET_PRESALE_ORDERS_BY_USER, {
+        onCompleted: (data) => {
+            const fooList = data.getPresaleOrdersByUser
+                .sort(
+                    (presale1, presale2) =>
+                        presale2.createdAt - presale1.createdAt
+                )
+                .map((item) => {
+                    const createdTime = new Date(item.createdAt);
+                    console.log("item", item);
+                    console.log("item dot createdAt", item.createdAt);
+                    return {
+                        transaction: "123456789 #",
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        amount: item.ndbAMount * item.ndbPrice,
+                        payment: 1,
+                        status: item.status,
+                    };
+                });
+            setPresaleList(fooList);
         },
         onError: (error) => console.log(error),
     });
