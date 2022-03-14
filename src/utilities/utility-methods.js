@@ -120,3 +120,14 @@ export const getStripePaymentFee = (user, allFees, bidAmount) => {
     return stripePaymentFee.toFixed(2);
 };
 
+
+export const createDateFromDateObject = () => {
+    const today = new Date()
+    let month = today.getMonth() + 1;
+    if (month < 10) month = "0" + month;
+    let day = today.getDate();
+    if (day < 10) day = "0" + day;
+    let year = today.getFullYear();
+
+    return year + "-" + month + "-" + day;
+};
