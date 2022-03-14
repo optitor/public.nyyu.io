@@ -14,7 +14,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
 import { Plaid, PaypalFiat, CreditCards, USDT } from '../../utilities/imgImport';
-import { SUPPORED_COINS } from "../../utilities/staticData2";
+import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import { CREATE_CHARGE_FOR_DEPOSIT, PAYPAY_FOR_DEPOSIT, CAPTURE_ORDER_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
@@ -309,7 +309,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
-                                        <FiatButton className="active" onClick={() => setIsPaypalDeposit(true)}>
+                                        <FiatButton className="active" onClick={() => {
+                                            setIsPaypalDeposit(true); setCurrentStep(3);
+                                        }
+                                        }>
                                             <img src={PaypalFiat} alt="paypal" />
                                         </FiatButton>
                                     </div>
@@ -321,7 +324,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
-                                        <FiatButton className="active" onClick={() => setCurrentStep(3)}>
+                                        <FiatButton className="active" onClick={() => {
+                                            setIsPaypalDeposit(false); setCurrentStep(3)
+                                        }
+                                        }>
                                             <p>Standard bank transfer</p>
                                         </FiatButton>
                                     </div>
@@ -388,9 +394,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                     </div>
                 )}
                 {currentStep === 3 && !isPaypalDeposit && (
-                    <div className="deposit width2">
+                    <div className="deposit width2 mb-5">
+                        <h5 className="text-center">Bank transfer deposit</h5>
                         <div>
-                            <p className="subtitle">Deposit Address</p>
+                            <p className="subtitle">Select currency</p>
                             <Select
                                 className="black_input"
                                 options={CURRENCIES}
@@ -447,7 +454,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                     </div>
                 )}
                 {currentStep === 4 && !isPaypalDeposit && (
-                    <div className="deposit width2">
+                    <div className="deposit width2 mb-5">
                         <h4 className="text-center">{currency.label} Deposits Only</h4>
                         <p className="subtitle mb-4">
                             <Icon icon='akar-icons:clock' className="me-2" style={{fontSize: 18}}/>
@@ -466,7 +473,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                             Please make sure you use the reference number indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.
                         </p>
                         <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-30px fw-bold"
+                            className="btn btn-outline-light rounded-0 w-100 fw-bold"
                             // onClick={()}
                         >
                             CONFIRM
@@ -474,53 +481,54 @@ export default function DepositModal({ showModal, setShowModal }) {
                     </div>
                 )}
 
-                {isPaypalDeposit && (
+                {currentStep === 3 && isPaypalDeposit && (
                     <div className="deposit width2">
-                    <div>
-                        <p className="subtitle">Currency</p>
-                        <Select
-                            className="black_input"
-                            options={CURRENCIES}
-                            value={currency}
-                            onChange={(selected) => {
-                                setCurrency(selected)
-                            }}
-                            styles={customSelectStyles}
-                            components={{
-                                IndicatorSeparator: null                                            
-                            }}
-                        />
-                    </div>
-                    <div className="mt-3">
-                        <p className="subtitle">Amount</p>
-                        <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
-                            <NumberFormat id="transferAmount" className="ms-2"
-                                thousandSeparator={true}
-                                prefix={currency.symbol + ' '}
-                                allowNegative={false}
-                                value={transferAmount}
-                                onValueChange={values => setTransferAmount(values.value)}
-                                autoComplete='off'
+                        <h5 className="text-center">Paypal deposit</h5>
+                        <div>
+                            <p className="subtitle">Currency</p>
+                            <Select
+                                className="black_input"
+                                options={CURRENCIES}
+                                value={currency}
+                                onChange={(selected) => {
+                                    setCurrency(selected)
+                                }}
+                                styles={customSelectStyles}
+                                components={{
+                                    IndicatorSeparator: null                                            
+                                }}
                             />
                         </div>
-                    </div>
-                    <div className="mt-3">
-                        <p className="desc">
-                            The <span>{currency.label}</span> will be converted to <span>USDT</span> and deposited to the wallet
-                        </p>
-                        <div className="black_input usdt_div">
-                            <img src={USDT} alt='usdt' className="ms-2" />
-                            <p className="ms-2">USDT</p>
+                        <div className="mt-3">
+                            <p className="subtitle">Amount</p>
+                            <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                <NumberFormat id="transferAmount" className="ms-2"
+                                    thousandSeparator={true}
+                                    prefix={currency.symbol + ' '}
+                                    allowNegative={false}
+                                    value={transferAmount}
+                                    onValueChange={values => setTransferAmount(values.value)}
+                                    autoComplete='off'
+                                />
+                            </div>
                         </div>
+                        <div className="mt-3">
+                            <p className="desc">
+                                The <span>{currency.label}</span> will be converted to <span>USDT</span> and deposited to the wallet
+                            </p>
+                            <div className="black_input usdt_div">
+                                <img src={USDT} alt='usdt' className="ms-2" />
+                                <p className="ms-2">USDT</p>
+                            </div>
+                        </div>
+                        <button
+                            className="btn btn-outline-light rounded-0 w-100 mt-50px mb-5 fw-bold"
+                            onClick={() => {initPaypalCheckout()}}
+                            disabled={!transferAmount}
+                        >
+                            CONTINUE
+                        </button>
                     </div>
-                    <button
-                        className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
-                        onClick={() => {initPaypalCheckout()}}
-                        disabled={!transferAmount}
-                    >
-                        CONTINUE
-                    </button>
-                </div>
                 )}
             </>
         </Modal>

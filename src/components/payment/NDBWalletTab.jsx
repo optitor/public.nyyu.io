@@ -160,7 +160,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                                     styles={customSelectWithIconStyles}
                                 />
                             </div>
-                            <div className="col-lg-8 pl-8px">
+                            <div className="col-lg-8">
                                 <p className="text-lightgrey mb-1">Payment amount</p>
                                 <NumberFormat
                                     className="black_input form-control ps-3"
