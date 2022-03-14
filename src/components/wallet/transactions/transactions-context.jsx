@@ -1,6 +1,9 @@
 import { useQuery } from "@apollo/client";
 import React, { useContext, useState } from "react";
-import { GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS } from "./queries";
+import {
+    GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS,
+    GET_BID_LIST_BY_USER,
+} from "./queries";
 
 export const TransactionsContext = React.createContext();
 export const useTransactions = () => useContext(TransactionsContext);
@@ -32,14 +35,14 @@ const tabs = [
 const TransactionsProvider = ({ children }) => {
     // Containers
     const [currentTab, setCurrentTab] = useState(0);
-    const [depositTransactions, setDepositTransactions] = useState([]);
-    const loading = !depositTransactions.length;
+    const [depositTransactions, setDepositTransactions] = useState(null);
+    const [bidList, setBidList] = useState(null);
+    const loading = !(depositTransactions && bidList);
 
     // Methods
     const createDateFromDate = (createdTime) => {
         let month = createdTime.getMonth();
         if (month < 10) month = "0" + month;
-        console.log("month", month);
         let day = createdTime.getDay();
         if (day < 10) day = "0" + day;
 
@@ -76,19 +79,41 @@ const TransactionsProvider = ({ children }) => {
                 };
             });
 
-            setDepositTransactions([...depositTransactions, ...fooList]);
+            setDepositTransactions(fooList);
         },
+    });
+    useQuery(GET_BID_LIST_BY_USER, {
+        onCompleted: (data) => {
+            const fooList = data.getBidListByUser
+                .sort((bid1, bid2) => bid2.placedAt - bid1.placedAt)
+                .map((item) => {
+                    const createdTime = new Date(item.placedAt);
+                    return {
+                        round: item.round,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        amount: item.totalAmount,
+                        payment: item.payType,
+                        status: item.status,
+                    };
+                });
+            setBidList(fooList);
+        },
+        onError: (error) => console.log(error),
     });
 
     // Methods
 
     // Binding
     const valueObject = {
+        // data
+        depositTransactions,
+        bidList,
+
         currentTab,
         setCurrentTab,
         tabs,
         loading,
-        depositTransactions,
     };
 
     // Render
@@ -100,3 +125,13 @@ const TransactionsProvider = ({ children }) => {
 };
 
 export default TransactionsProvider;
+
+// Here is the status of the bid:
+// NOT_CONFIRMED : 0
+// WINNER        : 1
+// FAILED        : 2
+
+// Payment Methods
+// 	CREDIT: 1
+// 	CRYPTO: 2
+// 	WALLET: 3

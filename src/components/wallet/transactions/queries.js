@@ -19,3 +19,21 @@ export const GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS = gql`
         }
     }
 `;
+
+export const GET_BID_LIST_BY_USER = gql`
+    query {
+        getBidListByUser {
+            roundId
+            round
+            tokenAmount
+            totalAmount
+            paidAmount
+            tokenPrice
+            pendingIncrease
+            payType
+            cryptoType
+            status
+            placedAt
+        }
+    }
+`;
