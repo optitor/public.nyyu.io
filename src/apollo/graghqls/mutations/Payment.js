@@ -93,3 +93,35 @@ export const CAPTURE_ORDER_FOR_AUCTION = gql`
         )
     }
 `;
+
+export const PAYPAY_FOR_DEPOSIT = gql`
+    mutation PaypalForDeposit(
+        $amount: Float
+        $currencyCode: String
+        $cryptoType: String
+    ) {
+        paypalForDeposit(
+            amount: $amount
+            currencyCode: $currencyCode
+            cryptoType: $cryptoType
+        ) {
+            id
+            status
+            links {
+                href
+                rel
+                method
+            }
+        }
+    }
+`;
+
+export const CAPTURE_ORDER_FOR_DEPOSIT = gql`
+    mutation CaptureOrderForDeposit(
+        $orderId: String
+    ) {
+        captureOrderForDeposit(
+            orderId: $orderId
+        )
+    }
+`;

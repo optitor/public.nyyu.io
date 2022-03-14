@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react"
 import { Router } from "@reach/router"
+// import Cookies from 'js-cookie'
 import { navigate } from "gatsby"
 import Loading from "../../components/common/Loading"
 import { useAuth } from "../../hooks/useAuth"
@@ -19,6 +20,7 @@ const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
 const Wallet = lazy(() => import("../../components/wallet"))
 const AuctionWrapper = lazy(() => import("../../components/auction/auction-wrapper"))
 const Payment = lazy(() => import("../../components/payment"))
+const Support = lazy(() => import("../../components/support"))
 const CreditCardDeposit = lazy(() => import("../../components/wallet/CreditCardDeposit"));
 
 const NotFound = lazy(() => import("./../404"))
@@ -35,6 +37,11 @@ const AuthRoute = ({ component: Component, location, ...rest }) => {
 
 const App = () => {
     const isSSR = typeof window === "undefined"
+    // // Remove the cookies for NDB when component will unmount.
+    // useEffect(() => {
+    //     return () => Cookies.remove("NDB_FavCoins", { expires: 0 });
+    // }, []);
+
     return (
         <>
             {!isSSR && (
@@ -58,6 +65,7 @@ const App = () => {
                         <PrivateRoute path="auction" component={AuctionWrapper} />
                         <PrivateRoute path="payment" component={Payment} />
                         <PrivateRoute path="creditDeposit" component={CreditCardDeposit} />
+                        <PrivateRoute path="support" component={Support} />
 
                         <NotFound default />
                     </Router>

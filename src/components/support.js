@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs"
 import {
     ChatButton,
     SupportAuthenticator,
+    SupportDelete,
     SupportRecovery,
     SupportReset,
     SupportSecurity,
@@ -64,6 +65,7 @@ const FAQ = () => {
         {
             id: 5,
             label: "Suspend/Delete Account",
+            icon: SupportDelete,
             clickEvent: () => setIsDeleteAccountModalOpen(true),
         },
     ]
@@ -109,10 +111,7 @@ const FAQ = () => {
                                                     onClick={item.clickEvent}
                                                 >
                                                     <div className="text-light border border-1 border-light text-center support-self-security-item col-12 mb-2">
-                                                        {
-                                                            item?.icon &&
-                                                            <img src={item.icon} alt="item figure" />
-                                                        }
+                                                        <img src={item.icon} alt="item figure" />
                                                         <div>{item.label}</div>
                                                     </div>
                                                 </div>

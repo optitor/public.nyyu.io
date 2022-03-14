@@ -36,7 +36,6 @@
                 }
             }
 
-
             table {
                 width: 100%;
                 thead,
@@ -285,7 +284,6 @@
                     }
                 }
                 &__tab-panel {
-                    padding: 0 20px;
                     &--selected {
                         height: 100%;
                         border-top: 2px solid #464646;
@@ -525,7 +523,7 @@
     .css-xmxkze-menu {
         border-radius: 0 !important;
     }
-    
+
     svg.icon {
         color: white;
         cursor: pointer;
@@ -548,13 +546,25 @@
         width: 70%;
         margin: auto;
     }
-    @include mq('phone', max) {
-        .width1, .width2, .width3, .width4 {
+    @include mq("phone", max) {
+        .width1,
+        .width2,
+        .width3,
+        .width4 {
             width: 100%;
         }
+        width: 100%;
+        overflow: auto;
+        border: none;
+        height: 100vh;
+    }
+    .min_height1 {
+        min-height: 400px;
+    }
+    .min_height2 {
+        min-height: 550px;
     }
     div.deposit {
-        min-height: 400px;
         margin: auto;
         margin-top: 20px;
         margin-bottom: 20px;
@@ -578,7 +588,7 @@
             }
         }
         div.select_div {
-            margin-top: 15px;
+            margin-top: 10px;
         }
         p.subtitle {
             color: $lightgrey;
@@ -595,6 +605,23 @@
         }
         .black_input {
             height: 49px;
+        }
+        div.withdraw_amount {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            input {
+                width: 88%;
+                background: none;
+                border: none;
+                color: white;
+            }
+            p {
+                width: 12%;
+                span {
+                    color: $green;
+                }
+            }
         }
         div.transfer_input {
             display: flex;
@@ -613,7 +640,7 @@
                     color: $green;
                 }
             }
-            @include mq('phone', max) {
+            @include mq("phone", max) {
                 input {
                     width: 95%;
                 }
@@ -642,7 +669,7 @@
                     cursor: pointer;
                 }
             }
-            @include mq('phone', max) {
+            @include mq("phone", max) {
                 flex-direction: column;
                 p.subtitle {
                     width: 100%;
@@ -683,7 +710,7 @@
                         width: 100%;
                     }
                 }
-                @include mq('phone', max) {
+                @include mq("phone", max) {
                     flex-direction: column;
                     div.clipboard {
                         width: 100%;
@@ -698,7 +725,7 @@
                     }
                 }
             }
-            
+
             div.stats_div {
                 margin-top: 50px;
                 div.stats {

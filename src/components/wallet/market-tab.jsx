@@ -4,6 +4,7 @@ import React, { useReducer, useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import axios from "axios";
+import Cookies from 'js-cookie';
 import NumberFormat from "react-number-format";
 import { numberSign, numFormatter } from "../../utilities/number";
 import icons from "base64-cryptocurrency-icons";
@@ -15,11 +16,11 @@ import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
 
-const QUOTE = "USDT"
+const QUOTE = "USDT";
 
-const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines"
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
-const ALLPRICES = "https://api.binance.com/api/v3/ticker/price"
+const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines";
+const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
+const ALLPRICES = "https://api.binance.com/api/v3/ticker/price";
 
 const KLINE_INTERVAL = "1h"
 const GREEN = "#23C865"
@@ -44,39 +45,38 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const { chart, min, price, percent, volume } = state;
 
     useEffect(() => {
-        if(!data.symbol) return;
-        axios
-            .get(KLINE_ENDPOINT, {
-                params: {
-                    symbol: data.symbol + QUOTE,
-                    interval: KLINE_INTERVAL,
-                    startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
-                },
-            })
-            .then((res) => {
-                const data = res.data.map((c) => c[1])
-
-                setState({
-                    min: Math.min(data),
-                    max: Math.max(data),
-                    chart: data,
-                })
-            });
-        const getTicker24hr = () => {
+        (async function() {
             if(!data.symbol) return;
-            axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } }).then((res) => {
+            const res = await axios.get(KLINE_ENDPOINT, {
+                    params: {
+                        symbol: data.symbol + QUOTE,
+                        interval: KLINE_INTERVAL,
+                        startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
+                    },
+                });
+            const chartData = res.data.map((c) => c[1]);
+
+            setState({
+                min: Math.min(chartData),
+                max: Math.max(chartData),
+                chart: chartData,
+            })
+            const getTicker24hr = async () => {
+                if(!data.symbol) return;
+                const res = await axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } });
                 setState({
                     price: res.data.lastPrice,
                     percent: res.data.priceChangePercent,
                     volume: res.data.quoteVolume,
                 })
-            })
-        };
-        getTicker24hr();
-        const interval1 = setInterval(() => {
+            };
+
             getTicker24hr();
-        }, 1000 * REFRESH_TIME);
-        return () => clearInterval(interval1);
+            const interval1 = setInterval(() => {
+                getTicker24hr()
+            }, 1000 * REFRESH_TIME);
+            return () => clearInterval(interval1);
+        })();
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
     
     return (
@@ -192,6 +192,7 @@ export default function MarketTab() {
 
     const [favours, setFavours] = useState({});
 
+
     const InitialFavours = {
         BTC: {symbol: 'BTC'},
         ETH: {symbol: 'ETH'},
@@ -204,11 +205,11 @@ export default function MarketTab() {
     };
 
     useEffect(() => {
-        if(sessionStorage.getItem('NDB_FavCoins')) {
-            setFavours(JSON.parse(sessionStorage.getItem('NDB_FavCoins')));
+        if(Cookies.get('NDB_FavCoins')) {
+            setFavours(JSON.parse(Cookies.get('NDB_FavCoins')));
         } else {
             setFavours(InitialFavours);
-            sessionStorage.setItem('NDB_FavCoins', JSON.stringify(InitialFavours));
+            Cookies.set('NDB_FavCoins', JSON.stringify(InitialFavours));
         }
     }, []);
 
@@ -234,11 +235,11 @@ export default function MarketTab() {
                 price = Number(res.data.lastPrice);
                 percent = Number(res.data.priceChangePercent);
                 volume = Number(res.data.quoteVolume);
-                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? item.symbol + 'Coin', price, percent, volume };
+                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
             }
             setFavoursData({ ...assets })
         })()
-    }, [favours, favoursData])
+    }, [favours, favoursData]);
 
     const set_Favourite_Crypto = item => {
         if(favours[item.symbol]) {
@@ -246,13 +247,13 @@ export default function MarketTab() {
             setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
-            sessionStorage.setItem('NDB_FavCoins', JSON.stringify(favours));
+            Cookies.set('NDB_FavCoins', JSON.stringify(favours));
             
             return;
         }
         const temp = { ...favours, [item.symbol]: item };
         setFavours(temp);
-        sessionStorage.setItem('NDB_FavCoins', JSON.stringify(temp));
+        Cookies.set('NDB_FavCoins', JSON.stringify(temp));
     };
 
     // console.log(loading)

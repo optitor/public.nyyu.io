@@ -7,15 +7,18 @@ import _ from "lodash";
 import styled from 'styled-components';
 import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
-import Loading from "../common/Loading";
 import { Icon } from "@iconify/react";
-import { useMutation } from '@apollo/client';
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { generateQR } from "../../utilities/string";
+// import { useMutation } from '@apollo/client';
+// import { CopyToClipboard } from "react-copy-to-clipboard";
+// import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
-import { Plaid, PaypalFiat, CreditCards, USDT } from '../../utilities/imgImport';
+import {
+    // Plaid,
+    PaypalFiat,
+    // CreditCards,
+    USDT } from '../../utilities/imgImport';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-import { CREATE_CHARGE_FOR_DEPOSIT, PAYPAY_FOR_DEPOSIT, CAPTURE_ORDER_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
+// import { CREATE_CHARGE_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [
@@ -49,7 +52,10 @@ const TransferData = {
 };
 
 const TransferFee = 0.03; 
+
 const { Option } = components;
+
+const SupportedCoins = _.mapKeys(SUPPORTED_COINS, 'value');
 
 const SelectOption = (props) => {
     return (
@@ -61,6 +67,12 @@ const SelectOption = (props) => {
                     alt={props.data.value}
                 />
                 <p className="coin-label ms-3">
+                    <NumberFormat
+                        value={props.data?.amount}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        renderText={(value, props) => <span {...props}>{value} </span>}
+                    />
                     {props.data?.label}
                 </p>
             </div>
@@ -68,19 +80,31 @@ const SelectOption = (props) => {
     );
 };
 
-export default function DepositModal({ showModal, setShowModal }) {
-    const [selectedAsset, setSelectedAsset] = useState(SUPPORTED_COINS[0]);
+export default function DepositModal({ showModal, setShowModal, assets }) {
+    const myAssets = _.orderBy(assets.filter(item => {
+        return item.tokenSymbol !== 'VOLT';
+    }).map(item => {
+        return {
+            value: item.tokenSymbol,
+            label: item.tokenSymbol,
+            amount: item.free + item.hold,
+            icon: item.symbol,
+            balance: item.balance,
+            networks: SupportedCoins[item.tokenSymbol]?.networks
+        };
+    }), ['balance'], ['desc']);
+    
+    const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [currentStep, setCurrentStep] = useState(1);
+    const [isPaypalWithdraw, setIsPaypalWithdraw] = useState(false);
     const [tabIndex, setTabIndex] = useState(1);
     const [copied, setCopied] = useState(false);
     const [pending, setPending] =useState(false);
-    const [coinQRCode, setCoinQRCode] = useState("");
 
-    const [loading, setLoading] = useState(false);
-
-    const networks = useMemo(() => (selectedAsset.networks), [selectedAsset]);    
+    const networks = useMemo(() => (selectedAsset?.networks?? []), [selectedAsset]);    
     const [network, setNetwork] = useState(networks[0]);
-    const [depositData, setDepositData] = useState({});
+    const [withdrawData, setWithdrawData] = useState({destAddress: '', amount: ''});
+    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) > selectedAsset.amount;
 
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
@@ -88,36 +112,25 @@ export default function DepositModal({ showModal, setShowModal }) {
 
     const [copyText, setCopyText] = useState('');
 
-    const [isPaypalDeposit, setIsPaypalDeposit] = useState(false);
 
-    useEffect(() => {
-        (async function() {
-            if (depositData.depositAddress) {
-                const qrCode = await generateQR(depositData.depositAddress);
-                setCoinQRCode(qrCode);
-            }
-            return "";
-        })();
-    }, [depositData]);
+    // const [createChargeForDepositMutation] = useMutation(
+    //     CREATE_CHARGE_FOR_DEPOSIT,
+    //     {
+    //         onCompleted: (data) => {
+    //             if (data.createChargeForDeposit) {
+    //                 const resData = data.createChargeForDeposit;
 
-    const [createChargeForDepositMutation] = useMutation(
-        CREATE_CHARGE_FOR_DEPOSIT,
-        {
-            onCompleted: (data) => {
-                if (data.createChargeForDeposit) {
-                    const resData = data.createChargeForDeposit;
-
-                    setDepositData(resData);
-                    setPending(false);
-                    setCurrentStep(2);
-                }
-            },
-            onError: (err) => {
-                console.log("get deposit address: ", err);
-                setPending(false);
-            },
-        }
-    );
+    //                 setDepositData(resData);
+    //                 setPending(false);
+    //                 setCurrentStep(2);
+    //             }
+    //         },
+    //         onError: (err) => {
+    //             console.log("get deposit address: ", err);
+    //             setPending(false);
+    //         },
+    //     }
+    // );
 
     const goBackToFiat = () => {
         setCurrentStep(1);
@@ -143,7 +156,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     };
 
     const closeModal = () => {
-        setDepositData({});
+        setWithdrawData({});
         setShowModal(false);
     };
 
@@ -160,52 +173,6 @@ export default function DepositModal({ showModal, setShowModal }) {
         setCopyText(text);
     };
 
-    const initPaypalCheckout = () => {
-        setLoading(true);
-        paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
-    }
-
-    const [paypalDeposit] = useMutation(PAYPAY_FOR_DEPOSIT, {
-        onCompleted: (data) => {
-            let links = data.paypalForDeposit.links;
-            for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === 'approve') {
-                    window.location.href = links[i].href;
-                    break;
-                }
-            }
-        },
-        onError: err => {
-            console.log(err);
-            alert('Error in PayPal checkout')
-            setLoading(false);
-        },
-    })
-
-    const [captureOrderForDeposit] = useMutation(CAPTURE_ORDER_FOR_DEPOSIT, {
-        onCompleted: (data) => {
-            if (data.captureOrderForDeposit) {
-                alert('Your checkout was successfully!')
-            } else {
-                alert('Error in checkout with PayPal');
-            }
-        },
-        onError: (err) => {
-            alert('Error in checkout with PayPal');
-        },
-    })
-
-    let orderCaptured = false;
-
-    if (window.location.href.includes('token=') && !orderCaptured) {
-        var url = new URL(window.location.href);
-        let token = url.searchParams.get("token");
-        orderCaptured = true;
-        captureOrderForDeposit({variables: {orderId: token}});
-    }
-
-    if (loading) return <Loading />;
-
     return (
         <Modal
             isOpen={showModal}
@@ -219,23 +186,15 @@ export default function DepositModal({ showModal, setShowModal }) {
                     <Icon
                         className="icon"
                         icon="carbon:arrow-left"
-                        onClick={() => setCurrentStep(1)}
+                        onClick={goBackToFiat}
                     />
                 )}
                 {currentStep === 3 && (
                     <Icon
                         className="icon"
                         icon="carbon:arrow-left"
-                        onClick={goBackToFiat}
-                    />
-                )}
-                {currentStep === 4 && (
-                    <Icon
-                        className="icon"
-                        icon="carbon:arrow-left"
                         onClick={() => {
-                            setCurrentStep(3);
-                            setCopyText('');
+                            setCurrentStep(2);
                         }}
                     />
                 )}
@@ -244,9 +203,9 @@ export default function DepositModal({ showModal, setShowModal }) {
             </div>
             <>
                 {currentStep === 1 && (
-                    <div className="deposit min_height1">
+                    <div className="deposit min_height2">
                         <div className="width1">
-                            <h4 className="text-center mb-4">Deposit</h4>
+                            <h4 className="text-center mb-4">Withdraw</h4>
                             <div className="button-group">
                                 <button className={`btn ${tabIndex === 1? 'selected': ''}`}
                                     onClick={() => setTabIndex(1)}
@@ -256,13 +215,17 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 >Fiat</button>
                             </div>
                         </div>
-                        {tabIndex === 1 && (
-                            <div className="width1">
+                        {tabIndex === 1 &&
+                        (_.isEmpty(myAssets)?
+                            <p className='text-center mt-3'>
+                                No Assets to withdraw
+                            </p>:
+                            (<div className="width1">
                                 <div className="select_div">
                                     <p className="subtitle">Select coin</p>
                                     <Select
                                         className="black_input"
-                                        options={SUPPORTED_COINS}
+                                        options={myAssets}
                                         value={selectedAsset}
                                         onChange={(selected) => {
                                             setSelectedAsset(selected)
@@ -291,43 +254,55 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         }}
                                     />
                                 </div>
+                                <div className="select_div">
+                                    <p className="subtitle">Destination wallet address</p>
+                                    <input
+                                        className="black_input"
+                                        value={withdrawData.destAddress}
+                                        onChange = {e => setWithdrawData({ ...withdrawData, destAddress: e.target.value }) }
+                                    />
+                                </div>
+                                <div className="select_div">
+                                    <p className="subtitle">Amount</p>
+                                    <div className='black_input withdraw_amount ps-2'>
+                                        <NumberFormat
+                                            value={withdrawData.amount}
+                                            thousandSeparator={true}
+                                            onValueChange={(values) => {
+                                                setWithdrawData({ ...withdrawData, amount: values.value });
+                                            }}
+                                            allowNegative={false}
+                                        />
+                                        <p className="btn"
+                                            onClick={() => {
+                                                setWithdrawData({ ...withdrawData, amount: selectedAsset.amount })
+                                            }}
+                                        ><span>MAX</span></p>
+                                    </div>
+                                </div>
                                 <button
-                                    className="btn btn-outline-light rounded-0 w-100 mt-40px fw-bold"
-                                    onClick={create_Charge_For_Deposit}
-                                    disabled={pending}
+                                    className="btn btn-outline-light rounded-0 w-100 mt-40px fw-bold mb-3"
+                                    // onClick={create_Charge_For_Deposit}
+                                    disabled={pending || invalidForWithdraw}
                                 >
-                                    {pending? <CustomSpinner />: 'GET DEPOSIT ADDRESS'}
+                                    {pending? <CustomSpinner />: 'WITHDRAW'}
                                 </button>
-                            </div>
+                            </div>)
                         )}
                         {tabIndex === 2 && (
-                            <div className="width2 mt-5">
-                                <div className="row">
-                                    <div className="col-sm-6">
-                                        <FiatButton className="inactive">
-                                            <img src={Plaid} alt="plaid" />
-                                        </FiatButton>
-                                    </div>
+                            <div className="width2 mt-5 pt-5">
+                                <div className="row mt-5">
                                     <div className="col-sm-6">
                                         <FiatButton className="active" onClick={() => {
-                                            setIsPaypalDeposit(true); setCurrentStep(3);
-                                        }
-                                        }>
+                                            setIsPaypalWithdraw(true); setCurrentStep(2);
+                                        }}>
                                             <img src={PaypalFiat} alt="paypal" />
                                         </FiatButton>
                                     </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-sm-6">
-                                        <FiatButton className="active" onClick={handleCreditDeposit}>
-                                            <img src={CreditCards} alt="creditcards" />
-                                        </FiatButton>
-                                    </div>
                                     <div className="col-sm-6">
                                         <FiatButton className="active" onClick={() => {
-                                            setIsPaypalDeposit(false); setCurrentStep(3)
-                                        }
-                                        }>
+                                            setIsPaypalWithdraw(false); setCurrentStep(2);
+                                        }}>
                                             <p>Standard bank transfer</p>
                                         </FiatButton>
                                     </div>
@@ -336,66 +311,19 @@ export default function DepositModal({ showModal, setShowModal }) {
                         )}
                     </div>
                 )}
-                {currentStep === 2 && !_.isEmpty(depositData) && !isPaypalDeposit && (
-                    <div className="deposit width3">
-                        <div className="address_div">
-                            <p className="subtitle">Deposit Address</p>
-                            <div className="clip_div">
-                                <CopyToClipboard
-                                    onCopy={handleCopy}
-                                    text={depositData?.depositAddress}
-                                    options={{ message: "copied" }}
-                                >
-                                    <div
-                                        className="clipboard"
-                                        onClick={handleCopy}
-                                        onKeyDown={handleCopy}
-                                        role="presentation"
-                                    >
-                                        <div className="address">{depositData?.depositAddress}</div>
-                                        <div className="copy_icon">
-                                            <Icon
-                                                icon={
-                                                    copied
-                                                        ? "clarity:copy-solid"
-                                                        : "clarity:copy-line"
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                </CopyToClipboard>
-                                <div className="qr_code">
-                                    {coinQRCode ? <img src={coinQRCode} alt="qrcode" /> : ""}
-                                </div>
+                {currentStep === 2 && isPaypalWithdraw && (
+                    <div className="deposit width2 mb-5">
+                        <h5 className="text-center">Paypal withdraw</h5>
+                        <div className="mt-3">
+                            <p className="subtitle">Source of fund</p>
+                            <div className="black_input usdt_div">
+                                <img src={USDT} alt='usdt' className="ms-2" />
+                                <p className="ms-2">USDT</p>
                             </div>
                             <p className="desc">
-                                Send only <span>{selectedAsset.value}</span> to this deposit address. Ensure the network is <span>{network.label}</span>
-                            </p>                      
-                            <div className="stats_div">
-                                <div className="stats">
-                                    <p className="topic">Status</p>
-                                    <p className="content">Waiting for your funds</p>
-                                </div>
-                                <div className="stats">
-                                    <p className="topic">Received so far</p>
-                                    <p className="content">0.000000000 BTC</p>
-                                </div>
-                                <hr />
-                                <div className="stats">
-                                    <p className="topic">Time left to confirm funds</p>
-                                    <p className="content">8h 0m 0s</p>
-                                </div>
-                                <div className="stats">
-                                    <p className="topic">Payment ID</p>
-                                    <p className="content">{depositData?.id}</p>
-                                </div>
-                            </div>
+                                The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your paypal account
+                            </p>
                         </div>
-                    </div>
-                )}
-                {currentStep === 3 && !isPaypalDeposit && (
-                    <div className="deposit width2 mb-5">
-                        <h5 className="text-center">Bank transfer deposit</h5>
                         <div>
                             <p className="subtitle">Select currency</p>
                             <Select
@@ -435,57 +363,30 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be converted to <span>USDT</span> and deposited to the wallet
-                            </p>
-                            <div className="black_input usdt_div">
-                                <img src={USDT} alt='usdt' className="ms-2" />
-                                <p className="ms-2">USDT</p>
-                            </div>
-                        </div>
                         <button
                             className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
-                            onClick={() => setCurrentStep(4)}
+                            onClick={() => setCurrentStep(3)}
                             disabled={!transferAmount}
                         >
                             NEXT
                         </button>
                     </div>
                 )}
-                {currentStep === 4 && !isPaypalDeposit && (
+                {currentStep === 2 && !isPaypalWithdraw && (
                     <div className="deposit width2 mb-5">
-                        <h4 className="text-center">{currency.label} Deposits Only</h4>
-                        <p className="subtitle mb-4">
-                            <Icon icon='akar-icons:clock' className="me-2" style={{fontSize: 18}}/>
-                            Incoming payments can take 3 working days to be added to your wallet
-                        </p>
-                        {_.map(TransferData[currency.value], (val, key) => (
-                            <div className="transfer_data_div" key={key}>
-                                <p className="subtitle pe-2">{key}:</p>
-                                <p className="value">
-                                    {val}
-                                    <Icon icon={copyText === val? 'fluent:copy-20-filled': 'fluent:copy-24-regular'} onClick={() => handleCopyToClipboard(val)} />
-                                </p>
+                        <h5 className="text-center">Bank transfer withdraw</h5>
+                        <div className="mt-3">
+                            <p className="subtitle">Source of fund</p>
+                            <div className="black_input usdt_div">
+                                <img src={USDT} alt='usdt' className="ms-2" />
+                                <p className="ms-2">USDT</p>
                             </div>
-                        ))}
-                        <p className="subtitle mt-4">
-                            Please make sure you use the reference number indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.
-                        </p>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 fw-bold"
-                            // onClick={()}
-                        >
-                            CONFIRM
-                        </button>
-                    </div>
-                )}
-
-                {currentStep === 3 && isPaypalDeposit && (
-                    <div className="deposit width2">
-                        <h5 className="text-center">Paypal deposit</h5>
+                            <p className="desc">
+                                The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your bank
+                            </p>
+                        </div>
                         <div>
-                            <p className="subtitle">Currency</p>
+                            <p className="subtitle">Select currency</p>
                             <Select
                                 className="black_input"
                                 options={CURRENCIES}
@@ -510,23 +411,52 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     onValueChange={values => setTransferAmount(values.value)}
                                     autoComplete='off'
                                 />
-                            </div>
-                        </div>
-                        <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be converted to <span>USDT</span> and deposited to the wallet
-                            </p>
-                            <div className="black_input usdt_div">
-                                <img src={USDT} alt='usdt' className="ms-2" />
-                                <p className="ms-2">USDT</p>
+                                <div>
+                                    Bank transfer fee{' '}
+                                    <NumberFormat
+                                        thousandSeparator={true}
+                                        suffix={' ' + currency.symbol}
+                                        displayType='text'
+                                        allowNegative={false}
+                                        value={Number(transferAmount) * TransferFee}
+                                        decimalScale={2}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-50px mb-5 fw-bold"
-                            onClick={() => {initPaypalCheckout()}}
+                            className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
+                            onClick={() => setCurrentStep(3)}
                             disabled={!transferAmount}
                         >
-                            CONTINUE
+                            NEXT
+                        </button>
+                    </div>
+                )}
+                {currentStep === 3 && (
+                    <div className="deposit width2 mb-5">
+                        <h4 className="text-center">{currency.label} Deposits Only</h4>
+                        <p className="subtitle mb-4">
+                            <Icon icon='akar-icons:clock' className="me-2" style={{fontSize: 18}}/>
+                            Incoming payments can take 3 working days to be added to your wallet
+                        </p>
+                        {_.map(TransferData[currency.value], (val, key) => (
+                            <div className="transfer_data_div" key={key}>
+                                <p className="subtitle pe-2">{key}:</p>
+                                <p className="value">
+                                    {val}
+                                    <Icon icon={copyText === val? 'fluent:copy-20-filled': 'fluent:copy-24-regular'} onClick={() => handleCopyToClipboard(val)} />
+                                </p>
+                            </div>
+                        ))}
+                        <p className="subtitle mt-4">
+                            Please make sure you use the reference number indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.
+                        </p>
+                        <button
+                            className="btn btn-outline-light rounded-0 w-100 mt-30px fw-bold"
+                            // onClick={()}
+                        >
+                            CONFIRM
                         </button>
                     </div>
                 )}

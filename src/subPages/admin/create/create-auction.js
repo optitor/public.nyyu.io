@@ -125,7 +125,6 @@ const IndexPage = () => {
     const handleSubmit = async () => {
         setPending(true);
         const createData = {
-            round: Number(roundData.roundNumber),
             startedAt: Number(roundData.startTime),
             duration: Number(duration),
             totalToken: Number(tokenData.tokenAmount),

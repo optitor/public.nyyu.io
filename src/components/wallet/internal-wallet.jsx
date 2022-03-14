@@ -7,6 +7,7 @@ import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
 import DepositWithdrawModal from "./deposit-withdraw-modal";
 import DepositModal from "./DepositModal";
+import WithdrawModal from "./WithdrawModal";
 import CustomSpinner from "../common/custom-spinner";
 import { TRANSACTION_TYPES } from "../../utilities/staticData";
 import NumberFormat from "react-number-format";
@@ -16,7 +17,7 @@ import { Icon } from "@iconify/react";
 
 const QUOTE = "USDT";
 const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
-const REFRESH_TIME = 100;
+const REFRESH_TIME = 30;
 
 const Asset = ({ item }) => {
     const currency = useSelector(state => state.placeBid.currency);
@@ -59,9 +60,8 @@ export default function InternalWallet() {
     const [BTCPrice, setBTCPrice] = useState(10000);
 
     const [hideValues, setHideValues] = useState(false);
-    const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit);
-    const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false);
     const [isDepositOpen, setIsDepositOpen] = useState(false);
+    const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
     const obscureValueString = "******";
     const [isShowBTC, setIsShowBTC] = useState(true);
 
@@ -70,19 +70,12 @@ export default function InternalWallet() {
         return _.sumBy(Object.values(myAssets), "balance") ?? 0
     }, [myAssets]);
 
-    const depositAssets = useMemo(() => {
-        const temp = {...myAssets};
-        if(temp['NDB']) delete temp['NDB'];
-        if(temp['VOLT']) delete temp['VOLT'];
-        return { ...temp };
-    }, [myAssets]);
-
     useEffect(() => {
         const get_BTCPrice = () => {
             axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
-                setBTCPrice(res.data.price)
+                setBTCPrice(res.data.price);
             })
-        }
+        };
         get_BTCPrice();
         const interval = setInterval(() => {
             get_BTCPrice()
@@ -137,7 +130,7 @@ export default function InternalWallet() {
             }, 1000 * REFRESH_TIME);
 
             return () => clearInterval(interval1);
-        })()
+        })();
     }, [Object.keys(myAssets).length]);
 
     const loadingSection = !myAssets;
@@ -211,7 +204,7 @@ export default function InternalWallet() {
                                                 : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
                                             : totalBalance === 0
                                             ? 0
-                                            : (totalBalance / BTCPrice).toFixed(9)
+                                            : (totalBalance / BTCPrice).toFixed(8)
                                     }
                                     className="value"
                                     displayType="text"
@@ -227,7 +220,7 @@ export default function InternalWallet() {
                                         isShowBTC === false
                                             ? totalBalance === 0
                                                 ? 0
-                                                : (totalBalance / BTCPrice).toFixed(9)
+                                                : (totalBalance / BTCPrice).toFixed(8)
                                             : totalBalance === 0
                                             ? 0
                                             : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
@@ -247,11 +240,10 @@ export default function InternalWallet() {
                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                         <div className="col-6 pe-2">
                             <button
-                                className={`btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4 ${loadingOfAssets? 'disabled': ''}`}
+                                className='btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4'
                                 onClick={() => {
                                     setIsDepositOpen(true)
                                 }}
-                                disabled={loadingOfAssets}
                             >
                                 deposit
                             </button>
@@ -260,25 +252,24 @@ export default function InternalWallet() {
                             <button
                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
-                                    setTransactionType(TRANSACTION_TYPES.withdraw)
-                                    setShowDepositAndWidthdrawModal(true)
+                                    setIsWithdrawOpen(true)
                                 }}
+                                disabled={loadingOfAssets}
                             >
                                 withdraw
                             </button>
                         </div>
-                        {showDepositAndWidthdrawModal && (
-                            <DepositWithdrawModal
-                                showModal={showDepositAndWidthdrawModal}
-                                setShowModal={setShowDepositAndWidthdrawModal}
-                                transactionType={transactionType}
+                        {isWithdrawOpen && (
+                            <WithdrawModal
+                                showModal={isWithdrawOpen}
+                                setShowModal={setIsWithdrawOpen}
+                                assets = {Object.values(myAssets)}
                             />
                         )}
                         {isDepositOpen && (
                             <DepositModal
                                 showModal={isDepositOpen}
                                 setShowModal={setIsDepositOpen}
-                                myAssets={Object.values(depositAssets)}
                             />
                         )}
                     </div>
@@ -292,7 +283,7 @@ export default function InternalWallet() {
                                     <CustomSpinner />
                                 </div>
                             )}
-                            {!loadingOfAssets && _.map(_.orderBy(myAssets, ["balance"], ["desc"]), (item) => (
+                            {!loadingOfAssets && _.map(_.orderBy(myAssets, ["balance", "tokenSymbol"], ["desc", "asc"]), (item) => (
                                 <Asset item={item} key={item.tokenName} />
                             ))}
                             {!loadingOfAssets && Object.values(myAssets).length === 0 && (
