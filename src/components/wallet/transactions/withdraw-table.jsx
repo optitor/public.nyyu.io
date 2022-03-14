@@ -35,7 +35,17 @@ export default function WithdrawTable() {
                         Status
                     </th>
                 </tr>
-                {depositTransactions.map(
+                {depositTransactions?.length === 0 && (
+                    <tr className="py-4 text-center">
+                        <td
+                            colSpan={4}
+                            className="text-light fs-16px text-uppercase fw-500"
+                        >
+                            no records found
+                        </td>
+                    </tr>
+                )}
+                {depositTransactions?.map(
                     ({
                         id,
                         date,

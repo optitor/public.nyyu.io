@@ -25,7 +25,17 @@ export default function BidTable() {
                         Status
                     </th>
                 </tr>
-                {bidList.map(
+                {bidList?.length === 0 && (
+                    <tr className="py-4 text-center">
+                        <td
+                            colSpan={5}
+                            className="text-light fs-16px text-uppercase fw-500"
+                        >
+                            no records found
+                        </td>
+                    </tr>
+                )}
+                {bidList?.map(
                     ({ round, date, time, amount, payment, status }) => (
                         <>
                             <tr className="border-bottom-2-dark-gray">

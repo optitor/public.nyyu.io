@@ -60,6 +60,7 @@ const TransactionsProvider = ({ children }) => {
 
         return hours + ":" + minutes + ":" + seconds;
     };
+
     // Webserver
     useQuery(GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
