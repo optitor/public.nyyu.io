@@ -235,7 +235,7 @@ export default function MarketTab() {
                 price = Number(res.data.lastPrice);
                 percent = Number(res.data.priceChangePercent);
                 volume = Number(res.data.quoteVolume);
-                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? item.symbol + 'Coin', price, percent, volume };
+                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
             }
             setFavoursData({ ...assets })
         })()
