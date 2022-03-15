@@ -125,3 +125,31 @@ export const CAPTURE_ORDER_FOR_DEPOSIT = gql`
         )
     }
 `;
+
+export const BANK_FOR_DEPOSIT = gql`
+    mutation BankForDeposit(
+        $amount: Float!
+        $currencyCode: String
+        $cryptoType: String
+    ) {
+        bankForDeposit(
+            amount: $amount
+            currencyCode: $currencyCode
+            cryptoType: $cryptoType
+        ) {
+            id
+            userId
+            uid
+            amount
+            createdAt
+            confirmedAt
+            status
+            fiatType
+            usdAmount
+            cryptoType
+            cryptoPrice
+            fee
+            deposited
+        }
+    }
+`;

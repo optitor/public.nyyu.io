@@ -91,6 +91,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                     icon: item.symbol,
                     amount: item.free
                 }));
+
                 setUserBalances(list);
                 setBalance(list[0]);
             }
@@ -130,6 +131,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                 <CustomSpinner />
             </div>
         );
+
     return (
         <div className="wallet-tab">
             <div className="payment-content">
@@ -230,6 +232,7 @@ const customSelectWithIconStyles = {
     input: (provided) => ({
         ...provided,
         position: "absolute",
+        color: 'transparent'
     }),
     option: (provided, state) => ({
         ...provided,
