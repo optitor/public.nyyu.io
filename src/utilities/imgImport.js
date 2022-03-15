@@ -134,6 +134,9 @@ import amex from "../images/payment/amex.svg"
 
 import europeanflag from "../images/europeanflag.svg"
 
+import accordionDownIcon from "../images/icons/accordion-down-icon.svg"
+import accordionUpIcon from "../images/icons/accordion-up-icon.svg"
+
 
 export const Logo = logo
 export const Bell = bell
@@ -265,3 +268,6 @@ export const Amex = amex
 export const EuropeanFlag = europeanflag
 export const BTCGrayIcon = btcGrayIcon
 export const DownloadIcon = downloadIcon
+
+export const AccordionDownIcon = accordionDownIcon
+export const AccordionUpIcon = accordionUpIcon
