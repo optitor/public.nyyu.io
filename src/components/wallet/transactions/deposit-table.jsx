@@ -9,7 +9,6 @@ export default function DepositTable() {
     // Containers
     const { tabs, depositTransactions } = useTransactions();
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
-    const downloadContentRef = useRef();
 
     // Methods
     const toggleDetails = (index) => {
