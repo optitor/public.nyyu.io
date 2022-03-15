@@ -158,6 +158,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                                         SingleValue: SelectOption,
                                     }}
                                     styles={customSelectWithIconStyles}
+                                    placeholder=''
                                 />
                             </div>
                             <div className="col-lg-8">

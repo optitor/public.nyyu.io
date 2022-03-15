@@ -469,11 +469,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 </p>
                             </div>
                         ))}
-                        <p className="subtitle mt-4">
+                        <p className="subtitle mt-5">
                             Please make sure you use the reference number indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.
                         </p>
                         <button
-                            className="btn btn-outline-light rounded-0 w-100 fw-bold"
+                            className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
                             // onClick={()}
                         >
                             CONFIRM

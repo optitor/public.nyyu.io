@@ -85,7 +85,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const transactionFee = useMemo(() => {
         const fee = allFees[user?.tierLevel]?.fee;
         const txnFee = (bidAmount * (0.5 + fee)) / 100;
-        if (txnFee === NaN) return null;
+        if (isNaN(txnFee)) return null;
         return txnFee.toFixed(4);
     }, [allFees, bidAmount, user]);
     
