@@ -17,7 +17,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useMutation } from "@apollo/client";
-
 import CustomSpinner from "../common/custom-spinner";
 import { generateQR } from "../../utilities/string";
 import { CheckBox } from "../common/FormControl";
@@ -27,7 +26,6 @@ import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import { Copy } from "../../utilities/imgImport";
 import * as Query from "./../../apollo/graghqls/querys/Payment";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-
 
 const QUOTE = "USDT";
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
