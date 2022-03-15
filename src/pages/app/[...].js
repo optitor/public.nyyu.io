@@ -1,6 +1,6 @@
-import React, { Suspense, lazy, useEffect } from "react"
+import React, { Suspense, lazy } from "react"
 import { Router } from "@reach/router"
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 import { navigate } from "gatsby"
 import Loading from "../../components/common/Loading"
 import { useAuth } from "../../hooks/useAuth"
@@ -37,14 +37,13 @@ const AuthRoute = ({ component: Component, location, ...rest }) => {
 
 const App = () => {
     const isSSR = typeof window === "undefined"
-
-    // Remove the cookies for NDB when component will unmount.
-    useEffect(() => {
-        return () => Cookies.remove("NDB_FavCoins", { expires: 0 });
-    }, []);
+    // // Remove the cookies for NDB when component will unmount.
+    // useEffect(() => {
+    //     return () => Cookies.remove("NDB_FavCoins", { expires: 0 });
+    // }, []);
 
     return (
-        <div onUnload>
+        <>
             {!isSSR && (
                 <Suspense fallback={<Loading />}>
                     <Router basepath="app">
@@ -72,7 +71,7 @@ const App = () => {
                     </Router>
                 </Suspense>
             )}
-        </div>
+        </>
     )
 }
 export default App

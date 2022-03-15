@@ -5,10 +5,9 @@ import { useSelector } from 'react-redux';
 import _ from "lodash";
 import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
-import DepositWithdrawModal from "./deposit-withdraw-modal";
 import DepositModal from "./DepositModal";
+import WithdrawModal from "./WithdrawModal";
 import CustomSpinner from "../common/custom-spinner";
-import { TRANSACTION_TYPES } from "../../utilities/staticData";
 import NumberFormat from "react-number-format";
 import { useQuery } from "@apollo/client";
 import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth";
@@ -59,9 +58,8 @@ export default function InternalWallet() {
     const [BTCPrice, setBTCPrice] = useState(10000);
 
     const [hideValues, setHideValues] = useState(false);
-    const [transactionType, setTransactionType] = useState(TRANSACTION_TYPES.deposit);
-    const [showDepositAndWidthdrawModal, setShowDepositAndWidthdrawModal] = useState(false);
     const [isDepositOpen, setIsDepositOpen] = useState(false);
+    const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
     const obscureValueString = "******";
     const [isShowBTC, setIsShowBTC] = useState(true);
 
@@ -73,9 +71,9 @@ export default function InternalWallet() {
     useEffect(() => {
         const get_BTCPrice = () => {
             axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
-                setBTCPrice(res.data.price)
+                setBTCPrice(res.data.price);
             })
-        }
+        };
         get_BTCPrice();
         const interval = setInterval(() => {
             get_BTCPrice()
@@ -204,7 +202,7 @@ export default function InternalWallet() {
                                                 : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
                                             : totalBalance === 0
                                             ? 0
-                                            : (totalBalance / BTCPrice).toFixed(9)
+                                            : (totalBalance / BTCPrice).toFixed(8)
                                     }
                                     className="value"
                                     displayType="text"
@@ -220,7 +218,7 @@ export default function InternalWallet() {
                                         isShowBTC === false
                                             ? totalBalance === 0
                                                 ? 0
-                                                : (totalBalance / BTCPrice).toFixed(9)
+                                                : (totalBalance / BTCPrice).toFixed(8)
                                             : totalBalance === 0
                                             ? 0
                                             : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
@@ -240,11 +238,10 @@ export default function InternalWallet() {
                     <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                         <div className="col-6 pe-2">
                             <button
-                                className={`btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4 ${loadingOfAssets? 'disabled': ''}`}
+                                className='btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4'
                                 onClick={() => {
                                     setIsDepositOpen(true)
                                 }}
-                                disabled={loadingOfAssets}
                             >
                                 deposit
                             </button>
@@ -253,18 +250,18 @@ export default function InternalWallet() {
                             <button
                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
-                                    setTransactionType(TRANSACTION_TYPES.withdraw)
-                                    setShowDepositAndWidthdrawModal(true)
+                                    setIsWithdrawOpen(true)
                                 }}
+                                disabled={loadingOfAssets}
                             >
                                 withdraw
                             </button>
                         </div>
-                        {showDepositAndWidthdrawModal && (
-                            <DepositWithdrawModal
-                                showModal={showDepositAndWidthdrawModal}
-                                setShowModal={setShowDepositAndWidthdrawModal}
-                                transactionType={transactionType}
+                        {isWithdrawOpen && (
+                            <WithdrawModal
+                                showModal={isWithdrawOpen}
+                                setShowModal={setIsWithdrawOpen}
+                                assets = {Object.values(myAssets)}
                             />
                         )}
                         {isDepositOpen && (

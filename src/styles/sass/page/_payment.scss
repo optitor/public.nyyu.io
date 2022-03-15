@@ -203,16 +203,30 @@
                 line-height: 29px;
                 padding: 9px 29px;
                 color: white;
+                height: 49px;
             }
             .css-1s2u09g-control,
             .css-1pahdxg-control {
                 @extend %select-style;
+                padding: 0!important;
             }
             .css-1okebmr-indicatorSeparator {
                 display: none;
             }
             .css-319lph-ValueContainer {
                 padding: 0;
+            }
+            .select_div {
+                display: flex;
+                .col-lg-8 {
+                    margin-left: 10px;
+                }
+                @include mq('phone', max) {
+                    flex-direction:  column;
+                    .col-lg-8 {
+                        margin-left: 0;
+                    }
+                }
             }
         }
 
@@ -320,63 +334,9 @@
         }
         .wallet-tab {
             .balance-select {
+                height: 49px;
                 @include mq("laptop", max) {
                     margin-bottom: 16px;
-                }
-                .css-1s2u09g-control {
-                    padding-top: 9px;
-                    padding-bottom: 9px;
-                    padding-right: 0px !important;
-                    @include mq("laptop", max) {
-                        border: 1px solid white;
-                    }
-                    .wallet-select__value {
-                        color: white;
-                        text-transform: uppercase;
-                        font-weight: bold;
-                        font-size: 18px;
-                        line-height: 22px;
-                    }
-                }
-                .css-1pahdxg-control {
-                    // border: none;
-                    @include mq("laptop", max) {
-                        border: 1px solid white;
-                    }
-                    .wallet-select__value {
-                        color: white;
-                        text-transform: uppercase;
-                        font-weight: bold;
-                        font-size: 18px;
-                        line-height: 22px;
-                    }
-                }
-                .css-26l3qy-menu {
-                    border-radius: unset;
-                    background-color: $black;
-                    width: calc(100% - 24px);
-                    & > div {
-                        padding: 0;
-                        & > div {
-                            background-color: $black;
-                            cursor: pointer;
-                            border: 1px solid white;
-                            border-bottom: none;
-                            padding: 20px 15px;
-                            &:last-child {
-                                border-bottom: 1px solid white;
-                            }
-                        }
-                    }
-                    .custom-option {
-                        display: flex;
-                        justify-content: space-between;
-                        p {
-                            font-weight: bold;
-                            font-size: 20px;
-                            line-height: 24px;
-                        }
-                    }
                 }
             }
             .choosed-icon {

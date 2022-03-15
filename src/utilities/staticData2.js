@@ -8,9 +8,10 @@ import {
     SOL,
     DOGE,
     SHIB,
+    NDB,
 } from "./imgImport";
 
-export const SUPPORED_COINS = [
+export const SUPPORTED_COINS = [
     {
         value: "BTC",
         label: "BTC",
@@ -97,8 +98,18 @@ export const SUPPORED_COINS = [
         value: "SOL",
         label: "SOL",
         icon: SOL,
-        networks: [{ label: "Solana", value: "SOL", network: "SOL" }],
+        networks: [
+            { label: "Solana", value: "SOL", network: "SOL" }
+        ],
     },
+    {
+        value: "NDB",
+        label: "NDB",
+        icon: NDB,
+        networks: [
+            { label: "NDB (BSC Chain)", value: "NDB.BEP20", network: "BEP20", }
+        ]
+    }
 ];
 
 

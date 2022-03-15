@@ -26,7 +26,7 @@ import * as Mutation from "../../apollo/graghqls/mutations/Payment";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import { Copy } from "../../utilities/imgImport";
 import * as Query from "./../../apollo/graghqls/querys/Payment";
-import { SUPPORED_COINS } from "../../utilities/staticData2";
+import { SUPPORTED_COINS } from "../../utilities/staticData2";
 
 
 const QUOTE = "USDT";
@@ -85,7 +85,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const transactionFee = useMemo(() => {
         const fee = allFees[user?.tierLevel]?.fee;
         const txnFee = (bidAmount * (0.5 + fee)) / 100;
-        if (txnFee === NaN) return null;
+        if (isNaN(txnFee)) return null;
         return txnFee.toFixed(4);
     }, [allFees, bidAmount, user]);
     
@@ -93,7 +93,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
                 const temp = JSON.parse(data.getExchangeRate);
-                const coins = SUPPORED_COINS.map((item) => {
+                const coins = SUPPORTED_COINS?.map((item) => {
                     return { ...item, detail: temp?.result[item.value] };
                 });
                 setFooCoins(coins);
@@ -316,7 +316,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         <div className="allow-text text-light">
                             Do you allow fraction of order completion?
                         </div>
-                        <ReactTooltip place="right" type="light" effect="solid">
+                        <ReactTooltip place="right" type="light" effect="solid" id='coinpayments-tooltip'>
                             <div
                                 className="text-justify"
                                 style={{
@@ -328,6 +328,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         </ReactTooltip>
                         <FontAwesomeIcon
                             data-tip="React-tooltip"
+                            data-for='coinpayments-tooltip'
                             icon={faQuestionCircle}
                             className="fa-2x ms-2 cursor-pointer text-light"
                         />

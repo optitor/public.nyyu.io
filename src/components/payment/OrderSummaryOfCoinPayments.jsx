@@ -57,22 +57,20 @@ export default function OrderSummary({ bidAmount }) {
                     </div>
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Transaction fee</p>
-                        <p className="order-list__detail">
-                            {coinData?.transactionFee ? (
-                                <NumberFormat
-                                    className="order-list__detail"
-                                    displayType={"text"}
-                                    suffix={` USD`}
-                                    value={coinData?.transactionFee}
-                                    thousandSeparator={true}
-                                    renderText={(value, props) => (
-                                        <p {...props}>{value}</p>
-                                    )}
-                                />
-                            ) : (
-                                ""
-                            )}
-                        </p>
+                        {coinData?.transactionFee ? (
+                            <NumberFormat
+                                className="order-list__detail"
+                                displayType={"text"}
+                                suffix={` USD`}
+                                value={coinData?.transactionFee}
+                                thousandSeparator={true}
+                                renderText={(value, props) => (
+                                    <p {...props}>{value}</p>
+                                )}
+                            />
+                        ) : (
+                            ""
+                        )}
                     </div>
                 </div>
                 <div

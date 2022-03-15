@@ -16,11 +16,11 @@ import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
 
-const QUOTE = "USDT"
+const QUOTE = "USDT";
 
-const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines"
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr"
-const ALLPRICES = "https://api.binance.com/api/v3/ticker/price"
+const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines";
+const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
+const ALLPRICES = "https://api.binance.com/api/v3/ticker/price";
 
 const KLINE_INTERVAL = "1h"
 const GREEN = "#23C865"
@@ -235,11 +235,11 @@ export default function MarketTab() {
                 price = Number(res.data.lastPrice);
                 percent = Number(res.data.priceChangePercent);
                 volume = Number(res.data.quoteVolume);
-                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? item.symbol + 'Coin', price, percent, volume };
+                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
             }
             setFavoursData({ ...assets })
         })()
-    }, [favours, favoursData])
+    }, [favours, favoursData]);
 
     const set_Favourite_Crypto = item => {
         if(favours[item.symbol]) {

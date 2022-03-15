@@ -34,6 +34,7 @@ import { set_All_Fees } from "../../redux/actions/allFeesAction";
 import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 import NDBWalletTab from "./NDBWalletTab";
+import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -43,23 +44,23 @@ const payment_types = [
     {
         icon: ExternalWallet,
         value: "externalwallets",
-        label: "External Wallets"
-    }
-]
+        label: "External Wallets",
+    },
+];
 
 const Payment = () => {
-    const currentRound = useSelector(state => state?.placeBid.round_id);
-    const bidAmount = useSelector(state => state?.placeBid.bid_amount);
+    const currentRound = useSelector((state) => state?.placeBid.round_id);
+    const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
     const dispatch = useDispatch();
-    const loading = !(totalRounds && barProgress && allFees && !payPalLoading)
+    const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
 
-    const targetCap = 1000000000000
-    const isSSR = typeof window === "undefined"
+    const targetCap = 1000000000000;
+    const isSSR = typeof window === "undefined";
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
@@ -67,100 +68,99 @@ const Payment = () => {
         (old, action) => ({ ...old, ...action }),
         {
             allow_fraction: false,
-            getAddress: false
+            getAddress: false,
         }
-    )
-    const { allow_fraction } = state
+    );
+    const { allow_fraction } = state;
 
     const [tabIndex, setTabIndex] = useState(0);
 
     const handleAllowFraction = useCallback(
-        e => {
+        (e) => {
             e.preventDefault();
             setState({ allow_fraction: !allow_fraction });
-
         },
         [allow_fraction]
-    )
+    );
 
     useQuery(GET_AUCTION, {
-        onCompleted: data => {
+        onCompleted: (data) => {
             setTotalRounds(data.getAuctions.length);
             setBarProgress((currentCap * 100) / targetCap);
-
         },
-        onError: error => console.log(error),
+        onError: (error) => console.log(error),
         errorPolicy: "ignore",
-        fetchPolicy: "network-only"
-    })
+        fetchPolicy: "network-only",
+    });
     useQuery(GET_ALL_FEES, {
-        onCompleted: data => {
+        onCompleted: (data) => {
             setAllFees(data.getAllFees);
             const allFees = _.mapKeys(data.getAllFees, "tierLevel");
 
             if (allFees) {
-                dispatch(set_All_Fees(allFees))
+                dispatch(set_All_Fees(allFees));
             }
         },
-        onError: error => console.log(error),
+        onError: (error) => console.log(error),
     });
 
-
     useEffect(() => {
-        if (barProgress < 1) setBarProgress(1)
-    }, [barProgress])
+        if (barProgress < 1) setBarProgress(1);
+    }, [barProgress]);
 
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === 'approve') {
-                    let token = links[i].href.split('token=')[1];
+                if (links[i].rel === "approve") {
+                    setPayPalLoading(false);
                     window.location.href = links[i].href;
                     break;
                 }
             }
         },
-        onError: err => {
+        onError: (err) => {
             console.log(err);
-            alert('Error in PayPal checkout')
+            alert("Error in PayPal checkout");
             setPayPalLoading(false);
         },
-    })
+    });
 
     const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
         onCompleted: (data) => {
             if (data.captureOrderForAuction) {
-                alert('Your checkout was successfully!')
+                alert("Your checkout was successfully!");
             } else {
-                alert('Error in checkout with PayPal');
+                alert("Error in checkout with PayPal");
             }
         },
         onError: (err) => {
-            alert('Error in checkout with PayPal');
+            alert("Error in checkout with PayPal");
         },
-    })
-    
+    });
+
     const initPaypal = () => {
         setPayPalLoading(true);
-        createPayPalOrder({variables: {roundId: currentRound, currencyCode: 'USD'}});
-    }
+        createPayPalOrder({
+            variables: { roundId: currentRound, currencyCode: "USD" },
+        });
+    };
 
     let orderCaptured = false;
 
-    if (window.location.href.includes('token=') && !orderCaptured) {
+    if (window.location.href.includes("token=") && !orderCaptured) {
         var url = new URL(window.location.href);
         let token = url.searchParams.get("token");
         orderCaptured = true;
-        captureOrderForAuction({variables: {orderId: token}});
+        captureOrderForAuction({ variables: { orderId: token } });
     }
 
     if (loading) return <Loading />;
     return (
         <>
-            <Seo title="Payment"/>
+            <Seo title="Payment" />
             <main className="payment-page">
-                <Header/>
+                <Header />
                 <section className="container position-relative">
                     <div className="row payment-wrapper">
                         <div className="col-lg-8 payment-select">
@@ -197,7 +197,7 @@ const Payment = () => {
                                                     marginRight:
                                                         idx % 2 === 0
                                                             ? "0"
-                                                            : "12px"
+                                                            : "12px",
                                                 }}
                                             >
                                                 <img
@@ -252,7 +252,7 @@ const Payment = () => {
                                             className="payment-content"
                                             style={{ display: "block" }}
                                         >
-                                            <ConnectWalletTab/>
+                                            <ConnectWalletTab />
 
                                             <div className="mt-1 d-flex justify-content-between">
                                                 <p className="d-flex flex-row">
@@ -277,7 +277,7 @@ const Payment = () => {
                                                         <div
                                                             className="text-justify"
                                                             style={{
-                                                                width: "300px"
+                                                                width: "300px",
                                                             }}
                                                         >
                                                             {
@@ -304,13 +304,16 @@ const Payment = () => {
                             </div>
                         </div>
                         {tabIndex === 1 && (
-                            <OrderSummaryOfCoinPayments bidAmount={bidAmount}/>
+                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} />
                         )}
                         {tabIndex === 2 && (
-                            <OrderSummaryOfCreditCard bidAmount={bidAmount}/>
+                            <OrderSummaryOfCreditCard bidAmount={bidAmount} />
                         )}
-                        {tabIndex !== 1 && tabIndex !== 2 && (
-                            <OrderSummary bidAmount={bidAmount}/>
+                        {tabIndex === 4 && (
+                            <OrderSummaryNDBWallet bidAmount={bidAmount} />
+                        )}
+                        {tabIndex !== 1 && tabIndex !== 2 && tabIndex !== 4 && (
+                            <OrderSummary bidAmount={bidAmount} />
                         )}
                     </div>
                     <div className="remain-token__value col-md-12 mx-auto">
@@ -332,7 +335,7 @@ const Payment = () => {
                                 style={{
                                     width: `${barProgress}%`,
                                     background:
-                                        "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)"
+                                        "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)",
                                 }}
                             >
                                 <div className="timeleft__value">
@@ -347,7 +350,7 @@ const Payment = () => {
                 </section>
             </main>
         </>
-    )
-}
+    );
+};
 
-export default Payment
+export default Payment;

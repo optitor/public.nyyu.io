@@ -514,6 +514,7 @@
 
 .deposit-modal {
     max-width: 800px;
+    min-height: 570px;
     p {
         font-size: 14px;
     }
@@ -554,9 +555,18 @@
         .width4 {
             width: 100%;
         }
+        width: 100%;
+        overflow: auto;
+        border: none;
+        height: 100vh;
+    }
+    .min_height1 {
+        min-height: 400px;
+    }
+    .min_height2 {
+        min-height: 550px;
     }
     div.deposit {
-        min-height: 400px;
         margin: auto;
         margin-top: 20px;
         margin-bottom: 20px;
@@ -580,7 +590,7 @@
             }
         }
         div.select_div {
-            margin-top: 15px;
+            margin-top: 10px;
         }
         p.subtitle {
             color: $lightgrey;
@@ -597,6 +607,23 @@
         }
         .black_input {
             height: 49px;
+        }
+        div.withdraw_amount {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            input {
+                width: 88%;
+                background: none;
+                border: none;
+                color: white;
+            }
+            p {
+                width: 12%;
+                span {
+                    color: $green;
+                }
+            }
         }
         div.transfer_input {
             display: flex;
