@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useReducer, useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import useDeepCompareEffect from 'use-deep-compare-effect';
