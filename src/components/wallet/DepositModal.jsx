@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import Modal from "react-modal";
-import { navigate } from "gatsby";
 import _ from "lodash";
 import styled from "styled-components";
 import Select, { components } from "react-select";
@@ -25,7 +24,7 @@ import {
     PAYPAY_FOR_DEPOSIT,
     CAPTURE_ORDER_FOR_DEPOSIT,
 } from "../../apollo/graghqls/mutations/Payment";
-import { ROUTES } from "../../utilities/routes";
+import StripeDepositSection from "./deposit/StripeDepositSection";
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
@@ -733,7 +732,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 )}
 
                 {currentStep === 4 && isStripeDeposit && (
-                    <div>Stripe Deposit Form</div>
+                    <StripeDepositSection />
                 )}
             </>
         </Modal>
