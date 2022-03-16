@@ -1,6 +1,7 @@
 import { navigate } from "gatsby";
 import React, { useEffect, useState } from "react";
 import useCountDown from "react-countdown-hook";
+import { SuccesImage } from "../../utilities/imgImport";
 import { ROUTES } from "../../utilities/routes";
 
 export default function PaymentSuccessful({
@@ -26,36 +27,7 @@ export default function PaymentSuccessful({
     return (
         <div className="text-center p-4">
             <div className="text-danger mb-4">
-                <svg
-                    className="text-success"
-                    width="126"
-                    height="126"
-                    viewBox="0 0 126 126"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <rect
-                        x="31"
-                        y="64.1067"
-                        width="14.2931"
-                        height="34.4792"
-                        transform="rotate(-45 31 64.1067)"
-                        fill="#F2F2F2"
-                    />
-                    <rect
-                        width="14.2931"
-                        height="57.0408"
-                        transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 95.6963 48.1067)"
-                        fill="#F2F2F2"
-                    />
-                    <circle
-                        cx="63"
-                        cy="63"
-                        r="56.5"
-                        stroke="#F2F2F2"
-                        strokeWidth="13"
-                    />
-                </svg>
+                <img src={SuccesImage} alt="Success image" />
             </div>
             <div className="text-capitalize text-light fs-28px fw-bold text-success">
                 payment successful
