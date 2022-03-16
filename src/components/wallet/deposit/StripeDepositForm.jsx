@@ -220,7 +220,7 @@ const StripeDepositForm = ({ amount, closeModal }) => {
                 <div className="d-flex align-items-center justify-content-center gap-3">
                     {requestPending && (
                         <div>
-                            <CustomSpinner />
+                            <CustomSpinner sm />
                         </div>
                     )}
                     <div>
