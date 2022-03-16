@@ -549,7 +549,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </button>
                     </div>
                 )}
-                {currentStep === 4 && !isPaypalDeposit && (
+                {currentStep === 4 && isBankAccountTransferDeposit && (
                     <div className="deposit width2 mb-5">
                         <h4 className="text-center">
                             {currency.label} Deposits Only
@@ -696,6 +696,19 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     }
                                     autoComplete="off"
                                 />
+                                <div>
+                                    Stripe fee{" "}
+                                    <NumberFormat
+                                        thousandSeparator={true}
+                                        suffix={" " + currency.symbol}
+                                        displayType="text"
+                                        allowNegative={false}
+                                        value={
+                                            Number(transferAmount) * TransferFee
+                                        }
+                                        decimalScale={2}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="mt-3">
@@ -711,14 +724,16 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </div>
                         <button
                             className="btn btn-outline-light rounded-0 w-100 mt-50px mb-5 fw-bold"
-                            onClick={() => {
-                                initPaypalCheckout();
-                            }}
+                            onClick={() => setCurrentStep(4)}
                             disabled={!transferAmount}
                         >
                             CONTINUE
                         </button>
                     </div>
+                )}
+
+                {currentStep === 4 && isStripeDeposit && (
+                    <div>Stripe Deposit Form</div>
                 )}
             </>
         </Modal>
