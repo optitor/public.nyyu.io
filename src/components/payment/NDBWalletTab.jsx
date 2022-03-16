@@ -17,6 +17,7 @@ import PaymentSuccessful from "./PaymentSuccessful";
 import { useSelector } from "react-redux";
 import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
 
+
 const { Option } = components;
 
 const setAmountWithPrecision = (tokenType, amount) => {

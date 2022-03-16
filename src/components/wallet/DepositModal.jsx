@@ -1,4 +1,5 @@
 /* eslint-disable */
+
 import React, { useState, useEffect, useMemo } from "react";
 import jq from 'jquery';
 import Modal from "react-modal";
@@ -162,14 +163,10 @@ export default function DepositModal({ showModal, setShowModal }) {
         setCopyText(text);
     };
 
-    const initPaypalCheckout = () => {
-        setLoading(true);
-        paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
-    }
-
     const [paypalDeposit] = useMutation(Mutation.PAYPAY_FOR_DEPOSIT, {
         onCompleted: (data) => {
             let links = data.paypalForDeposit.links;
+            console.log(data.paypalForDeposit)
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
                     window.location.href = links[i].href;
@@ -182,7 +179,12 @@ export default function DepositModal({ showModal, setShowModal }) {
             alert('Error in PayPal checkout')
             setLoading(false);
         },
-    })
+    });
+
+    const initPaypalCheckout = () => {
+        setLoading(true);
+        paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
+    };
 
     const [captureOrderForDeposit] = useMutation(Mutation.CAPTURE_ORDER_FOR_DEPOSIT, {
         onCompleted: (data) => {
