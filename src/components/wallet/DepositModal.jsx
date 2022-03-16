@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useState, useEffect, useMemo } from "react";
 import jq from 'jquery';
 import Modal from "react-modal";
@@ -14,9 +13,9 @@ import { useMutation } from '@apollo/client';
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
-import { Plaid, PaypalFiat, CreditCards, USDT } from '../../utilities/imgImport';
+import { Plaid, PaypalFiat, CreditCards, USDT, SuccesImage, FailImage } from '../../utilities/imgImport';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-import { CREATE_CHARGE_FOR_DEPOSIT, PAYPAY_FOR_DEPOSIT, CAPTURE_ORDER_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
+import * as Mutation from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [
@@ -49,7 +48,7 @@ const TransferData = {
     }
 };
 
-const TransferFee = 0.03; 
+const TransferFee = 0.03;
 const { Option } = components;
 
 const SelectOption = (props) => {
@@ -74,12 +73,13 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [currentStep, setCurrentStep] = useState(1);
     const [tabIndex, setTabIndex] = useState(1);
     const [copied, setCopied] = useState(false);
-    const [pending, setPending] =useState(false);
+    const [pending, setPending] = useState(false);
+    const [bankDepositStatus, setBankDepositStatus] = useState('');
     const [coinQRCode, setCoinQRCode] = useState("");
 
     const [loading, setLoading] = useState(false);
 
-    const networks = useMemo(() => (selectedAsset.networks), [selectedAsset]);    
+    const networks = useMemo(() => (selectedAsset.networks), [selectedAsset]);
     const [network, setNetwork] = useState(networks[0]);
     const [depositData, setDepositData] = useState({});
 
@@ -102,7 +102,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     }, [depositData]);
 
     const [createChargeForDepositMutation] = useMutation(
-        CREATE_CHARGE_FOR_DEPOSIT,
+        Mutation.CREATE_CHARGE_FOR_DEPOSIT,
         {
             onCompleted: (data) => {
                 if (data.createChargeForDeposit) {
@@ -124,6 +124,7 @@ export default function DepositModal({ showModal, setShowModal }) {
         setCurrentStep(1);
         setCurrency(CURRENCIES[0]);
         setTransferAmount('');
+        setBankDepositStatus('');
     };
 
     const create_Charge_For_Deposit = () => {
@@ -136,7 +137,7 @@ export default function DepositModal({ showModal, setShowModal }) {
 
         createChargeForDepositMutation({
             variables: { ...createData }
-        })
+        });
     };
 
     const handleCreditDeposit = () => {
@@ -166,7 +167,7 @@ export default function DepositModal({ showModal, setShowModal }) {
         paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
     }
 
-    const [paypalDeposit] = useMutation(PAYPAY_FOR_DEPOSIT, {
+    const [paypalDeposit] = useMutation(Mutation.PAYPAY_FOR_DEPOSIT, {
         onCompleted: (data) => {
             let links = data.paypalForDeposit.links;
             for (let i = 0; i < links.length; i++) {
@@ -183,7 +184,7 @@ export default function DepositModal({ showModal, setShowModal }) {
         },
     })
 
-    const [captureOrderForDeposit] = useMutation(CAPTURE_ORDER_FOR_DEPOSIT, {
+    const [captureOrderForDeposit] = useMutation(Mutation.CAPTURE_ORDER_FOR_DEPOSIT, {
         onCompleted: (data) => {
             if (data.captureOrderForDeposit) {
                 alert('Your checkout was successfully!')
@@ -194,7 +195,35 @@ export default function DepositModal({ showModal, setShowModal }) {
         onError: (err) => {
             alert('Error in checkout with PayPal');
         },
-    })
+    });
+
+    const [bankForDeposit] = useMutation(Mutation.BANK_FOR_DEPOSIT, {
+        onCompleted: data => {
+            if(data.bankForDeposit) {
+                console.log(data.bankForDeposit)
+                setPending(false);
+                setBankDepositStatus('success');
+            }
+            setPending(false);
+        },
+        onError: err => {
+            console.log(err.message);
+            setPending(false);
+            setBankDepositStatus('fail');
+        }
+    });
+
+    const handleBankForDeposit = () => {
+        setPending(true);
+        const depositData = {
+            amount: Number(transferAmount),
+            currencyCode: currency.label,
+            cryptoType: 'USDT',
+        };
+        bankForDeposit({
+            variables: { ...depositData }
+        });
+    };
 
     let orderCaptured = false;
 
@@ -408,7 +437,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 }}
                                 styles={customSelectStyles}
                                 components={{
-                                    IndicatorSeparator: null                                            
+                                    IndicatorSeparator: null
                                 }}
                             />
                         </div>
@@ -473,12 +502,25 @@ export default function DepositModal({ showModal, setShowModal }) {
                         <p className="subtitle mt-5">
                             Please make sure you use the reference number indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.
                         </p>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
-                            // onClick={()}
-                        >
-                            CONFIRM
-                        </button>
+                        {!bankDepositStatus? (
+                            <button
+                                className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
+                                onClick={handleBankForDeposit}
+                                disabled={pending}
+                            >
+                                {pending? <CustomSpinner />: 'CONFIRM REQUEST'}
+                            </button>
+                        ): bankDepositStatus === 'success'? (
+                            <div className="text-center mt-2">
+                                <img src={SuccesImage} alt="success" style={{width: 80}}/>
+                                <p className="mt-2 text-green" style={{fontSize: 18, fontWeight: 600}}>REQUEST SENT SUCCESSFULLY</p>
+                            </div>
+                        ): (
+                            <div className="text-center mt-2">
+                                <img src={FailImage} alt="success" style={{width: 80}}/>
+                                <p className="mt-2 text-danger" style={{fontSize: 18, fontWeight: 600}}>ERROR IN BANK DEPOSIT</p>
+                            </div>
+                        )}
                     </div>
                 )}
 
