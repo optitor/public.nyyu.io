@@ -10,8 +10,7 @@ import CustomSpinner from "../../common/custom-spinner";
 import { useMutation } from "@apollo/client";
 import { STRIPE_FOR_DEPOSIT } from "../../payment/payment-webservice";
 import PaymentSuccessful from "../../payment/PaymentSuccessful";
-import { navigate } from "gatsby";
-import { ROUTES } from "../../../utilities/routes";
+import PaymentFailure from "../../payment/PaymentFailure";
 const StripeDepositForm = ({ amount, closeModal }) => {
     // Containers
     const stripe = useStripe();
@@ -22,13 +21,55 @@ const StripeDepositForm = ({ amount, closeModal }) => {
     const [postalCode, setPostalCode] = useState("");
     const [requestPending, setRequestPending] = useState(false);
     const [isSaveCard, setIsSaveCard] = useState(false);
-    const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+    const [paymentSuccessful, setPaymentSuccessful] = useState(null);
+    const [stripePaymentSecondCall, setStripePaymentSecondCall] =
+        useState(false);
 
     // Webserver
     const [stripeForDeposit] = useMutation(STRIPE_FOR_DEPOSIT, {
         onCompleted: (data) => {
-            setPaymentSuccessful(true);
-            setRequestPending(false);
+            if (stripePaymentSecondCall === false) {
+                if (data.stripeForDeposit.error) {
+                    setRequestPending(false);
+                    return setError(data.stripeForDeposit.error);
+                }
+                const { clientSecret, requiresAction } = data.stripeForDeposit;
+                if (requiresAction === false || requiresAction === null) {
+                    setRequestPending(false);
+                    return setPaymentSuccessful(true);
+                }
+                if (clientSecret)
+                    return stripe
+                        .handleCardAction(clientSecret)
+                        .then((result) => {
+                            setStripePaymentSecondCall(true);
+                            if (result.error) {
+                                setRequestPending(false);
+                                return setPaymentSuccessful(false);
+                            }
+                            const paymentIntentId = result.paymentIntent.id;
+                            return stripeForDeposit({
+                                variables: {
+                                    amount: amount * 100,
+                                    cryptoType: "USDT",
+                                    paymentMethodId: null,
+                                    paymentIntentId,
+                                    isSaveCard,
+                                },
+                            });
+                        });
+                return setError("Invalid payment");
+            } else if (stripePaymentSecondCall === true) {
+                if (
+                    data.stripeForDeposit.error ||
+                    data.stripeForDeposit.requiresAction === true
+                ) {
+                    // TODO: Payment fully fails at here.
+                    setRequestPending(false);
+                    return setPaymentSuccessful(false);
+                }
+                return setPaymentSuccessful(true);
+            }
         },
     });
 
@@ -71,8 +112,10 @@ const StripeDepositForm = ({ amount, closeModal }) => {
     };
 
     // Render
-    return paymentSuccessful ? (
-        <PaymentSuccessful timeout={5} callback={closeModal} />
+    return paymentSuccessful === true ? (
+        <PaymentSuccessful timeout={3} callback={closeModal} />
+    ) : paymentSuccessful === false ? (
+        <PaymentFailure timeout={3} callback={closeModal} />
     ) : (
         <form className="row m-0">
             {error && (
@@ -170,15 +213,21 @@ const StripeDepositForm = ({ amount, closeModal }) => {
                 </label>
             </div>
             <button
-                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-4 py-3 ${
-                    requestPending && "disabled"
-                }`}
-                onClick={requestPending ? null : submitPayment}
+                className="btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-4 py-2"
+                disabled={requestPending}
+                onClick={submitPayment}
             >
                 <div className="d-flex align-items-center justify-content-center gap-3">
-                    {requestPending && <CustomSpinner />}
-                    {/* {stripePaymentSecondCall ? "verifying" : "confirm payment"} */}
-                    confirm deposit
+                    {requestPending && (
+                        <div>
+                            <CustomSpinner />
+                        </div>
+                    )}
+                    <div>
+                        {stripePaymentSecondCall
+                            ? "verifying"
+                            : "confirm deposit"}
+                    </div>
                 </div>
             </button>
         </form>
