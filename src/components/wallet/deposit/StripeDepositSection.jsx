@@ -1,4 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import React, { useState } from "react";
 import { Amex } from "../../../utilities/imgImport";
 import CustomSpinner from "../../common/custom-spinner";
@@ -7,10 +9,11 @@ import {
     GET_SAVED_CARDS,
     GET_STRIPE_PUB_KEY,
 } from "../../payment/payment-webservice";
+import StripeDepositForm from "./StripeDepositForm";
 
 const StripeDepositSection = () => {
     // Containers
-    const [isNewCard, setIsNewCard] = useState(false);
+    const [isNewCard, setIsNewCard] = useState(true);
     const [savedCards, setSavedCards] = useState(null);
     const [stripePublicKey, setStripePublicKey] = useState(null);
     const [selectedSavedCard, setSelectedSavedCard] = useState(0);
@@ -76,7 +79,21 @@ const StripeDepositSection = () => {
                     <CustomSpinner />
                 </div>
             ) : isNewCard ? (
-                <></>
+                <Elements
+                    options={{
+                        fonts: [
+                            {
+                                cssSrc: "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap%27",
+                            },
+                        ],
+                    }}
+                    stripe={loadStripe(stripePublicKey)}
+                >
+                    <StripeDepositForm
+                        // amount={Number(amount) + Number(stripePaymentFee)}
+                        amount={100}
+                    />
+                </Elements>
             ) : (
                 <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-2">
                     {savedCards.map((item, index) => {
