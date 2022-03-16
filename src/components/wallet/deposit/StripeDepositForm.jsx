@@ -5,7 +5,6 @@ import {
     CardNumberElement,
 } from "@stripe/react-stripe-js";
 import CustomSpinner from "../../common/custom-spinner";
-import { CheckBox } from "../../common/FormControl";
 const StripeDepositForm = ({ amount }) => {
     // Containers
     const [error, setError] = useState("");
@@ -110,7 +109,7 @@ const StripeDepositForm = ({ amount }) => {
                 />
                 <label
                     htmlFor="save-card-checkbox"
-                    className="fw-500 text-light text-uppercase fs-10px noselect"
+                    className="fw-500 text-light text-uppercase fs-11px noselect"
                 >
                     save card details for future purchase
                 </label>
