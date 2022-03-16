@@ -11,7 +11,7 @@ import {
 } from "../../payment/payment-webservice";
 import StripeDepositForm from "./StripeDepositForm";
 
-const StripeDepositSection = () => {
+const StripeDepositSection = ({ amount, closeModal }) => {
     // Containers
     const [isNewCard, setIsNewCard] = useState(true);
     const [savedCards, setSavedCards] = useState(null);
@@ -91,7 +91,8 @@ const StripeDepositSection = () => {
                 >
                     <StripeDepositForm
                         // amount={Number(amount) + Number(stripePaymentFee)}
-                        amount={100}
+                        amount={amount}
+                        closeModal={closeModal}
                     />
                 </Elements>
             ) : (

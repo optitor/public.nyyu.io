@@ -373,7 +373,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         >
                                             <img
                                                 src={CreditCards}
-                                                alt="creditcards"
+                                                alt="Credit cards"
                                             />
                                         </FiatButton>
                                     </div>
@@ -732,7 +732,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                 )}
 
                 {currentStep === 4 && isStripeDeposit && (
-                    <StripeDepositSection />
+                    <StripeDepositSection
+                        closeModal={closeModal}
+                        amount={Number(transferAmount)}
+                    />
                 )}
             </>
         </Modal>

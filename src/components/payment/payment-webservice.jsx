@@ -55,3 +55,26 @@ export const DELETE_CARD = gql`
         deleteCard(id: $id)
     }
 `;
+
+export const STRIPE_FOR_DEPOSIT = gql`
+    mutation stripeForDeposit(
+        $amount: Float
+        $cryptoType: String
+        $paymentMethodId: String
+        $paymentIntentId: String
+        $isSaveCard: Boolean
+    ) {
+        stripeForDeposit(
+            amount: $amount
+            cryptoType: $cryptoType
+            paymentMethodId: $paymentMethodId
+            paymentIntentId: $paymentIntentId
+            isSaveCard: $isSaveCard
+        ) {
+            clientSecret
+            paymentIntentId
+            requiresAction
+            error
+        }
+    }
+`;

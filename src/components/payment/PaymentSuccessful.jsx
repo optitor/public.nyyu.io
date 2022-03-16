@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import useCountDown from "react-countdown-hook";
 import { ROUTES } from "../../utilities/routes";
 
-export default function PaymentSuccessful() {
+export default function PaymentSuccessful({
+    timeout = 3,
+    callback = () => navigate(ROUTES.auction),
+}) {
     // Countdown
-    const initialTime = 3 * 1000;
+    const initialTime = timeout * 1000;
     const interval = 1000;
     const [startedCounting, setStartedCounting] = useState(false);
     const [timeLeft, { start: startTimer }] = useCountDown(
@@ -17,7 +20,7 @@ export default function PaymentSuccessful() {
     useEffect(() => startTimer(), []);
     useEffect(() => {
         setStartedCounting(true);
-        if (startedCounting) if (timeLeft === 0) navigate(ROUTES.auction);
+        if (startedCounting) if (timeLeft === 0) callback();
     }, [timeLeft]);
     // Render
     return (

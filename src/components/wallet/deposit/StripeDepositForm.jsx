@@ -3,22 +3,77 @@ import {
     CardCvcElement,
     CardExpiryElement,
     CardNumberElement,
+    useElements,
+    useStripe,
 } from "@stripe/react-stripe-js";
 import CustomSpinner from "../../common/custom-spinner";
-const StripeDepositForm = ({ amount }) => {
+import { useMutation } from "@apollo/client";
+import { STRIPE_FOR_DEPOSIT } from "../../payment/payment-webservice";
+import PaymentSuccessful from "../../payment/PaymentSuccessful";
+import { navigate } from "gatsby";
+import { ROUTES } from "../../../utilities/routes";
+const StripeDepositForm = ({ amount, closeModal }) => {
     // Containers
+    const stripe = useStripe();
+    const elements = useElements();
     const [error, setError] = useState("");
     const [cardHolder, setCardHolder] = useState("");
     const [country, setCountry] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [requestPending, setRequestPending] = useState(false);
     const [isSaveCard, setIsSaveCard] = useState(false);
+    const [paymentSuccessful, setPaymentSuccessful] = useState(false);
+
+    // Webserver
+    const [stripeForDeposit] = useMutation(STRIPE_FOR_DEPOSIT, {
+        onCompleted: (data) => {
+            setPaymentSuccessful(true);
+            setRequestPending(false);
+        },
+    });
 
     // Methods
-    const submitPayment = () => {};
+    const submitPayment = async (e) => {
+        e.preventDefault();
+        setError("");
+        setRequestPending(true);
+        if (!stripe || !elements) return;
+
+        const { paymentMethod } = await stripe.createPaymentMethod({
+            type: "card",
+            card: elements.getElement(CardNumberElement),
+            billing_details: {
+                name: cardHolder,
+                address: {
+                    city: null,
+                    country: null,
+                    line1: null,
+                    line2: null,
+                    postal_code: postalCode,
+                    state: null,
+                },
+            },
+        });
+        if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
+            const { id: paymentMethodId } = paymentMethod;
+            return stripeForDeposit({
+                variables: {
+                    amount: amount * 100,
+                    cryptoType: "USDT",
+                    paymentMethodId,
+                    paymentIntentId: null,
+                    isSaveCard,
+                },
+            });
+        }
+        setRequestPending(false);
+        return setError("Invalid card information");
+    };
 
     // Render
-    return (
+    return paymentSuccessful ? (
+        <PaymentSuccessful timeout={5} callback={closeModal} />
+    ) : (
         <form className="row m-0">
             {error && (
                 <div className="text-danger fs-16px ps-0 mb-2">
