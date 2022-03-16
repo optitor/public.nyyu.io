@@ -38,5 +38,6 @@ module.exports = {
                 fonts: [`Montserrat\:300,400,500,700,800`],
             },
         },
+        "gatsby-plugin-use-query-params",
     ],
 }
