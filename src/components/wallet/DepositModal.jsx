@@ -734,7 +734,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 {currentStep === 4 && isStripeDeposit && (
                     <StripeDepositSection
                         closeModal={closeModal}
-                        amount={Number(transferAmount)}
+                        amount={Number(transferAmount) * TransferFee}
                     />
                 )}
             </>
