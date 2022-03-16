@@ -180,7 +180,6 @@ const Wallet = () => {
                                         <Tab>referral</Tab>
                                         <Tab>airdrops</Tab>
                                         <Tab>transaction</Tab>
-                                        <Tab>bid activity</Tab>
                                     </TabList>
                                 </div>
                                 <TabPanel>
@@ -278,11 +277,6 @@ const Wallet = () => {
                                     <TransactionsProvider>
                                         <Transactions />
                                     </TransactionsProvider>
-                                </TabPanel>
-                                <TabPanel>
-                                    <BidActivityTab
-                                        bids={bidList?.getBidListByUser}
-                                    />
                                 </TabPanel>
                             </Tabs>
                         </div>
