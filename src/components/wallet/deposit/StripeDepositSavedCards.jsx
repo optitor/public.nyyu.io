@@ -6,6 +6,7 @@ import { STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD } from "../../payment/payment-webser
 import PaymentSuccessful from "../../payment/PaymentSuccessful";
 import PaymentFailure from "../../payment/PaymentFailure";
 import { isBrowser } from "../../../utilities/auth";
+import { useStripe } from "@stripe/react-stripe-js";
 
 export default function StripeDepositSavedCards({
     savedCards,
@@ -14,16 +15,59 @@ export default function StripeDepositSavedCards({
     closeModal,
 }) {
     // Containers
+    const stripe = useStripe();
     const [requestPending, setRequestPending] = useState(false);
     const [selectedSavedCard, setSelectedSavedCard] = useState(0);
     const [successfulPayment, setSuccessfulPayment] = useState(null);
+    const [stripePaymentSecondCall, setStripePaymentSecondCall] =
+        useState(false);
     const [stripePaymentWithSavedCard] = useMutation(
         STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD,
         {
             onCompleted: (data) => {
-                if (data.stripeForDepositWithSavedCard.error)
+                if (stripePaymentSecondCall === false) {
+                    if (data.stripeForDepositWithSavedCard.error) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(false);
+                    }
+                    const { clientSecret, requiresAction } =
+                        data.stripeForDepositWithSavedCard;
+                    if (requiresAction === false || requiresAction === null) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(true);
+                    }
+                    if (clientSecret)
+                        return stripe
+                            .handleCardAction(clientSecret)
+                            .then((result) => {
+                                setStripePaymentSecondCall(true);
+                                if (result.error) {
+                                    setRequestPending(false);
+                                    return setSuccessfulPayment(false);
+                                }
+                                const paymentIntentId = result.paymentIntent.id;
+                                return stripePaymentWithSavedCard({
+                                    variables: {
+                                        cryptoType: "USDT",
+                                        amount: amount * 100,
+                                        cardId: savedCards[selectedSavedCard]
+                                            .id,
+                                        paymentIntentId,
+                                    },
+                                });
+                            });
                     return setSuccessfulPayment(false);
-                else return setSuccessfulPayment(true);
+                } else if (stripePaymentSecondCall === true) {
+                    if (
+                        data.stripeForDepositWithSavedCard.error ||
+                        data.stripeForDepositWithSavedCard.requiresAction ===
+                            true
+                    ) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(false);
+                    }
+                    return setSuccessfulPayment(true);
+                }
             },
             onError: (error) => console.log(error),
         }

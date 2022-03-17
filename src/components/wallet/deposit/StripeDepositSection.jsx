@@ -93,12 +93,23 @@ const StripeDepositSection = ({ amount, closeModal }) => {
                     />
                 </Elements>
             ) : (
-                <StripeDepositSavedCards
-                    closeModal={closeModal}
-                    savedCards={savedCards}
-                    deleteCardMethod={deleteCardMethod}
-                    amount={amount}
-                />
+                <Elements
+                    options={{
+                        fonts: [
+                            {
+                                cssSrc: "https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap%27",
+                            },
+                        ],
+                    }}
+                    stripe={loadStripe(stripePublicKey)}
+                >
+                    <StripeDepositSavedCards
+                        closeModal={closeModal}
+                        savedCards={savedCards}
+                        deleteCardMethod={deleteCardMethod}
+                        amount={amount}
+                    />
+                </Elements>
             )}
         </>
     );
