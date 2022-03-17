@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import {
     GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS,
     GET_BID_LIST_BY_USER,
+    GET_COINPAYMENT_DEPOSIT_TX_BY_USER,
     GET_PRESALE_ORDERS_BY_USER,
 } from "./queries";
 
@@ -36,10 +37,18 @@ const tabs = [
 const TransactionsProvider = ({ children }) => {
     // Containers
     const [currentTab, setCurrentTab] = useState(0);
-    const [depositTransactions, setDepositTransactions] = useState(null);
+    const [paypalDepositTransactions, setPaypalDepositTransactions] =
+        useState(null);
+    const [coinDepositTransactions, setCoinDepositTransactions] =
+        useState(null);
     const [bidList, setBidList] = useState(null);
     const [presaleList, setPresaleList] = useState(null);
-    const loading = !(depositTransactions && bidList && presaleList);
+    const loading = !(
+        paypalDepositTransactions &&
+        coinDepositTransactions &&
+        bidList &&
+        presaleList
+    );
 
     // Methods
     const createDateFromDate = (createdTime) => {
@@ -66,24 +75,49 @@ const TransactionsProvider = ({ children }) => {
     // Webserver
     useQuery(GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
-            const fooList = data.getAllPaypalDepositTxns.map((item) => {
-                const createdTime = new Date(item.createdAt);
+            const fooList = data.getAllPaypalDepositTxns
+                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+                .map((item) => {
+                    const createdTime = new Date(item.createdAt);
 
-                return {
-                    id: item.id,
-                    date: createDateFromDate(createdTime),
-                    time: createTimeFromDate(createdTime),
-                    fee: item.fee,
-                    status: item.status,
-                    amount: item.fiatAmount,
-                    type: "Paypal Deposit",
-                    paymentId: item.paypalOrderId,
-                    asset: item.fiatType,
-                };
-            });
+                    return {
+                        id: item.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item.fee,
+                        status: item.status,
+                        amount: item.fiatAmount,
+                        type: "Paypal Deposit",
+                        paymentId: item.paypalOrderId,
+                        asset: item.fiatType,
+                    };
+                });
 
-            setDepositTransactions(fooList);
+            setPaypalDepositTransactions(fooList);
         },
+    });
+    useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
+        onCompleted: (data) => {
+            const fooList = data.getCoinpaymentDepositTxByUser
+                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+                .map((item) => {
+                    const createdTime = new Date(item.createdAt);
+
+                    return {
+                        id: item.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: 0.0,
+                        status: item.status,
+                        amount: item.amount,
+                        type: "Crypto Deposit",
+                        paymentId: "---",
+                        asset: item.cryptoType,
+                    };
+                });
+            setCoinDepositTransactions(fooList);
+        },
+        onError: (error) => console.log(error),
     });
     useQuery(GET_BID_LIST_BY_USER, {
         onCompleted: (data) => {
@@ -114,8 +148,6 @@ const TransactionsProvider = ({ children }) => {
                 )
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
-                    console.log("item", item);
-                    console.log("item dot createdAt", item.createdAt);
                     return {
                         transaction: "123456789 #",
                         date: createDateFromDate(createdTime),
@@ -135,7 +167,8 @@ const TransactionsProvider = ({ children }) => {
     // Binding
     const valueObject = {
         // data
-        depositTransactions,
+        paypalDepositTransactions,
+        coinDepositTransactions,
         bidList,
         presaleList,
 

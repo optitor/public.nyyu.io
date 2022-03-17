@@ -56,3 +56,20 @@ export const GET_PRESALE_ORDERS_BY_USER = gql`
         }
     }
 `;
+export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
+    query {
+        getCoinpaymentDepositTxByUser {
+            id
+            userId
+            amount
+            createdAt
+            status
+            cryptoType
+            network
+            cryptoAmount
+            confirmedAt
+            depositAddress
+            coin
+        }
+    }
+`;

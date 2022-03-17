@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import Select from "react-select";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
@@ -7,11 +8,23 @@ import {
 import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
 
+const depositOptions = [
+    { value: "paypal", label: "Paypal" },
+    { value: "crypto", label: "Crypto" },
+    { value: "credit_card", label: "Credit Card" },
+];
+
 export default function DepositTable() {
     // Containers
     const user = useSelector((state) => state.auth.user);
-    const { tabs, depositTransactions } = useTransactions();
+    const { tabs, paypalDepositTransactions, coinDepositTransactions } =
+        useTransactions();
+
+    const [list, setList] = useState(paypalDepositTransactions);
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
+    const [currentDepositType, setCurrentDepositType] = useState(
+        depositOptions[0]
+    );
 
     // Methods
     const toggleDetails = (index) => {
@@ -55,23 +68,27 @@ export default function DepositTable() {
         downloadable.print();
     };
 
+    const changeDepositType = (type) => {
+        setCurrentDepositType(type);
+        if (type.value === "paypal") setList(paypalDepositTransactions);
+        if (type.value === "crypto") setList(coinDepositTransactions);
+        if (type.value === "credit_card") setList([]);
+    };
+
     // Render
     return (
         <div className="px-sm-4 px-3 table-responsive transaction-section-tables">
             <table className="wallet-transaction-table w-100">
-                <tr className="border-bottom-2-dark-gray py-3">
-                    <th scope="col">Date</th>
-                    <th scope="col" className="text-sm-end">
-                        FIAT/Crypto
-                    </th>
-                    <th scope="col" className="text-center text-sm-end">
-                        Fee
-                    </th>
-                    <th scope="col" className="text-center text-sm-end">
-                        Status
-                    </th>
-                </tr>
-                {depositTransactions?.length === 0 && (
+                <div className="mt-4">
+                    <Select
+                        isSearchable={false}
+                        options={depositOptions}
+                        defaultValue={depositOptions[0]}
+                        value={currentDepositType}
+                        onChange={changeDepositType}
+                    />
+                </div>
+                {list?.length === 0 && (
                     <tr className="py-4 text-center">
                         <td
                             colSpan={4}
@@ -81,7 +98,21 @@ export default function DepositTable() {
                         </td>
                     </tr>
                 )}
-                {depositTransactions?.map(
+                {list?.length && (
+                    <tr className="border-bottom-2-dark-gray pb-3 pt-1">
+                        <th scope="col">Date</th>
+                        <th scope="col" className="text-sm-end">
+                            FIAT/Crypto
+                        </th>
+                        <th scope="col" className="text-center text-sm-end">
+                            Fee
+                        </th>
+                        <th scope="col" className="text-center text-sm-end">
+                            Status
+                        </th>
+                    </tr>
+                )}
+                {list?.map(
                     ({
                         id,
                         date,
@@ -110,10 +141,6 @@ export default function DepositTable() {
                                 <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
                                     <div className="text-sm-end fs-16px">
                                         {amount + "" + asset}
-                                        <br />
-                                        <div className="text-secondary fs-12px mt-1 fw-500">
-                                            121 USDT
-                                        </div>
                                     </div>
                                 </td>
                                 <td className="text-end pe-5 pe-sm-0 white-space-nowrap">

@@ -1192,6 +1192,7 @@ div.wallet_balances {
     }
     .transaction-section-tables {
         max-height: 500px;
+        min-height: 500px;
         overflow-y: auto;
         @include custom-scroll(0vh);
     }
@@ -1201,15 +1202,16 @@ div.wallet_balances {
         background: $black;
         border: 1px solid gray;
         border-radius: 0px;
+        box-shadow: none !important;
         .css-qc6sy-singleValue {
-            font-size: 12px;
+            font-size: 14px;
             color: white;
         }
     }
     .css-26l3qy-menu {
         color: white;
         background-color: $black !important;
-        font-size: 12px;
+        font-size: 14px;
         .css-1n7v3ny-option {
             background-color: #464646;
         }
