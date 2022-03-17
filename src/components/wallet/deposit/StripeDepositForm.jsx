@@ -11,6 +11,7 @@ import { useMutation } from "@apollo/client";
 import { STRIPE_FOR_DEPOSIT } from "../../payment/payment-webservice";
 import PaymentSuccessful from "../../payment/PaymentSuccessful";
 import PaymentFailure from "../../payment/PaymentFailure";
+import { isBrowser } from "../../../utilities/auth";
 const StripeDepositForm = ({ amount, closeModal }) => {
     // Containers
     const stripe = useStripe();
@@ -113,7 +114,10 @@ const StripeDepositForm = ({ amount, closeModal }) => {
 
     // Render
     return paymentSuccessful === true ? (
-        <PaymentSuccessful timeout={3} callback={closeModal} />
+        <PaymentSuccessful
+            timeout={3}
+            callback={() => isBrowser && window.location.reload(false)}
+        />
     ) : paymentSuccessful === false ? (
         <PaymentFailure timeout={3} callback={closeModal} />
     ) : (
@@ -171,7 +175,7 @@ const StripeDepositForm = ({ amount, closeModal }) => {
                 <input
                     type="text"
                     style={style.base}
-                    className="border border-light border-1 p-2 w-100 mb-3 form-control"
+                    className="border border-light border-1 p-2 w-100 mb-3 form-control placeholder:text-lightgray"
                     placeholder="Card holder (John Smith)"
                     value={cardHolder}
                     onChange={(e) => setCardHolder(e.target.value)}
@@ -181,7 +185,7 @@ const StripeDepositForm = ({ amount, closeModal }) => {
                 <input
                     type="text"
                     style={style.base}
-                    className="border border-light border-1 p-2 w-100 mb-3 form-control"
+                    className="border border-light border-1 p-2 w-100 mb-3 form-control placeholder:text-lightgray"
                     placeholder="Country"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
@@ -191,7 +195,7 @@ const StripeDepositForm = ({ amount, closeModal }) => {
                 <input
                     type="text"
                     style={style.base}
-                    className="border border-light border-1 p-2 w-100 mb-3 form-control"
+                    className="border border-light border-1 p-2 w-100 mb-3 form-control placeholder:text-lightgray"
                     placeholder="Billing zip/postal code"
                     value={postalCode}
                     onChange={(e) => setPostalCode(e.target.value)}
@@ -237,7 +241,7 @@ export default StripeDepositForm;
 
 const style = {
     base: {
-        color: "#696969",
+        color: "white",
         fontFamily: "Montserrat",
         fontWeight: "500",
         fontSmoothing: "antialiased",
@@ -245,7 +249,7 @@ const style = {
         backgroundColor: "transparent",
         border: "1px solid white",
         "::placeholder": {
-            color: "dimgrey",
+            color: "lightgray",
         },
     },
     invalid: {
