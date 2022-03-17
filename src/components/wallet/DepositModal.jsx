@@ -170,6 +170,8 @@ export default function DepositModal({ showModal, setShowModal }) {
             let links = data.paypalForDeposit.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
+                    let token = links[i].href.split('token=')[1];
+                    localStorage.setItem('PayPalDepositToken', token)
                     window.location.href = links[i].href;
                     break;
                 }
@@ -181,28 +183,34 @@ export default function DepositModal({ showModal, setShowModal }) {
             setLoading(false);
         },
     })
-
-    const [captureOrderForDeposit] = useMutation(CAPTURE_ORDER_FOR_DEPOSIT, {
-        onCompleted: (data) => {
-            if (data.captureOrderForDeposit) {
-                alert('Your checkout was successfully!')
-            } else {
-                alert('Error in checkout with PayPal');
+    
+    const [bankForDeposit] = useMutation(Mutation.BANK_FOR_DEPOSIT, {
+        onCompleted: data => {
+            if(data.bankForDeposit) {
+                console.log(data.bankForDeposit)
+                setPending(false);
+                setBankDepositStatus('success');
             }
+            setPending(false);
         },
-        onError: (err) => {
-            alert('Error in checkout with PayPal');
-        },
-    })
+        onError: err => {
+            console.log(err.message);
+            setPending(false);
+            setBankDepositStatus('fail');
+        }
+    });
 
-    let orderCaptured = false;
-
-    if (window.location.href.includes('token=') && !orderCaptured) {
-        var url = new URL(window.location.href);
-        let token = url.searchParams.get("token");
-        orderCaptured = true;
-        captureOrderForDeposit({variables: {orderId: token}});
-    }
+    const handleBankForDeposit = () => {
+        setPending(true);
+        const depositData = {
+            amount: Number(transferAmount),
+            currencyCode: currency.label,
+            cryptoType: 'USDT',
+        };
+        bankForDeposit({
+            variables: { ...depositData }
+        });
+    };
 
     if (loading) return <Loading />;
 
