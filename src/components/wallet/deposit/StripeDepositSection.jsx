@@ -2,7 +2,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useState } from "react";
-import { Amex } from "../../../utilities/imgImport";
 import CustomSpinner from "../../common/custom-spinner";
 import {
     DELETE_CARD,
@@ -10,14 +9,13 @@ import {
     GET_STRIPE_PUB_KEY,
 } from "../../payment/payment-webservice";
 import StripeDepositForm from "./StripeDepositForm";
+import StripeDepositSavedCards from "./StripeDepositSavedCards";
 
 const StripeDepositSection = ({ amount, closeModal }) => {
     // Containers
     const [isNewCard, setIsNewCard] = useState(true);
     const [savedCards, setSavedCards] = useState(null);
     const [stripePublicKey, setStripePublicKey] = useState(null);
-    const [selectedSavedCard, setSelectedSavedCard] = useState(0);
-
     const [deleteCardLoading, setDeleteCardLoading] = useState(false);
     const loading = !(stripePublicKey && savedCards);
 
@@ -90,58 +88,17 @@ const StripeDepositSection = ({ amount, closeModal }) => {
                     stripe={loadStripe(stripePublicKey)}
                 >
                     <StripeDepositForm
-                        // amount={Number(amount) + Number(stripePaymentFee)}
                         amount={amount}
                         closeModal={closeModal}
                     />
                 </Elements>
             ) : (
-                <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-2">
-                    {savedCards.map((item, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className={`credit-card-save-cards-item mb-3 mb-sm-2 col-lg-6 col-12 ${
-                                    index % 2 === 0
-                                        ? "pe-sm-2 px-0"
-                                        : "ps-sm-2 px-0"
-                                }`}
-                            >
-                                <button
-                                    onClick={() => setSelectedSavedCard(index)}
-                                    className={`btn rounded-0 mt-0 col-12 ${
-                                        index === selectedSavedCard && "active"
-                                    }`}
-                                >
-                                    <div className="d-flex align-items-start">
-                                        <img
-                                            src={Amex}
-                                            alt="Amex"
-                                            className="me-4"
-                                        />
-                                        <div className="credit-card-save-cards-item-details text-start">
-                                            **** **** **** {item.last4} <br />
-                                            {item.expMonth}/{item.expYear}{" "}
-                                        </div>
-                                        <button
-                                            onClick={() =>
-                                                deleteCardMethod(item.id)
-                                            }
-                                            className="btn text-underline text-light mt-0 pt-0 fs-13px ms-auto"
-                                        >
-                                            Delete card
-                                        </button>
-                                    </div>
-                                </button>
-                            </div>
-                        );
-                    })}
-                    {savedCards.length === 0 && (
-                        <div className="text-center mx-auto mt-2 text-uppercase text-light fw-500">
-                            No saved cards
-                        </div>
-                    )}
-                </div>
+                <StripeDepositSavedCards
+                    closeModal={closeModal}
+                    savedCards={savedCards}
+                    deleteCardMethod={deleteCardMethod}
+                    amount={amount}
+                />
             )}
         </>
     );

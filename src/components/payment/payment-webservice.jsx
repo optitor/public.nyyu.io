@@ -78,3 +78,22 @@ export const STRIPE_FOR_DEPOSIT = gql`
         }
     }
 `;
+
+export const STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD = gql`
+    mutation stripeForDepositWithSavedCard(
+        $amount: Float
+        $cryptoType: String
+        $cardId: Int
+    ) {
+        stripeForDepositWithSavedCard(
+            amount: $amount
+            cryptoType: $cryptoType
+            cardId: $cardId
+        ) {
+            clientSecret
+            paymentIntentId
+            requiresAction
+            error
+        }
+    }
+`;
