@@ -23,7 +23,7 @@ const IndexPage = () => {
     // Webservice
     useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => {
-            setCurrentRound(data.getCurrentRound)
+            setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },
         onError: (error) => console.log(error),
@@ -298,11 +298,11 @@ const IndexPage = () => {
                 <section className="home-section mt-5 mt-sm-0">
                     <div className="container h-100 d-flex flex-column justify-content-xl-center justify-content-start mt-5 mt-md-5">
                         <div className="row m-0">
-                            {currentRound.auction
+                            {currentRound?.auction
                                 ? auctionStatus === 1
                                     ? auctionPendingContent
                                     : auctionStartedContent
-                                : currentRound.presale
+                                : currentRound?.presale
                                     ? presaleStatus === 1
                                         ? presalePendingContent
                                         : presaleStartedContent

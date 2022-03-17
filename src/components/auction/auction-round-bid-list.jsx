@@ -30,6 +30,8 @@ export default function AuctionRoundBidList() {
         auction.getBid
     )
 
+    // console.log(currentRoundBidList, auction.currentRoundBidList, auction.getBid )
+
     // Webservices
     const { startPolling, stopPolling } = useQuery(isAuction ? GET_BIDLIST_BY_ROUND : GET_PRESALE_LIST_BY_ROUND, {
         variables: isAuction ? {

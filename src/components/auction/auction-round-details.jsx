@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react"
-
+import { useSelector} from 'react-redux'
 import { useAuction } from "../../providers/auction-context"
 import { numberWithLength } from "../../utilities/number"
 import PercentageBar from "./percentage-bar"
 
 export default function AuctionRoundDetails() {
+    const currency = useSelector(state => state.placeBid.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
+
     // Container
     const auction = useAuction()
     const { optCurrentRound, currentRoundBidList, isAuction } = auction
@@ -50,9 +53,9 @@ export default function AuctionRoundDetails() {
                 <div>
                     <p className="caption text-[#959595]">{isAuction ? "Reserved Price" : "Token Price"} </p>
                     <p className="value">
-                        {isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice + " "}
-                        <span className="txt-green">
-                            USD
+                        {Number((isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice) * currencyRates[currency.value]).toFixed(2)}
+                        <span className="txt-green ms-1">
+                            {currency.label}
                         </span>
                     </p>
                 </div>

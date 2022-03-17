@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux"
 import Slider from "rc-slider"
 import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
-
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 
