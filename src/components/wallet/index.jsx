@@ -174,7 +174,6 @@ const Wallet = () => {
     });
 
     let orderCaptured = false;
-    let possibleToken = localStorage.getItem('PayPalDepositToken');
 
     if (window.location.href.includes('token=') && !orderCaptured) {
         var url = new URL(window.location.href);
@@ -183,13 +182,13 @@ const Wallet = () => {
         captureOrderForDeposit({variables: {orderId: token}});
     }
 
-    if (localStorage.getItem('PayPalDepositToken').toString() !== 'null' && !orderCaptured) {
-        alert('es null');
+    if (localStorage.getItem('PayPalDepositToken') != null && localStorage.getItem('PayPalDepositToken') != undefined && !orderCaptured) {
         orderCaptured = true;
-        alert(possibleToken)
+        let possibleToken = localStorage.getItem('PayPalDepositToken');
         captureOrderForDeposit({variables: {orderId: possibleToken}});
         localStorage.setItem('PayPalDepositToken', null);
-    } 
+        localStorage.removeItem('PayPalDepositToken');
+    }
 
     return (
         <>
