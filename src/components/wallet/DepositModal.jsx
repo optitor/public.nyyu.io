@@ -169,6 +169,8 @@ export default function DepositModal({ showModal, setShowModal }) {
             console.log(data.paypalForDeposit)
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === 'approve') {
+                    let token = links[i].href.split('token=')[1];
+                    localStorage.setItem('PayPalDepositToken', token)
                     window.location.href = links[i].href;
                     break;
                 }
@@ -179,25 +181,12 @@ export default function DepositModal({ showModal, setShowModal }) {
             alert('Error in PayPal checkout')
             setLoading(false);
         },
-    });
+    })
 
     const initPaypalCheckout = () => {
         setLoading(true);
         paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
     };
-
-    const [captureOrderForDeposit] = useMutation(Mutation.CAPTURE_ORDER_FOR_DEPOSIT, {
-        onCompleted: (data) => {
-            if (data.captureOrderForDeposit) {
-                alert('Your checkout was successfully!')
-            } else {
-                alert('Error in checkout with PayPal');
-            }
-        },
-        onError: (err) => {
-            alert('Error in checkout with PayPal');
-        },
-    });
 
     const [bankForDeposit] = useMutation(Mutation.BANK_FOR_DEPOSIT, {
         onCompleted: data => {
@@ -227,14 +216,6 @@ export default function DepositModal({ showModal, setShowModal }) {
         });
     };
 
-    let orderCaptured = false;
-
-    if (window.location.href.includes('token=') && !orderCaptured) {
-        var url = new URL(window.location.href);
-        let token = url.searchParams.get("token");
-        orderCaptured = true;
-        captureOrderForDeposit({variables: {orderId: token}});
-    }
 
     if (loading) return <Loading />;
 
