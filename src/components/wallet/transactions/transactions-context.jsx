@@ -1,5 +1,7 @@
 import { useQuery } from "@apollo/client";
+import { data } from "jquery";
 import React, { useContext, useState } from "react";
+import { GET_ALL_FEES } from "../../../apollo/graghqls/querys/Payment";
 import {
     GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS,
     GET_BID_LIST_BY_USER,
@@ -43,6 +45,7 @@ const TransactionsProvider = ({ children }) => {
         useState(null);
     const [bidList, setBidList] = useState(null);
     const [presaleList, setPresaleList] = useState(null);
+    const [allFees, setAllFees] = useState(null);
     const loading = !(
         paypalDepositTransactions &&
         coinDepositTransactions &&
@@ -95,6 +98,12 @@ const TransactionsProvider = ({ children }) => {
 
             setPaypalDepositTransactions(fooList);
         },
+    });
+    useQuery(GET_ALL_FEES, {
+        onCompleted: (data) => {
+            setAllFees(data.allFees);
+        },
+        onError: (error) => console.log(error),
     });
     useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
@@ -171,6 +180,7 @@ const TransactionsProvider = ({ children }) => {
         coinDepositTransactions,
         bidList,
         presaleList,
+        allFees,
 
         currentTab,
         setCurrentTab,
