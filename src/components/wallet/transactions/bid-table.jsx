@@ -41,14 +41,6 @@ export default function BidTable() {
                             <tr className="border-bottom-2-dark-gray">
                                 <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
                                     <div className="fw-500">Round {round}</div>
-                                    {status === 0 && (
-                                        <Link
-                                            to={ROUTES.auction}
-                                            className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success white-space-nowrap"
-                                        >
-                                            Increase bid
-                                        </Link>
-                                    )}
                                 </td>
                                 <td className="text-light pe-5 pe-sm-0 fw-light">
                                     <div className="fs-16px">{date}</div>
@@ -79,9 +71,14 @@ export default function BidTable() {
                                             <div className="gray-bullet me-2"></div>
                                             <div>Processing</div>
                                         </div>
-                                        <div className="text-secondary text-decoration-underline text-decoration-secondary fs-14px">
-                                            Cancel
-                                        </div>
+                                        {status === 0 && (
+                                            <Link
+                                                to={ROUTES.auction}
+                                                className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success white-space-nowrap fs-14px"
+                                            >
+                                                Increase bid
+                                            </Link>
+                                        )}
                                     </td>
                                 ) : status === 1 ? (
                                     <td className="d-flex align-items-center justify-content-end">

@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
-    ReceiptQRCode,
 } from "../../../utilities/imgImport";
 import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
