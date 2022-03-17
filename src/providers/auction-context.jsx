@@ -34,7 +34,7 @@ const AuctionProvider = ({ children }) => {
             setAuctions(data.getAuctions)
         },
         onError: (error) => console.log(error),
-        errorPolicy: "ignore",
+        errorPolicy: 'ignore',
         fetchPolicy: "network-only",
     })
 
@@ -43,13 +43,13 @@ const AuctionProvider = ({ children }) => {
             setPresales(data.getPreSales)
         },
         onError: (error) => console.log(error),
-        errorPolicy: "ignore",
+        errorPolicy: 'ignore',
         fetchPolicy: "network-only",
     })
     useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => setCurrentRound(data.getCurrentRound),
         onError: (error) => console.log(error),
-        errorPolicy: "ignore",
+        errorPolicy: 'ignore',
         fetchPolicy: "network-only",
     })
 
