@@ -1,12 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
+    ReceiptQRCode,
 } from "../../../utilities/imgImport";
+import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
 
 export default function DepositTable() {
     // Containers
+    const user = useSelector((state) => state.auth.user);
     const { tabs, depositTransactions } = useTransactions();
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
 
@@ -36,18 +40,18 @@ export default function DepositTable() {
     ) => {
         const downloadable = window.open("", "", "");
         downloadable.document.write(
-            `<div>
-                <div style="font-weight:bold; font-size:20px;">Deposit Receipt #${id}</div>
-                <br />
-                <div style="font-size:14px;padding-bottom: 6px;">Time: ${date} ${time}</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Amount: ${amount} USD</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Fee: ${fee} USD</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Status: ${
-                    status ? "Success" : "Failed"
-                }</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Type: ${type}</div>
-                <div style="font-size:14px;padding-bottom: 6px;">PaymentID: ${paymentId}</div>
-            </div>`
+            receiptTemplate({
+                id,
+                date,
+                time,
+                amount,
+                asset,
+                fee,
+                status,
+                type,
+                paymentId,
+                user,
+            })
         );
         downloadable.print();
     };
