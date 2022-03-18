@@ -1,6 +1,10 @@
 /* eslint-disable */
 import React, { useCallback, useReducer, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+// for paypal callback
+import { useQueryParam, StringParam } from "use-query-params";
+
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import ReactTooltip from "react-tooltip";
@@ -49,6 +53,12 @@ const payment_types = [
 ];
 
 const Payment = () => {
+
+    // try to get token from request
+    const [orderId, setOrderId] = useQueryParam("token", StringParam);
+    console.log("--------------- from params", orderId);
+    console.log("--------------- from localStorage", localStorage.getItem("ACCESS_TOKEN"));
+
     const currentRound = useSelector((state) => state?.placeBid.round_id);
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
     const [totalRounds, setTotalRounds] = useState(null);
@@ -121,23 +131,28 @@ const Payment = () => {
         },
         onError: (err) => {
             console.log(err);
-            alert("Error in PayPal checkout");
+            // alert("Error in PayPal checkout");
             setPayPalLoading(false);
         },
     });
 
     const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
         onCompleted: (data) => {
+            console.log(data);
             if (data.captureOrderForAuction) {
                 alert("Your checkout was successfully!");
             } else {
-                alert("Error in checkout with PayPal");
+                // alert("Error in checkout with PayPal");
             }
         },
         onError: (err) => {
-            alert("Error in checkout with PayPal");
+            // alert("Error in checkout with PayPal");
         },
     });
+
+    if(orderId != undefined) {
+        captureOrderForAuction({ variables: { orderId: orderId } });
+    }
 
     const initPaypal = () => {
         setPayPalLoading(true);
@@ -148,12 +163,13 @@ const Payment = () => {
 
     let orderCaptured = false;
 
-    if (window.location.href.includes("token=") && !orderCaptured) {
-        var url = new URL(window.location.href);
-        let token = url.searchParams.get("token");
-        orderCaptured = true;
-        captureOrderForAuction({ variables: { orderId: token } });
-    }
+    // if (window.location.href.includes("token=") && !orderCaptured) {
+    //     var url = new URL(window.location.href);
+    //     let token = url.searchParams.get("token");
+    //     console.log("---------- from Axel", token);
+    //     orderCaptured = true;
+    //     captureOrderForAuction({ variables: { orderId: token } });
+    // }
 
     if (loading) return <Loading />;
     return (

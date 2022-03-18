@@ -1,4 +1,5 @@
 /* eslint-disable */
+
 import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import Modal from "react-modal";
@@ -12,22 +13,14 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
-import {
-    Plaid,
-    PaypalFiat,
-    CreditCards,
-    USDT,
-} from "../../utilities/imgImport";
-import { SUPPORTED_COINS } from "../../utilities/staticData2";
-import {
-    CREATE_CHARGE_FOR_DEPOSIT,
-    PAYPAY_FOR_DEPOSIT,
-    CAPTURE_ORDER_FOR_DEPOSIT,
-} from "../../apollo/graghqls/mutations/Payment";
 import StripeDepositSection from "./deposit/StripeDepositSection";
 import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
+import { Plaid, PaypalFiat, CreditCards, USDT, SuccesImage, FailImage } from '../../utilities/imgImport';
+import { SUPPORTED_COINS } from "../../utilities/staticData2";
+import * as Mutation from "../../apollo/graghqls/mutations/Payment";
+import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
@@ -84,11 +77,13 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [tabIndex, setTabIndex] = useState(1);
     const [copied, setCopied] = useState(false);
     const [pending, setPending] = useState(false);
+
+    const [bankDepositStatus, setBankDepositStatus] = useState('');
     const [coinQRCode, setCoinQRCode] = useState("");
 
     const [loading, setLoading] = useState(false);
 
-    const networks = useMemo(() => selectedAsset.networks, [selectedAsset]);
+    const networks = useMemo(() => (selectedAsset.networks), [selectedAsset]);
     const [network, setNetwork] = useState(networks[0]);
     const [depositData, setDepositData] = useState({});
 
@@ -124,7 +119,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     });
 
     const [createChargeForDepositMutation] = useMutation(
-        CREATE_CHARGE_FOR_DEPOSIT,
+        Mutation.CREATE_CHARGE_FOR_DEPOSIT,
         {
             onCompleted: (data) => {
                 if (data.createChargeForDeposit) {
@@ -145,7 +140,8 @@ export default function DepositModal({ showModal, setShowModal }) {
     const goBackToFiat = () => {
         setCurrentStep(1);
         setCurrency(CURRENCIES[0]);
-        setTransferAmount("");
+        setTransferAmount('');
+        setBankDepositStatus('');
     };
 
     const create_Charge_For_Deposit = () => {
@@ -155,10 +151,13 @@ export default function DepositModal({ showModal, setShowModal }) {
             network: network.network,
             cryptoType: selectedAsset.value,
         };
-
         createChargeForDepositMutation({
-            variables: { ...createData },
+            variables: { ...createData }
         });
+    };
+
+    const handleCreditDeposit = () => {
+        navigate(ROUTES.creditDeposit);
     };
 
     const closeModal = () => {
@@ -179,22 +178,14 @@ export default function DepositModal({ showModal, setShowModal }) {
         setCopyText(text);
     };
 
-    const initPaypalCheckout = () => {
-        setLoading(true);
-        paypalDeposit({
-            variables: {
-                amount: transferAmount,
-                currencyCode: currency.value,
-                cryptoType: "USDT",
-            },
-        });
-    };
-
-    const [paypalDeposit] = useMutation(PAYPAY_FOR_DEPOSIT, {
+    const [paypalDeposit] = useMutation(Mutation.PAYPAY_FOR_DEPOSIT, {
         onCompleted: (data) => {
             let links = data.paypalForDeposit.links;
+            console.log(data.paypalForDeposit)
             for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === "approve") {
+                if (links[i].rel === 'approve') {
+                    let token = links[i].href.split('token=')[1];
+                    localStorage.setItem('PayPalDepositToken', token)
                     window.location.href = links[i].href;
                     break;
                 }
@@ -207,28 +198,38 @@ export default function DepositModal({ showModal, setShowModal }) {
         },
     });
 
-    const [captureOrderForDeposit] = useMutation(CAPTURE_ORDER_FOR_DEPOSIT, {
-        onCompleted: (data) => {
-            if (data.captureOrderForDeposit) {
-                alert("Your checkout was successfully!");
-            } else {
-                alert("Error in checkout with PayPal");
+    const initPaypalCheckout = () => {
+        setLoading(true);
+        paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
+    };
+
+    const [bankForDeposit] = useMutation(Mutation.BANK_FOR_DEPOSIT, {
+        onCompleted: data => {
+            if(data.bankForDeposit) {
+                console.log(data.bankForDeposit)
+                setPending(false);
+                setBankDepositStatus('success');
             }
+            setPending(false);
         },
-        onError: (err) => {
-            alert("Error in checkout with PayPal");
-        },
+        onError: err => {
+            console.log(err.message);
+            setPending(false);
+            setBankDepositStatus('fail');
+        }
     });
 
-    let orderCaptured = false;
-
-    if (window.location.href.includes("token=") && !orderCaptured) {
-        var url = new URL(window.location.href);
-        let token = url.searchParams.get("token");
-        orderCaptured = true;
-        captureOrderForDeposit({ variables: { orderId: token } });
-    }
-
+    const handleBankForDeposit = () => {
+        setPending(true);
+        const depositData = {
+            amount: Number(transferAmount),
+            currencyCode: currency.label,
+            cryptoType: 'USDT',
+        };
+        bankForDeposit({
+            variables: { ...depositData }
+        });
+    };
     if (loading) return <Loading />;
 
     return (
@@ -504,6 +505,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 styles={customSelectStyles}
                                 components={{
                                     IndicatorSeparator: null,
+                                    IndicatorSeparator: null
                                 }}
                             />
                         </div>
@@ -600,9 +602,25 @@ export default function DepositModal({ showModal, setShowModal }) {
                             otherwise we may not be able to locate your
                             transaction.
                         </p>
-                        <button className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3">
-                            CONFIRM
-                        </button>
+                        {!bankDepositStatus? (
+                            <button
+                                className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
+                                onClick={handleBankForDeposit}
+                                disabled={pending}
+                            >
+                                {pending? <CustomSpinner />: 'CONFIRM REQUEST'}
+                            </button>
+                        ): bankDepositStatus === 'success'? (
+                            <div className="text-center mt-2">
+                                <img src={SuccesImage} alt="success" style={{width: 80}}/>
+                                <p className="mt-2 text-green" style={{fontSize: 18, fontWeight: 600}}>REQUEST SENT SUCCESSFULLY</p>
+                            </div>
+                        ): (
+                            <div className="text-center mt-2">
+                                <img src={FailImage} alt="success" style={{width: 80}}/>
+                                <p className="mt-2 text-danger" style={{fontSize: 18, fontWeight: 600}}>ERROR IN BANK DEPOSIT</p>
+                            </div>
+                        )}
                     </div>
                 )}
 

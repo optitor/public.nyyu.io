@@ -1,15 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
+    DownArrow,
 } from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 
-export default function DepositTable() {
+export default function WithdrawTable() {
     // Containers
     const { tabs, depositTransactions } = useTransactions();
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
-    const downloadContentRef = useRef();
 
     // Methods
     const toggleDetails = (index) => {
@@ -22,35 +22,6 @@ export default function DepositTable() {
                 );
             else setCurrentRowsOpen([...currentRowsOpen, index]);
         }
-    };
-
-    const downloadContent = (
-        id,
-        date,
-        time,
-        amount,
-        asset,
-        fee,
-        status,
-        type,
-        paymentId
-    ) => {
-        const downloadable = window.open("", "", "");
-        downloadable.document.write(
-            `<div>
-                <div style="font-weight:bold; font-size:20px;">Deposit Receipt #${id}</div>
-                <br />
-                <div style="font-size:14px;padding-bottom: 6px;">Time: ${date} ${time}</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Amount: ${amount} USD</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Fee: ${fee} USD</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Status: ${
-                    status ? "Success" : "Failed"
-                }</div>
-                <div style="font-size:14px;padding-bottom: 6px;">Type: ${type}</div>
-                <div style="font-size:14px;padding-bottom: 6px;">PaymentID: ${paymentId}</div>
-            </div>`
-        );
-        downloadable.print();
     };
 
     // Render
@@ -222,25 +193,9 @@ export default function DepositTable() {
                                             </div>
                                         </div>
                                         <div className="fs-12px">
-                                            <button
-                                                className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                onClick={() =>
-                                                    downloadContent(
-                                                        id,
-                                                        date,
-                                                        time,
-                                                        amount,
-                                                        asset,
-                                                        fee,
-                                                        status,
-                                                        type,
-                                                        paymentId
-                                                    )
-                                                }
-                                            >
+                                            <div className="text-success text-decoration-success text-decoration-underline">
                                                 Get PDF Receipt
-                                            </button>
-
+                                            </div>
                                             <div className="text-light text-underline">
                                                 Hide this activity
                                             </div>
