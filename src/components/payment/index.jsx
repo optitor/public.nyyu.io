@@ -118,6 +118,8 @@ const Payment = () => {
         if (barProgress < 1) setBarProgress(1);
     }, [barProgress]);
 
+    let paypalIsCheckingOut = false;
+
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
             let links = data.paypalForAuction.links;
@@ -140,6 +142,7 @@ const Payment = () => {
 
     const initPaypal = () => {
         setPayPalLoading(true);
+        paypalIsCheckingOut = true;
         createPayPalOrder({
             variables: { roundId: currentRound, currencyCode: "USD" },
         });
@@ -161,14 +164,14 @@ const Payment = () => {
 
     let orderCaptured = false;
 
-    if (window.location.href.includes('token=') && !orderCaptured) {
+    if (window.location.href.includes('token=') && !orderCaptured && !paypalIsCheckingOut) {
         var url = new URL(window.location.href);
         let token = url.searchParams.get("token");
         orderCaptured = true;
         captureOrderForAuction({ variables: { orderId: token } });
     }
 
-    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') != undefined && !orderCaptured) {
+    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') != undefined && !orderCaptured && !paypalIsCheckingOut) {
         orderCaptured = true;
         let possibleToken = localStorage.getItem('PayPalForAuctionToken');
         captureOrderForAuction({ variables: { orderId: possibleToken } });
