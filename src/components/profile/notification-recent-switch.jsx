@@ -110,7 +110,7 @@ export default function NotificationRecent() {
                     )}
                 </div>
                 <div className="row">
-                    <div className="col-10">
+                    <div className="col-9">
                         {NTList.length && (
                             <div>
                                 <Pagination
@@ -125,13 +125,13 @@ export default function NotificationRecent() {
                             </div>
                         )}
                     </div>
-                    <div className="col-2 justify-content-center align-items-end mt-3">
-                        <div
+                    <div className="col-3 justify-content-center align-items-end text-end mt-3">
+                        <button
                             onClick={setNotificationReadFlagAll}
-                            className="cursor-pointer text-white text-decoration-underline fs-6"
+                            className="btn text-white text-decoration-underline fs-6"
                         >
                             Mark as all read
-                        </div>
+                        </button>
                     </div>
                 </div>
             </>
