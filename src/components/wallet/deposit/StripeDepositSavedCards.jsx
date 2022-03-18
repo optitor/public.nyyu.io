@@ -83,7 +83,6 @@ export default function StripeDepositSavedCards({
                 paymentIntentId: null,
             },
         });
-        setRequestPending(false);
     };
 
     // Render
@@ -154,7 +153,11 @@ export default function StripeDepositSavedCards({
                                 <CustomSpinner sm />
                             </div>
                         )}
-                        <div>confirm deposit</div>
+                        <div>
+                            {stripePaymentSecondCall
+                                ? "verifying"
+                                : "confirm deposit"}
+                        </div>
                     </div>
                 </button>
             )}
