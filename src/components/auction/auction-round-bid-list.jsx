@@ -50,6 +50,7 @@ export default function AuctionRoundBidList() {
                 totalAmount: isAuction ? item.tokenPrice * item.tokenAmount : item.ndbAmount * item.ndbPrice,
                 ranking: isAuction ? (item.ranking ? item.ranking : list.indexOf(item) + 1) : list.indexOf(item) + 1,
             }))
+            setDisplayedBidList([])
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
         },
