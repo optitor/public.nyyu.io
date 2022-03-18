@@ -1,14 +1,14 @@
 /* eslint-disable */
 
-import React from "react"
-import { useState } from "react"
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs"
-import { BTC, DownArrow, Equity, ETH, USDC } from "../../utilities/imgImport"
-import { Icon } from "@iconify/react"
+import React from "react";
+import { useState } from "react";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { BTC, DownArrow, Equity, ETH, USDC } from "../../utilities/imgImport";
+import { Icon } from "@iconify/react";
 
 export default function StakeTab() {
     // Containers
-    const [lockedStakingAssets, setLockedStakingAssets] = useState([])
+    const [lockedStakingAssets, setLockedStakingAssets] = useState([]);
     if (lockedStakingAssets.length === 0)
         setLockedStakingAssets([
             {
@@ -32,14 +32,14 @@ export default function StakeTab() {
                 apy: "4.49%",
                 duration: 0,
             },
-        ])
+        ]);
     // Methods
     const changeDurationForAsset = (assetID, durationID) => {
-        const fooArray = lockedStakingAssets
-        fooArray[assetID].duration = durationID
-        setLockedStakingAssets([...fooArray])
+        const fooArray = lockedStakingAssets;
+        fooArray[assetID].duration = durationID;
+        setLockedStakingAssets([...fooArray]);
         // console.log("clicking")
-    }
+    };
     return (
         <Tabs className="text-light stake-react-list__tab">
             <TabList className="py-3 px-0 px-sm-4 overflow-auto d-flex align-items-center justify-content-start white-space-nowrap">
@@ -52,10 +52,14 @@ export default function StakeTab() {
                     <div className="d-flex justify-content-between px-0 px-sm-2 flex-sm-row flex-column">
                         <div className="d-flex flex-column justify-content-center">
                             <div className="d-flex align-items-center gap-3">
-                                <div className="fs-24px fw-500">Equity value(BTC)</div>
+                                <div className="fs-24px fw-500">
+                                    Equity value(BTC)
+                                </div>
                                 <img src={Equity} alt="equity icon" />
                             </div>
-                            <div className="txt-green fs-36px lh-25px mt-3">******</div>
+                            <div className="txt-green fs-36px lh-25px mt-3">
+                                ******
+                            </div>
                             <div className="text-secondary fs-24px">******</div>
                         </div>
                         <div>
@@ -64,13 +68,17 @@ export default function StakeTab() {
                                     <div className="text-secondary fs-14px fw-500">
                                         30-day profit (BTC)
                                     </div>
-                                    <div className="txt-green fs-18px">******</div>
+                                    <div className="txt-green fs-18px">
+                                        ******
+                                    </div>
                                 </div>
                                 <div>
                                     <div className="text-secondary fs-14px fw-500">
                                         Last day PNL (BTC)
                                     </div>
-                                    <div className="txt-green fs-18px">******</div>
+                                    <div className="txt-green fs-18px">
+                                        ******
+                                    </div>
                                 </div>
                             </div>
                             <div className="mt-4">
@@ -120,13 +128,18 @@ export default function StakeTab() {
                                     <tr key={index} className="w-sm-100">
                                         <td className="pe-5">
                                             <div className="d-flex align-items-center fs-12px gap-2">
-                                                <img src={item.icon} alt="btc image" />
+                                                <img
+                                                    src={item.icon}
+                                                    alt="btc image"
+                                                />
                                                 <div className="fs-16px fw-500 text-uppercase">
                                                     {item.label}
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="fs-12px text-center pe-5">1 NDB</td>
+                                        <td className="fs-12px text-center pe-5">
+                                            1 NDB
+                                        </td>
                                         <td className="fs-12px text-success text-end pe-5">
                                             30.77%
                                         </td>
@@ -152,8 +165,11 @@ export default function StakeTab() {
                             <th>Min. amount</th>
                             <th>Action</th>
                         </tr>
-                        {lockedStakingAssets.map((asset) => (
-                            <tr className="border-bottom-2-dark-gray">
+                        {lockedStakingAssets.map((asset, index) => (
+                            <tr
+                                key={index}
+                                className="border-bottom-2-dark-gray"
+                            >
                                 <td>
                                     <div className="d-flex align-items-center fs-16px gap-2">
                                         <div className="circle-light"></div>
@@ -162,7 +178,9 @@ export default function StakeTab() {
                                         </div>
                                     </div>
                                 </td>
-                                <td className="fs-14px text-success">{asset.apy}</td>
+                                <td className="fs-14px text-success">
+                                    {asset.apy}
+                                </td>
                                 <td className="fs-14px" colSpan={3}>
                                     <div className="stake-duration">
                                         {[
@@ -174,10 +192,15 @@ export default function StakeTab() {
                                             <div
                                                 key={index}
                                                 className={`bg-black-10 ${
-                                                    asset.duration === item.id && "active-duration"
+                                                    asset.duration ===
+                                                        item.id &&
+                                                    "active-duration"
                                                 }`}
                                                 onClick={() =>
-                                                    changeDurationForAsset(asset.id, item.id)
+                                                    changeDurationForAsset(
+                                                        asset.id,
+                                                        item.id
+                                                    )
                                                 }
                                             >
                                                 {item.label}
@@ -185,7 +208,9 @@ export default function StakeTab() {
                                         ))}
                                     </div>
                                 </td>
-                                <td className="fs-14px text-uppercase">{asset.minAmount}</td>
+                                <td className="fs-14px text-uppercase">
+                                    {asset.minAmount}
+                                </td>
                                 <td>
                                     <button className="btn btn-outline-light rounded-0 fw-bold text-uppercase w-100 py-1">
                                         stake
@@ -227,7 +252,9 @@ export default function StakeTab() {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="fs-14px text-success">{asset.apy}</td>
+                                    <td className="fs-14px text-success">
+                                        {asset.apy}
+                                    </td>
                                     <td className="fs-14px">
                                         <div className="d-flex align-items-center gap-2 justify-content-center">
                                             <Icon
@@ -237,7 +264,9 @@ export default function StakeTab() {
                                             <div>Flexible</div>
                                         </div>
                                     </td>
-                                    <td className="fs-14px text-uppercase">{asset.minAmount}</td>
+                                    <td className="fs-14px text-uppercase">
+                                        {asset.minAmount}
+                                    </td>
                                     <td>
                                         <button className="btn btn-outline-light rounded-0 fw-bold text-uppercase w-100 py-1">
                                             stake
@@ -250,5 +279,5 @@ export default function StakeTab() {
                 </div>
             </TabPanel>
         </Tabs>
-    )
+    );
 }

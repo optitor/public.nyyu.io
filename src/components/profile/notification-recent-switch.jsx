@@ -5,6 +5,7 @@ import Pagination from "react-js-pagination";
 import CustomSpinner from "../common/custom-spinner";
 import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification";
 import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification";
+import { SET_NOTIFICATION_READ_FLAG_ALL } from "../../apollo/graghqls/mutations/Notification";
 
 
 
@@ -36,6 +37,19 @@ export default function NotificationRecent() {
                 (el) => el.timeStamp === data.setNotificationReadFlag.timeStamp
             );
             ids[index] = { ...ids[index], pending: false, read: true };
+            setNTList(ids);
+        },
+    });
+
+    function setSingleNotificationRead(item, index, arr) {
+        arr[index] = { ...arr[index], pending: false, read: true };
+        console.log(arr[index].timeStamp)
+    }
+
+    const [setNotificationReadFlagAll] = useMutation(SET_NOTIFICATION_READ_FLAG_ALL, {
+        onCompleted: () => {
+            let ids = [...NTList];
+            ids.forEach(setSingleNotificationRead)
             setNTList(ids);
         },
     });
@@ -94,17 +108,24 @@ export default function NotificationRecent() {
                         </div>
                     )}
                 </div>
-                {NTList.length && (
-                    <div>
-                        <Pagination
-                            activePage={activePage}
-                            itemsCountPerPage={itemsCountPerPage}
-                            totalItemsCount={NTList.length}
-                            pageRangeDisplayed={5}
-                            onChange={(pageNumber) => setActivePage(pageNumber)}
-                        />
+                <div className="row">
+                    <div className="col-10">
+                        {NTList.length && (
+                            <div>
+                                <Pagination
+                                    activePage={activePage}
+                                    itemsCountPerPage={itemsCountPerPage}
+                                    totalItemsCount={NTList.length}
+                                    pageRangeDisplayed={5}
+                                    onChange={(pageNumber) => setActivePage(pageNumber)}
+                                />
+                            </div>
+                        )}
                     </div>
-                )}
+                    <div className="col-2  justify-content-center align-items-end mt-3">
+                        <a onClick={setNotificationReadFlagAll} className="text-white text-decoration-underline fs-6">Mark as all read</a>
+                    </div>
+                </div>
             </>
         );
 }

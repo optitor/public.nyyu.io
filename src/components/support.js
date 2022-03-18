@@ -102,9 +102,9 @@ const FAQ = () => {
                                     <div className="row col-12 p-0 m-0">
                                         {selfServiceData.map((item, index) => {
                                             return (
-                                                <div
+                                                <button
                                                     key={index}
-                                                    className={`col-12 col-lg-6 ${index % 2 === 0
+                                                    className={`btn col-12 col-lg-6 ${index % 2 === 0
                                                         ? "ps-lg-0 pe-lg-1 px-0"
                                                         : "pe-lg-0 ps-lg-1 px-0"
                                                         }`}
@@ -114,7 +114,7 @@ const FAQ = () => {
                                                         <img src={item.icon} alt="item figure" />
                                                         <div>{item.label}</div>
                                                     </div>
-                                                </div>
+                                                </button>
                                             )
                                         })}
                                     </div>
