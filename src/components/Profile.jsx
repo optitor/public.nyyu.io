@@ -6,7 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/header";
 import { ROUTES } from "../utilities/routes";
 import SignOutTab from "./profile/sign-out-tab";
-import { profile_tabs, TWO_FACTOR_AUTH_TOOLTIP_CONTENT } from "../utilities/staticData";
+import {
+    profile_tabs,
+    TWO_FACTOR_AUTH_TOOLTIP_CONTENT,
+} from "../utilities/staticData";
 import Seo from "./seo";
 import TwoFactorModal from "./profile/two-factor-modal";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -36,8 +39,11 @@ const Profile = () => {
     const [userTiersData, setUserTiersData] = useState(null);
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-    const [currentProfileTab, setCurrentProfileTab] = useState(profile_tabs[tab]);
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
+    const [currentProfileTab, setCurrentProfileTab] = useState(
+        profile_tabs[tab]
+    );
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
+        useState(false);
     const [shuftiStatus, setShuftiStatus] = useState(null);
     const [shuftReference, setShuftiReference] = useState(null);
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
@@ -81,8 +87,12 @@ const Profile = () => {
         ? user.security.filter((f) => f.tfaEnabled).map((m) => m.authType)
         : [];
 
-    const currentTier = userTiersData?.filter((item) => item?.level === user?.tierLevel);
-    const nextTier = userTiersData?.filter((item) => item?.level === user?.tierLevel + 1);
+    const currentTier = userTiersData?.filter(
+        (item) => item?.level === user?.tierLevel
+    );
+    const nextTier = userTiersData?.filter(
+        (item) => item?.level === user?.tierLevel + 1
+    );
 
     // Methods
     const handleProfileTab = (value) => {
@@ -109,14 +119,18 @@ const Profile = () => {
 
         return (
             <>
-                <div className={`status ${config ? "active" : "deactive"} mt-3px`}/>
+                <div
+                    className={`status ${
+                        config ? "active" : "deactive"
+                    } mt-3px`}
+                />
                 <div className="security-item">
                     <p className="security-name">{title}</p>
 
                     {!config &&
                         (available ? (
                             <p
-                                className="txt-green security-link"
+                                className="security-link"
                                 onClick={() => setIs2FAModalOpen(true)}
                                 onKeyDown={() => setIs2FAModalOpen(true)}
                                 role="presentation"
@@ -149,7 +163,9 @@ const Profile = () => {
 
     useEffect(async () => {
         if (!shuftiReferenceLoading) {
-            const response = await getShuftiStatusByReference(shuftReference?.reference);
+            const response = await getShuftiStatusByReference(
+                shuftReference?.reference
+            );
             return setShuftiStatus(response);
         }
     }, [shuftiReferenceLoading]);
@@ -211,7 +227,8 @@ const Profile = () => {
                                                 width: `${
                                                     (user?.tierPoint /
                                                         (nextTier?.length > 0 ??
-                                                            nextTier[0]?.point)) *
+                                                            nextTier[0]
+                                                                ?.point)) *
                                                     100
                                                 }%`,
                                             }}
@@ -253,10 +270,14 @@ const Profile = () => {
                                         <Tabs className="detail-tab">
                                             <TabList>
                                                 <Tab>
-                                                    <div className="pt-3">account detaiLs</div>
+                                                    <div className="pt-3">
+                                                        account detaiLs
+                                                    </div>
                                                 </Tab>
                                                 <Tab>
-                                                    <div className="pt-3">tier Details</div>
+                                                    <div className="pt-3">
+                                                        tier Details
+                                                    </div>
                                                 </Tab>
                                             </TabList>
                                             <TabPanel>
@@ -266,20 +287,29 @@ const Profile = () => {
                                                             setIsPasswordModalOpen
                                                         }
                                                         user={user}
-                                                        displayName={displayName}
-                                                        shuftReference={shuftReference}
-                                                        shuftiStatus={shuftiStatus}
+                                                        displayName={
+                                                            displayName
+                                                        }
+                                                        shuftReference={
+                                                            shuftReference
+                                                        }
+                                                        shuftiStatus={
+                                                            shuftiStatus
+                                                        }
                                                     />
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">
                                                             <div>
-                                                                Increase your account security
+                                                                Increase your
+                                                                account security
                                                             </div>
                                                             <img
                                                                 data-tip
                                                                 data-for="question-mark-tooltip"
                                                                 className="cursor-pointer ms-2"
-                                                                src={QuestionMark}
+                                                                src={
+                                                                    QuestionMark
+                                                                }
                                                                 alt="Question Mark"
                                                             />
                                                             <ReactTooltip
@@ -325,7 +355,9 @@ const Profile = () => {
                                                 </div>
                                             </TabPanel>
                                             <TabPanel>
-                                                <TierDetailsTab shuftiStatus={shuftiStatus} />
+                                                <TierDetailsTab
+                                                    shuftiStatus={shuftiStatus}
+                                                />
                                             </TabPanel>
                                         </Tabs>
                                     </>
@@ -335,10 +367,14 @@ const Profile = () => {
                                         <Tabs className="notification-tab">
                                             <TabList>
                                                 <Tab>
-                                                    <div className="pt-3 pb-2">Recent</div>
+                                                    <div className="pt-3 pb-2">
+                                                        Recent
+                                                    </div>
                                                 </Tab>
                                                 <Tab>
-                                                    <div className="py-3 pb-2">Setup</div>
+                                                    <div className="py-3 pb-2">
+                                                        Setup
+                                                    </div>
                                                 </Tab>
                                             </TabList>
                                             <TabPanel>
@@ -366,7 +402,9 @@ const Profile = () => {
                     />
                     <DeleteAccountModal
                         isDeleteAccountModalOpen={isDeleteAccountModalOpen}
-                        setIsDeleteAccountModalOpen={setIsDeleteAccountModalOpen}
+                        setIsDeleteAccountModalOpen={
+                            setIsDeleteAccountModalOpen
+                        }
                     />
                 </main>
             </>
