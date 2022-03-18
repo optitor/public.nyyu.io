@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux"
 import Slider from "rc-slider"
 import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
-
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 
@@ -22,6 +21,8 @@ export default function AuctionPlaceBid() {
     const [price, setPrice] = useState(optCurrentRound?.minPrice)
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
+    const [preAmount, setPreAmount] = useState(1)
+    const [prePrice, setPrePrice] = useState(1)
 
     // Webservice
     const [placeBid] = useMutation(PLACE_BID, {
@@ -57,6 +58,7 @@ export default function AuctionPlaceBid() {
                     tokenPrice: price,
                 },
             })
+            dispatch(setBidInfo(Number(price * amount)))
         } else {
             increaseBid({
                 variables: {
@@ -65,8 +67,8 @@ export default function AuctionPlaceBid() {
                     tokenPrice: price,
                 },
             })
+            dispatch(setBidInfo(Number(price * amount - prePrice * preAmount)))
         }
-        dispatch(setBidInfo(Number(price * amount)))
         dispatch(setCurrentRound(optCurrentRound?.id))
     }
 
@@ -75,6 +77,10 @@ export default function AuctionPlaceBid() {
             if (Object.keys(getBid).length !== 0) {
                 setPrice(isBid ? optCurrentRound.placeBid : getBid.tokenPrice)
                 setAmount(isBid ? 1 : getBid.tokenAmount)
+                if(!isBid) {
+                    setPreAmount(getBid.tokenAmount)
+                    setPrePrice(getBid.tokenPrice)
+                }
             }
     }, [getBid, optCurrentRound?.placeBid, isBid])
 
@@ -127,7 +133,7 @@ export default function AuctionPlaceBid() {
                             value={price}
                             onChange={(value) => setPrice(value)}
                             min={optCurrentRound?.minPrice}
-                            max={100}
+                            max={1000}
                             step={1}
                         />
                     </div>
@@ -176,10 +182,7 @@ export default function AuctionPlaceBid() {
                     )}
                     <button
                         className="btn btn-outline-light rounded-0 text-uppercase w-100 fw-bold py-12px fs-20px"
-                        onClick={() => {
-                            bidMutation()
-                        }}
-
+                        onClick={bidMutation}
                         disabled={reqPending}
                     >
                         <div className="d-flex align-items-center justify-content-center gap-3">

@@ -108,6 +108,11 @@ input[type="number"]::-webkit-outer-spin-button {
         color: #e3e3e3 !important;
     }
 }
+.placeholder\:text-lightgray {
+    &::placeholder {
+        color: lightgray;
+    }
+}
 
 @for $size from 4 to 100 {
     .py-#{$size}px {
@@ -326,6 +331,10 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .text-underline {
     text-decoration: underline !important;
+}
+
+.text-green {
+    color: #23c865;
 }
 
 .icon-23px {

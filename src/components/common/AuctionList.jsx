@@ -1,7 +1,10 @@
 import React from "react"
+import { useSelector } from 'react-redux'
 import { useAuction } from "../../providers/auction-context"
 
 const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult, isCurrentUser }) => {
+    const currency = useSelector(state => state.placeBid.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
 
     const {isAuction} = useAuction()
     return (
@@ -20,9 +23,9 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult,
                     {isAuction ?
                         <div className="d-flex flex-column">
                             <div className="text-white align-self-end fw-500">{tokenPrice}</div>
-                            <div className="txt-scorpion align-self-end fs-12px">{mainAmount}</div>
+                            <div className="text-secondary align-self-end fs-12px">{currency.sign} {Number(mainAmount * currencyRates[currency.value]).toFixed(2)}</div>
                         </div> :
-                        <div className="text-white align-self-end fw-500">{mainAmount}</div>
+                        <div className="text-white align-self-end fw-500">{currency.sign} {Number(mainAmount * currencyRates[currency.value]).toFixed(2)}</div>
                     }
                 </div>
             </div>

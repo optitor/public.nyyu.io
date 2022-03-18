@@ -7,15 +7,15 @@ import { width } from "./columnWidth";
 import DeleteConfirmModal from "../../DeleteConfirmModal";
 
 const UserDataRow = ({ datum, index }) => {
-    const [show, setShow] = useState(false)
-    const [showBtns, setShowBtns] = useState(false)
-    const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-    const [email, setEmail] = useState(datum.email)
+    const [show, setShow] = useState(false);
+    const [showBtns, setShowBtns] = useState(false);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [email, setEmail] = useState(datum.email);
 
     const deleteUser = () => {
         setIsConfirmOpen(false)
-    }
+    };
 
     return (
         <>

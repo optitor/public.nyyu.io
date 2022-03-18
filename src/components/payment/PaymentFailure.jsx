@@ -1,10 +1,10 @@
 import { navigate } from "gatsby";
 import React, { useEffect, useState } from "react";
 import useCountDown from "react-countdown-hook";
-import { SuccesImage } from "../../utilities/imgImport";
+import { FailImage } from "../../utilities/imgImport";
 import { ROUTES } from "../../utilities/routes";
 
-export default function PaymentSuccessful({
+export default function PaymentFailure({
     timeout = 3,
     callback = () => navigate(ROUTES.auction),
 }) {
@@ -27,13 +27,13 @@ export default function PaymentSuccessful({
     return (
         <div className="text-center p-4">
             <div className="text-danger mb-4">
-                <img src={SuccesImage} alt="Success image" />
+                <img src={FailImage} alt="Success image" />
             </div>
             <div className="text-capitalize text-light fs-28px fw-bold text-success">
-                payment successful
+                payment failed
             </div>
             <div className="text-light fs-18px fw-500 mt-2">
-                You will be redirected in {Math.floor(timeLeft / 1000)} ...
+                you will be redirected in {Math.floor(timeLeft / 1000)} ...
             </div>
         </div>
     );

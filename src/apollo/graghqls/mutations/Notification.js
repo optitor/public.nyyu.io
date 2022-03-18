@@ -28,3 +28,11 @@ export const SET_NOTIFICATION_READ_FLAG = gql`
         }
     }
 `
+export const SET_NOTIFICATION_READ_FLAG_ALL = gql`
+    mutation setNotificationReadFlagAll{
+        setNotificationReadFlagAll
+    }
+`
+
+
+

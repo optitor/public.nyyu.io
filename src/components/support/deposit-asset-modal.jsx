@@ -1,16 +1,16 @@
-import React from "react"
-import { useState } from "react"
-import Modal from "react-modal"
+import React from "react";
+import { useState } from "react";
+import Modal from "react-modal";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import CustomSpinner from "../common/custom-spinner"
-import { FormInput } from "../common/FormControl"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
-import { CloseIcon } from "../../utilities/imgImport"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CustomSpinner from "../common/custom-spinner";
+import { FormInput } from "../common/FormControl";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { CloseIcon } from "../../utilities/imgImport";
 
 export default function DepositAssetModal({ isOpen, setIsOpen }) {
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
+    const [loading] = useState(false);
+    const [error] = useState("");
     return (
         <Modal
             isOpen={isOpen}
@@ -108,5 +108,5 @@ export default function DepositAssetModal({ isOpen, setIsOpen }) {
                 </div>
             </div>
         </Modal>
-    )
+    );
 }

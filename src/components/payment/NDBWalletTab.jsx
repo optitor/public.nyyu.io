@@ -17,6 +17,7 @@ import PaymentSuccessful from "./PaymentSuccessful";
 import { useSelector } from "react-redux";
 import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
 
+
 const { Option } = components;
 
 const setAmountWithPrecision = (tokenType, amount) => {
@@ -91,6 +92,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                     icon: item.symbol,
                     amount: item.free
                 }));
+
                 setUserBalances(list);
                 setBalance(list[0]);
             }
@@ -130,6 +132,7 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                 <CustomSpinner />
             </div>
         );
+
     return (
         <div className="wallet-tab">
             <div className="payment-content">
@@ -158,7 +161,6 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                                         SingleValue: SelectOption,
                                     }}
                                     styles={customSelectWithIconStyles}
-                                    placeholder=''
                                 />
                             </div>
                             <div className="col-lg-8">
@@ -231,6 +233,7 @@ const customSelectWithIconStyles = {
     input: (provided) => ({
         ...provided,
         position: "absolute",
+        color: 'transparent'
     }),
     option: (provided, state) => ({
         ...provided,
@@ -253,4 +256,8 @@ const customSelectWithIconStyles = {
         margin: 0,
         padding: 0,
     }),
+    placeholder: provided => ({
+        ...provided,
+        color: 'transparent'
+    })
 };

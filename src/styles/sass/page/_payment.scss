@@ -208,7 +208,7 @@
             .css-1s2u09g-control,
             .css-1pahdxg-control {
                 @extend %select-style;
-                padding: 0!important;
+                padding: 0 !important;
             }
             .css-1okebmr-indicatorSeparator {
                 display: none;
@@ -221,8 +221,8 @@
                 .col-lg-8 {
                     margin-left: 10px;
                 }
-                @include mq('phone', max) {
-                    flex-direction:  column;
+                @include mq("phone", max) {
+                    flex-direction: column;
                     .col-lg-8 {
                         margin-left: 0;
                     }
@@ -609,9 +609,9 @@
 }
 
 .credit-card-save-cards {
-    height: 300px;
+    max-height: 300px;
     @include mq("phone") {
-        height: 200px;
+        max-height: 200px;
     }
     overflow-y: auto;
     padding-right: 10px;

@@ -23,11 +23,13 @@ import MarketTab from "../wallet/market-tab";
 import Transactions from "./transactions/transactions-tab";
 import ReferralTab from "../wallet/referral-tab";
 import StakeTab from "../wallet/stake-tab";
-import BidActivityTab from "../wallet/bid-activity-tab";
 import { GET_BID_LIST_BY_USER } from "../../apollo/graghqls/querys/Bid";
 import InternalWallet from "../wallet/internal-wallet";
 import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
+import * as Mutation from "../../apollo/graghqls/mutations/Payment";
+import { useMutation } from '@apollo/client';
+
 
 const airdrops = [
     {
@@ -157,6 +159,36 @@ const Wallet = () => {
         setState({ joinAirdrop: true });
     };
 
+    const [captureOrderForDeposit] = useMutation(Mutation.CAPTURE_ORDER_FOR_DEPOSIT, {
+        onCompleted: (data) => {
+            if (data.captureOrderForDeposit) {
+                alert('Your checkout was successfully!')
+            } else {
+                alert('Error in checkout with PayPal');
+            }
+        },
+        onError: (err) => {
+            alert('Error in checkout with PayPal');
+        },
+    });
+
+    let orderCaptured = false;
+
+    if (window.location.href.includes('token=') && !orderCaptured) {
+        var url = new URL(window.location.href);
+        let token = url.searchParams.get("token");
+        orderCaptured = true;
+        captureOrderForDeposit({variables: {orderId: token}});
+    }
+
+    if (localStorage.getItem('PayPalDepositToken') != null && localStorage.getItem('PayPalDepositToken') != undefined && !orderCaptured) {
+        orderCaptured = true;
+        let possibleToken = localStorage.getItem('PayPalDepositToken');
+        captureOrderForDeposit({variables: {orderId: possibleToken}});
+        localStorage.setItem('PayPalDepositToken', null);
+        localStorage.removeItem('PayPalDepositToken');
+    }
+
     return (
         <>
             <Seo title="Wallet" />
@@ -180,7 +212,6 @@ const Wallet = () => {
                                         <Tab>referral</Tab>
                                         <Tab>airdrops</Tab>
                                         <Tab>transaction</Tab>
-                                        <Tab>bid activity</Tab>
                                     </TabList>
                                 </div>
                                 <TabPanel>
@@ -278,11 +309,6 @@ const Wallet = () => {
                                     <TransactionsProvider>
                                         <Transactions />
                                     </TransactionsProvider>
-                                </TabPanel>
-                                <TabPanel>
-                                    <BidActivityTab
-                                        bids={bidList?.getBidListByUser}
-                                    />
                                 </TabPanel>
                             </Tabs>
                         </div>

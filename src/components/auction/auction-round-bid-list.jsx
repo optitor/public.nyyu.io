@@ -30,6 +30,8 @@ export default function AuctionRoundBidList() {
         auction.getBid
     )
 
+    // console.log(currentRoundBidList, auction.currentRoundBidList, auction.getBid )
+
     // Webservices
     const { startPolling, stopPolling } = useQuery(isAuction ? GET_BIDLIST_BY_ROUND : GET_PRESALE_LIST_BY_ROUND, {
         variables: isAuction ? {
@@ -48,6 +50,7 @@ export default function AuctionRoundBidList() {
                 totalAmount: isAuction ? item.tokenPrice * item.tokenAmount : item.ndbAmount * item.ndbPrice,
                 ranking: isAuction ? (item.ranking ? item.ranking : list.indexOf(item) + 1) : list.indexOf(item) + 1,
             }))
+            setDisplayedBidList([])
             setCurrentRoundBidList(list)
             auction.setCurrentRoundBidList(list)
         },
