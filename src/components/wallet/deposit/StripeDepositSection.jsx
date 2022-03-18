@@ -2,9 +2,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { GET_ALL_FEES } from "../../../apollo/graghqls/querys/Payment";
-import { getStripePaymentFee } from "../../../utilities/utility-methods";
 import CustomSpinner from "../../common/custom-spinner";
 import {
     DELETE_CARD,
@@ -16,19 +13,11 @@ import StripeDepositSavedCards from "./StripeDepositSavedCards";
 
 const StripeDepositSection = ({ amount, closeModal }) => {
     // Containers
-    const user = useSelector((state) => state.auth.user);
     const [isNewCard, setIsNewCard] = useState(true);
     const [savedCards, setSavedCards] = useState(null);
     const [stripePublicKey, setStripePublicKey] = useState(null);
     const [deleteCardLoading, setDeleteCardLoading] = useState(false);
-    const [stripePaymentFee, setStripePaymentFee] = useState(null);
-    const [allFees, setAllFees] = useState(null);
-    const loading = !(
-        stripePublicKey &&
-        savedCards &&
-        allFees &&
-        stripePaymentFee
-    );
+    const loading = !(stripePublicKey && savedCards);
 
     // Webserver
     useQuery(GET_STRIPE_PUB_KEY, {
@@ -39,15 +28,6 @@ const StripeDepositSection = ({ amount, closeModal }) => {
     useQuery(GET_SAVED_CARDS, {
         fetchPolicy: "network-only",
         onCompleted: (data) => setSavedCards(data.getSavedCards),
-        onError: (error) => console.log(error),
-    });
-    useQuery(GET_ALL_FEES, {
-        onCompleted: (data) => {
-            setStripePaymentFee(
-                getStripePaymentFee(user, data.getAllFees, amount)
-            );
-            setAllFees(data.getAllFees);
-        },
         onError: (error) => console.log(error),
     });
     const [deleteCard] = useMutation(DELETE_CARD, {
@@ -108,7 +88,7 @@ const StripeDepositSection = ({ amount, closeModal }) => {
                     stripe={loadStripe(stripePublicKey)}
                 >
                     <StripeDepositForm
-                        amount={Number(amount) + Number(stripePaymentFee)}
+                        amount={Number(amount)}
                         closeModal={closeModal}
                     />
                 </Elements>
@@ -127,7 +107,7 @@ const StripeDepositSection = ({ amount, closeModal }) => {
                         closeModal={closeModal}
                         savedCards={savedCards}
                         deleteCardMethod={deleteCardMethod}
-                        amount={Number(amount) + Number(stripePaymentFee)}
+                        amount={Number(amount)}
                     />
                 </Elements>
             )}

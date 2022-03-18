@@ -8,7 +8,7 @@ import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
 import Loading from "../common/Loading";
 import { Icon } from "@iconify/react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
@@ -25,6 +25,9 @@ import {
     CAPTURE_ORDER_FOR_DEPOSIT,
 } from "../../apollo/graghqls/mutations/Payment";
 import StripeDepositSection from "./deposit/StripeDepositSection";
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import { getStripePaymentFee } from "../../utilities/utility-methods";
+import { useSelector } from "react-redux";
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
@@ -75,6 +78,7 @@ const SelectOption = (props) => {
 };
 
 export default function DepositModal({ showModal, setShowModal }) {
+    const user = useSelector((state) => state.auth.user);
     const [selectedAsset, setSelectedAsset] = useState(SUPPORTED_COINS[0]);
     const [currentStep, setCurrentStep] = useState(1);
     const [tabIndex, setTabIndex] = useState(1);
@@ -98,6 +102,9 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [isStripeDeposit, setIsStripeDeposit] = useState(false);
     const [isBankAccountTransferDeposit, setIsBankAccountTransferDeposit] =
         useState(false);
+    const [allFees, setAllFees] = useState(null);
+
+    const loadingStripe = !allFees;
 
     useEffect(() => {
         (async function () {
@@ -108,6 +115,13 @@ export default function DepositModal({ showModal, setShowModal }) {
             return "";
         })();
     }, [depositData]);
+
+    useQuery(GET_ALL_FEES, {
+        onCompleted: (data) => {
+            setAllFees(data.getAllFees);
+        },
+        onError: (error) => console.log(error),
+    });
 
     const [createChargeForDepositMutation] = useMutation(
         CREATE_CHARGE_FOR_DEPOSIT,
@@ -656,81 +670,117 @@ export default function DepositModal({ showModal, setShowModal }) {
                 )}
                 {currentStep === 3 && isStripeDeposit && (
                     <div className="deposit width2">
-                        <h5 className="text-center">Credit card deposit</h5>
                         <div>
-                            <p className="subtitle">Currency</p>
-                            <Select
-                                className="black_input"
-                                options={CURRENCIES}
-                                value={currency}
-                                onChange={(selected) => {
-                                    setCurrency(selected);
-                                }}
-                                styles={customSelectStyles}
-                                components={{
-                                    IndicatorSeparator: null,
-                                }}
-                            />
-                        </div>
-                        <div className="mt-3">
-                            <p className="subtitle">Amount</p>
-                            <div
-                                className="black_input transfer_input"
-                                onClick={() =>
-                                    jq("input#transferAmount").trigger("focus")
-                                }
-                            >
-                                <NumberFormat
-                                    id="transferAmount"
-                                    className="ms-2"
-                                    thousandSeparator={true}
-                                    prefix={currency.symbol + " "}
-                                    allowNegative={false}
-                                    value={transferAmount}
-                                    onValueChange={(values) =>
-                                        setTransferAmount(values.value)
-                                    }
-                                    autoComplete="off"
-                                />
-                                <div>
-                                    Stripe fee{" "}
-                                    <NumberFormat
-                                        thousandSeparator={true}
-                                        suffix={" " + currency.symbol}
-                                        displayType="text"
-                                        allowNegative={false}
-                                        value={
-                                            Number(transferAmount) * TransferFee
-                                        }
-                                        decimalScale={2}
-                                    />
+                            {loadingStripe ? (
+                                <div className="text-center mt-4">
+                                    <CustomSpinner />
                                 </div>
-                            </div>
+                            ) : (
+                                <>
+                                    <h5 className="text-center">
+                                        Credit card deposit
+                                    </h5>
+                                    <div>
+                                        <p className="subtitle">Currency</p>
+                                        <Select
+                                            className="black_input"
+                                            options={CURRENCIES}
+                                            value={currency}
+                                            onChange={(selected) => {
+                                                setCurrency(selected);
+                                            }}
+                                            styles={customSelectStyles}
+                                            components={{
+                                                IndicatorSeparator: null,
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mt-3">
+                                        <p className="subtitle">Amount</p>
+                                        <div
+                                            className="black_input transfer_input"
+                                            onClick={() =>
+                                                jq(
+                                                    "input#transferAmount"
+                                                ).trigger("focus")
+                                            }
+                                        >
+                                            <NumberFormat
+                                                id="transferAmount"
+                                                className="ms-2"
+                                                thousandSeparator={true}
+                                                prefix={currency.symbol + " "}
+                                                allowNegative={false}
+                                                value={transferAmount}
+                                                onValueChange={(values) =>
+                                                    setTransferAmount(
+                                                        values.value
+                                                    )
+                                                }
+                                                autoComplete="off"
+                                            />
+                                            <div>
+                                                Stripe fee{" "}
+                                                <NumberFormat
+                                                    thousandSeparator={true}
+                                                    suffix={
+                                                        " " + currency.symbol
+                                                    }
+                                                    displayType="text"
+                                                    allowNegative={false}
+                                                    value={Number(
+                                                        getStripePaymentFee(
+                                                            user,
+                                                            allFees,
+                                                            transferAmount
+                                                        )
+                                                    )}
+                                                    decimalScale={2}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-3">
+                                        <p className="desc">
+                                            The <span>{currency.label}</span>{" "}
+                                            will be converted to{" "}
+                                            <span>USDT</span> and deposited to
+                                            the wallet
+                                        </p>
+                                        <div className="black_input usdt_div">
+                                            <img
+                                                src={USDT}
+                                                alt="usdt"
+                                                className="ms-2"
+                                            />
+                                            <p className="ms-2">USDT</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        className="btn btn-outline-light rounded-0 w-100 mt-50px mb-5 fw-bold"
+                                        onClick={() => setCurrentStep(4)}
+                                        disabled={!transferAmount}
+                                    >
+                                        CONTINUE
+                                    </button>
+                                </>
+                            )}
                         </div>
-                        <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be
-                                converted to <span>USDT</span> and deposited to
-                                the wallet
-                            </p>
-                            <div className="black_input usdt_div">
-                                <img src={USDT} alt="usdt" className="ms-2" />
-                                <p className="ms-2">USDT</p>
-                            </div>
-                        </div>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-50px mb-5 fw-bold"
-                            onClick={() => setCurrentStep(4)}
-                            disabled={!transferAmount}
-                        >
-                            CONTINUE
-                        </button>
                     </div>
                 )}
                 {currentStep === 4 && isStripeDeposit && (
                     <StripeDepositSection
                         closeModal={closeModal}
-                        amount={Number(transferAmount)}
+                        amount={
+                            Number(transferAmount) +
+                            Number(
+                                getStripePaymentFee(
+                                    user,
+                                    allFees,
+                                    transferAmount
+                                )
+                            )
+                        }
                     />
                 )}
             </>

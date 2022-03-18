@@ -88,7 +88,7 @@ export default function StripeDepositSavedCards({
     // Render
     return successfulPayment === true ? (
         <PaymentSuccessful
-            timeout={30}
+            timeout={3}
             callback={() => isBrowser && window.location.reload(false)}
         />
     ) : successfulPayment === false ? (
