@@ -9,17 +9,17 @@ import { FormInput } from "../common/FormControl";
 
 export default function ChangeNameModal({ isOpen, setIsOpen }) {
     // Containers
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
     const [error, setError] = useState("");
     const [newName, setNewName] = useState("");
     // Methods
     const containsSpecialCharacter = (text) => {
-        const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-        return format.test(text);
+        return true;
     };
     const submitNameChange = (e) => {
         e.preventDefault();
-        if (containsSpecialCharacter(newName)) return setError("Cannot include special characters");
+        if (containsSpecialCharacter(newName))
+            return setError("Cannot include special characters");
     };
     // Render
     return (
@@ -36,14 +36,22 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                     role="button"
                     tabIndex="0"
                 >
-                    <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    <img
+                        width="14px"
+                        height="14px"
+                        src={CloseIcon}
+                        alt="close"
+                    />
                 </div>
             </div>
             <div className="py-4">
                 <div className="text-center">
-                    <p className="text-capitalize fs-30px fw-bold lh-36px">Name change</p>
+                    <p className="text-capitalize fs-30px fw-bold lh-36px">
+                        Name change
+                    </p>
                     <p className="fs-16px mt-3 text-light fw-normald px-sm-5 px-0">
-                        Name change will cost 10 NDB coins, and it will be drawn from your wallet
+                        Name change will cost 10 NDB coins, and it will be drawn
+                        from your wallet
                     </p>
                 </div>
                 <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light mt-4">
@@ -60,19 +68,28 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                         <div className="mb-3">
                             {error && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                    <FontAwesomeIcon
+                                        icon={faExclamationCircle}
+                                    />{" "}
+                                    {error}
                                 </span>
                             )}
                             <button
                                 type="submit"
                                 className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-1 mt-4"
+                                onClick={submitNameChange}
                             >
-                                <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                                <div
+                                    className={`${
+                                        loading ? "opacity-1" : "opacity-0"
+                                    }`}
+                                >
                                     <CustomSpinner />
                                 </div>
                                 <div
-                                    className={`fs-20px ${loading ? "ms-3" : "pe-4"}`}
-                                    onClick={submitNameChange}
+                                    className={`fs-20px ${
+                                        loading ? "ms-3" : "pe-4"
+                                    }`}
                                 >
                                     confirm
                                 </div>

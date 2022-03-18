@@ -8,8 +8,8 @@ import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
 
 export default function ChangeEmailModal({ isOpen, setIsOpen }) {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [loading] = useState(false);
+    const [error] = useState("");
     return (
         <Modal
             isOpen={isOpen}
