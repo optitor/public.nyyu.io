@@ -80,6 +80,7 @@ export default function StripeDepositSavedCards({
                 cryptoType: "USDT",
                 amount: amount * 100,
                 cardId: savedCards[selectedSavedCard].id,
+                paymentIntentId: null,
             },
         });
         setRequestPending(false);

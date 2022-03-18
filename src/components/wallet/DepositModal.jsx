@@ -17,7 +17,14 @@ import StripeDepositSection from "./deposit/StripeDepositSection";
 import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
-import { Plaid, PaypalFiat, CreditCards, USDT, SuccesImage, FailImage } from '../../utilities/imgImport';
+import {
+    Plaid,
+    PaypalFiat,
+    CreditCards,
+    USDT,
+    SuccesImage,
+    FailImage,
+} from "../../utilities/imgImport";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
@@ -78,12 +85,12 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [copied, setCopied] = useState(false);
     const [pending, setPending] = useState(false);
 
-    const [bankDepositStatus, setBankDepositStatus] = useState('');
+    const [bankDepositStatus, setBankDepositStatus] = useState("");
     const [coinQRCode, setCoinQRCode] = useState("");
 
     const [loading, setLoading] = useState(false);
 
-    const networks = useMemo(() => (selectedAsset.networks), [selectedAsset]);
+    const networks = useMemo(() => selectedAsset.networks, [selectedAsset]);
     const [network, setNetwork] = useState(networks[0]);
     const [depositData, setDepositData] = useState({});
 
@@ -140,8 +147,8 @@ export default function DepositModal({ showModal, setShowModal }) {
     const goBackToFiat = () => {
         setCurrentStep(1);
         setCurrency(CURRENCIES[0]);
-        setTransferAmount('');
-        setBankDepositStatus('');
+        setTransferAmount("");
+        setBankDepositStatus("");
     };
 
     const create_Charge_For_Deposit = () => {
@@ -152,7 +159,7 @@ export default function DepositModal({ showModal, setShowModal }) {
             cryptoType: selectedAsset.value,
         };
         createChargeForDepositMutation({
-            variables: { ...createData }
+            variables: { ...createData },
         });
     };
 
@@ -181,11 +188,11 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [paypalDeposit] = useMutation(Mutation.PAYPAY_FOR_DEPOSIT, {
         onCompleted: (data) => {
             let links = data.paypalForDeposit.links;
-            console.log(data.paypalForDeposit)
+            console.log(data.paypalForDeposit);
             for (let i = 0; i < links.length; i++) {
-                if (links[i].rel === 'approve') {
-                    let token = links[i].href.split('token=')[1];
-                    localStorage.setItem('PayPalDepositToken', token)
+                if (links[i].rel === "approve") {
+                    let token = links[i].href.split("token=")[1];
+                    localStorage.setItem("PayPalDepositToken", token);
                     window.location.href = links[i].href;
                     break;
                 }
@@ -200,23 +207,29 @@ export default function DepositModal({ showModal, setShowModal }) {
 
     const initPaypalCheckout = () => {
         setLoading(true);
-        paypalDeposit({variables: {amount: transferAmount, currencyCode: currency.value, cryptoType: "USDT"}});
+        paypalDeposit({
+            variables: {
+                amount: transferAmount,
+                currencyCode: currency.value,
+                cryptoType: "USDT",
+            },
+        });
     };
 
     const [bankForDeposit] = useMutation(Mutation.BANK_FOR_DEPOSIT, {
-        onCompleted: data => {
-            if(data.bankForDeposit) {
-                console.log(data.bankForDeposit)
+        onCompleted: (data) => {
+            if (data.bankForDeposit) {
+                console.log(data.bankForDeposit);
                 setPending(false);
-                setBankDepositStatus('success');
+                setBankDepositStatus("success");
             }
             setPending(false);
         },
-        onError: err => {
+        onError: (err) => {
             console.log(err.message);
             setPending(false);
-            setBankDepositStatus('fail');
-        }
+            setBankDepositStatus("fail");
+        },
     });
 
     const handleBankForDeposit = () => {
@@ -224,10 +237,10 @@ export default function DepositModal({ showModal, setShowModal }) {
         const depositData = {
             amount: Number(transferAmount),
             currencyCode: currency.label,
-            cryptoType: 'USDT',
+            cryptoType: "USDT",
         };
         bankForDeposit({
-            variables: { ...depositData }
+            variables: { ...depositData },
         });
     };
     if (loading) return <Loading />;
@@ -505,7 +518,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 styles={customSelectStyles}
                                 components={{
                                     IndicatorSeparator: null,
-                                    IndicatorSeparator: null
+                                    IndicatorSeparator: null,
                                 }}
                             />
                         </div>
@@ -602,23 +615,45 @@ export default function DepositModal({ showModal, setShowModal }) {
                             otherwise we may not be able to locate your
                             transaction.
                         </p>
-                        {!bankDepositStatus? (
+                        {!bankDepositStatus ? (
                             <button
                                 className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
                                 onClick={handleBankForDeposit}
                                 disabled={pending}
                             >
-                                {pending? <CustomSpinner />: 'CONFIRM REQUEST'}
+                                {pending ? (
+                                    <CustomSpinner />
+                                ) : (
+                                    "CONFIRM REQUEST"
+                                )}
                             </button>
-                        ): bankDepositStatus === 'success'? (
+                        ) : bankDepositStatus === "success" ? (
                             <div className="text-center mt-2">
-                                <img src={SuccesImage} alt="success" style={{width: 80}}/>
-                                <p className="mt-2 text-green" style={{fontSize: 18, fontWeight: 600}}>REQUEST SENT SUCCESSFULLY</p>
+                                <img
+                                    src={SuccesImage}
+                                    alt="success"
+                                    style={{ width: 80 }}
+                                />
+                                <p
+                                    className="mt-2 text-green"
+                                    style={{ fontSize: 18, fontWeight: 600 }}
+                                >
+                                    REQUEST SENT SUCCESSFULLY
+                                </p>
                             </div>
-                        ): (
+                        ) : (
                             <div className="text-center mt-2">
-                                <img src={FailImage} alt="success" style={{width: 80}}/>
-                                <p className="mt-2 text-danger" style={{fontSize: 18, fontWeight: 600}}>ERROR IN BANK DEPOSIT</p>
+                                <img
+                                    src={FailImage}
+                                    alt="success"
+                                    style={{ width: 80 }}
+                                />
+                                <p
+                                    className="mt-2 text-danger"
+                                    style={{ fontSize: 18, fontWeight: 600 }}
+                                >
+                                    ERROR IN BANK DEPOSIT
+                                </p>
                             </div>
                         )}
                     </div>
@@ -790,14 +825,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                     <StripeDepositSection
                         closeModal={closeModal}
                         amount={
-                            Number(transferAmount) +
-                            Number(
-                                getStripePaymentFee(
-                                    user,
-                                    allFees,
-                                    transferAmount
-                                )
-                            )
+                            Number(transferAmount)
                         }
                     />
                 )}

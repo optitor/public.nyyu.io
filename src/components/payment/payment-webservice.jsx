@@ -84,11 +84,13 @@ export const STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD = gql`
         $amount: Float
         $cryptoType: String
         $cardId: Int
+        $paymentIntentId: String
     ) {
         stripeForDepositWithSavedCard(
             amount: $amount
             cryptoType: $cryptoType
             cardId: $cardId
+            paymentIntentId: $paymentIntentId
         ) {
             clientSecret
             paymentIntentId
