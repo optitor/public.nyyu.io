@@ -586,10 +586,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                             otherwise we may not be able to locate your
                             transaction.
                         </p>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
-                            // onClick={()}
-                        >
+                        <button className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3">
                             CONFIRM
                         </button>
                     </div>
@@ -733,10 +730,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 {currentStep === 4 && isStripeDeposit && (
                     <StripeDepositSection
                         closeModal={closeModal}
-                        amount={
-                            Number(transferAmount * TransferFee) +
-                            Number(transferAmount)
-                        }
+                        amount={Number(transferAmount)}
                     />
                 )}
             </>
