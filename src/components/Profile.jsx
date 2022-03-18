@@ -45,12 +45,12 @@ const Profile = () => {
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
-            if (!userData.getUser) {
+            if (!userData?.getUser) {
                 return logout(() => {
                     navigate(ROUTES.home);
                 });
             }
-            if (userData.getUser?.avatar) {
+            if (userData?.getUser?.avatar) {
                 const { prefix, name } = userData.getUser.avatar;
                 if (prefix && name) {
                     return setDisplayName(prefix + "." + name);
@@ -63,12 +63,12 @@ const Profile = () => {
     useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-            return setUserTiersData(data.getUserTiers);
+            return setUserTiersData(data?.getUserTiers);
         },
     });
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
-            setShuftiReference(data.getShuftiReference);
+            setShuftiReference(data?.getShuftiReference);
             return setShuftiReferenceLoading(false);
         },
         fetchPolicy: "network-only",
