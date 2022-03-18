@@ -80,9 +80,9 @@ export default function StripeDepositSavedCards({
                 cryptoType: "USDT",
                 amount: amount * 100,
                 cardId: savedCards[selectedSavedCard].id,
+                paymentIntentId: null,
             },
         });
-        setRequestPending(false);
     };
 
     // Render
@@ -153,7 +153,11 @@ export default function StripeDepositSavedCards({
                                 <CustomSpinner sm />
                             </div>
                         )}
-                        <div>confirm deposit</div>
+                        <div>
+                            {stripePaymentSecondCall
+                                ? "verifying"
+                                : "confirm deposit"}
+                        </div>
                     </div>
                 </button>
             )}
