@@ -118,11 +118,15 @@ const Payment = () => {
         if (barProgress < 1) setBarProgress(1);
     }, [barProgress]);
 
+    let paypalIsCheckingOut = false;
+
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
+                    let token = links[i].href.split('token=')[1];
+                    localStorage.setItem('PayPalForAuctionToken', token)
                     setPayPalLoading(false);
                     window.location.href = links[i].href;
                     break;
@@ -131,10 +135,18 @@ const Payment = () => {
         },
         onError: (err) => {
             console.log(err);
-            // alert("Error in PayPal checkout");
+            alert("Error in PayPal checkout");
             setPayPalLoading(false);
         },
     });
+
+    const initPaypal = () => {
+        setPayPalLoading(true);
+        paypalIsCheckingOut = true;
+        createPayPalOrder({
+            variables: { roundId: currentRound, currencyCode: "USD" },
+        });
+    };
 
     const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
         onCompleted: (data) => {
@@ -142,26 +154,30 @@ const Payment = () => {
             if (data.captureOrderForAuction) {
                 alert("Your checkout was successfully!");
             } else {
-                // alert("Error in checkout with PayPal");
+                alert("Error in checkout with PayPal");
             }
         },
         onError: (err) => {
-            // alert("Error in checkout with PayPal");
+            alert("Error in checkout with PayPal");
         },
     });
 
-    if(orderId != undefined) {
-        captureOrderForAuction({ variables: { orderId: orderId } });
+    let orderCaptured = false;
+
+    if (window.location.href.includes('token=') && !orderCaptured && !paypalIsCheckingOut) {
+        var url = new URL(window.location.href);
+        let token = url.searchParams.get("token");
+        orderCaptured = true;
+        captureOrderForAuction({ variables: { orderId: token } });
     }
 
-    const initPaypal = () => {
-        setPayPalLoading(true);
-        createPayPalOrder({
-            variables: { roundId: currentRound, currencyCode: "USD" },
-        });
-    };
-
-    let orderCaptured = false;
+    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') != undefined && !orderCaptured && !paypalIsCheckingOut) {
+        orderCaptured = true;
+        let possibleToken = localStorage.getItem('PayPalForAuctionToken');
+        captureOrderForAuction({ variables: { orderId: possibleToken } });
+        localStorage.setItem('PayPalForAuctionToken', null);
+        localStorage.removeItem('PayPalForAuctionToken');
+    }
 
     // if (window.location.href.includes("token=") && !orderCaptured) {
     //     var url = new URL(window.location.href);
