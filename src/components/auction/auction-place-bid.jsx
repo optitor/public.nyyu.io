@@ -91,7 +91,9 @@ export default function AuctionPlaceBid() {
                 <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
                     round is over
                 </div>
-            ) : !auction.currentRoundBidList ? (
+            ) : optCurrentRound?.status === 1 ? <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
+                countdown
+            </div> : !auction.currentRoundBidList ? (
                 <></>
             ) : (
                 <div className="place-bid">

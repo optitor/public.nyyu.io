@@ -16,7 +16,7 @@ export default function ConnectWalletTab() {
     return (
         <div className="row">
             {accountData ? (
-                <div>
+                <div className="mb-10px">
                     <div className="connected">
                         <img src={wallets[accountData.connector.id]?.icon} alt="wallet icon" />
                         <p>{accountData.address}</p>

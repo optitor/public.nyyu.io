@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useCallback, useReducer, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // for paypal callback
@@ -7,15 +7,13 @@ import { useQueryParam, StringParam } from "use-query-params";
 
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import ReactTooltip from "react-tooltip";
 import _ from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+
 import Header from "../header";
 import Loading from "../common/Loading";
 import { numberWithCommas } from "../../utilities/number";
-import { CheckBox } from "../common/FormControl";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
     CryptoCoin,
     Paypal,
@@ -24,21 +22,20 @@ import {
     ExternalWallet,
     PaypalBrand,
 } from "../../utilities/imgImport";
-import ConnectWalletTab from "../profile/connect-wallet-tab";
-import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
 import Seo from "./../seo";
 import CreditCardTab from "./credit-card-tab";
 import CoinPaymentsTab from "./CoinPaymentsTab";
 import OrderSummary from "./order-summary";
 import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
 import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
-import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { set_All_Fees } from "../../redux/actions/allFeesAction";
+import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
+import NDBWalletTab from "./NDBWalletTab";
+import PaymentExternalWalletTab from "./payment-external-wallet-tab"
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
 import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
-import NDBWalletTab from "./NDBWalletTab";
-import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -56,8 +53,6 @@ const Payment = () => {
 
     // try to get token from request
     const [orderId, setOrderId] = useQueryParam("token", StringParam);
-    console.log("--------------- from params", orderId);
-    console.log("--------------- from localStorage", localStorage.getItem("ACCESS_TOKEN"));
 
     const currentRound = useSelector((state) => state?.placeBid.round_id);
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
@@ -71,27 +66,10 @@ const Payment = () => {
 
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    // if (!isSSR && !currentRound) navigate(ROUTES.auction);
+    if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
-    const [state, setState] = useReducer(
-        (old, action) => ({ ...old, ...action }),
-        {
-            allow_fraction: false,
-            getAddress: false,
-        }
-    );
-    const { allow_fraction } = state;
-
     const [tabIndex, setTabIndex] = useState(0);
-
-    const handleAllowFraction = useCallback(
-        (e) => {
-            e.preventDefault();
-            setState({ allow_fraction: !allow_fraction });
-        },
-        [allow_fraction]
-    );
 
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
@@ -171,7 +149,7 @@ const Payment = () => {
         captureOrderForAuction({ variables: { orderId: token } });
     }
 
-    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') != undefined && !orderCaptured && !paypalIsCheckingOut) {
+    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') !== undefined && !orderCaptured && !paypalIsCheckingOut) {
         orderCaptured = true;
         let possibleToken = localStorage.getItem('PayPalForAuctionToken');
         captureOrderForAuction({ variables: { orderId: possibleToken } });
@@ -284,52 +262,10 @@ const Payment = () => {
                                             className="payment-content"
                                             style={{ display: "block" }}
                                         >
-                                            <ConnectWalletTab />
-
-                                            <div className="mt-1 d-flex justify-content-between">
-                                                <p className="d-flex flex-row">
-                                                    <CheckBox
-                                                        type="checkbox"
-                                                        name="allow_fraction"
-                                                        value={allow_fraction}
-                                                        onChange={
-                                                            handleAllowFraction
-                                                        }
-                                                        className="text-uppercase"
-                                                    />
-                                                    <div className="allow-text">
-                                                        Do you allow fraction of
-                                                        order compleation?
-                                                    </div>
-                                                    <ReactTooltip
-                                                        place="right"
-                                                        type="light"
-                                                        effect="solid"
-                                                    >
-                                                        <div
-                                                            className="text-justify"
-                                                            style={{
-                                                                width: "300px",
-                                                            }}
-                                                        >
-                                                            {
-                                                                PAYMENT_FRACTION_TOOLTIP_CONTENT
-                                                            }
-                                                        </div>
-                                                    </ReactTooltip>
-                                                    <FontAwesomeIcon
-                                                        data-tip="React-tooltip"
-                                                        icon={faQuestionCircle}
-                                                        className="fa-xl ms-2 cursor-pointer"
-                                                    />
-                                                </p>
-                                                <p className="payment-expire my-auto">
-                                                    payment expires in{" "}
-                                                    <span className="txt-green">
-                                                        10 minutes
-                                                    </span>
-                                                </p>
-                                            </div>
+                                            <PaymentExternalWalletTab
+                                                currentRound={currentRound}
+                                                bidAmount={bidAmount}
+                                            />
                                         </div>
                                     </div>
                                 )}

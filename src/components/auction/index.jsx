@@ -21,7 +21,9 @@ const Auction = () => {
         if (auctions || presales) {
             const tempRounds = auctions?.concat(presales)
             tempRounds && tempRounds.length && setEntireRounds(tempRounds.sort((a, b) => {
-                return a?.round - b?.round
+                if (a.round || b.round) {
+                    return a.round - b.round
+                }
             }))
         }
     }, [auctions, presales])

@@ -5,4 +5,4 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import "react-tabs/style/react-tabs.css"
 import "rc-slider/assets/index.css"
 
-export { wrapRootElement } from './wrap-with-provider';
+export { wrapRootElement } from './src/providers/wrap-with-provider';
