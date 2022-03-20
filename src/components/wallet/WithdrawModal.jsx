@@ -300,9 +300,11 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
-                                        <FiatButton className="active" onClick={() => {
-                                            setIsPaypalWithdraw(false); setCurrentStep(2);
-                                        }}>
+                                        <FiatButton className="inactive" 
+                                            // onClick={() => {
+                                            //     setIsPaypalWithdraw(false); setCurrentStep(2);
+                                            // }}
+                                        >
                                             <p>Standard bank transfer</p>
                                         </FiatButton>
                                     </div>
@@ -311,155 +313,136 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                         )}
                     </div>
                 )}
-                {currentStep === 2 && isPaypalWithdraw && (
-                    <div className="deposit width2 mb-5">
-                        <h5 className="text-center">Paypal withdraw</h5>
-                        <div className="mt-3">
-                            <p className="subtitle">Source of fund</p>
-                            <div className="black_input usdt_div">
-                                <img src={USDT} alt='usdt' className="ms-2" />
-                                <p className="ms-2">USDT</p>
-                            </div>
-                            <p className="desc">
-                                The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your paypal account
-                            </p>
-                        </div>
-                        <div>
-                            <p className="subtitle">Select currency</p>
-                            <Select
-                                className="black_input"
-                                options={CURRENCIES}
-                                value={currency}
-                                onChange={(selected) => {
-                                    setCurrency(selected)
-                                }}
-                                styles={customSelectStyles}
-                                components={{
-                                    IndicatorSeparator: null                                            
-                                }}
-                            />
-                        </div>
-                        <div className="mt-3">
-                            <p className="subtitle">Amount</p>
-                            <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
-                                <NumberFormat id="transferAmount" className="ms-2"
-                                    thousandSeparator={true}
-                                    prefix={currency.symbol + ' '}
-                                    allowNegative={false}
-                                    value={transferAmount}
-                                    onValueChange={values => setTransferAmount(values.value)}
-                                    autoComplete='off'
-                                />
-                                <div>
-                                    Bank transfer fee{' '}
-                                    <NumberFormat
-                                        thousandSeparator={true}
-                                        suffix={' ' + currency.symbol}
-                                        displayType='text'
-                                        allowNegative={false}
-                                        value={Number(transferAmount) * TransferFee}
-                                        decimalScale={2}
-                                    />
+                {currentStep === 2 &&
+                    (isPaypalWithdraw? (
+                        <div className="deposit width2 mb-5">
+                            <h5 className="text-center">Paypal withdraw</h5>
+                            <div className="mt-3">
+                                <p className="subtitle">Source of fund</p>
+                                <div className="black_input usdt_div">
+                                    <img src={USDT} alt='usdt' className="ms-2" />
+                                    <p className="ms-2">USDT</p>
                                 </div>
-                            </div>
-                        </div>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
-                            onClick={() => setCurrentStep(3)}
-                            disabled={!transferAmount}
-                        >
-                            NEXT
-                        </button>
-                    </div>
-                )}
-                {currentStep === 2 && !isPaypalWithdraw && (
-                    <div className="deposit width2 mb-5">
-                        <h5 className="text-center">Bank transfer withdraw</h5>
-                        <div className="mt-3">
-                            <p className="subtitle">Source of fund</p>
-                            <div className="black_input usdt_div">
-                                <img src={USDT} alt='usdt' className="ms-2" />
-                                <p className="ms-2">USDT</p>
-                            </div>
-                            <p className="desc">
-                                The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your bank
-                            </p>
-                        </div>
-                        <div>
-                            <p className="subtitle">Select currency</p>
-                            <Select
-                                className="black_input"
-                                options={CURRENCIES}
-                                value={currency}
-                                onChange={(selected) => {
-                                    setCurrency(selected)
-                                }}
-                                styles={customSelectStyles}
-                                components={{
-                                    IndicatorSeparator: null                                            
-                                }}
-                            />
-                        </div>
-                        <div className="mt-3">
-                            <p className="subtitle">Amount</p>
-                            <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
-                                <NumberFormat id="transferAmount" className="ms-2"
-                                    thousandSeparator={true}
-                                    prefix={currency.symbol + ' '}
-                                    allowNegative={false}
-                                    value={transferAmount}
-                                    onValueChange={values => setTransferAmount(values.value)}
-                                    autoComplete='off'
-                                />
-                                <div>
-                                    Bank transfer fee{' '}
-                                    <NumberFormat
-                                        thousandSeparator={true}
-                                        suffix={' ' + currency.symbol}
-                                        displayType='text'
-                                        allowNegative={false}
-                                        value={Number(transferAmount) * TransferFee}
-                                        decimalScale={2}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
-                            onClick={() => setCurrentStep(3)}
-                            disabled={!transferAmount}
-                        >
-                            NEXT
-                        </button>
-                    </div>
-                )}
-                {currentStep === 3 && (
-                    <div className="deposit width2 mb-5">
-                        <h4 className="text-center">{currency.label} Deposits Only</h4>
-                        <p className="subtitle mb-4">
-                            <Icon icon='akar-icons:clock' className="me-2" style={{fontSize: 18}}/>
-                            Incoming payments can take 3 working days to be added to your wallet
-                        </p>
-                        {_.map(TransferData[currency.value], (val, key) => (
-                            <div className="transfer_data_div" key={key}>
-                                <p className="subtitle pe-2">{key}:</p>
-                                <p className="value">
-                                    {val}
-                                    <Icon icon={copyText === val? 'fluent:copy-20-filled': 'fluent:copy-24-regular'} onClick={() => handleCopyToClipboard(val)} />
+                                <p className="desc">
+                                    The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your paypal account
                                 </p>
                             </div>
-                        ))}
-                        <p className="subtitle mt-4">
-                            Please make sure you use the reference number indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.
-                        </p>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-30px fw-bold"
-                            // onClick={()}
-                        >
-                            CONFIRM
-                        </button>
-                    </div>
-                )}
+                            <div>
+                                <p className="subtitle">Select currency</p>
+                                <Select
+                                    className="black_input"
+                                    options={CURRENCIES}
+                                    value={currency}
+                                    onChange={(selected) => {
+                                        setCurrency(selected)
+                                    }}
+                                    styles={customSelectStyles}
+                                    components={{
+                                        IndicatorSeparator: null                                            
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3">
+                                <p className="subtitle">Amount</p>
+                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                    <NumberFormat id="transferAmount" className="ms-2"
+                                        thousandSeparator={true}
+                                        prefix={currency.symbol + ' '}
+                                        allowNegative={false}
+                                        value={transferAmount}
+                                        onValueChange={values => setTransferAmount(values.value)}
+                                        autoComplete='off'
+                                    />
+                                    <div>
+                                        Bank transfer fee{' '}
+                                        <NumberFormat
+                                            thousandSeparator={true}
+                                            suffix={' ' + currency.symbol}
+                                            displayType='text'
+                                            allowNegative={false}
+                                            value={Number(transferAmount) * TransferFee}
+                                            decimalScale={2}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
+                                onClick={() => setCurrentStep(3)}
+                                disabled={!transferAmount}
+                            >
+                                NEXT
+                            </button>
+                        </div>
+                    ): (
+                        <div className="deposit width2 mb-5">
+                            <h5 className="text-center">Bank transfer withdraw</h5>
+                            <div className="mt-3">
+                                <p className="subtitle">Source of fund</p>
+                                <div className="black_input usdt_div">
+                                    <img src={USDT} alt='usdt' className="ms-2" />
+                                    <p className="ms-2">USDT</p>
+                                </div>
+                                <p className="desc">
+                                    The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your bank
+                                </p>
+                            </div>
+                            <div>
+                                <p className="subtitle">Select currency</p>
+                                <Select
+                                    className="black_input"
+                                    options={CURRENCIES}
+                                    value={currency}
+                                    onChange={(selected) => {
+                                        setCurrency(selected)
+                                    }}
+                                    styles={customSelectStyles}
+                                    components={{
+                                        IndicatorSeparator: null
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3">
+                                <p className="subtitle">Amount</p>
+                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                    <NumberFormat id="transferAmount" className="ms-2"
+                                        thousandSeparator={true}
+                                        prefix={currency.symbol + ' '}
+                                        allowNegative={false}
+                                        value={transferAmount}
+                                        onValueChange={values => setTransferAmount(values.value)}
+                                        autoComplete='off'
+                                    />
+                                    <div>
+                                        Bank transfer fee{' '}
+                                        <NumberFormat
+                                            thousandSeparator={true}
+                                            suffix={' ' + currency.symbol}
+                                            displayType='text'
+                                            allowNegative={false}
+                                            value={Number(transferAmount) * TransferFee}
+                                            decimalScale={2}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
+                                onClick={() => setCurrentStep(3)}
+                                disabled={!transferAmount}
+                            >
+                                NEXT
+                            </button>
+                        </div>
+                    ))
+                }
+                {currentStep === 3 &&
+                    (isPaypalWithdraw? (
+                        <></>
+                    ): (
+                        <></>
+                    ))
+                }
             </>
         </Modal>
     )

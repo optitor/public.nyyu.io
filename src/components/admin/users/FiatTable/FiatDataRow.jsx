@@ -36,7 +36,7 @@ const FiatDataRow = ({datum, index}) => {
                         <div className='status_laptop-md'>
                             {datum.status === 'complete' && <span style={{color: '#23c865'}}><Icon icon="akar-icons:circle-fill" /></span>}
                             {datum.status === 'pending' && <span style={{color: 'lightgrey'}}><Icon icon="akar-icons:circle-fill" /></span>}
-                        </div>                        
+                        </div>
                     </Main>
                 </div>
             </DataRow>

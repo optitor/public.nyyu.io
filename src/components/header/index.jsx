@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useQuery, useMutation } from "@apollo/client";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 import { isBrowser } from "./../../utilities/auth";
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
 import ReactTooltip from "react-tooltip";
@@ -20,17 +20,29 @@ import {GET_USER} from "../../apollo/graghqls/querys/Auth";
 import {ROUTES} from "../../utilities/routes";
 import {GET_ALL_UNREAD_NOTIFICATIONS} from "../../apollo/graghqls/querys/Notification";
 import {UPDATE_AVATARSET} from "../../apollo/graghqls/mutations/AvatarComponent";
+import InformBannedModal from "./InformBannedModal";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch();
+    const [banned, setBanned] = useState(false);
+    const [isBannedOpen, setIsBannedOpen] = useState(false);
+
     // Webservice
     const { data: user_data } = useQuery(GET_USER);
     useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
-        onCompleted: (response) => {
-            if (!response.getAllUnReadNotifications) return;
-            setNewNotification(response.getAllUnReadNotifications?.length !== 0);
+        errorPolicy: 'none',
+        onCompleted: (data) => {
+            if (!data?.getAllUnReadNotifications) return;
+            setNewNotification(data?.getAllUnReadNotifications?.length !== 0);
         },
+        onError: err => {
+            if(err.graphQLErrors[0]?.isBannedCountry) {
+                navigate('/');
+                setBanned(true);
+                setIsBannedOpen(true);
+            }
+        }
     });
     const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
@@ -40,7 +52,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             console.log("received Mutation data", err);
         },
     });
-
 
     // Containers
     const auth = useAuth();
@@ -214,9 +225,9 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     <div className="d-flex align-items-center">
                         <div>
                             {!auth?.isLoggedIn() ? (
-                                <Link className="header-btn" to={ROUTES.signIn}>
+                                !banned? <Link className="header-btn" to={ROUTES.signIn} >
                                     Sign In
-                                </Link>
+                                </Link>: ''
                             ) : (
                                 <ul className="d-flex align-items-center">
                                     <Link className="header-btn sale" to="/app/auction">
@@ -340,6 +351,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                             </ul>
                         </div>
                     </div>
+                    {isBannedOpen && <InformBannedModal isModalOpen={isBannedOpen} setIsModalOpen={setIsBannedOpen} />}
                 </div>
             </nav>
         );

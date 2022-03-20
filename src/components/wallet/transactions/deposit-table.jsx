@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import {
+    AccordionDownIcon,
+    AccordionUpIcon,
+} from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 
 export default function DepositTable() {
     // Containers
-    const { tabs } = useTransactions();
+    const { tabs, depositTransactions } = useTransactions();
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
+    const downloadContentRef = useRef();
 
     // Methods
     const toggleDetails = (index) => {
@@ -19,89 +24,128 @@ export default function DepositTable() {
         }
     };
 
+    const downloadContent = (
+        id,
+        date,
+        time,
+        amount,
+        asset,
+        fee,
+        status,
+        type,
+        paymentId
+    ) => {
+        const downloadable = window.open("", "", "");
+        downloadable.document.write(
+            `<div>
+                <div style="font-weight:bold; font-size:20px;">Deposit Receipt #${id}</div>
+                <br />
+                <div style="font-size:14px;padding-bottom: 6px;">Time: ${date} ${time}</div>
+                <div style="font-size:14px;padding-bottom: 6px;">Amount: ${amount} USD</div>
+                <div style="font-size:14px;padding-bottom: 6px;">Fee: ${fee} USD</div>
+                <div style="font-size:14px;padding-bottom: 6px;">Status: ${
+                    status ? "Success" : "Failed"
+                }</div>
+                <div style="font-size:14px;padding-bottom: 6px;">Type: ${type}</div>
+                <div style="font-size:14px;padding-bottom: 6px;">PaymentID: ${paymentId}</div>
+            </div>`
+        );
+        downloadable.print();
+    };
+
     // Render
     return (
-        <div className="px-4">
+        <div className="px-sm-4 px-3 table-responsive transaction-section-tables">
             <table className="wallet-transaction-table w-100">
-                <thead>
-                    <tr className="border-bottom-2-dark-gray py-3">
-                        <th scope="col">Date</th>
-                        <th scope="col" className="text-sm-end">
-                            FIAT/Crypto
-                        </th>
-                        <th scope="col" className="text-sm-end">
-                            Fee
-                        </th>
-                        <th scope="col" className="text-sm-end">
-                            Status
-                        </th>
+                <tr className="border-bottom-2-dark-gray py-3">
+                    <th scope="col">Date</th>
+                    <th scope="col" className="text-sm-end">
+                        FIAT/Crypto
+                    </th>
+                    <th scope="col" className="text-center text-sm-end">
+                        Fee
+                    </th>
+                    <th scope="col" className="text-center text-sm-end">
+                        Status
+                    </th>
+                </tr>
+                {depositTransactions?.length === 0 && (
+                    <tr className="py-4 text-center">
+                        <td
+                            colSpan={4}
+                            className="text-light fs-16px text-uppercase fw-500"
+                        >
+                            no records found
+                        </td>
                     </tr>
-                </thead>
-                <tbody className="pe-3">
-                    {[...Array(10).keys()].map((item) => (
+                )}
+                {depositTransactions?.map(
+                    ({
+                        id,
+                        date,
+                        time,
+                        amount,
+                        asset,
+                        fee,
+                        status,
+                        type,
+                        paymentId,
+                    }) => (
                         <>
                             <tr
-                                className="border-bottom-2-dark-gray"
-                                onClick={() => toggleDetails(item)}
+                                className="border-bottom-2-dark-gray cursor-pointer"
+                                onClick={() => toggleDetails(id)}
                             >
                                 <td
                                     scope="row"
                                     className="text-light pe-5 pe-sm-0 fw-light"
                                 >
-                                    <div className="fs-16px">12/27/2021</div>
+                                    <div className="fs-16px">{date}</div>
                                     <div className="text-secondary fs-12px mt-1 fw-500">
-                                        21:31:12
+                                        {time}
                                     </div>
                                 </td>
                                 <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
                                     <div className="text-sm-end fs-16px">
-                                        120 USD
+                                        {amount + "" + asset}
                                         <br />
                                         <div className="text-secondary fs-12px mt-1 fw-500">
                                             121 USDT
                                         </div>
                                     </div>
                                 </td>
-                                <td className="text-end pe-5 pe-sm-0">
-                                    1.08 USDT
+                                <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
+                                    {fee + " " + asset}
                                 </td>
-                                <td className="d-flex align-items-center justify-content-end pe-5 pe-sm-0">
-                                    <div className="green-bullet me-2"></div>
-                                    <div>Completed</div>
+                                <td className="d-flex align-items-center justify-content-end">
+                                    <div
+                                        className={`${
+                                            status
+                                                ? "green-bullet"
+                                                : "red-bullet"
+                                        } me-2`}
+                                    ></div>
+                                    <div>{status ? "Completed" : "Failed"}</div>
                                     <button className="btn text-light border-0">
-                                        {currentRowsOpen.includes(item) ? (
-                                            <svg
-                                                className="icon-25px ms-2 cursor-pointer"
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
+                                        {currentRowsOpen.includes(id) ? (
+                                            <img
+                                                src={AccordionUpIcon}
+                                                className="icon-sm ms-2 cursor-pointer"
+                                                alt="Down arrow icon"
+                                            />
                                         ) : (
-                                            <svg
-                                                className="icon-25px ms-2 cursor-pointer"
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
+                                            <img
+                                                src={AccordionDownIcon}
+                                                className="icon-sm ms-2 cursor-pointer"
+                                                alt="Down arrow icon"
+                                            />
                                         )}
                                     </button>
                                 </td>
                             </tr>
                             <tr
                                 className="text-light d-none px-5"
-                                id={`transaction-details-${item}`}
+                                id={`transaction-details-${id}`}
                             >
                                 <td colSpan={tabs.length}>
                                     <div className="d-flex align-items-start justify-content-between">
@@ -111,7 +155,7 @@ export default function DepositTable() {
                                                     type:
                                                 </span>
                                                 <span className="fw-500">
-                                                    Crypto Deposit
+                                                    {type}
                                                 </span>
                                             </div>
                                             <div>
@@ -119,7 +163,7 @@ export default function DepositTable() {
                                                     amount:
                                                 </span>
                                                 <span className="fw-500">
-                                                    10 BTC
+                                                    {amount + " " + asset}
                                                 </span>
                                             </div>
                                             <div>
@@ -127,7 +171,7 @@ export default function DepositTable() {
                                                     fee:
                                                 </span>
                                                 <span className="fw-500">
-                                                    0.12
+                                                    {fee + " " + asset}
                                                 </span>
                                             </div>
                                             <div>
@@ -135,7 +179,7 @@ export default function DepositTable() {
                                                     date:
                                                 </span>
                                                 <span className="fw-500">
-                                                    28-12-2022 23:30:40 +00:00
+                                                    {date + " " + time}
                                                 </span>
                                             </div>
                                             <div>
@@ -143,7 +187,7 @@ export default function DepositTable() {
                                                     asset:
                                                 </span>
                                                 <span className="fw-500">
-                                                    BTC
+                                                    {asset}
                                                 </span>
                                             </div>
                                         </div>
@@ -153,30 +197,50 @@ export default function DepositTable() {
                                                     Payment-ID:
                                                 </span>
                                                 <span className="fw-500">
-                                                    XXXX-XXXX-XXXX
+                                                    {paymentId}
                                                 </span>
                                             </div>
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    Address:
-                                                </span>
-                                                <span className="fw-500">
-                                                    12hfi6sh...l6shi
-                                                </span>
-                                            </div>
+                                            {type === "Crypto Deposit" && (
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        Address:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        12hfi6sh...l6shi
+                                                    </span>
+                                                </div>
+                                            )}
                                             <div>
                                                 <span className="text-secondary pe-1">
                                                     Status:
                                                 </span>
                                                 <span className="fw-500">
-                                                    Success
+                                                    {status
+                                                        ? "Success"
+                                                        : "Failed"}
                                                 </span>
                                             </div>
                                         </div>
                                         <div className="fs-12px">
-                                            <div className="text-success text-decoration-success text-decoration-underline">
+                                            <button
+                                                className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
+                                                onClick={() =>
+                                                    downloadContent(
+                                                        id,
+                                                        date,
+                                                        time,
+                                                        amount,
+                                                        asset,
+                                                        fee,
+                                                        status,
+                                                        type,
+                                                        paymentId
+                                                    )
+                                                }
+                                            >
                                                 Get PDF Receipt
-                                            </div>
+                                            </button>
+
                                             <div className="text-light text-underline">
                                                 Hide this activity
                                             </div>
@@ -185,8 +249,8 @@ export default function DepositTable() {
                                 </td>
                             </tr>
                         </>
-                    ))}
-                </tbody>
+                    )
+                )}
             </table>
         </div>
     );
