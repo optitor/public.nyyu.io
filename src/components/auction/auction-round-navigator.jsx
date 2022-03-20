@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { Tab, TabList } from "react-tabs";
 
 import { useAuction } from "../../providers/auction-context";
-
 import { numberWithCommas } from "../../utilities/number";
 
 export default function AuctionRoundNavigator() {
