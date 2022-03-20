@@ -1030,16 +1030,16 @@ export const countries = [
     },
 ]
 
-export const SITE_URL = "https://sale.ndb.money"
+export const SITE_URL = "https://saledev.ndb.money"
 
 // export const API_BASE_URL = "http://localhost:5000";
-export const API_BASE_URL = "https://api.live.ndb.money"
+export const API_BASE_URL = "https://api.ndb.money"
 
 // export const SUBSCRIPTION_BASE_URL = "ws://localhost:5000/subscriptions";
 export const SUBSCRIPTION_BASE_URL = "wss://api.ndb.money/subscriptions"
 
 // export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2/redirect"
-export const OAUTH2_REDIRECT_URI = "https://sale.ndb.money/oauth2/redirect"
+export const OAUTH2_REDIRECT_URI = "https://saledev.ndb.money/oauth2/redirect"
 
 export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
 
