@@ -3,7 +3,7 @@ import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
 import Loading from "../common/Loading"
-import { API_BASE_URL, SITE_URL } from "../../utilities/staticData"
+import { API_BASE_URL, SITE_URL } from "../../utilities/statciData3"
 
 const VerificationPage = () => {
     // WebService

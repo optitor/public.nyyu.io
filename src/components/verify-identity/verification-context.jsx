@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { CLIENT_ID, SECRET } from "../../utilities/staticData"
 import { getCurrentDate } from "../../utilities/utility-methods"
-import { API_BASE_URL } from "../../utilities/staticData"
+import { API_BASE_URL, SITE_URL } from "../../utilities/statciData3"
 
 export const VerificationContext = React.createContext()
 
