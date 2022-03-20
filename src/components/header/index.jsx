@@ -24,8 +24,8 @@ import InformBannedModal from "./InformBannedModal";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch();
-    const [banned, setBanned] = useState(true);
-    const [isBannedOpen, setIsBannedOpen] = useState(true);
+    const [banned, setBanned] = useState(false);
+    const [isBannedOpen, setIsBannedOpen] = useState(false);
 
     // Webservice
     const { data: user_data } = useQuery(GET_USER);

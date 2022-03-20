@@ -300,9 +300,11 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
-                                        <FiatButton className="active" onClick={() => {
-                                            setIsPaypalWithdraw(false); setCurrentStep(2);
-                                        }}>
+                                        <FiatButton className="inactive" 
+                                            // onClick={() => {
+                                            //     setIsPaypalWithdraw(false); setCurrentStep(2);
+                                            // }}
+                                        >
                                             <p>Standard bank transfer</p>
                                         </FiatButton>
                                     </div>
