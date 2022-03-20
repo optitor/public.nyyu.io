@@ -44,6 +44,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             }
         }
     });
+    
     const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
             dispatch(getAuthInfo());
