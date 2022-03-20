@@ -1,16 +1,16 @@
 import React from "react"
-import { AuthProvider } from "./src/hooks/useAuth"
+import { AuthProvider } from "../hooks/useAuth"
 import { ApolloProvider } from "@apollo/client"
-import { client } from "./src/apollo/client"
 import { Provider as ReduxProvider } from "react-redux";
+
 import { Provider as WalletProvider, chain, defaultChains } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink'
 
-import store from './src/redux/store';
-import { INFURA_ID } from "./src/utilities/staticData"
-
+import { client } from "../apollo/client"
+import store from '../redux/store';
+import { INFURA_ID } from "../utilities/staticData"
 
 // API key for Ethereum node
 // Two popular services are Infura (infura.io) and Alchemy (alchemy.com)
@@ -18,7 +18,6 @@ import { INFURA_ID } from "./src/utilities/staticData"
 const infuraId = INFURA_ID
 // Chains for connectors to support
 const chains = defaultChains
-
 // Set up connectors
 const connectors = ({ chainId }) => {
   const rpcUrl =

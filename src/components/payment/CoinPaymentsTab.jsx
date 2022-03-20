@@ -27,10 +27,7 @@ import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import { Copy } from "../../utilities/imgImport";
 import * as Query from "./../../apollo/graghqls/querys/Payment";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-
-
-const QUOTE = "USDT";
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
+import { QUOTE, TICKER_24hr } from "./data"
 
 const { Option } = components;
 
@@ -85,7 +82,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const transactionFee = useMemo(() => {
         const fee = allFees[user?.tierLevel]?.fee;
         const txnFee = (bidAmount * (0.5 + fee)) / 100;
-        if (txnFee === NaN) return null;
+        if (isNaN(txnFee)) return null;
         return txnFee.toFixed(4);
     }, [allFees, bidAmount, user]);
     
@@ -119,7 +116,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         let coinPrice = BTCPrice * coin?.detail?.rate_btc;
 
         let precision = 4;
-        if (coin.value === "BTC") precision = 9;
+        if (coin.value === "BTC") precision = 8;
 
         let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
         if (quantity === Infinity) quantity = null;
