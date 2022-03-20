@@ -27,7 +27,6 @@ export const isLoggedOut = () => {
 
 
 // Methods
-
 export const logout = (callback) => {
   inMemoryAuthToken = inMemoryAuthTokenDefault
   localStorage.removeItem(ACCESS_TOKEN)
@@ -40,7 +39,6 @@ export const logout = (callback) => {
 
 
 // Setter
-
 export const setAuthToken = (authToken) => {
   if (!isBrowser) return
   if (!authToken) {
