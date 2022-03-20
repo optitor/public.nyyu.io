@@ -24,9 +24,7 @@ const Accordion = ({ question, date, answer }) => {
                 <span className="sign" />
             </button>
 
-            <div className="accordion__content">
-                <p>{answer}</p>
-            </div>
+            <div className="accordion__content">{answer}</div>
         </div>
     )
 }

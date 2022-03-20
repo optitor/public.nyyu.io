@@ -1030,10 +1030,8 @@ export const countries = [
     },
 ]
 
-export const SITE_URL = "https://sale.ndb.money"
-
 // export const API_BASE_URL = "http://localhost:5000";
-export const API_BASE_URL = "https://api.live.ndb.money"
+export const API_BASE_URL = "https://api.ndb.money"
 
 // export const SUBSCRIPTION_BASE_URL = "ws://localhost:5000/subscriptions";
 export const SUBSCRIPTION_BASE_URL = "wss://api.ndb.money/subscriptions"
@@ -1262,90 +1260,138 @@ export const AUCTION_TOOLTIP_CONTENT2 =
 export const FAQ_CONTENT = [
     {
         question: "What is the Dual Token System?",
-        answer: `The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
+        answer: (
+            <p>
+                The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
                 the Volt Token, a variable supply token. The Dual token brings more incentives to
                 the users and partners. For example, with this method we can provide to our partners
                 more accurate measurements of the interest in their companies by utilizing our
-                services and products from their customer’s perspective.`,
+                services and products from their customer’s perspective.
+            </p>
+        ),
     },
     {
         question: "What is Volt Token?",
-        answer: `The Volt token is the driving force behind the applications and interacts with NDB
+        answer: (
+            <p>
+                The Volt token is the driving force behind the applications and interacts with NDB
                 token. These tokens will be of variable supply, burnable and mintable and serve to
                 power its applications. Through Volt token, the users will have the possibility to
                 lease and access benefits from our products. Furthermore, the token can be used as
                 an energy tracker for utility providers and consumers to earn rewards. There are
-                also plans for this token to be used as a form of energy payment in the future.`,
+                also plans for this token to be used as a form of energy payment in the future.
+            </p>
+        ),
     },
     {
         question: "What is the NDB token?",
-        answer: `The NDB token is a tool for demonstrating the buyer’s interests in the partnership
+        answer: (
+            <p>
+                The NDB token is a tool for demonstrating the buyer’s interests in the partnership
                 between companies inside our ecosystem. The inclusion of new proposals into our
                 blockchain ecosystem enables people to stake their NDB tokens and support the
                 project, company, or individuals. By staking NDB tokens on different Pools, you can
-                earn dividends as Volt tokens over the staked amount.`,
+                earn dividends as Volt tokens over the staked amount.
+            </p>
+        ),
     },
     {
         question: "What is Airdrop?",
-        answer: `Our Airdrop function is the initial incentive for people to stake their NDB tokens
+        answer: (
+            <p>
+                Our Airdrop function is the initial incentive for people to stake their NDB tokens
                 into the Pools. The Airdrop will come as a reward for the interaction between the
                 Pool entity and our products and services. As the ecosystem grows, more features
                 will be announced, guaranteeing advantages on-chain and off-chain for the user’s
-                interaction with specific Pools.`,
+                interaction with specific Pools.
+            </p>
+        ),
     },
     {
         question: "What are the pools?",
-        answer: `Pools are the mechanism used for the token to gather and measure intention from
+        answer: (
+            <p>
+                Pools are the mechanism used for the token to gather and measure intention from
                 users and organizations for us and our partners. The Pools act as quantifiers for
-                value and will play an essential role in the early stages.`,
+                value and will play an essential role in the early stages.
+            </p>
+        ),
     },
     {
         question: "What is the relationship between both tokens?",
-        answer: `NDB token interacts with Volt, both of which price-wise, interact freely on the open
+        answer: (
+            <p>
+                NDB token interacts with Volt, both of which price-wise, interact freely on the open
                 market. The interaction of NDB and Volt tokens will maintain the interest of users
                 in the ecosystem, and create economic checks and balances to regulate the demand for
-                tokens.`,
+                tokens.
+            </p>
+        ),
     },
     {
         question: "What is the NDB Hub?",
-        answer: `NDB Hub is an institution governed by Voltamond SA based in Switzerland tasked with
+        answer: (
+            <p>
+                NDB Hub is an institution governed by Voltamond SA based in Switzerland tasked with
                 assessing and putting forward growth proposals related to energy applications. It is
                 also responsible for maintaining and safeguarding the best interests of this project
                 through oversight on maintaining developers, seeking feedback from the community,
                 and searching for product improvement where needed. It will assess and seek
                 potential partners that support the growth of the ecosystem. This initiative is the
-                primary organization through which the NDB and Volt token operate.`,
+                primary organization through which the NDB and Volt token operate.
+            </p>
+        ),
     },
     {
         question: "How can I earn more tokens?",
-        answer: `You can stake your NDB tokens on the different categories of Pools, to earn
+        answer: (
+            <p>
+                You can stake your NDB tokens on the different categories of Pools, to earn
                 dividends as Volt tokens based on the staked value. In addition to that, you should
                 bear in mind that NDB-powered devices constantly generate energy. That is why, when
                 you have a device containing our products, you can earn Volt tokens for the unused
-                energy sent to the grid when the device is inactive.`,
+                energy sent to the grid when the device is inactive.
+            </p>
+        ),
     },
     {
         question: "How to send tokens to external sources?",
-        answer: `The in-built function of NDB App will allow users to move their tokens to private
+        answer: (
+            <p>
+                The in-built function of NDB App will allow users to move their tokens to private
                 external wallets, or you can keep your tokens in custodian parties like crypto
-                exchanges.`,
+                exchanges.
+            </p>
+        ),
     },
     {
         question: "Can I stake my NDB tokens without having an account on the NDB App?",
-        answer: `Safety and security of users of our platform is one of the top priorities for NDB.
+        answer: (
+            <p>
+                Safety and security of users of our platform is one of the top priorities for NDB.
                 That is why, before you stake NDB tokens into a Pool of any kind, you must submit
-                the required documents for the KYC process from our App.`,
+                the required documents for the KYC process from our App.
+            </p>
+        ),
     },
     {
         question: "Which protocol are the tokens using?",
-        answer: `The NDB token is created in IBEP-20 protocol using the Binance Smart Chain network.`,
+        answer: (
+            <p>
+                The NDB token is created in IBEP-20 protocol using the Binance Smart Chain network.
+            </p>
+        ),
     },
     {
         question: "Can I charge my devices with NDB token?",
-        answer: `No, NDB token serves as a tool to demonstrate the buyer’s interest in the
+        answer: (
+            <p>
+                No, NDB token serves as a tool to demonstrate the buyer’s interest in the
                 partnership between companies inside the NDB ecosystem, but you can stake your NDB
                 tokens to earn Volt. With Volt tokens you can lease and access benefits from NDB’s
-                products.`,
+                products.
+            </p>
+        ),
     },
 ]
 
@@ -1353,31 +1399,47 @@ export const NEWS_CONTENT = [
     {
         question: "What is the Dual Token System?",
         date: "17.01.2022",
-        answer: `The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
+        answer: (
+            <p>
+                The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
                 the Volt Token, a variable supply token. The Dual token brings more incentives to
                 the users and partners. For example, with this method we can provide to our partners
                 more accurate measurements of the interest in their companies by utilizing our
-                services and products from their customer’s perspective.`,
+                services and products from their customer’s perspective.
+            </p>
+        ),
     },
     {
         question: "Latest NDB news",
         date: "08.01.2022",
-        answer: ``,
+        answer: (
+            <p>
+            </p>
+        ),
     },
     {
         question: "Latest activities",
         date: "26.12.2021",
-        answer: ``,
+        answer: (
+            <p>
+            </p>
+        ),
     },
     {
         question: "API updates",
         date: "19.12.2021",
-        answer: ``,
+        answer: (
+            <p>
+            </p>
+        ),
     },
     {
         question: "Crypto airdrop",
         date: "12.12.2021",
-        answer: ``,
+        answer: (
+            <p>
+            </p>
+        ),
     },
 ]
 
