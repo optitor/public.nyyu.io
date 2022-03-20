@@ -18,7 +18,7 @@ export default function PercentageBar({ percentage, sold, total }) {
                                 : 0) + "%",
                         background: "#464646",
                     }}
-                ></div>
+                />
             </div>
         </div>
     )
