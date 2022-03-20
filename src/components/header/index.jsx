@@ -24,8 +24,8 @@ import InformBannedModal from "./InformBannedModal";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch();
-    const [banned, setBanned] = useState(false);
-    const [isBannedOpen, setIsBannedOpen] = useState(false);
+    const [banned, setBanned] = useState(true);
+    const [isBannedOpen, setIsBannedOpen] = useState(true);
 
     // Webservice
     const { data: user_data } = useQuery(GET_USER);
@@ -52,7 +52,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             console.log("received Mutation data", err);
         },
     });
-
 
     // Containers
     const auth = useAuth();
