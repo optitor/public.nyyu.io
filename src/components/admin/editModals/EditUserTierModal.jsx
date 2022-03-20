@@ -30,8 +30,8 @@ const IndexPage = ({ isModalOpen, setIsModalOpen, tier = {} }) => {
     // Token Details Data Validation
     const detailsError = useMemo(() => {
         if(!details.name) return {name: 'Token Name is required'};
-        if(!details.point) return {point: 'Token Threshold is required'};
-        if(!details.level) return {level: 'Token Level is required'};
+        if(details.point === '') return {point: 'Token Threshold is required'};
+        if(details.level === '') return {level: 'Token Level is required'};
         return {};
     }, [details]);
 

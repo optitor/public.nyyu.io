@@ -51,7 +51,7 @@ const IndexPage = () => {
 
     //Price Data Validation
     const avatarInfoError = useMemo(() => {
-        if(!avatarInfo.tier.value) return {tier: 'User Tier is required'};
+        if(!avatarInfo.tier.value && avatarInfo.tier.value !== 0) return {tier: 'User Tier is required'};
         return {};
     }, [avatarInfo]);
 

@@ -56,8 +56,6 @@ const Payment = () => {
 
     // try to get token from request
     const [orderId, setOrderId] = useQueryParam("token", StringParam);
-    console.log("--------------- from params", orderId);
-    console.log("--------------- from localStorage", localStorage.getItem("ACCESS_TOKEN"));
 
     const currentRound = useSelector((state) => state?.placeBid.round_id);
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
@@ -71,7 +69,7 @@ const Payment = () => {
 
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    // if (!isSSR && !currentRound) navigate(ROUTES.auction);
+    if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
     const [state, setState] = useReducer(

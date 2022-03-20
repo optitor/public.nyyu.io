@@ -26,7 +26,7 @@ const App = () => {
     const { user } = useSelector(state => state.auth);
     const isAdmin = user.role?.includes('ROLE_ADMIN');
     
-    // if(isAdmin) {
+    if(isAdmin) {
         return (
             <>
                 {!isSSR && (
@@ -53,9 +53,9 @@ const App = () => {
                 <AlarmModal />
             </>
         );
-    // } else {
-    //     navigate('/');
-    //     return null;
-    // }
+    } else {
+        navigate('/');
+        return null;
+    }
 };
 export default App;
