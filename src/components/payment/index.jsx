@@ -51,6 +51,9 @@ const payment_types = [
 
 const Payment = () => {
 
+    // try to get token from request
+    const [orderId, setOrderId] = useQueryParam("token", StringParam);
+
     const currentRound = useSelector((state) => state?.placeBid.round_id);
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
     const [totalRounds, setTotalRounds] = useState(null);
@@ -63,7 +66,7 @@ const Payment = () => {
 
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    // if (!isSSR && !currentRound) navigate(ROUTES.auction);
+    if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
