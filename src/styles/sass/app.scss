@@ -24,7 +24,7 @@
 @import "page/signup";
 @import "page/select_figure";
 @import "page/payment";
-@import "page/history";
+@import "page/wallet";
 @import "page/profile";
 @import "page/verify";
 @import "page/verify-company";
@@ -33,6 +33,7 @@
 @import "page/purchase/home.scss";
 @import "page/purchase/homeWithSign.scss";
 @import "page/direct-purchase";
+@import "page/presale";
 
 // admin style
 @import "page/admin/common";

@@ -14,7 +14,28 @@ export const create_Auction = createData => async dispatch => {
         showSuccessAlarm('Auction created successfully');
     } catch(err) {
         // console.log(err.message);
-        showFailAlarm('Action failed', err.message);
+        if(err.message === 'started_auction') {
+            showFailAlarm('Action failed', 'Auction already started');
+        } else {
+            showFailAlarm('Action failed', err.message);
+        }
+    }
+};
+
+export const create_New_Presale = createData => async dispatch => {
+    try {
+        await client.mutate({
+            mutation: Mutation.CREATE_NEW_PRESALE,
+            variables: { ...createData }
+        });
+        showSuccessAlarm('Direct Purchase Round created successfully');
+    } catch(err) {
+        // console.log(err.message);
+        if(err.message === 'started_auction') {
+            showFailAlarm('Action failed', 'Auction already started');
+        } else {
+            showFailAlarm('Action failed', err.message);
+        }
     }
 };
 
@@ -23,7 +44,7 @@ export const get_Auctions = () => async dispatch => {
         const { data } = await client.query({
             query: Query.GET_AUCTIONS
         });
-        const dataList = _.mapKeys(data.getAuctions, 'id');
+        const dataList = _.mapKeys(data.getAuctions, 'round');
         dispatch({
             type: types.FETCH_DATA,
             payload: dataList

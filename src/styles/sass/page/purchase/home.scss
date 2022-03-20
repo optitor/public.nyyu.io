@@ -10,11 +10,7 @@ main.purchase-page {
         align-items: center;
         @media screen and (max-width: 768px) {
             height: calc(100vh - 75px);
-            background: radial-gradient(
-                37.36% 30.86% at 38.06% 59.62%,
-                rgba(0, 0, 0, 0) 0%,
-                #000000 100%
-            );
+            background: radial-gradient(37.36% 30.86% at 38.06% 59.62%, rgba(0, 0, 0, 0) 0%, #000000 100%);
         }
         @media screen and (max-width: 575px) {
             align-items: center;
@@ -83,8 +79,8 @@ main.purchase-page {
                     @media screen and (max-width: 768px) {
                         width: 500px;
                         margin-top: 40px;
-                        order:2;
-                        gap:10px;
+                        order: 2;
+                        gap: 10px;
                         background-image: url("../../images/green-coin.svg");
                         background-repeat: no-repeat;
                         background-size: 65%;
@@ -109,7 +105,7 @@ main.purchase-page {
                             text-align: center;
                             width: inherit;
                         }
-                        .btn-desktop{
+                        .btn-desktop {
                             margin-left: 0;
                         }
                         // button.btn-green {
@@ -118,7 +114,7 @@ main.purchase-page {
                         // }
                     }
                     @media screen and (max-width: 575px) {
-                        max-width:100%;
+                        max-width: 100%;
                         text-align: center;
                         align-items: center !important;
                         padding: 10px 20px;
@@ -194,14 +190,14 @@ main.purchase-page {
                                     font-variant: small-caps;
                                     color: #ffffff;
                                 }
-                                .token-value{ 
+                                .token-value {
                                     font-size: 100px;
                                     line-height: 0.9;
                                     // font-size: 70px;
-									// color:red;
+                                    // color:red;
                                     /* i comment your changes */
                                 }
-                                .token-left{
+                                .token-left {
                                     font-size: 24px;
                                 }
                             }
@@ -228,11 +224,11 @@ main.purchase-page {
                                     font-variant: small-caps;
                                     color: #ffffff;
                                 }
-                                .token-value{
+                                .token-value {
                                     font-size: 64px;
                                     line-height: 1;
                                 }
-                                .token-left{
+                                .token-left {
                                     font-size: 24px;
                                 }
                             }
@@ -240,6 +236,42 @@ main.purchase-page {
                     }
                 }
             }
+        }
+    }
+}
+
+.home-page-no-active-round {
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    .title {
+        font-size: 35px;
+        line-height: 40px;
+        text-align: center;
+
+        @include mq("phone") {
+            font-size: 60px;
+            line-height: 80px;
+            text-align: left;
+        }
+
+        &::first-letter {
+            color: $green;
+        }
+    }
+    .sub-title {
+        font-size: 16px;
+        line-height: 18px;
+        margin-top: 50px;
+
+        @include mq("phone") {
+            font-size: 27px;
+            line-height: 33px;
+            margin-top: 73px;
+        }
+
+        a {
+            text-decoration: underline;
         }
     }
 }

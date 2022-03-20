@@ -3,7 +3,7 @@
 module.exports = {
     siteMetadata: {
         title: `NDB`,
-        description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+        description: `NDB Token Auction and Sale: The NDB token is a tool for demonstrating the buyer’s interests in the partnership between companies inside our ecosystem`,
         author: `@gatsbyjs`,
         siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
     },
@@ -38,5 +38,6 @@ module.exports = {
                 fonts: [`Montserrat\:300,400,500,700,800`],
             },
         },
+        "gatsby-plugin-use-query-params",
     ],
 }

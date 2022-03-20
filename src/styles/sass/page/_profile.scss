@@ -1,13 +1,13 @@
 @use "sass:math";
 .profile-page {
     @include mq("phone", max) {
-        margin: 0rem;
+        margin: 0;
     }
     .menu {
         border-bottom: 2px solid #464646;
     }
     &__left {
-        padding: 0px 32px;
+        padding: 0 32px;
         display: flex;
         flex-direction: column;
         justify-content: start;
@@ -16,7 +16,7 @@
             height: 100%;
         }
         .user-info {
-            margin: 45px 0px;
+            margin: 45px 0;
             @include mq("laptop", max) {
                 margin: 24px 0;
             }
@@ -174,15 +174,6 @@
                 }
             }
         }
-        .verify-delete {
-            display: flex;
-            justify-content: space-between;
-            .delete-account-link {
-                color: red;
-                cursor: pointer;
-                text-decoration: underline;
-            }
-        }
         .account-details,
         .tier-details {
             h4 {
@@ -230,6 +221,22 @@
                         }
                     }
                 }
+                .col-12 {
+                    display: none;
+                    padding: 25px 12px;
+                    @include mq("phone", max) {
+                        display: flex;
+                    }
+                    .change-pwd {
+                        font-weight: bold;
+                        font-size: 18px;
+                        line-height: 22px;
+                        letter-spacing: 0.04em;
+                        text-transform: uppercase;
+                        padding: 15px 26px;
+                        background: #1e1e1e;
+                    }
+                }
             }
             .change-password {
                 .col-6 {
@@ -261,11 +268,10 @@
             .account-security {
                 margin-top: 32px;
                 .row {
-                    .col-md-6 {
+                    .col-md-4 {
                         padding: 25px 12px;
                         display: flex;
-                        align-items: center;
-                        border-bottom: 2px solid #464646;
+                        align-items: flex-start;
                         @include mq("phone", max) {
                             padding-left: 0;
                             padding-right: 0;
@@ -291,13 +297,16 @@
                                 cursor: pointer;
                                 font-size: 13px;
                                 font-weight: 500;
-                                color: #23c865;
+                                color: #59d8f3;
                                 text-decoration: underline;
                             }
                         }
                         .security-item-disable {
                             margin-right: 10px;
                             margin-top: 18px;
+                            @include mq("phone", max) {
+                                margin-right: 0;
+                            }
                             .security-link {
                                 cursor: pointer;
                                 font-size: 13px;
@@ -335,7 +344,7 @@
                     @include custom-scroll(250px);
                     overflow-x: hidden;
                     overflow-y: auto;
-                    height: 520px;
+                    height: 400px;
                 }
                 .recent-item,
                 .notification-item {
@@ -497,6 +506,7 @@
 
 .pwd-modal {
     max-width: 539px;
+    border: none;
     &__header {
         display: flex;
         justify-content: space-between;
@@ -525,6 +535,13 @@
             line-height: 22px;
             padding: 15px 95px;
         }
+    }
+    .form-check-input {
+        border: 1px solid #ffffff;
+        background-color: $black;
+        width: 18px;
+        height: 18px;
+        border-radius: unset;
     }
     .form {
         padding: 18px 51px;
@@ -591,7 +608,7 @@
 }
 .dressup-modal {
     max-width: 950px;
-    padding: 0px;
+    padding: 0;
     border: unset;
 
     .expression-icons {
@@ -666,11 +683,11 @@
         overflow-x: auto !important;
         white-space: nowrap;
         overflow-y: hidden;
-        padding: 0px;
+        padding: 0;
         display: flex;
         justify-content: start;
         align-items: center;
-        margin: 0px;
+        margin: 0;
         height: 200px;
         & > div {
             height: 200px;
@@ -683,7 +700,7 @@
                 position: absolute;
                 width: 100%;
                 text-align: center;
-                left: 0px;
+                left: 0;
                 bottom: 10px;
             }
             & > img {
@@ -696,7 +713,7 @@
             }
         }
         &::-webkit-scrollbar {
-            height: 0px !important;
+            height: 0 !important;
         }
         &::-webkit-scrollbar-track {
             background: #666666 !important;
@@ -711,7 +728,7 @@
         position: relative;
         text-align: center;
         margin: auto;
-        padding: 0px;
+        padding: 0;
         margin-top: 75px;
         .empty-avatar {
             width: max-content;
@@ -727,7 +744,7 @@
 // admin dress-up modal
 .dress-up-modal {
     max-width: 950px;
-    padding: 0px;
+    padding: 0;
     border: unset;
 
     div.profile {
@@ -828,11 +845,11 @@
         overflow-x: auto !important;
         white-space: nowrap;
         overflow-y: hidden;
-        padding: 0px;
+        padding: 0;
         display: flex;
         justify-content: start;
         align-items: center;
-        margin: 0px;
+        margin: 0;
         height: 200px;
         & > div {
             height: 200px;
@@ -887,7 +904,7 @@
             }
         }
         &::-webkit-scrollbar {
-            height: 0px !important;
+            height: 0 !important;
         }
         &::-webkit-scrollbar-track {
             background: #666666 !important;
@@ -913,5 +930,54 @@
         line-height: 22px;
         letter-spacing: 0.04em;
         color: #ffffff;
+    }
+}
+.question-mark {
+    width: 18px;
+    height: 18px;
+}
+
+.circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    &-dark {
+        background-color: #333333;
+    }
+    &-success {
+        background-color: $green;
+    }
+    &-warning {
+        background-color: #f77500;
+    }
+    &-danger {
+        background-color: $red;
+    }
+}
+
+.pagination {
+    margin-top: 15px;
+    li {
+        margin-right: 5px;
+        border: 1px solid white;
+        width: 35px;
+        text-align: center;
+        line-height: 35px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    .active {
+        border-color: #23c865;
+        a {
+            color: #23c865 !important;
+        }
+        font-weight: bold;
+    }
+    .disabled {
+        border-color: gray;
+        a {
+            color: gray;
+        }
     }
 }

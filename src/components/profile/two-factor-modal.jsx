@@ -1,29 +1,32 @@
-import React, { useCallback, useReducer, useState, useEffect } from "react"
-import { Input } from "../common/FormControl"
-import Modal from "react-modal"
-import { CloseIcon } from "../../utilities/imgImport"
-import { useMutation } from "@apollo/client"
-import { REQUEST_2FA, DISABLE_2FA, CONFIRM_REQUEST_2FA } from "../../apollo/graghqls/mutations/Auth"
-import CustomSpinner from "../common/custom-spinner"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import React, { useCallback, useReducer, useState, useEffect } from "react";
+import { Input } from "../common/FormControl";
+import Modal from "react-modal";
+import { CloseIcon } from "../../utilities/imgImport";
+import { useMutation } from "@apollo/client";
+import {
+    REQUEST_2FA,
+    DISABLE_2FA,
+    CONFIRM_REQUEST_2FA,
+} from "../../apollo/graghqls/mutations/Auth";
+import CustomSpinner from "../common/custom-spinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
-import "react-phone-number-input/style.css"
-import ConnectMobile from "./connect-mobile"
+import "react-phone-number-input/style.css";
+import ConnectMobile from "./connect-mobile";
 
 const two_factors = [
     { label: "Authenticator App", method: "app" },
     { label: "SMS", method: "phone" },
     { label: "Email", method: "email" },
-]
+];
 const initial = {
     result_code: "",
-    selected: 0,
     set_type: -1,
     input_mobile: false,
     loading: false,
     error: false,
-}
+};
 
 export default function TwoFactorModal({
     is2FAModalOpen,
@@ -33,73 +36,73 @@ export default function TwoFactorModal({
     twoStep,
     onResult,
 }) {
-    const [qrcode, setQRCode] = useState("")
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), initial)
-    const { result_code, selected, set_type, input_mobile, loading, error } = state
+    const [qrcode, setQRCode] = useState("");
+    const [selected, setSelected] = useState(0);
+    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), initial);
+    const { result_code, set_type, input_mobile, loading, error } = state;
 
     const handleInput = useCallback((e) => {
-        e.preventDefault()
-        setState({ [e.target.name]: e.target.value })
-    }, [])
+        e.preventDefault();
+        setState({ [e.target.name]: e.target.value });
+    }, []);
 
     useEffect(() => {
-        setState({ loading: false })
-    }, [twoStep])
+        setState({ loading: false });
+    }, [twoStep]);
 
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
-            setQRCode(data.request2FA)
-            setState({ set_type: selected })
+            setQRCode(data.request2FA);
+            setState({ set_type: selected });
         },
         onError: (error) => {
-            console.log("Error", error)
-            onResult(false)
+            console.log("Error", error);
+            onResult(false);
         },
-    })
+    });
 
     // This will be only trigger on Profile page
     const [disable2FA] = useMutation(DISABLE_2FA, {
         onCompleted: (data) => {
-            onResult(true)
+            onResult(true);
         },
-    })
+    });
 
     const [confirmRequest2FA, { loading: confirmLoading }] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
             if (data.confirmRequest2FA === "Failed") {
-                setState(initial)
-                onResult(false)
+                setState(initial);
+                onResult(false);
             } else if (data.confirmRequest2FA === "Success") {
-                onResult(true)
+                onResult(true);
                 setState({
                     result_code: "",
                     set_type: -1,
                     input_mobile: false,
                     loading: false,
                     error: false,
-                })
+                });
             }
         },
         onError: (error) => {
-            console.log("Error", error)
-            onResult(false)
+            console.log("Error", error);
+            onResult(false);
         },
-    })
+    });
 
     const sendRequest2FA = (i, mobile = "") => {
-        setState({ loading: true })
         request2FA({
             variables: {
                 email,
                 method: two_factors[i].method,
                 phone: mobile,
             },
-        })
-    }
+        });
+    };
     const closeModal = () => {
-        setIs2FAModalOpen(false)
-        setState(initial)
-    }
+        setIs2FAModalOpen(false);
+        setState(initial);
+    };
 
     return (
         <Modal
@@ -125,7 +128,9 @@ export default function TwoFactorModal({
                         <ConnectMobile confirm={(number) => sendRequest2FA(1, number)} />
                     ) : (
                         <div className="tfa-select">
-                            <h3>Protect your account with 2-step verification</h3>
+                            <h3 className="tfa-select-title">
+                                Protect your account with 2-step verification
+                            </h3>
                             <p className="mt-4 mb-5">
                                 Each time you log in, in addition to your password, you will enter a
                                 one-time code you receive via text message or generate using an
@@ -133,7 +138,15 @@ export default function TwoFactorModal({
                             </p>
                             <div className="d-flex flex-column justify-content-center align-items-center">
                                 {two_factors.map((item, idx) => {
-                                    const enable = !!twoStep ? twoStep.includes(item.method) : false
+                                    const enable = !!twoStep
+                                        ? twoStep.includes(item.method)
+                                        : false;
+                                    let available = true;
+                                    if (item.method === "phone") {
+                                        if (twoStep.includes("app")) available = false;
+                                    } else if (item.method === "app") {
+                                        if (twoStep.includes("phone")) available = false;
+                                    }
                                     return (
                                         <div key={idx} className="tfa-line">
                                             <div className="tfa-line_labels">
@@ -159,15 +172,15 @@ export default function TwoFactorModal({
                                                         <button
                                                             className="btn-primary select-tfa d-flex align-items-center justify-content-center"
                                                             onClick={() => {
+                                                                setSelected(idx);
                                                                 setState({
-                                                                    selected: idx,
                                                                     loading: true,
-                                                                })
+                                                                });
                                                                 disable2FA({
                                                                     variables: {
                                                                         method: item.method,
                                                                     },
-                                                                })
+                                                                });
                                                             }}
                                                         >
                                                             <div
@@ -190,15 +203,28 @@ export default function TwoFactorModal({
                                                             </div>
                                                         </button>
                                                     </>
-                                                ) : (
+                                                ) : available === true ? (
                                                     <button
+                                                        disabled={
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method === "app" &&
+                                                                twoStep.includes("phone")) ||
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method ===
+                                                                    "phone" &&
+                                                                twoStep.includes("app"))
+                                                        }
                                                         className="btn-primary select-tfa d-flex align-items-center justify-content-center enable"
                                                         onClick={() => {
-                                                            setState({ selected: idx })
+                                                            setSelected(idx);
                                                             if (item.method === "phone") {
-                                                                setState({ input_mobile: true })
+                                                                setState({ input_mobile: true });
                                                             } else {
-                                                                sendRequest2FA(idx)
+                                                                setState({ loading: true });
+                                                                setTimeout(
+                                                                    () => sendRequest2FA(idx),
+                                                                    300
+                                                                );
                                                             }
                                                         }}
                                                     >
@@ -221,10 +247,17 @@ export default function TwoFactorModal({
                                                             Enable
                                                         </div>
                                                     </button>
+                                                ) : (
+                                                    <button
+                                                        disabled
+                                                        className="btn btn-light rounded-0 select-tfa d-flex align-items-center justify-content-center enable disabled"
+                                                    >
+                                                        Unavailable
+                                                    </button>
                                                 )}
                                             </div>
                                         </div>
-                                    )
+                                    );
                                 })}
                             </div>
                         </div>
@@ -240,7 +273,7 @@ export default function TwoFactorModal({
                                         Scan the QR code below or mannually type the secret key into
                                         your authenticator app.
                                     </p>
-                                    <img src={qrcode} alt="qr code" />
+                                    <img src={qrcode} width={120} alt="qr code" />
                                     <p>
                                         <small className="fw-bold">123456xxxx</small>
                                     </p>
@@ -272,6 +305,7 @@ export default function TwoFactorModal({
 
                         <div className="mt-5">
                             <Input
+                                style={result_code?.length > 0 ? { opacity: 1 } : {}}
                                 type="text"
                                 name="result_code"
                                 value={result_code}
@@ -289,7 +323,7 @@ export default function TwoFactorModal({
                             <button
                                 className="btn-primary next-step d-flex align-items-center justify-content-center"
                                 onClick={() => {
-                                    if (!result_code.length) setState({ error: true })
+                                    if (!result_code.length) setState({ error: true });
                                     else
                                         confirmRequest2FA({
                                             variables: {
@@ -297,7 +331,7 @@ export default function TwoFactorModal({
                                                 method: two_factors[selected].method,
                                                 code: result_code,
                                             },
-                                        })
+                                        });
                                 }}
                             >
                                 <div className={`${confirmLoading ? "opacity-1" : "opacity-0"}`}>
@@ -310,5 +344,5 @@ export default function TwoFactorModal({
                 )}
             </div>
         </Modal>
-    )
+    );
 }

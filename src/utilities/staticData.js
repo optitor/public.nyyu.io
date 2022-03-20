@@ -1030,8 +1030,10 @@ export const countries = [
     },
 ]
 
+export const SITE_URL = "https://sale.ndb.money"
+
 // export const API_BASE_URL = "http://localhost:5000";
-export const API_BASE_URL = "https://api.ndb.money"
+export const API_BASE_URL = "https://api.live.ndb.money"
 
 // export const SUBSCRIPTION_BASE_URL = "ws://localhost:5000/subscriptions";
 export const SUBSCRIPTION_BASE_URL = "wss://api.ndb.money/subscriptions"
@@ -1093,7 +1095,7 @@ export const wallets = {
     injected: {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
-        warn: "MetaMask is not supported",
+        warn: "MetaMask is not supported by your Browser",
     },
     walletConnect: {
         icon: WalletConnect,
@@ -1111,6 +1113,23 @@ export const wallets = {
         warn: "Trust wallet is only supported on Mobile",
     },
 }
+
+export const externalWallets = [
+    {
+        icon: MetaMask,
+        title: "MetaMask Wallet"
+    }, {
+        icon: WalletConnect,
+        title: "WalletConnect"
+    }, {
+        icon: Coinbase,
+        title: "Coinbase account"
+    }, {
+        icon: TrustWallet,
+        title: "Trust Wallet"
+    },
+
+]
 
 export const profile_tabs = [
     {
@@ -1230,6 +1249,9 @@ export const FOO_COINS = [
 
 export const PAYMENT_FRACTION_TOOLTIP_CONTENT =
     "If your bid is the last one to be accepted and there are not enough tokens to fulfil your order, by checking this box you allow us to complete your order with the remaining tokens only."
+
+
+export const TWO_FACTOR_AUTH_TOOLTIP_CONTENT = "Enable 2FA to secure your account. Email 2FA can be used along with mobile or Google authentication."
 
 export const AUCTION_TOOLTIP_CONTENT1 =
     "You can easily move between rounds to have a more clear understanding about auction statistics."
@@ -1375,7 +1397,105 @@ export const FAQ_CONTENT = [
     },
 ]
 
+export const NEWS_CONTENT = [
+    {
+        question: "What is the Dual Token System?",
+        date: "17.01.2022",
+        answer: (
+            <p>
+                The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
+                the Volt Token, a variable supply token. The Dual token brings more incentives to
+                the users and partners. For example, with this method we can provide to our partners
+                more accurate measurements of the interest in their companies by utilizing our
+                services and products from their customer’s perspective.
+            </p>
+        ),
+    },
+    {
+        question: "Latest NDB news",
+        date: "08.01.2022",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+    {
+        question: "Latest activities",
+        date: "26.12.2021",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+    {
+        question: "API updates",
+        date: "19.12.2021",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+    {
+        question: "Crypto airdrop",
+        date: "12.12.2021",
+        answer: (
+            <p>
+            </p>
+        ),
+    },
+]
+
 export const NDB_TOKEN_CONTENT = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
 By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 
 `
+
+
+export const VerificationDocumentTypes = [
+    {
+        label: "Passport",
+        value: "passport",
+    },
+    {
+        label: "National Identification Card",
+        value: "id_card",
+    },
+    {
+        label: "Driving License",
+        value: "driver_license",
+    },
+]
+
+export const VerificationStepThreeDocumentTypes = [
+    {
+        label: "National ID",
+        value: "national_id",
+    },
+    {
+        label: "Driving license",
+        value: "driving_license",
+    },
+    {
+        label: "Employer letter",
+        value: "employer_letter",
+    },
+    {
+        label: "Rent agreement",
+        value: "rent_agreement",
+    },
+    {
+        label: "Utility bill",
+        value: "utility_bill",
+    },
+    {
+        label: "Tax bill",
+        value: "tax_bill",
+    },
+    {
+        label: "Bank statement",
+        value: "bank_statement",
+    },
+]
+
+export const CLIENT_ID = "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425"
+export const SECRET = "$2y$10$501VfRCMRXitkUmuHhJCPelM5MYTdvzO3S8qlY319L9bnDdVJp24C"

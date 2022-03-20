@@ -2,15 +2,11 @@
     width: 100%;
     position: fixed;
     top: 0;
-    padding: 22px;
+    padding: 28px 0 !important;
     background-color: $black;
     z-index: 9999;
     .image_div {
         width: 50px;
-    }
-    .header-right-side {
-        margin-bottom: -10px;
-        margin-top: 5px;
     }
     .user-dropdown {
         position: relative;
@@ -74,20 +70,16 @@
             }
         }
         @include mq("phone", max) {
-            display: none;
+            font-size: 16px;
+            margin-right: 10px;
+            line-height: 20px;
+            padding: 7px 20px;
         }
     }
 
     @include mq("tablet", max) {
-        padding: 9px 0;
+        padding: 16px 0 !important;
     }
-    @include mq("phone", max) {
-        padding: 15px 0;
-    }
-
-    // .container {
-    //     max-width: 100%;
-    // }
 
     .menu__logo {
         svg {
@@ -152,11 +144,12 @@
         .menu__toggler {
             span {
                 &:first-child {
-                    top: 11px;
+                    width: 30px;
+                    top: 6px;
                     transform: rotate(45deg);
-
                     @include mq("laptop") {
                         top: 16px;
+                        width: 40px;
                     }
                 }
 
@@ -165,13 +158,11 @@
                 }
 
                 &:last-child {
-                    width: 27px;
-                    top: -11px;
+                    width: 30px;
+                    top: -18px;
                     transform: rotate(-45deg);
-
                     @include mq("laptop") {
                         width: 40px;
-                        top: -18px;
                     }
                 }
             }
@@ -190,7 +181,7 @@
         transition: all 0.3s ease;
 
         .content {
-            width: 80%;
+            width: 100%;
             height: 100%;
             position: relative;
             left: 100%;
@@ -214,35 +205,30 @@
 
             .menu__item {
                 margin-bottom: 28px;
+                text-align: center;
+                text-transform: uppercase;
 
                 @include mq("laptop") {
                     margin-bottom: 34px;
-                    text-align: center;
-                    text-transform: uppercase;
+                }
+
+                .active {
+                    color: $white;
+                    &::first-letter {
+                        color: $green;
+                    }
                 }
 
                 a {
                     font-size: 24px;
                     line-height: 29px;
                     font-weight: bold;
-
-                    &::first-letter {
-                        color: $green;
-                    }
-
-                    @include mq("laptop") {
-                        color: #424242;
+                    color: #424242;
+                    &:hover {
+                        color: $white;
 
                         &::first-letter {
-                            color: inherit;
-                        }
-
-                        &:hover {
-                            color: $white;
-
-                            &::first-letter {
-                                color: $green;
-                            }
+                            color: $green;
                         }
                     }
                 }
@@ -256,7 +242,7 @@
             visibility: visible;
 
             .content {
-                left: 20%;
+                left: 0;
 
                 @include mq("laptop") {
                     left: 0;
@@ -267,62 +253,6 @@
     }
 }
 
-.header-currencies-dropdown {
-    .currencies-dropdown-indicator {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: relative;
-
-        width: 100px;
-        color: white;
-        background-color: $black;
-        border: 1px solid white;
-
-        font-weight: bold;
-        font-variant: small-caps;
-        line-height: 29px;
-        text-align: center;
-        font-size: 20px;
-
-        padding: 5px 10px;
-        margin-right: 15px;
-
-        transition: 500ms;
-        cursor: pointer;
-
-        &:hover {
-            opacity: 0.65;
-        }
-
-        .down-arrow {
-            width: 25px;
-            height: auto;
-        }
-    }
-    .currencies-dropdown-content {
-        position: absolute;
-        width: 100px;
-        border: 1px solid white;
-        background-color: $black;
-        border-top: 0px;
-
-        font-weight: bold;
-        font-variant: small-caps;
-        line-height: 29px;
-        text-align: left;
-        font-size: 20px;
-
-        li {
-            transition: 500ms;
-            padding: 5px 10px;
-            cursor: pointer;
-            &:hover {
-                opacity: 0.65;
-            }
-        }
-    }
-}
 .header-sale-cta {
     padding: 7px 50px;
     color: white;
@@ -339,9 +269,26 @@
 
 .header-avatar-user-tier {
     position: absolute;
-    bottom: 5px;
-    right: 20px;
     height: 10px;
     width: 10px;
+    right: 3px;
+    bottom: 5px;
     transform: scale(0.35);
+    @include mq("phone") {
+        right: 20px;
+    }
+}
+
+.flag_div {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+    img {
+        width: 160%;
+        object-fit: cover;
+    }
 }

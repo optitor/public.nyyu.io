@@ -47,7 +47,31 @@ export const delete_Token = id => async dispatch => {
             payload: id
         });
     } catch(err) {
-        console.log(err.message);
+        // console.log(err.message);
         showFailAlarm('Action failed', 'Ops! Something went wrong. Try again!');
     }
 };
+
+export const update_Symbol = updateData => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+            mutation: Mutation.UPDATE_SYMBOL,
+            variables: {
+                id: updateData.id,
+                symbol: updateData.symbol
+            }
+        });
+        if(data.updateSymbol) {
+            showSuccessAlarm('Token updated successfully');
+            dispatch({
+                type: types.UPDATE_DATUM,
+                payload: { ...updateData }
+            });
+        } else {
+            showFailAlarm('Action failed', 'Ops! Something went wrong. Try again!');
+        }
+    } catch(err) {
+        console.log(err.message);
+        showFailAlarm('Action failed', 'Ops! Something went wrong. Try again!');
+    }
+}

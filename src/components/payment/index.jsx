@@ -1,0 +1,388 @@
+/* eslint-disable */
+import React, { useCallback, useReducer, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+// for paypal callback
+import { useQueryParam, StringParam } from "use-query-params";
+
+import { useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import ReactTooltip from "react-tooltip";
+import _ from "lodash";
+import Header from "../header";
+import Loading from "../common/Loading";
+import { numberWithCommas } from "../../utilities/number";
+import { CheckBox } from "../common/FormControl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+    CryptoCoin,
+    Paypal,
+    Credit,
+    NdbWallet,
+    ExternalWallet,
+    PaypalBrand,
+} from "../../utilities/imgImport";
+import ConnectWalletTab from "../profile/connect-wallet-tab";
+import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
+import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
+import Seo from "./../seo";
+import CreditCardTab from "./credit-card-tab";
+import CoinPaymentsTab from "./CoinPaymentsTab";
+import OrderSummary from "./order-summary";
+import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
+import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
+import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import { set_All_Fees } from "../../redux/actions/allFeesAction";
+import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
+import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
+import NDBWalletTab from "./NDBWalletTab";
+import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
+
+const payment_types = [
+    { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
+    { icon: Credit, value: "creditcard", label: "Credit / Debit card" },
+    { icon: Paypal, value: "paypal", label: "PayPal" },
+    { icon: NdbWallet, value: "ndb_wallet", label: "Ndb wallet" },
+    {
+        icon: ExternalWallet,
+        value: "externalwallets",
+        label: "External Wallets",
+    },
+];
+
+const Payment = () => {
+
+    // try to get token from request
+    const [orderId, setOrderId] = useQueryParam("token", StringParam);
+    console.log("--------------- from params", orderId);
+    console.log("--------------- from localStorage", localStorage.getItem("ACCESS_TOKEN"));
+
+    const currentRound = useSelector((state) => state?.placeBid.round_id);
+    const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
+    const [totalRounds, setTotalRounds] = useState(null);
+    const [barProgress, setBarProgress] = useState(null);
+    const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
+    const [allFees, setAllFees] = useState(null);
+    const [payPalLoading, setPayPalLoading] = useState(false);
+    const dispatch = useDispatch();
+    const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
+
+    const targetCap = 1000000000000;
+    const isSSR = typeof window === "undefined";
+    // if (!isSSR && !currentRound) navigate(ROUTES.auction);
+    // TODO: uncomment the above line later on.
+
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            allow_fraction: false,
+            getAddress: false,
+        }
+    );
+    const { allow_fraction } = state;
+
+    const [tabIndex, setTabIndex] = useState(0);
+
+    const handleAllowFraction = useCallback(
+        (e) => {
+            e.preventDefault();
+            setState({ allow_fraction: !allow_fraction });
+        },
+        [allow_fraction]
+    );
+
+    useQuery(GET_AUCTION, {
+        onCompleted: (data) => {
+            setTotalRounds(data.getAuctions.length);
+            setBarProgress((currentCap * 100) / targetCap);
+        },
+        onError: (error) => console.log(error),
+        errorPolicy: "ignore",
+        fetchPolicy: "network-only",
+    });
+    useQuery(GET_ALL_FEES, {
+        onCompleted: (data) => {
+            setAllFees(data.getAllFees);
+            const allFees = _.mapKeys(data.getAllFees, "tierLevel");
+
+            if (allFees) {
+                dispatch(set_All_Fees(allFees));
+            }
+        },
+        onError: (error) => console.log(error),
+    });
+
+    useEffect(() => {
+        if (barProgress < 1) setBarProgress(1);
+    }, [barProgress]);
+
+    let paypalIsCheckingOut = false;
+
+    const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
+        onCompleted: (data) => {
+            let links = data.paypalForAuction.links;
+            for (let i = 0; i < links.length; i++) {
+                if (links[i].rel === "approve") {
+                    let token = links[i].href.split('token=')[1];
+                    localStorage.setItem('PayPalForAuctionToken', token)
+                    setPayPalLoading(false);
+                    window.location.href = links[i].href;
+                    break;
+                }
+            }
+        },
+        onError: (err) => {
+            console.log(err);
+            alert("Error in PayPal checkout");
+            setPayPalLoading(false);
+        },
+    });
+
+    const initPaypal = () => {
+        setPayPalLoading(true);
+        paypalIsCheckingOut = true;
+        createPayPalOrder({
+            variables: { roundId: currentRound, currencyCode: "USD" },
+        });
+    };
+
+    const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
+        onCompleted: (data) => {
+            console.log(data);
+            if (data.captureOrderForAuction) {
+                alert("Your checkout was successfully!");
+            } else {
+                alert("Error in checkout with PayPal");
+            }
+        },
+        onError: (err) => {
+            alert("Error in checkout with PayPal");
+        },
+    });
+
+    let orderCaptured = false;
+
+    if (window.location.href.includes('token=') && !orderCaptured && !paypalIsCheckingOut) {
+        var url = new URL(window.location.href);
+        let token = url.searchParams.get("token");
+        orderCaptured = true;
+        captureOrderForAuction({ variables: { orderId: token } });
+    }
+
+    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') != undefined && !orderCaptured && !paypalIsCheckingOut) {
+        orderCaptured = true;
+        let possibleToken = localStorage.getItem('PayPalForAuctionToken');
+        captureOrderForAuction({ variables: { orderId: possibleToken } });
+        localStorage.setItem('PayPalForAuctionToken', null);
+        localStorage.removeItem('PayPalForAuctionToken');
+    }
+
+    // if (window.location.href.includes("token=") && !orderCaptured) {
+    //     var url = new URL(window.location.href);
+    //     let token = url.searchParams.get("token");
+    //     console.log("---------- from Axel", token);
+    //     orderCaptured = true;
+    //     captureOrderForAuction({ variables: { orderId: token } });
+    // }
+
+    if (loading) return <Loading />;
+    return (
+        <>
+            <Seo title="Payment" />
+            <main className="payment-page">
+                <Header />
+                <section className="container position-relative">
+                    <div className="row payment-wrapper">
+                        <div className="col-lg-8 payment-select">
+                            <div className="payment-type__tab">
+                                <div className="payment-type__tab-name">
+                                    {tabIndex !== 0 && (
+                                        <FontAwesomeIcon
+                                            icon={faArrowLeft}
+                                            className="left-arrow cursor-pointer text-light"
+                                            size="lg"
+                                            onClick={() => setTabIndex(0)}
+                                        />
+                                    )}
+                                    <h4>
+                                        {tabIndex === 0
+                                            ? "How do you want to pay?"
+                                            : payment_types[tabIndex - 1].label}
+                                    </h4>
+                                </div>
+                                {tabIndex === 0 && (
+                                    <div className="payment-type__tab-list">
+                                        {payment_types.map((item, idx) => (
+                                            <div
+                                                className="payment-type"
+                                                key={idx}
+                                                onClick={() =>
+                                                    setTabIndex(idx + 1)
+                                                }
+                                                style={{
+                                                    width:
+                                                        idx === 0
+                                                            ? "100%"
+                                                            : "calc(50% - 6px)",
+                                                    marginRight:
+                                                        idx % 2 === 0
+                                                            ? "0"
+                                                            : "12px",
+                                                }}
+                                            >
+                                                <img
+                                                    className="payment-type__icon"
+                                                    src={item.icon}
+                                                    alt="payment type"
+                                                />
+                                                <p className="payment-type__name">
+                                                    {item.label}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}{" "}
+                                {tabIndex === 1 && (
+                                    <CoinPaymentsTab
+                                        currentRound={currentRound}
+                                        bidAmount={bidAmount}
+                                    />
+                                )}
+                                {tabIndex === 2 && (
+                                    <CreditCardTab
+                                        amount={Number(bidAmount).toFixed(2)}
+                                        round={currentRound}
+                                    />
+                                )}
+                                {tabIndex === 3 && (
+                                    <div className="paypal-tab">
+                                        <div
+                                            className="payment-content"
+                                            onClick={() => initPaypal()}
+                                        >
+                                            <button className="paypal-checkout btn-second">
+                                                Check out with &nbsp;
+                                                <img
+                                                    src={PaypalBrand}
+                                                    alt="paypal"
+                                                />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                                {tabIndex === 4 && (
+                                    <NDBWalletTab
+                                        bidAmount={bidAmount}
+                                        currentRound={currentRound}
+                                    />
+                                )}
+                                {tabIndex === 5 && (
+                                    <div className="externalwallets-tab">
+                                        <div
+                                            className="payment-content"
+                                            style={{ display: "block" }}
+                                        >
+                                            <ConnectWalletTab />
+
+                                            <div className="mt-1 d-flex justify-content-between">
+                                                <p className="d-flex flex-row">
+                                                    <CheckBox
+                                                        type="checkbox"
+                                                        name="allow_fraction"
+                                                        value={allow_fraction}
+                                                        onChange={
+                                                            handleAllowFraction
+                                                        }
+                                                        className="text-uppercase"
+                                                    />
+                                                    <div className="allow-text">
+                                                        Do you allow fraction of
+                                                        order compleation?
+                                                    </div>
+                                                    <ReactTooltip
+                                                        place="right"
+                                                        type="light"
+                                                        effect="solid"
+                                                    >
+                                                        <div
+                                                            className="text-justify"
+                                                            style={{
+                                                                width: "300px",
+                                                            }}
+                                                        >
+                                                            {
+                                                                PAYMENT_FRACTION_TOOLTIP_CONTENT
+                                                            }
+                                                        </div>
+                                                    </ReactTooltip>
+                                                    <FontAwesomeIcon
+                                                        data-tip="React-tooltip"
+                                                        icon={faQuestionCircle}
+                                                        className="fa-xl ms-2 cursor-pointer"
+                                                    />
+                                                </p>
+                                                <p className="payment-expire my-auto">
+                                                    payment expires in{" "}
+                                                    <span className="txt-green">
+                                                        10 minutes
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        {tabIndex === 1 && (
+                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} />
+                        )}
+                        {tabIndex === 2 && (
+                            <OrderSummaryOfCreditCard bidAmount={bidAmount} />
+                        )}
+                        {tabIndex === 4 && (
+                            <OrderSummaryNDBWallet bidAmount={bidAmount} />
+                        )}
+                        {tabIndex !== 1 && tabIndex !== 2 && tabIndex !== 4 && (
+                            <OrderSummary bidAmount={bidAmount} />
+                        )}
+                    </div>
+                    <div className="remain-token__value col-md-12 mx-auto">
+                        <div className="d-flex justify-content-between">
+                            <p className="current-value">
+                                current cap&nbsp;
+                                <span className="txt-green">
+                                    {numberWithCommas(currentCap)}
+                                </span>
+                            </p>
+                            <p className="end-value">
+                                target cap&nbsp;
+                                <span className="txt-green">1 Trillion</span>
+                            </p>
+                        </div>
+                        <div className="timeframe-bar">
+                            <div
+                                className="timeleft"
+                                style={{
+                                    width: `${barProgress}%`,
+                                    background:
+                                        "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)",
+                                }}
+                            >
+                                <div className="timeleft__value">
+                                    Round &nbsp;
+                                    <span className="txt-green">
+                                        {totalRounds}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </>
+    );
+};
+
+export default Payment;

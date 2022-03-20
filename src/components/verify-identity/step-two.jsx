@@ -2,44 +2,32 @@ import React from "react"
 import { useState } from "react"
 import { VerifyIdStep2 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
-import AdapterDateFns from "@mui/lab/AdapterDateFns"
-import LocalizationProvider from "@mui/lab/LocalizationProvider"
-import TextField from "@mui/material/TextField"
-import { MobileDatePicker } from "@mui/lab"
+import { useVerification } from "./verification-context"
 
-export default function StepTwo({
-    step,
-    setState,
-    dob,
-    setDob,
-    firstName,
-    setFirstName,
-    surname,
-    setSurname,
-}) {
+export default function StepTwo() {
+    // Containers
+    const verification = useVerification()
     const [firstNameError, setFirstNameError] = useState("")
     const [surnameError, setSurnameError] = useState("")
-
+    const [loading, setLoading] = useState(true)
     const onNextButtonClick = (e) => {
         e.preventDefault()
         setFirstNameError("")
         setSurnameError("")
         let error = false
-        if (!firstName) {
+        if (!verification.firstName) {
             error = true
             setFirstNameError("Please fill out the first name field")
         }
-        if (!surname) {
+        if (!verification.surname) {
             error = true
             setSurnameError("Please fill out the surname field")
         }
-        if (!error) return setState({ step: step + 1 })
+        if (!error) return verification.nextStep()
     }
 
     // Render
-
-    const [loading, setLoading] = useState(true)
-
+    verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -72,8 +60,8 @@ export default function StepTwo({
                             <input
                                 type="text"
                                 className="form-control"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                value={verification.firstName}
+                                onChange={(e) => verification.setFirstName(e.target.value)}
                                 placeholder="First name"
                             />
                             <div className="text-danger mt-2">{firstNameError}</div>
@@ -83,31 +71,18 @@ export default function StepTwo({
                             <input
                                 type="text"
                                 className="form-control"
-                                value={surname}
-                                onChange={(e) => setSurname(e.target.value)}
+                                value={verification.surname}
+                                onChange={(e) => verification.setSurname(e.target.value)}
                                 placeholder="Surname name"
                             />
                             <div className="text-danger mt-2">{surnameError}</div>
-                        </div>
-                        <div>
-                            <p className="form-label mt-4">Date of birth (YYYY-MM-DD)</p>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <MobileDatePicker
-                                    inputFormat="yyyy-MM-dd"
-                                    value={dob}
-                                    onChange={(newValue) => {
-                                        setDob(newValue)
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </LocalizationProvider>
                         </div>
                     </div>
 
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
                         <button
                             className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
+                            onClick={() => verification.previousStep()}
                         >
                             back
                         </button>

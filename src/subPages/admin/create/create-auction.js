@@ -4,6 +4,8 @@ import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import validator from "validator";
 import NumberFormat from "react-number-format";
+import { useQuery } from "@apollo/client";
+import * as Query from './../../../apollo/graghqls/querys/Auction'
 
 import Seo from "../../../components/seo"
 import Stepper from "../../../components/admin/Stepper";
@@ -16,7 +18,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { MobileDateTimePicker   } from '@mui/lab';
 import Select from 'react-select';
-import { fetch_Avatars } from './../../../redux/actions/avatarAction';
+import { fetch_Avatars } from "../../../redux/actions/avatarAction";
 import AvatarImage from './../../../components/admin/shared/AvatarImage';
 import { create_Auction } from "../../../redux/actions/auctionAction";
 
@@ -41,11 +43,22 @@ const IndexPage = () => {
     // Round Data
     const initialRoundData = { roundNumber: '', startTime: Date.now(), endTime: Date.now() };
     const [roundData, setRoundData] = useState(initialRoundData);
+
+    const { data: newRound } = useQuery(Query.GET_NEW_ROUND, {
+        fetchPolicy: "network-only",
+        onCompleted: () => {
+            if(newRound.getNewRound) {
+                setRoundData({ ...roundData, roundNumber: newRound.getNewRound });
+            }
+        },
+    });
+
     const duration = useMemo(() => {
         if(!roundData.startTime || !roundData.endTime) return '';
         if(new Date(roundData.endTime) <= new Date(roundData.startTime)) return '';
         return new Date(roundData.endTime) - new Date(roundData.startTime) + 1000;
     }, [roundData]);
+    // console.log(roundData)
 
     // Round Data Validation
     const roundDataError = useMemo(() => {
@@ -112,7 +125,6 @@ const IndexPage = () => {
     const handleSubmit = async () => {
         setPending(true);
         const createData = {
-            round: Number(roundData.roundNumber),
             startedAt: Number(roundData.startTime),
             duration: Number(duration),
             totalToken: Number(tokenData.tokenAmount),
@@ -146,15 +158,12 @@ const IndexPage = () => {
                                     </div>
                                     <div>
                                         <p>Round Number</p>
-                                        <NumberFormat className={`black_input ${showError && roundDataError.roundNumber? 'error': ''}`}
-                                            placeholder='Enter number'
+                                        <NumberFormat className={`black_input disabled`}
+                                            placeholder='Auto-Generated'
                                             thousandSeparator={true}
                                             allowNegative={false}
                                             value={roundData.roundNumber}
-                                            onValueChange={({ value }) => {
-                                                setRoundData({...roundData, roundNumber: value});
-                                            }}
-                                            isAllowed={({floatValue}) => Number.isInteger(floatValue)}
+                                            readOnly
                                         />
                                     </div>
                                 </div>
@@ -219,21 +228,33 @@ const IndexPage = () => {
                                     </div>                                    
                                 </div>
                                 <div className="div1 mt-4">
-                                    <div>           
+                                    <div>
                                         <p>Total Token Amount</p>  
                                         <div className="token_div">
-                                            <input className="white_input" value={totalTokenAmount} readOnly/>
+                                            <NumberFormat
+                                                value={totalTokenAmount}
+                                                className="white_input"
+                                                displayType='text'
+                                                thousandSeparator={true}
+                                                readOnly
+                                            />
                                             <div>
                                                 {[5, 10, 20, 50].map(value => {
                                                     return (<button key={value} onClick={() => setTokenData({...tokenData, tokenAmount: String(totalTokenAmount * value / 100)})}>{value}%</button>);
                                                 })}
                                             </div>
-                                        </div>                                                               
+                                        </div>
                                     </div>
                                     <div>    
                                         <p>Previous Reserved Price</p>                                     
                                         <div className="token_div">
-                                            <input className="white_input" value={prevReservedPrice+'$'} readOnly/>
+                                            <NumberFormat
+                                                value={prevReservedPrice}
+                                                className="white_input"
+                                                displayType='text'
+                                                thousandSeparator={true}
+                                                readOnly
+                                            />
                                             <div>
                                                 {[5, 10, 20, 50].map(value => {
                                                     return (<button key={value} onClick={() => setTokenData({...tokenData, ReservedPrice: String(prevReservedPrice * value / 100)})}>{value}%</button>);
@@ -350,7 +371,7 @@ const IndexPage = () => {
                                         <div className="col-sm-4 col-6 mb-4">
                                             <div className="item">
                                                 <p>Round ID</p>
-                                                <p>{roundData.roundId}</p>
+                                                <p>Auto-generated</p>
                                             </div>
                                             <div className="item">
                                                 <p>Round Number</p>

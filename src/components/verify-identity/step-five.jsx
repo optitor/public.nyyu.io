@@ -1,23 +1,21 @@
 import React, { useState } from "react"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import { useVerification } from "./verification-context"
+import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
 
-export default function StepOne({
-    step,
-    setState,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+export default function StepOne() {
+    // Containers
+    const verification = useVerification()
+    const [loading, setLoading] = useState(true)
+
     // Methods
     const onUserDropFile = (e) => {
-        handleDragDropEvent(e)
-        setFiles(e, "w")
+        verification.consentProof.handleDragDropEvent(e)
+        verification.consentProof.setFiles(e, "w")
     }
 
     // Render
-    const [loading, setLoading] = useState(true)
+    verification.shuftReferencePayload?.conStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -28,7 +26,7 @@ export default function StepOne({
                 <div className="text-center">
                     <div className="d-block d-sm-none">
                         <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 3</div>
-                        <div className="text-light fs-14px fw-bold">Consent verification</div>
+                        <div className="text-light fs-14px fw-bold">consentProof verification</div>
                     </div>
                     <img
                         className="d-sm-block d-none"
@@ -44,7 +42,7 @@ export default function StepOne({
                                 Write the following text on a blank paper, <br />
                                 upload its photo along with your face.
                             </p>
-                            <p className="my-3 fw-bold text-uppercase">i & ndb</p>
+                            <p className="my-3 fw-bold">{verification.consentText}</p>
                             <div className="requirements mt-0">
                                 <p className="fs-14px">Photo requirements:</p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
@@ -72,15 +70,21 @@ export default function StepOne({
                                         <label
                                             htmlFor="file-upload-input"
                                             className="file-upload cursor-pointer"
-                                            onDragEnter={handleDragDropEvent}
-                                            onDragOver={handleDragDropEvent}
+                                            onDragEnter={
+                                                verification.consentProof.handleDragDropEvent
+                                            }
+                                            onDragOver={
+                                                verification.consentProof.handleDragDropEvent
+                                            }
                                             onDrop={onUserDropFile}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
-                                                onChange={(e) => setFiles(e, "w")}
+                                                onChange={(e) =>
+                                                    verification.consentProof.setFiles(e, "w")
+                                                }
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -90,9 +94,9 @@ export default function StepOne({
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {files[0] ? (
+                                                {verification.consentProof.files[0] ? (
                                                     <p className="mt-30px">
-                                                        {files[0].name}{" "}
+                                                        {verification.consentProof.files[0].name}{" "}
                                                         <span className="txt-green fw-bold">
                                                             selected
                                                         </span>
@@ -118,14 +122,15 @@ export default function StepOne({
 
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
+                            className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                            onClick={() => verification.previousStep()}
                         >
                             back
                         </button>
                         <button
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
+                            disabled={verification.consentProof.files.length === 0}
+                            className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                            onClick={() => verification.nextStep()}
                         >
                             next
                         </button>

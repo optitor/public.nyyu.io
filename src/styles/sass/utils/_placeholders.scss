@@ -11,7 +11,7 @@
 }
 
 %set-height2 {
-    height: calc(100vh - 97px);
+    height: calc(100vh - 110px);
     @include mq("phone", max) {
         height: calc(100vh - 55px);
     }

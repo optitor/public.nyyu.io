@@ -6,7 +6,8 @@ export const GET_BID = gql`
             userId
             tokenAmount
             tokenPrice
-            totalPrice
+            totalAmount
+            paidAmount
         }
     }
 `
@@ -19,7 +20,7 @@ export const GET_BIDLIST_BY_ROUND = gql`
             name
             roundId
             tokenAmount
-            totalPrice
+            paidAmount
             tokenPrice
             tempTokenAmount
             tempTokenPrice
@@ -37,6 +38,7 @@ export const GET_BIDLIST_BY_ROUND = gql`
             placedAt
             updatedAt
             status
+            ranking
         }
     }
 `
@@ -56,7 +58,8 @@ export const GET_BID_LIST = gql`
     query GetBidList {
         getBidList {
             tokenAmount
-            totalPrice
+            totalAmount
+            paidAmount
             placedAt
         }
     }

@@ -1,41 +1,54 @@
 import fetch from "isomorphic-fetch"
-import { ApolloClient, InMemoryCache, createHttpLink, split } from "@apollo/client"
+import {
+    ApolloClient,
+    InMemoryCache,
+    // createHttpLink,
+    // split 
+} from "@apollo/client"
+import { createUploadLink } from "apollo-upload-client";
 import { setContext } from '@apollo/client/link/context';
-import { getInMemoryAuthToken, isBrowser } from "../utilities/auth"
-import { API_BASE_URL, SUBSCRIPTION_BASE_URL } from "../utilities/staticData"
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
+import {
+    getInMemoryAuthToken,
+    // isBrowser 
+} from "../utilities/auth"
+import {
+    API_BASE_URL,
+    // SUBSCRIPTION_BASE_URL 
+} from "../utilities/staticData"
+// import { WebSocketLink } from '@apollo/client/link/ws';
+// import { getMainDefinition } from '@apollo/client/utilities';
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
     uri: API_BASE_URL + "/graphql",
 });
 
-const wsLink = isBrowser ? new WebSocketLink({
-    uri: SUBSCRIPTION_BASE_URL,
-    options: {
-        reconnect: true,
-        connectionParams: {
-            Authorization: `Bearer ${getInMemoryAuthToken()}`,
-        },
-    }
-}) : undefined;
+// const wsLink = isBrowser ? new WebSocketLink({
+//     uri: SUBSCRIPTION_BASE_URL,
+//     options: {
+//         reconnect: true,
+//         connectionParams: {
+//             Authorization: `Bearer ${getInMemoryAuthToken()}`,
+//         },
+//     }
+// }) : undefined;
 
 // The split function takes three parameters:
 //
 // * A function that's called for each operation to execute
 // * The Link to use for an operation if the function returns a "truthy" value
 // * The Link to use for an operation if the function returns a "falsy" value
-const splitLink = isBrowser ? split(
-    ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-            definition.kind === 'OperationDefinition' &&
-            definition.operation === 'subscription'
-        );
-    },
-    wsLink,
-    httpLink,
-) : httpLink;
+// const splitLink = isBrowser ? split(
+//     ({ query }) => {
+//         const definition = getMainDefinition(query);
+//         return (
+//             definition.kind === 'OperationDefinition' &&
+//             definition.operation === 'subscription'
+//         );
+//     },
+//     wsLink,
+//     httpLink,
+// ) : httpLink;
+const splitLink = httpLink
 
 const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
@@ -51,12 +64,12 @@ const authLink = setContext((_, { headers }) => {
 
 const defaultOptions = {
     watchQuery: {
-      fetchPolicy: 'no-cache',
-      errorPolicy: 'ignore',
+        fetchPolicy: 'no-cache',
+        errorPolicy: 'ignore',
     },
     query: {
-      fetchPolicy: 'no-cache',
-      errorPolicy: 'all',
+        fetchPolicy: 'no-cache',
+        errorPolicy: 'all',
     },
 };
 

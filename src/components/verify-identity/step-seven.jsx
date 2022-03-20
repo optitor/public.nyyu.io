@@ -1,10 +1,127 @@
+import axios from "axios"
 import { Link } from "gatsby"
-import React, { useState } from "react"
-import { VerifyIdStep7 } from "../../utilities/imgImport"
-import { ROUTES } from "../../utilities/routes"
+import { v4 as uuidv4 } from "uuid"
 import Loading from "../common/Loading"
+import React, { useEffect, useState } from "react"
+import { useMutation } from "@apollo/client"
+import { ROUTES } from "../../utilities/routes"
+import { VerifyIdStep7 } from "../../utilities/imgImport"
+import { INSERT_UPDATE_REFERENCE } from "./kyc-webservice"
+import { getBase64 } from "../../utilities/utility-methods"
+import { useVerification } from "./verification-context"
 
 export default function StepSeven() {
+    // Containers
+    const verification = useVerification()
+    const [reference] = useState(uuidv4())
+
+    // Webservice
+    const [insertUpdateReference] = useMutation(INSERT_UPDATE_REFERENCE)
+
+    // Methods
+    const sendShuftiRequest = async () => {
+        verification.setSubmitting(true)
+        insertUpdateReference({
+            variables: {
+                reference,
+            },
+        })
+        const token = btoa(`${verification.clientId}:${verification.secret}`)
+        const payload = {
+            reference: `${reference}`,
+            callback_url: verification.callbackUrl,
+            redirect_url: verification.redirectUrl,
+            country: verification.country.value,
+            language: "EN",
+            verification_mode: "any",
+            manual_review: "1",
+        }
+
+        if (
+            verification.shuftReferencePayload?.docStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        ) {
+            const documentProof = await getBase64(verification.documentProof.files[0])
+            payload["document"] = {
+                proof: documentProof,
+                supported_types: ["id_card", "passport", "driving_license"],
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
+                },
+                allow_offline: "1",
+            }
+        }
+
+        if (
+            verification.shuftReferencePayload?.addrStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        ) {
+            const addressProof = await getBase64(verification.addressProof.files[0])
+            payload["address"] = {
+                full_address: verification.address,
+                proof: addressProof,
+                supported_types: [
+                    "utility_bill",
+                    "bank_statement",
+                    "driving_license",
+                    "rent_agreement",
+                    "employer_letter",
+                    "tax_bill",
+                ],
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
+                },
+                allow_offline: "1",
+            }
+        }
+
+        if (
+            verification.shuftReferencePayload?.conStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        ) {
+            const consentProof = await getBase64(verification.consentProof.files[0])
+            payload["consent"] = {
+                proof: consentProof,
+                text: verification.consentText,
+                supported_types: ["printed", "handwritten"],
+                allow_offline: "1",
+            }
+        }
+        if (
+            verification.shuftReferencePayload?.selfieStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        )
+            payload["face"] = {
+                proof: verification.faceProof.selfieImage,
+                allow_offline: "1",
+            }
+
+        axios
+            .post(verification.shuftiProBaseUrl, payload, {
+                headers: {
+                    Authorization: `Basic ${token}`,
+                },
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
+        verification.setSubmitting(false)
+    }
+
+    useEffect(() => {
+        sendShuftiRequest()
+    }, [])
     // Render
     const [loading, setLoading] = useState(true)
     return (
@@ -23,12 +140,12 @@ export default function StepSeven() {
                     />
                 </div>
                 <div className="my-sm-5 py-sm-5 verify-step1">
-                    <div className="text-sm-start text-center">
+                    <div className="text-center">
                         <p className="fs-25px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
-                            Thank you, your verification has been successfully submitted.
+                            Thank you, your verification result will be sent to your email soon.
                         </p>
                         <p className="fs-16px fw-bold text-light d-block d-sm-none">
-                            Thank you, your verification has been successfully submitted.
+                            Thank you, your verification result will be sent to your email soon.
                         </p>
                         <p className="fs-14px px-sm-2 px-4 mt-3">
                             As soley the data processor, NDB acknowledges your right to request

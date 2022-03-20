@@ -1,36 +1,41 @@
-import React, { useReducer } from "react"
-import { Link, navigate } from "gatsby"
-import Select from "react-select"
-import validator from "validator"
-import AuthLayout from "../common/AuthLayout"
-import { FormInput } from "../common/FormControl"
-import CustomSpinner from "../common/custom-spinner"
-import * as GraphQL from "../../apollo/graghqls/mutations/Auth"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
-import { countries, passwordValidatorOptions, social_links } from "../../utilities/staticData"
-import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf"
-import PasswordEyeIcon from "../common/password-eye-icon"
-import { useMutation } from "@apollo/client"
-import { ROUTES } from "../../utilities/routes"
+import React, { useReducer } from "react";
+import { Link, navigate } from "gatsby";
+import Select from "react-select";
+import validator from "validator";
+import AuthLayout from "../common/AuthLayout";
+import { FormInput } from "../common/FormControl";
+import CustomSpinner from "../common/custom-spinner";
+import * as GraphQL from "../../apollo/graghqls/mutations/Auth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+    countries,
+    passwordValidatorOptions,
+    social_links,
+} from "../../utilities/staticData";
+import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf";
+import { useMutation } from "@apollo/client";
+import { ROUTES } from "../../utilities/routes";
 
 const Singup = () => {
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        email: "",
-        pwd: "",
-        pwdConfirm: "",
-        agree: "",
-        country: countries[0],
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            email: "",
+            pwd: "",
+            pwdConfirm: "",
+            agree: "",
+            country: countries[0],
 
-        pwdVisible: false,
-        pwdConfirmVisible: false,
+            pwdVisible: false,
 
-        emailError: "",
-        pwdError: "",
-        pwdConfirmError: "",
-        agreeError: "",
-        result: "",
-    })
+            emailError: "",
+            pwdError: "",
+            pwdConfirmError: "",
+            agreeError: "",
+            result: "",
+        }
+    );
 
     const {
         email,
@@ -40,47 +45,57 @@ const Singup = () => {
         country,
 
         pwdVisible,
-        pwdConfirmVisible,
 
         emailError,
         pwdError,
         pwdConfirmError,
         agreeError,
         result,
-    } = state
+    } = state;
 
     const [signupMutation, { loading }] = useMutation(GraphQL.SIGNUP, {
         onCompleted: (data) => {
-            setState({ result: data?.signup })
+            setState({ result: data?.signup });
             if (data?.signup === "Already verified")
-                navigate(ROUTES.signIn + "error.Already verified")
-            else navigate(ROUTES.verifyEmail + email)
+                navigate(ROUTES.signIn + "error.Already verified");
+            else navigate(ROUTES.verifyEmail + email);
         },
-    })
+    });
 
     const signUserUp = (e) => {
-        e.preventDefault()
-        setState({ emailError: "", pwdError: "", pwdConfirmError: "", agreeError: "" })
-        let error = false
+        e.preventDefault();
+        setState({
+            emailError: "",
+            pwdError: "",
+            pwdConfirmError: "",
+            agreeError: "",
+        });
+        let error = false;
         if (!email || !validator.isEmail(email)) {
-            setState({ emailError: "Invalid email address" })
-            error = true
+            setState({ emailError: "Invalid email address" });
+            error = true;
         }
-        if (!pwd || !validator.isStrongPassword(pwd, passwordValidatorOptions)) {
+        if (
+            !pwd ||
+            !validator.isStrongPassword(pwd, passwordValidatorOptions)
+        ) {
             setState({
                 pwdError:
                     "Password must contain at least 8 characters, including UPPER/lowercase and numbers!",
-            })
-            error = true
+            });
+            error = true;
         }
         if (!agree) {
-            setState({ agreeError: "Please agree to terms and conditions" })
-            error = true
+            setState({ agreeError: "Please agree to terms and conditions" });
+            error = true;
         }
         if (!pwdConfirm || pwd !== pwdConfirm)
-            setState({ pwdConfirmError: "Password doest not match it's repeat!" })
-        if (!error) signupMutation({ variables: { email, password: pwd, country } })
-    }
+            setState({
+                pwdConfirmError: "Password doest not match it's repeat!",
+            });
+        if (!error)
+            signupMutation({ variables: { email, password: pwd, country } });
+    };
 
     return (
         <AuthLayout>
@@ -106,38 +121,28 @@ const Singup = () => {
                             onChange={(e) => setState({ pwd: e.target.value })}
                             placeholder="Enter password"
                         />
-                        <PasswordEyeIcon
-                            passwordVisible={pwdVisible}
-                            setPasswordVisible={(res) => setState({ pwdVisible: res })}
-                            styles={{
-                                right: "18px",
-                            }}
-                        />
                     </div>
                     <div className="form-group col-md-6 mb-0 position-relative">
                         <FormInput
-                            type={pwdConfirmVisible ? "text" : "password"}
+                            type={pwdVisible ? "text" : "password"}
                             label="Password confirmation"
                             value={pwdConfirm}
-                            onChange={(e) => setState({ pwdConfirm: e.target.value })}
+                            onChange={(e) =>
+                                setState({ pwdConfirm: e.target.value })
+                            }
                             placeholder="Enter password"
-                        />
-                        <PasswordEyeIcon
-                            passwordVisible={pwdConfirmVisible}
-                            setPasswordVisible={(res) => setState({ pwdConfirmVisible: res })}
-                            styles={{
-                                right: "18px",
-                            }}
                         />
                     </div>
                     {pwdError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> {pwdError}
+                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            {pwdError}
                         </span>
                     )}
                     {!pwdError && pwdConfirmError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> {pwdConfirmError}
+                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            {pwdConfirmError}
                         </span>
                     )}
                 </div>
@@ -152,36 +157,55 @@ const Singup = () => {
                         className="text-left"
                     />
                 </div>
-                <div className="form-group">
-                    <label className="d-flex align-items-center gap-2">
-                        <input
-                            type="checkbox"
-                            value={agree}
-                            className="form-check-input"
-                            onChange={() => setState({ agree: !agree })}
-                        />
-                        <div className="keep-me-signed-in-text">
-                            Agree to{" "}
-                            <a
-                                target="_blank"
-                                rel="noreferrer"
-                                href={termsAndConditionsFile}
-                                className="text-info terms-link"
-                            >
-                                Terms & Conditions
-                            </a>
-                        </div>
-                    </label>
+                <div className="d-flex flex-wrap justify-content-between">
+                    <div className="form-group me-4">
+                        <label className="d-flex align-items-center gap-2">
+                            <input
+                                type="checkbox"
+                                value={pwdVisible}
+                                className="form-check-input"
+                                onChange={() =>
+                                    setState({ pwdVisible: !pwdVisible })
+                                }
+                            />
+                            <div className="keep-me-signed-in-text">
+                                Show password
+                            </div>
+                        </label>
+                    </div>
+                    <div className="form-group">
+                        <label className="d-flex align-items-center gap-2">
+                            <input
+                                type="checkbox"
+                                value={agree}
+                                className="form-check-input"
+                                onChange={() => setState({ agree: !agree })}
+                            />
+                            <div className="keep-me-signed-in-text">
+                                Agree to{" "}
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    href={termsAndConditionsFile}
+                                    className="text-info terms-link"
+                                >
+                                    Terms & Conditions
+                                </a>
+                            </div>
+                        </label>
+                    </div>
                 </div>
                 <div className="mt-3">
                     {result.length > 0 && result !== "Success" && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> {result}
+                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            {result}
                         </span>
                     )}
                     {agreeError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> {agreeError}
+                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            {agreeError}
                         </span>
                     )}
                     <button
@@ -189,10 +213,14 @@ const Singup = () => {
                         className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
                         disabled={loading}
                     >
-                        <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                        <div
+                            className={`${loading ? "opacity-1" : "opacity-0"}`}
+                        >
                             <CustomSpinner />
                         </div>
-                        <div className={`${loading ? "ms-3" : "pe-4"}`}>sign up with email</div>
+                        <div className={`${loading ? "ms-3" : "pe-4"}`}>
+                            sign up with email
+                        </div>
                     </button>
                 </div>
             </form>
@@ -212,7 +240,7 @@ const Singup = () => {
                 </Link>
             </p>
         </AuthLayout>
-    )
-}
+    );
+};
 
-export default Singup
+export default Singup;

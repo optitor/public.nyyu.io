@@ -1,10 +1,12 @@
 import { navigate } from "gatsby"
 import React from "react"
+// import Cookies from 'js-cookie';
 import { logout } from "../../utilities/auth"
 import { ROUTES } from "../../utilities/routes"
 
 export default function SignOutTab() {
     const signOut = () => {
+        // Cookies.remove('NDB_FavCoins')
         logout(() => {
             navigate(ROUTES.home)
         })
