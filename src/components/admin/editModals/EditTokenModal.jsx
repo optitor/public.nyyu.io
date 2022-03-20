@@ -1,15 +1,19 @@
 import React, { useState, useMemo } from "react";
+import { useDispatch } from 'react-redux';
 import Modal from 'react-modal';
 import { Icon } from '@iconify/react';
 import parse from 'html-react-parser';
 
 import Stepper2 from "../../../components/admin/Stepper2";
 import Alert from '@mui/material/Alert';
+import { update_Symbol } from "../../../redux/actions/tokenAction";
 
 const EditTokenModal = ({isModalOpen, setIsModalOpen, datum}) => {
+    const dispatch = useDispatch();
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
     const [error, setError] = useState('');
+    const [pending, setPending] = useState(false);
 
     //------- Token Details and Validation
     // Token Details
@@ -80,14 +84,18 @@ const EditTokenModal = ({isModalOpen, setIsModalOpen, datum}) => {
         setShowError(false);
     };
 
-    const handleSubmit = () => {
-        alert('Token added successfully')
+    const handleSubmit = async () => {
+        setPending(true);
+        const updateData = { ...datum, symbol: svgFile.svg };
+        await dispatch(update_Symbol(updateData));
+        setPending(false);
     };
 
     const closeModal = () => {
         setDetails(InitialDetails);
         setSvgFile(initialIconData);
         setIsModalOpen(false);
+        setCurrentStep(1);
     };
 
     return (
@@ -99,7 +107,7 @@ const EditTokenModal = ({isModalOpen, setIsModalOpen, datum}) => {
             overlayClassName="pwd-modal__overlay"
         >
             <div className="pwd-modal__header mb-3">
-                <p style={{fontSize: 22}}>Edit Token</p>
+                <p style={{fontSize: 22}}>Edit Token (Only Symbol Icon)</p>
                 <div
                     onClick={closeModal}
                     onKeyDown={closeModal}
@@ -117,34 +125,38 @@ const EditTokenModal = ({isModalOpen, setIsModalOpen, datum}) => {
                         <div className="div1">
                             <div>
                                 <p>Token Name</p>
-                                <input className={`black_input ${showError && detailsError.name? 'error': ''}`}
+                                <input className={`black_input disabled ${showError && detailsError.name? 'error': ''}`}
                                     value={details.name}
-                                    onChange={e => setDetails({...details, name: e.target.value})}
+                                    // onChange={e => setDetails({...details, name: e.target.value})}
+                                    readOnly
                                 />
                             </div>
                             <div>
                                 <p>Token Address</p>
-                                <input  className={`black_input ${showError && detailsError.address? 'error': ''}`}
+                                <input  className={`black_input disabled ${showError && detailsError.address? 'error': ''}`}
                                     value={details.address} 
-                                    onChange={e => setDetails({...details, address: e.target.value})}
+                                    // onChange={e => setDetails({...details, address: e.target.value})}
+                                    readOnly
                                 />
                             </div>                                    
                         </div>
                         <div className="div1 mt-3">
                             <div>
                                 <p>Token Symbol</p>
-                                <input className={`black_input ${showError && detailsError.symbol? 'error': ''}`}
+                                <input className={`black_input disabled ${showError && detailsError.symbol? 'error': ''}`}
                                     value={details.symbol}
-                                    onChange={e => setDetails({...details, symbol: e.target.value})}
+                                    // onChange={e => setDetails({...details, symbol: e.target.value})}
+                                    readOnly
                                 />
                             </div>
                             <div>
                                 <p>Token Network</p>
-                                <input  className={`black_input ${showError && detailsError.network? 'error': ''}`}
+                                <input  className={`black_input disabled ${showError && detailsError.network? 'error': ''}`}
                                     value={details.network} 
-                                    onChange={e => setDetails({...details, network: e.target.value})}
+                                    // onChange={e => setDetails({...details, network: e.target.value})}
+                                    readOnly
                                 />
-                            </div>                                    
+                            </div>
                         </div>
                     </div>                                    
                     <div className="button_div">
@@ -224,7 +236,11 @@ const EditTokenModal = ({isModalOpen, setIsModalOpen, datum}) => {
                     </div>
                     <div className="button_div">
                         <button className="btn previous" onClick={() => setCurrentStep(2)}>Previous</button>
-                        <button className="btn next" onClick={handleSubmit}>Edit Token</button>
+                        <button className="btn next" onClick={handleSubmit}
+                            disabled={pending}
+                        >
+                            {pending? 'Saving. . .': 'Save'}
+                        </button>
                     </div>
                 </>
             )}

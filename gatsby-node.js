@@ -1,3 +1,5 @@
+const TerserPlugin = require('terser-webpack-plugin');
+
 // Implement the Gatsby API “onCreatePage”. This is
 // called after every page is created.
 exports.onCreatePage = async ({ page, actions }) => {
@@ -33,24 +35,30 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins }) => {
                 ],
             },
         })
-    }
-    actions.setWebpackConfig({
-        module: {
-            rules: [
-                {
-                    test: /\.html$/,
-                    loader: require.resolve('html-loader'),
-                    options: {
-                        minimize: false,
+        actions.setWebpackConfig({
+            module: {
+                rules: [
+                    {
+                        test: /\.html$/,
+                        loader: require.resolve('html-loader'),
+                        options: {
+                            minimize: false,
+                        },
                     },
-                },
-            ],
-        },
-        optimization: {
-            splitChunks: false,
-        },
-        plugins: [plugins.provide({
-            Buffer: ['buffer/', 'Buffer'],
-        })]
-    });
+                ],
+            },
+            optimization: {
+                splitChunks: false,
+                minimize: true,
+                minimizer: [
+                    new TerserPlugin({
+                        parallel: true,
+                    }),
+                ],
+            },
+            plugins: [plugins.provide({
+                Buffer: ['buffer/', 'Buffer'],
+            })]
+        });
+    }
 };

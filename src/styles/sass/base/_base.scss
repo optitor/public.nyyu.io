@@ -103,29 +103,79 @@ input[type="number"]::-webkit-outer-spin-button {
     width: max-content !important;
 }
 
-.mt-16px {
-    margin-top: 16px;
-}
-
 .placeholder\:text-light {
     &::placeholder {
-        color: lightgrey !important;
+        color: #e3e3e3 !important;
     }
 }
-.py-12px {
-    padding-top: 12px;
-    padding-bottom: 12px;
+.placeholder\:text-lightgray {
+    &::placeholder {
+        color: lightgray;
+    }
 }
-.py-10px {
-    padding-top: 10px;
-    padding-bottom: 10px;
+
+@for $size from 4 to 100 {
+    .py-#{$size}px {
+        padding-top: #{$size}px !important;
+        padding-bottom: #{$size}px !important;
+    }
 }
-.px-55px {
-    padding-left: 55px;
-    padding-right: 55px;
+
+@for $size from 4 to 96 {
+    .px-#{$size}px {
+        padding-left: #{$size}px !important;
+        padding-right: #{$size}px !important;
+    }
 }
-.pl-8px {
-    padding-left: 8px;
+
+@for $size from 4 to 96 {
+    .ml-#{$size}px {
+        margin-left: #{$size}px !important;
+    }
+}
+
+@for $size from 4 to 96 {
+    .mr-#{$size}px {
+        margin-right: #{$size}px !important;
+    }
+}
+
+@for $size from 3 to 96 {
+    .mt-#{$size}px {
+        margin-top: #{$size}px !important;
+    }
+}
+
+.mt-1 {
+    margin-top: 1px !important;
+}
+.mb-5px {
+    margin-bottom: 5px !important;
+}
+
+@for $size from 0 to 96 {
+    .pt-#{$size}px {
+        padding-top: #{$size}px !important;
+    }
+}
+
+@for $size from 0 to 96 {
+    .pb-#{$size}px {
+        padding-bottom: #{$size}px !important;
+    }
+}
+
+//padding left
+@for $size from 0 to 96 {
+    .pl-#{$size}px {
+        padding-left: #{$size}px !important;
+    }
+}
+
+@for $size from 4 to 96 {
+    .pr-#{$size}px {
+        padding-right: #{$size}px !important;
+    }
 }
 
 .hover\:bg-dark {
@@ -139,16 +189,25 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: justify !important;
 }
 
-.w-316px {
-    width: 316px !important;
+@for $size from 8 to 500 {
+    .w-#{$size}px {
+        width: #{$size}px !important;
+    }
 }
-// Begin: New Font Sizes
-@for $size from 12 to 48 {
+
+// Font Sizes
+@for $size from 8 to 96 {
     .fs-#{$size}px {
         font-size: #{$size}px !important;
     }
 }
 
+// Line Heights
+@for $size from 12 to 96 {
+    .lh-#{$size}px {
+        line-height: #{$size}px !important;
+    }
+}
 .scale-75 {
     transform: scale(0.75, 0.75);
     @include mq("phone", min) {
@@ -158,11 +217,38 @@ input[type="number"]::-webkit-outer-spin-button {
 .border-bottom-1px {
     border-bottom: 1px !important;
 }
+
+.border-bottom-scorpion {
+    border-bottom: 1px solid $scorpion !important;
+}
+
+.border-bottom-2-dark-gray {
+    border-bottom: 2px solid $dimgrey;
+}
+
+.border-cinnabar {
+    border: 1px solid $cinnabar;
+}
+
+.border-mountainMeadow {
+    border: 1px solid $mountainMeadow;
+}
+.border-white {
+    border: 1px solid $white;
+}
+
+.border-dimgray {
+    border: 1px solid $dimgrey;
+}
+
 .fv-small-caps {
     font-variant: small-caps !important;
 }
 .fw-500 {
     font-weight: 500 !important;
+}
+.fw-700 {
+    font-weight: 700 !important;
 }
 .lh-25px {
     line-height: 25px !important;
@@ -188,24 +274,148 @@ input[type="number"]::-webkit-outer-spin-button {
 .bg-gray {
     background: $grey;
 }
-.mt-1 {
-    margin-top: 1px !important;
-}
+
 //End: Background Color
 
 .scale-70 {
     transform: scale(0.7, 0.7);
 }
-.mt-30px {
-    margin-top: 30px;
-}
-.mt-3px {
-    margin-top: 3px !important;
-}
-.ml-45px {
-    margin-left: 45px !important;
-}
 
 .bg-black-10 {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+.ms-40px {
+    margin-left: 40px;
+}
+
+.first-letter\:text-green {
+    color: white !important;
+    &::first-letter {
+        color: $green !important;
+    }
+}
+
+.w-max-content {
+    width: max-content !important;
+}
+.w-sm-100 {
+    @include mq("phone") {
+        width: 100% !important;
+    }
+}
+
+.white-space-nowrap {
+    white-space: nowrap !important;
+}
+
+.hover\:shadow-light {
+    transition: 500ms;
+    &:hover {
+        box-shadow: 0 0 8px lightgrey;
+    }
+}
+.hover\:scale-125 {
+    transition: 500ms;
+    &:hover {
+        transform: scale(1.25);
+    }
+}
+
+.bottom-20px {
+    bottom: 20px !important;
+}
+.end-20px {
+    right: 20px !important;
+}
+
+.text-underline {
+    text-decoration: underline !important;
+}
+
+.text-green {
+    color: #23c865;
+}
+
+.icon-23px {
+    width: 23px;
+    height: 23px;
+}
+
+.icon-25px {
+    width: 25px;
+    height: 25px;
+}
+
+.icon-30px {
+    height: 30px;
+    width: 30px;
+}
+
+.ps-6px {
+    padding-left: 6px !important;
+}
+
+.text-\[\#959595\] {
+    color: #959595;
+}
+
+.text-light-blue {
+    color: #59d8f3 !important;
+}
+
+.text-lightgrey {
+    color: lightgrey !important;
+}
+
+.h-85 {
+    height: 85% !important;
+}
+
+.txt-green {
+    color: $green;
+}
+.txt-grey {
+    color: $grey;
+}
+.txt-red {
+    color: $red;
+}
+.txt-light-red {
+    color: $light-red;
+}
+.txt-cyan {
+    color: $cyan;
+}
+.txt-scorpion {
+    color: $scorpion;
+}
+.txt-cinnabar {
+    color: $cinnabar;
+}
+.txt-mountainMeadow {
+    color: $mountainMeadow;
+}
+.txt-dustGray {
+    color: $dustGray;
+}
+
+.txt-underline {
+    text-decoration: underline;
+}
+
+.top-0px {
+    top: 0 !important;
+}
+
+.left-0px {
+    left: 0 !important;
+}
+
+.icon-sm {
+    width: 15px;
+    height: 15px;
+}
+.text-blue {
+    color: #59d8f3;
 }

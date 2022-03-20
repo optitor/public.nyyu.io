@@ -24,13 +24,13 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                 })
             )
         },
-    })
+    });
 
     // Containers
     const [type, setType] = useState(transactionType)
     const [myAssets, setMyAssets] = useState(null)
     const [selectedAsset, setSelectedAsset] = useState(null)
-    const [selectedPercent, setSelectedPercent] = useState(25)
+    const [selectedPercent, setSelectedPercent] = useState(-1)
     const [withdrawAmount, setWithdrawAmount] = useState()
     const loadingSection = !myAssets
 
@@ -94,7 +94,7 @@ export default function DepositWithdrawModal({ showModal, setShowModal, transact
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                     d="M19 9l-7 7-7-7"
                                 ></path>
                             </svg>

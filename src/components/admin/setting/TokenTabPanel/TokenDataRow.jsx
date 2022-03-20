@@ -6,15 +6,15 @@ import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import DeleteConfirmModal from '../../DeleteConfirmModal';
-// import EditTokenModal from '../../editModals/EditTokenModal';
-import { delete_Token } from './../../../../redux/actions/tokenAction'
+import EditTokenModal from '../../editModals/EditTokenModal';
+import { delete_Token } from "../../../../redux/actions/tokenAction"
 
 const TokenDataRow = ({ datum = {} }) => {
     const dispatch = useDispatch();
 
     const [show, setShow] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    // const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
     const [deletePending, setDeletePending] = useState(false);
 
     const deleteToken = async () => {
@@ -29,7 +29,7 @@ const TokenDataRow = ({ datum = {} }) => {
             <DataRow>
                 <div className='image'>
                     <Main>
-                        <img src={svgToDataURL(datum.symbol)} alt="token" />
+                        <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" />
                     </Main>
                 </div>
                 <div className='name'>
@@ -55,7 +55,7 @@ const TokenDataRow = ({ datum = {} }) => {
                 <div className='edit'>
                     <Main>
                         <p>
-                            {/* <span className='edit'><Icon icon="clarity:note-edit-line" onClick={() => setIsEditOpen(true)} /></span> */}
+                            <span className='edit'><Icon icon="clarity:note-edit-line" onClick={() => setIsEditOpen(true)} /></span>
                             <span className='delete'><Icon icon="akar-icons:trash-can" onClick={() => setIsConfirmOpen(true)} /></span>
                         </p>
                     </Main>
@@ -65,16 +65,16 @@ const TokenDataRow = ({ datum = {} }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className='left' style={{width: '10%'}}>
-                            <img src={svgToDataURL(datum.symbol)} alt="token" />
+                            <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" />
                         </div>
                         <div className='left' style={{width: '60%'}}>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.tokenName}</p>
                         </div>
-                        {/* <div className='right'>
+                        <div className='right'>
                             <p>
                                 <span className='edit'><Icon icon="clarity:note-edit-line" onClick={() => setIsEditOpen(true)} /></span>
                             </p>
-                        </div> */}
+                        </div>
                         <div className='right'>
                             <p>
                                 <span className='delete'><Icon icon="akar-icons:trash-can" onClick={() => setIsConfirmOpen(true)} /></span>
@@ -114,7 +114,7 @@ const TokenDataRow = ({ datum = {} }) => {
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
-            {/* <EditTokenModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} /> */}
+            <EditTokenModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />
             <DeleteConfirmModal
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}

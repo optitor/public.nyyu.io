@@ -1,65 +1,25 @@
 import Select from "react-select"
 import React, { useState } from "react"
-import { countries } from "../../utilities/staticData"
 import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep3 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import { VerificationCountriesList } from "../../utilities/countries-list"
+import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData"
+import { useVerification } from "./verification-context"
 
-export default function StepThree({
-    step,
-    setState,
-    country,
-    setCountry,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+export default function StepThree() {
     // Containers
-    const docTypes = [
-        {
-            label: "National ID",
-            value: "passport",
-        },
-        {
-            label: "Driving license",
-            value: "driving_license",
-        },
-        {
-            label: "Utility bill",
-            value: "utility_bill",
-        },
-        {
-            label: "Rent agreement",
-            value: "rent_agreement",
-        },
-        {
-            label: "Employer letter",
-            value: "employer_letter",
-        },
-        {
-            label: "Tax bill",
-            value: "tax_bill",
-        },
-        {
-            label: "Bank statement",
-            value: "bank_statement",
-        },
-        {
-            label: "Insurence agreement",
-            value: "insurance_agreement",
-        },
-    ]
-    const [docType, setDocType] = useState(docTypes[0])
+    const verification = useVerification()
+    const [loading, setLoading] = useState(true)
+    const [docType, setDocType] = useState(VerificationStepThreeDocumentTypes[0])
 
     // Methods
     const onUserDropFile = (e) => {
-        handleDragDropEvent(e)
-        setFiles(e, "w")
+        verification.addressProof.handleDragDropEvent(e)
+        verification.addressProof.setFiles(e, "w")
     }
 
     // Render
-    const [loading, setLoading] = useState(true)
-
+    verification.shuftReferencePayload?.addrStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -85,16 +45,16 @@ export default function StepThree({
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>
                             <Select
-                                options={docTypes}
+                                options={VerificationStepThreeDocumentTypes}
                                 value={docType}
                                 onChange={(v) => setDocType(v)}
                                 placeholder="Document type"
                             />
                             <p className="form-label mt-4">Country issuing</p>
                             <Select
-                                options={countries}
-                                value={country}
-                                onChange={(v) => setCountry(v)}
+                                options={VerificationCountriesList}
+                                value={verification.country}
+                                onChange={(v) => verification.setCountry(v)}
                                 placeholder="Choose country"
                             />
                             <div className="requirements">
@@ -124,15 +84,21 @@ export default function StepThree({
                                         <label
                                             htmlFor="file-upload-input"
                                             className="file-upload cursor-pointer"
-                                            onDragEnter={handleDragDropEvent}
-                                            onDragOver={handleDragDropEvent}
+                                            onDragEnter={
+                                                verification.addressProof.handleDragDropEvent
+                                            }
+                                            onDragOver={
+                                                verification.addressProof.handleDragDropEvent
+                                            }
                                             onDrop={onUserDropFile}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
-                                                onChange={(e) => setFiles(e, "w")}
+                                                onChange={(e) =>
+                                                    verification.addressProof.setFiles(e, "w")
+                                                }
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -142,9 +108,9 @@ export default function StepThree({
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {files[0] ? (
+                                                {verification.addressProof.files[0] ? (
                                                     <p className="mt-30px">
-                                                        {files[0].name}{" "}
+                                                        {verification.addressProof.files[0].name}{" "}
                                                         <span className="txt-green fw-bold">
                                                             selected
                                                         </span>
@@ -170,15 +136,15 @@ export default function StepThree({
 
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
+                            className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                            onClick={() => verification.previousStep()}
                         >
                             back
                         </button>
                         <button
-                            disabled={files.length === 0}
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
+                            disabled={verification.addressProof.files.length === 0}
+                            className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                            onClick={() => verification.nextStep()}
                         >
                             next
                         </button>

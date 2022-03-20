@@ -184,12 +184,13 @@
             max-width: 646px;
             margin: 0 auto;
             .languageDropdown {
+                width: 120px;
                 position: absolute;
                 right: 50px;
                 top: 24px;
                 z-index: 100;
-                select {
-                    padding: 6px;
+                svg {
+                    color: black !important;
                 }
             }
             .pre-wrap {

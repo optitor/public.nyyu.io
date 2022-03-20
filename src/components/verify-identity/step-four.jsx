@@ -2,21 +2,27 @@ import React from "react"
 import { useState } from "react"
 import { VerifyIdStep4 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import { useVerification } from "./verification-context"
 
-export default function StepFour({ step, setState, address, setAddress }) {
+export default function StepFour() {
+    // Containers
+    const verification = useVerification()
     const [addressError, setAddressError] = useState(false)
+    const [loading, setLoading] = useState(true)
 
+    // Methods
     const onNextButtonClick = (e) => {
         e.preventDefault()
         let error = false
-        if (!address) {
+        if (!verification.address) {
             error = true
             setAddressError("Please fill out the address field")
         }
-        if (!error) return setState({ step: step + 1 })
+        if (!error) return verification.nextStep()
     }
+
     // Render
-    const [loading, setLoading] = useState(true)
+    verification.shuftReferencePayload?.addrStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -49,8 +55,8 @@ export default function StepFour({ step, setState, address, setAddress }) {
                             <p className="form-label mt-4">Address</p>
                             <input
                                 type="text"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
+                                value={verification.address}
+                                onChange={(e) => verification.setAddress(e.target.value)}
                                 className="form-control"
                                 placeholder="17th floor, Street name, city"
                             />
@@ -60,7 +66,7 @@ export default function StepFour({ step, setState, address, setAddress }) {
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
                         <button
                             className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
+                            onClick={() => verification.previousStep()}
                         >
                             back
                         </button>

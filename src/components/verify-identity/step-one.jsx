@@ -1,44 +1,26 @@
-import Select from "react-select"
 import React, { useState } from "react"
-import { countries } from "../../utilities/staticData"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
+import Select from "react-select"
 import Loading from "../common/Loading"
 
-export default function StepOne({
-    step,
-    setState,
-    country,
-    setCountry,
-    files,
-    setFiles,
-    handleDragDropEvent,
-    removeFile,
-}) {
+import { useVerification } from "./verification-context"
+import { VerificationCountriesList } from "../../utilities/countries-list"
+import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep1 } from "../../utilities/imgImport"
+import { VerificationDocumentTypes } from "../../utilities/staticData"
+
+export default function StepOne() {
     // Containers
-    const docTypes = [
-        {
-            label: "Passports",
-            value: "passport",
-        },
-        {
-            label: "National Identification Cards",
-            value: "id_card",
-        },
-        {
-            label: "Driving License",
-            value: "driver_license",
-        },
-    ]
-    const [docType, setDocType] = useState(docTypes[0])
+    const verification = useVerification()
+    const [loading, setLoading] = useState(true)
+    const [docType, setDocType] = useState(VerificationDocumentTypes[0])
 
     // Methods
     const onUserDropFile = (e) => {
-        handleDragDropEvent(e)
-        setFiles(e, "w")
+        verification.documentProof.handleDragDropEvent(e)
+        verification.documentProof.setFiles(e, "w")
     }
 
     // Render
-    const [loading, setLoading] = useState(true)
+    verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -63,34 +45,34 @@ export default function StepOne({
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>
                             <Select
-                                options={docTypes}
+                                options={VerificationDocumentTypes}
                                 value={docType}
                                 onChange={(v) => setDocType(v)}
                                 placeholder="Document type"
                             />
                             <p className="form-label mt-4">Country issuing</p>
                             <Select
-                                options={countries}
-                                value={country}
-                                onChange={(v) => setCountry(v)}
+                                options={VerificationCountriesList}
+                                value={verification.country}
+                                onChange={(v) => verification.setCountry(v)}
                                 placeholder="Choose country"
                             />
                             <div className="requirements">
                                 <p className="fs-14px">Photo requirements:</p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>Upload entire document clearly</div>
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>Don`t fold the document</div>
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>No image from another image or device</div>
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
+                                    <div className="small-white-dot"/>
                                     <div>No paper-base document</div>
                                 </p>
                             </div>
@@ -102,15 +84,21 @@ export default function StepOne({
                                         <label
                                             htmlFor="file-upload-input"
                                             className="file-upload cursor-pointer"
-                                            onDragEnter={handleDragDropEvent}
-                                            onDragOver={handleDragDropEvent}
+                                            onDragEnter={
+                                                verification.documentProof.handleDragDropEvent
+                                            }
+                                            onDragOver={
+                                                verification.documentProof.handleDragDropEvent
+                                            }
                                             onDrop={onUserDropFile}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
-                                                onChange={(e) => setFiles(e, "w")}
+                                                onChange={(e) =>
+                                                    verification.documentProof.setFiles(e, "w")
+                                                }
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -120,9 +108,9 @@ export default function StepOne({
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {files[0] ? (
+                                                {verification.documentProof.files[0] ? (
                                                     <p className="mt-30px">
-                                                        {files[0].name}{" "}
+                                                        {verification.documentProof.files[0].name}{" "}
                                                         <span className="txt-green fw-normal">
                                                             selected
                                                         </span>
@@ -146,20 +134,22 @@ export default function StepOne({
                         </div>
                     </div>
 
-                    <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
-                        <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => setState({ step: step - 1 })}
-                        >
-                            back
-                        </button>
-                        <button
-                            disabled={files.length === 0}
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={() => setState({ step: step + 1 })}
-                        >
-                            next
-                        </button>
+                    <div className="my-5 ">
+                        <div className="d-flex justify-content-center gap-3 col-md-12">
+                            <button
+                                className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
+                                onClick={() => verification.previousStep()}
+                            >
+                                back
+                            </button>
+                            <button
+                                disabled={verification.documentProof.files.length === 0}
+                                className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
+                                onClick={() => verification.nextStep()}
+                            >
+                                next
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

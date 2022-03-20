@@ -10,12 +10,8 @@ import TextField from "@mui/material/TextField"
 import { Trees } from "../../utilities/imgImport"
 import { ROUTES } from "../../utilities/routes"
 import PrivacyPolicy from "../verify-identity/privacy-policy"
-import languageDropdown from "react-lang-dropdown"
 import languages from "../../assets/lang/languages.json"
-
-const content = `
-I declare that i am at least 16 years of age; I agree to the collection, processing or storage of my personal information, including biometic data, by NDB for the purpose(s) of identiy verification; that the information I provide is true and accurate to the best of my knowledge; and I shall be fully responsible in case I provide wrong information or any of the documents I use are fake, forged, counterfeit etc.
-`
+import SelectLang from "../verify-identity/select-lang"
 
 const Verifier = ({ isFirst }) => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -83,7 +79,8 @@ const Verifier = ({ isFirst }) => {
 }
 
 const VerifyCompany = () => {
-    const [language, LanguageDropdown] = languageDropdown.useDropdown(languages)
+    const [langKey, setLangKey] = useState("en")
+    const language = languages[langKey]
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         step: -1,
         file: null,
@@ -108,7 +105,9 @@ const VerifyCompany = () => {
             <section>
                 <div className="container verify-company_container">
                     <div className="header">
-                        <h4 className="text-center mt-2 mb-4">{language.content.verify_company}</h4>
+                        <h4 className="text-center mt-2 mb-4">
+                            {language?.content?.verify_company}
+                        </h4>
                         {step !== -1 && step <= 2 && (
                             <div className="d-flex mt-4">
                                 <div className="step-bar">
@@ -128,15 +127,20 @@ const VerifyCompany = () => {
                     </div>
                     {step === -1 && (
                         <div className="verify-step0">
-                            <LanguageDropdown />
+                            <SelectLang
+                                className="languageDropdown"
+                                languages={languages}
+                                langKey={langKey}
+                                onLangChange={(res) => setLangKey(res.value)}
+                            />
                             <p className="pre-wrap">
-                                <b>{language.content?.subtitle}</b>
-                                {language.content?.content}
+                                <b>{language?.content?.subtitle}</b>
+                                {language?.content?.content}
                             </p>
                             <PrivacyPolicy
                                 agree={agree}
                                 setAgree={(res) => setAgree(res)}
-                                lang={language.content}
+                                lang={language?.content}
                             />
                         </div>
                     )}

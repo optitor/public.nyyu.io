@@ -1,67 +1,88 @@
-import React, { useState, useEffect } from "react"
-import { useQuery, useMutation } from "@apollo/client"
-import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification"
-import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification"
-import CustomSpinner from "../common/custom-spinner"
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import Pagination from "react-js-pagination";
+
+import CustomSpinner from "../common/custom-spinner";
+import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification";
+import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification";
+import { SET_NOTIFICATION_READ_FLAG_ALL } from "../../apollo/graghqls/mutations/Notification";
 
 export default function NotificationRecent() {
-    const [loadingSection, setLoadingSection] = useState(true)
-    const [last, setLast] = useState(null)
+    // Containers
+    // -- States
+    const [loadingSection, setLoadingSection] = useState(true);
+    const [activePage, setActivePage] = useState(1);
+    const [NTList, setNTList] = useState([]);
+    const itemsCountPerPage = 10;
 
-    const [NTList, setNTList] = useState([])
-
-    const { data: ntf_list, loading } = useQuery(GET_NOTIFICATIONS, {
+    // -- Hooks
+    const { data: ntf_list } = useQuery(GET_NOTIFICATIONS, {
         onCompleted: () => setLoadingSection(false),
         fetchPolicy: "network-only",
-    })
+    });
 
-    const tempList = ntf_list?.getNotifications
+    const tempList = ntf_list?.getNotifications;
 
     useEffect(() => {
-        if (!tempList) return
-        setNTList((d) => [...d, ...tempList])
-    }, [tempList])
-
-    const loadMore = () => {
-        if (tempList.length > 0) setLast(tempList ? NTList.slice(-1)[0] : null)
-    }
+        if (!tempList) return;
+        setNTList((d) => [...d, ...tempList]);
+    }, [tempList]);
 
     const [setNotificationReadFlag] = useMutation(SET_NOTIFICATION_READ_FLAG, {
         onCompleted: (data) => {
-            let ids = [...NTList]
+            let ids = [...NTList];
             let index = ids.findIndex(
                 (el) => el.timeStamp === data.setNotificationReadFlag.timeStamp
-            )
-            ids[index] = { ...ids[index], pending: false, read: true }
-            setNTList(ids)
+            );
+            ids[index] = { ...ids[index], pending: false, read: true };
+            setNTList(ids);
         },
-    })
+    });
+
+    function setSingleNotificationRead(item, index, arr) {
+        arr[index] = { ...arr[index], pending: false, read: true };
+        console.log(arr[index].timeStamp);
+    }
+
+    const [setNotificationReadFlagAll] = useMutation(
+        SET_NOTIFICATION_READ_FLAG_ALL,
+        {
+            onCompleted: () => {
+                let ids = [...NTList];
+                ids.forEach(setSingleNotificationRead);
+                setNTList(ids);
+            },
+        }
+    );
 
     const setRead = (item) => {
-        if (item.read) return
-        let ids = [...NTList]
-        let index = ids.findIndex((el) => el.timeStamp === item.timeStamp)
-        ids[index] = { ...ids[index], pending: true }
-        setNTList(ids)
-        console.log(item)
+        if (item.read) return;
+        let ids = [...NTList];
+        let index = ids.findIndex((el) => el.timeStamp === item.timeStamp);
+        ids[index] = { ...ids[index], pending: true };
+        setNTList(ids);
+        console.log(item);
         setNotificationReadFlag({
             variables: {
                 id: item.id,
             },
-        })
-    }
+        });
+    };
     if (loadingSection)
         return (
             <div className="d-flex justify-content-center mt-5">
                 <CustomSpinner />
             </div>
-        )
+        );
     else
         return (
             <>
                 <div className="recent-notification-wrapper pe-3">
-                    {NTList.length ? (
-                        NTList.map((item, idx) => (
+                    {NTList.length &&
+                        NTList.slice(
+                            (activePage - 1) * itemsCountPerPage,
+                            activePage * itemsCountPerPage
+                        ).map((item, idx) => (
                             <div
                                 className="recent-item"
                                 key={idx}
@@ -78,29 +99,41 @@ export default function NotificationRecent() {
                                             ? "deactive"
                                             : "active"
                                     }`}
-                                ></div>
+                                />
                                 <p>{item?.msg}</p>
                             </div>
-                        ))
-                    ) : (
+                        ))}
+                    {!NTList.length && (
                         <div className="text-light fw-500 text-center text-uppercase py-3">
                             no notification yet
                         </div>
                     )}
                 </div>
-                {/* {NTList.length && (
-                    <div className="w-100 d-flex flex-column align-items-center justify-content-center py-2">
-                        <button
-                            className="btn-primary d-flex align-items-center justify-content-center py-2"
-                            onClick={(e) => loadMore()}
-                        >
-                            <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
-                                <CustomSpinner />
+                <div className="row">
+                    <div className="col-9">
+                        {NTList.length && (
+                            <div>
+                                <Pagination
+                                    activePage={activePage}
+                                    itemsCountPerPage={itemsCountPerPage}
+                                    totalItemsCount={NTList.length}
+                                    pageRangeDisplayed={5}
+                                    onChange={(pageNumber) =>
+                                        setActivePage(pageNumber)
+                                    }
+                                />
                             </div>
-                            <div className={`${loading ? "ms-3" : "pe-4"}`}>Load More</div>
+                        )}
+                    </div>
+                    <div className="col-3 justify-content-center align-items-end text-end mt-3">
+                        <button
+                            onClick={setNotificationReadFlagAll}
+                            className="btn text-white text-decoration-underline fs-6"
+                        >
+                            Mark as all read
                         </button>
                     </div>
-                )} */}
+                </div>
             </>
-        )
+        );
 }

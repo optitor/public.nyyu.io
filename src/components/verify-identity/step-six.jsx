@@ -1,30 +1,26 @@
-import React, { useRef, useState } from "react"
 import Webcam from "react-webcam"
-import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
+import React, { useRef, useState } from "react"
 import CustomSpinner from "../common/custom-spinner"
+import { useVerification } from "./verification-context"
+import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
 
-export default function StepSix({
-    step,
-    setState,
-    selfieImage,
-    setSelfieImage,
-    submitKYCData,
-    submitting,
-}) {
+export default function StepSix() {
     // Containers
+    const verification = useVerification()
     const webcamRef = useRef(null)
+    const [loading, setLoading] = useState(true)
     const [openWebcam, setOpenWebcam] = useState(false)
 
     // Methods
     const capture = () => {
         const fooImage = webcamRef.current.getScreenshot()
-        setSelfieImage(fooImage)
+        verification.faceProof.setSelfieImage(fooImage)
         return setOpenWebcam(false)
     }
-    // Render
-    const [loading, setLoading] = useState(true)
 
+    // Render
+    verification.shuftReferencePayload?.selfieStatus === true && verification.nextStep()
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
@@ -67,16 +63,20 @@ export default function StepSix({
                         ) : (
                             <img
                                 className="selfie-img mt-4"
-                                src={selfieImage ? selfieImage : SelfieImg}
+                                src={
+                                    verification.faceProof.selfieImage
+                                        ? verification.faceProof.selfieImage
+                                        : SelfieImg
+                                }
                                 alt="seflie"
                             />
                         )}
                     </div>
                     <div className="d-flex justify-content-center gap-2 mt-5 col-md-12">
-                        {!selfieImage && (
+                        {!verification.faceProof.selfieImage && (
                             <button
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={() => setState({ step: step - 1 })}
+                                onClick={() => verification.previousStep()}
                             >
                                 back
                             </button>
@@ -93,24 +93,24 @@ export default function StepSix({
                                 className="btn btn-success rounded-0 px-3 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                                 onClick={() => {
                                     setOpenWebcam(true)
-                                    setSelfieImage(null)
+                                    verification.faceProof.setSelfieImage(null)
                                 }}
                             >
-                                {selfieImage ? "retake" : "open camera"}
+                                {verification.faceProof.selfieImage ? "retake" : "open camera"}
                             </button>
                         )}
-                        {selfieImage && !openWebcam && (
+                        {verification.faceProof.selfieImage && !openWebcam && (
                             <button
-                                disabled={submitting}
+                                disabled={verification.submitting}
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={submitKYCData}
+                                onClick={() => verification.nextStep()}
                             >
-                                {submitting ? (
+                                {verification.submitting ? (
                                     <div className="mt-3px">
                                         <CustomSpinner />
                                     </div>
                                 ) : (
-                                    "compete"
+                                    "next"
                                 )}
                             </button>
                         )}

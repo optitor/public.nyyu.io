@@ -27,3 +27,15 @@ export const DELETE_TOKEN = gql`
         )
     }
 `;
+
+export const UPDATE_SYMBOL = gql`
+    mutation UpdateSymbol(
+        $id: Int
+        $symbol: String
+    ) {
+        updateSymbol(
+            id: $id
+            symbol: $symbol
+        )
+    }
+`;

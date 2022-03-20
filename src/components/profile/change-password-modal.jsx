@@ -1,14 +1,15 @@
 import React, { useState } from "react"
-import { FormInput } from "../common/FormControl"
 import Modal from "react-modal"
+
+import { FormInput } from "../common/FormControl"
+import { useChangePassword } from "../../apollo/model/auth"
+import CustomSpinner from "../common/custom-spinner"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 import { CloseIcon } from "../../utilities/imgImport"
 import { passwordValidatorOptions } from "../../utilities/staticData"
-import { useChangePassword } from "../../apollo/model/auth"
 import validator from "validator"
-import CustomSpinner from "../common/custom-spinner"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import PasswordEyeIcon from "../common/password-eye-icon"
 
 export default function ProfileChangePasswordModal({
     isPasswordModalOpen,
@@ -21,18 +22,21 @@ export default function ProfileChangePasswordModal({
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
     const [changePasswordMutation, changePasswordResults] = useChangePassword()
     const pending = changePasswordResults.loading
-    const webserviceError = changePasswordResults?.data?.changePassword === "Failed"
-    const successfullRequest = changePasswordResults?.data?.changePassword === "Success"
-
+    const webserviceError =
+        changePasswordResults?.data?.changePassword === "Failed"
+    const successfullRequest =
+        changePasswordResults?.data?.changePassword === "Success"
     const [passwordVisible, setPasswordVisible] = useState(false)
-    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
     // Methods
     const changeUserPassword = (e) => {
         e.preventDefault()
         setPasswordError("")
         setConfirmPasswordError("")
         let error = false
-        if (!password || !validator.isStrongPassword(password, passwordValidatorOptions)) {
+        if (
+            !password ||
+            !validator.isStrongPassword(password, passwordValidatorOptions)
+        ) {
             setPasswordError(
                 "Password must contain at least 8 characters, including UPPER/lowercase and numbers!"
             )
@@ -40,7 +44,10 @@ export default function ProfileChangePasswordModal({
         }
         if (
             !confirmPassword ||
-            !validator.isStrongPassword(confirmPassword, passwordValidatorOptions)
+            !validator.isStrongPassword(
+                confirmPassword,
+                passwordValidatorOptions
+            )
         ) {
             setConfirmPasswordError(
                 "Password must contain at least 8 characters, including UPPER/lowercase and numbers!"
@@ -68,7 +75,12 @@ export default function ProfileChangePasswordModal({
                     role="button"
                     tabIndex="0"
                 >
-                    <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                    <img
+                        width="14px"
+                        height="14px"
+                        src={CloseIcon}
+                        alt="close"
+                    />
                 </div>
             </div>
             <form className="form">
@@ -81,42 +93,41 @@ export default function ProfileChangePasswordModal({
                         onChange={(e) => setPassword(e.target.value)}
                         error={passwordError}
                     />
-                    <PasswordEyeIcon
-                        styles={{
-                            top: "40px",
-                        }}
-                        passwordVisible={passwordVisible}
-                        setPasswordVisible={setPasswordVisible}
-                    />
                 </div>
                 <div className="form-group position-relative">
                     <FormInput
-                        type={confirmPasswordVisible ? "text" : "password"}
+                        type={passwordVisible ? "text" : "password"}
                         label="Confirm New Password"
                         value={confirmPassword}
                         placeholder="Re-enter password"
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         error={confirmPasswordError}
                     />
-                    <PasswordEyeIcon
-                        styles={{
-                            top: "40px",
-                        }}
-                        passwordVisible={confirmPasswordVisible}
-                        setPasswordVisible={setConfirmPasswordVisible}
-                    />
+                </div>
+                <div>
+                    <label className="d-flex align-items-center gap-2">
+                        <input
+                            type="checkbox"
+                            value={passwordVisible}
+                            className="form-check-input p-0 m-0"
+                            onChange={() => setPasswordVisible(!passwordVisible)}
+                        />
+                        <div className="keep-me-signed-in-text">
+                            Show password
+                        </div>
+                    </label>
                 </div>
                 <div className="pwd-modal__footer mt-4">
                     {webserviceError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> Something went wrong,
-                            Please try again!
+                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            Something went wrong, Please try again!
                         </span>
                     )}
                     {successfullRequest && (
                         <div className="txt-green text-left">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> Password changed
-                            successfully!
+                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            Password changed successfully!
                         </div>
                     )}
                     <button
@@ -124,10 +135,14 @@ export default function ProfileChangePasswordModal({
                         disabled={pending}
                         onClick={changeUserPassword}
                     >
-                        <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
+                        <div
+                            className={`${pending ? "opacity-1" : "opacity-0"}`}
+                        >
                             <CustomSpinner />
                         </div>
-                        <div className={`${pending ? "ms-3" : "pe-4"}`}>save</div>
+                        <div className={`${pending ? "ms-3" : "pe-4"}`}>
+                            save
+                        </div>
                     </button>
                     <button
                         className="btn-cancel pointer-cursor mx-auto mt-3"
