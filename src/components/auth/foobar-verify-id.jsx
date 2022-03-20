@@ -16,7 +16,7 @@ const VerificationPage = () => {
     // Containers
     const [reference, setReference] = useState(null)
     const [KYCPageUrl, setKYCPageUrl] = useState(null)
-    const callbackUrl = `${API_BASE_URL}/shufti`
+    const callbackUrl = API_BASE_URL + '/shufti'
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
     // Production
@@ -26,7 +26,7 @@ const VerificationPage = () => {
     //     "$2y$10$vPNtAL2q8rRxhWU4fNKQDeLv09AhIQfd9zRFsmXF6AkL.sWkPpTj2"
 
     // Test
-    const redirectUrl = `${SITE_URL}/app/profile`
+    const redirectUrl = SITE_URL + 'app/profile'
     // const redirectUrl = "http://localhost:8000/app/profile/"
     const clientId =
         "sWPA9CtQUI09MRpvQtxCPKK1hN6CU8qqngge3jHjAYptWsm9Ab1643819657"

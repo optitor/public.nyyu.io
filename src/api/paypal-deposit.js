@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 import { API_BASE_URL } from '../utilities/staticData';
 
 export default async function handler(req, res) {
-    const url = `${API_BASE_URL}/graphql`;
+    const url = API_BASE_URL + '/graphql';
     const headers = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.CLIENT_TOKEN}`,

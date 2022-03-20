@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { device } from '../../utilities/device';
+import { SadFace } from '../../utilities/imgImport';
 
 const InformBannedModal = ({isModalOpen, setIsModalOpen}) => {
     const closeModal = () => {
@@ -30,8 +31,13 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen}) => {
             </div>
             <InformBanned>
                 <div className='text-center mb-3'>
-                    <h4>Sorry</h4>
-                    <p>Your country is banned from our services.</p>
+                    <img src={SadFace} />
+                    <h4>We are sorry!</h4>
+                    <p>It seems your country is not in our records.</p>
+                    <p className='mt-5 description'>
+                        For more information about our services please visit
+                        <a target='_blank' href='https://ndb.technology' className='ms-2 text-green text-underline'>ndb.technology</a>
+                    </p>
                 </div>
             </InformBanned>
         </Modal>
@@ -41,13 +47,14 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen}) => {
 export default InformBannedModal;
 
 const InformBanned = styled.div`
-    margin-top: 20px;
+    img {
+        width: 150px;
+    }
     p {
         font-size: 18px;
         font-weight: 600;
         &.description {
             font-size: 14px;
-            font-weight: 400;
         }
     }
     button.btn {

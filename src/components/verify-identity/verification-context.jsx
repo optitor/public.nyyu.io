@@ -40,9 +40,9 @@ const VerificationProvider = ({ children }) => {
     const secret = SECRET
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
-    const callbackUrl = `${API_BASE_URL}/shufti`
+    const callbackUrl = API_BASE_URL + '/shufti'
     // const redirectUrl = "http://localhost:8000/app/profile/"
-    const redirectUrl = `${SITE_URL}/app/profile`
+    const redirectUrl = SITE_URL + '/app/profile'
 
     // Methods
     const nextStep = () => {
