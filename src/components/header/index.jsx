@@ -52,10 +52,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             console.log("received Mutation data", err);
         },
     });
-<<<<<<< HEAD
-
-=======
->>>>>>> 69f7c754a4cef6f7781645a4c8326dc95d938353
 
     // Containers
     const auth = useAuth();
