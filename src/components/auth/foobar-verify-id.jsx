@@ -3,6 +3,7 @@ import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
 import Loading from "../common/Loading"
+import { API_BASE_URL } from "../../utilities/statciData3"
 
 const VerificationPage = () => {
     // WebService
@@ -15,7 +16,7 @@ const VerificationPage = () => {
     // Containers
     const [reference, setReference] = useState(null)
     const [KYCPageUrl, setKYCPageUrl] = useState(null)
-    const callbackUrl = "https://api.ndb.money/shufti"
+    const callbackUrl = `${API_BASE_URL}/shufti`
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
     // Production
