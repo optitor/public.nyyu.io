@@ -51,11 +51,6 @@ const payment_types = [
 
 const Payment = () => {
 
-    // try to get token from request
-    const [orderId, setOrderId] = useQueryParam("token", StringParam);
-    console.log("--------------- from params", orderId);
-    console.log("--------------- from localStorage", localStorage.getItem("ACCESS_TOKEN"));
-
     const currentRound = useSelector((state) => state?.placeBid.round_id);
     const bidAmount = useSelector((state) => state?.placeBid.bid_amount);
     const [totalRounds, setTotalRounds] = useState(null);
@@ -151,7 +146,7 @@ const Payment = () => {
         captureOrderForAuction({ variables: { orderId: token } });
     }
 
-    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') != undefined && !orderCaptured && !paypalIsCheckingOut) {
+    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') !== undefined && !orderCaptured && !paypalIsCheckingOut) {
         orderCaptured = true;
         let possibleToken = localStorage.getItem('PayPalForAuctionToken');
         captureOrderForAuction({ variables: { orderId: possibleToken } });
