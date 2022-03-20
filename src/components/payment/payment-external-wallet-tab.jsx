@@ -34,6 +34,7 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
     const [paymentId, setPaymentId] = useState(null)
     const [pending, setPending] = useState(false)
     const [startedTransaction, setStartedTransaction] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
@@ -68,6 +69,17 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
         if (isNaN(txnFee)) return null
         return txnFee.toFixed(4)
     }, [allFees, bidAmount, user])
+
+    useEffect(() => {
+        if (connectError) {
+            setErrorMessage("Failed to Connect, try again.")
+            setTimeout(() => setErrorMessage(""), 5000)
+        }
+        if (transactionError) {
+            setErrorMessage("Failed for Transaction, try again.")
+            setTimeout(() => setErrorMessage(""), 5000)
+        }
+    }, [connectError, transactionError])
 
     useEffect(() => {
         if (fooCoins && balanceInfo) {
@@ -228,8 +240,7 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
             </div>
         </>
         <div className="py-2" style={{ color: connectError || transactionError ? "#E8503A" : "#23C865" }}>
-            {connectError && (connectError?.message ?? "Failed to connect")}
-            {transactionError && transactionError.message ? "Failed for transaction. Try again." : ""}
+            {errorMessage}
         </div>
         <div className="mt-1 d-flex justify-content-between">
             <div className="d-flex flex-row text-white">
