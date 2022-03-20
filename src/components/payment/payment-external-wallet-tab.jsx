@@ -19,6 +19,7 @@ import { QUOTE, TICKER_24hr, TRUST_URL } from "./data"
 import * as Mutation from "../../apollo/graghqls/mutations/Payment"
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT, wallets } from "../../utilities/staticData"
 import { SUPPORTED_COINS } from "../../utilities/staticData2"
+import { ROUTES as Routes } from "../../utilities/routes"
 
 export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
     const dispatch = useDispatch()
@@ -32,6 +33,7 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
     const [coinQuantity, setCoinQuantity] = useState(0)
     const [paymentId, setPaymentId] = useState(null)
     const [pending, setPending] = useState(false)
+    const [startedTransaction, setStartedTransaction] = useState(false)
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
@@ -51,7 +53,7 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
         addressOrName: accountInfo?.address
     })
 
-    const [{ data: transactionInfo, error: transactionError }, sendTransaction] = useTransaction({
+    const [{ data: transactionInfo, error: transactionError, loading: transactionLoading }, sendTransaction] = useTransaction({
         request: {
             to: depositAddress,
             value: coinQuantity ? ethers.utils.parseEther(coinQuantity.toString()) : null
@@ -83,6 +85,12 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
             setBTCPrice(BTCPriceData.lastPrice)
         })()
     }, [])
+
+    useEffect(() => {
+        if (startedTransaction && !transactionLoading && !transactionError) {
+            navigate(Routes.auction)
+        }
+    }, [startedTransaction, transactionLoading, transactionError])
 
     //Get the Exchange rate of various coins
     useQuery(Query.GET_EXCHANGE_RATE, {
@@ -162,6 +170,7 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
     }
 
     const handleTransaction = () => {
+        setStartedTransaction(true)
         sendTransaction()
     }
 
