@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react"
 import { VerificationCountriesList } from "../../utilities/countries-list"
 import { CLIENT_ID, SECRET } from "../../utilities/staticData"
 import { getCurrentDate } from "../../utilities/utility-methods"
+import { API_BASE_URL } from "../../utilities/staticData"
 
 export const VerificationContext = React.createContext()
 
@@ -39,9 +40,9 @@ const VerificationProvider = ({ children }) => {
     const secret = SECRET
     const shuftiProBaseUrl = "https://api.shuftipro.com"
 
-    const callbackUrl = "https://api.ndb.money/shufti"
-    const redirectUrl = "http://localhost:8000/app/profile/"
-    // const redirectUrl = "https://saledev.ndb.money/app/profile"
+    const callbackUrl = `${API_BASE_URL}/shufti`
+    // const redirectUrl = "http://localhost:8000/app/profile/"
+    const redirectUrl = `${SITE_URL}/app/profile`
 
     // Methods
     const nextStep = () => {
