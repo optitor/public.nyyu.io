@@ -1,6 +1,6 @@
-import React from "react"
-import { Link } from "gatsby"
-import { Logo } from "../../utilities/imgImport"
+import React from "react";
+import { Link } from "gatsby";
+import { Logo } from "../../utilities/imgImport";
 
 const SimpleHeader = () => {
     return (
@@ -14,6 +14,6 @@ const SimpleHeader = () => {
             </div>
         </nav>
     )
-}
+};
 
-export default SimpleHeader
+export default SimpleHeader;
