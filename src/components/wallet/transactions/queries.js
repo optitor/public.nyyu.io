@@ -134,3 +134,22 @@ export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
         }
     }
 `;
+
+export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
+    query {
+        getBankDepositTxnsByUser {
+            id
+            userId
+            uid
+            createdAt
+            confirmedAt
+            status
+            fiatType
+            usdAmount
+            cryptoType
+            cryptoPrice
+            fee
+            deposited
+        }
+    }
+`;

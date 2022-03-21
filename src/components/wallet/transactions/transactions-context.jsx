@@ -9,6 +9,7 @@ import {
     GET_STRIPE_DEPOSIT_TX_BY_USER,
     GET_PAYPAL_WITHDRAW_TRANSACTIONS,
     GET_CRYPTO_WITHDRAW_BY_USER,
+    GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER,
 } from "./queries";
 
 export const TransactionsContext = React.createContext();
@@ -54,15 +55,17 @@ const TransactionsProvider = ({ children }) => {
 
     const [stripeDepositTransactions, setStripeDepositTransactions] =
         useState(null);
+    const [bankDepositTransactions, setBankDepositTransactions] =
+        useState(null);
     const [bidList, setBidList] = useState(null);
     const [presaleList, setPresaleList] = useState(null);
-    const [allFees, setAllFees] = useState(null);
     const loading = !(
         paypalDepositTransactions &&
         paypalWithdrawTransactions &&
         coinDepositTransactions &&
         coinWithdrawTransactions &&
         stripeDepositTransactions &&
+        bankDepositTransactions &&
         bidList &&
         presaleList
     );
@@ -161,9 +164,26 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
-    useQuery(GET_ALL_FEES, {
+    useQuery(GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER, {
         onCompleted: (data) => {
-            setAllFees(data.allFees);
+            const fooList = data.getBankDepositTxnsByUser
+                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+                .map((item) => {
+                    const createdTime = new Date(item.createdAt);
+
+                    return {
+                        id: item.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item.fee,
+                        status: item.status,
+                        amount: item.deposited,
+                        type: "Bank Deposit",
+                        paymentId: "---",
+                        asset: item.cryptoType,
+                    };
+                });
+            setBankDepositTransactions(fooList);
         },
         onError: (error) => console.log(error),
     });
@@ -268,9 +288,9 @@ const TransactionsProvider = ({ children }) => {
         coinWithdrawTransactions,
         stripeDepositTransactions,
         paypalWithdrawTransactions,
+        bankDepositTransactions,
         bidList,
         presaleList,
-        allFees,
 
         currentTab,
         setCurrentTab,
