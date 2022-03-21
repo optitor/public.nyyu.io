@@ -7,6 +7,7 @@ import {
 } from "../../../utilities/imgImport";
 import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
+import Pagination from "react-js-pagination";
 
 const depositOptions = [
     { value: "paypal", label: "Paypal" },
@@ -31,6 +32,8 @@ export default function DepositTable() {
     const [currentDepositType, setCurrentDepositType] = useState(
         depositOptions[0]
     );
+    const [activePage, setActivePage] = useState(1);
+    const itemsCountPerPage = 5;
 
     // Methods
     const toggleDetails = (index) => {
@@ -75,6 +78,7 @@ export default function DepositTable() {
     };
 
     const changeDepositType = (type) => {
+        setActivePage(1);
         setCurrentDepositType(type);
         if (type.value === "paypal") setList(paypalDepositTransactions);
         if (type.value === "crypto") setList(coinDepositTransactions);
@@ -120,172 +124,186 @@ export default function DepositTable() {
                         </th>
                     </tr>
                 )}
-                {list?.map(
-                    ({
-                        id,
-                        date,
-                        time,
-                        amount,
-                        asset,
-                        fee,
-                        status,
-                        type,
-                        paymentId,
-                    }) => (
-                        <>
-                            <tr
-                                className="border-bottom-2-dark-gray cursor-pointer"
-                                onClick={() => toggleDetails(id)}
-                            >
-                                <td className="text-light pe-5 pe-sm-0 fw-light">
-                                    <div className="fs-16px">{date}</div>
-                                    <div className="text-secondary fs-12px mt-1 fw-500">
-                                        {time}
-                                    </div>
-                                </td>
-                                <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                                    <div className="text-sm-end fs-16px">
-                                        {amount + "" + asset}
-                                    </div>
-                                </td>
-                                <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
-                                    {fee + " " + asset}
-                                </td>
-                                <td className="d-flex align-items-center justify-content-end">
-                                    <div
-                                        className={`${
-                                            status
-                                                ? "green-bullet"
-                                                : "red-bullet"
-                                        } me-2`}
-                                    ></div>
-                                    <div>{status ? "Completed" : "Failed"}</div>
-                                    <button className="btn text-light border-0">
-                                        {currentRowsOpen.includes(id) ? (
-                                            <img
-                                                src={AccordionUpIcon}
-                                                className="icon-sm ms-2 cursor-pointer"
-                                                alt="Down arrow icon"
-                                            />
-                                        ) : (
-                                            <img
-                                                src={AccordionDownIcon}
-                                                className="icon-sm ms-2 cursor-pointer"
-                                                alt="Down arrow icon"
-                                            />
-                                        )}
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr
-                                className="text-light d-none px-5"
-                                id={`transaction-details-${id}`}
-                            >
-                                <td colSpan={tabs.length}>
-                                    <div className="d-flex align-items-start justify-content-between">
-                                        <div className="text-capitalize fs-12px">
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    type:
-                                                </span>
-                                                <span className="fw-500">
-                                                    {type}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    amount:
-                                                </span>
-                                                <span className="fw-500">
-                                                    {amount + " " + asset}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    fee:
-                                                </span>
-                                                <span className="fw-500">
-                                                    {fee + " " + asset}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    date:
-                                                </span>
-                                                <span className="fw-500">
-                                                    {date + " " + time}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    asset:
-                                                </span>
-                                                <span className="fw-500">
-                                                    {asset}
-                                                </span>
-                                            </div>
+                {list
+                    ?.slice(
+                        (activePage - 1) * itemsCountPerPage,
+                        activePage * itemsCountPerPage
+                    )
+                    ?.map(
+                        ({
+                            id,
+                            date,
+                            time,
+                            amount,
+                            asset,
+                            fee,
+                            status,
+                            type,
+                            paymentId,
+                        }) => (
+                            <>
+                                <tr
+                                    className="border-bottom-2-dark-gray cursor-pointer"
+                                    onClick={() => toggleDetails(id)}
+                                >
+                                    <td className="text-light pe-5 pe-sm-0 fw-light">
+                                        <div className="fs-16px">{date}</div>
+                                        <div className="text-secondary fs-12px mt-1 fw-500">
+                                            {time}
                                         </div>
-                                        <div className="text-capitalize fs-12px">
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    Payment-ID:
-                                                </span>
-                                                <span className="fw-500">
-                                                    {paymentId}
-                                                </span>
-                                            </div>
-                                            {type === "Crypto Deposit" && (
+                                    </td>
+                                    <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
+                                        <div className="text-sm-end fs-16px">
+                                            {amount + "" + asset}
+                                        </div>
+                                    </td>
+                                    <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
+                                        {fee + " " + asset}
+                                    </td>
+                                    <td className="d-flex align-items-center justify-content-end">
+                                        <div
+                                            className={`${
+                                                status
+                                                    ? "green-bullet"
+                                                    : "red-bullet"
+                                            } me-2`}
+                                        ></div>
+                                        <div>
+                                            {status ? "Completed" : "Failed"}
+                                        </div>
+                                        <button className="btn text-light border-0">
+                                            {currentRowsOpen.includes(id) ? (
+                                                <img
+                                                    src={AccordionUpIcon}
+                                                    className="icon-sm ms-2 cursor-pointer"
+                                                    alt="Down arrow icon"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={AccordionDownIcon}
+                                                    className="icon-sm ms-2 cursor-pointer"
+                                                    alt="Down arrow icon"
+                                                />
+                                            )}
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr
+                                    className="text-light d-none px-5"
+                                    id={`transaction-details-${id}`}
+                                >
+                                    <td colSpan={tabs.length}>
+                                        <div className="d-flex align-items-start justify-content-between">
+                                            <div className="text-capitalize fs-12px">
                                                 <div>
                                                     <span className="text-secondary pe-1">
-                                                        Address:
+                                                        type:
                                                     </span>
                                                     <span className="fw-500">
-                                                        12hfi6sh...l6shi
+                                                        {type}
                                                     </span>
                                                 </div>
-                                            )}
-                                            <div>
-                                                <span className="text-secondary pe-1">
-                                                    Status:
-                                                </span>
-                                                <span className="fw-500">
-                                                    {status
-                                                        ? "Success"
-                                                        : "Failed"}
-                                                </span>
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        amount:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        {amount + " " + asset}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        fee:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        {fee + " " + asset}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        date:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        {date + " " + time}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        asset:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        {asset}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="fs-12px">
-                                            <button
-                                                className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                onClick={() =>
-                                                    downloadContent(
-                                                        id,
-                                                        date,
-                                                        time,
-                                                        amount,
-                                                        asset,
-                                                        fee,
-                                                        status,
-                                                        type,
-                                                        paymentId
-                                                    )
-                                                }
-                                            >
-                                                Get PDF Receipt
-                                            </button>
+                                            <div className="text-capitalize fs-12px">
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        Payment-ID:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        {paymentId}
+                                                    </span>
+                                                </div>
+                                                {type === "Crypto Deposit" && (
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            Address:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            12hfi6sh...l6shi
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        Status:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        {status
+                                                            ? "Success"
+                                                            : "Failed"}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="fs-12px">
+                                                <button
+                                                    className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
+                                                    onClick={() =>
+                                                        downloadContent(
+                                                            id,
+                                                            date,
+                                                            time,
+                                                            amount,
+                                                            asset,
+                                                            fee,
+                                                            status,
+                                                            type,
+                                                            paymentId
+                                                        )
+                                                    }
+                                                >
+                                                    Get PDF Receipt
+                                                </button>
 
-                                            <div className="text-light text-underline">
-                                                Hide this activity
+                                                <div className="text-light text-underline">
+                                                    Hide this activity
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </>
-                    )
-                )}
+                                    </td>
+                                </tr>
+                            </>
+                        )
+                    )}
             </table>
+            <Pagination
+                activePage={activePage}
+                itemsCountPerPage={itemsCountPerPage}
+                totalItemsCount={list.length}
+                pageRangeDisplayed={5}
+                onChange={(pageNumber) => setActivePage(pageNumber)}
+            />
         </div>
     );
 }
