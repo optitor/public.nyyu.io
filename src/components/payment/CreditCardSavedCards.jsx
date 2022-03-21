@@ -50,7 +50,7 @@ export default function CreditCardSavedCards({
                                 const paymentIntentId = result.paymentIntent.id;
                                 return payStripeForAuctionWithSavedCard({
                                     variables: {
-                                        cryptoType: "USDT",
+                                        roundId,
                                         amount: amount * 100,
                                         cardId: savedCards[selectedSavedCard]
                                             .id,
