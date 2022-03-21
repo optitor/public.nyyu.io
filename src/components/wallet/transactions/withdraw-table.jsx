@@ -11,7 +11,6 @@ import { useTransactions } from "./transactions-context";
 const withdrawOptions = [
     { value: "paypal", label: "Paypal" },
     { value: "crypto", label: "Crypto" },
-    { value: "credit_card", label: "Credit Card" },
 ];
 
 export default function WithdrawTable() {
