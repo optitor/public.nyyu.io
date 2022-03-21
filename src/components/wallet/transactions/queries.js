@@ -73,3 +73,24 @@ export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
         }
     }
 `;
+
+export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
+    query {
+        getStripeDepositTxByUser {
+            id
+            userId
+            amount
+            createdAt
+            confirmedAt
+            status
+            fiatType
+            fiatAmount
+            paymentIntentId
+            paymentMethodId
+            cryptoType
+            cryptoPrice
+            fee
+            deposited
+        }
+    }
+`;

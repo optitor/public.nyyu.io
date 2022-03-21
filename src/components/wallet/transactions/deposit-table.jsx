@@ -17,8 +17,12 @@ const depositOptions = [
 export default function DepositTable() {
     // Containers
     const user = useSelector((state) => state.auth.user);
-    const { tabs, paypalDepositTransactions, coinDepositTransactions } =
-        useTransactions();
+    const {
+        tabs,
+        paypalDepositTransactions,
+        coinDepositTransactions,
+        stripeDepositTransactions,
+    } = useTransactions();
 
     const [list, setList] = useState(paypalDepositTransactions);
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
@@ -72,7 +76,7 @@ export default function DepositTable() {
         setCurrentDepositType(type);
         if (type.value === "paypal") setList(paypalDepositTransactions);
         if (type.value === "crypto") setList(coinDepositTransactions);
-        if (type.value === "credit_card") setList([]);
+        if (type.value === "credit_card") setList(stripeDepositTransactions);
     };
 
     // Render

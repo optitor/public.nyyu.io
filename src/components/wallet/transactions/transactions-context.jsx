@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { data } from "jquery";
 import React, { useContext, useState } from "react";
 import { GET_ALL_FEES } from "../../../apollo/graghqls/querys/Payment";
 import {
@@ -7,6 +6,7 @@ import {
     GET_BID_LIST_BY_USER,
     GET_COINPAYMENT_DEPOSIT_TX_BY_USER,
     GET_PRESALE_ORDERS_BY_USER,
+    GET_STRIPE_DEPOSIT_TX_BY_USER,
 } from "./queries";
 
 export const TransactionsContext = React.createContext();
@@ -42,6 +42,8 @@ const TransactionsProvider = ({ children }) => {
     const [paypalDepositTransactions, setPaypalDepositTransactions] =
         useState(null);
     const [coinDepositTransactions, setCoinDepositTransactions] =
+        useState(null);
+    const [stripeDepositTransactions, setStripeDepositTransactions] =
         useState(null);
     const [bidList, setBidList] = useState(null);
     const [presaleList, setPresaleList] = useState(null);
@@ -99,6 +101,29 @@ const TransactionsProvider = ({ children }) => {
             setPaypalDepositTransactions(fooList);
         },
     });
+    useQuery(GET_STRIPE_DEPOSIT_TX_BY_USER, {
+        onCompleted: (data) => {
+            const fooList = data.getStripeDepositTxByUser
+                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+                .map((item) => {
+                    const createdTime = new Date(item.createdAt);
+
+                    return {
+                        id: item.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item.fee,
+                        status: item.status,
+                        amount: item.amount,
+                        type: "Credit Card Deposit",
+                        paymentId: item.paymentIntentId,
+                        asset: "USD",
+                    };
+                });
+            setStripeDepositTransactions(fooList);
+        },
+        onError: (error) => console.log(error),
+    });
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
             setAllFees(data.allFees);
@@ -128,6 +153,7 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
+
     useQuery(GET_BID_LIST_BY_USER, {
         onCompleted: (data) => {
             const fooList = data.getBidListByUser
@@ -178,6 +204,7 @@ const TransactionsProvider = ({ children }) => {
         // data
         paypalDepositTransactions,
         coinDepositTransactions,
+        stripeDepositTransactions,
         bidList,
         presaleList,
         allFees,
