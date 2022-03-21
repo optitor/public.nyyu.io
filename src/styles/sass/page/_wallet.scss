@@ -1198,6 +1198,7 @@ div.wallet_balances {
     }
     .css-1s2u09g-control,
     .css-1pahdxg-control {
+        font-family: "Montserrat" !important;
         width: 150px;
         background: $black;
         border: 1px solid gray;
@@ -1206,12 +1207,14 @@ div.wallet_balances {
         .css-qc6sy-singleValue {
             font-size: 14px;
             color: white;
+            font-family: "Montserrat" !important;
         }
         &:hover {
             border: 1px solid gray;
         }
     }
     .css-26l3qy-menu {
+        font-family: "Montserrat" !important;
         color: white;
         background-color: $black !important;
         font-size: 14px;
