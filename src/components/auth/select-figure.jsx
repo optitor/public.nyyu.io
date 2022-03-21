@@ -102,6 +102,7 @@ const SelectFigure = () => {
             },
         })
     }
+    
     if (loadingPage) return <Loading />
     else
         return (
