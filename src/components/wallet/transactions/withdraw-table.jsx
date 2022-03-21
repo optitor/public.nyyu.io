@@ -1,15 +1,29 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import Select from "react-select";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
-    DownArrow,
 } from "../../../utilities/imgImport";
+import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
+
+const withdrawOptions = [
+    { value: "paypal", label: "Paypal" },
+    { value: "crypto", label: "Crypto" },
+    { value: "credit_card", label: "Credit Card" },
+];
 
 export default function WithdrawTable() {
     // Containers
-    const { tabs, depositTransactions } = useTransactions();
+    const user = useSelector((state) => state.auth.user);
+    const { tabs, paypalWithdrawTransactions } = useTransactions();
+    console.log("paypal withdraw", paypalWithdrawTransactions);
+    const [list, setList] = useState(paypalWithdrawTransactions);
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
+    const [currentDepositType, setCurrentDepositType] = useState(
+        withdrawOptions[0]
+    );
 
     // Methods
     const toggleDetails = (index) => {
@@ -24,23 +38,56 @@ export default function WithdrawTable() {
         }
     };
 
+    const downloadContent = (
+        id,
+        date,
+        time,
+        amount,
+        asset,
+        fee,
+        status,
+        type,
+        paymentId
+    ) => {
+        const downloadable = window.open("", "", "");
+        downloadable.document.write(
+            receiptTemplate({
+                id,
+                date,
+                time,
+                amount,
+                asset,
+                fee,
+                status,
+                type,
+                paymentId,
+                user,
+            })
+        );
+        downloadable.print();
+    };
+
+    const changeDepositType = (type) => {
+        setCurrentDepositType(type);
+        if (type.value === "paypal") setList(paypalWithdrawTransactions);
+        if (type.value === "crypto") setList([]);
+        if (type.value === "credit_card") setList([]);
+    };
+
     // Render
     return (
         <div className="px-sm-4 px-3 table-responsive transaction-section-tables">
             <table className="wallet-transaction-table w-100">
-                <tr className="border-bottom-2-dark-gray py-3">
-                    <th scope="col">Date</th>
-                    <th scope="col" className="text-sm-end">
-                        FIAT/Crypto
-                    </th>
-                    <th scope="col" className="text-center text-sm-end">
-                        Fee
-                    </th>
-                    <th scope="col" className="text-center text-sm-end">
-                        Status
-                    </th>
-                </tr>
-                {depositTransactions?.length === 0 && (
+                <div className="mt-4">
+                    <Select
+                        isSearchable={false}
+                        options={withdrawOptions}
+                        defaultValue={withdrawOptions[0]}
+                        value={currentDepositType}
+                        onChange={changeDepositType}
+                    />
+                </div>
+                {list?.length === 0 && (
                     <tr className="py-4 text-center">
                         <td
                             colSpan={4}
@@ -50,7 +97,21 @@ export default function WithdrawTable() {
                         </td>
                     </tr>
                 )}
-                {depositTransactions?.map(
+                {list?.length && (
+                    <tr className="border-bottom-2-dark-gray pb-3 pt-1">
+                        <th scope="col">Date</th>
+                        <th scope="col" className="text-sm-end">
+                            FIAT/Crypto
+                        </th>
+                        <th scope="col" className="text-center text-sm-end">
+                            Fee
+                        </th>
+                        <th scope="col" className="text-center text-sm-end">
+                            Status
+                        </th>
+                    </tr>
+                )}
+                {list?.map(
                     ({
                         id,
                         date,
@@ -67,10 +128,7 @@ export default function WithdrawTable() {
                                 className="border-bottom-2-dark-gray cursor-pointer"
                                 onClick={() => toggleDetails(id)}
                             >
-                                <td
-                                    scope="row"
-                                    className="text-light pe-5 pe-sm-0 fw-light"
-                                >
+                                <td className="text-light pe-5 pe-sm-0 fw-light">
                                     <div className="fs-16px">{date}</div>
                                     <div className="text-secondary fs-12px mt-1 fw-500">
                                         {time}
@@ -79,10 +137,6 @@ export default function WithdrawTable() {
                                 <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
                                     <div className="text-sm-end fs-16px">
                                         {amount + "" + asset}
-                                        <br />
-                                        <div className="text-secondary fs-12px mt-1 fw-500">
-                                            121 USDT
-                                        </div>
                                     </div>
                                 </td>
                                 <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
@@ -193,9 +247,25 @@ export default function WithdrawTable() {
                                             </div>
                                         </div>
                                         <div className="fs-12px">
-                                            <div className="text-success text-decoration-success text-decoration-underline">
+                                            <button
+                                                className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
+                                                onClick={() =>
+                                                    downloadContent(
+                                                        id,
+                                                        date,
+                                                        time,
+                                                        amount,
+                                                        asset,
+                                                        fee,
+                                                        status,
+                                                        type,
+                                                        paymentId
+                                                    )
+                                                }
+                                            >
                                                 Get PDF Receipt
-                                            </div>
+                                            </button>
+
                                             <div className="text-light text-underline">
                                                 Hide this activity
                                             </div>

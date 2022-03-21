@@ -2,11 +2,12 @@ import { useQuery } from "@apollo/client";
 import React, { useContext, useState } from "react";
 import { GET_ALL_FEES } from "../../../apollo/graghqls/querys/Payment";
 import {
-    GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS,
     GET_BID_LIST_BY_USER,
     GET_COINPAYMENT_DEPOSIT_TX_BY_USER,
+    GET_PAPAL_DEPOSIT_TRANSACTIONS,
     GET_PRESALE_ORDERS_BY_USER,
     GET_STRIPE_DEPOSIT_TX_BY_USER,
+    GET_PAYPAL_WITHDRAW_TRANSACTIONS,
 } from "./queries";
 
 export const TransactionsContext = React.createContext();
@@ -41,6 +42,8 @@ const TransactionsProvider = ({ children }) => {
     const [currentTab, setCurrentTab] = useState(0);
     const [paypalDepositTransactions, setPaypalDepositTransactions] =
         useState(null);
+    const [paypalWithdrawTransactions, setPaypalWithdrawTransactions] =
+        useState(null);
     const [coinDepositTransactions, setCoinDepositTransactions] =
         useState(null);
     const [stripeDepositTransactions, setStripeDepositTransactions] =
@@ -50,7 +53,9 @@ const TransactionsProvider = ({ children }) => {
     const [allFees, setAllFees] = useState(null);
     const loading = !(
         paypalDepositTransactions &&
+        paypalWithdrawTransactions &&
         coinDepositTransactions &&
+        stripeDepositTransactions &&
         bidList &&
         presaleList
     );
@@ -78,7 +83,7 @@ const TransactionsProvider = ({ children }) => {
     };
 
     // Webserver
-    useQuery(GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS, {
+    useQuery(GET_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
             const fooList = data.getPaypalDepositTxnsByUser
                 .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
@@ -100,6 +105,30 @@ const TransactionsProvider = ({ children }) => {
 
             setPaypalDepositTransactions(fooList);
         },
+    });
+    useQuery(GET_PAYPAL_WITHDRAW_TRANSACTIONS, {
+        onCompleted: (data) => {
+            const fooList = data.getPaypalWithdrawByUser
+                .sort((tx1, tx2) => tx2.confirmedAt - tx1.confirmedAt)
+                .map((item) => {
+                    const createdTime = new Date(item.confirmedAt);
+
+                    return {
+                        id: item.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item.fee,
+                        status: item.status,
+                        amount: item.withdrawAmount,
+                        type: "Paypal Withdraw",
+                        paymentId: item.senderBatchId,
+                        asset: item.targetCurrency,
+                    };
+                });
+
+            setPaypalWithdrawTransactions(fooList);
+        },
+        onError: (error) => console.log(error),
     });
     useQuery(GET_STRIPE_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
@@ -205,6 +234,7 @@ const TransactionsProvider = ({ children }) => {
         paypalDepositTransactions,
         coinDepositTransactions,
         stripeDepositTransactions,
+        paypalWithdrawTransactions,
         bidList,
         presaleList,
         allFees,

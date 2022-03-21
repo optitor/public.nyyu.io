@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS = gql`
+export const GET_PAPAL_DEPOSIT_TRANSACTIONS = gql`
     query {
         getPaypalDepositTxnsByUser {
             id
@@ -16,6 +16,27 @@ export const GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS = gql`
             cryptoType
             fee
             deposited
+        }
+    }
+`;
+export const GET_PAYPAL_WITHDRAW_TRANSACTIONS = gql`
+    query {
+        getPaypalWithdrawByUser {
+            id
+            userId
+            targetCurrency
+            sourceToken
+            tokenPrice
+            withdrawAmount
+            fee
+            tokenAmount
+            status
+            deniedReason
+            requestedAt
+            confirmedAt
+            senderBatchId
+            senderItemId
+            receiver
         }
     }
 `;
