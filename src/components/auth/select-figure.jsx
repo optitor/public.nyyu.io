@@ -31,7 +31,7 @@ const SelectFigure = () => {
     const [figuresArray, setFiguresArray] = useState([])
     const { data: userData } = useQuery(GET_USER, {
         onCompleted: () => {
-            if (userData.getUser.avatar) return navigate(ROUTES.profile)
+            if (userData.getUser?.avatar) return navigate(ROUTES.profile)
             return setUserDataLoading(false)
         },
         fetchPolicy: "network-only",
@@ -102,7 +102,7 @@ const SelectFigure = () => {
             },
         })
     }
-    
+
     if (loadingPage) return <Loading />
     else
         return (
@@ -159,11 +159,11 @@ const SelectFigure = () => {
                                                 <div className="d-flex justify-content-around">
                                                     <div className="mt-3 scale-70">
                                                         <AvatarImage
-                                                            avatar={figuresArray[selectedId].avatar}
+                                                            avatar={figuresArray[selectedId]?.avatar}
                                                         />
                                                     </div>
                                                     <div className="stars">
-                                                        {figuresArray[selectedId].stars.map(
+                                                        {figuresArray[selectedId]?.stars.map(
                                                             (item, idx) => (
                                                                 <div
                                                                     className="row align-items-center"
@@ -190,7 +190,7 @@ const SelectFigure = () => {
                                                     </div>
                                                 </div>
                                                 <div className="my-4">
-                                                    {figuresArray[selectedId].abilities.map(
+                                                    {figuresArray[selectedId]?.abilities.map(
                                                         (item, idx) => (
                                                             <div className="row mb-1" key={idx}>
                                                                 <div className="col-4">
@@ -205,7 +205,7 @@ const SelectFigure = () => {
                                                         )
                                                     )}
                                                 </div>
-                                                <p>{figuresArray[selectedId].intro}</p>
+                                                <p>{figuresArray[selectedId]?.intro}</p>
                                             </>
                                         ) : (
                                             <>
@@ -228,7 +228,7 @@ const SelectFigure = () => {
                                                     <div className="d-flex align-items-end flex-column">
                                                         <div className="d-flex align-items-end justify-content-start">
                                                             <h3 className="random-display mb-0 fw-bold me-4">
-                                                                {figuresArray[selectedId].lastname}.
+                                                                {figuresArray[selectedId]?.lastname}.
                                                             </h3>
                                                             <div className="random-generate">
                                                                 <p className="form-label">
@@ -329,7 +329,7 @@ const SelectFigure = () => {
                             {!selected ? (
                                 <>
                                     <div className="stars">
-                                        {figuresArray[selectedId].stars.map((item, idx) => (
+                                        {figuresArray[selectedId]?.stars.map((item, idx) => (
                                             <div className="row align-items-center" key={idx}>
                                                 <div className="col-6">
                                                     <p className="ability">{item.type}</p>
@@ -346,7 +346,7 @@ const SelectFigure = () => {
                                         ))}
                                     </div>
                                     <div className="my-4">
-                                        {figuresArray[selectedId].abilities.map((item, idx) => (
+                                        {figuresArray[selectedId]?.abilities.map((item, idx) => (
                                             <div className="row mb-1" key={idx}>
                                                 <div className="col-5">
                                                     <p className="fw-bold">{item.title}</p>
@@ -357,7 +357,7 @@ const SelectFigure = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <p>{figuresArray[selectedId].intro}</p>
+                                    <p>{figuresArray[selectedId]?.intro}</p>
                                 </>
                             ) : (
                                 <>

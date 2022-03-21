@@ -22,7 +22,7 @@ export default function DressupHorizontalList({
 
     const user = useSelector((state) => state.auth?.user)
 
-    const purchased = JSON.parse(user?.avatar?.purchased ?? {})?.[topic] ?? []
+    const purchased = JSON.parse(user?.avatar?.purchased ?? '{}')?.[topic] ?? []
     const tierLevel = user?.tierLevel ?? 0
 
     useEffect(() => {

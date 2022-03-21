@@ -27,7 +27,7 @@ const App = () => {
     const isAdmin = user.role?.includes('ROLE_ADMIN');
     // console.log(isAdmin)
     
-    if(isAdmin) {
+    // if(isAdmin) {
         return (
             <>
                 {isBrowser && (
@@ -54,10 +54,10 @@ const App = () => {
                 <AlarmModal />
             </>
         );
-    } else {
-        if(isBrowser) navigate('/');
-        return null;
-    }
+    // } else {
+    //     if(isBrowser) navigate('/');
+    //     return null;
+    // }
 };
 
 export default App;
