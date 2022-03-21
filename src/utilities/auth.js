@@ -3,7 +3,7 @@ import decode from "jwt-decode";
 let inMemoryAuthTokenDefault = {
   authToken: null,
   authExpiration: null,
-}
+};
 
 let inMemoryAuthToken = inMemoryAuthTokenDefault
 
