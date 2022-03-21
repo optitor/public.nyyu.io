@@ -496,17 +496,21 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                     </div>
                 </>
             )}
-            <button
-                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-2 ${
-                    requestPending && "disabled"
-                }`}
-                onClick={requestPending ? null : submitPayment}
-            >
-                <div className="d-flex align-items-center justify-content-center gap-3">
-                    {requestPending && <CustomSpinner />}
-                    {stripePaymentSecondCall ? "verifying" : "confirm payment"}
-                </div>
-            </button>
+            {isNewCard && (
+                <button
+                    className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-2 ${
+                        requestPending && "disabled"
+                    }`}
+                    onClick={requestPending ? null : submitPayment}
+                >
+                    <div className="d-flex align-items-center justify-content-center gap-3">
+                        {requestPending && <CustomSpinner />}
+                        {stripePaymentSecondCall
+                            ? "verifying"
+                            : "confirm payment"}
+                    </div>
+                </button>
+            )}
         </>
     );
 };
