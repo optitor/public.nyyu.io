@@ -25,6 +25,7 @@ const NotFound = lazy(() => import("./../404"));
 const App = () => {
     const { user } = useSelector(state => state.auth);
     const isAdmin = user.role?.includes('ROLE_ADMIN');
+    // console.log(isAdmin)
     
     if(isAdmin) {
         return (
