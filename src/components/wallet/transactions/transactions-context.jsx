@@ -1,6 +1,5 @@
 import { useQuery } from "@apollo/client";
 import React, { useContext, useState } from "react";
-import { GET_ALL_FEES } from "../../../apollo/graghqls/querys/Payment";
 import {
     GET_BID_LIST_BY_USER,
     GET_COINPAYMENT_DEPOSIT_TX_BY_USER,
@@ -69,6 +68,7 @@ const TransactionsProvider = ({ children }) => {
         bidList &&
         presaleList
     );
+    const itemsCountPerPage = 3;
 
     // Methods
     const createDateFromDate = (createdTime) => {
@@ -291,6 +291,7 @@ const TransactionsProvider = ({ children }) => {
         bankDepositTransactions,
         bidList,
         presaleList,
+        itemsCountPerPage,
 
         currentTab,
         setCurrentTab,

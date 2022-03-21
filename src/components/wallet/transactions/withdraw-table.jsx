@@ -17,15 +17,18 @@ const withdrawOptions = [
 export default function WithdrawTable() {
     // Containers
     const user = useSelector((state) => state.auth.user);
-    const { tabs, paypalWithdrawTransactions, coinWithdrawTransactions } =
-        useTransactions();
+    const {
+        tabs,
+        paypalWithdrawTransactions,
+        coinWithdrawTransactions,
+        itemsCountPerPage,
+    } = useTransactions();
     const [list, setList] = useState(paypalWithdrawTransactions);
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
     const [currentWithdrawType, setCurrentWithdrawType] = useState(
         withdrawOptions[0]
     );
     const [activePage, setActivePage] = useState(1);
-    const itemsCountPerPage = 5;
 
     // Methods
     const toggleDetails = (index) => {

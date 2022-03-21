@@ -7,9 +7,8 @@ import Pagination from "react-js-pagination";
 
 export default function BidTable() {
     // Containers
-    const { bidList: list } = useTransactions();
+    const { bidList: list, itemsCountPerPage } = useTransactions();
     const [activePage, setActivePage] = useState(1);
-    const itemsCountPerPage = 5;
 
     // Render
     return (

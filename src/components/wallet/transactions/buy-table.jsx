@@ -5,9 +5,8 @@ import Pagination from "react-js-pagination";
 
 export default function BuyTable() {
     // Containers
-    const { presaleList: list } = useTransactions();
+    const { presaleList: list, itemsCountPerPage } = useTransactions();
     const [activePage, setActivePage] = useState(1);
-    const itemsCountPerPage = 5;
 
     // Render
     return (

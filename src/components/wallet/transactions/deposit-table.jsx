@@ -25,6 +25,7 @@ export default function DepositTable() {
         coinDepositTransactions,
         stripeDepositTransactions,
         bankDepositTransactions,
+        itemsCountPerPage,
     } = useTransactions();
 
     const [list, setList] = useState(paypalDepositTransactions);
@@ -33,7 +34,6 @@ export default function DepositTable() {
         depositOptions[0]
     );
     const [activePage, setActivePage] = useState(1);
-    const itemsCountPerPage = 5;
 
     // Methods
     const toggleDetails = (index) => {
