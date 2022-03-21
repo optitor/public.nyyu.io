@@ -1207,6 +1207,10 @@ div.wallet_balances {
             font-size: 14px;
             color: white;
         }
+        &:hover {
+            border: none;
+            outline: none;
+        }
     }
     .css-26l3qy-menu {
         color: white;

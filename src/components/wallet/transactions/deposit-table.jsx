@@ -133,10 +133,7 @@ export default function DepositTable() {
                                 className="border-bottom-2-dark-gray cursor-pointer"
                                 onClick={() => toggleDetails(id)}
                             >
-                                <td
-                                    scope="row"
-                                    className="text-light pe-5 pe-sm-0 fw-light"
-                                >
+                                <td className="text-light pe-5 pe-sm-0 fw-light">
                                     <div className="fs-16px">{date}</div>
                                     <div className="text-secondary fs-12px mt-1 fw-500">
                                         {time}
