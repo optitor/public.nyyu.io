@@ -48,8 +48,8 @@ const SelectFigure = () => {
                         avatar: {
                             avatarSet: item.avatarSet,
                         },
-                        firstname: item.fname,
-                        lastname: item.surname,
+                        firstname: item?.fname,
+                        lastname: item?.surname,
                         stars: item.skillSet.map((skill) => {
                             return {
                                 type: skill.name,
@@ -122,7 +122,7 @@ const SelectFigure = () => {
                                 <div className="row figure-select-items-section">
                                     {figuresArray
                                         .filter((item) =>
-                                            (item.firstname + item.lastname)
+                                            (item?.firstname + item?.lastname)
                                                 .toLowerCase()
                                                 .includes(searchValue.toLowerCase())
                                         )
@@ -147,9 +147,9 @@ const SelectFigure = () => {
                                 <div className="figure-intro__box">
                                     {!selected && (
                                         <p className="figure-name">
-                                            {figuresArray[selectedId].firstname +
+                                            {figuresArray[selectedId]?.firstname +
                                                 " " +
-                                                figuresArray[selectedId].lastname}
+                                                figuresArray[selectedId]?.lastname}
                                         </p>
                                     )}
                                     <div className="figure-intro__box--body">
@@ -310,9 +310,9 @@ const SelectFigure = () => {
                 >
                     <div className="figure-intro__box">
                         <div className="mobile-figure-header">
-                            {figuresArray[selectedId].firstname +
+                            {figuresArray[selectedId]?.firstname +
                                 " " +
-                                figuresArray[selectedId].lastname}
+                                figuresArray[selectedId]?.lastname}
 
                             <div
                                 onClick={() => closeModal()}
