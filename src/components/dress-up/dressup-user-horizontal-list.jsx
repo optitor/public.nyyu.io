@@ -109,7 +109,7 @@ export default function DressupHorizontalList({
                                   style={{opacity: status === LOCKED || status === UNAVAILABLE? 0.5: 1, marginTop: -1}}
                               >
                                   <div className="image_div mx-auto">
-                                      {topic !== "hairColor" && (
+                                      {topic !== "hairColors" && (
                                           <>
                                               {topic === "hairStyle" || !topic ? (
                                                   <img src={EmptyAvatar} alt="Background Avatar" />
@@ -151,7 +151,7 @@ export default function DressupHorizontalList({
                                               </div>
                                           </>
                                       )}
-                                      {topic === "hairColor" && (
+                                      {topic === "hairColors" && (
                                           <>
                                               <img src={EmptyAvatar} alt="Background Avatar" />
                                               <Hair
@@ -170,7 +170,7 @@ export default function DressupHorizontalList({
                                       )}
                                   </div>
                                   <div className="price_div">
-                                      {topic !== "hairColor" && (
+                                      {topic !== "hairColors" && (
                                           <>
                                               {status === AVAILABLE && (
                                                   <>

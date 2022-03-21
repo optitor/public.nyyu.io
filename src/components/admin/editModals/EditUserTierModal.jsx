@@ -6,7 +6,6 @@ import parse from 'html-react-parser';
 import NumberFormat from "react-number-format";
 
 import Stepper2 from "../../../components/admin/Stepper2";
-
 import Alert from '@mui/material/Alert';
 import { update_User_Tier } from "../../../redux/actions/userTierAction";
 
@@ -66,7 +65,7 @@ const IndexPage = ({ isModalOpen, setIsModalOpen, tier = {} }) => {
         }
     };
     // console.log(svgFile.svg)
-
+    
     const setTokenDetailsData = () => {
         if(Object.values(detailsError)[0]) {
             setShowError(true);

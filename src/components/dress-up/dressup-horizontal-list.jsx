@@ -58,7 +58,7 @@ export default function DressupHorizontalList({
                     isScrollable ? "d-inline-block" : "d-auto"
                 } select${topic}_dressUp`}
             >
-                {list.length > 0? list.map((item, index) => {
+                {list.length > 0? list?.map((item, index) => {
                     return (
                         <div
                             key={index}
@@ -85,16 +85,16 @@ export default function DressupHorizontalList({
                                                 </div>
                                             </>
                                         ): ''}
-                                        <div compid={list[index].compId} groupid={list[index].groupId} style={{top: `${list[index].top}%`, left: `${list[index].left}%`, width: `${list[index].width}%`}}>
-                                            {parse(list[index].svg)}
+                                        <div compid={list[index]?.compId} groupid={list[index]?.groupId} style={{top: `${list[index]?.top}%`, left: `${list[index]?.left}%`, width: `${list[index]?.width}%`}}>
+                                            {parse(list[index]?.svg?? '')}
                                         </div>
                                     </>
                                 )}
                                 {topic === 'hairColors' && (
                                     <>
                                         <img src={EmptyAvatar} alt="Background Avatar" />
-                                        <Hair hairColor={list[index]} style={{top: `${hairStyles[hairStyle].top}%`, left: `${hairStyles[hairStyle].left}%`, width: `${hairStyles[hairStyle].width}%`}}>
-                                            {parse(hairStyles[hairStyle].svg)}
+                                        <Hair hairColor={list[index]} style={{top: `${hairStyles[hairStyle]?.top}%`, left: `${hairStyles[hairStyle]?.left}%`, width: `${hairStyles[hairStyle]?.width}%`}}>
+                                            {parse(hairStyles[hairStyle]?.svg?? '')}
                                         </Hair>
                                     </>
                                 )}
