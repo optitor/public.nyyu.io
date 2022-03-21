@@ -72,23 +72,26 @@ const ForgetPassword = () => {
                         placeholder="Enter New Password"
                         label="Enter New Password"
                     />
-                    <PasswordEyeIcon
-                        passwordVisible={passwordVisible}
-                        setPasswordVisible={setPasswordVisible}
-                    />
                 </div>
                 <div className="form-group position-relative">
                     <FormInput
-                        type={confirmPasswordVisible ? "text" : "password"}
+                        type={passwordVisible ? "text" : "password"}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Confirm Password"
                         label="Confirm Password"
                     />
-                    <PasswordEyeIcon
-                        passwordVisible={confirmPasswordVisible}
-                        setPasswordVisible={setConfirmPasswordVisible}
-                    />
+                </div>
+                <div>
+                    <label className="d-flex align-items-center gap-2">
+                        <input
+                            type="checkbox"
+                            value={passwordVisible}
+                            className="form-check-input"
+                            onChange={() => setPasswordVisible(!passwordVisible)}
+                        />
+                        <div className="keep-me-signed-in-text">Show password</div>
+                    </label>
                 </div>
                 <div className="mb-3 mt-5">
                     {error && (
