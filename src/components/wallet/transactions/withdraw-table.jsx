@@ -79,7 +79,7 @@ export default function WithdrawTable() {
 
     // Render
     return (
-        <div className="px-sm-4 px-3 table-responsive transaction-section-tables">
+        <div className="px-sm-4 px-3 table-responsive transaction-section-tables mb-5 mb-sm-0">
             <table className="wallet-transaction-table w-100">
                 <div className="mt-4">
                     <Select

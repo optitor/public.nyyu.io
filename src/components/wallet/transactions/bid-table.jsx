@@ -13,7 +13,7 @@ export default function BidTable() {
 
     // Render
     return (
-        <div className="px-4 table-responsive transaction-section-tables">
+        <div className="px-4 table-responsive transaction-section-tables mb-5 mb-sm-0">
             <table className="wallet-transaction-table w-100">
                 <tr className="border-bottom-2-dark-gray py-3">
                     <th scope="col">Auction</th>
