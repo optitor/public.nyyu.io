@@ -1,12 +1,15 @@
 import { Link } from "gatsby";
-import React from "react";
+import React, { useState } from "react";
 import { BTCGrayIcon, Credit, NdbWallet } from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 import { ROUTES } from "../../../utilities/routes";
+import Pagination from "react-js-pagination";
 
 export default function BidTable() {
     // Containers
-    const { bidList } = useTransactions();
+    const { bidList: list } = useTransactions();
+    const [activePage, setActivePage] = useState(1);
+    const itemsCountPerPage = 5;
 
     // Render
     return (
@@ -25,7 +28,7 @@ export default function BidTable() {
                         Status
                     </th>
                 </tr>
-                {bidList?.length === 0 && (
+                {list?.length === 0 && (
                     <tr className="py-4 text-center">
                         <td
                             colSpan={5}
@@ -35,8 +38,12 @@ export default function BidTable() {
                         </td>
                     </tr>
                 )}
-                {bidList?.map(
-                    ({ round, date, time, amount, payment, status }) => (
+                {list
+                    ?.slice(
+                        (activePage - 1) * itemsCountPerPage,
+                        activePage * itemsCountPerPage
+                    )
+                    ?.map(({ round, date, time, amount, payment, status }) => (
                         <>
                             <tr className="border-bottom-2-dark-gray">
                                 <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
@@ -93,9 +100,15 @@ export default function BidTable() {
                                 )}
                             </tr>
                         </>
-                    )
-                )}
+                    ))}
             </table>
+            <Pagination
+                activePage={activePage}
+                itemsCountPerPage={itemsCountPerPage}
+                totalItemsCount={list.length}
+                pageRangeDisplayed={5}
+                onChange={(pageNumber) => setActivePage(pageNumber)}
+            />
         </div>
     );
 }
