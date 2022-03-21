@@ -70,6 +70,7 @@ export default function WithdrawTable() {
     };
 
     const changeDepositType = (type) => {
+        setActivePage(1);
         setCurrentWithdrawType(type);
         if (type.value === "paypal") setList(paypalWithdrawTransactions);
         if (type.value === "crypto") setList(coinWithdrawTransactions);
