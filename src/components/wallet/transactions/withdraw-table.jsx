@@ -17,7 +17,8 @@ const withdrawOptions = [
 export default function WithdrawTable() {
     // Containers
     const user = useSelector((state) => state.auth.user);
-    const { tabs, paypalWithdrawTransactions } = useTransactions();
+    const { tabs, paypalWithdrawTransactions, coinWithdrawTransactions } =
+        useTransactions();
     const [list, setList] = useState(paypalWithdrawTransactions);
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
     const [currentWithdrawType, setCurrentWithdrawType] = useState(
@@ -69,7 +70,7 @@ export default function WithdrawTable() {
     const changeDepositType = (type) => {
         setCurrentWithdrawType(type);
         if (type.value === "paypal") setList(paypalWithdrawTransactions);
-        if (type.value === "crypto") setList([]);
+        if (type.value === "crypto") setList(coinWithdrawTransactions);
         if (type.value === "credit_card") setList([]);
     };
 

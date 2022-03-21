@@ -8,6 +8,7 @@ import {
     GET_PRESALE_ORDERS_BY_USER,
     GET_STRIPE_DEPOSIT_TX_BY_USER,
     GET_PAYPAL_WITHDRAW_TRANSACTIONS,
+    GET_CRYPTO_WITHDRAW_BY_USER,
 } from "./queries";
 
 export const TransactionsContext = React.createContext();
@@ -40,12 +41,17 @@ const tabs = [
 const TransactionsProvider = ({ children }) => {
     // Containers
     const [currentTab, setCurrentTab] = useState(0);
+
     const [paypalDepositTransactions, setPaypalDepositTransactions] =
         useState(null);
     const [paypalWithdrawTransactions, setPaypalWithdrawTransactions] =
         useState(null);
+
     const [coinDepositTransactions, setCoinDepositTransactions] =
         useState(null);
+    const [coinWithdrawTransactions, setCoinWithdrawTransactions] =
+        useState(null);
+
     const [stripeDepositTransactions, setStripeDepositTransactions] =
         useState(null);
     const [bidList, setBidList] = useState(null);
@@ -55,6 +61,7 @@ const TransactionsProvider = ({ children }) => {
         paypalDepositTransactions &&
         paypalWithdrawTransactions &&
         coinDepositTransactions &&
+        coinWithdrawTransactions &&
         stripeDepositTransactions &&
         bidList &&
         presaleList
@@ -130,6 +137,7 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
+
     useQuery(GET_STRIPE_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
             const fooList = data.getStripeDepositTxByUser
@@ -159,6 +167,7 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
+
     useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
             const fooList = data.getCoinpaymentDepositTxByUser
@@ -179,6 +188,29 @@ const TransactionsProvider = ({ children }) => {
                     };
                 });
             setCoinDepositTransactions(fooList);
+        },
+        onError: (error) => console.log(error),
+    });
+
+    useQuery(GET_CRYPTO_WITHDRAW_BY_USER, {
+        onCompleted: (data) => {
+            const fooList = data.getCryptoWithdrawByUser
+                .sort((tx1, tx2) => tx2.confirmedAt - tx1.confirmedAt)
+                .map((item) => {
+                    const createdTime = new Date(item.confirmedAt);
+                    return {
+                        id: item.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item.fee,
+                        status: item.status,
+                        amount: item.withdrawAmount,
+                        type: "Crypto Withdraw",
+                        paymentId: "---",
+                        asset: item.sourceToken,
+                    };
+                });
+            setCoinWithdrawTransactions(fooList);
         },
         onError: (error) => console.log(error),
     });
@@ -233,6 +265,7 @@ const TransactionsProvider = ({ children }) => {
         // data
         paypalDepositTransactions,
         coinDepositTransactions,
+        coinWithdrawTransactions,
         stripeDepositTransactions,
         paypalWithdrawTransactions,
         bidList,

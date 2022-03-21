@@ -94,6 +94,25 @@ export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
         }
     }
 `;
+export const GET_CRYPTO_WITHDRAW_BY_USER = gql`
+    query {
+        getCryptoWithdrawByUser {
+            id
+            userId
+            sourceToken
+            tokenPrice
+            withdrawAmount
+            fee
+            tokenAmount
+            status
+            deniedReason
+            requestedAt
+            confirmedAt
+            network
+            destination
+        }
+    }
+`;
 
 export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
     query {
