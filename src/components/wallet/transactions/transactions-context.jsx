@@ -80,7 +80,7 @@ const TransactionsProvider = ({ children }) => {
     // Webserver
     useQuery(GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
-            const fooList = data.getAllPaypalDepositTxns
+            const fooList = data.getPaypalDepositTxnsByUser
                 .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);

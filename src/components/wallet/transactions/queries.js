@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS = gql`
     query {
-        getAllPaypalDepositTxns {
+        getPaypalDepositTxnsByUser {
             id
             userId
             amount
