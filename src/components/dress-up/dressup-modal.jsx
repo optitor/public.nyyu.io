@@ -152,7 +152,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                             />
                             <div className="mt-4"></div>
                             <DressupHorizontalList
-                                topic="hairColor"
+                                topic="hairColors"
                                 title={"hair color"}
                                 hairStyle={selectedHairStyle}
                                 hairStyles={hairStyles}
