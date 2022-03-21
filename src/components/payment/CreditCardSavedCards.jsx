@@ -1,24 +1,99 @@
+import { useMutation } from "@apollo/client";
+import { useStripe } from "@stripe/react-stripe-js";
 import React, { useState } from "react";
 import { Amex } from "../../utilities/imgImport";
 import CustomSpinner from "../common/custom-spinner";
+import { PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD } from "./payment-webservice";
+import PaymentFailure from "./PaymentFailure";
+import PaymentSuccessful from "./PaymentSuccessful";
 
 export default function CreditCardSavedCards({
     savedCards,
     deleteCardMethod,
     selectedSavedCard,
     setSelectedSavedCard,
+    amount,
+    roundId,
 }) {
     // Containers
+    const stripe = useStripe();
     const [requestPending, setRequestPending] = useState(false);
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
     const [successfulPayment, setSuccessfulPayment] = useState(null);
 
+    // Webserver
+    const [payStripeForAuctionWithSavedCard] = useMutation(
+        PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD,
+        {
+            onCompleted: (data) => {
+                if (stripePaymentSecondCall === false) {
+                    if (data.payStripeForAuctionWithSavedCard.error) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(false);
+                    }
+                    const { clientSecret, requiresAction } =
+                        data.payStripeForAuctionWithSavedCard;
+                    if (requiresAction === false || requiresAction === null) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(true);
+                    }
+                    if (clientSecret)
+                        return stripe
+                            .handleCardAction(clientSecret)
+                            .then((result) => {
+                                setStripePaymentSecondCall(true);
+                                if (result.error) {
+                                    setRequestPending(false);
+                                    return setSuccessfulPayment(false);
+                                }
+                                const paymentIntentId = result.paymentIntent.id;
+                                return payStripeForAuctionWithSavedCard({
+                                    variables: {
+                                        cryptoType: "USDT",
+                                        amount: amount * 100,
+                                        cardId: savedCards[selectedSavedCard]
+                                            .id,
+                                        paymentIntentId,
+                                    },
+                                });
+                            });
+                    return setSuccessfulPayment(false);
+                } else if (stripePaymentSecondCall === true) {
+                    if (
+                        data.payStripeForAuctionWithSavedCard.error ||
+                        data.payStripeForAuctionWithSavedCard.requiresAction ===
+                            true
+                    ) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(false);
+                    }
+                    return setSuccessfulPayment(true);
+                }
+            },
+            onError: (error) => console.log(error),
+        }
+    );
+
     // Methods
-    const submitPayment = () => {};
+    const submitPayment = () => {
+        setRequestPending(true);
+        payStripeForAuctionWithSavedCard({
+            variables: {
+                roundId,
+                amount: amount * 100,
+                cardId: savedCards[selectedSavedCard].id,
+                paymentIntentId: null,
+            },
+        });
+    };
 
     // Render
-    return (
+    return successfulPayment === true ? (
+        <PaymentSuccessful timeout={3} />
+    ) : successfulPayment === false ? (
+        <PaymentFailure timeout={3} />
+    ) : (
         <>
             <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-2 px-0">
                 {savedCards.map((item, index) => {
@@ -45,8 +120,7 @@ export default function CreditCardSavedCards({
                                     />
                                     <div className="credit-card-save-cards-item-details">
                                         **** **** **** {item.last4} <br />
-                                        {item.expMonth}/{item.expYear} <br />
-                                        Card holder's name
+                                        {item.expMonth}/{item.expYear}
                                     </div>
                                     <button
                                         onClick={() =>

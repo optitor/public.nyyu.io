@@ -427,6 +427,8 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
                 </div>
             ) : (
                 <CreditCardSavedCards
+                    roundId={Number(round)}
+                    amount={amount}
                     savedCards={savedCards}
                     deleteCardMethod={deleteCardMethod}
                     selectedSavedCard={selectedSavedCard}
