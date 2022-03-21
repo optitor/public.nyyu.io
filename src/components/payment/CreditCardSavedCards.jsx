@@ -135,6 +135,11 @@ export default function CreditCardSavedCards({
                         </div>
                     );
                 })}
+                {savedCards.length === 0 && (
+                    <div className="text-center mx-auto mt-2 text-uppercase text-light fw-500">
+                        No saved cards
+                    </div>
+                )}
             </div>
             <button
                 className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-2 ${
