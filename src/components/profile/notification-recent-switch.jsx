@@ -7,8 +7,6 @@ import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification";
 import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification";
 import { SET_NOTIFICATION_READ_FLAG_ALL } from "../../apollo/graghqls/mutations/Notification";
 
-
-
 export default function NotificationRecent() {
     // Containers
     // -- States
@@ -43,16 +41,19 @@ export default function NotificationRecent() {
 
     function setSingleNotificationRead(item, index, arr) {
         arr[index] = { ...arr[index], pending: false, read: true };
-        console.log(arr[index].timeStamp)
+        console.log(arr[index].timeStamp);
     }
 
-    const [setNotificationReadFlagAll] = useMutation(SET_NOTIFICATION_READ_FLAG_ALL, {
-        onCompleted: () => {
-            let ids = [...NTList];
-            ids.forEach(setSingleNotificationRead)
-            setNTList(ids);
-        },
-    });
+    const [setNotificationReadFlagAll] = useMutation(
+        SET_NOTIFICATION_READ_FLAG_ALL,
+        {
+            onCompleted: () => {
+                let ids = [...NTList];
+                ids.forEach(setSingleNotificationRead);
+                setNTList(ids);
+            },
+        }
+    );
 
     const setRead = (item) => {
         if (item.read) return;
@@ -109,7 +110,7 @@ export default function NotificationRecent() {
                     )}
                 </div>
                 <div className="row">
-                    <div className="col-10">
+                    <div className="col-9">
                         {NTList.length && (
                             <div>
                                 <Pagination
@@ -117,13 +118,20 @@ export default function NotificationRecent() {
                                     itemsCountPerPage={itemsCountPerPage}
                                     totalItemsCount={NTList.length}
                                     pageRangeDisplayed={5}
-                                    onChange={(pageNumber) => setActivePage(pageNumber)}
+                                    onChange={(pageNumber) =>
+                                        setActivePage(pageNumber)
+                                    }
                                 />
                             </div>
                         )}
                     </div>
-                    <div className="col-2  justify-content-center align-items-end mt-3">
-                        <a onClick={setNotificationReadFlagAll} className="text-white text-decoration-underline fs-6">Mark as all read</a>
+                    <div className="col-3 justify-content-center align-items-end text-end mt-3">
+                        <button
+                            onClick={setNotificationReadFlagAll}
+                            className="btn text-white text-decoration-underline fs-6"
+                        >
+                            Mark as all read
+                        </button>
                     </div>
                 </div>
             </>

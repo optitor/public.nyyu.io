@@ -53,7 +53,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         },
     });
 
-
     // Containers
     const auth = useAuth();
     const userInfo = user_data?.getUser;

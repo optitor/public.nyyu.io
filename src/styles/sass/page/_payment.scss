@@ -66,7 +66,6 @@
         .sub-title {
             color: white;
             font-style: normal;
-            font-weight: normal;
             font-size: 18px;
             line-height: 23px;
             text-align: center;
@@ -91,13 +90,41 @@
         .connected {
             border: 1px solid #23c865;
             padding: 10px;
+            word-wrap: break-word;
+            position: relative;
             p {
                 color: #23c865;
-                margin: 10px 0;
+                margin: 5px 0;
+                font-size: 10px;
+                cursor: pointer;
             }
             img {
                 margin: 10px 0;
-                width: 90px;
+                width: 40px;
+            }
+            .small-btn {
+                font-weight: bold;
+                color: white;
+                background: #1e1e1e;
+                border : 1px solid white;
+                text-transform: uppercase;
+                transition: 500ms;
+                border-radius: 0.2rem;
+                text-decoration: none;
+                font-size: 9px;
+                z-index: 9999;
+            }
+            .disconnect {
+                position: absolute;
+                top: 3px;
+                left: 5px;
+            }
+            .payment {
+                position: absolute;
+                top: 3px;
+                right: 5px;
+                border-color: #23c865;
+                color: #23c865;
             }
         }
 
@@ -504,7 +531,7 @@
         }
     }
     .remain-token__value {
-        padding: 0px 60px;
+        padding: 0 60px;
         margin-top: 80px;
         margin-bottom: 80px;
         @include mq("tablet", max) {
@@ -549,15 +576,15 @@
 }
 
 .css-4ljt47-MenuList {
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 .payment-type__tab-list {
     flex: 1 !important;
     margin-right: 5px;
     &:last-child {
-        margin-right: 0px;
+        margin-right: 0;
     }
 }
 
@@ -645,7 +672,7 @@
     }
     &::-webkit-scrollbar {
         width: 2px;
-        height: 0px !important;
+        height: 0 !important;
     }
     &::-webkit-scrollbar-track {
         background: #666666 !important;

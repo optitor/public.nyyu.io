@@ -84,11 +84,34 @@ export const STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD = gql`
         $amount: Float
         $cryptoType: String
         $cardId: Int
+        $paymentIntentId: String
     ) {
         stripeForDepositWithSavedCard(
             amount: $amount
             cryptoType: $cryptoType
             cardId: $cardId
+            paymentIntentId: $paymentIntentId
+        ) {
+            clientSecret
+            paymentIntentId
+            requiresAction
+            error
+        }
+    }
+`;
+
+export const PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD = gql`
+    mutation payStripeForAuctionWithSavedCard(
+        $roundId: Int
+        $amount: Float
+        $cardId: Int
+        $paymentIntentId: String
+    ) {
+        payStripeForAuctionWithSavedCard(
+            roundId: $roundId
+            amount: $amount
+            cardId: $cardId
+            paymentIntentId: $paymentIntentId
         ) {
             clientSecret
             paymentIntentId

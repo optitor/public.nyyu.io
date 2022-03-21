@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Router } from "@reach/router";
 import Loading from "../../components/common/Loading";
 import AlarmModal from './../../components/admin/AlarmModal';
+import { isBrowser } from "../../utilities/auth";
 
 const Dashboard = lazy(() => import("./../../subPages/admin/dashboard"));
 const Rounds = lazy(() => import("./../../subPages/admin/rounds"));
@@ -22,14 +23,13 @@ const CreateGeoLocation = lazy(() => import("./../../subPages/admin/create/creat
 const NotFound = lazy(() => import("./../404"));
 
 const App = () => {
-    const isSSR = typeof window === "undefined";
     const { user } = useSelector(state => state.auth);
     const isAdmin = user.role?.includes('ROLE_ADMIN');
     
-    // if(isAdmin) {
+    if(isAdmin) {
         return (
             <>
-                {!isSSR && (
+                {isBrowser && (
                     <Suspense fallback={<Loading />}>
                         <Router basepath="admin">
                             <Dashboard path="/" />
@@ -53,9 +53,9 @@ const App = () => {
                 <AlarmModal />
             </>
         );
-    // } else {
-    //     navigate('/');
-    //     return null;
-    // }
+    } else {
+        if(isBrowser) navigate('/');
+        return null;
+    }
 };
 export default App;

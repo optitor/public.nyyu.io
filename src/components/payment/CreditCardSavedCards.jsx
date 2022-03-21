@@ -1,37 +1,39 @@
-import React, { useState } from "react";
-import { Amex } from "../../../utilities/imgImport";
-import CustomSpinner from "../../common/custom-spinner";
 import { useMutation } from "@apollo/client";
-import { STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD } from "../../payment/payment-webservice";
-import PaymentSuccessful from "../../payment/PaymentSuccessful";
-import PaymentFailure from "../../payment/PaymentFailure";
-import { isBrowser } from "../../../utilities/auth";
 import { useStripe } from "@stripe/react-stripe-js";
+import React, { useState } from "react";
+import { Amex } from "../../utilities/imgImport";
+import CustomSpinner from "../common/custom-spinner";
+import { PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD } from "./payment-webservice";
+import PaymentFailure from "./PaymentFailure";
+import PaymentSuccessful from "./PaymentSuccessful";
 
-export default function StripeDepositSavedCards({
+export default function CreditCardSavedCards({
     savedCards,
     deleteCardMethod,
+    selectedSavedCard,
+    setSelectedSavedCard,
     amount,
-    closeModal,
+    roundId,
 }) {
     // Containers
     const stripe = useStripe();
     const [requestPending, setRequestPending] = useState(false);
-    const [selectedSavedCard, setSelectedSavedCard] = useState(0);
-    const [successfulPayment, setSuccessfulPayment] = useState(null);
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
-    const [stripePaymentWithSavedCard] = useMutation(
-        STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD,
+    const [successfulPayment, setSuccessfulPayment] = useState(null);
+
+    // Webserver
+    const [payStripeForAuctionWithSavedCard] = useMutation(
+        PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD,
         {
             onCompleted: (data) => {
                 if (stripePaymentSecondCall === false) {
-                    if (data.stripeForDepositWithSavedCard.error) {
+                    if (data.payStripeForAuctionWithSavedCard.error) {
                         setRequestPending(false);
                         return setSuccessfulPayment(false);
                     }
                     const { clientSecret, requiresAction } =
-                        data.stripeForDepositWithSavedCard;
+                        data.payStripeForAuctionWithSavedCard;
                     if (requiresAction === false || requiresAction === null) {
                         setRequestPending(false);
                         return setSuccessfulPayment(true);
@@ -46,9 +48,9 @@ export default function StripeDepositSavedCards({
                                     return setSuccessfulPayment(false);
                                 }
                                 const paymentIntentId = result.paymentIntent.id;
-                                return stripePaymentWithSavedCard({
+                                return payStripeForAuctionWithSavedCard({
                                     variables: {
-                                        cryptoType: "USDT",
+                                        roundId,
                                         amount: amount * 100,
                                         cardId: savedCards[selectedSavedCard]
                                             .id,
@@ -59,8 +61,8 @@ export default function StripeDepositSavedCards({
                     return setSuccessfulPayment(false);
                 } else if (stripePaymentSecondCall === true) {
                     if (
-                        data.stripeForDepositWithSavedCard.error ||
-                        data.stripeForDepositWithSavedCard.requiresAction ===
+                        data.payStripeForAuctionWithSavedCard.error ||
+                        data.payStripeForAuctionWithSavedCard.requiresAction ===
                             true
                     ) {
                         setRequestPending(false);
@@ -72,12 +74,13 @@ export default function StripeDepositSavedCards({
             onError: (error) => console.log(error),
         }
     );
+
     // Methods
-    const submitPayment = async () => {
+    const submitPayment = () => {
         setRequestPending(true);
-        await stripePaymentWithSavedCard({
+        payStripeForAuctionWithSavedCard({
             variables: {
-                cryptoType: "USDT",
+                roundId,
                 amount: amount * 100,
                 cardId: savedCards[selectedSavedCard].id,
                 paymentIntentId: null,
@@ -87,12 +90,9 @@ export default function StripeDepositSavedCards({
 
     // Render
     return successfulPayment === true ? (
-        <PaymentSuccessful
-            timeout={3}
-            callback={() => isBrowser && window.location.reload(false)}
-        />
+        <PaymentSuccessful timeout={3} />
     ) : successfulPayment === false ? (
-        <PaymentFailure timeout={3} callback={closeModal} />
+        <PaymentFailure timeout={3} />
     ) : (
         <>
             <div className="credit-card-save-cards text-light row m-0 mb-4 mb-sm-2 px-0">
@@ -118,9 +118,9 @@ export default function StripeDepositSavedCards({
                                         alt="Amex"
                                         className="me-4"
                                     />
-                                    <div className="credit-card-save-cards-item-details text-start">
+                                    <div className="credit-card-save-cards-item-details">
                                         **** **** **** {item.last4} <br />
-                                        {item.expMonth}/{item.expYear}{" "}
+                                        {item.expMonth}/{item.expYear}
                                     </div>
                                     <button
                                         onClick={() =>
@@ -141,26 +141,17 @@ export default function StripeDepositSavedCards({
                     </div>
                 )}
             </div>
-            {savedCards.length && (
-                <button
-                    className="btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-4 py-2"
-                    disabled={requestPending}
-                    onClick={submitPayment}
-                >
-                    <div className="d-flex align-items-center justify-content-center gap-3">
-                        {requestPending && (
-                            <div>
-                                <CustomSpinner sm />
-                            </div>
-                        )}
-                        <div>
-                            {stripePaymentSecondCall
-                                ? "verifying"
-                                : "confirm deposit"}
-                        </div>
-                    </div>
-                </button>
-            )}
+            <button
+                className={`btn btn-outline-light rounded-0 text-uppercase confirm-payment fw-bold w-100 mt-2 ${
+                    requestPending && "disabled"
+                }`}
+                onClick={requestPending ? null : submitPayment}
+            >
+                <div className="d-flex align-items-center justify-content-center gap-3">
+                    {requestPending && <CustomSpinner sm />}
+                    {stripePaymentSecondCall ? "verifying" : "confirm payment"}
+                </div>
+            </button>
         </>
     );
 }
