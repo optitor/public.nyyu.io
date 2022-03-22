@@ -1035,7 +1035,7 @@ export const countries = [
 export const SUBSCRIPTION_BASE_URL = "wss://api.ndb.money/subscriptions"
 
 // export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2/redirect"
-export const OAUTH2_REDIRECT_URI = `${SITE_URL}/oauth2/redirect`
+export const OAUTH2_REDIRECT_URI = `https://sale.ndb.money/oauth2/redirect`
 
 export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
 

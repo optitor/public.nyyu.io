@@ -32,7 +32,7 @@ import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
 import { set_All_Fees } from "../../redux/actions/allFeesAction";
 import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
 import NDBWalletTab from "./NDBWalletTab";
-import PaymentExternalWalletTab from "./payment-external-wallet-tab"
+import PaymentExternalWalletTab from "./payment-external-wallet-tab";
 import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
 import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
@@ -52,7 +52,6 @@ const payment_types = [
 ];
 
 const Payment = () => {
-
     // try to get token from request
     const [orderId, setOrderId] = useQueryParam("token", StringParam);
 
@@ -68,7 +67,7 @@ const Payment = () => {
 
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    if (!isSSR && !currentRound) navigate(ROUTES.auction);
+    // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
@@ -105,8 +104,8 @@ const Payment = () => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
-                    let token = links[i].href.split('token=')[1];
-                    localStorage.setItem('PayPalForAuctionToken', token)
+                    let token = links[i].href.split("token=")[1];
+                    localStorage.setItem("PayPalForAuctionToken", token);
                     setPayPalLoading(false);
                     window.location.href = links[i].href;
                     break;
@@ -144,19 +143,28 @@ const Payment = () => {
 
     let orderCaptured = false;
 
-    if (window.location.href.includes('token=') && !orderCaptured && !paypalIsCheckingOut) {
+    if (
+        window.location.href.includes("token=") &&
+        !orderCaptured &&
+        !paypalIsCheckingOut
+    ) {
         var url = new URL(window.location.href);
         let token = url.searchParams.get("token");
         orderCaptured = true;
         captureOrderForAuction({ variables: { orderId: token } });
     }
 
-    if (localStorage.getItem('PayPalForAuctionToken') != null && localStorage.getItem('PayPalForAuctionToken') !== undefined && !orderCaptured && !paypalIsCheckingOut) {
+    if (
+        localStorage.getItem("PayPalForAuctionToken") != null &&
+        localStorage.getItem("PayPalForAuctionToken") !== undefined &&
+        !orderCaptured &&
+        !paypalIsCheckingOut
+    ) {
         orderCaptured = true;
-        let possibleToken = localStorage.getItem('PayPalForAuctionToken');
+        let possibleToken = localStorage.getItem("PayPalForAuctionToken");
         captureOrderForAuction({ variables: { orderId: possibleToken } });
-        localStorage.setItem('PayPalForAuctionToken', null);
-        localStorage.removeItem('PayPalForAuctionToken');
+        localStorage.setItem("PayPalForAuctionToken", null);
+        localStorage.removeItem("PayPalForAuctionToken");
     }
 
     // if (window.location.href.includes("token=") && !orderCaptured) {
