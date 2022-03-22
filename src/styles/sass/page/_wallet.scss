@@ -1252,3 +1252,47 @@ div.wallet_balances {
         }
     }
 }
+
+.react-datepicker {
+    background-color: black !important;
+    border: none !important;
+    font-family: "Montserrat" !important;
+    .react-datepicker__current-month {
+        background-color: black;
+    }
+    .react-datepicker__header {
+        background-color: black;
+        padding-top: 14px;
+        border-bottom: none;
+        .react-datepicker__current-month {
+            color: white;
+        }
+    }
+    .react-datepicker__day--selected {
+        background-color: $green;
+        border-radius: 50%;
+        font-weight: normal;
+    }
+    .react-datepicker__day-name,
+    .react-datepicker__day,
+    .react-datepicker__day--selected {
+        color: white;
+        font-weight: lighter !important;
+    }
+    .react-datepicker__navigation {
+        top: 15px;
+    }
+    .react-datepicker__day {
+        transition: 500ms;
+        &:hover {
+            background-color: #6d6d6d;
+            border-radius: 50%;
+        }
+    }
+    .react-datepicker__triangle {
+        &::after,
+        &::before {
+            border-bottom-color: black !important;
+        }
+    }
+}
