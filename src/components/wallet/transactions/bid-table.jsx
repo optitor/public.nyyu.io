@@ -1,16 +1,18 @@
 import { Link } from "gatsby";
-import React from "react";
+import React, { useState } from "react";
 import { BTCGrayIcon, Credit, NdbWallet } from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 import { ROUTES } from "../../../utilities/routes";
+import Pagination from "react-js-pagination";
 
 export default function BidTable() {
     // Containers
-    const { bidList } = useTransactions();
+    const { bidList: list, itemsCountPerPage } = useTransactions();
+    const [activePage, setActivePage] = useState(1);
 
     // Render
     return (
-        <div className="px-4 table-responsive transaction-section-tables">
+        <div className="px-4 table-responsive transaction-section-tables mb-5 mb-sm-0">
             <table className="wallet-transaction-table w-100">
                 <tr className="border-bottom-2-dark-gray py-3">
                     <th scope="col">Auction</th>
@@ -25,7 +27,7 @@ export default function BidTable() {
                         Status
                     </th>
                 </tr>
-                {bidList?.length === 0 && (
+                {list?.length === 0 && (
                     <tr className="py-4 text-center">
                         <td
                             colSpan={5}
@@ -35,20 +37,16 @@ export default function BidTable() {
                         </td>
                     </tr>
                 )}
-                {bidList?.map(
-                    ({ round, date, time, amount, payment, status }) => (
+                {list
+                    ?.slice(
+                        (activePage - 1) * itemsCountPerPage,
+                        activePage * itemsCountPerPage
+                    )
+                    ?.map(({ round, date, time, amount, payment, status }) => (
                         <>
                             <tr className="border-bottom-2-dark-gray">
                                 <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
                                     <div className="fw-500">Round {round}</div>
-                                    {status === 0 && (
-                                        <Link
-                                            to={ROUTES.auction}
-                                            className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success white-space-nowrap"
-                                        >
-                                            Increase bid
-                                        </Link>
-                                    )}
                                 </td>
                                 <td className="text-light pe-5 pe-sm-0 fw-light">
                                     <div className="fs-16px">{date}</div>
@@ -79,9 +77,14 @@ export default function BidTable() {
                                             <div className="gray-bullet me-2"></div>
                                             <div>Processing</div>
                                         </div>
-                                        <div className="text-secondary text-decoration-underline text-decoration-secondary fs-14px">
-                                            Cancel
-                                        </div>
+                                        {status === 0 && (
+                                            <Link
+                                                to={ROUTES.auction}
+                                                className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success white-space-nowrap fs-14px"
+                                            >
+                                                Increase bid
+                                            </Link>
+                                        )}
                                     </td>
                                 ) : status === 1 ? (
                                     <td className="d-flex align-items-center justify-content-end">
@@ -96,9 +99,15 @@ export default function BidTable() {
                                 )}
                             </tr>
                         </>
-                    )
-                )}
+                    ))}
             </table>
+            <Pagination
+                activePage={activePage}
+                itemsCountPerPage={itemsCountPerPage}
+                totalItemsCount={list.length}
+                pageRangeDisplayed={5}
+                onChange={(pageNumber) => setActivePage(pageNumber)}
+            />
         </div>
     );
 }

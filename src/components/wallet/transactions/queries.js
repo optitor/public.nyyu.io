@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS = gql`
+export const GET_PAPAL_DEPOSIT_TRANSACTIONS = gql`
     query {
-        getAllPaypalDepositTxns {
+        getPaypalDepositTxnsByUser {
             id
             userId
             amount
@@ -16,6 +16,27 @@ export const GET_ALL_PAPAL_DEPOSIT_TRANSACTIONS = gql`
             cryptoType
             fee
             deposited
+        }
+    }
+`;
+export const GET_PAYPAL_WITHDRAW_TRANSACTIONS = gql`
+    query {
+        getPaypalWithdrawByUser {
+            id
+            userId
+            targetCurrency
+            sourceToken
+            tokenPrice
+            withdrawAmount
+            fee
+            tokenAmount
+            status
+            deniedReason
+            requestedAt
+            confirmedAt
+            senderBatchId
+            senderItemId
+            receiver
         }
     }
 `;
@@ -53,6 +74,82 @@ export const GET_PRESALE_ORDERS_BY_USER = gql`
             status
             createdAt
             updatedAt
+        }
+    }
+`;
+export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
+    query {
+        getCoinpaymentDepositTxByUser {
+            id
+            userId
+            amount
+            createdAt
+            status
+            cryptoType
+            network
+            cryptoAmount
+            confirmedAt
+            depositAddress
+            coin
+        }
+    }
+`;
+export const GET_CRYPTO_WITHDRAW_BY_USER = gql`
+    query {
+        getCryptoWithdrawByUser {
+            id
+            userId
+            sourceToken
+            tokenPrice
+            withdrawAmount
+            fee
+            tokenAmount
+            status
+            deniedReason
+            requestedAt
+            confirmedAt
+            network
+            destination
+        }
+    }
+`;
+
+export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
+    query {
+        getStripeDepositTxByUser {
+            id
+            userId
+            amount
+            createdAt
+            confirmedAt
+            status
+            fiatType
+            fiatAmount
+            paymentIntentId
+            paymentMethodId
+            cryptoType
+            cryptoPrice
+            fee
+            deposited
+        }
+    }
+`;
+
+export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
+    query {
+        getBankDepositTxnsByUser {
+            id
+            userId
+            uid
+            createdAt
+            confirmedAt
+            status
+            fiatType
+            usdAmount
+            cryptoType
+            cryptoPrice
+            fee
+            deposited
         }
     }
 `;
