@@ -5,7 +5,6 @@ import {
     AccordionUpIcon,
     DownloadIcon,
 } from "../../../utilities/imgImport";
-import { createDateFromDateObject } from "../../../utilities/utility-methods";
 import { useTransactions } from "./transactions-context";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
