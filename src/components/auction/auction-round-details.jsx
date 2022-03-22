@@ -8,6 +8,7 @@ import PercentageBar from "./percentage-bar"
 export default function AuctionRoundDetails() {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
 
     // Container
     const auction = useAuction()
@@ -61,7 +62,7 @@ export default function AuctionRoundDetails() {
                         {isAuction ? "Reserved Price" : "Token Price"}{" "}
                     </p>
                     <p className="value">
-                        {Number((isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice) * currencyRates[currency.value]).toFixed(2)}
+                        {Number((isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice) * currencyRate).toFixed(2)}
                         <span className="txt-green ms-1">
                             {currency.label}
                         </span>

@@ -5,6 +5,7 @@ import { useAuction } from "../../providers/auction-context"
 const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult, isCurrentUser }) => {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
 
     const {isAuction} = useAuction()
     return (
@@ -23,9 +24,9 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult,
                     {isAuction ?
                         <div className="d-flex flex-column">
                             <div className="text-white align-self-end fw-500">{tokenPrice}</div>
-                            <div className="text-secondary align-self-end fs-12px">{currency.sign} {Number(mainAmount * currencyRates[currency.value]).toFixed(2)}</div>
+                            <div className="text-secondary align-self-end fs-12px">{currency.sign} {Number(mainAmount * currencyRate).toFixed(2)}</div>
                         </div> :
-                        <div className="text-white align-self-end fw-500">{currency.sign} {Number(mainAmount * currencyRates[currency.value]).toFixed(2)}</div>
+                        <div className="text-white align-self-end fw-500">{currency.sign} {Number(mainAmount * currencyRate).toFixed(2)}</div>
                     }
                 </div>
             </div>

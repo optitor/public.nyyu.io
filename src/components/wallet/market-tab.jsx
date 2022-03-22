@@ -33,6 +33,7 @@ const REFRESH_TIME = 30;
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         chart: [],
@@ -97,7 +98,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                 <p className="coin-price text-center">
                     {price?
                     <NumberFormat
-                        value={Math.round(price * Number(currencyRates[currency.value]?? 1).toFixed(2) * 10**8) / 10**8}
+                        value={Math.round(price * Number(currencyRate).toFixed(2) * 10**8) / 10**8}
                         thousandSeparator={true}
                         displayType='text'
                         prefix={currency.sign + ' '}
@@ -155,11 +156,12 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                 }
             </td>
             <td className="mobile-not text-center">
-                {!volume ? '' : currency.sign + ' '+ numFormatter(volume * Number(currencyRates[currency.value]?? 1), 2)}
+                {!volume ? '' : currency.sign + ' '+ numFormatter(volume * Number(currencyRate), 2)}
             </td>
         </tr>
     )
 }
+
 const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
     return (
         <tr>
