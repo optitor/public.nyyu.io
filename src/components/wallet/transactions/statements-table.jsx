@@ -5,16 +5,14 @@ import {
     AccordionUpIcon,
     DownloadIcon,
 } from "../../../utilities/imgImport";
+import { createDateFromDateObject } from "../../../utilities/utility-methods";
 import { useTransactions } from "./transactions-context";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
 export default function StatementsTable() {
     // Containers
     const { tabs } = useTransactions();
     const [currentRowsOpen, setCurrentRowsOpen] = useState([]);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(createDateFromDateObject());
+    const [endDate, setEndDate] = useState(createDateFromDateObject());
     const depositOptions = [
         { value: "withdraw", label: "Withdraw" },
         { value: "bid", label: "Bid" },
@@ -60,19 +58,25 @@ export default function StatementsTable() {
                     </div>
                     <div className="d-flex align-items-center gap-1">
                         <div className="date-title">start date:</div>
-                        <DatePicker
-                            selected={startDate}
-                            className="start-date-picker"
-                            onChange={(date) => setStartDate(date)}
-                        />
+                        <div>
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                className="start-date-picker"
+                            />
+                        </div>
                     </div>
                     <div className="d-flex align-items-center gap-1">
                         <div className="date-title">end date:</div>
-                        <DatePicker
-                            selected={endDate}
-                            className="start-date-picker"
-                            onChange={(date) => setEndDate(date)}
-                        />
+                        <div>
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                className="start-date-picker"
+                            />
+                        </div>
                     </div>
                     <div>
                         <img src={DownloadIcon} alt="Download icon" />
