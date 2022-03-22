@@ -66,7 +66,7 @@ export default function CurrencyChoice({ classNames }) {
     };
     
     return (
-        <div className={`${classNames} mx-1`}>
+        <div className={`${classNames?? ''} mx-1`}>
             {isShowCurrencyChoice && (
                     <div>
                         <Select
