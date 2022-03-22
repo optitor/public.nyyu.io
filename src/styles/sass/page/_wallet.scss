@@ -1191,8 +1191,8 @@ div.wallet_balances {
         font-size: 12px;
     }
     .transaction-section-tables {
-        max-height: 430px !important;
-        min-height: 430px;
+        max-height: 300px !important;
+        min-height: 300px;
         @include custom-scroll(0vh);
     }
     .css-1s2u09g-control,
