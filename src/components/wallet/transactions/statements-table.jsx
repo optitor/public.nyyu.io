@@ -24,6 +24,7 @@ export default function StatementsTable() {
         { value: "bid", label: "Bid" },
         { value: "buy", label: "Buy" },
     ];
+
     const periodOptions = [
         { value: "weekly", label: "Weekly" },
         { value: "quarterly", label: "Quarterly" },

@@ -153,3 +153,156 @@ export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
         }
     }
 `;
+
+export const GET_STATEMENTS = gql`
+    query getStatement($from: Float, $to: Float) {
+        getStatement(from: $from, to: $to) {
+            cryptoWithdraws {
+                id
+                userId
+                sourceToken
+                tokenPrice
+                withdrawAmount
+                fee
+                tokenAmount
+                status
+                deniedReason
+                requestedAt
+                confirmedAt
+                network
+                destination
+            }
+            paypalWithdraws {
+                id
+                userId
+                targetCurrency
+                sourceToken
+                tokenPrice
+                withdrawAmount
+                fee
+                tokenAmount
+                status
+                deniedReason
+                requestedAt
+                confirmedAt
+                senderBatchId
+                senderItemId
+                receiver
+            }
+            stripeAuctionTxns {
+                id
+                auctionId
+                userId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paymentIntentId
+                paymentMethodId
+                bidId
+            }
+            paypalAuctionTxns {
+                id
+                userId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paypalOrderId
+                paypalOrderStatus
+                auctionId
+                bidId
+            }
+            coinpaymentAuctionTxns {
+                id
+                userId
+                amount
+                createdAt
+                status
+                cryptoType
+                network
+                cryptoAmount
+                confirmedAt
+                coin
+                auctionId
+                bidId
+            }
+            stripePresaleTxns {
+                id
+                presaleId
+                orderId
+                userId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paymentIntentId
+                paymentMethodId
+            }
+            paypalPresaleTxns {
+                id
+                userId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paypalOrderId
+                paypalOrderStatus
+                presaleId
+                orderId
+            }
+            coinpaymentPresaleTxns {
+                id
+                userId
+                amount
+                createdAt
+                status
+                cryptoType
+                network
+                cryptoAmount
+                confirmedAt
+                depositAddress
+                coin
+                presaleId
+                orderId
+            }
+            paypalDepositTxns {
+                id
+                userId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paypalOrderId
+                paypalOrderStatus
+                cryptoType
+                cryptoPrice
+                fee
+                deposited
+            }
+            coinpaymentWalletTxns {
+                id
+                userId
+                amount
+                createdAt
+                status
+                cryptoType
+                network
+                cryptoAmount
+                confirmedAt
+                depositAddress
+                coin
+            }
+        }
+    }
+`;
