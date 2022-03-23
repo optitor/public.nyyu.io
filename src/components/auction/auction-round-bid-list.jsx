@@ -37,7 +37,7 @@ export default function AuctionRoundBidList() {
         variables: isAuction ? {
             round: currentRoundNumber
         } : {
-            presaleId: optCurrentRound.id
+            presaleId: optCurrentRound?.id
         },
         onCompleted: (data) => {
             let list = _.orderBy(

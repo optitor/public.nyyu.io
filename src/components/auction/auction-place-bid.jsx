@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import Slider from "rc-slider"
 import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
+import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 
@@ -13,6 +14,10 @@ import { ROUTES } from "../../utilities/routes"
 import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
 
 export default function AuctionPlaceBid() {
+    const currency = useSelector(state => state.placeBid.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
+
     // Containers
     const auction = useAuction();
     const dispatch = useDispatch()
@@ -116,7 +121,7 @@ export default function AuctionPlaceBid() {
                             step={1}
                         />
                     </div>
-                    <h3 className="range-label">per token price</h3>
+                    <h3 className="range-label">per token price (USD)</h3>
                     <div className="d-flex align-items-center mb-4">
                         <input
                             type="number"
@@ -140,19 +145,28 @@ export default function AuctionPlaceBid() {
                         />
                     </div>
                     <div className="d-flex align-items-center">
-                    <span className="range-label mb-0">Total price</span>
-                        <input
+                        <span className="range-label mb-0">Total price</span>
+                        <NumberFormat
                             className="total-input"
-                            type="text"
-                            value={numberWithCommas(
-                                Number(
-                                    Math.max(optCurrentRound?.minPrice, price * amount),
-                                    " "
-                                )
-                            )}
-                            readOnly
+                            value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount * currencyRate)).toFixed(2) * 10**2) / 10**2}
+                            thousandSeparator={true}
+                            displayType='text'
+                            allowNegative={false}
+                            renderText={(value, props) => <span {...props}>{value}</span>}
                         />
-                        <h3 className="symbol-label">{Currencies[0].label}</h3>
+                        <h3 className="symbol-label">{currency.label}</h3>
+                    </div>
+                    <div className="text-center mt-8px" style={{height: 20, fontWeight: 600}}>
+                        {currency.label !== 'USD'?
+                            <NumberFormat
+                                className="text-green"
+                                value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount)).toFixed(2) * 10**2) / 10**2}
+                                thousandSeparator={true}
+                                displayType='text'
+                                allowNegative={false}
+                                renderText={(value, props) => <span {...props}>{value} USD</span>}
+                            />: ''
+                        }
                     </div>
                     <div className="mt-3 mb-1">
                         <p className="text-secondary fw-500 text-[#959595]">

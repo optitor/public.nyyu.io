@@ -16,6 +16,7 @@ import { EmptyAvatar, BaseExpression, BaseHair } from "../../../utilities/imgImp
 import { useGetUserTierQuery } from "../../../apollo/model/userTier";
 import { create_Avatar_Component } from "../../../redux/actions/avatarAction";
 
+
 const categories = [
     { value: 'hairStyle', label: 'Hair Style' },
     { value: 'facialStyle', label: 'Facial Style' },

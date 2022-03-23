@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { navigate } from "gatsby";
 
 // for paypal callback
 import { useQueryParam, StringParam } from "use-query-params";
@@ -36,6 +37,7 @@ import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
 import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
 import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
+import { ROUTES } from "../../utilities/routes";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },

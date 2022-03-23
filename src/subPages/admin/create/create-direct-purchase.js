@@ -25,8 +25,8 @@ const IndexPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
     const [pending, setPending] = useState(false);
-    const totalTokenAmount = 100000000;
-    const prevReservedPrice = 5000;
+    const totalTokenAmount = 1000000;
+    const prevReservedPrice = 100;
 
     //------- Round Data and Validation
     // Round Data

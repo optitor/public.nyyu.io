@@ -15,7 +15,7 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen}) => {
             isOpen={isModalOpen}
             onRequestClose={closeModal}
             ariaHideApp={false}
-            className="delete-confirm-modal"
+            className="inform-banned-modal"
             overlayClassName="pwd-modal__overlay"
         >
             <div className="pwd-modal__header">
@@ -30,13 +30,13 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen}) => {
                 </div>
             </div>
             <InformBanned>
-                <div className='text-center mb-3'>
+                <div className='text-center mb-5 px-5'>
                     <img src={SadFace} />
-                    <h4>We are sorry!</h4>
-                    <p>It seems your country is not in our records.</p>
-                    <p className='mt-5 description'>
-                        For more information about our services please visit
-                        <a target='_blank' href='https://ndb.technology' className='ms-2 text-green text-underline'>ndb.technology</a>
+                    <p className='mt-3'>It seems you are accessing nyyu.io from an IP address belonging to the unallowed country.</p>
+                    <p className='mt-3'>
+                        As per our
+                        <a target='_blank' href='https://ndb.technology' className='ms-2 text-green text-underline'>Terms of Use</a>
+                        , we are unable to provide services to users from this region.
                     </p>
                 </div>
             </InformBanned>
