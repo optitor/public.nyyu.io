@@ -74,6 +74,7 @@
     "react-copy-to-clipboard": "^5.0.4",
     "react-countdown-hook": "^1.1.1",
     "react-currency-conv": "^1.1.0",
+    "react-day-picker": "^7.4.10",
     "react-device-detect": "^2.1.2",
     "react-dom": "^17.0.1",
     "react-fontawesome": "^1.7.1",
