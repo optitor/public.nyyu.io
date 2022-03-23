@@ -13,6 +13,7 @@ import "react-day-picker/lib/style.css";
 
 export default function StatementsTable() {
     // Containers
+    // Other variables.
     const { tabs, itemsCountPerPage } = useTransactions();
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
     const [startDate, setStartDate] = useState(new Date());
@@ -20,16 +21,67 @@ export default function StatementsTable() {
     const [activePage, setActivePage] = useState(1);
     const [list, setList] = useState([...Array(15).keys()]);
     const depositOptions = [
+        { value: "deposit", label: "Deposit" },
         { value: "withdraw", label: "Withdraw" },
         { value: "bid", label: "Bid" },
         { value: "buy", label: "Buy" },
     ];
 
     const periodOptions = [
-        { value: "weekly", label: "Weekly" },
-        { value: "quarterly", label: "Quarterly" },
-        { value: "yearly", label: "Yearly" },
+        { index: 0, value: "weekly", label: "Weekly" },
+        { index: 1, value: "monthly", label: "Monthly" },
+        { index: 2, value: "quarterly", label: "Quarterly" },
+        { index: 3, value: "semi_annually", label: "Semi Annually" },
+        { index: 4, value: "annually", label: "Annually" },
+        { index: 5, value: "all_time", label: "All Time" },
+        { index: 6, value: "custom", label: "Custom" },
     ];
+    const [selectedPeriodIndex, setSelectedPeriodIndex] = useState(0);
+    const [selectedPeriodOption, setSelectedPeriodOption] = useState(
+        periodOptions[selectedPeriodIndex]
+    );
+    const [selectedDepositOption, setSelectedDepositOption] = useState(
+        depositOptions[0]
+    );
+
+    // Utility variables.
+    const now = new Date();
+    const lastWeek = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - 7
+    );
+    const lastMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() - 1,
+        now.getDate()
+    );
+    const last4Month = new Date(
+        now.getFullYear(),
+        now.getMonth() - 4,
+        now.getDate()
+    );
+    const last6Month = new Date(
+        now.getFullYear(),
+        now.getMonth() - 6,
+        now.getDate()
+    );
+    const lastYear = new Date(
+        now.getFullYear() - 1,
+        now.getMonth(),
+        now.getDate()
+    );
+    const allTime = new Date(0);
+    const timeFrames = [
+        lastWeek,
+        lastMonth,
+        last4Month,
+        last6Month,
+        lastYear,
+        allTime,
+    ];
+    const [from, setFrom] = useState(timeFrames[selectedPeriodIndex]);
+    const [to, setTo] = useState(now);
 
     // Methods
     const toggleDetails = (index) => {
@@ -52,51 +104,64 @@ export default function StatementsTable() {
                         <Select
                             isSearchable={false}
                             options={depositOptions}
-                            defaultValue={depositOptions[0]}
+                            value={selectedDepositOption}
+                            onChange={(option) =>
+                                setSelectedDepositOption(option)
+                            }
                         />
                     </div>
                     <div>
                         <Select
                             isSearchable={false}
                             options={periodOptions}
-                            defaultValue={periodOptions[0]}
+                            value={selectedPeriodOption}
+                            onChange={(option) => {
+                                setSelectedPeriodOption(option);
+                                setSelectedPeriodIndex(option.index);
+                                if (option.value === "custom") {
+                                    setFrom(now);
+                                    setTo(now);
+                                } else setFrom(timeFrames[option.index]);
+                            }}
                         />
                     </div>
                     <div className="d-flex align-items-center gap-2">
                         <div className="date-title">start date:</div>
-                        {/* <div>
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
+                        {selectedPeriodOption.value === "custom" ? (
+                            <DayPickerInput
+                                placeholder="DD/MM/YYYY"
+                                format="DD/MM/YYYY"
                                 className="start-date-picker"
+                                value={new Date(from)}
+                                onDayChange={(day) => setStartDate(day)}
                             />
-                        </div> */}
-                        <DayPickerInput
-                            placeholder="DD/MM/YYYY"
-                            format="DD/MM/YYYY"
-                            className="start-date-picker"
-                            value={startDate}
-                            onDayChange={(day) => setStartDate(day)}
-                        />
+                        ) : (
+                            <input
+                                type="text"
+                                disabled
+                                value={createDateFromDateObject(new Date(from))}
+                                className="start-date-picker disabled text-secondary"
+                            />
+                        )}
                     </div>
                     <div className="d-flex align-items-center gap-2">
                         <div className="date-title">end date:</div>
-                        {/* <div>
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
+                        {selectedPeriodOption.value === "custom" ? (
+                            <DayPickerInput
+                                placeholder="DD/MM/YYYY"
+                                format="DD/MM/YYYY"
                                 className="start-date-picker"
+                                value={new Date(to)}
+                                onDayChange={(day) => setEndDate(day)}
                             />
-                        </div> */}
-                        <DayPickerInput
-                            placeholder="DD/MM/YYYY"
-                            format="DD/MM/YYYY"
-                            className="start-date-picker"
-                            value={endDate}
-                            onDayChange={(day) => setEndDate(day)}
-                        />
+                        ) : (
+                            <input
+                                type="text"
+                                disabled
+                                value={createDateFromDateObject(new Date(to))}
+                                className="start-date-picker disabled text-secondary"
+                            />
+                        )}
                     </div>
                     <div>
                         <img src={DownloadIcon} alt="Download icon" />
