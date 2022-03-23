@@ -310,18 +310,20 @@ export default function DepositTable() {
                         )}
                 </table>
             </div>
-            <div className="px-4">
-                <Pagination
-                    activePage={activePage}
-                    itemsCountPerPage={itemsCountPerPage}
-                    totalItemsCount={list.length}
-                    pageRangeDisplayed={5}
-                    onChange={(pageNumber) => {
-                        toggleDetails(-1);
-                        setActivePage(pageNumber);
-                    }}
-                />
-            </div>
+            {list?.length > 3 && (
+                <div className="px-4">
+                    <Pagination
+                        activePage={activePage}
+                        itemsCountPerPage={itemsCountPerPage}
+                        totalItemsCount={list.length}
+                        pageRangeDisplayed={5}
+                        onChange={(pageNumber) => {
+                            toggleDetails(-1);
+                            setActivePage(pageNumber);
+                        }}
+                    />
+                </div>
+            )}
         </>
     );
 }

@@ -77,7 +77,6 @@ export default function WithdrawTable() {
         setCurrentWithdrawType(type);
         if (type.value === "paypal") setList(paypalWithdrawTransactions);
         if (type.value === "crypto") setList(coinWithdrawTransactions);
-        if (type.value === "credit_card") setList([]);
     };
 
     // Render
@@ -303,18 +302,20 @@ export default function WithdrawTable() {
                         )}
                 </table>
             </div>
-            <div className="px-4">
-                <Pagination
-                    activePage={activePage}
-                    itemsCountPerPage={itemsCountPerPage}
-                    totalItemsCount={list.length}
-                    pageRangeDisplayed={5}
-                    onChange={(pageNumber) => {
-                        toggleDetails(-1);
-                        setActivePage(pageNumber);
-                    }}
-                />
-            </div>
+            {list?.length > 3 && (
+                <div className="px-4">
+                    <Pagination
+                        activePage={activePage}
+                        itemsCountPerPage={itemsCountPerPage}
+                        totalItemsCount={list.length}
+                        pageRangeDisplayed={5}
+                        onChange={(pageNumber) => {
+                            toggleDetails(-1);
+                            setActivePage(pageNumber);
+                        }}
+                    />
+                </div>
+            )}
         </>
     );
 }
