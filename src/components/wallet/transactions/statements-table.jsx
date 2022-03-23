@@ -8,11 +8,14 @@ import {
 } from "../../../utilities/imgImport";
 import { createDateFromDateObject } from "../../../utilities/utility-methods";
 import { useTransactions } from "./transactions-context";
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import "react-day-picker/lib/style.css";
+
 export default function StatementsTable() {
     // Containers
     const { tabs, itemsCountPerPage } = useTransactions();
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
-    const [startDate, setStartDate] = useState(createDateFromDateObject());
+    const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(createDateFromDateObject());
     const [activePage, setActivePage] = useState(1);
     const [list, setList] = useState([...Array(15).keys()]);
@@ -58,27 +61,41 @@ export default function StatementsTable() {
                             defaultValue={periodOptions[0]}
                         />
                     </div>
-                    <div className="d-flex align-items-center gap-1">
+                    <div className="d-flex align-items-center gap-2">
                         <div className="date-title">start date:</div>
-                        <div>
+                        {/* <div>
                             <input
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
                                 className="start-date-picker"
                             />
-                        </div>
+                        </div> */}
+                        <DayPickerInput
+                            placeholder="DD/MM/YYYY"
+                            format="DD/MM/YYYY"
+                            className="start-date-picker"
+                            value={startDate}
+                            onDayChange={(day) => setStartDate(day)}
+                        />
                     </div>
-                    <div className="d-flex align-items-center gap-1">
+                    <div className="d-flex align-items-center gap-2">
                         <div className="date-title">end date:</div>
-                        <div>
+                        {/* <div>
                             <input
                                 type="date"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
                                 className="start-date-picker"
                             />
-                        </div>
+                        </div> */}
+                        <DayPickerInput
+                            placeholder="DD/MM/YYYY"
+                            format="DD/MM/YYYY"
+                            className="start-date-picker"
+                            value={endDate}
+                            onDayChange={(day) => setEndDate(day)}
+                        />
                     </div>
                     <div>
                         <img src={DownloadIcon} alt="Download icon" />
