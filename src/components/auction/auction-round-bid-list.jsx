@@ -22,9 +22,6 @@ export default function AuctionRoundBidList() {
     const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
     const [currentUserBidData, setCurrentUserBidData] = useState(null)
     const pollIntervalValue = 10000
-    const limitDisplayBidCount = 6
-    const [aboveBidList, setAboveBidList] = useState(null)
-    const [belowBidList, setBelowBidList] = useState(null)
 
     const loadingData = !(
         currentRoundBidList &&
@@ -51,8 +48,6 @@ export default function AuctionRoundBidList() {
                 ranking: isAuction ? (item.ranking ? item.ranking : list.indexOf(item) + 1) : list.indexOf(item) + 1
             }))
             setDisplayedBidList([])
-            setAboveBidList([])
-            setBelowBidList([])
             setCurrentAuctionUserExist(false)
             setCurrentUserBidData([])
             if (!isAuction) {
@@ -95,19 +90,16 @@ export default function AuctionRoundBidList() {
 
     useEffect(() => {
         if (currentRoundBidList && currentRoundBidList.length) {
-            if (currentRoundBidList.length >= limitDisplayBidCount) {
-                setDisplayedBidList(currentRoundBidList)
-                const currentUserBidInfo = currentRoundBidList?.filter(
-                    (auction) => auction.userId === currentUser.id
-                )[0]
-                if (currentUserBidInfo) {
-                    setCurrentUserBidData(currentUserBidInfo)
-                    setCurrentAuctionUserExist(true)
-                    setAboveBidList(currentRoundBidList.slice(0, currentUserBidInfo.ranking - 1))
-                    setBelowBidList(currentRoundBidList.slice(currentUserBidInfo.ranking))
-                } else {
-                    setDisplayedBidList(currentRoundBidList)
-                }
+            const currentUserBidInfo = currentRoundBidList?.filter(
+                (auction) => auction.userId === currentUser.id
+            )[0]
+            if (currentUserBidInfo) {
+                setCurrentUserBidData(currentUserBidInfo)
+                setCurrentAuctionUserExist(true)
+                const restList = currentRoundBidList?.filter(
+                    (auction) => auction.userId !== currentUser.id
+                )
+                setDisplayedBidList(restList)
             } else {
                 setDisplayedBidList(currentRoundBidList)
             }
@@ -131,56 +123,28 @@ export default function AuctionRoundBidList() {
         <div className="d-flex flex-column align-items-center pt-5 list-part">
             <AuctionListHeader totalCount={currentRoundBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
                                auctionTitle={isAuction ? "Bid" : "Order"}/>
-            {currentAuctionUserExist ? <>
-                    <div className="auction-bid-list-section-group">
-                        {aboveBidList && aboveBidList.map((item, index) =>
-                            <AuctionList
-                                key={index}
-                                ranking={item.ranking}
-                                fullName={item.prefix + "." + item.name}
-                                tokenPrice={isAuction ? item.tokenPrice : item.ndbPrice}
-                                mainAmount={isAuction ? item.tokenAmount * item.tokenPrice : item.ndbAmount}
-                                winningResult={item.status !== 0 && item.status === 1}
-                                isCurrentUser={item.userId === currentUser.id}
-                            />
-                        )}
-                    </div>
-                    <div className="auction-bid-list-content-final">
-                        <AuctionList
-                            ranking={currentUserBidData.ranking}
-                            fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
-                            tokenPrice={currentUserBidData.tokenPrice}
-                            mainAmount={currentUserBidData.tokenAmount * currentUserBidData.tokenPrice}
-                            winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1}
-                            isCurrentUser={true}/>
-                    </div>
-                    <div className="auction-bid-list-section-group">
-                        {belowBidList && belowBidList.map((item, index) =>
-                            <AuctionList
-                                key={index}
-                                ranking={item.ranking}
-                                fullName={item.prefix + "." + item.name}
-                                tokenPrice={isAuction ? item.tokenPrice : item.ndbPrice}
-                                mainAmount={isAuction ? item.tokenAmount * item.tokenPrice : item.ndbAmount}
-                                winningResult={item.status !== 0 && item.status === 1}
-                                isCurrentUser={item.userId === currentUser.id}
-                            />
-                        )}
-                    </div>
-                </> :
-                <div className="auction-bid-list-content-group">
-                    {displayedBidList && displayedBidList.map((item, index) =>
-                        <AuctionList
-                            key={index}
-                            ranking={item.ranking}
-                            fullName={item.prefix + "." + item.name}
-                            tokenPrice={isAuction ? item.tokenPrice : item.ndbPrice}
-                            mainAmount={isAuction ? item.tokenAmount * item.tokenPrice : item.ndbAmount}
-                            winningResult={item.status !== 0 && item.status === 1}
-                            isCurrentUser={item.userId === currentUser.id}
-                        />
-                    )}
-                </div>}
+            {currentAuctionUserExist ? <div className="auction-bid-list-content-final">
+                <AuctionList
+                    ranking={currentUserBidData.ranking}
+                    fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
+                    tokenPrice={currentUserBidData.tokenPrice}
+                    mainAmount={currentUserBidData.tokenAmount * currentUserBidData.tokenPrice}
+                    winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1}
+                    isCurrentUser={true}/>
+            </div> : ""}
+            <div className="auction-bid-list-content-group">
+                {displayedBidList && displayedBidList.map((item, index) =>
+                    <AuctionList
+                        key={index}
+                        ranking={item.ranking}
+                        fullName={item.prefix + "." + item.name}
+                        tokenPrice={isAuction ? item.tokenPrice : item.ndbPrice}
+                        mainAmount={isAuction ? item.tokenAmount * item.tokenPrice : item.ndbAmount}
+                        winningResult={item.status !== 0 && item.status === 1}
+                        isCurrentUser={item.userId === currentUser.id}
+                    />
+                )}
+            </div>
         </div>
     )
 }
