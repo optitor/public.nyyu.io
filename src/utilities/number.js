@@ -58,6 +58,10 @@ export const numberWithCommas = (x, ch = ",") => {
     else return parseFloat(x)
 }
 
+export const floatWithCommas = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
 export const formatBytes = (bytes, decimals = 0) => {
     if (bytes === 0) return "0 Bytes"
 
