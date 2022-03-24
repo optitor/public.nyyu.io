@@ -326,7 +326,6 @@
         font-size: 24px;
         line-height: 29px;
         text-transform: uppercase;
-        margin-bottom: 21px;
         color: white;
     }
     .range-input,
@@ -343,11 +342,10 @@
         text-align: center;
     }
     .total-input {
-        width: 250px;
+        width: 100%;
         font-weight: bold;
         font-size: 30px;
         line-height: 37px;
-        margin-left: 18px;
     }
     .symbol-label {
         color: $green;
@@ -496,4 +494,9 @@
 }
 .url-error-input {
     border: 1px solid $red;
+}
+@include media-breakpoint-down(lg) {
+    .range-label {
+        margin-bottom: 21px;
+    }
 }

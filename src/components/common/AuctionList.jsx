@@ -20,9 +20,9 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult,
                 <div className="d-flex align-items-center justify-content-start">
                     <div className="d-flex justify-content-center align-items-center">
                         <div
-                            className={isCurrentUser ? winningResult ? "txt-mountainMeadow fw-bold wrap-text" : "txt-cinnabar fw-bold wrap-text" : "text-white wrap-text"}>{fullName}</div>
-                        {isCurrentUser ? <div
-                            className={`w-50px text-center fs-8px ml-8px ${winningResult ? " border-mountainMeadow txt-mountainMeadow" : "border-cinnabar txt-cinnabar"}`}>{winningResult ? "WINNING" : "LOST"}</div> : ""}
+                            className={isCurrentUser ? winningResult ? "txt-mountainMeadow fw-bold" : "txt-cinnabar fw-bold" : "text-white"}>{fullName}</div>
+                        {isCurrentUser ? <span
+                            className={`w-50px text-center fs-8px ml-8px ${winningResult ? " border-mountainMeadow txt-mountainMeadow" : "border-cinnabar txt-cinnabar"}`}>{winningResult ? "WINNING" : "LOST"}</span> : ""}
                     </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-end">
