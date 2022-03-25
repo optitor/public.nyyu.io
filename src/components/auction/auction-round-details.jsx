@@ -6,9 +6,9 @@ import { numberWithLength } from "../../utilities/number"
 import PercentageBar from "./percentage-bar"
 
 export default function AuctionRoundDetails() {
-    const currency = useSelector(state => state.placeBid.currency);
-    const currencyRates = useSelector(state => state.currencyRates);
-    const currencyRate = currencyRates[currency.value]?? 1;
+    const currency = useSelector(state => state.placeBid.currency)
+    const currencyRates = useSelector(state => state.currencyRates)
+    const currencyRate = currencyRates[currency.value] ?? 1
 
     // Container
     const auction = useAuction()
@@ -16,7 +16,7 @@ export default function AuctionRoundDetails() {
     const [restTime, setRestTime] = useState({
         hours: 0,
         minutes: 0,
-        seconds: 0,
+        seconds: 0
     })
     const getRemainingRoundTime = (difference) => {
         const seconds = Math.floor((difference / 1000) % 60)
@@ -25,16 +25,16 @@ export default function AuctionRoundDetails() {
         setRestTime({
             hours: hours < 10 ? "0" + hours : hours,
             minutes: minutes < 10 ? "0" + minutes : minutes,
-            seconds: seconds < 10 ? "0" + seconds : seconds,
+            seconds: seconds < 10 ? "0" + seconds : seconds
         })
     }
 
-    const soldTokensPercentage = (optCurrentRound?.sold / (isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)) * 100;
+    const soldTokensPercentage = (optCurrentRound?.sold / (isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)) * 100
 
     useEffect(() => {
         const timer = setInterval(() => {
             const currentTimeMilliSeconds = new Date().getTime()
-            if (optCurrentRound.status === 2 ) {
+            if (optCurrentRound.status === 2) {
                 const difference = Math.abs(optCurrentRound.endedAt - currentTimeMilliSeconds)
                 getRemainingRoundTime(difference)
             } else if (optCurrentRound.status === 1) {
@@ -48,7 +48,7 @@ export default function AuctionRoundDetails() {
     }, [optCurrentRound])
 
     // Render
-    if (!currentRoundBidList) return <></>;
+    if (!currentRoundBidList) return <></>
     return (
         <div className="auction-left__bottom">
             <PercentageBar
@@ -62,7 +62,7 @@ export default function AuctionRoundDetails() {
                         {isAuction ? "Reserved Price" : "Token Price"}{" "}
                     </p>
                     <p className="value">
-                        {Number((isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice) * currencyRate).toFixed(2)}
+                        {Number((isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice) * currencyRate).toFixed(3)}
                         <span className="txt-green ms-1">
                             {currency.label}
                         </span>
@@ -75,7 +75,7 @@ export default function AuctionRoundDetails() {
                                 {isAuction ? "Time Remaining" : "Tokens Remaining"}
                             </p>
                             <p className="value text-end">
-                                {isAuction ? numberWithLength(restTime.hours,2)+":"+numberWithLength(restTime.minutes, 2)+":"+numberWithLength(restTime.seconds, 2) : optCurrentRound.tokenAmount - optCurrentRound.sold}
+                                {isAuction ? numberWithLength(restTime.hours, 2) + ":" + numberWithLength(restTime.minutes, 2) + ":" + numberWithLength(restTime.seconds, 2) : optCurrentRound.tokenAmount - optCurrentRound.sold}
                             </p>
                         </>
                     ) : (
@@ -84,5 +84,5 @@ export default function AuctionRoundDetails() {
                 </div>
             </div>
         </div>
-    );
+    )
 }

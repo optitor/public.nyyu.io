@@ -8,10 +8,10 @@ import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 
 import CustomSpinner from "../common/custom-spinner"
-import { numberWithCommas } from "../../utilities/number"
-import { Currencies } from "../../utilities/staticData"
 import { ROUTES } from "../../utilities/routes"
 import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
+
+const initialMaxPrice = 100
 
 export default function AuctionPlaceBid() {
     const currency = useSelector(state => state.placeBid.currency);
@@ -28,6 +28,7 @@ export default function AuctionPlaceBid() {
     const [reqPending, setReqPending] = useState(false)
     const [preAmount, setPreAmount] = useState(1)
     const [prePrice, setPrePrice] = useState(1)
+    const [maxPrice, setMaxPrice] = useState(initialMaxPrice)
 
     // Webservice
     const [placeBid] = useMutation(PLACE_BID, {
@@ -76,6 +77,12 @@ export default function AuctionPlaceBid() {
         }
         dispatch(setCurrentRound(optCurrentRound?.id))
     }
+
+    useEffect(() => {
+        if (price === maxPrice) {
+            setTimeout(() => setMaxPrice(2*maxPrice), 200)
+        }
+    }, [price])
 
     useEffect(() => {
         if (getBid)
@@ -140,27 +147,33 @@ export default function AuctionPlaceBid() {
                             value={price}
                             onChange={(value) => setPrice(value)}
                             min={optCurrentRound?.minPrice}
-                            max={1000}
-                            step={1}
+                            max={maxPrice}
+                            step={0.001}
                         />
                     </div>
-                    <div className="d-flex align-items-center">
-                        <span className="range-label mb-0">Total price</span>
-                        <NumberFormat
-                            className="total-input"
-                            value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount * currencyRate)).toFixed(2) * 10**2) / 10**2}
-                            thousandSeparator={true}
-                            displayType='text'
-                            allowNegative={false}
-                            renderText={(value, props) => <span {...props}>{value}</span>}
-                        />
-                        <h3 className="symbol-label">{currency.label}</h3>
+                    <div className="row">
+                        <div className="col-lg-4 col-md-12 range-label">
+                            <div className="h-100 d-flex align-items-center">Total price</div>
+                        </div>
+                        <div className="col-lg-8 col-md-12">
+                            <div className="d-flex align-items-center justify-content-end">
+                                <NumberFormat
+                                    className="total-input"
+                                    value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount * currencyRate)).toFixed(3) * 10**3) / 10**3}
+                                    thousandSeparator={true}
+                                    displayType='text'
+                                    allowNegative={false}
+                                    renderText={(value, props) => <span {...props}>{value}</span>}
+                                />
+                                <h3 className="symbol-label">{currency.label}</h3>
+                            </div>
+                        </div>
                     </div>
                     <div className="text-center mt-8px" style={{height: 20, fontWeight: 600}}>
                         {currency.label !== 'USD'?
                             <NumberFormat
                                 className="text-green"
-                                value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount)).toFixed(2) * 10**2) / 10**2}
+                                value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount)).toFixed(3) * 10**3) / 10**3}
                                 thousandSeparator={true}
                                 displayType='text'
                                 allowNegative={false}
