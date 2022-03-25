@@ -141,19 +141,15 @@ const Payment = () => {
         },
     });
 
-    const [orderCaptured, setOrderCaptured] = useState(false);
-
     useEffect(() => {
         console.log(window.location.href)
         if (
             window.location.href.includes("token=") &&
-            !orderCaptured &&
             !paypalIsCheckingOut
         ) {
             const url = new URL(window.location.href);
             const token = url.searchParams.get("token");
             console.log(token)
-            setOrderCaptured(true);
             captureOrderForAuction({ variables: { orderId: token } });
         }
     }, []);
