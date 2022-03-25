@@ -56,7 +56,7 @@ export default function AuctionRoundDetails() {
                 sold={optCurrentRound.sold}
                 total={isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount}
             />
-            <div className="d-flex justify-content-between mt-4">
+            <div className="d-flex justify-content-between mt-20px">
                 <div>
                     <p className="caption text-[#959595]">
                         {isAuction ? "Reserved Price" : "Token Price"}{" "}
