@@ -159,18 +159,18 @@ const Payment = () => {
     }, []);
 
 
-    if (
-        localStorage.getItem("PayPalForAuctionToken") != null &&
-        localStorage.getItem("PayPalForAuctionToken") !== undefined &&
-        !orderCaptured &&
-        !paypalIsCheckingOut
-    ) {
-        orderCaptured = true;
-        let possibleToken = localStorage.getItem("PayPalForAuctionToken");
-        captureOrderForAuction({ variables: { orderId: possibleToken } });
-        localStorage.setItem("PayPalForAuctionToken", null);
-        localStorage.removeItem("PayPalForAuctionToken");
-    }
+    // if (
+    //     localStorage.getItem("PayPalForAuctionToken") != null &&
+    //     localStorage.getItem("PayPalForAuctionToken") !== undefined &&
+    //     !orderCaptured &&
+    //     !paypalIsCheckingOut
+    // ) {
+    //     setOrderCaptured();
+    //     let possibleToken = localStorage.getItem("PayPalForAuctionToken");
+    //     captureOrderForAuction({ variables: { orderId: possibleToken } });
+    //     localStorage.setItem("PayPalForAuctionToken", null);
+    //     localStorage.removeItem("PayPalForAuctionToken");
+    // }
 
     // if (window.location.href.includes("token=") && !orderCaptured) {
     //     var url = new URL(window.location.href);
