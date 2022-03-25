@@ -39,6 +39,7 @@ import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
+
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
     { icon: Credit, value: "creditcard", label: "Credit / Debit card" },
@@ -62,6 +63,7 @@ const Payment = () => {
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
+    const [paypalIsCheckingOut, setPaypalIsCheckingOut] = useState(false);
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
 
@@ -97,8 +99,6 @@ const Payment = () => {
         if (barProgress < 1) setBarProgress(1);
     }, [barProgress]);
 
-    let paypalIsCheckingOut = false;
-
     const [createPayPalOrder] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
             let links = data.paypalForAuction.links;
@@ -121,7 +121,7 @@ const Payment = () => {
 
     const initPaypal = () => {
         setPayPalLoading(true);
-        paypalIsCheckingOut = true;
+        setPaypalIsCheckingOut(true);
         createPayPalOrder({
             variables: { roundId: currentRound, currencyCode: "USD" },
         });
@@ -133,7 +133,7 @@ const Payment = () => {
             if (data.captureOrderForAuction) {
                 alert("Your checkout was successfully!");
             } else {
-                alert("Error in checkout with PayPal");
+                console.log("Error in checkout with PayPal in complete");
             }
         },
         onError: (err) => {
@@ -141,18 +141,23 @@ const Payment = () => {
         },
     });
 
-    let orderCaptured = false;
+    const [orderCaptured, setOrderCaptured] = useState(false);
 
-    if (
-        window.location.href.includes("token=") &&
-        !orderCaptured &&
-        !paypalIsCheckingOut
-    ) {
-        var url = new URL(window.location.href);
-        let token = url.searchParams.get("token");
-        orderCaptured = true;
-        captureOrderForAuction({ variables: { orderId: token } });
-    }
+    useEffect(() => {
+        console.log(window.location.href)
+        if (
+            window.location.href.includes("token=") &&
+            !orderCaptured &&
+            !paypalIsCheckingOut
+        ) {
+            const url = new URL(window.location.href);
+            const token = url.searchParams.get("token");
+            console.log(token)
+            setOrderCaptured(true);
+            captureOrderForAuction({ variables: { orderId: token } });
+        }
+    }, []);
+
 
     if (
         localStorage.getItem("PayPalForAuctionToken") != null &&
