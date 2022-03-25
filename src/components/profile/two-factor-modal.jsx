@@ -20,6 +20,7 @@ const two_factors = [
     { label: "SMS", method: "phone" },
     { label: "Email", method: "email" },
 ];
+
 const initial = {
     result_code: "",
     set_type: -1,
