@@ -139,13 +139,13 @@ export default function TwoFactorModal({
                             <div className="d-flex flex-column justify-content-center align-items-center">
                                 {two_factors.map((item, idx) => {
                                     const enable = !!twoStep
-                                        ? twoStep.includes(item.method)
+                                        ? twoStep?.includes(item.method)
                                         : false;
                                     let available = true;
                                     if (item.method === "phone") {
-                                        if (twoStep.includes("app")) available = false;
+                                        if (twoStep?.includes("app")) available = false;
                                     } else if (item.method === "app") {
-                                        if (twoStep.includes("phone")) available = false;
+                                        if (twoStep?.includes("phone")) available = false;
                                     }
                                     return (
                                         <div key={idx} className="tfa-line">
@@ -208,11 +208,11 @@ export default function TwoFactorModal({
                                                         disabled={
                                                             (!!twoStep &&
                                                                 two_factors[idx].method === "app" &&
-                                                                twoStep.includes("phone")) ||
+                                                                twoStep?.includes("phone")) ||
                                                             (!!twoStep &&
                                                                 two_factors[idx].method ===
                                                                     "phone" &&
-                                                                twoStep.includes("app"))
+                                                                twoStep?.includes("app"))
                                                         }
                                                         className="btn-primary select-tfa d-flex align-items-center justify-content-center enable"
                                                         onClick={() => {
@@ -310,7 +310,7 @@ export default function TwoFactorModal({
                                 name="result_code"
                                 value={result_code}
                                 onChange={handleInput}
-                                placeholder="000 000"
+                                placeholder="000000"
                             />
                             <div className="result_code_error">
                                 {error && (

@@ -5,7 +5,6 @@ import { useQuery } from "@apollo/client"
 
 import { useAuction } from "../../providers/auction-context"
 import CustomSpinner from "../common/custom-spinner"
-
 import AuctionListHeader from "../common/AuctionListHeader"
 import AuctionList from "../common/AuctionList"
 
@@ -107,7 +106,7 @@ export default function AuctionRoundBidList() {
 
         }
 
-    }, [currentRoundBidList, currentUser.id])
+    }, [currentRoundBidList, currentUser.id, isAuction])
 
     useEffect(() => {
         if (optCurrentRound && optCurrentRound.status === 2) return startPolling(pollIntervalValue)
