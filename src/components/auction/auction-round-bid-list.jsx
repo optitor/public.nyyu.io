@@ -103,12 +103,8 @@ export default function AuctionRoundBidList() {
                 setDisplayedBidList(currentRoundBidList)
             }
         }
-<<<<<<< HEAD
 
     }, [currentRoundBidList, currentUser.id, isAuction])
-=======
-    }, [currentRoundBidList, currentUser.id])
->>>>>>> 22ceb89c700b958a2b0467425304314932049bbc
 
     useEffect(() => {
         if (optCurrentRound && optCurrentRound.status === 2) return startPolling(pollIntervalValue)
