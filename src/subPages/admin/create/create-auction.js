@@ -182,7 +182,7 @@ const IndexPage = () => {
                                             />                                        
                                         </div>
                                         <div>    
-                                            <p className={`${roundDataError.endTime? 'error': ''}`}>Round End Time</p>                                     
+                                            <p className={`${showError && roundDataError.endTime? 'error': ''}`}>Round End Time</p>                                     
                                             <MobileDateTimePicker  
                                                 showTodayButton
                                                 value={roundData.endTime}

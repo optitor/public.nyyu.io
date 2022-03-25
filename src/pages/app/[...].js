@@ -52,6 +52,7 @@ const App = () => {
                         <AuthRoute path="verify-email/:email" component={VerifyEmail} />
 
                         <VerifyFailed path="verify-failed" />
+                        <SelectFigure path="select-figure" />
                         <NewPassword path="new-password" />
                         <ForgotPassword path="forgot-password" />
                         <ChangePassword path="change-password" />
@@ -59,7 +60,6 @@ const App = () => {
                         <VerifyCompany path="verify-company" />
 
                         <PrivateRoute path="profile" component={Profile} />
-                        <PrivateRoute path="select-figure" component={SelectFigure} />
                         <PrivateRoute path="wallet" component={Wallet} />
                         <PrivateRoute path="auction" component={AuctionWrapper} />
                         <PrivateRoute path="payment" component={Payment} />

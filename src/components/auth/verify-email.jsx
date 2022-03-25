@@ -40,9 +40,10 @@ const VerifyEmail = ({ email }) => {
                 }}
                 email={email}
                 twoStep={[]}
-                onResult={(r) => {
-                    if (r) {
-                        navigate(ROUTES.signIn)
+                onResult={(result) => {
+                    if (result) {
+                        console.log(ROUTES.selectFigure)
+                        navigate(ROUTES.selectFigure)
                     } else navigate(ROUTES.verifyFailed)
                 }}
             />

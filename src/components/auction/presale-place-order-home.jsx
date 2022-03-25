@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { useSelector } from 'react-redux'
 import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
-
 import { useAuction } from "../../providers/auction-context"
 
 
