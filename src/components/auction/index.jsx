@@ -4,7 +4,6 @@ import { Tabs } from "react-tabs"
 import Seo from "../seo"
 import Loading from "../common/Loading"
 import Header from "../header"
-
 import { useAuction } from "../../providers/auction-context"
 import AuctionRoundNavigator from "./auction-round-navigator"
 import AuctionRoundBidList from "./auction-round-bid-list"
