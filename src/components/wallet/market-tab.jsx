@@ -33,6 +33,7 @@ const REFRESH_TIME = 30;
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
 
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         chart: [],
@@ -71,8 +72,8 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             };
 
             getTicker24hr();
-            const interval1 = setInterval(() => {
-                getTicker24hr()
+            const interval1 = setInterval(async () => {
+                await getTicker24hr()
             }, 1000 * REFRESH_TIME);
             return () => clearInterval(interval1);
         })();
@@ -95,10 +96,9 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             </td>
             <td className="text-center">
                 <p className="coin-price text-center">
-                    {price && currencyRates[currency.value]?
-                    // currency.sign + ' ' + Math.round(price * Number(currencyRates[currency.value]).toFixed(3) * 10**8) / 10**8:
+                    {price?
                     <NumberFormat
-                        value={Math.round(price * Number(currencyRates[currency.value]).toFixed(2) * 10**8) / 10**8}
+                        value={Math.round(price * Number(currencyRate).toFixed(2) * 10**8) / 10**8}
                         thousandSeparator={true}
                         displayType='text'
                         prefix={currency.sign + ' '}
@@ -156,11 +156,12 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                 }
             </td>
             <td className="mobile-not text-center">
-                {!volume ? '' : currency.sign + ' '+ numFormatter(volume * Number(currencyRates[currency.value]), 2)}
+                {!volume ? '' : currency.sign + ' '+ numFormatter(volume * Number(currencyRate), 2)}
             </td>
         </tr>
     )
 }
+
 const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
     return (
         <tr>

@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from 'react-redux';
 import _ from "lodash";
@@ -20,6 +19,7 @@ const REFRESH_TIME = 30;
 const Asset = ({ item }) => {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
 
     return (
         <tr>
@@ -38,7 +38,7 @@ const Asset = ({ item }) => {
                     renderText={(value, props) => <p {...props}>{value} {item.tokenSymbol}</p>}
                 />
                 <NumberFormat
-                    value={Number(item.balance  * currencyRates[currency.value]).toFixed(2)}
+                    value={Number(item.balance  * currencyRate).toFixed(2)}
                     className="coin-percent"
                     displayType={"text"}
                     thousandSeparator={true}
@@ -52,6 +52,7 @@ const Asset = ({ item }) => {
 export default function InternalWallet() {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
 
     const InitialAssets = {};
     const [myAssets, setMyAssets] = useState(InitialAssets);
@@ -199,7 +200,7 @@ export default function InternalWallet() {
                                         isShowBTC === false
                                             ? totalBalance === 0
                                                 ? 0
-                                                : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
+                                                : Number(totalBalance * currencyRate).toFixed(2)
                                             : totalBalance === 0
                                             ? 0
                                             : (totalBalance / BTCPrice).toFixed(8)
@@ -221,7 +222,7 @@ export default function InternalWallet() {
                                                 : (totalBalance / BTCPrice).toFixed(8)
                                             : totalBalance === 0
                                             ? 0
-                                            : Number(totalBalance * currencyRates[currency.value]).toFixed(2)
+                                            : Number(totalBalance * currencyRate).toFixed(2)
                                     }
                                     className="max-value mt-3"
                                     displayType="text"

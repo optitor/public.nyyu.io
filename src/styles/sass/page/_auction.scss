@@ -90,7 +90,7 @@
             }
         }
         .auction-left {
-            padding-right: 50px;
+            padding-right: 25px;
             @include mq("tablet") {
                 display: block !important;
             }
@@ -271,10 +271,24 @@
         }
     }
 }
+.auction-bid-list-section-group {
+    width: 100%;
+    max-height: 177px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    & > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        & > * {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+}
 
 .auction-bid-list-content-group {
     width: 100%;
-    max-height: 295px;
+    max-height: 239px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     & > .row {
@@ -312,7 +326,6 @@
         font-size: 24px;
         line-height: 29px;
         text-transform: uppercase;
-        margin-bottom: 21px;
         color: white;
     }
     .range-input,
@@ -329,11 +342,10 @@
         text-align: center;
     }
     .total-input {
-        width: 250px;
+        width: 100%;
         font-weight: bold;
         font-size: 30px;
         line-height: 37px;
-        margin-left: 18px;
     }
     .symbol-label {
         color: $green;
@@ -482,4 +494,9 @@
 }
 .url-error-input {
     border: 1px solid $red;
+}
+@include media-breakpoint-down(lg) {
+    .range-label {
+        margin-bottom: 21px;
+    }
 }

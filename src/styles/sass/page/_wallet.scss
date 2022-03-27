@@ -1191,30 +1191,95 @@ div.wallet_balances {
         font-size: 12px;
     }
     .transaction-section-tables {
-        max-height: 500px;
-        overflow-y: auto;
+        max-height: 300px !important;
+        min-height: 300px;
         @include custom-scroll(0vh);
     }
     .css-1s2u09g-control,
     .css-1pahdxg-control {
+        font-family: "Montserrat" !important;
         width: 150px;
         background: $black;
         border: 1px solid gray;
         border-radius: 0px;
+        box-shadow: none !important;
         .css-qc6sy-singleValue {
-            font-size: 12px;
+            font-size: 14px;
             color: white;
+            font-family: "Montserrat" !important;
+        }
+        &:hover {
+            border: 1px solid gray;
         }
     }
     .css-26l3qy-menu {
+        font-family: "Montserrat" !important;
         color: white;
         background-color: $black !important;
-        font-size: 12px;
+        font-size: 14px;
         .css-1n7v3ny-option {
             background-color: #464646;
         }
+        .css-9gakcf-option {
+            background-color: black;
+        }
     }
     .start-date-picker {
+        border-radius: 10px;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        background-color: $black !important;
+        color: white;
+        font-size: 12px;
+        letter-spacing: 1px;
+        width: 140px;
+        border: 1px solid #464646;
+        &:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            outline-width: 0;
+        }
+        &::placeholder {
+            color: #fff;
+            opacity: 1;
+        }
+        &:-ms-input-placeholder {
+            color: #fff;
+        }
+        &::-ms-input-placeholder {
+            color: #fff;
+        }
+    }
+}
+
+.DayPicker {
+    background-color: black;
+    color: white;
+    font-weight: lighter;
+    .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+        background-color: $green;
+        color: white;
+        &:hover {
+            background-color: #6d6d6d;
+        }
+    }
+    .DayPicker-Day--today {
+        color: white;
+        font-weight: lighter;
+    }
+    .DayPicker-Day {
+        transition: 500ms;
+        padding: 7px 7px !important;
+        line-height: 20px !important;
+        &:hover {
+            background-color: #6d6d6d !important;
+        }
+    }
+}
+
+.DayPickerInput {
+    input {
         border-radius: 10px;
         padding: 5px 10px;
         box-sizing: border-box;

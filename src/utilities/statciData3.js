@@ -1,2 +1,2 @@
-export const API_BASE_URL = "https://api.live.ndb.money"
-export const SITE_URL = "https://sale.ndb.money"
+export const API_BASE_URL = "https://api.nyyu.io"
+export const SITE_URL = "https://www.nyyu.io"

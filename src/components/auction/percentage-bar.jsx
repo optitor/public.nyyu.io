@@ -4,7 +4,7 @@ import { numberWithCommas } from "../../utilities/number"
 export default function PercentageBar({ percentage, sold, total }) {
     const fooPercentage = 100 - percentage
     return (
-        <div className="mt-5">
+        <div className="mt-20px">
             <div className="fs-12px text-light mb-2">
                 {numberWithCommas(sold)}/{numberWithCommas(total)}
             </div>

@@ -136,8 +136,12 @@ p.disabled {
     color: dimgray;
 }
 
-input.disabled, div.disabled {
+input.disabled {
     border: 1px solid dimgray !important;
+}
+
+div.disabled {
+    opacity: 0.5;
 }
 
 .previous {
@@ -178,6 +182,10 @@ input.disabled, div.disabled {
 
 .delete-confirm-modal {
     max-width: 600px;
+}
+
+.inform-banned-modal {
+    max-width: 700px;
 }
 
 div.modal {

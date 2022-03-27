@@ -121,8 +121,8 @@ export const getStripePaymentFee = (user, allFees, bidAmount) => {
 };
 
 
-export const createDateFromDateObject = () => {
-    const today = new Date()
+export const createDateFromDateObject = (newDate = new Date()) => {
+    const today = newDate
     let month = today.getMonth() + 1;
     if (month < 10) month = "0" + month;
     let day = today.getDate();
