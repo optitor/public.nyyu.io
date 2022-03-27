@@ -72,8 +72,8 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             };
 
             getTicker24hr();
-            const interval1 = setInterval(() => {
-                getTicker24hr()
+            const interval1 = setInterval(async () => {
+                await getTicker24hr()
             }, 1000 * REFRESH_TIME);
             return () => clearInterval(interval1);
         })();
