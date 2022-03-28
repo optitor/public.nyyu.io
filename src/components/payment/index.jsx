@@ -60,7 +60,7 @@ const Payment = () => {
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
-    const [paypalIsCheckingOut, setPaypalIsCheckingOut] = useState(false);
+
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
 
@@ -101,8 +101,6 @@ const Payment = () => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
-                    let token = links[i].href.split("token=")[1];
-                    localStorage.setItem("PayPalForAuctionToken", token);
                     setPayPalLoading(false);
                     window.location.href = links[i].href;
                     break;
@@ -118,7 +116,6 @@ const Payment = () => {
 
     const initPaypal = () => {
         setPayPalLoading(true);
-        setPaypalIsCheckingOut(true);
         createPayPalOrder({
             variables: { roundId: currentRound, currencyCode: "USD" },
         });

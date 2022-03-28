@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react"
 import { useQuery } from "@apollo/client"
-
 import {
     GET_AUCTION,
     GET_CURRENT_ROUND,
     GET_PRESALES,
 } from "../apollo/graphqls/querys/Auction"
+import { setCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../utilities/cookies';
 
 export const AuctionContext = React.createContext()
 export const useAuction = () => useContext(AuctionContext)
@@ -46,8 +46,20 @@ const AuctionProvider = ({ children }) => {
         errorPolicy: 'ignore',
         fetchPolicy: "network-only",
     })
+
     useQuery(GET_CURRENT_ROUND, {
-        onCompleted: (data) => setCurrentRound(data.getCurrentRound),
+        onCompleted: (data) => {
+            if(data.getCurrentRound) {
+                setCurrentRound(data.getCurrentRound)
+                if(data.getCurrentRound?.auction) {
+                    setCookie(NDB_Paypal_TrxType, NDB_Auction);
+                } else if(data.getCurrentRound?.presale) {
+                    setCookie(NDB_Paypal_TrxType, NDB_Presale);
+                } else {
+                    setCookie(NDB_Paypal_TrxType, '');
+                }
+            }
+        },
         onError: (error) => console.log(error),
         errorPolicy: 'ignore',
         fetchPolicy: "network-only",

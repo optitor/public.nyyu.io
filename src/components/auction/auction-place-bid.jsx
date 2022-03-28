@@ -5,7 +5,7 @@ import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
 import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
-import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
+import { setBidInfo, setCurrentRound, setBidType } from "../../redux/actions/bidAction"
 
 import CustomSpinner from "../common/custom-spinner"
 import { ROUTES } from "../../utilities/routes"
@@ -76,6 +76,7 @@ export default function AuctionPlaceBid() {
             dispatch(setBidInfo(Number(price * amount - prePrice * preAmount)))
         }
         dispatch(setCurrentRound(optCurrentRound?.id))
+        dispatch(setBidType('auction'));
     }
 
     useEffect(() => {
