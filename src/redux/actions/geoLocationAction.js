@@ -1,8 +1,8 @@
 import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';
 import { client } from './../../apollo/client';
 import _ from 'lodash';
-import * as Mutation from './../../apollo/graghqls/mutations/GeoLocation';
-import * as Query from './../../apollo/graghqls/querys/GeoLocation';
+import * as Mutation from './../../apollo/graphqls/mutations/GeoLocation';
+import * as Query from './../../apollo/graphqls/querys/GeoLocation';
 import * as types from './../actionTypes';
 
 export const add_Disallowed_Country = createData => async dispatch => {

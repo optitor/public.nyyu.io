@@ -9,7 +9,7 @@ import WithdrawModal from "./WithdrawModal";
 import CustomSpinner from "../common/custom-spinner";
 import NumberFormat from "react-number-format";
 import { useQuery } from "@apollo/client";
-import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth";
+import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { Icon } from "@iconify/react";
 
 const QUOTE = "USDT";

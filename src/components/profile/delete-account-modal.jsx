@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/client"
 import { logout } from "../../utilities/auth"
 import { ROUTES } from "../../utilities/routes"
 import CustomSpinner from "../common/custom-spinner"
-import { CONFIRM_DELETE_ACCOUNT } from "../../apollo/graghqls/mutations/Auth"
+import { CONFIRM_DELETE_ACCOUNT } from "../../apollo/graphqls/mutations/Auth"
 import { CloseIcon } from "../../utilities/imgImport"
 
 export default function DeleteAccountModal({

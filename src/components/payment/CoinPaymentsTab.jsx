@@ -22,10 +22,10 @@ import CustomSpinner from "../common/custom-spinner";
 import { generateQR } from "../../utilities/string";
 import { CheckBox } from "../common/FormControl";
 import { set_Temp_Data } from "../../redux/actions/tempAction";
-import * as Mutation from "../../apollo/graghqls/mutations/Payment";
+import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import { Copy } from "../../utilities/imgImport";
-import * as Query from "./../../apollo/graghqls/querys/Payment";
+import * as Query from "./../../apollo/graphqls/querys/Payment";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import { QUOTE, TICKER_24hr } from "./data"
 

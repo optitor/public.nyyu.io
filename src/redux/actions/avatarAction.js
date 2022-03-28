@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import * as Query from '../../apollo/graghqls/querys/AvatarComponent';
-import * as Mutation from './../../apollo/graghqls/mutations/AvatarComponent';
+import * as Query from '../../apollo/graphqls/querys/AvatarComponent';
+import * as Mutation from './../../apollo/graphqls/mutations/AvatarComponent';
 import * as types from "../actionTypes";
 import { client } from './../../apollo/client';
 import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';

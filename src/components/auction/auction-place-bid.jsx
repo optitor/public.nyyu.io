@@ -9,7 +9,7 @@ import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 
 import CustomSpinner from "../common/custom-spinner"
 import { ROUTES } from "../../utilities/routes"
-import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid"
 
 const initialMaxPrice = 100
 

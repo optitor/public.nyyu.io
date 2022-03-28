@@ -10,7 +10,7 @@ import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { numberWithCommas } from "../../utilities/number"
 import { CloseIcon } from "../../utilities/imgImport"
 import { ROUTES } from "../../utilities/routes"
-import { INCREASE_BID, PLACE_BID } from "../../apollo/graghqls/mutations/Bid"
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid"
 
 export default function AuctionPlaceBidModal() {
     // Containers

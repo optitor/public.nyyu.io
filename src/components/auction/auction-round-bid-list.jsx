@@ -8,9 +8,9 @@ import CustomSpinner from "../common/custom-spinner"
 import AuctionListHeader from "../common/AuctionListHeader"
 import AuctionList from "../common/AuctionList"
 
-import { GET_BID } from "../../apollo/graghqls/querys/Auction"
-import { GET_BIDLIST_BY_ROUND } from "../../apollo/graghqls/querys/Bid"
-import { GET_PRESALE_LIST_BY_ROUND } from "../../apollo/graghqls/querys/Presale"
+import { GET_BID } from "../../apollo/graphqls/querys/Auction"
+import { GET_BIDLIST_BY_ROUND } from "../../apollo/graphqls/querys/Bid"
+import { GET_PRESALE_LIST_BY_ROUND } from "../../apollo/graphqls/querys/Presale"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)

@@ -7,7 +7,7 @@ import {
   logout,
 } from "../utilities/auth"
 import { ROUTES } from './../utilities/routes'
-// import {NOTIFICATION_SUBSCRIPTION} from "../apollo/graghqls/subscriptions/notification"
+// import {NOTIFICATION_SUBSCRIPTION} from "../apollo/graphqls/subscriptions/notification"
 // import { useSubscription } from "@apollo/client"
 import { navigate } from "gatsby"
 

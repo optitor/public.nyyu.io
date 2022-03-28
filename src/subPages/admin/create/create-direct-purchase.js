@@ -16,7 +16,7 @@ import Alert from '@mui/material/Alert';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { MobileDateTimePicker   } from '@mui/lab';
-import * as Query from "../../../apollo/graghqls/querys/Auction";
+import * as Query from "../../../apollo/graphqls/querys/Auction";
 import { create_New_Presale } from "../../../redux/actions/auctionAction";
 
 const IndexPage = () => {

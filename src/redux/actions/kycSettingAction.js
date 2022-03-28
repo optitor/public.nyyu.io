@@ -1,7 +1,7 @@
 import { client } from './../../apollo/client';
 import _ from 'lodash';
-import * as Query from './../../apollo/graghqls/querys/KycSetting';
-import *  as Mutation  from './../../apollo/graghqls/mutations/kycSetting';
+import * as Query from './../../apollo/graphqls/querys/KycSetting';
+import *  as Mutation  from './../../apollo/graphqls/mutations/kycSetting';
 import * as types from './../actionTypes'
 import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';
 

@@ -1,5 +1,5 @@
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { CAPTURE_ORDER_FOR_DEPOSIT } from "../apollo/graghqls/mutations/Payment";
+import { CAPTURE_ORDER_FOR_DEPOSIT } from "../apollo/graphqls/mutations/Payment";
 import fetch from "node-fetch";
 import { API_BASE_URL } from '../utilities/statciData3';
 

@@ -7,7 +7,7 @@ import {
     REQUEST_2FA,
     DISABLE_2FA,
     CONFIRM_REQUEST_2FA,
-} from "../../apollo/graghqls/mutations/Auth";
+} from "../../apollo/graphqls/mutations/Auth";
 import CustomSpinner from "../common/custom-spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
