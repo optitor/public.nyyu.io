@@ -1,4 +1,4 @@
-import * as GraphQL from "../graghqls/mutations/Auth"
+import * as GraphQL from "../graphqls/mutations/Auth"
 import { useMutation } from "@apollo/client"
 import { navigate } from "gatsby"
 import { setAuthToken } from "../../utilities/auth"

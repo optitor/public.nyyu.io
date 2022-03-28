@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client"
 import axios from "axios"
 import React, { useEffect, useState } from "react"
-import { CREATE_NEW_REFERENCE } from "../../apollo/graghqls/mutations/Auth"
+import { CREATE_NEW_REFERENCE } from "../../apollo/graphqls/mutations/Auth"
 import Loading from "../common/Loading"
 import { API_BASE_URL, SITE_URL } from "../../utilities/statciData3"
 

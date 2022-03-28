@@ -14,7 +14,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
 import StripeDepositSection from "./deposit/StripeDepositSection";
-import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
+import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 import {
@@ -26,7 +26,7 @@ import {
     FailImage,
 } from "../../utilities/imgImport";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-import * as Mutation from "../../apollo/graghqls/mutations/Payment";
+import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [

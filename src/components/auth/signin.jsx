@@ -8,7 +8,7 @@ import CustomSpinner from "../common/custom-spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { ROUTES } from "../../utilities/routes";
-import * as GraphQL from "../../apollo/graghqls/mutations/Auth";
+import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
 import { useMutation } from "@apollo/client";
 import VerifyMutliFA from "./verify-multiFA";
 import TwoFactorModal from "../profile/two-factor-modal";

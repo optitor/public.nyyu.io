@@ -16,10 +16,10 @@ import CurrencyChoice from "./currency-choice";
 import Avatar from "../dress-up/avatar";
 import UserTier from "./user-tier";
 import { profile_tabs } from "../../utilities/staticData";
-import {GET_USER} from "../../apollo/graghqls/querys/Auth";
+import {GET_USER} from "../../apollo/graphqls/querys/Auth";
 import {ROUTES} from "../../utilities/routes";
-import {GET_ALL_UNREAD_NOTIFICATIONS} from "../../apollo/graghqls/querys/Notification";
-import {UPDATE_AVATARSET} from "../../apollo/graghqls/mutations/AvatarComponent";
+import {GET_ALL_UNREAD_NOTIFICATIONS} from "../../apollo/graphqls/querys/Notification";
+import {UPDATE_AVATARSET} from "../../apollo/graphqls/mutations/AvatarComponent";
 import InformBannedModal from "./InformBannedModal";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
@@ -130,8 +130,8 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             window.location.pathname === ROUTES.payment ||
             window.location.pathname === ROUTES.creditDeposit ||
             window.location.pathname.includes(ROUTES.admin));
-
-    // Methods
+            
+    // Methodsaypal
     useEffect(() => {
         if (!avatarComponents.loaded) {
             dispatch(fetch_Avatar_Components());

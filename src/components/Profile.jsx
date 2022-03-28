@@ -14,7 +14,7 @@ import {
 import Seo from "./seo";
 import TwoFactorModal from "./profile/two-factor-modal";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { GET_USER } from "../apollo/graghqls/querys/Auth";
+import { GET_USER } from "../apollo/graphqls/querys/Auth";
 import ConnectWalletTab from "./profile/connect-wallet-tab";
 import React, { useEffect, useState } from "react";
 import DeleteAccountModal from "./profile/delete-account-modal";

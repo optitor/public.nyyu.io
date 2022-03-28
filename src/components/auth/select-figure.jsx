@@ -14,9 +14,9 @@ import CustomSpinner from "../common/custom-spinner"
 import AvatarImage from "../admin/shared/AvatarImage"
 import { CloseIcon } from "../../utilities/imgImport"
 import { ROUTES } from "../../utilities/routes"
-import { GET_USER } from "../../apollo/graghqls/querys/Auth"
-import { SET_AVATAR } from "../../apollo/graghqls/mutations/Auth"
-import { GET_AVATARS } from "../../apollo/graghqls/querys/AvatarComponent"
+import { GET_USER } from "../../apollo/graphqls/querys/Auth"
+import { SET_AVATAR } from "../../apollo/graphqls/mutations/Auth"
+import { GET_AVATARS } from "../../apollo/graphqls/querys/AvatarComponent"
 
 const SelectFigure = () => {
     // Containers

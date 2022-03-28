@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useQuery } from "@apollo/client"
-import { GET_USER } from "../../apollo/graghqls/querys/Auth"
-import { GET_AVATAR_COMPONENTS } from "../../apollo/graghqls/querys/AvatarComponent"
+import { GET_USER } from "../../apollo/graphqls/querys/Auth"
+import { GET_AVATAR_COMPONENTS } from "../../apollo/graphqls/querys/AvatarComponent"
 import CustomSpinner from "../common/custom-spinner"
 import { EmptyAvatar } from "../../utilities/imgImport"
 

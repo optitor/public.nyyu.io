@@ -3,9 +3,9 @@ import { useQuery, useMutation } from "@apollo/client";
 import Pagination from "react-js-pagination";
 
 import CustomSpinner from "../common/custom-spinner";
-import { GET_NOTIFICATIONS } from "../../apollo/graghqls/querys/Notification";
-import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graghqls/mutations/Notification";
-import { SET_NOTIFICATION_READ_FLAG_ALL } from "../../apollo/graghqls/mutations/Notification";
+import { GET_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification";
+import { SET_NOTIFICATION_READ_FLAG } from "../../apollo/graphqls/mutations/Notification";
+import { SET_NOTIFICATION_READ_FLAG_ALL } from "../../apollo/graphqls/mutations/Notification";
 
 export default function NotificationRecent() {
     // Containers

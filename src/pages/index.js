@@ -4,13 +4,14 @@ import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
 import Header from "../components/header"
+import PaypalRedirect from '../components/payment/PaypalRedirect'
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
 import { ROUTES } from "../utilities/routes"
 import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 import Loading from "../components/common/FadeLoading"
 import { useQuery } from "@apollo/client"
-import { GET_CURRENT_ROUND } from "../apollo/graghqls/querys/Auction"
+import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
 
 const IndexPage = () => {
@@ -295,6 +296,7 @@ const IndexPage = () => {
             <Seo title="Home" />
             <main className="home-page">
                 <Header />
+                <PaypalRedirect />
                 <ReferToFriendsModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}

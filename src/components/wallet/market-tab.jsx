@@ -71,7 +71,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                     price: res.data.lastPrice,
                     percent: res.data.priceChangePercent,
                     volume: res.data.quoteVolume,
-                })
+                });
             };
 
             getTicker24hr();
@@ -321,14 +321,14 @@ export default function MarketTab() {
                         <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     )) :
                     _.isEmpty(favoursData)?
-                        (
-                            <div className='d-flex justify-content-center align-items-center mt-4'>
-                                <p>No Favorite Item. Please Search.</p>
-                            </div>
-                        ) :
-                        _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
-                            <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
-                        ))
+                    (
+                        <div className='d-flex justify-content-center align-items-center mt-4'>
+                            <CustomSpinner/>
+                        </div>
+                    ) :
+                    _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
+                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                    ))
                 }
             </tbody>
         </table>
