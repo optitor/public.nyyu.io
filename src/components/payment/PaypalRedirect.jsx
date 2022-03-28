@@ -6,12 +6,6 @@ import * as Mutation from '../../apollo/graphqls/mutations/Payment';
 import { getCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale, NDB_Deposit } from '../../utilities/cookies';
 
 const PaypalRedirect = () => {
-    useEffect(() => {
-        console.log(window.location.href);
-        if(window.location.href.includes('token')) {
-            navigate('/app/wallet/')
-        }
-    }, []);
 
     const [captureOrderForAuction] = useMutation(Mutation.CAPTURE_ORDER_FOR_AUCTION, {
         onCompleted: (data) => {
