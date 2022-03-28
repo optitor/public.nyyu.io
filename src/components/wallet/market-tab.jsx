@@ -3,7 +3,6 @@ import React, { useReducer, useEffect, useState } from "react";
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { useSelector } from 'react-redux';
 import axios from "axios";
-import Cookies from 'js-cookie';
 import NumberFormat from "react-number-format";
 import { numberSign, numFormatter } from "../../utilities/number";
 import icons from "base64-cryptocurrency-icons";
@@ -14,6 +13,7 @@ import _ from 'lodash';
 import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
+import { setCookie, getCookie, NDB_FavCoins } from '../../utilities/cookies';
 
 const QUOTE = "USDT";
 
@@ -206,15 +206,17 @@ export default function MarketTab() {
         SHIB: {symbol: 'SHIB'},
         LTC: {symbol: 'LTC'},
         ADA: {symbol: 'ADA'},
+
+
         CAKE: {symbol: 'CAKE'},
     };
 
     useEffect(() => {
-        if(Cookies.get('NDB_FavCoins')) {
-            setFavours(JSON.parse(Cookies.get('NDB_FavCoins')));
+        if(getCookie(NDB_FavCoins)) {
+            setFavours(JSON.parse(getCookie(NDB_FavCoins)));
         } else {
             setFavours(InitialFavours);
-            Cookies.set('NDB_FavCoins', JSON.stringify(InitialFavours));
+            setCookie(NDB_FavCoins, JSON.stringify(InitialFavours));
         }
     }, []);
 
@@ -247,18 +249,18 @@ export default function MarketTab() {
     }, [favours]);
 
     const set_Favourite_Crypto = item => {
-        if(favours[item.symbol]) {
+        if(favoursData[item.symbol]) {
             delete favoursData[item.symbol];
             setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
-            Cookies.set('NDB_FavCoins', JSON.stringify(favours));
+            setCookie(NDB_FavCoins, JSON.stringify(favours));
             
             return;
         }
         const temp = { ...favours, [item.symbol]: item };
         setFavours(temp);
-        Cookies.set('NDB_FavCoins', JSON.stringify(temp));
+        setCookie(NDB_FavCoins, JSON.stringify(temp));
     };
 
     // console.log(loading)
