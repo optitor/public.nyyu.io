@@ -11,7 +11,7 @@ const PaypalRedirect = () => {
         onCompleted: (data) => {
             console.log(data);
             if (data.captureOrderForAuction) {
-                alert("Your checkout was successfully!");
+                alert("Your paypal payment for Auction was done successfully!");
             } else {
                 console.log("Error in checkout with PayPal in complete");
             }
@@ -24,7 +24,7 @@ const PaypalRedirect = () => {
     const [captureOrderForPresale] = useMutation(Mutation.CAPTURE_ORDER_FOR_PRESALE, {
         onCompleted: data => {
             if (data.captureOrderForPresale) {
-                alert("Your checkout was successfully!");
+                alert("Your paypal payment for Presale was done successfully!");
             } else {
                 console.log("Error in checkout with PayPal in complete");
             }
@@ -37,7 +37,7 @@ const PaypalRedirect = () => {
     const [captureOrderForDeposit] = useMutation(Mutation.CAPTURE_ORDER_FOR_DEPOSIT, {
         onCompleted: data => {
             if (data.captureOrderForDeposit) {
-                alert("Your checkout was successfully!");
+                alert("Your paypal payment for Deposit was done successfully!");
             } else {
                 console.log("Error in checkout with PayPal in complete");
             }
@@ -69,7 +69,7 @@ const PaypalRedirect = () => {
                     break
             }
         }
-    }, []);
+    }, [captureOrderForAuction, captureOrderForPresale, captureOrderForDeposit]);
 
     return (
         <div></div>

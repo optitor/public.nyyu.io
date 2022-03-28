@@ -28,6 +28,7 @@ import {
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
+import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cookies';
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
@@ -185,14 +186,11 @@ export default function DepositModal({ showModal, setShowModal }) {
         setCopyText(text);
     };
 
-    const [paypalDeposit] = useMutation(Mutation.PAYPAY_FOR_DEPOSIT, {
+    const [paypalDeposit] = useMutation(Mutation.PAYPAL_FOR_DEPOSIT, {
         onCompleted: (data) => {
             let links = data.paypalForDeposit.links;
-            console.log(data.paypalForDeposit);
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
-                    let token = links[i].href.split("token=")[1];
-                    localStorage.setItem("PayPalDepositToken", token);
                     window.location.href = links[i].href;
                     break;
                 }
@@ -206,6 +204,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     });
 
     const initPaypalCheckout = () => {
+        setCookie(NDB_Paypal_TrxType, NDB_Deposit);
         setLoading(true);
         paypalDeposit({
             variables: {
