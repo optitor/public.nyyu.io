@@ -1,18 +1,24 @@
 import React from "react"
 import Header from "../header"
-import { Apart, Trees } from "../../utilities/imgImport"
 
 const AuthLayout = ({ children }) => {
     return (
         <main className="signup-page">
-            <Header />
-            <section className="position-relative">
-                <div className="d-flex container position-relative h-100 align-items-center">
-                    <div className="signup">{children}</div>
-                    <img src={Apart} alt="apart" className="apart-img z-999" />
+            <Header/>
+            <div className="main-part">
+                <div className="row">
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+                        <section className="position-relative">
+                            <div className="d-flex position-relative h-100 align-items-center">
+                                <div className="signup">{children}</div>
+                            </div>
+                        </section>
+                    </div>
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                        <div className="right-background"/>
+                    </div>
                 </div>
-                <img src={Trees} alt="trees" className="trees-img w-100 z-n999" />
-            </section>
+            </div>
         </main>
     )
 }
