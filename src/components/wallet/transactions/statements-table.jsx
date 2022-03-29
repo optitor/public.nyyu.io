@@ -17,6 +17,22 @@ import NumberFormat from "react-number-format";
 import { receiptTemplate } from "./receiptTemplate";
 import { useSelector } from "react-redux";
 
+const depositOptions = [
+    { value: "deposit", label: "Deposit" },
+    { value: "withdraw", label: "Withdraw" },
+    { value: "bid", label: "Bid" },
+    { value: "buy", label: "Buy" },
+];
+const periodOptions = [
+    { index: 0, value: "weekly", label: "Weekly" },
+    { index: 1, value: "monthly", label: "Monthly" },
+    { index: 2, value: "quarterly", label: "Quarterly" },
+    { index: 3, value: "semi_annually", label: "Semi Annually" },
+    { index: 4, value: "annually", label: "Annually" },
+    { index: 5, value: "all_time", label: "All Time" },
+    { index: 6, value: "custom", label: "Custom" },
+];
+
 export default function StatementsTable() {
     // Containers
     const user = useSelector((state) => state.auth.user);
@@ -30,22 +46,7 @@ export default function StatementsTable() {
     const [withdrawList, setWithdrawList] = useState([]);
     const [bidList, setBidList] = useState([]);
     const [buyList, setBuyList] = useState([]);
-    const depositOptions = [
-        { value: "deposit", label: "Deposit" },
-        { value: "withdraw", label: "Withdraw" },
-        { value: "bid", label: "Bid" },
-        { value: "buy", label: "Buy" },
-    ];
 
-    const periodOptions = [
-        { index: 0, value: "weekly", label: "Weekly" },
-        { index: 1, value: "monthly", label: "Monthly" },
-        { index: 2, value: "quarterly", label: "Quarterly" },
-        { index: 3, value: "semi_annually", label: "Semi Annually" },
-        { index: 4, value: "annually", label: "Annually" },
-        { index: 5, value: "all_time", label: "All Time" },
-        { index: 6, value: "custom", label: "Custom" },
-    ];
     const [selectedPeriodIndex, setSelectedPeriodIndex] = useState(0);
     const [selectedPeriodOption, setSelectedPeriodOption] = useState(
         periodOptions[selectedPeriodIndex]
@@ -163,6 +164,11 @@ export default function StatementsTable() {
                     };
                 }
             );
+            const coinPaymentBidFooList =
+                data.getStatement.coinpaymentAuctionTxns.map((item) => {
+                    console.log(item);
+                });
+
             setBidList([...stripeBidFooList]);
             setLoading(false);
         },
