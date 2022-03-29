@@ -13,7 +13,6 @@ const depositOptions = [
     { value: "paypal", label: "Paypal" },
     { value: "crypto", label: "Crypto" },
     { value: "credit_card", label: "Credit Card" },
-    { value: "standard_bank_transfer", label: "Standard Bank Transfer" },
 ];
 
 export default function DepositTable() {
@@ -83,14 +82,14 @@ export default function DepositTable() {
         if (type.value === "paypal") setList(paypalDepositTransactions);
         if (type.value === "crypto") setList(coinDepositTransactions);
         if (type.value === "credit_card") setList(stripeDepositTransactions);
-        if (type.value === "standard_bank_transfer")
-            setList(bankDepositTransactions);
+        // if (type.value === "standard_bank_transfer")
+        //     setList(bankDepositTransactions);
     };
 
     // Render
     return (
         <>
-            <div className="mt-4 px-4">
+            <div className="mt-4 px-md-4 d-inline-block">
                 <Select
                     isSearchable={false}
                     options={depositOptions}
