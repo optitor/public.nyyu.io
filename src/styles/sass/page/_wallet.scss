@@ -1276,6 +1276,13 @@ div.wallet_balances {
             background-color: #6d6d6d !important;
         }
     }
+    .DayPicker-Day--disabled {
+        color: #4d4d4d !important;
+        font-weight: normal !important;
+        &:hover {
+            background-color: transparent !important;
+        }
+    }
 }
 
 .DayPickerInput {

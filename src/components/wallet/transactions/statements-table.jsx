@@ -113,7 +113,7 @@ export default function StatementsTable() {
         setSelectedPeriodOption(option);
         setSelectedPeriodIndex(option.index);
         if (option.value === "custom") {
-            setFrom(now);
+            setFrom(timeFrames[0]);
             setTo(now);
         } else setFrom(timeFrames[option.index]);
         setLoading(true);
@@ -166,6 +166,11 @@ export default function StatementsTable() {
                                 className="start-date-picker"
                                 value={new Date(from)}
                                 onDayChange={onStartDateChange}
+                                dayPickerProps={{
+                                    disabledDays: {
+                                        after: now,
+                                    },
+                                }}
                             />
                         ) : (
                             <input
@@ -185,6 +190,11 @@ export default function StatementsTable() {
                                 className="start-date-picker"
                                 value={new Date(to)}
                                 onDayChange={onEndDateChange}
+                                dayPickerProps={{
+                                    disabledDays: {
+                                        before: from,
+                                    },
+                                }}
                             />
                         ) : (
                             <input
