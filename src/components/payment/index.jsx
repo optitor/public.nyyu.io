@@ -1,7 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { navigate } from "gatsby";
 
 // for paypal callback
 import { useQueryParam, StringParam } from "use-query-params";
@@ -33,11 +32,9 @@ import { set_All_Fees } from "../../redux/actions/allFeesAction";
 import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
 import NDBWalletTab from "./NDBWalletTab";
 import PaymentExternalWalletTab from "./payment-external-wallet-tab";
-import { GET_ALL_FEES } from "../../apollo/graghqls/querys/Payment";
-import { GET_AUCTION } from "../../apollo/graghqls/querys/Auction";
-import { PAYPAL_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
-import { CAPTURE_ORDER_FOR_AUCTION } from "../../apollo/graghqls/mutations/Payment";
-import { ROUTES } from "../../utilities/routes";
+import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
+import { GET_AUCTION } from "../../apollo/graphqls/querys/Auction";
+import { PAYPAL_FOR_AUCTION } from "../../apollo/graphqls/mutations/Payment";
 
 
 const payment_types = [
@@ -63,7 +60,7 @@ const Payment = () => {
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
-    const [paypalIsCheckingOut, setPaypalIsCheckingOut] = useState(false);
+
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
 
@@ -104,8 +101,6 @@ const Payment = () => {
             let links = data.paypalForAuction.links;
             for (let i = 0; i < links.length; i++) {
                 if (links[i].rel === "approve") {
-                    let token = links[i].href.split("token=")[1];
-                    localStorage.setItem("PayPalForAuctionToken", token);
                     setPayPalLoading(false);
                     window.location.href = links[i].href;
                     break;
@@ -121,60 +116,10 @@ const Payment = () => {
 
     const initPaypal = () => {
         setPayPalLoading(true);
-        setPaypalIsCheckingOut(true);
         createPayPalOrder({
             variables: { roundId: currentRound, currencyCode: "USD" },
         });
     };
-
-    const [captureOrderForAuction] = useMutation(CAPTURE_ORDER_FOR_AUCTION, {
-        onCompleted: (data) => {
-            console.log(data);
-            if (data.captureOrderForAuction) {
-                alert("Your checkout was successfully!");
-            } else {
-                console.log("Error in checkout with PayPal in complete");
-            }
-        },
-        onError: (err) => {
-            alert("Error in checkout with PayPal");
-        },
-    });
-
-    useEffect(() => {
-        console.log(window.location.href)
-        if (
-            window.location.href.includes("token=") &&
-            !paypalIsCheckingOut
-        ) {
-            const url = new URL(window.location.href);
-            const token = url.searchParams.get("token");
-            console.log(token)
-            captureOrderForAuction({ variables: { orderId: token } });
-        }
-    }, []);
-
-
-    // if (
-    //     localStorage.getItem("PayPalForAuctionToken") != null &&
-    //     localStorage.getItem("PayPalForAuctionToken") !== undefined &&
-    //     !orderCaptured &&
-    //     !paypalIsCheckingOut
-    // ) {
-    //     setOrderCaptured();
-    //     let possibleToken = localStorage.getItem("PayPalForAuctionToken");
-    //     captureOrderForAuction({ variables: { orderId: possibleToken } });
-    //     localStorage.setItem("PayPalForAuctionToken", null);
-    //     localStorage.removeItem("PayPalForAuctionToken");
-    // }
-
-    // if (window.location.href.includes("token=") && !orderCaptured) {
-    //     var url = new URL(window.location.href);
-    //     let token = url.searchParams.get("token");
-    //     console.log("---------- from Axel", token);
-    //     orderCaptured = true;
-    //     captureOrderForAuction({ variables: { orderId: token } });
-    // }
 
     if (loading) return <Loading />;
     return (

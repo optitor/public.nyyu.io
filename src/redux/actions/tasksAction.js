@@ -1,6 +1,6 @@
 import { client } from './../../apollo/client';
-import * as Query from './../../apollo/graghqls/querys/Tasks';
-import * as Mutation from './../../apollo/graghqls/mutations/Tasks';
+import * as Query from './../../apollo/graphqls/querys/Tasks';
+import * as Mutation from './../../apollo/graphqls/mutations/Tasks';
 import * as types from './../actionTypes'
 import { showFailAlarm, showSuccessAlarm } from '../../components/admin/AlarmModal';
 

@@ -13,6 +13,7 @@ import { EuropeanFlag } from "../../utilities/imgImport";
 const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.currencyfreaks.com/latest';
 // const API_KEY = '49cd7eb3c5f54f638e0e2bb4ce3ba8e2';
 const API_KEY = '013a5b710f794e2b8515478f6d5e166b';
+// const API_KEY = 'da4017f4889c4ff9bcf5a243eedad995';
 
 const Currencies = SUPPORTED_CURRENCIES.map(item => ({label: item.symbol, value: item.symbol, sign: item.sign}));
 const SYMBOLS = SUPPORTED_CURRENCIES.map(item => item.symbol).join(',');

@@ -94,7 +94,39 @@ export const CAPTURE_ORDER_FOR_AUCTION = gql`
     }
 `;
 
-export const PAYPAY_FOR_DEPOSIT = gql`
+export const PAYPAL_FOR_PRESALE = gql`
+    mutation PaypalForPresale(
+        $presaleId: Int
+        $orderId: Int
+        $currencyCode: String
+    ) {
+        paypalForPresale(
+            presaleId: $presaleId
+            orderId: $orderId
+            currencyCode: $currencyCode
+        ) {
+            id
+            status
+            links {
+                href
+                rel
+                method
+            }
+        }
+    }
+`;
+
+export const CAPTURE_ORDER_FOR_PRESALE = gql`
+    mutation CaptureOrderForPresale(
+        $orderId: String
+    ) {
+        captureOrderForPresale(
+            orderId: $orderId
+        )
+    }
+`;
+
+export const PAYPAL_FOR_DEPOSIT = gql`
     mutation PaypalForDeposit(
         $amount: Float
         $currencyCode: String

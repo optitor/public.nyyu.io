@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Link, navigate } from "gatsby"
 import { Input } from "../common/FormControl"
 import { useMutation } from "@apollo/client"
-import { VERIFY_ACCOUNT, RESEND_VERIFY_CODE } from "../../apollo/graghqls/mutations/Auth"
+import { VERIFY_ACCOUNT, RESEND_VERIFY_CODE } from "../../apollo/graphqls/mutations/Auth"
 import CustomSpinner from "../common/custom-spinner"
 import { ROUTES } from "../../utilities/routes"
 import AuthLayout from "../common/AuthLayout"
@@ -42,8 +42,7 @@ const VerifyEmail = ({ email }) => {
                 twoStep={[]}
                 onResult={(result) => {
                     if (result) {
-                        console.log(ROUTES.selectFigure)
-                        navigate(ROUTES.selectFigure)
+                        navigate(ROUTES.signIn)
                     } else navigate(ROUTES.verifyFailed)
                 }}
             />

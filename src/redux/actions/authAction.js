@@ -1,5 +1,5 @@
 import { LOGIN_SUCCESS, LOGOUT_USER } from "../actionTypes";
-import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { client } from './../../apollo/client';
 
 export const logOutUser = () => dispatch => {

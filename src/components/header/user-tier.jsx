@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client"
 import React from "react"
 import { useState } from "react"
-import { GET_USER } from "../../apollo/graghqls/querys/Auth"
+import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { GET_USER_TIERS } from "../profile/profile-queries"
 
 export default function UserTier() {

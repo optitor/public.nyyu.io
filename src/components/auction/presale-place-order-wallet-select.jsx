@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client"
 
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
-import { PLACE_PRESALE_ORDER } from "../../apollo/graghqls/mutations/Bid"
+import { PLACE_PRESALE_ORDER } from "../../apollo/graphqls/mutations/Bid"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import CustomSpinner from "../common/custom-spinner"
 import { externalWallets } from "../../utilities/staticData"

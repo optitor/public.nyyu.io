@@ -23,11 +23,11 @@ import MarketTab from "../wallet/market-tab";
 import Transactions from "./transactions/transactions-tab";
 import ReferralTab from "../wallet/referral-tab";
 import StakeTab from "../wallet/stake-tab";
-import { GET_BID_LIST_BY_USER } from "../../apollo/graghqls/querys/Bid";
+import { GET_BID_LIST_BY_USER } from "../../apollo/graphqls/querys/Bid";
 import InternalWallet from "../wallet/internal-wallet";
 import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
-import * as Mutation from "../../apollo/graghqls/mutations/Payment";
+import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { useMutation } from '@apollo/client';
 
 

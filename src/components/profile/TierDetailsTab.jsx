@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_TASK_SETTING, GET_USER_TIERS, GET_USER_TIER_TASK } from "./profile-queries";
 import { useState } from "react";
 import CustomSpinner from "../common/custom-spinner";
-import { GET_USER } from "../../apollo/graghqls/querys/Auth";
+import { GET_USER } from "../../apollo/graphqls/querys/Auth";
 import { Qmark } from "../../utilities/imgImport";
 import ReactTooltip from "react-tooltip";
 
