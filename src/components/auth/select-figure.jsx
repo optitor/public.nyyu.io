@@ -75,7 +75,7 @@ const SelectFigure = () => {
         errorPolicy: "ignore",
         onCompleted: (data) => {
             setPending(false)
-            if (data?.setAvatar === "Success") navigate(ROUTES.profile)
+            if (data?.setAvatar === "Success") navigate(ROUTES.verifyId)
             else setError(`${figuresArray[selectedId].lastname}.${randomName} Already Exists`)
         },
     })
