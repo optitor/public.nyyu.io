@@ -282,7 +282,7 @@ const TransactionsProvider = ({ children }) => {
 
     // Binding
     const valueObject = {
-        // data
+        // Data
         paypalDepositTransactions,
         coinDepositTransactions,
         coinWithdrawTransactions,
@@ -293,6 +293,11 @@ const TransactionsProvider = ({ children }) => {
         presaleList,
         itemsCountPerPage,
 
+        // Methods
+        createDateFromDate,
+        createTimeFromDate,
+
+        // Utilities
         currentTab,
         setCurrentTab,
         tabs,
