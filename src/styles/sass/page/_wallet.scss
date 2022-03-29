@@ -755,6 +755,12 @@
                 }
             }
         }
+        div.paypal_email {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 420px;
+        }
         .col-sm-6 {
             padding-left: 1%;
             padding-right: 1%;

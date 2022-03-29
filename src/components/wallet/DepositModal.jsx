@@ -32,8 +32,8 @@ import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cook
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
-    { label: "GBP", value: "GBP", symbol: "£" },
-    { label: "EUR", value: "EUR", symbol: "€" },
+    // { label: "GBP", value: "GBP", symbol: "£" },
+    // { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
 const TransferData = {
@@ -106,7 +106,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [isStripeDeposit, setIsStripeDeposit] = useState(false);
     const [isBankAccountTransferDeposit, setIsBankAccountTransferDeposit] =
         useState(false);
-    const [allFees, setAllFees] = useState(null);
+    const [allFees, setAllFees] = useState({});
 
     const loadingStripe = !allFees;
 
