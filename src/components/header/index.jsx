@@ -15,12 +15,12 @@ import DressupModal from "../dress-up/dressup-user-modal"
 import CurrencyChoice from "./currency-choice"
 import Avatar from "../dress-up/avatar"
 import UserTier from "./user-tier"
-import { profile_tabs } from "../../utilities/staticData"
+import InformBannedModal from "./InformBannedModal"
+import { navigationLinks, profile_tabs } from "../../utilities/staticData"
 import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { ROUTES as Routes, ROUTES } from "../../utilities/routes"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
 import { UPDATE_AVATARSET } from "../../apollo/graphqls/mutations/AvatarComponent"
-import InformBannedModal from "./InformBannedModal"
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
@@ -63,64 +63,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const [newNotification, setNewNotification] = useState(false)
     const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
     const { user, isAuthenticated } = useSelector((state) => state.auth)
-    const navigationLinks = [
-        {
-            label: "Home",
-            url: "https://ndb.money/",
-            active: false
-        },
-        {
-            label: "Vision",
-            url: "https://ndb.city",
-            active: false
-        },
-        {
-            label: "Technology",
-            url: "https://ndb.money/technology",
-            active: false
-        },
-        {
-            label: "Learn",
-            url: "https://ndb.money/learn",
-            active: false
-        },
-        {
-            label: "Sale",
-            url: "/",
-            active: true,
-            subMenu: [
-                {
-                    label: "Wallet",
-                    url: ROUTES.wallet,
-                    isDressup: false
-                },
-                {
-                    label: "Sale",
-                    url: ROUTES.auction,
-                    isDressup: false
-                },
-                {
-                    label: "Profile",
-                    url: ROUTES.profile,
-                    isDressup: false
-                },
-                {
-                    label: "Dressup",
-                    isDressup: true
-                },
-                {
-                    label: "Support",
-                    url: ROUTES.faq,
-                    isDressup: false
-                }
-            ]
-        },
-        {
-            label: "Contact Us",
-            url: "https://ndb.money/#contactUs",
-            active: false
-        }
-    ]
 
     const isShowNavLinks =
         isBrowser &&

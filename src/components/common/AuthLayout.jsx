@@ -1,5 +1,6 @@
 import React from "react"
 import Header from "../header"
+import Footer from "../footer"
 
 const AuthLayout = ({ children }) => {
     return (
@@ -19,6 +20,7 @@ const AuthLayout = ({ children }) => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </main>
     )
 }
