@@ -10,7 +10,6 @@ import TwoFactorModal from "../profile/two-factor-modal"
 
 const VerifyEmail = ({ email }) => {
     const [code, setCode] = useState("")
-
     const [tfaOpen, setTfaOpen] = useState(false)
 
     const [verifyAccount, { loading }] = useMutation(VERIFY_ACCOUNT, {
@@ -42,7 +41,7 @@ const VerifyEmail = ({ email }) => {
                 twoStep={[]}
                 onResult={(result) => {
                     if (result) {
-                        navigate(ROUTES.signIn)
+                        // navigate(ROUTES.signIn)
                     } else navigate(ROUTES.verifyFailed)
                 }}
             />

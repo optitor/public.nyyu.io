@@ -31,7 +31,7 @@ const SelectFigure = () => {
     const [figuresArray, setFiguresArray] = useState([])
     const { data: userData } = useQuery(GET_USER, {
         onCompleted: () => {
-            if (userData.getUser?.avatar) return navigate(ROUTES.profile)
+            if (userData.getUser?.avatar) return navigate(ROUTES.verifyId)
             return setUserDataLoading(false)
         },
         fetchPolicy: "network-only",

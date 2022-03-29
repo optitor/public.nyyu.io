@@ -43,9 +43,7 @@ const Singup = () => {
         pwdConfirm,
         agree,
         country,
-
         pwdVisible,
-
         emailError,
         pwdError,
         pwdConfirmError,
