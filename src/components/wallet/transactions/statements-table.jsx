@@ -19,8 +19,6 @@ export default function StatementsTable() {
     const [loading, setLoading] = useState(true);
     const { tabs, itemsCountPerPage } = useTransactions();
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(createDateFromDateObject());
     const [activePage, setActivePage] = useState(1);
     const [list, setList] = useState([...Array(15).keys()]);
     const depositOptions = [
@@ -122,6 +120,19 @@ export default function StatementsTable() {
         await refetch();
         setLoading(false);
     };
+    const onStartDateChange = async (day) => {
+        setFrom(new Date(day));
+        setLoading(true);
+        await refetch();
+        setLoading(false);
+    };
+
+    const onEndDateChange = async (day) => {
+        setTo(new Date(day));
+        setLoading(true);
+        await refetch();
+        setLoading(false);
+    };
 
     // Render
     return (
@@ -154,7 +165,7 @@ export default function StatementsTable() {
                                 format="DD/MM/YYYY"
                                 className="start-date-picker"
                                 value={new Date(from)}
-                                onDayChange={(day) => setStartDate(day)}
+                                onDayChange={onStartDateChange}
                             />
                         ) : (
                             <input
@@ -173,7 +184,7 @@ export default function StatementsTable() {
                                 format="DD/MM/YYYY"
                                 className="start-date-picker"
                                 value={new Date(to)}
-                                onDayChange={(day) => setEndDate(day)}
+                                onDayChange={onEndDateChange}
                             />
                         ) : (
                             <input
