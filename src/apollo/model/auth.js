@@ -12,7 +12,7 @@ export const useSignIn2FA = () => {
                 return
             } else if (data.confirm2FA.status === "Success") {
                 setAuthToken(data.confirm2FA.token)
-                navigate(ROUTES.profile)
+                navigate(ROUTES.selectFigure)
             }
         },
     })
@@ -27,6 +27,29 @@ export const useSignIn2FA = () => {
         })
     }
     return [signin2fa, mutationResults]
+}
+
+export const useSignUp2FA = () => {
+    const [mutation, mutationResults] = useMutation(GraphQL.CONFIRM_REQUEST_2FA, {
+        onCompleted: (data) => {
+            console.log(data);
+            if (data.confirmRequest2FA.status === "Failed") {
+                return
+            } else if (data.confirmRequest2FA.status === "Success") {
+                setAuthToken(data.confirmRequest2FA.token)
+                navigate(ROUTES.selectFigure)
+            }
+        }
+    })
+
+    const signup2fa = (email, method, code) => {
+        return mutation({
+            variables: {
+                email, method, code
+            }
+        })
+    }
+    return [signup2fa, mutationResults];
 }
 
 // Forgot Password
