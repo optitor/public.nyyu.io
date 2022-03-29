@@ -21,6 +21,13 @@ export const setCurrentRound = (round_id) => (dispatch) => {
     })
 }
 
+export const setBidType = bidType => dispatch => {
+    dispatch({
+        type: Types.SET_BID_TYPE,
+        payload: bidType
+    })
+}
+
 export const setCurrencyRates = data => dispatch => {
     dispatch({
         type: Types.FETCH_CURRENCY_RATES,

@@ -1,9 +1,8 @@
 /* eslint-disable */
 import React, { useReducer, useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
 import useDeepCompareEffect from 'use-deep-compare-effect';
+import { useSelector } from 'react-redux';
 import axios from "axios";
-import Cookies from 'js-cookie';
 import NumberFormat from "react-number-format";
 import { numberSign, numFormatter } from "../../utilities/number";
 import icons from "base64-cryptocurrency-icons";
@@ -14,6 +13,7 @@ import _ from 'lodash';
 import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
+import { setCookie, getCookie, NDB_FavCoins } from '../../utilities/cookies';
 
 const QUOTE = "USDT";
 
@@ -46,21 +46,24 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
     useEffect(() => {
         (async function() {
-            if(!data.symbol) return;
-            const res = await axios.get(KLINE_ENDPOINT, {
-                    params: {
-                        symbol: data.symbol + QUOTE,
-                        interval: KLINE_INTERVAL,
-                        startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
-                    },
-                });
-            const chartData = res.data.map((c) => c[1]);
+            const getChartData = async () => {
+                if(!data.symbol) return;
+                const res = await axios.get(KLINE_ENDPOINT, {
+                        params: {
+                            symbol: data.symbol + QUOTE,
+                            interval: KLINE_INTERVAL,
+                            startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
+                        },
+                    });
+                const chartData = res.data.map((c) => c[1]);
 
-            setState({
-                min: Math.min(chartData),
-                max: Math.max(chartData),
-                chart: chartData,
-            })
+                setState({
+                    min: Math.min(chartData),
+                    max: Math.max(chartData),
+                    chart: chartData,
+                });
+            };
+
             const getTicker24hr = async () => {
                 if(!data.symbol) return;
                 const res = await axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } });
@@ -68,13 +71,15 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                     price: res.data.lastPrice,
                     percent: res.data.priceChangePercent,
                     volume: res.data.quoteVolume,
-                })
+                });
             };
 
             getTicker24hr();
-            const interval1 = setInterval(async () => {
-                await getTicker24hr()
-            }, 1000 * REFRESH_TIME);
+            getChartData();
+
+            const interval1 = setInterval(() => {
+                getTicker24hr();
+            },1000 * REFRESH_TIME);
             return () => clearInterval(interval1);
         })();
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -201,15 +206,17 @@ export default function MarketTab() {
         SHIB: {symbol: 'SHIB'},
         LTC: {symbol: 'LTC'},
         ADA: {symbol: 'ADA'},
+
+
         CAKE: {symbol: 'CAKE'},
     };
 
     useEffect(() => {
-        if(Cookies.get('NDB_FavCoins')) {
-            setFavours(JSON.parse(Cookies.get('NDB_FavCoins')));
+        if(getCookie(NDB_FavCoins)) {
+            setFavours(JSON.parse(getCookie(NDB_FavCoins)));
         } else {
             setFavours(InitialFavours);
-            Cookies.set('NDB_FavCoins', JSON.stringify(InitialFavours));
+            setCookie(NDB_FavCoins, JSON.stringify(InitialFavours));
         }
     }, []);
 
@@ -223,8 +230,8 @@ export default function MarketTab() {
         });
     }, []);
 
-    const [favoursData, setFavoursData] = useState(InitialFavours);
-
+    const [favoursData, setFavoursData] = useState({});
+    
     useDeepCompareEffect(() => {
         (async function() {
             let assets = { ...favours };
@@ -239,21 +246,21 @@ export default function MarketTab() {
             }
             setFavoursData({ ...assets })
         })()
-    }, [favours, favoursData]);
+    }, [favours]);
 
     const set_Favourite_Crypto = item => {
-        if(favours[item.symbol]) {
+        if(favoursData[item.symbol]) {
             delete favoursData[item.symbol];
             setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
-            Cookies.set('NDB_FavCoins', JSON.stringify(favours));
+            setCookie(NDB_FavCoins, JSON.stringify(favours));
             
             return;
         }
         const temp = { ...favours, [item.symbol]: item };
         setFavours(temp);
-        Cookies.set('NDB_FavCoins', JSON.stringify(temp));
+        setCookie(NDB_FavCoins, JSON.stringify(temp));
     };
 
     // console.log(loading)
@@ -316,14 +323,14 @@ export default function MarketTab() {
                         <CryptoRowForSearch data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
                     )) :
                     _.isEmpty(favoursData)?
-                        (
-                            <div className='d-flex justify-content-center align-items-center mt-4'>
-                                <CustomSpinner />
-                            </div>
-                        ) :
-                        _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
-                            <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
-                        ))
+                    (
+                        <div className='d-flex justify-content-center align-items-center mt-4'>
+                            <CustomSpinner/>
+                        </div>
+                    ) :
+                    _.map(_.orderBy(favoursData, [Object.keys(sortOption)[0]], [Object.values(sortOption)[0]]), item => (
+                        <CryptoRow data={item} key={item.name} favours={favours} doAction={() => set_Favourite_Crypto(item)} />
+                    ))
                 }
             </tbody>
         </table>

@@ -18,7 +18,7 @@ import {
     // CreditCards,
     USDT } from '../../utilities/imgImport';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-// import { CREATE_CHARGE_FOR_DEPOSIT } from "../../apollo/graghqls/mutations/Payment";
+// import { CREATE_CHARGE_FOR_DEPOSIT } from "../../apollo/graphqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [

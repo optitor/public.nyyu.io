@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import validator from "validator";
 import NumberFormat from "react-number-format";
 import { useQuery } from "@apollo/client";
-import * as Query from './../../../apollo/graghqls/querys/Auction'
+import * as Query from './../../../apollo/graphqls/querys/Auction'
 
 import Seo from "../../../components/seo"
 import Stepper from "../../../components/admin/Stepper";

@@ -4,9 +4,9 @@ import CustomSpinner from "../common/custom-spinner";
 import { useQuery, useMutation } from "@apollo/client";
 
 import { COLOR_LOAD, COLOR_OFF, COLOR_ON } from "../../utilities/staticData";
-import { GET_NOTICATION_TYPES } from "../../apollo/graghqls/querys/Notification";
-import { USER_NOTIFICATION_SETTING } from "../../apollo/graghqls/mutations/Notification";
-import { GET_USER } from "../../apollo/graghqls/querys/Auth";
+import { GET_NOTICATION_TYPES } from "../../apollo/graphqls/querys/Notification";
+import { USER_NOTIFICATION_SETTING } from "../../apollo/graphqls/mutations/Notification";
+import { GET_USER } from "../../apollo/graphqls/querys/Auth";
 
 export default function NotificationSetting() {
     // Containers

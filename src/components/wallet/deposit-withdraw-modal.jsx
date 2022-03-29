@@ -3,7 +3,7 @@
 import { useQuery } from "@apollo/client"
 import React, { useState } from "react"
 import Modal from "react-modal"
-import { GET_BALANCES } from "../../apollo/graghqls/querys/Auth"
+import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth"
 import { CloseIcon, DestinationWallet, WalletQRCode } from "../../utilities/imgImport"
 import { TRANSACTION_TYPES } from "../../utilities/staticData"
 import CustomSpinner from "../common/custom-spinner"

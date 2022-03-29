@@ -1,6 +1,6 @@
 import { client } from "../../apollo/client";
 import { showFailAlarm, showSuccessAlarm } from "../../components/admin/AlarmModal";
-import * as Mutation from './../../apollo/graghqls/mutations/User';
+import * as Mutation from './../../apollo/graphqls/mutations/User';
 
 export const create_New_User = createData => async dispatch => {
     try {
