@@ -106,9 +106,6 @@ export default function AuctionRoundBidList() {
 
     }, [currentRoundBidList, currentUser.id, isAuction])
 
-    console.log(currentRoundBidList)
-    console.log(displayedBidList)
-
     useEffect(() => {
         if (optCurrentRound && optCurrentRound.status === 2) return startPolling(pollIntervalValue)
         return stopPolling()
