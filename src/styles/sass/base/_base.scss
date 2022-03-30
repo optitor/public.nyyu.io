@@ -407,6 +407,14 @@ input[type="number"]::-webkit-outer-spin-button {
     color: $dustGray;
 }
 
+.text-blue {
+    color: #59d8f3;
+}
+
+.text-gray {
+    color: #8F8F8F;
+}
+
 .txt-underline {
     text-decoration: underline;
 }
@@ -423,6 +431,4 @@ input[type="number"]::-webkit-outer-spin-button {
     width: 15px;
     height: 15px;
 }
-.text-blue {
-    color: #59d8f3;
-}
+
