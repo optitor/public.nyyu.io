@@ -44,6 +44,7 @@ const VerifyEmail = ({ email }) => {
                         // navigate(ROUTES.signIn)
                     } else navigate(ROUTES.verifyFailed)
                 }}
+                redirect={true}
             />
             <h3 className="signup-head mb-5">Verify email</h3>
             <form

@@ -12,6 +12,7 @@ import CustomSpinner from "../common/custom-spinner"
 import { externalWallets } from "../../utilities/staticData"
 import { ROUTES } from "../../utilities/routes"
 import { validURL } from "../../utilities/string"
+import { setPresaleOrderId } from '../../redux/actions/bidAction' 
 
 export default function PresalePlaceOrderWalletSelect() {
     const auction = useAuction()
@@ -31,9 +32,13 @@ export default function PresalePlaceOrderWalletSelect() {
         }
     }
 
-    const [placePresaleOrder] = useMutation(PLACE_PRESALE_ORDER, {
-        onCompleted: () => {
-            navigate(ROUTES.payment)
+    const [placePresaleOrderMutation] = useMutation(PLACE_PRESALE_ORDER, {
+        onCompleted: data => {
+            console.log(data.placePreSaleOrder)
+            if(data.placePreSaleOrder) {
+                dispatch(setPresaleOrderId(data.placePreSaleOrder?.id))
+                navigate(ROUTES.payment)
+            }
             setReqPending(false)
         },
         onError: (err) => {
@@ -42,14 +47,14 @@ export default function PresalePlaceOrderWalletSelect() {
         },
     })
 
-    const presaleMutation = () => {
+    const handlePresale = () => {
         if (selectedWallet === 2 && !validURL(externalUrl)) {
             setUrlError(true)
             return
         }
         setReqPending(true)
         setError("")
-        placePresaleOrder({
+        placePresaleOrderMutation({
             variables: {
                 presaleId: optCurrentRound?.id,
                 ndbAmount: presaleNdbAmount,
@@ -144,9 +149,7 @@ export default function PresalePlaceOrderWalletSelect() {
             )}
             <button
                 className="btn btn-outline-light rounded-0 text-uppercase w-100 fw-bold py-12px fs-20px"
-                onClick={() => {
-                    presaleMutation()
-                }}
+                onClick={handlePresale}
                 disabled={reqPending && !selectedWallet}
             >
                 <div className="d-flex align-items-center justify-content-center gap-3">

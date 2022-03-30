@@ -37,6 +37,7 @@ export default function TwoFactorModal({
     phone,
     twoStep,
     onResult,
+    redirect
 }) {
     const [qrcode, setQRCode] = useState("");
     const [selected, setSelected] = useState(0);
@@ -75,10 +76,10 @@ export default function TwoFactorModal({
 
     const [confirmRequest2FA, { loading: confirmLoading }] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
-            if (data.confirmRequest2FA === "Failed") {
+            if (data.confirmRequest2FA?.status === "Failed") {
                 setState(initial);
                 onResult(false);
-            } else if (data.confirmRequest2FA === "Success") {
+            } else if (data.confirmRequest2FA?.status === "Success") {
                 onResult(true);
                 setState({
                     result_code: "",
@@ -330,10 +331,20 @@ export default function TwoFactorModal({
                                 onClick={() => {
                                     if (!result_code.length) setState({ error: true });
                                     else {
-                                       
-                                        signup2faMutation(email,
-                                                    two_factors[selected].method,
-                                                    result_code);
+                                        if(redirect) {
+                                            signup2faMutation(email,
+                                                        two_factors[selected].method,
+                                                        result_code);
+                                        } else {
+                                            console.log(redirect);
+                                            confirmRequest2FA({
+                                                variables: {
+                                                    email,
+                                                    method: two_factors[selected].method,
+                                                    code: result_code,
+                                                },
+                                            });    
+                                        }
                                     }
                                 }}
                             >

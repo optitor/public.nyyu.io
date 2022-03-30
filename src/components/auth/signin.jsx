@@ -103,6 +103,7 @@ const Signin = ({ error }) => {
                         setState({ tfaOpen: false, authError: false });
                     } else navigate(ROUTES.verifyFailed);
                 }}
+                redirect={false}
             />
             {success ? (
                 <VerifyMutliFA

@@ -21,10 +21,10 @@ export const setCurrentRound = (round_id) => (dispatch) => {
     })
 }
 
-export const setBidType = bidType => dispatch => {
+export const setPresaleOrderId = orderId => dispatch => {
     dispatch({
-        type: Types.SET_BID_TYPE,
-        payload: bidType
+        type: Types.SET_PRESALE_ORDER_ID,
+        payload: orderId
     })
 }
 
