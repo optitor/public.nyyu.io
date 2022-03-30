@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { navigate } from 'gatsby';
+import { navigate } from "gatsby";
 
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
@@ -32,10 +32,17 @@ import NDBWalletTab from "./NDBWalletTab";
 import PaymentExternalWalletTab from "./payment-external-wallet-tab";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import { GET_AUCTION } from "../../apollo/graphqls/querys/Auction";
-import { PAYPAL_FOR_AUCTION, PAYPAL_FOR_PRESALE } from "../../apollo/graphqls/mutations/Payment";
-import { getCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
-import { ROUTES } from "../../utilities/routes"
-
+import {
+    PAYPAL_FOR_AUCTION,
+    PAYPAL_FOR_PRESALE,
+} from "../../apollo/graphqls/mutations/Payment";
+import {
+    getCookie,
+    NDB_Paypal_TrxType,
+    NDB_Auction,
+    NDB_Presale,
+} from "../../utilities/cookies";
+import { ROUTES } from "../../utilities/routes";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -50,7 +57,11 @@ const payment_types = [
 ];
 
 const Payment = () => {
-    const { round_id: currentRound, bid_amount: bidAmount, order_id: orderId } = useSelector(state => state?.placeBid);
+    const {
+        round_id: currentRound,
+        bid_amount: bidAmount,
+        order_id: orderId,
+    } = useSelector((state) => state?.placeBid);
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
@@ -59,7 +70,7 @@ const Payment = () => {
 
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
-    
+
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
     if (!isSSR && !currentRound) navigate(ROUTES.auction);
@@ -131,13 +142,17 @@ const Payment = () => {
     const initPaypal = () => {
         setPayPalLoading(true);
         const paypalTrxType = getCookie(NDB_Paypal_TrxType);
-        if(paypalTrxType === NDB_Auction) {
+        if (paypalTrxType === NDB_Auction) {
             paypalForAuctionMutation({
                 variables: { roundId: currentRound, currencyCode: "USD" },
             });
-        } else if( paypalTrxType === NDB_Presale) {
+        } else if (paypalTrxType === NDB_Presale) {
             paypalForPresaleMutation({
-                variables: { presaleId: currentRound, orderId, currencyCode: "USD" },
+                variables: {
+                    presaleId: currentRound,
+                    orderId,
+                    currencyCode: "USD",
+                },
             });
         }
     };
@@ -231,6 +246,7 @@ const Payment = () => {
                                     <NDBWalletTab
                                         bidAmount={bidAmount}
                                         currentRound={currentRound}
+                                        orderId={orderId}
                                     />
                                 )}
                                 {tabIndex === 5 && (
