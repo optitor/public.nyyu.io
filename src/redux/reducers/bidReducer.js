@@ -4,7 +4,7 @@ const initailState = {
     bid_amount: 1,
     currency: { label: 'USD', value: 'USD', sign: '$' },
     round_id: 0,
-    bidType: ''
+    order_id: 0
 }
 
 export const bidReducer = (state = initailState, action) => {
@@ -15,8 +15,8 @@ export const bidReducer = (state = initailState, action) => {
             return { ...state, currency: action.payload }
         case Types.SET_CURRENT_ROUND_ID:
             return { ...state, round_id: action.payload }
-        case Types.SET_BID_TYPE:
-            return { ...state, bidType: action.payload }
+        case Types.SET_PRESALE_ORDER_ID:
+            return { ...state, order_id: action.payload }
         default:
             return state
     }

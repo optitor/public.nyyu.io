@@ -106,20 +106,25 @@ export const createPaymentIntent = (paymentMethodId, amount) => {
 };
 
 export const getStripePaymentFee = (user, allFees, bidAmount) => {
-    // getting data from redux.
-    const allFeesArray = Object.values(allFees);
-
     // finding the fee.
     let userTierLevel = user?.tierLevel;
     if (userTierLevel === 0)
         userTierLevel = 1
-    const userFee = allFeesArray.filter(
-        (item) => item?.tierLevel === userTierLevel
-    )[0]?.fee;
+    const userFee = allFees[userTierLevel]?.fee;
     const stripePaymentFee = ((2.9 + userFee) * bidAmount) / 100 + 0.3;
     return stripePaymentFee.toFixed(2);
 };
 
+export const getPaypalPaymentFee = (user, allFees, bidAmount) => {
+    const PaypalTrxFee = 5;
+    // finding the fee.
+    let userTierLevel = user?.tierLevel;
+    if (userTierLevel === 0)
+        userTierLevel = 1
+    const userFee = allFees[userTierLevel]?.fee;
+    const paypalPaymentFee = ((PaypalTrxFee + userFee) * bidAmount) / 100 + 0.3;
+    return paypalPaymentFee.toFixed(2);
+};
 
 export const createDateFromDateObject = (newDate = new Date()) => {
     const today = newDate
