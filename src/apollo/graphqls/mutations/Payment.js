@@ -192,12 +192,14 @@ export const PAYPAL_WITHDRAW_REQUEST = gql`
         $target: String
         $withdrawAmount: Float
         $sourceToken: String
+        $code: String
     ) {
         paypalWithdrawRequest(
             email: $email
             target: $target
             withdrawAmount: $withdrawAmount
             sourceToken: $sourceToken
+            code: $code
         ) {
             id
             userId
@@ -206,5 +208,11 @@ export const PAYPAL_WITHDRAW_REQUEST = gql`
             tokenAmount
             status
         }
+    }
+`;
+
+export const GENERATE_WITHDRAW = gql`
+    mutation GenerateWithdraw {
+        generateWithdraw
     }
 `;

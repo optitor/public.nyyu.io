@@ -761,6 +761,27 @@
             justify-content: center;
             min-height: 420px;
         }
+        div.confirm_div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 350px;
+            div.react-code-input {
+                input {
+                    width: 50px!important;
+                    height: 65px!important;
+                    margin: 10px!important;
+                }
+                @include mq('phone', max) {
+                    input {
+                        width: 40px !important;
+                        height: 55px !important;
+                        margin: 5px !important;
+                    }
+                }
+            }
+        }
         .col-sm-6 {
             padding-left: 1%;
             padding-right: 1%;

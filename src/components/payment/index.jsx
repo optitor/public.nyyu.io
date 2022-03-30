@@ -34,8 +34,7 @@ import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import { GET_AUCTION } from "../../apollo/graphqls/querys/Auction";
 import { PAYPAL_FOR_AUCTION, PAYPAL_FOR_PRESALE } from "../../apollo/graphqls/mutations/Payment";
 import { getCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
-import { ROUTES } from "../../utilities/routes"
-
+import { ROUTES } from "../../utilities/routes";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
