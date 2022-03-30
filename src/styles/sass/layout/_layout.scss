@@ -12,7 +12,6 @@
     @include mq("phone", max) {
         padding: 15px 0;
     }
-    background-color: $black;
     .logo {
         width: 92px;
         height: 35px;
