@@ -34,11 +34,11 @@ export default function AuctionRoundDetails() {
     useEffect(() => {
         const timer = setInterval(() => {
             const currentTimeMilliSeconds = new Date().getTime()
-            if (optCurrentRound.status === 2) {
-                const difference = Math.abs(optCurrentRound.endedAt - currentTimeMilliSeconds)
+            if (optCurrentRound?.status === 2) {
+                const difference = Math.abs(optCurrentRound?.endedAt - currentTimeMilliSeconds)
                 getRemainingRoundTime(difference)
-            } else if (optCurrentRound.status === 1) {
-                const difference = Math.abs(currentTimeMilliSeconds - optCurrentRound.startedAt)
+            } else if (optCurrentRound?.status === 1) {
+                const difference = Math.abs(currentTimeMilliSeconds - optCurrentRound?.startedAt)
                 getRemainingRoundTime(difference)
             }
         }, 1000)
@@ -53,7 +53,7 @@ export default function AuctionRoundDetails() {
         <div className="auction-left__bottom">
             <PercentageBar
                 percentage={soldTokensPercentage}
-                sold={optCurrentRound.sold}
+                sold={optCurrentRound?.sold}
                 total={isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount}
             />
             <div className="d-flex justify-content-between mt-20px">
@@ -62,20 +62,20 @@ export default function AuctionRoundDetails() {
                         {isAuction ? "Reserved Price" : "Token Price"}{" "}
                     </p>
                     <p className="value">
-                        {Number((isAuction ? optCurrentRound.minPrice : optCurrentRound.tokenPrice) * currencyRate).toFixed(3)}
+                        {Number((isAuction ? optCurrentRound?.minPrice : optCurrentRound?.tokenPrice) * currencyRate).toFixed(3)}
                         <span className="txt-green ms-1">
                             {currency.label}
                         </span>
                     </p>
                 </div>
                 <div>
-                    {optCurrentRound.status !== 3 ? (
+                    {optCurrentRound?.status !== 3 ? (
                         <>
                             <p className="caption text-end text-[#959595]">
                                 {isAuction ? "Time Remaining" : "Tokens Remaining"}
                             </p>
                             <p className="value text-end">
-                                {isAuction ? numberWithLength(restTime.hours, 2) + ":" + numberWithLength(restTime.minutes, 2) + ":" + numberWithLength(restTime.seconds, 2) : optCurrentRound.tokenAmount - optCurrentRound.sold}
+                                {isAuction ? numberWithLength(restTime.hours, 2) + ":" + numberWithLength(restTime.minutes, 2) + ":" + numberWithLength(restTime.seconds, 2) : optCurrentRound?.tokenAmount - optCurrentRound?.sold}
                             </p>
                         </>
                     ) : (

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { navigate } from 'gatsby';
 
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
@@ -33,6 +34,7 @@ import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import { GET_AUCTION } from "../../apollo/graphqls/querys/Auction";
 import { PAYPAL_FOR_AUCTION, PAYPAL_FOR_PRESALE } from "../../apollo/graphqls/mutations/Payment";
 import { getCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
+import { ROUTES } from "../../utilities/routes"
 
 
 const payment_types = [
@@ -57,17 +59,17 @@ const Payment = () => {
 
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
-
+    console.log(totalRounds, barProgress, allFees, payPalLoading)
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    // if (!isSSR && !currentRound) navigate(ROUTES.auction);
+    if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
 
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
-            setTotalRounds(data.getAuctions.length);
+            setTotalRounds(data.getAuctions?.length);
             setBarProgress((currentCap * 100) / targetCap);
         },
         onError: (error) => console.log(error),
@@ -134,7 +136,7 @@ const Payment = () => {
                 variables: { roundId: currentRound, currencyCode: "USD" },
             });
         } else if( paypalTrxType === NDB_Presale) {
-            paypalForAuctionMutation({
+            paypalForPresaleMutation({
                 variables: { roundId: currentRound, orderId, currencyCode: "USD" },
             });
         }

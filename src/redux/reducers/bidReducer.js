@@ -16,7 +16,7 @@ export const bidReducer = (state = initailState, action) => {
         case Types.SET_CURRENT_ROUND_ID:
             return { ...state, round_id: action.payload }
         case Types.SET_PRESALE_ORDER_ID:
-            return { ...state, orderId: action.payload }
+            return { ...state, order_id: action.payload }
         default:
             return state
     }
