@@ -505,6 +505,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                     deleteCardMethod={deleteCardMethod}
                     selectedSavedCard={selectedSavedCard}
                     setSelectedSavedCard={setSelectedSavedCard}
+                    orderId={orderId}
                 />
             )}
             {isNewCard && (
