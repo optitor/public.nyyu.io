@@ -107,46 +107,71 @@ export default function StatementsTable() {
             ).getTime(),
         },
         onCompleted: (data) => {
-            setDepositList([
-                ...data.getStatement.paypalDepositTxns
-                    .sort((item2, item1) => item2?.createdAt - item1?.createdAt)
-                    .map((item) => {
-                        const createdTime = new Date(item?.createdAt);
-                        return {
-                            id: item?.id,
-                            date: createDateFromDate(createdTime),
-                            time: createTimeFromDate(createdTime),
-                            fee: item?.fee,
-                            status: item?.status,
-                            amount: item?.fiatAmount,
-                            type: "Paypal Deposit",
-                            paymentId: item?.paypalOrderId,
-                            asset: item?.fiatType,
-                        };
-                    }),
-            ]);
-            // TODO: Add other withdraw data here too
-            setWithdrawList([
-                ...data.getStatement.cryptoWithdraws
-                    .sort(
-                        (item2, item1) =>
-                            item2?.confirmedAt - item1?.confirmedAt
-                    )
-                    .map((item) => {
-                        const createdTime = new Date(item?.confirmedAt);
-                        return {
-                            id: item?.id,
-                            date: createDateFromDate(createdTime),
-                            time: createTimeFromDate(createdTime),
-                            fee: item?.fee,
-                            status: item?.status,
-                            amount: item?.withdrawAmount,
-                            type: "Crypto Withdraw",
-                            paymentId: "---",
-                            asset: item?.sourceToken,
-                        };
-                    }),
-            ]);
+            // Deposit
+            const paypalDepositFooList =
+                data.getStatement.paypalDepositTxns.map((item) => {
+                    const createdTime = new Date(item?.createdAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item?.fee,
+                        status: item?.status,
+                        amount: item?.fiatAmount,
+                        type: "Paypal Deposit",
+                        paymentId: item?.paypalOrderId,
+                        asset: item?.fiatType,
+                    };
+                });
+            const coinPaymentDepositFooList =
+                data.getStatement.coinpaymentWalletTxns.map((item) => {
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: 0.0,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Crypto Deposit",
+                        paymentId: "---",
+                        asset: item?.coin,
+                    };
+                });
+
+            // Withdraw
+            const cryptoWithdrawsFooList =
+                data.getStatement.cryptoWithdraws.map((item) => {
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item?.fee,
+                        status: item?.status,
+                        amount: item?.withdrawAmount,
+                        type: "Crypto Withdraw",
+                        paymentId: "---",
+                        asset: item?.sourceToken,
+                    };
+                });
+            const paypalWithdrawsFooList =
+                data.getStatement.paypalWithdraws.map((item) => {
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item?.fee,
+                        status: item?.status,
+                        amount: item?.withdrawAmount,
+                        type: "Paypal Withdraw",
+                        paymentId: "---",
+                        asset: item?.targetCurrency,
+                    };
+                });
+
+            // Auction
             const stripeBidFooList = data.getStatement.stripeAuctionTxns.map(
                 (item) => {
                     const createdTime = new Date(item?.confirmedAt);
@@ -154,7 +179,6 @@ export default function StatementsTable() {
                         id: item?.id,
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
-                        // fee: item?.fee,
                         fee: 0.0,
                         status: item?.status,
                         amount: item?.amount,
@@ -164,12 +188,107 @@ export default function StatementsTable() {
                     };
                 }
             );
+            const paypalBidFooList = data.getStatement.paypalAuctionTxns.map(
+                (item) => {
+                    const createdTime = new Date(item?.createdAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: 0.0,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Paypal Auction",
+                        paymentId: item?.paypalOrderId,
+                        asset: item?.fiatType,
+                    };
+                }
+            );
+
             const coinPaymentBidFooList =
                 data.getStatement.coinpaymentAuctionTxns.map((item) => {
-                    console.log(item);
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: 0.0,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Crypto Auction",
+                        paymentId: "---",
+                        asset: item?.coin,
+                    };
                 });
 
-            setBidList([...stripeBidFooList]);
+            // Presale
+            const stripeBuyFooList = data.getStatement.stripePresaleTxns.map(
+                (item) => {
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: 0.0,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Credit Card PreSale",
+                        paymentId: item?.paymentMethodId,
+                        asset: item?.fiatType,
+                    };
+                }
+            );
+            const paypalBuyFooList = data.getStatement.paypalPresaleTxns.map(
+                (item) => {
+                    const createdTime = new Date(item?.createdAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: 0.0,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Paypal PreSale",
+                        paymentId: item?.paypalOrderId,
+                        asset: item?.fiatType,
+                    };
+                }
+            );
+            const coinPaymentBuyFooList =
+                data.getStatement.coinpaymentPresaleTxns.map((item) => {
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: 0.0,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Crypto PreSale",
+                        paymentId: "---",
+                        asset: item?.coin,
+                    };
+                });
+
+            // Binding
+            setDepositList([
+                ...paypalDepositFooList,
+                ...coinPaymentDepositFooList,
+            ]);
+            setWithdrawList([
+                ...cryptoWithdrawsFooList,
+                ...paypalWithdrawsFooList,
+            ]);
+            setBidList([
+                ...stripeBidFooList,
+                ...paypalBidFooList,
+                ...coinPaymentBidFooList,
+            ]);
+            setBuyList([
+                ...stripeBuyFooList,
+                ...paypalBuyFooList,
+                ...coinPaymentBuyFooList,
+            ]);
             setLoading(false);
         },
         onError: (error) => console.log(error),
