@@ -22,6 +22,7 @@ const depositOptions = [
     { value: "withdraw", label: "Withdraw" },
     { value: "bid", label: "Bid" },
     { value: "buy", label: "Buy" },
+    { value: "all", label: "All" },
 ];
 const periodOptions = [
     { index: 0, value: "weekly", label: "Weekly" },
@@ -337,6 +338,13 @@ export default function StatementsTable() {
         if (option.value === "withdraw") return setList(withdrawList);
         if (option.value === "bid") return setList(bidList);
         if (option.value === "buy") return setList(buyList);
+        if (option.value === "all")
+            return setList([
+                ...depositList,
+                ...withdrawList,
+                ...bidList,
+                ...buyList,
+            ]);
     };
     const downloadContent = (
         id,
