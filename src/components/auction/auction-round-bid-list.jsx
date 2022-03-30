@@ -106,6 +106,9 @@ export default function AuctionRoundBidList() {
 
     }, [currentRoundBidList, currentUser.id, isAuction])
 
+    console.log(currentRoundBidList)
+    console.log(displayedBidList)
+
     useEffect(() => {
         if (optCurrentRound && optCurrentRound.status === 2) return startPolling(pollIntervalValue)
         return stopPolling()
@@ -127,8 +130,8 @@ export default function AuctionRoundBidList() {
                 <AuctionList
                     ranking={currentUserBidData.ranking}
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
-                    tokenPrice={currentUserBidData.tokenPrice}
-                    mainAmount={currentUserBidData.tokenAmount * currentUserBidData.tokenPrice}
+                    tokenPrice={isAuction ? currentUserBidData.tokenPrice : currentUserBidData.ndbPrice}
+                    mainAmount={isAuction ? currentUserBidData.tokenAmount * currentUserBidData.tokenPrice : currentUserBidData.ndbAmount}
                     winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1}
                     isCurrentUser={true}/>
             </div> : ""}
