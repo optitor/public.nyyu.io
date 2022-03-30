@@ -111,7 +111,8 @@ export default function CreditCardSavedCards({
                                 const paymentIntentId = result.paymentIntent.id;
                                 return payStripeForPreSaleWithSavedCard({
                                     variables: {
-                                        roundId,
+                                        presaleId: roundId,
+                                        orderId: orderId,
                                         amount: amount * 100,
                                         cardId: savedCards[selectedSavedCard]
                                             .id,
@@ -140,9 +141,6 @@ export default function CreditCardSavedCards({
     const submitPayment = () => {
         setRequestPending(true);
         const type = getCookie(NDB_Paypal_TrxType);
-        console.log("type", type);
-        console.log("ndb_auction", NDB_Auction);
-        console.log("ndb_presale", NDB_Presale);
         if (type === NDB_Auction)
             return payStripeForAuctionWithSavedCard({
                 variables: {

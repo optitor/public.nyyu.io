@@ -213,10 +213,12 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             }
                             return stripePaymentForPresale({
                                 variables: {
-                                    roundId: Number(round),
+                                    presaleId: Number(round),
+                                    orderId: orderId,
                                     amount: amount * 100,
                                     paymentMethodId: null,
                                     paymentIntentId: result.paymentIntent.id,
+                                    isSaveCard,
                                 },
                             });
                         });
