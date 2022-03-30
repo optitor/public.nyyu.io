@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Link, navigate } from "gatsby"
 import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
@@ -20,10 +20,6 @@ const IndexPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [loading, setLoading] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
-
-    useEffect(() => {
-        console.log(window.location.href)
-    })
 
     // Webservice
     useQuery(GET_CURRENT_ROUND, {

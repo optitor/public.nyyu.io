@@ -70,7 +70,6 @@ const Payment = () => {
 
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
-    console.log(totalRounds, barProgress, allFees, payPalLoading);
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
     if (!isSSR && !currentRound) navigate(ROUTES.auction);
@@ -149,7 +148,7 @@ const Payment = () => {
         } else if (paypalTrxType === NDB_Presale) {
             paypalForPresaleMutation({
                 variables: {
-                    roundId: currentRound,
+                    presaleId: currentRound,
                     orderId,
                     currencyCode: "USD",
                 },
@@ -247,6 +246,7 @@ const Payment = () => {
                                     <NDBWalletTab
                                         bidAmount={bidAmount}
                                         currentRound={currentRound}
+                                        orderId={orderId}
                                     />
                                 )}
                                 {tabIndex === 5 && (

@@ -4,7 +4,6 @@ import { Icon } from '@iconify/react';
 import NumberFormat from "react-number-format";
 
 import { useAuction } from "../../providers/auction-context";
-import { numberWithCommas } from "../../utilities/number";
 
 export default function AuctionRoundNavigator() {
     // Containers

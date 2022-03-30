@@ -18,7 +18,8 @@ import {
     TrustWallet,
     WalletConnect,
 } from "./imgImport"
-import { API_BASE_URL, SITE_URL } from "./statciData3"
+import { API_BASE_URL } from "./statciData3"
+import { ROUTES } from "./routes"
 
 export const countries = [
     {
@@ -1488,6 +1489,104 @@ export const VerificationStepThreeDocumentTypes = [
         label: "Bank statement",
         value: "bank_statement",
     },
+]
+
+export const navigationLinks = [
+    {
+        label: "Home",
+        url: "https://ndb.money/",
+        active: false
+    },
+    {
+        label: "Vision",
+        url: "https://ndb.city",
+        active: false
+    },
+    {
+        label: "Technology",
+        url: "https://ndb.money/technology",
+        active: false
+    },
+    {
+        label: "Learn",
+        url: "https://ndb.money/learn",
+        active: false
+    },
+    {
+        label: "Sale",
+        url: "/",
+        active: true,
+        subMenu: [
+            {
+                label: "Wallet",
+                url: ROUTES.wallet,
+                isDressup: false
+            },
+            {
+                label: "Sale",
+                url: ROUTES.auction,
+                isDressup: false
+            },
+            {
+                label: "Profile",
+                url: ROUTES.profile,
+                isDressup: false
+            },
+            {
+                label: "Dressup",
+                isDressup: true
+            },
+            {
+                label: "Support",
+                url: ROUTES.faq,
+                isDressup: false
+            }
+        ]
+    },
+    {
+        label: "Contact Us",
+        url: "https://ndb.money/#contactUs",
+        active: false
+    }
+]
+
+export const footerLinks = [
+    {
+        label: "Fee",
+        url: "/",
+    },
+    {
+        label: "Bug bounty",
+        url: "/",
+    },
+    {
+        label: "Apply for listings",
+        url: "/",
+    },
+    {
+        label: "API",
+        url: "/",
+    },
+    {
+        label: "About us",
+        url: "/",
+    },
+    {
+        label: "Terms of use",
+        url: "/",
+    },
+    {
+        label: "Privacy policy",
+        url: "/",
+    },
+    {
+        label: "AML policy",
+        url: "/",
+    },
+    {
+        label: "Contacts",
+        url: "/",
+    }
 ]
 
 export const CLIENT_ID = "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425"

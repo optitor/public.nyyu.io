@@ -127,8 +127,8 @@ export default function AuctionRoundBidList() {
                 <AuctionList
                     ranking={currentUserBidData.ranking}
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
-                    tokenPrice={currentUserBidData.tokenPrice}
-                    mainAmount={currentUserBidData.tokenAmount * currentUserBidData.tokenPrice}
+                    tokenPrice={isAuction ? currentUserBidData.tokenPrice : currentUserBidData.ndbPrice}
+                    mainAmount={isAuction ? currentUserBidData.tokenAmount * currentUserBidData.tokenPrice : currentUserBidData.ndbAmount}
                     winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1}
                     isCurrentUser={true}/>
             </div> : ""}

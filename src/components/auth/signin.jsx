@@ -103,6 +103,7 @@ const Signin = ({ error }) => {
                         setState({ tfaOpen: false, authError: false });
                     } else navigate(ROUTES.verifyFailed);
                 }}
+                redirect={false}
             />
             {success ? (
                 <VerifyMutliFA
@@ -115,7 +116,6 @@ const Signin = ({ error }) => {
                 />
             ) : (
                 <>
-                    <h3 className="signup-head">Sign in</h3>
                     <form className="form">
                         <div className="form-group">
                             <FormInput
