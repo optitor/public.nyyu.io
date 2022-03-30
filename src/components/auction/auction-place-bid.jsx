@@ -88,7 +88,7 @@ export default function AuctionPlaceBid() {
     useEffect(() => {
         if (getBid)
             if (Object.keys(getBid).length !== 0) {
-                setPrice(isBid ? optCurrentRound.placeBid : getBid.tokenPrice)
+                setPrice(isBid ? optCurrentRound?.placeBid : getBid.tokenPrice)
                 setAmount(isBid ? 1 : getBid.tokenAmount)
                 if(!isBid) {
                     setPreAmount(getBid.tokenAmount)
@@ -125,7 +125,7 @@ export default function AuctionPlaceBid() {
                             value={amount}
                             onChange={(value) => setAmount(value)}
                             min={1}
-                            max={optCurrentRound.totalToken}
+                            max={optCurrentRound?.totalToken}
                             step={1}
                         />
                     </div>

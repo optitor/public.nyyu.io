@@ -50,7 +50,7 @@ const Auction = () => {
     }, [currentRoundNumber])
 
     useEffect(() => {
-            auction.setIsAuction(optCurrentRound?.kind === 1)
+        auction.setIsAuction(optCurrentRound?.kind === 1)
     }, [optCurrentRound])
 
     if (loading) return <Loading/>

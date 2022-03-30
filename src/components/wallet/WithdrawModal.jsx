@@ -1,30 +1,30 @@
 /* eslint-disable */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
+import { useSelector } from 'react-redux';
 import jq from 'jquery';
 import Modal from "react-modal";
 import { navigate } from 'gatsby';
+import validator from "validator";
 import _ from "lodash";
 import styled from 'styled-components';
 import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
 import { Icon } from "@iconify/react";
-// import { useMutation } from '@apollo/client';
-// import { CopyToClipboard } from "react-copy-to-clipboard";
-// import { generateQR } from "../../utilities/string";
+import { useQuery, useMutation } from '@apollo/client';
 import CustomSpinner from "../common/custom-spinner";
+import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
+import { getPaypalPaymentFee } from "../../utilities/utility-methods";
 import {
-    // Plaid,
     PaypalFiat,
-    // CreditCards,
     USDT } from '../../utilities/imgImport';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-// import { CREATE_CHARGE_FOR_DEPOSIT } from "../../apollo/graphqls/mutations/Payment";
+import { CREATE_CHARGE_FOR_DEPOSIT, PAYPAL_WITHDRAW_REQUEST } from "../../apollo/graphqls/mutations/Payment";
 import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [
     {label: 'USD', value: 'USD', symbol: '$'},
-    {label: 'GBP', value: 'GBP', symbol: '£'},
-    {label: 'EUR', value: 'EUR', symbol: '€'},
+    // {label: 'GBP', value: 'GBP', symbol: '£'},
+    // {label: 'EUR', value: 'EUR', symbol: '€'},
 ];
 
 const TransferData = {
@@ -81,6 +81,7 @@ const SelectOption = (props) => {
 };
 
 export default function DepositModal({ showModal, setShowModal, assets }) {
+    const user = useSelector((state) => state.auth.user);
     const myAssets = _.orderBy(assets.filter(item => {
         return item.tokenSymbol !== 'VOLT';
     }).map(item => {
@@ -98,7 +99,6 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [currentStep, setCurrentStep] = useState(1);
     const [isPaypalWithdraw, setIsPaypalWithdraw] = useState(false);
     const [tabIndex, setTabIndex] = useState(1);
-    const [copied, setCopied] = useState(false);
     const [pending, setPending] =useState(false);
 
     const networks = useMemo(() => (selectedAsset?.networks?? []), [selectedAsset]);    
@@ -108,10 +108,16 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
 
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
-    const [transferAmount, setTransferAmount] = useState('')
+    const [transferAmount, setTransferAmount] = useState('');
+    const [paypalEmail, setPaypalEmail] = useState('');
+    const [allFees, setAllFees] = useState({});
 
-    const [copyText, setCopyText] = useState('');
+    const [showError, setShowError] = useState(false);
 
+    const paypalEmailError = useMemo(() => {
+        if(!paypalEmail) return 'Please Enter Your PayPal Email.';
+        if(!validator.isEmail(paypalEmail)) return 'Invalid Email';
+    }, [paypalEmail]);
 
     // const [createChargeForDepositMutation] = useMutation(
     //     CREATE_CHARGE_FOR_DEPOSIT,
@@ -131,6 +137,13 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     //         },
     //     }
     // );
+
+    useQuery(GET_ALL_FEES, {
+        onCompleted: (data) => {
+            setAllFees( _.mapKeys(data.getAllFees, "tierLevel"));
+        },
+        onError: (error) => console.log(error),
+    });
 
     const goBackToFiat = () => {
         setCurrentStep(1);
@@ -160,18 +173,34 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         setShowModal(false);
     };
 
-    const handleCopy = () => {
-        setCopied(true)
-        setTimeout(() => {
-            setCopied(false)
-        }, 1000)
-    };
+    const [paypalWithdrawRequestMutation] = useMutation(PAYPAL_WITHDRAW_REQUEST, {
+        onCompleted: data => {
+            console.log(data.paypalWithdrawRequest);
+            setPending(false);
+        },
+        onError: err => {
+            console.log(err.message);
+            setPending(false);
+        }
+    });
 
-    const handleCopyToClipboard = (text) => {
-        /* Copy the text inside the text field */
-        navigator.clipboard.writeText(text);
-        setCopyText(text);
+    const handleRequestPaypalTrx = () => {
+        if(paypalEmailError) {
+            setShowError(true);
+            return;
+        }
+        setPending(true);
+        const requestData = {
+            email: paypalEmail,
+            target: currency.value,
+            withdrawAmount: Number(transferAmount),
+            sourceToken: 'USDT'
+        };
+        paypalWithdrawRequestMutation({
+            variables: { ...requestData }
+        });
     };
+    
 
     return (
         <Modal
@@ -316,7 +345,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                 {currentStep === 2 &&
                     (isPaypalWithdraw? (
                         <div className="deposit width2 mb-5">
-                            <h5 className="text-center">Paypal withdraw</h5>
+                            <h5 className="text-center">PayPal withdraw</h5>
                             <div className="mt-3">
                                 <p className="subtitle">Source of fund</p>
                                 <div className="black_input usdt_div">
@@ -328,7 +357,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 </p>
                             </div>
                             <div>
-                                <p className="subtitle">Select currency</p>
+                                <p className="subtitle">Currency</p>
                                 <Select
                                     className="black_input"
                                     options={CURRENCIES}
@@ -351,16 +380,23 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         allowNegative={false}
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
+                                        placeholder={'Min 1 ' + currency.symbol}
                                         autoComplete='off'
                                     />
                                     <div>
-                                        Bank transfer fee{' '}
+                                        Transaction fee{' '}
                                         <NumberFormat
                                             thousandSeparator={true}
                                             suffix={' ' + currency.symbol}
                                             displayType='text'
                                             allowNegative={false}
-                                            value={Number(transferAmount) * TransferFee}
+                                            value={Number(
+                                                getPaypalPaymentFee(
+                                                    user,
+                                                    allFees,
+                                                    transferAmount
+                                                )
+                                            )}
                                             decimalScale={2}
                                         />
                                     </div>
@@ -369,7 +405,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <button
                                 className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
                                 onClick={() => setCurrentStep(3)}
-                                disabled={!transferAmount}
+                                disabled={!transferAmount || Number(transferAmount) < 1}
                             >
                                 NEXT
                             </button>
@@ -438,7 +474,28 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                 }
                 {currentStep === 3 &&
                     (isPaypalWithdraw? (
-                        <></>
+                        <div className='deposit width2'>
+                            <div className="paypal_email">
+                                <h5>PayPal Email</h5>
+                                <input className="black_input"
+                                    value={paypalEmail}
+                                    onChange={e => setPaypalEmail(e.target.value)}
+                                />
+                                <p style={{height: 25}}>
+                                    {showError && paypalEmailError}
+                                </p>
+                                <button
+                                    className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold d-flex align-items-center justify-content-center"
+                                    onClick={handleRequestPaypalTrx}
+                                    disabled={pending}
+                                >
+                                    <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                        <CustomSpinner />
+                                    </div>
+                                    <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Request withdraw</div>
+                                </button>
+                            </div>
+                        </div>
                     ): (
                         <></>
                     ))

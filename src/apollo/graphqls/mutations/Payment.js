@@ -185,3 +185,26 @@ export const BANK_FOR_DEPOSIT = gql`
         }
     }
 `;
+
+export const PAYPAL_WITHDRAW_REQUEST = gql`
+    mutation PaypalWithdrawRequest(
+        $email: String
+        $target: String
+        $withdrawAmount: Float
+        $sourceToken: String
+    ) {
+        paypalWithdrawRequest(
+            email: $email
+            target: $target
+            withdrawAmount: $withdrawAmount
+            sourceToken: $sourceToken
+        ) {
+            id
+            userId
+            withdrawAmount
+            fee
+            tokenAmount
+            status
+        }
+    }
+`;

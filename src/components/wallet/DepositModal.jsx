@@ -15,7 +15,7 @@ import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
 import StripeDepositSection from "./deposit/StripeDepositSection";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
-import { getStripePaymentFee } from "../../utilities/utility-methods";
+import { getStripePaymentFee, getPaypalPaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 import {
     Plaid,
@@ -32,8 +32,8 @@ import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cook
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
-    { label: "GBP", value: "GBP", symbol: "£" },
-    { label: "EUR", value: "EUR", symbol: "€" },
+    // { label: "GBP", value: "GBP", symbol: "£" },
+    // { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
 const TransferData = {
@@ -62,6 +62,7 @@ const TransferData = {
 
 const TransferFee = 0.03;
 const { Option } = components;
+const MIN_VALUE = 1;
 
 const SelectOption = (props) => {
     return (
@@ -105,7 +106,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [isStripeDeposit, setIsStripeDeposit] = useState(false);
     const [isBankAccountTransferDeposit, setIsBankAccountTransferDeposit] =
         useState(false);
-    const [allFees, setAllFees] = useState(null);
+    const [allFees, setAllFees] = useState({});
 
     const loadingStripe = !allFees;
 
@@ -121,7 +122,7 @@ export default function DepositModal({ showModal, setShowModal }) {
 
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
-            setAllFees(data.getAllFees);
+            setAllFees( _.mapKeys(data.getAllFees, "tierLevel"));
         },
         onError: (error) => console.log(error),
     });
@@ -694,8 +695,28 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     onValueChange={(values) =>
                                         setTransferAmount(values.value)
                                     }
+                                    placeholder={'Min 1 ' + currency.symbol}
                                     autoComplete="off"
                                 />
+                                <div>
+                                    Transaction fee{" "}
+                                    <NumberFormat
+                                        thousandSeparator={true}
+                                        suffix={
+                                            " " + currency.symbol
+                                        }
+                                        displayType="text"
+                                        allowNegative={false}
+                                        value={Number(
+                                            getPaypalPaymentFee(
+                                                user,
+                                                allFees,
+                                                transferAmount
+                                            )
+                                        )}
+                                        decimalScale={2}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="mt-3">
@@ -714,7 +735,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                             onClick={() => {
                                 initPaypalCheckout();
                             }}
-                            disabled={!transferAmount}
+                            disabled={!transferAmount || Number(transferAmount) < 1}
                         >
                             CONTINUE
                         </button>
