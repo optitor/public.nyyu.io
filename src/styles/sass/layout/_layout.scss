@@ -132,6 +132,7 @@
 }
 
 .footer-bar {
+    margin-top: 10px;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -148,6 +149,7 @@
 
 @include media-breakpoint-down(lg) {
     .footer-copyright {
+        width: 100%;
         display: flex;
         justify-content: flex-end;
     }
