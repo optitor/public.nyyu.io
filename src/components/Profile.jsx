@@ -179,7 +179,6 @@ const Profile = () => {
                 <main className="profile-page">
                     <TwoFactorModal
                         is2FAModalOpen={is2FAModalOpen}
-                        setIs2FAModalOpen={setIs2FAModalOpen}
                         email={user?.email}
                         phone={user?.phone}
                         twoStep={twoStep}
@@ -188,7 +187,10 @@ const Profile = () => {
                                 refetch();
                             }
                         }}
-                    />
+                        redirect={false}
+                        setIs2FAModalOpen={setIs2FAModalOpen}
+                    />   
+                      
                     <Header
                         setTabIndex={setTabIndex}
                         setCurrentProfileTab={setCurrentProfileTab}

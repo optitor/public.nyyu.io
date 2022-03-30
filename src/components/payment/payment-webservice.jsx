@@ -35,6 +35,16 @@ export const PAY_WALLLET_FOR_AUCTION = gql`
     }
 `;
 
+export const PAY_WALLET_FOR_PRESALE = gql`
+    mutation ($presaleId: Int, $orderId: Int, $cryptoType: String) {
+        payWalletForPresale(
+            presaleId: $presaleId
+            orderId: $orderId
+            cryptoType: $cryptoType
+        )
+    }
+`;
+
 export const GET_SAVED_CARDS = gql`
     {
         getSavedCards {

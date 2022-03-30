@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import Select, { components } from "react-select";
-import _ from 'lodash';
-import { Icon } from '@iconify/react';
+import _ from "lodash";
+import { Icon } from "@iconify/react";
 import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,22 +12,32 @@ import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
 import { CheckBox } from "../common/FormControl";
 import svgToDataURL from "svg-to-dataurl";
-import { PAY_WALLLET_FOR_AUCTION } from "./payment-webservice";
+import {
+    PAY_WALLET_FOR_PRESALE,
+    PAY_WALLLET_FOR_AUCTION,
+} from "./payment-webservice";
 import PaymentSuccessful from "./PaymentSuccessful";
 import { useSelector } from "react-redux";
 import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
-
+import {
+    getCookie,
+    NDB_Paypal_TrxType,
+    NDB_Auction,
+    NDB_Presale,
+} from "../../utilities/cookies";
 
 const { Option } = components;
 
 const setAmountWithPrecision = (tokenType, amount) => {
     let precision = 0;
-    if(tokenType === 'BTC') {
+    if (tokenType === "BTC") {
         precision = 8;
     } else {
         precision = 4;
     }
-    return Math.round(amount * Math.pow(10 , precision)) / Math.pow(10 , precision);
+    return (
+        Math.round(amount * Math.pow(10, precision)) / Math.pow(10, precision)
+    );
 };
 
 const SelectOption = (props) => {
@@ -43,20 +53,23 @@ const SelectOption = (props) => {
                 <div className="d-flex justify-content-between w-100 ms-2">
                     <NumberFormat
                         className="ms-2"
-                        displayType={'text'}
-                        value={setAmountWithPrecision(data.tokenType, data.amount)}
+                        displayType={"text"}
+                        value={setAmountWithPrecision(
+                            data.tokenType,
+                            data.amount
+                        )}
                         thousandSeparator={true}
                         renderText={(value, props) => <p {...props}>{value}</p>}
-                        style={{width: '70%'}}
+                        style={{ width: "70%" }}
                     />
-                    <p style={{width: '30%'}}>{data.tokenType}</p>
+                    <p style={{ width: "30%" }}>{data.tokenType}</p>
                 </div>
             </div>
         </Option>
     );
 };
 
-export default function NDBWalletTab({ bidAmount, currentRound }) {
+export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
     // Containers
     const [balance, setBalance] = useState(null);
     const [userBalances, setUserBalances] = useState(null);
@@ -77,20 +90,18 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
 
     // Webserver
     useQuery(GET_BALANCES, {
-        onCompleted: data => {
-            if(data.getBalances) {
+        onCompleted: (data) => {
+            if (data.getBalances) {
                 let list = data.getBalances?.filter(
-                    (token) => (
-                        token.tokenName !== "NDB" &&
-                        token.tokenName !== "VOLT"
-                    )
+                    (token) =>
+                        token.tokenName !== "NDB" && token.tokenName !== "VOLT"
                 );
-                list = _.orderBy(list, ['free'], ['desc']);
-                list = list.map(item => ({
+                list = _.orderBy(list, ["free"], ["desc"]);
+                list = list.map((item) => ({
                     value: item.free + item.tokenSymbol,
                     tokenType: item.tokenSymbol,
                     icon: item.symbol,
-                    amount: item.free
+                    amount: item.free,
                 }));
 
                 setUserBalances(list);
@@ -106,7 +117,17 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
             setRequestPending(false);
         },
         onError: (error) => {
-            // setError(error.message);
+            setError("Insufficient funds");
+            setRequestPending(false);
+        },
+    });
+    const [payWalletForPresale] = useMutation(PAY_WALLET_FOR_PRESALE, {
+        onCompleted: (data) => {
+            if (data && data?.payWalletForPresale === "Success")
+                setPaymentSuccessful(true);
+            setRequestPending(false);
+        },
+        onError: (error) => {
             setError("Insufficient funds");
             setRequestPending(false);
         },
@@ -117,12 +138,22 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
         e.preventDefault();
         setError("");
         setRequestPending(true);
-        payWalletForAuction({
-            variables: {
-                roundId: currentRound,
-                cryptoType: balance?.tokenType,
-            },
-        });
+        const type = getCookie(NDB_Paypal_TrxType);
+        if (type === NDB_Auction)
+            return payWalletForAuction({
+                variables: {
+                    roundId: currentRound,
+                    cryptoType: balance?.tokenType,
+                },
+            });
+        else if (type === NDB_Presale)
+            return payWalletForPresale({
+                variables: {
+                    presaleId: currentRound,
+                    orderId: orderId,
+                    cryptoType: balance?.tokenType,
+                },
+            });
     };
 
     // Render
@@ -139,7 +170,10 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                 {error && (
                     <div className="text-danger fs-16px ps-0 mb-2">
                         <div className="d-flex align-items-center gap-2">
-                            <Icon icon='bx:error-circle' className="icon-23px" />
+                            <Icon
+                                icon="bx:error-circle"
+                                className="icon-23px"
+                            />
                             <div>{error}</div>
                         </div>
                     </div>
@@ -150,7 +184,9 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                     <>
                         <div className="select_div">
                             <div className="col-lg-4">
-                                <p className="text-lightgrey mb-1">Your wallet balance</p>
+                                <p className="text-lightgrey mb-1">
+                                    Your wallet balance
+                                </p>
                                 <Select
                                     className="balance-select"
                                     options={userBalances}
@@ -164,7 +200,9 @@ export default function NDBWalletTab({ bidAmount, currentRound }) {
                                 />
                             </div>
                             <div className="col-lg-8">
-                                <p className="text-lightgrey mb-1">Payment amount</p>
+                                <p className="text-lightgrey mb-1">
+                                    Payment amount
+                                </p>
                                 <NumberFormat
                                     className="black_input form-control ps-3"
                                     value={finalPaymentAmount}
@@ -233,7 +271,7 @@ const customSelectWithIconStyles = {
     input: (provided) => ({
         ...provided,
         position: "absolute",
-        color: 'transparent'
+        color: "transparent",
     }),
     option: (provided, state) => ({
         ...provided,
@@ -256,8 +294,8 @@ const customSelectWithIconStyles = {
         margin: 0,
         padding: 0,
     }),
-    placeholder: provided => ({
+    placeholder: (provided) => ({
         ...provided,
-        color: 'transparent'
-    })
+        color: "transparent",
+    }),
 };

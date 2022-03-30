@@ -67,6 +67,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     else
                         navigate(ROUTES.verifyFailed)
                 }}
+                redirect={true}
             />
         </AuthLayout>
     )
