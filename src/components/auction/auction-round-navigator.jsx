@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { Tab, TabList } from "react-tabs";
+import { Icon } from '@iconify/react';
+import NumberFormat from "react-number-format";
 
 import { useAuction } from "../../providers/auction-context";
-import { numberWithCommas } from "../../utilities/number";
 
 export default function AuctionRoundNavigator() {
     // Containers
@@ -46,56 +47,31 @@ export default function AuctionRoundNavigator() {
                             className="btn text-light cursor-pointer"
                             onClick={goBack}
                         >
-                            <svg
-                                className={`icon-25px ${
-                                    !canGoBack && "text-secondary"
-                                }`}
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M15 19l-7-7 7-7"
-                                />
-                            </svg>
+                            <Icon icon='ooui:previous-ltr' />
                         </button>
                         <div className="fw-bold text-uppercase fs-30px border-bottom border-3 border-success px-2">
                             <div>
                                 Round
-                                {" " + optCurrentRound?.round}
+                                {" " + (optCurrentRound?.round?? '')}
                             </div>
                         </div>
                         <button
                             className="btn text-light cursor-pointer"
                             onClick={goNext}
                         >
-                            {/* Next */}
-                            <svg
-                                className={`icon-25px ${
-                                    !canGoNext && "text-secondary"
-                                }`}
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M9 5l7 7-7 7"
-                                />
-                            </svg>
+                            <Icon icon='ooui:previous-rtl'/>
                         </button>
                     </div>
                     <div className="mt-3">
                         <span className="text-[#959595]">Token Available </span>
                         <span className="fw-500">
-                            {numberWithCommas(isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)}
+                            <NumberFormat
+                                value={isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount}
+                                thousandSeparator={true}
+                                displayType='text'
+                                allowNegative={false}
+                                renderText={(value, props) => <span {...props}>{value}</span>}
+                            />
                         </span>
                     </div>
                 </div>

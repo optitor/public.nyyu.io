@@ -37,7 +37,7 @@ export default function PresalePlaceOrderHome() {
                     value={amount}
                     onChange={(value) => setAmount(value)}
                     min={1}
-                    max={optCurrentRound.totalToken}
+                    max={optCurrentRound?.totalToken}
                     step={1}
                 />
             </div>
