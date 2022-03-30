@@ -147,7 +147,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 }
                 const { clientSecret, requiresAction } =
                     data.payStripeForAuction;
-                if (requiresAction === false) {
+                if (requiresAction === false || requiresAction === null) {
                     startTimer();
                     setRequestPending(false);
                     return setSuccessfulPayment(true);
@@ -198,7 +198,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 }
                 const { clientSecret, requiresAction } =
                     data.payStripeForPreSale;
-                if (requiresAction === false) {
+                if (requiresAction === false || requiresAction === null) {
                     startTimer();
                     setRequestPending(false);
                     return setSuccessfulPayment(true);
