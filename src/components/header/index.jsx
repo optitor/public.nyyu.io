@@ -26,7 +26,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
     const [banned, setBanned] = useState(false)
     const [isBannedOpen, setIsBannedOpen] = useState(false)
-    const [isCurrentSignin, setIsCurrentSignin] = useState(false)
 
     // Webservice
     const { data: user_data } = useQuery(GET_USER)
@@ -74,6 +73,8 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             window.location.pathname === ROUTES.creditDeposit ||
             window.location.pathname.includes(ROUTES.admin))
 
+    const isCurrentSignin = isBrowser && (window.location.pathname === Routes.signIn)
+
     // Methodsaypal
     useEffect(() => {
         if (!avatarComponents.loaded) {
@@ -83,10 +84,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             dispatch(setCurrentAuthInfo(userInfo))
         }
     }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated])
-
-    useEffect(() => {
-        setIsCurrentSignin(window.location.pathname === Routes.signIn)
-    }, [window.location])
 
     useEffect(() => {
         const handleEscKeyPress = (event) => {
