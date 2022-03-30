@@ -29,6 +29,31 @@ export const STRIPE_PAYMENT = gql`
     }
 `;
 
+export const PAY_STRIPE_FOR_PRESALE = gql`
+    mutation (
+        $presaleId: Int
+        $orderId: Int
+        $amount: Float
+        $paymentIntentId: String
+        $paymentMethodId: String
+        $isSaveCard: Boolean
+    ) {
+        payStripeForPreSale(
+            presaleId: $presaleId
+            orderId: $orderId
+            amount: $amount
+            paymentIntentId: $paymentIntentId
+            paymentMethodId: $paymentMethodId
+            isSaveCard: $isSaveCard
+        ) {
+            clientSecret
+            paymentIntentId
+            requiresAction
+            error
+        }
+    }
+`;
+
 export const PAY_WALLLET_FOR_AUCTION = gql`
     mutation ($roundId: Int, $cryptoType: String) {
         payWalletForAuction(roundId: $roundId, cryptoType: $cryptoType)

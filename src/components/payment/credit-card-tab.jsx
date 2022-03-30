@@ -15,6 +15,7 @@ import {
     DELETE_CARD,
     GET_SAVED_CARDS,
     GET_STRIPE_PUB_KEY,
+    PAY_STRIPE_FOR_PRESALE,
     STRIPE_PAYMENT,
 } from "./payment-webservice";
 import { useMutation, useQuery } from "@apollo/client";
@@ -26,8 +27,14 @@ import { Qmark } from "../../utilities/imgImport";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 import CreditCardSavedCards from "./CreditCardSavedCards";
+import {
+    getCookie,
+    NDB_Auction,
+    NDB_Paypal_TrxType,
+    NDB_Presale,
+} from "../../utilities/cookies";
 
-export default function CreditCardTab({ amount, round }) {
+export default function CreditCardTab({ amount, round, orderId }) {
     // Containers
     const [stripePublicKey, setStripePublicKey] = useState(null);
     const user = useSelector((state) => state.auth.user);
@@ -69,6 +76,7 @@ export default function CreditCardTab({ amount, round }) {
                         round={round}
                         savedCards={savedCards}
                         setSavedCards={setSavedCards}
+                        orderId={orderId}
                     />
                 </Elements>
             )}
@@ -76,7 +84,7 @@ export default function CreditCardTab({ amount, round }) {
     );
 }
 
-const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
+const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     // Containers
     const stripe = useStripe();
     const elements = useElements();
@@ -180,6 +188,57 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
             setRequestPending(false);
         },
     });
+    const [stripePaymentForPresale] = useMutation(PAY_STRIPE_FOR_PRESALE, {
+        onCompleted: async (data) => {
+            if (stripePaymentSecondCall === false) {
+                setStripePaymentSecondCall(true);
+                if (data.payStripeForPreSale.error) {
+                    setRequestPending(false);
+                    return setError(data.payStripeForPreSale.error);
+                }
+                const { clientSecret, requiresAction } =
+                    data.payStripeForPreSale;
+                if (requiresAction === false) {
+                    startTimer();
+                    setRequestPending(false);
+                    return setSuccessfulPayment(true);
+                }
+                if (clientSecret)
+                    return stripe
+                        .handleCardAction(clientSecret)
+                        .then((result) => {
+                            if (result.error) {
+                                startTimer();
+                                return setSuccessfulPayment(false);
+                            }
+                            return stripePaymentForPresale({
+                                variables: {
+                                    roundId: Number(round),
+                                    amount: amount * 100,
+                                    paymentMethodId: null,
+                                    paymentIntentId: result.paymentIntent.id,
+                                },
+                            });
+                        });
+                return setError("Invalid payment");
+            } else if (stripePaymentSecondCall === true) {
+                if (
+                    data.payStripeForPreSale.error ||
+                    data.payStripeForPreSale.requiresAction === true
+                ) {
+                    startTimer();
+                    setRequestPending(false);
+                    return setSuccessfulPayment(false);
+                }
+                startTimer();
+                return setSuccessfulPayment(true);
+            }
+        },
+        onError: (error) => {
+            console.log(error);
+            setRequestPending(false);
+        },
+    });
 
     // Methods
     const deleteCardMethod = (id) => {
@@ -213,15 +272,28 @@ const CardSection = ({ amount, round, savedCards, setSavedCards }) => {
             },
         });
         if (paymentMethod && "id" in paymentMethod && paymentMethod.id) {
-            return stripePayment({
-                variables: {
-                    roundId: Number(round),
-                    amount: amount * 100,
-                    paymentMethodId: paymentMethod.id,
-                    paymentIntentId: null,
-                    isSaveCard,
-                },
-            });
+            const type = getCookie(NDB_Paypal_TrxType);
+            if (type === NDB_Auction)
+                return stripePayment({
+                    variables: {
+                        roundId: Number(round),
+                        amount: amount * 100,
+                        paymentMethodId: paymentMethod.id,
+                        paymentIntentId: null,
+                        isSaveCard,
+                    },
+                });
+            else if (type === NDB_Presale)
+                return stripePaymentForPresale({
+                    variables: {
+                        presaleId: Number(round),
+                        orderId: orderId,
+                        amount: amount * 100,
+                        paymentMethodId: paymentMethod.id,
+                        paymentIntentId: null,
+                        isSaveCard,
+                    },
+                });
         }
         setRequestPending(false);
         return setError("Invalid card information");
