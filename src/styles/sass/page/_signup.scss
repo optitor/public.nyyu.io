@@ -21,14 +21,36 @@
         transform: scale(1.5);
     }
 }
+.right-position {
+    height: 100%;
+}
 @include media-breakpoint-down(sm) {
+    .right-position {
+        position: relative;
+    }
     .right-background {
+        position: absolute;
+        top: 26px;
         width: 100%;
-        height: 355px;
+        height: 300px;
         background-image: url(../../images/signup-bg.svg);
-        background-position: left -160px bottom -85px;
+        background-position: left -115px bottom -63px;
         background-repeat: no-repeat;
         background-size: cover;
+    }
+    .right-background::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+}
+@include media-breakpoint-down(lg) {
+    .signup-page {
+        display: flex;
+        flex-direction: column;
     }
 }
 .signup-page {

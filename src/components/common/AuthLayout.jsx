@@ -16,7 +16,9 @@ const AuthLayout = ({ children }) => {
                         </section>
                     </div>
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-                        <div className="right-background"/>
+                        <div className="right-position">
+                            <div className="right-background"/>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -115,7 +115,6 @@ const Signin = ({ error }) => {
                 />
             ) : (
                 <>
-                    <h3 className="signup-head">Sign in</h3>
                     <form className="form">
                         <div className="form-group">
                             <FormInput
