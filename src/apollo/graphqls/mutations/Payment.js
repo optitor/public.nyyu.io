@@ -186,25 +186,47 @@ export const BANK_FOR_DEPOSIT = gql`
     }
 `;
 
+export const GENERATE_WITHDRAW = gql`
+    mutation GenerateWithdraw {
+        generateWithdraw
+    }
+`;
+
 export const PAYPAL_WITHDRAW_REQUEST = gql`
     mutation PaypalWithdrawRequest(
         $email: String
         $target: String
         $withdrawAmount: Float
         $sourceToken: String
+        $code: String
     ) {
         paypalWithdrawRequest(
             email: $email
             target: $target
             withdrawAmount: $withdrawAmount
             sourceToken: $sourceToken
+            code: $code
         ) {
             id
             userId
             withdrawAmount
             fee
-            tokenAmount
             status
+            deniedReason
         }
+    }
+`;
+
+export const CONFIRM_PAYPAL_WITHDRAW = gql`
+    mutation ConfirmPaypalWithdraw(
+        $id: Int
+        $status: Int
+        $deniedReason: String
+    ) {
+        confirmPaypalWithdraw(
+            id: $id
+            status: $status
+            deniedReason: $deniedReason
+        )
     }
 `;

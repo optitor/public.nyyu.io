@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, navigate } from "gatsby"
 import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
@@ -14,12 +14,22 @@ import { useQuery } from "@apollo/client"
 import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
 
+
 const IndexPage = () => {
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [loading, setLoading] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
+
+    // For catching the redirect Url from Paypal.
+    useEffect(() => {
+        if (
+            window.location.href.includes("token=")
+        ) {
+            setLoading(true)
+        }
+    }, []);
 
     // Webservice
     useQuery(GET_CURRENT_ROUND, {
@@ -281,7 +291,12 @@ const IndexPage = () => {
     )
 
     // Render
-    if (loading) return <Loading />
+    if (loading) return (
+        <>
+            <Loading />
+            <PaypalRedirect />
+        </>
+    );
     return (
         <div
             style={{
@@ -292,7 +307,6 @@ const IndexPage = () => {
             <Seo title="Home" />
             <main className="home-page">
                 <Header />
-                <PaypalRedirect />
                 <ReferToFriendsModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
