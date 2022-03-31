@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import jq from 'jquery';
 import ReactCodeInput from 'react-code-input';
 import Modal from "react-modal";
-import { navigate } from 'gatsby';
 import validator from "validator";
 import _ from "lodash";
 import styled from 'styled-components';
@@ -18,10 +17,10 @@ import { getPaypalPaymentFee } from "../../utilities/utility-methods";
 import {
     PaypalFiat,
     USDT } from '../../utilities/imgImport';
+import { roundNumber } from '../../utilities/number';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { censorEmail } from "../../utilities/string";
-import { ROUTES } from "../../utilities/routes";
 
 const CURRENCIES = [
     {label: 'USD', value: 'USD', symbol: '$'},
@@ -60,6 +59,7 @@ const { Option } = components;
 const SupportedCoins = _.mapKeys(SUPPORTED_COINS, 'value');
 
 const SelectOption = (props) => {
+    const precision = props.data?.label === 'BTC'? 8: 4;
     return (
         <Option {...props}>
             <div className="d-flex justify-content-sm-start align-items-center ">
@@ -70,7 +70,7 @@ const SelectOption = (props) => {
                 />
                 <p className="coin-label ms-3">
                     <NumberFormat
-                        value={props.data?.amount}
+                        value={roundNumber(props.data?.amount, precision)}
                         displayType={'text'}
                         thousandSeparator={true}
                         renderText={(value, props) => <span {...props}>{value} </span>}
@@ -116,6 +116,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [paypalEmail, setPaypalEmail] = useState('');
     const [allFees, setAllFees] = useState({});
 
+    const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
     const paypalEmailError = useMemo(() => {
@@ -145,7 +146,6 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [generateWithdrawMutation] = useMutation(Mutation.GENERATE_WITHDRAW, {
         onCompleted: data => {
             if(data.generateWithdraw) {
-                console.log(data.generateWithdraw)
                 setCurrentStep(4);
             }
             setPending(false);
@@ -161,6 +161,8 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
             setShowError(true);
             return;
         }
+        setError('');
+        setConfirmCode('');
         setPending(true);
         generateWithdrawMutation();
     };
@@ -168,19 +170,26 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [paypalWithdrawRequestMutation] = useMutation(Mutation.PAYPAL_WITHDRAW_REQUEST, {
         onCompleted: data => {
             if(data.paypalWithdrawRequest) {
+                console.log(data.paypalWithdrawRequest)
                 setCurrentStep(5);
             }
             setPending(false);
         },
         onError: err => {
-            console.log(err.message);
             setPending(false);
-            setCurrentStep(5)
+            if(err.message === 'insufficient_balance') {
+                setError("Sorry! Your wallet don't have sufficient balance.");
+            } else if(err.message === '2FA failed') {
+                setError("Sorry! Two-factor authentication failed. Try again.");
+            } else {
+                setError('Something went wrong! Try again.');
+            }
         }
     });
 
     const paypal_Withdraw_Request = e => {
         e.preventDefault();
+        setError('');
         setPending(true);
         const requestData = {
             email: paypalEmail,
@@ -484,7 +493,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     value={paypalEmail}
                                     onChange={e => setPaypalEmail(e.target.value)}
                                 />
-                                <p style={{height: 25}}>
+                                <p style={{height: 25, color: '#e16565'}}>
                                     {showError && paypalEmailError}
                                 </p>
                                 <button
@@ -521,6 +530,9 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         disabled={pending}
                                     ><strong>Resend</strong></span>
                                 </div>
+                                <p className="mt-2" style={{color: '#e16565'}}>
+                                    {error}
+                                </p>
                             </div>
                             <div className="d-flex justify-content-center mt-2">
                                 <button className="btn btn-outline-light fw-bold rounded-0 w-50 mx-1"
@@ -546,7 +558,10 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                         <div className='deposit width2'>
                             <div className="confirm_div">
                                 <h3 className="mt-3"><strong>Withdraw Details</strong></h3>
-                                <div className="stats_div w-100">
+                                <h5 className="mt-2 text-green">
+                                    Request sent successfully
+                                </h5>
+                                <div className="stats_div w-100 mt-2">
                                     <div className="stats">
                                         <p className="topic">User Email</p>
                                         <p className="content">
