@@ -11,6 +11,7 @@ import { ROUTES } from "../../utilities/routes";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
 import { CHANGE_EMAIL, CONFIRM_CHANGE_EMAIL } from "./profile-queries";
+import validator from "validator";
 
 export default function ChangeEmailModal({ isOpen, setIsOpen }) {
     // Containers
@@ -47,6 +48,7 @@ export default function ChangeEmailModal({ isOpen, setIsOpen }) {
         e.preventDefault();
         setError("");
         if (!(code || email)) return setError("Please fill out all the fields");
+        if (!validator.isEmail(email)) return setError("Invalid email address");
         setLoadingConfirmation(true);
         await confirmChangeEmail({
             variables: {
