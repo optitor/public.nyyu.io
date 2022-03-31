@@ -4,12 +4,17 @@ import { useMutation } from '@apollo/client';
 
 import * as Mutation from '../../apollo/graphqls/mutations/Payment';
 import { getCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale, NDB_Deposit } from '../../utilities/cookies';
-import { ROUTES } from '../../utilities/routes';
+import { ROUTES, isRedirectUrl } from '../../utilities/routes';
 
-const TIMEOUT = 1500;
+
+const TIME_OUT = 1500;
+const navigateToAfterTime = uri => {
+    return setTimeout(() => {
+        navigate(uri);
+    }, TIME_OUT);
+};
 
 const PaypalRedirect = () => {
-
     const [captureOrderForAuction] = useMutation(Mutation.CAPTURE_ORDER_FOR_AUCTION, {
         onCompleted: (data) => {
             if (data.captureOrderForAuction) {
@@ -17,15 +22,11 @@ const PaypalRedirect = () => {
             } else {
                 console.log("Error in checkout with PayPal in complete");
             }
-            setTimeout(() => {
-                navigate(ROUTES.auction);
-            }, TIMEOUT);
+            navigateToAfterTime(ROUTES.auction);
         },
         onError: (err) => {
             alert("Error in checkout with PayPal");
-            setTimeout(() => {
-                navigate(ROUTES.auction);
-            }, TIMEOUT);
+            navigateToAfterTime(ROUTES.auction);
         },
     });
 
@@ -36,15 +37,11 @@ const PaypalRedirect = () => {
             } else {
                 console.log("Error in checkout with PayPal in complete");
             }
-            setTimeout(() => {
-                navigate(ROUTES.auction);
-            }, TIMEOUT);
+            navigateToAfterTime(ROUTES.auction);
         },
         onError: err => {
             alert('Error in checkout with PayPal');
-            setTimeout(() => {
-                navigate(ROUTES.auction);
-            }, TIMEOUT);
+            navigateToAfterTime(ROUTES.auction);
         }
     });
 
@@ -55,26 +52,20 @@ const PaypalRedirect = () => {
             } else {
                 console.log("Error in checkout with PayPal in complete");
             }
-            setTimeout(() => {
-                navigate(ROUTES.wallet);
-            }, TIMEOUT);
+            navigateToAfterTime(ROUTES.wallet);
         },
         onError: err => {
             alert('Error in checkout with PayPal');
-            setTimeout(() => {
-                navigate(ROUTES.wallet);
-            }, TIMEOUT);
+            navigateToAfterTime(ROUTES.wallet);
         }
     });
 
     useEffect(() => {
-        if (
-            window.location.href.includes("token=")
-        ) {
+        if (isRedirectUrl) {
             const url = new URL(window.location.href);
             const token = url.searchParams.get("token");
             const paypalTrxType = getCookie(NDB_Paypal_TrxType);
-            console.log(paypalTrxType, token)
+            // console.log(paypalTrxType, token)
             switch(paypalTrxType) {
                 case NDB_Auction:
                     captureOrderForAuction({ variables: { orderId: token } });
@@ -86,7 +77,7 @@ const PaypalRedirect = () => {
                     captureOrderForDeposit({ variables: { orderId: token } });
                     break;
                 default:
-                    break
+                    break;
             }
         }
     }, [captureOrderForAuction, captureOrderForPresale, captureOrderForDeposit]);

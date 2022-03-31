@@ -28,6 +28,7 @@ import { Copy } from "../../utilities/imgImport";
 import * as Query from "./../../apollo/graphqls/querys/Payment";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import { QUOTE, TICKER_24hr } from "./data"
+import { roundNumber } from "../../utilities/number";
 
 const { Option } = components;
 
@@ -223,7 +224,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                     <NumberFormat
                                         className="order_value"
                                         displayType={"text"}
-                                        value={bidAmount}
+                                        value={roundNumber(bidAmount, 2)}
                                         suffix={` USD`}
                                         thousandSeparator={true}
                                         renderText={(value, props) => (
