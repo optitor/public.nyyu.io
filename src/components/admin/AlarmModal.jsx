@@ -19,6 +19,7 @@ const AlarmModal = () => {
                 <div className="modal fade" id="alarmSuccessModal">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                         <div id="success" className="modal-content">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
                             <div className="modal-body">
                                 <div className='icon'>
                                     <img src={SuccesImage} alt="success" />
@@ -34,6 +35,7 @@ const AlarmModal = () => {
                 <div className="modal fade" id="alarmFailModal">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                         <div id="fail" className="modal-content">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
                             <div className="modal-body">
                                 <div className='icon'>
                                     <img src={FailImage} alt="fail" />
@@ -64,6 +66,10 @@ export const showFailAlarm = (inform = 'Action failed', subInform = 'Ops! Someth
     jq('div#alarmFailModal').find('div.inform').html(inform);
     jq('div#alarmFailModal').find('div.subInform').html(subInform);
     jq('#fail_alarm_btn').trigger('click');
+};
+
+export const closeAlarmModal = () => {
+    jq('button.btn-close').trigger('click');
 };
 
 const AlarmModalContainer = styled.div`

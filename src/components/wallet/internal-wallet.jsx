@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from 'react-redux';
-import _ from "lodash";
+import _, { round } from "lodash";
 import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
 import DepositModal from "./DepositModal";
@@ -11,6 +11,7 @@ import NumberFormat from "react-number-format";
 import { useQuery } from "@apollo/client";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { Icon } from "@iconify/react";
+import { roundNumber } from "../../utilities/number"; 
 
 const QUOTE = "USDT";
 const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
@@ -20,6 +21,7 @@ const Asset = ({ item }) => {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
+    const precision = item.tokenSymbol === 'BTC'? 8: 4;
 
     return (
         <tr>
@@ -31,7 +33,7 @@ const Asset = ({ item }) => {
             </td>
             <td>
                 <NumberFormat
-                    value={Math.round((item.free + item.hold) * 10**8) / 10**8}
+                    value={roundNumber(item.free + item.hold, precision)}
                     className="coin-price fw-bold"
                     displayType={"text"}
                     thousandSeparator={true}
