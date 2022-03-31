@@ -149,3 +149,9 @@ export const getNDBWalletPaymentFee = (user, allFees, bidAmount) => {
     return ((userFee * bidAmount) / 100)
 }
 
+export const getCurrentMarketCap = async () => {
+    const { data } = await axios.get("https://api.dev.nyyu.io/marketcap")
+    if (data)
+        return data
+    return null
+}
