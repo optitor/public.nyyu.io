@@ -7,13 +7,12 @@ import Header from "../components/header"
 import PaypalRedirect from '../components/payment/PaypalRedirect'
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
-import { ROUTES } from "../utilities/routes"
+import { ROUTES, isRedirectUrl } from "../utilities/routes"
 import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 import Loading from "../components/common/FadeLoading"
 import { useQuery } from "@apollo/client"
 import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
-
 
 const IndexPage = () => {
     // Containers
@@ -24,17 +23,13 @@ const IndexPage = () => {
 
     // For catching the redirect Url from Paypal.
     useEffect(() => {
-        if (
-            window.location.href.includes("token=")
-        ) {
-            setLoading(true)
-        }
+        if (isRedirectUrl) setLoading(true);
     }, []);
 
     // Webservice
     useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => {
-            if(window.location.href.includes("token=")) return;
+            if(isRedirectUrl) return;
             setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },

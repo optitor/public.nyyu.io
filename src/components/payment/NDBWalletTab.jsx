@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import Select, { components } from "react-select";
 import _ from "lodash";
 import { Icon } from "@iconify/react";
@@ -17,7 +18,6 @@ import {
     PAY_WALLLET_FOR_AUCTION,
 } from "./payment-webservice";
 import PaymentSuccessful from "./PaymentSuccessful";
-import { useSelector } from "react-redux";
 import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
 import {
     getCookie,
@@ -25,6 +25,7 @@ import {
     NDB_Auction,
     NDB_Presale,
 } from "../../utilities/cookies";
+import { roundNumber } from "../../utilities/number";
 
 const { Option } = components;
 
@@ -205,9 +206,13 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                 </p>
                                 <NumberFormat
                                     className="black_input form-control ps-3"
-                                    value={finalPaymentAmount}
+                                    displayType={"text"}
+                                    suffix=' USD'
+                                    value={roundNumber(Number(finalPaymentAmount), 2)}
                                     thousandSeparator={true}
-                                    readOnly
+                                    renderText={(value, props) => (
+                                        <p {...props}>~ {value}</p>
+                                    )}
                                 />
                             </div>
                         </div>

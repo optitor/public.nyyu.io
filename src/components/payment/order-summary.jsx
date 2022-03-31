@@ -1,5 +1,6 @@
 import React from "react"
-import { numberWithCommas } from "../../utilities/number"
+import NumberFormat from "react-number-format"
+import { roundNumber } from "../../utilities/number"
 
 export default function OrderSummary({ bidAmount }) {
     return (
@@ -10,9 +11,16 @@ export default function OrderSummary({ bidAmount }) {
                 <div className="order-list">
                     <div className="d-flex justify-content-between">
                         <p className="order-list__label">Total order</p>
-                        <p className="order-list__label">
-                            {numberWithCommas(bidAmount)} <span> USD</span>
-                        </p>
+                        <NumberFormat
+                            className="order-list__label"
+                            displayType={"text"}
+                            suffix=' USD'
+                            value={roundNumber(bidAmount, 2)}
+                            thousandSeparator={true}
+                            renderText={(value, props) => (
+                                <p {...props}>~ {value}</p>
+                            )}
+                        />
                     </div>
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Fee</p>
@@ -33,9 +41,16 @@ export default function OrderSummary({ bidAmount }) {
                     >
                         Order total:
                     </p>
-                    <p className="order-total">
-                        {numberWithCommas(bidAmount)} <span> USD</span>
-                    </p>
+                    <NumberFormat
+                        className="order-total"
+                        displayType={"text"}
+                        suffix=' USD'
+                        value={roundNumber(bidAmount, 2)}
+                        thousandSeparator={true}
+                        renderText={(value, props) => (
+                            <p {...props}>~ {value}</p>
+                        )}
+                    />
                 </div>
             </div>
         </div>

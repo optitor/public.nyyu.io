@@ -18,3 +18,5 @@ export const ROUTES = {
     presale_auction: "/pre-sale/auction",
     presale_home: "/pre-sale/home",
 }
+
+export const isRedirectUrl = window.location.href.includes("token=");
