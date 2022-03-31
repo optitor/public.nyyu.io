@@ -6,7 +6,6 @@ import * as Mutation from '../../apollo/graphqls/mutations/Payment';
 import { getCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale, NDB_Deposit } from '../../utilities/cookies';
 import { ROUTES, isRedirectUrl } from '../../utilities/routes';
 
-
 const TIME_OUT = 1500;
 const navigateToAfterTime = uri => {
     return setTimeout(() => {
