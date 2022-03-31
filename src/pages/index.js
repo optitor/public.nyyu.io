@@ -34,6 +34,7 @@ const IndexPage = () => {
     // Webservice
     useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => {
+            if(window.location.href.includes("token=")) return;
             setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },
