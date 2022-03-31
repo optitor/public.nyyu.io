@@ -727,32 +727,31 @@
                     }
                 }
             }
-
-            div.stats_div {
-                margin-top: 50px;
-                div.stats {
-                    padding-top: 10px;
-                    display: flex;
-                    p.topic {
-                        width: 40%;
-                        color: dimgray;
-                    }
+        }
+        div.stats_div {
+            margin-top: 50px;
+            div.stats {
+                padding-top: 10px;
+                display: flex;
+                p.topic {
+                    width: 40%;
+                    color: dimgray;
+                }
+                p.content {
+                    width: 60%;
+                    text-align: right;
+                }
+                @include mq("phone", max) {
+                    flex-direction: column;
+                    p.topic,
                     p.content {
-                        width: 60%;
-                        text-align: right;
-                    }
-                    @include mq("phone", max) {
-                        flex-direction: column;
-                        p.topic,
-                        p.content {
-                            width: 100%;
-                        }
+                        width: 100%;
                     }
                 }
-                hr {
-                    color: white;
-                    margin-top: 25px;
-                }
+            }
+            hr {
+                color: white;
+                margin-top: 25px;
             }
         }
         div.paypal_email {
@@ -769,9 +768,11 @@
             min-height: 350px;
             div.react-code-input {
                 input {
-                    width: 50px!important;
-                    height: 65px!important;
-                    margin: 10px!important;
+                    width: 50px !important;
+                    height: 65px !important;
+                    margin: 10px !important;
+                    padding: 0!important;
+                    text-align: center;
                 }
                 @include mq('phone', max) {
                     input {
