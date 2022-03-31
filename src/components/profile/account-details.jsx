@@ -17,14 +17,23 @@ export default function AccountDetails({
     // Render
     return (
         <>
-            <ChangeEmailModal
-                isOpen={isChangeEmailModalOpen}
-                setIsOpen={setIsChangeEmailModalOpen}
-            />
-            <ChangeNameModal isOpen={isChangeNameModalOpen} setIsOpen={setIsChangeNameModalOpen} />
+            {isChangeEmailModalOpen && (
+                <ChangeEmailModal
+                    isOpen={isChangeEmailModalOpen}
+                    setIsOpen={setIsChangeEmailModalOpen}
+                />
+            )}
+            {isChangeNameModalOpen && (
+                <ChangeNameModal
+                    isOpen={isChangeNameModalOpen}
+                    setIsOpen={setIsChangeNameModalOpen}
+                />
+            )}
             <div className="account-details">
                 <div className="row w-100 mx-auto">
-                    <div className="col-6 col-sm-4 col-md-6 br">display name</div>
+                    <div className="col-6 col-sm-4 col-md-6 br">
+                        display name
+                    </div>
                     <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
                         <div className="d-flex align-items-center justify-content-between">
                             <div>{displayName}</div>
@@ -72,11 +81,13 @@ export default function AccountDetails({
                     </div>
                 </div>
                 <div className="row w-100 mx-auto">
-                    <div className="col-6 col-sm-4 col-md-6 br">kyc/aml verification</div>
+                    <div className="col-6 col-sm-4 col-md-6 br">
+                        kyc/aml verification
+                    </div>
                     <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
                         {shuftiStatus === "UNSET" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-dark"/>
+                                <div className="circle circle-dark" />
                                 <Link
                                     to={ROUTES.verifyId}
                                     className="text-light-blue fs-15px fw-bold text-underline text-capitalize"
@@ -86,33 +97,36 @@ export default function AccountDetails({
                             </div>
                         ) : shuftiStatus?.event === "verification.accepted" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-success"/>
+                                <div className="circle circle-success" />
                                 <div className="txt-green fs-15px fw-bold text-capitalize">
                                     verified
                                 </div>
                             </div>
                         ) : shuftiStatus?.event === "verification.declined" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-danger"/>
+                                <div className="circle circle-danger" />
                                 <Link
                                     to={ROUTES.verifyId}
                                     className="text-light fs-15px fw-500 text-capitalize"
                                 >
-                                    Failed, <span className="text-underline">Retry</span>
+                                    Failed,{" "}
+                                    <span className="text-underline">
+                                        Retry
+                                    </span>
                                 </Link>
                             </div>
                         ) : shuftiStatus?.event === "request.invalid" ||
                           shuftiStatus?.event === "review.pending" ||
                           shuftiStatus === "PENDING" ? (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-warning"/>
+                                <div className="circle circle-warning" />
                                 <div className="text-light fs-15px fw-500 text-capitalize">
                                     under review
                                 </div>
                             </div>
                         ) : (
                             <div className="d-flex align-items-center gap-2">
-                                <div className="circle circle-dark"/>
+                                <div className="circle circle-dark" />
                                 <Link
                                     to={ROUTES.verifyId}
                                     className="text-light-blue fs-15px fw-bold text-underline text-capitalize"
