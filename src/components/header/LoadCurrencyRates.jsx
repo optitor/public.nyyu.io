@@ -16,9 +16,12 @@ export default function LoadCurrencyRates() {
     
     useEffect(() => {
         (async function() {
-            const res = await axios.get(GET_CURRENCY_PRICES_ENDPOINT, { params: { apikey: API_KEY, symbols: SYMBOLS } });
-            dispatch(setCurrencyRates(res.data.rates));
-
+            try {
+                const res = await axios.get(GET_CURRENCY_PRICES_ENDPOINT, { params: { apikey: API_KEY, symbols: SYMBOLS } });
+                dispatch(setCurrencyRates(res.data.rates));
+            } catch(err) {
+                console.log(err);
+            }
         })();
     }, [dispatch]);
     

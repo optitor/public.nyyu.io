@@ -5,6 +5,8 @@ import { ROUTES } from "../../utilities/routes";
 import ChangeEmailModal from "./ChangeEmailModal";
 import ChangeNameModal from "./ChangeNameModal";
 import SelectCurrencyModal from "./SelectCurrencyModal";
+import { CurrencyIconEndpoint } from "../../utilities/statciData3";
+import { EuropeanFlag } from '../../utilities/imgImport';
 
 export default function AccountDetails({
     setIsPasswordModalOpen,
@@ -150,12 +152,25 @@ export default function AccountDetails({
                 </div>
                 <div className="row w-100 mx-auto">
                     <div className="col-6 col-sm-4 col-md-6 br">Currency</div>
-                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
-                        <span className="text-green text-decoration-underline cursor-pointer"
-                            onClick={() => setIsCurrencyModalOpen(true)}
-                        >
-                            {savedCurrency.label}
-                        </span>
+                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
+                        <div className="d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center">
+                                <div className='flag_div'>
+                                    <img
+                                        src={savedCurrency.value !=='EUR'? `${CurrencyIconEndpoint}/${String(savedCurrency.value).toLowerCase()}.png`: EuropeanFlag}
+                                        alt={savedCurrency.value}
+                                    />
+                                </div>
+                                <p className="text-uppercase ms-2">{savedCurrency.label}</p>
+                                <p className="ms-2 text-green">( {savedCurrency.sign} )</p>
+                            </div>
+                            <button
+                                onClick={() => setIsCurrencyModalOpen(true)}
+                                className="btn fs-13px text-success text-underline text-capitalize"
+                            >
+                                Currency Change
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

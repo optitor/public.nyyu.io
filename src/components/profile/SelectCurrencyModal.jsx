@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import Modal from 'react-modal';
 import _ from 'lodash';
@@ -8,8 +8,8 @@ import Select, { components } from 'react-select';
 import { setCurrencyInfo } from "../../redux/actions/bidAction";
 import { EuropeanFlag } from "../../utilities/imgImport";
 import { SUPPORTED_CURRENCIES } from "../../utilities/staticData2";
+import { CurrencyIconEndpoint } from "../../utilities/statciData3";
 
-const CurrencyIconEndpoint = 'https://currencyfreaks.com/photos/flags';
 const Currencies = SUPPORTED_CURRENCIES.map(item => ({label: item.symbol, value: item.symbol, sign: item.sign}));
 
 const { Option } = components;
