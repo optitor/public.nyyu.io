@@ -182,7 +182,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                                         <CustomSpinner sm />
                                     </div>
                                     <div
-                                        className={`fs-20px ${
+                                        className={`fs-20px fw-bold ${
                                             confirmationLoading
                                                 ? "ms-3"
                                                 : "pe-4"
