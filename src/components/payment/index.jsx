@@ -74,7 +74,6 @@ const Payment = () => {
 
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
-
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);
@@ -233,6 +232,7 @@ const Payment = () => {
                                     <CreditCardTab
                                         amount={Number(bidAmount).toFixed(2)}
                                         round={currentRound}
+                                        orderId={orderId}
                                     />
                                 )}
                                 {tabIndex === 3 && (
