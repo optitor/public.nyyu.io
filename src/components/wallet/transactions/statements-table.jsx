@@ -419,6 +419,8 @@ export default function StatementsTable() {
         if (selectedDepositOption.value === "withdraw") setList(withdrawList);
         if (selectedDepositOption.value === "bid") setList(bidList);
         if (selectedDepositOption.value === "buy") setList(buyList);
+        if (selectedDepositOption.value === "all")
+            setList([...depositList, ...withdrawList, ...bidList, ...buyList]);
     }, [depositList, withdrawList, bidList, buyList]);
 
     // Render
