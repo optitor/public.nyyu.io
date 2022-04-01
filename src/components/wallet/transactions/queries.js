@@ -310,6 +310,19 @@ export const GET_STATEMENTS = gql`
                 depositAddress
                 coin
             }
+            stripeDepositTxns {
+                id
+                userId
+                amount
+                fee
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paymentIntentId
+                paymentMethodId
+            }
         }
     }
 `;

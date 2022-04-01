@@ -140,6 +140,22 @@ export default function StatementsTable() {
                     };
                 });
 
+            const stripeDepositFooList =
+                data.getStatement.stripeDepositTxns.map((item) => {
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item?.fee,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Credit Card Deposit",
+                        paymentId: item?.paymentMethodId,
+                        asset: item?.fiatType,
+                    };
+                });
+
             // Withdraw
             const cryptoWithdrawsFooList =
                 data.getStatement.cryptoWithdraws.map((item) => {
@@ -275,6 +291,7 @@ export default function StatementsTable() {
             setDepositList([
                 ...paypalDepositFooList,
                 ...coinPaymentDepositFooList,
+                ...stripeDepositFooList,
             ]);
             setWithdrawList([
                 ...cryptoWithdrawsFooList,
