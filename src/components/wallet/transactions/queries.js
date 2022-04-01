@@ -323,6 +323,21 @@ export const GET_STATEMENTS = gql`
                 paymentIntentId
                 paymentMethodId
             }
+            bankDepositTxns{
+                id
+                userId
+                uid
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                usdAmount
+                cryptoType
+                cryptoPrice
+                fee
+                deposited
+            }
         }
     }
 `;

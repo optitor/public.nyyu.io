@@ -287,11 +287,29 @@ export default function StatementsTable() {
                     };
                 });
 
+            const bankDepositFooList = data.getStatement.bankDepositTxns.map(
+                (item) => {
+                    const createdTime = new Date(item?.confirmedAt);
+                    return {
+                        id: item?.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item?.fee,
+                        status: item?.status,
+                        amount: item?.amount,
+                        type: "Bank Deposit",
+                        paymentId: "---",
+                        asset: item?.fiatType,
+                    };
+                }
+            );
+
             // Binding
             setDepositList([
                 ...paypalDepositFooList,
                 ...coinPaymentDepositFooList,
                 ...stripeDepositFooList,
+                ...bankDepositFooList,
             ]);
             setWithdrawList([
                 ...cryptoWithdrawsFooList,
