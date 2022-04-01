@@ -2,6 +2,7 @@ import React, { useCallback, useReducer, useState, useEffect } from "react";
 import { Input } from "../common/FormControl";
 import Modal from "react-modal";
 import { CloseIcon } from "../../utilities/imgImport";
+import { useSignUp2FA } from '../../apollo/model/auth';
 import { useMutation } from "@apollo/client";
 import {
     REQUEST_2FA,
@@ -36,6 +37,7 @@ export default function TwoFactorModal({
     phone,
     twoStep,
     onResult,
+    redirect
 }) {
     const [qrcode, setQRCode] = useState("");
     const [selected, setSelected] = useState(0);
@@ -50,6 +52,9 @@ export default function TwoFactorModal({
     useEffect(() => {
         setState({ loading: false });
     }, [twoStep]);
+
+    // for redirecting 
+    const [signup2faMutation, signup2faMuationResults] = useSignUp2FA();
 
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {
@@ -71,10 +76,10 @@ export default function TwoFactorModal({
 
     const [confirmRequest2FA, { loading: confirmLoading }] = useMutation(CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
-            if (data.confirmRequest2FA === "Failed") {
+            if (data.confirmRequest2FA?.status === "Failed") {
                 setState(initial);
                 onResult(false);
-            } else if (data.confirmRequest2FA === "Success") {
+            } else if (data.confirmRequest2FA?.status === "Success") {
                 onResult(true);
                 setState({
                     result_code: "",
@@ -325,14 +330,22 @@ export default function TwoFactorModal({
                                 className="btn-primary next-step d-flex align-items-center justify-content-center"
                                 onClick={() => {
                                     if (!result_code.length) setState({ error: true });
-                                    else
-                                        confirmRequest2FA({
-                                            variables: {
-                                                email,
-                                                method: two_factors[selected].method,
-                                                code: result_code,
-                                            },
-                                        });
+                                    else {
+                                        if(redirect) {
+                                            signup2faMutation(email,
+                                                        two_factors[selected].method,
+                                                        result_code);
+                                        } else {
+                                            console.log(redirect);
+                                            confirmRequest2FA({
+                                                variables: {
+                                                    email,
+                                                    method: two_factors[selected].method,
+                                                    code: result_code,
+                                                },
+                                            });    
+                                        }
+                                    }
                                 }}
                             >
                                 <div className={`${confirmLoading ? "opacity-1" : "opacity-0"}`}>

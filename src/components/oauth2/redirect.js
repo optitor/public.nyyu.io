@@ -29,7 +29,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     success: true
                 })
             } else {
-                navigate("/app/signin")
+                navigate(ROUTES.selectFigure)
             }
         } else {
             if (dataType === "No2FA") {
@@ -67,6 +67,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     else
                         navigate(ROUTES.verifyFailed)
                 }}
+                redirect={true}
             />
         </AuthLayout>
     )

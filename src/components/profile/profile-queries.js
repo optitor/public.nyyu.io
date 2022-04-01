@@ -1,4 +1,5 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
+import { graphQLResultHasError } from "@apollo/client/utilities";
 
 export const GET_USER_TIER_TASK = gql`
     {
@@ -14,7 +15,7 @@ export const GET_USER_TIER_TASK = gql`
             }
         }
     }
-`
+`;
 export const GET_TASK_SETTING = gql`
     {
         getTaskSetting {
@@ -32,7 +33,7 @@ export const GET_TASK_SETTING = gql`
             }
         }
     }
-`
+`;
 
 export const GET_USER_TIERS = gql`
     {
@@ -43,4 +44,16 @@ export const GET_USER_TIERS = gql`
             svg
         }
     }
-`
+`;
+
+export const CHANGE_EMAIL = gql`
+    mutation {
+        changeEmail
+    }
+`;
+
+export const CONFIRM_CHANGE_EMAIL = gql`
+    mutation confirmChangeEmail($newEmail: String, $code: String) {
+        confirmChangeEmail(newEmail: $newEmail, code: $code)
+    }
+`;

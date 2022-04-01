@@ -5,7 +5,7 @@ import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
 import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
-import { setBidInfo, setCurrentRound, setBidType } from "../../redux/actions/bidAction"
+import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 
 import CustomSpinner from "../common/custom-spinner"
 import { ROUTES } from "../../utilities/routes"
@@ -76,7 +76,6 @@ export default function AuctionPlaceBid() {
             dispatch(setBidInfo(Number(price * amount - prePrice * preAmount)))
         }
         dispatch(setCurrentRound(optCurrentRound?.id))
-        dispatch(setBidType('auction'));
     }
 
     useEffect(() => {
@@ -88,7 +87,7 @@ export default function AuctionPlaceBid() {
     useEffect(() => {
         if (getBid)
             if (Object.keys(getBid).length !== 0) {
-                setPrice(isBid ? optCurrentRound.placeBid : getBid.tokenPrice)
+                setPrice(isBid ? optCurrentRound?.placeBid : getBid.tokenPrice)
                 setAmount(isBid ? 1 : getBid.tokenAmount)
                 if(!isBid) {
                     setPreAmount(getBid.tokenAmount)
@@ -125,7 +124,7 @@ export default function AuctionPlaceBid() {
                             value={amount}
                             onChange={(value) => setAmount(value)}
                             min={1}
-                            max={optCurrentRound.totalToken}
+                            max={optCurrentRound?.totalToken}
                             step={1}
                         />
                     </div>

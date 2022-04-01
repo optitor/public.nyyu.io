@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, navigate } from "gatsby"
 import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
@@ -7,7 +7,7 @@ import Header from "../components/header"
 import PaypalRedirect from '../components/payment/PaypalRedirect'
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
-import { ROUTES } from "../utilities/routes"
+import { ROUTES, isRedirectUrl } from "../utilities/routes"
 import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 import Loading from "../components/common/FadeLoading"
 import { useQuery } from "@apollo/client"
@@ -21,13 +21,15 @@ const IndexPage = () => {
     const [loading, setLoading] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
 
+    // For catching the redirect Url from Paypal.
     useEffect(() => {
-        console.log(window.location.href)
-    })
+        if (isRedirectUrl) setLoading(true);
+    }, []);
 
     // Webservice
     useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => {
+            if(isRedirectUrl) return;
             setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },
@@ -285,7 +287,12 @@ const IndexPage = () => {
     )
 
     // Render
-    if (loading) return <Loading />
+    if (loading) return (
+        <>
+            <Loading />
+            <PaypalRedirect />
+        </>
+    );
     return (
         <div
             style={{
@@ -296,7 +303,6 @@ const IndexPage = () => {
             <Seo title="Home" />
             <main className="home-page">
                 <Header />
-                <PaypalRedirect />
                 <ReferToFriendsModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}

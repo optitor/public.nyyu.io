@@ -6,12 +6,22 @@ import CustomSpinner from "../common/custom-spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
-const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn, resend, loading }) => {
-    const [code, setCode] = useReducer((old, action) => ({ ...old, ...action }), {
-        app: "",
-        phone: "",
-        email: "",
-    });
+const VerifyMutliFA = ({
+    twoStep,
+    tempToken,
+    email,
+    returnToSignIn,
+    resend,
+    loading,
+}) => {
+    const [code, setCode] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            app: "",
+            phone: "",
+            email: "",
+        }
+    );
     const [codeError, setCodeError] = useState("");
 
     const [signin2faMutation, signin2faMutationResults] = useSignIn2FA();
@@ -38,7 +48,8 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn, resend, load
     };
 
     const pending = signin2faMutationResults.loading;
-    const webserviceError = signin2faMutationResults?.data?.confirm2FA?.status === "Failed";
+    const webserviceError =
+        signin2faMutationResults?.data?.confirm2FA?.status === "Failed";
 
     return (
         <>
@@ -56,18 +67,25 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn, resend, load
                                             name="code"
                                             type="text"
                                             value={code[step]}
-                                            onChange={(e) => setCode({ [step]: e.target.value })}
+                                            onChange={(e) =>
+                                                setCode({
+                                                    [step]: e.target.value,
+                                                })
+                                            }
                                             placeholder="Enter code"
                                         />
                                         {codeError && (
                                             <span className="errorsapn">
-                                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                                <FontAwesomeIcon
+                                                    icon={faExclamationCircle}
+                                                />{" "}
                                                 {codeError}
                                             </span>
                                         )}
                                     </div>
                                     <div className="form-group text-white resend-2fa">
                                         <button
+                                            type="button"
                                             disabled={loading}
                                             className={`signup-link btn mt-0 pe-0 py-0 text-capitalize cursor-pointer ${
                                                 loading
@@ -78,7 +96,11 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn, resend, load
                                         >
                                             <div className="d-flex align-items-center gap-2">
                                                 <div className="mt-4px">
-                                                    {loading ? <CustomSpinner sm /> : <></>}
+                                                    {loading ? (
+                                                        <CustomSpinner sm />
+                                                    ) : (
+                                                        <></>
+                                                    )}
                                                 </div>
                                                 <div>Resend</div>
                                             </div>
@@ -100,16 +122,24 @@ const VerifyMutliFA = ({ twoStep, tempToken, email, returnToSignIn, resend, load
                         disabled={pending}
                         onClick={confirmCodeClick}
                     >
-                        <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
+                        <div
+                            className={`${pending ? "opacity-1" : "opacity-0"}`}
+                        >
                             <CustomSpinner />
                         </div>
-                        <div className={`${pending ? "ms-3" : "pe-4"}`}>confirm code</div>
+                        <div className={`${pending ? "ms-3" : "pe-4"}`}>
+                            confirm code
+                        </div>
                     </button>
                 </div>
             </form>
             <p className="text-white text-center">
                 Return to{" "}
-                <Link to="#" className="signup-link" onClick={() => returnToSignIn()}>
+                <Link
+                    to="#"
+                    className="signup-link"
+                    onClick={() => returnToSignIn()}
+                >
                     Sign in
                 </Link>
             </p>

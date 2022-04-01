@@ -34,7 +34,10 @@ export const CONFIRM_REQUEST_2FA = gql`
         $method: String!
         $code: String!
     ) {
-        confirmRequest2FA(email: $email, method: $method, code: $code)
+        confirmRequest2FA(email: $email, method: $method, code: $code) {
+            status
+            token
+        }
     }
 `
 

@@ -6,6 +6,7 @@ import chart from "../images/chart.svg"
 import qmark from "../images/question_mark.svg"
 import apart from "../images/apart.svg"
 import trees from "../images/trees.svg"
+import landingTokens from "../images/signup-bg.svg"
 
 import facebook from "../images/facebook.svg"
 import google from "../images/google.svg"
@@ -153,6 +154,7 @@ export const ChartIcon = chart
 export const Qmark = qmark
 export const Apart = apart
 export const Trees = trees
+export const LandingTokens = landingTokens
 
 export const Facebook = facebook
 export const Google = google

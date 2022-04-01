@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { numberWithCommas } from "../../utilities/number";
+import { roundNumber } from "../../utilities/number";
 import NumberFormat from "react-number-format";
 
 export default function OrderSummary({ bidAmount }) {
@@ -83,9 +83,16 @@ export default function OrderSummary({ bidAmount }) {
                     >
                         Order total:
                     </p>
-                    <p className="order-total">
-                        {numberWithCommas(bidAmount)} <span> USD</span>
-                    </p>
+                    <NumberFormat
+                        className="order-total"
+                        displayType={"text"}
+                        suffix=' USD'
+                        value={roundNumber(bidAmount, 2)}
+                        thousandSeparator={true}
+                        renderText={(value, props) => (
+                            <p {...props}>~ {value}</p>
+                        )}
+                    />
                 </div>
                 {coinData.coinValue ? (
                     <NumberFormat

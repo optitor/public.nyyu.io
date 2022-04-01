@@ -31,6 +31,7 @@ import ReactTooltip from "react-tooltip";
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice";
 import { logout } from "../utilities/auth";
 import { getShuftiStatusByReference } from "../utilities/utility-methods";
+import TierProgressBar from "./profile/TierProgressBar";
 
 const Profile = () => {
     const [tab, setTab] = useState(useSelector((state) => state.profileTab));
@@ -179,7 +180,6 @@ const Profile = () => {
                 <main className="profile-page">
                     <TwoFactorModal
                         is2FAModalOpen={is2FAModalOpen}
-                        setIs2FAModalOpen={setIs2FAModalOpen}
                         email={user?.email}
                         phone={user?.phone}
                         twoStep={twoStep}
@@ -188,7 +188,10 @@ const Profile = () => {
                                 refetch();
                             }
                         }}
-                    />
+                        redirect={false}
+                        setIs2FAModalOpen={setIs2FAModalOpen}
+                    />   
+                      
                     <Header
                         setTabIndex={setTabIndex}
                         setCurrentProfileTab={setCurrentProfileTab}
@@ -221,20 +224,7 @@ const Profile = () => {
                                                 "p to " +
                                                 nextTier[0]?.name}
                                     </p>
-                                    <div className="timeframe-bar mt-1">
-                                        <div
-                                            className="timeleft"
-                                            style={{
-                                                width: `${
-                                                    (user?.tierPoint /
-                                                        (nextTier?.length > 0 ??
-                                                            nextTier[0]
-                                                                ?.point)) *
-                                                    100
-                                                }%`,
-                                            }}
-                                        />
-                                    </div>
+                                    <TierProgressBar user={user} nextTier={nextTier} />
                                 </div>
                                 <Tabs
                                     className="profile-tab"

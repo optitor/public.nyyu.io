@@ -192,3 +192,7 @@ export const getFormatedDateOnBids = (date, period) => {
         return month + " " + day + " " + hour + ":" + minute
     }
 }
+
+export const roundNumber = (number, decimals) => {
+    return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
+};

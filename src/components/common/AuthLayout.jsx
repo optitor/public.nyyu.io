@@ -1,6 +1,6 @@
-import React from "react"
-import Header from "../header"
-import { Apart, Trees } from "../../utilities/imgImport"
+import React from "react";
+import Header from "../header";
+import { Apart, Trees } from "../../utilities/imgImport";
 
 const AuthLayout = ({ children }) => {
     return (
@@ -11,10 +11,14 @@ const AuthLayout = ({ children }) => {
                     <div className="signup">{children}</div>
                     <img src={Apart} alt="apart" className="apart-img z-999" />
                 </div>
-                <img src={Trees} alt="trees" className="trees-img w-100 z-n999" />
+                <img
+                    src={Trees}
+                    alt="trees"
+                    className="trees-img w-100 z-n999"
+                />
             </section>
         </main>
-    )
-}
+    );
+};
 
-export default AuthLayout
+export default AuthLayout;

@@ -1,15 +1,65 @@
+import { useMutation } from "@apollo/client";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import { navigate } from "gatsby";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Modal from "react-modal";
+import { logout } from "../../utilities/auth";
 import { CloseIcon } from "../../utilities/imgImport";
+import { ROUTES } from "../../utilities/routes";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
+import { CHANGE_EMAIL, CONFIRM_CHANGE_EMAIL } from "./profile-queries";
+import validator from "validator";
 
 export default function ChangeEmailModal({ isOpen, setIsOpen }) {
-    const [loading] = useState(false);
-    const [error] = useState("");
+    // Containers
+    const [error, setError] = useState("");
+    const [email, setEmail] = useState("");
+    const [code, setCode] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [loadingConfirmation, setLoadingConfirmation] = useState(false);
+
+    // Webserver
+    const [changeEmail] = useMutation(CHANGE_EMAIL, {
+        onCompleted: (data) => {
+            if (data.changeEmail === "Success") setLoading(false);
+        },
+    });
+    const [confirmChangeEmail] = useMutation(CONFIRM_CHANGE_EMAIL, {
+        onCompleted: (data) => {
+            if (data.confirmChangeEmail === 1)
+                return logout(() => {
+                    navigate(ROUTES.home);
+                });
+            return setError("Something went wrong");
+        },
+        onError: (error) => setError(error.message),
+    });
+
+    useEffect(() => {
+        setLoading(true);
+        changeEmail();
+    }, []);
+
+    // Methods
+    const onConfirmEmailChange = async (e) => {
+        e.preventDefault();
+        setError("");
+        if (!(code || email)) return setError("Please fill out all the fields");
+        if (!validator.isEmail(email)) return setError("Invalid email address");
+        setLoadingConfirmation(true);
+        await confirmChangeEmail({
+            variables: {
+                newEmail: email,
+                code,
+            },
+        }).catch((error) => setError(error.message));
+        setLoadingConfirmation(false);
+    };
+
+    // Render
     return (
         <Modal
             isOpen={isOpen}
@@ -32,57 +82,84 @@ export default function ChangeEmailModal({ isOpen, setIsOpen }) {
                     />
                 </div>
             </div>
-            <div className="py-4">
-                <div className="text-center">
-                    <p className="text-capitalize fs-30px fw-bold lh-36px">
-                        Email change
-                    </p>
-                    <p className="fs-16px mt-3 text-light fw-normald px-sm-5 px-0">
-                        Email change will cost 10 NDB coins, and it will be
-                        drawn from your wallet
-                    </p>
+            {loading ? (
+                <div className="text-center mx-auto my-5 py-5">
+                    <CustomSpinner />
                 </div>
-                <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light mt-4">
-                    <form action="form">
-                        <div className="form-group">
-                            <FormInput
-                                type="text"
-                                label="Email"
-                                placeholder="Enter a new name"
-                            />
-                        </div>
-                        <div className="mt-4 mb-3">
-                            {error && (
-                                <span className="errorsapn">
-                                    <FontAwesomeIcon
-                                        icon={faExclamationCircle}
-                                    />{" "}
-                                    {error}
-                                </span>
-                            )}
-                            <button
-                                type="submit"
-                                className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-1 mt-4"
-                            >
-                                <div
-                                    className={`${
-                                        loading ? "opacity-1" : "opacity-0"
-                                    }`}
+            ) : (
+                <div className="py-4">
+                    <div className="text-center">
+                        <p className="text-capitalize fs-30px fw-bold lh-36px">
+                            Verification
+                        </p>
+                        <p className="fs-16px mt-3 text-light fw-normald px-sm-5 px-0">
+                            We have sent you an email.
+                        </p>
+                    </div>
+                    <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light mt-4">
+                        <form action="form">
+                            <div className="form-group mb-3">
+                                <FormInput
+                                    type="text"
+                                    label="New Email"
+                                    placeholder="Enter a new email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <FormInput
+                                    type="text"
+                                    label="Enter code"
+                                    placeholder="Enter code"
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
+                                />
+                            </div>
+                            <div className="mt-4 mb-3">
+                                {error && (
+                                    <span className="errorsapn">
+                                        <div className="d-flex align-items-center gap-1">
+                                            <div className="mt-1px">
+                                                <FontAwesomeIcon
+                                                    icon={faExclamationCircle}
+                                                    className="align-middle"
+                                                />{" "}
+                                            </div>
+                                            <div>{error}</div>
+                                        </div>
+                                    </span>
+                                )}
+                                <button
+                                    type="submit"
+                                    disabled={loadingConfirmation}
+                                    className="btn btn-outline-light rounded-0 w-100 text-uppercase d-flex align-items-center justify-content-center py-2 mt-2"
+                                    onClick={onConfirmEmailChange}
                                 >
-                                    <CustomSpinner />
-                                </div>
-                                <div
-                                    className={`fs-20px ${
-                                        loading ? "ms-3" : "pe-4"
-                                    }`}
-                                >
-                                    confirm
-                                </div>
-                            </button>
-                        </div>
-                    </form>
+                                    <div
+                                        className={`mt-auto ${
+                                            loadingConfirmation
+                                                ? "opacity-1"
+                                                : "opacity-0"
+                                        }`}
+                                    >
+                                        <CustomSpinner sm />
+                                    </div>
+                                    <div
+                                        className={`fs-20px ${
+                                            loadingConfirmation
+                                                ? "ms-3"
+                                                : "pe-4"
+                                        }`}
+                                    >
+                                        confirm
+                                    </div>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            )}
         </Modal>
     );
 }
