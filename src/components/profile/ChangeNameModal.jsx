@@ -1,32 +1,49 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState } from "react";
 import { isBrowser } from "react-device-detect";
 import Modal from "react-modal";
+import NumberFormat from "react-number-format";
 import { CloseIcon } from "../../utilities/imgImport";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
-import { CHANGE_BUY_NAME } from "./profile-queries";
+import { CHANGE_BUY_NAME, GET_ALL_BUY_NAME_PRICES } from "./profile-queries";
 import Successful from "./Successful";
 
 export default function ChangeNameModal({ isOpen, setIsOpen }) {
     // Containers
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [confirmationLoading, setConfirmationLoading] = useState(false);
     const [error, setError] = useState("");
     const [newName, setNewName] = useState("");
     const [successful, setSuccessful] = useState(false);
+    const [allBuyNamePrices, setAllBuyNamePrices] = useState(null);
+    const [cost, setCost] = useState(0.0);
+    const ndbPriceUSD = 0.01;
 
     // Webserver
     const [changeBuyName] = useMutation(CHANGE_BUY_NAME, {
         onCompleted: (data) => {
             if (data.changeBuyName === "1") setSuccessful(true);
-            setLoading(false);
+            setConfirmationLoading(false);
         },
         onError: (error) => {
             setError(error.message);
+            setConfirmationLoading(false);
+        },
+    });
+
+    useQuery(GET_ALL_BUY_NAME_PRICES, {
+        onCompleted: (data) => {
+            setAllBuyNamePrices(data.getAllBuyNamePrices);
             setLoading(false);
+        },
+        onError: (error) => {
+            setAllBuyNamePrices([]);
+            setLoading(false);
+            console.log(error);
         },
     });
 
@@ -35,6 +52,27 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
         const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
         return format.test(text);
     };
+
+    const onNewNameChange = (e) => {
+        const { value } = e.target;
+        setNewName(value);
+        if (value.length !== 0) {
+            if (value.length > 10) {
+                const fooCost =
+                    allBuyNamePrices[allBuyNamePrices.length - 1]?.price;
+                if (fooCost) return setCost(fooCost);
+            }
+
+            const matchedPriceNameItems = allBuyNamePrices.filter(
+                (item) => item.numOfChars === value.length
+            );
+            if (matchedPriceNameItems && matchedPriceNameItems?.length) {
+                const fooCost = matchedPriceNameItems[0].price;
+                if (fooCost) return setCost(fooCost);
+            }
+        }
+        return setCost(0.0);
+    };
     const submitNameChange = (e) => {
         e.preventDefault();
         setError("");
@@ -42,7 +80,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
         if (containsSpecialCharacter(newName))
             return setError("Cannot include special characters");
 
-        setLoading(true);
+        setConfirmationLoading(true);
         changeBuyName({
             variables: {
                 newName: newName,
@@ -82,6 +120,10 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                         }
                     />
                 </div>
+            ) : loading ? (
+                <div className="text-center mx-auto my-5 py-5">
+                    <CustomSpinner />
+                </div>
             ) : (
                 <div className="py-4">
                     <div className="text-center">
@@ -100,10 +142,21 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                                     type="text"
                                     label="New Name"
                                     value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
+                                    onChange={onNewNameChange}
                                     placeholder="Enter a new name"
                                 />
                             </div>
+                            <div className="text-end">
+                                Price:
+                                <NumberFormat
+                                    className="text-success fw-bold px-1"
+                                    thousandSeparator={true}
+                                    value={cost / ndbPriceUSD}
+                                    displayType="text"
+                                />
+                                NDB
+                            </div>
+
                             <div className="mb-3 mt-4">
                                 {error && (
                                     <span className="errorsapn">
@@ -117,18 +170,22 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                                     type="submit"
                                     className="btn btn-outline-light rounded-0 w-100 text-uppercase d-flex align-items-end justify-content-center py-2 mt-1"
                                     onClick={submitNameChange}
-                                    disabled={loading}
+                                    disabled={confirmationLoading}
                                 >
                                     <div
                                         className={`${
-                                            loading ? "opacity-1" : "opacity-0"
+                                            confirmationLoading
+                                                ? "opacity-1"
+                                                : "opacity-0"
                                         }`}
                                     >
                                         <CustomSpinner sm />
                                     </div>
                                     <div
                                         className={`fs-20px ${
-                                            loading ? "ms-3" : "pe-4"
+                                            confirmationLoading
+                                                ? "ms-3"
+                                                : "pe-4"
                                         }`}
                                     >
                                         confirm
