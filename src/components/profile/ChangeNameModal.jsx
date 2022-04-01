@@ -1,25 +1,52 @@
+import { useMutation, useQuery } from "@apollo/client";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState } from "react";
+import { isBrowser } from "react-device-detect";
 import Modal from "react-modal";
 import { CloseIcon } from "../../utilities/imgImport";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
+import { CHANGE_BUY_NAME } from "./profile-queries";
 
 export default function ChangeNameModal({ isOpen, setIsOpen }) {
     // Containers
-    const [loading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [newName, setNewName] = useState("");
+
+    // Webserver
+    const [changeBuyName] = useMutation(CHANGE_BUY_NAME, {
+        onCompleted: (data) => {
+            if (data.changeBuyName === "1")
+                return isBrowser && window.location.reload(false);
+            setLoading(false);
+        },
+        onError: (error) => {
+            setError(error.message);
+            setLoading(false);
+        },
+    });
+
     // Methods
     const containsSpecialCharacter = (text) => {
-        return true;
+        const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        return format.test(text);
     };
     const submitNameChange = (e) => {
         e.preventDefault();
+        setError("");
+        if (!newName) return setError("New name cannot be empty");
         if (containsSpecialCharacter(newName))
             return setError("Cannot include special characters");
+
+        setLoading(true);
+        changeBuyName({
+            variables: {
+                newName: newName,
+            },
+        });
     };
     // Render
     return (
@@ -50,7 +77,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                         Name change
                     </p>
                     <p className="fs-16px mt-3 text-light fw-normald px-sm-5 px-0">
-                        Name change will cost 10 NDB coins, and it will be drawn
+                        Name change will cost NDB coins, and it will be drawn
                         from your wallet
                     </p>
                 </div>
@@ -59,13 +86,13 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                         <div className="form-group">
                             <FormInput
                                 type="text"
-                                label="Name"
+                                label="New Name"
                                 value={newName}
                                 onChange={(e) => setNewName(e.target.value)}
                                 placeholder="Enter a new name"
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-3 mt-4">
                             {error && (
                                 <span className="errorsapn">
                                     <FontAwesomeIcon
@@ -76,15 +103,16 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                             )}
                             <button
                                 type="submit"
-                                className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-1 mt-4"
+                                className="btn btn-outline-light rounded-0 w-100 text-uppercase d-flex align-items-end justify-content-center py-2 mt-1"
                                 onClick={submitNameChange}
+                                disabled={loading}
                             >
                                 <div
                                     className={`${
                                         loading ? "opacity-1" : "opacity-0"
                                     }`}
                                 >
-                                    <CustomSpinner />
+                                    <CustomSpinner sm />
                                 </div>
                                 <div
                                     className={`fs-20px ${

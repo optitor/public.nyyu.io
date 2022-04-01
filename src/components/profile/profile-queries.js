@@ -57,3 +57,19 @@ export const CONFIRM_CHANGE_EMAIL = gql`
         confirmChangeEmail(newEmail: $newEmail, code: $code)
     }
 `;
+
+export const CHANGE_BUY_NAME = gql`
+    mutation changeBuyName($newName: String!) {
+        changeBuyName(newName: $newName)
+    }
+`;
+
+export const GET_ALL_BUY_NAME_PRICES = gql`
+    query {
+        getAllBuyNamePrices {
+            id
+            numOfChars
+            price
+        }
+    }
+`;
