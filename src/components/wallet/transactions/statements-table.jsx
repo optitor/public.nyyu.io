@@ -349,12 +349,15 @@ export default function StatementsTable() {
             setTo(now);
         } else setFrom(timeFrames[option.index]);
         setLoading(true);
+        setList([]);
+
         await refetch();
         setLoading(false);
     };
 
     const onStartDateChange = async (day) => {
         setFrom(new Date(day));
+        setList([]);
         setLoading(true);
         await refetch();
         setLoading(false);
@@ -362,6 +365,7 @@ export default function StatementsTable() {
 
     const onEndDateChange = async (day) => {
         setTo(new Date(day));
+        setList([]);
         setLoading(true);
         await refetch();
         setLoading(false);
