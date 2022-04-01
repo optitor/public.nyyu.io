@@ -34,7 +34,7 @@ export default function PresalePlaceOrderWalletSelect() {
 
     const [placePresaleOrderMutation] = useMutation(PLACE_PRESALE_ORDER, {
         onCompleted: data => {
-            console.log(data.placePreSaleOrder)
+            // console.log(data.placePreSaleOrder)
             if(data.placePreSaleOrder) {
                 dispatch(setPresaleOrderId(data.placePreSaleOrder?.id))
                 navigate(ROUTES.payment)

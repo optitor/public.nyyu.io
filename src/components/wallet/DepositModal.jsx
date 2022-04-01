@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import Modal from "react-modal";
@@ -196,6 +195,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                     break;
                 }
             }
+            setLoading(false);
         },
         onError: (err) => {
             console.log(err);

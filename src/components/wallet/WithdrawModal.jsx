@@ -170,7 +170,6 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [paypalWithdrawRequestMutation] = useMutation(Mutation.PAYPAL_WITHDRAW_REQUEST, {
         onCompleted: data => {
             if(data.paypalWithdrawRequest) {
-                console.log(data.paypalWithdrawRequest)
                 setCurrentStep(5);
             }
             setPending(false);

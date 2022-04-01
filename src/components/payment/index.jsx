@@ -143,7 +143,7 @@ const Payment = () => {
         },
         onError: (err) => {
             console.log(err);
-            alert("Error in PayPal checkout");
+            alert("Error in PayPal checkout from backend");
             setPayPalLoading(false);
         },
     });

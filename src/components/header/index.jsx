@@ -12,7 +12,7 @@ import { fetch_Avatar_Components } from "../../redux/actions/avatarAction"
 
 import Loading from "../common/FadeLoading"
 import DressupModal from "../dress-up/dressup-user-modal"
-import CurrencyChoice from "./currency-choice"
+import LoadCurrencyRates from "./LoadCurrencyRates"
 import Avatar from "../dress-up/avatar"
 import UserTier from "./user-tier"
 import InformBannedModal from "./InformBannedModal"
@@ -238,7 +238,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                 </ul>
                             )}
                         </div>
-                        <CurrencyChoice/>
+                        <LoadCurrencyRates/>
                         <button
                             type="button"
                             className="menu__toggler"

@@ -1,8 +1,10 @@
 import { Link } from "gatsby";
 import React, { useState } from "react";
+import { useSelector } from 'react-redux';
 import { ROUTES } from "../../utilities/routes";
 import ChangeEmailModal from "./ChangeEmailModal";
 import ChangeNameModal from "./ChangeNameModal";
+import SelectCurrencyModal from "./SelectCurrencyModal";
 
 export default function AccountDetails({
     setIsPasswordModalOpen,
@@ -13,6 +15,9 @@ export default function AccountDetails({
     // Containers
     const [isChangeNameModalOpen, setIsChangeNameModalOpen] = useState(false);
     const [isChangeEmailModalOpen, setIsChangeEmailModalOpen] = useState(false);
+    const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
+
+    const savedCurrency = useSelector(state => state.placeBid.currency); 
 
     // Render
     return (
@@ -27,6 +32,12 @@ export default function AccountDetails({
                 <ChangeNameModal
                     isOpen={isChangeNameModalOpen}
                     setIsOpen={setIsChangeNameModalOpen}
+                />
+            )}
+            {isCurrencyModalOpen && (
+                <SelectCurrencyModal
+                    isOpen={isCurrencyModalOpen}
+                    setIsOpen={setIsCurrencyModalOpen}
                 />
             )}
             <div className="account-details">
@@ -135,6 +146,16 @@ export default function AccountDetails({
                                 </Link>
                             </div>
                         )}
+                    </div>
+                </div>
+                <div className="row w-100 mx-auto">
+                    <div className="col-6 col-sm-4 col-md-6 br">Currency</div>
+                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
+                        <span className="text-green text-decoration-underline cursor-pointer"
+                            onClick={() => setIsCurrencyModalOpen(true)}
+                        >
+                            {savedCurrency.label}
+                        </span>
                     </div>
                 </div>
             </div>

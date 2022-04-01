@@ -26,7 +26,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
         <Modal
             isOpen={isOpen}
             onRequestClose={() => setIsOpen(false)}
-            className="support-modal border-0"
+            className="support-modal"
             overlayClassName="support-modal__overlay"
         >
             <div className="support-modal__header justify-content-end">
