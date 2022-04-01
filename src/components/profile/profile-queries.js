@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { graphQLResultHasError } from "@apollo/client/utilities";
 
 export const GET_USER_TIER_TASK = gql`
     {
