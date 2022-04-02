@@ -222,7 +222,7 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                     type="checkbox"
                                     name="allow_fraction"
                                     className="text-uppercase"
-                                ></CheckBox>
+                                />
                                 <div className="allow-text text-light">
                                     Do you allow fraction of order compleation?
                                 </div>

@@ -32,7 +32,7 @@ export const CheckBox = (props) => {
     const { children, className, name, ...others } = props
     return (
         <div className="form-check noselect">
-            <input type="checkbox" className="form-check-input my-auto" id={name} {...others} />{" "}
+            <input type="checkbox" className="form-check-input" id={name} {...others} />{" "}
             <label className={"form-check-label ms-3 " + className} htmlFor={name}>
                 {children}
             </label>
