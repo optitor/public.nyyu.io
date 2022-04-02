@@ -152,7 +152,7 @@ export default function AccountDetails({
                 </div>
                 <div className="row w-100 mx-auto">
                     <div className="col-6 col-sm-4 col-md-6 br">Currency</div>
-                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
+                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
                         <div className="d-flex align-items-center justify-content-between">
                             <div className="d-flex align-items-center">
                                 <div className='flag_div'>
@@ -161,7 +161,7 @@ export default function AccountDetails({
                                         alt={savedCurrency.value}
                                     />
                                 </div>
-                                <p className="text-uppercase ms-2">{savedCurrency.label}</p>
+                                <p className="ms-2">{savedCurrency.label}</p>
                                 <p className="ms-2 text-green">( {savedCurrency.sign} )</p>
                             </div>
                             <button
