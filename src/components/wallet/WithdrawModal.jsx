@@ -28,6 +28,10 @@ const CURRENCIES = [
     // {label: 'EUR', value: 'EUR', symbol: '€'},
 ];
 
+const CRYTOCURRENCY = 'CRYTOCURRENCY';
+const PAYPAL = 'PAYPAL';
+const BANKTRANSFER = 'BANKTRANSFER';
+
 const TransferData = {
     EUR: {
         'Account holder': 'Voltamond',
@@ -99,7 +103,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [currentStep, setCurrentStep] = useState(1);
-    const [isPaypalWithdraw, setIsPaypalWithdraw] = useState(false);
+    const [withdrawType, setWithdrawType] = useState(null);
     const [tabIndex, setTabIndex] = useState(1);
     const [pending, setPending] =useState(false);
 
@@ -108,7 +112,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [withdrawData, setWithdrawData] = useState({destAddress: '', amount: ''});
     const [confirmCode, setConfirmCode] = useState('');
     const [returnValue, setReturnValue] = useState({});
-    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) > selectedAsset.amount;
+    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) > Number(selectedAsset.amount);
     
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
@@ -315,7 +319,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         />
                                         <p className="btn"
                                             onClick={() => {
-                                                setWithdrawData({ ...withdrawData, amount: selectedAsset.amount })
+                                                setWithdrawData({ ...withdrawData, amount: roundNumber(selectedAsset.amount, 4) })
                                             }}
                                         ><span>MAX</span></p>
                                     </div>
@@ -334,7 +338,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 <div className="row mt-5">
                                     <div className="col-sm-6">
                                         <FiatButton className="active" onClick={() => {
-                                            setIsPaypalWithdraw(true); setCurrentStep(2);
+                                            setWithdrawType(PAYPAL); setCurrentStep(2);
                                         }}>
                                             <img src={PaypalFiat} alt="paypal" />
                                         </FiatButton>
@@ -354,7 +358,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     </div>
                 )}
                 {currentStep === 2 &&
-                    (isPaypalWithdraw? (
+                    (withdrawType === PAYPAL? (
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">PayPal withdraw</h5>
                             <div className="mt-3">
@@ -484,7 +488,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     ))
                 }
                 {currentStep === 3 &&
-                    (isPaypalWithdraw? (
+                    (withdrawType === PAYPAL? (
                         <div className='deposit width2'>
                             <div className="paypal_email">
                                 <h5>PayPal Email</h5>
@@ -512,7 +516,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     ))
                 }
                 {currentStep === 4 &&
-                    (isPaypalWithdraw? (
+                    (withdrawType === PAYPAL? (
                         <div className='deposit width2'>
                             <div className="confirm_div">
                                 <h3 className="mt-3"><strong>Confirm Withdraw</strong></h3>
@@ -553,7 +557,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     ))
                 }
                 {currentStep === 5 &&
-                    (isPaypalWithdraw? (
+                    (withdrawType === PAYPAL? (
                         <div className='deposit width2'>
                             <div className="confirm_div">
                                 <h3 className="mt-3"><strong>Withdraw Details</strong></h3>
