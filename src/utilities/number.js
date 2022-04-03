@@ -194,5 +194,5 @@ export const getFormatedDateOnBids = (date, period) => {
 }
 
 export const roundNumber = (number, decimals) => {
-    return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return Math.floor(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };

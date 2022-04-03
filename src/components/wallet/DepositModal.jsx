@@ -35,6 +35,8 @@ const CURRENCIES = [
     // { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
+const DEPOSIT_COINS = SUPPORTED_COINS.filter(item => item.value !== 'NDB');
+
 const TransferData = {
     EUR: {
         "Account holder": "Voltamond",
@@ -243,6 +245,7 @@ export default function DepositModal({ showModal, setShowModal }) {
             variables: { ...depositData },
         });
     };
+
     if (loading) return <Loading />;
 
     return (
@@ -315,7 +318,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <p className="subtitle">Select coin</p>
                                     <Select
                                         className="black_input"
-                                        options={SUPPORTED_COINS}
+                                        options={DEPOSIT_COINS}
                                         value={selectedAsset}
                                         onChange={(selected) => {
                                             setSelectedAsset(selected);

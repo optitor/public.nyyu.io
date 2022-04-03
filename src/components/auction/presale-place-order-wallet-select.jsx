@@ -16,6 +16,7 @@ import { externalWallets, NDB_WALLET_TOOLTIP_CONTENT, EXTERNAL_WALLET_TOOLTIP_CO
 import { ROUTES } from "../../utilities/routes"
 import { validURL } from "../../utilities/string"
 import { setPresaleOrderId } from '../../redux/actions/bidAction' 
+import { NyyuWallet, NyyuWalletSelected } from "../../utilities/imgImport";
 
 export default function PresalePlaceOrderWalletSelect() {
     const auction = useAuction()
@@ -137,10 +138,10 @@ export default function PresalePlaceOrderWalletSelect() {
                                     </ReactTooltip>
                                 </div>
                                 <div className="img_div">
-
+                                    <img src={selectedWallet === 'internal'? NyyuWalletSelected: NyyuWallet} alt='nyyu wallet' />
                                 </div>
                                 <h4 className="text-center">
-                                    NDB WALLET
+                                    NYYU WALLET
                                 </h4>
                             </div>
                         </div>
@@ -163,7 +164,7 @@ export default function PresalePlaceOrderWalletSelect() {
                                         </div>
                                     </ReactTooltip>
                                 </div>
-                                <div className="img_div d-flex justify-content-center align-items-center">
+                                <div className="img_div">
                                     <Icon icon='carbon:wallet' />
                                 </div>
                                 <h4 className="text-center">
