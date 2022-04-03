@@ -230,3 +230,26 @@ export const CONFIRM_PAYPAL_WITHDRAW = gql`
         )
     }
 `;
+
+export const CRYPTO_WITHDRAW_REQUEST = gql`
+    mutation CryptoWithdrawRequest(
+        $amount: Float
+        $sourceToken: String
+        $network: String
+        $des: String
+        $code: String
+    ) {
+        cryptoWithdrawRequest(
+            amount: $amount
+            sourceToken: $sourceToken
+            network: $network
+            des: $des
+            code: $code
+        ) {
+            id
+            userId
+            withdrawAmount
+            status
+        }
+    }
+`;

@@ -21,7 +21,7 @@ const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines";
 const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
 const ALLPRICES = "https://api.binance.com/api/v3/ticker/price";
 
-const KLINE_INTERVAL = "1h"
+const KLINE_INTERVAL = "30m"
 const GREEN = "#23C865"
 const RED = "#F6361A"
 
@@ -52,7 +52,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                         params: {
                             symbol: data.symbol + QUOTE,
                             interval: KLINE_INTERVAL,
-                            startTime: new Date().getTime() - 7 * 24 * 3600 * 1000,
+                            startTime: new Date().getTime() - 24 * 3600 * 1000,
                         },
                     });
                 const chartData = res.data.map((c) => c[1]);
@@ -79,6 +79,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
             const interval1 = setInterval(() => {
                 getTicker24hr();
+                getChartData();
             },1000 * REFRESH_TIME);
             return () => clearInterval(interval1);
         })();
