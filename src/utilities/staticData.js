@@ -18,7 +18,7 @@ import {
     TrustWallet,
     WalletConnect,
 } from "./imgImport"
-import { API_BASE_URL } from "./statciData3"
+import { API_BASE_URL } from "./staticData3"
 import { ROUTES } from "./routes"
 
 export const countries = [
@@ -1500,27 +1500,7 @@ export const VerificationStepThreeDocumentTypes = [
 
 export const navigationLinks = [
     {
-        label: "Home",
-        url: "https://ndb.money/",
-        active: false
-    },
-    {
-        label: "Vision",
-        url: "https://ndb.city",
-        active: false
-    },
-    {
-        label: "Technology",
-        url: "https://ndb.money/technology",
-        active: false
-    },
-    {
-        label: "Learn",
-        url: "https://ndb.money/learn",
-        active: false
-    },
-    {
-        label: "Sale",
+        label: "Nyyu",
         url: "/",
         active: true,
         subMenu: [
@@ -1551,8 +1531,14 @@ export const navigationLinks = [
         ]
     },
     {
-        label: "Contact Us",
-        url: "https://ndb.money/#contactUs",
+        label: "Money",
+        url: "https://ndb.money/",
+        active: false
+    },
+    
+    {
+        label: "City",
+        url: "https://ndb.city",
         active: false
     }
 ]

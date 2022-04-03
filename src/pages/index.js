@@ -252,7 +252,7 @@ const IndexPage = () => {
             <div className="tokens-lower-part mt-sm-0">
                 <div className="cta mt-sm-0 px-1 px-sm-0">
                     <button className="btn btn-green white-space-nowrap">
-                        get notify
+                        Be notified
                     </button>
                     <br />
                     <div
@@ -278,9 +278,9 @@ const IndexPage = () => {
     const noContent = (
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <div className="text-light home-page-no-active-round d-flex flex-column justify-content-center h-100">
-                <div className="title">auction will be launched soon!</div>
+                <div className="title">Presale will start soon!</div>
                 <div className="sub-title">
-                    <Link to="/">subscribe</Link> to our newsletter to keep
+                    <Link to="https://share.hsforms.com/1uASSxWOlQsWUX3inkpWpTQ4jiis">subscribe</Link> to our waiting list
                     updated.
                 </div>
             </div>

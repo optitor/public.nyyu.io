@@ -27,15 +27,15 @@ const IndexPage = () => {
                         <div className="d-flex align-items-center">
                             <div className="col-md-6 d-xl-flex flex-xl-column align-items-xl-center">
                                 <div className="next-auction-label">
-                                    <div>the next auction round starts in</div>
+                                    <div>the next round starts in</div>
                                     <div className="text-end">7 days</div>
                                 </div>
-                                <div className="tokens-amount">604 800</div>
+                                <div className="tokens-amount">10,000,000</div>
                             </div>
                             <div className="col-md-6 d-flex flex-column align-items-center">
                                 <div>
                                     <div className="exclusive-label">exlusive sale of</div>
-                                    <div className="ndb-tokens-label">10 ndb tokens</div>
+                                    <div className="ndb-tokens-label">10,000,000 NDB Tokens</div>
                                     <div className="miss-label">
                                         Don't miss an opportunity to buy limited number of NDB
                                         Tokens at the fixed price before the next auction round
@@ -43,7 +43,7 @@ const IndexPage = () => {
                                     </div>
                                     <div className="text-center">
                                         <button className="btn btn-green btn-buy-now">
-                                            buy now
+                                            Buy now
                                         </button>
                                     </div>
                                 </div>
