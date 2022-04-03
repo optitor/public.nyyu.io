@@ -8,7 +8,7 @@ import Select, { components } from 'react-select';
 import { setCurrencyInfo } from "../../redux/actions/bidAction";
 import { EuropeanFlag } from "../../utilities/imgImport";
 import { SUPPORTED_CURRENCIES } from "../../utilities/staticData2";
-import { CurrencyIconEndpoint } from "../../utilities/statciData3";
+import { CurrencyIconEndpoint } from "../../utilities/staticData3";
 
 const Currencies = SUPPORTED_CURRENCIES.map(item => ({label: item.symbol, value: item.symbol, sign: item.sign}));
 

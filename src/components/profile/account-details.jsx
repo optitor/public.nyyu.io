@@ -5,7 +5,7 @@ import { ROUTES } from "../../utilities/routes";
 import ChangeEmailModal from "./ChangeEmailModal";
 import ChangeNameModal from "./ChangeNameModal";
 import SelectCurrencyModal from "./SelectCurrencyModal";
-import { CurrencyIconEndpoint } from "../../utilities/statciData3";
+import { CurrencyIconEndpoint } from "../../utilities/staticData3";
 import { EuropeanFlag } from '../../utilities/imgImport';
 
 export default function AccountDetails({
