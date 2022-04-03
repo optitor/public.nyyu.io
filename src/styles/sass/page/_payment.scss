@@ -106,7 +106,7 @@
                 font-weight: bold;
                 color: white;
                 background: #1e1e1e;
-                border : 1px solid white;
+                border: 1px solid white;
                 text-transform: uppercase;
                 transition: 500ms;
                 border-radius: 0.2rem;
@@ -179,19 +179,6 @@
                     }
                 }
             }
-        }
-        .form-check-input {
-            border: 1px solid #ffffff;
-            background-color: $black;
-            width: 24px;
-            height: 24px;
-            border-radius: unset;
-        }
-        .form-check-label {
-            display: flex;
-            align-items: center;
-            font-size: 11px;
-            font-weight: bold;
         }
 
         .creditcard-tab {
@@ -553,7 +540,7 @@
                 position: relative;
                 &__value {
                     position: absolute;
-                    bottom: -23px;
+                    bottom: -33px;
                     right: 0;
                     color: white;
                     font-weight: bold;

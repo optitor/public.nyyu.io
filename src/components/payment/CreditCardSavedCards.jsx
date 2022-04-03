@@ -1,9 +1,18 @@
 import { useMutation } from "@apollo/client";
 import { useStripe } from "@stripe/react-stripe-js";
 import React, { useState } from "react";
+import {
+    getCookie,
+    NDB_Auction,
+    NDB_Paypal_TrxType,
+    NDB_Presale,
+} from "../../utilities/cookies";
 import { Amex } from "../../utilities/imgImport";
 import CustomSpinner from "../common/custom-spinner";
-import { PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD } from "./payment-webservice";
+import {
+    PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD,
+    PAY_STRIPE_FOR_PRESALE_WITH_SAVED_CARD,
+} from "./payment-webservice";
 import PaymentFailure from "./PaymentFailure";
 import PaymentSuccessful from "./PaymentSuccessful";
 
@@ -14,6 +23,7 @@ export default function CreditCardSavedCards({
     setSelectedSavedCard,
     amount,
     roundId,
+    orderId,
 }) {
     // Containers
     const stripe = useStripe();
@@ -74,18 +84,83 @@ export default function CreditCardSavedCards({
             onError: (error) => console.log(error),
         }
     );
+    const [payStripeForPreSaleWithSavedCard] = useMutation(
+        PAY_STRIPE_FOR_PRESALE_WITH_SAVED_CARD,
+        {
+            onCompleted: (data) => {
+                if (stripePaymentSecondCall === false) {
+                    if (data.payStripeForPreSaleWithSavedCard.error) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(false);
+                    }
+                    const { clientSecret, requiresAction } =
+                        data.payStripeForPreSaleWithSavedCard;
+                    if (requiresAction === false || requiresAction === null) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(true);
+                    }
+                    if (clientSecret)
+                        return stripe
+                            .handleCardAction(clientSecret)
+                            .then((result) => {
+                                setStripePaymentSecondCall(true);
+                                if (result.error) {
+                                    setRequestPending(false);
+                                    return setSuccessfulPayment(false);
+                                }
+                                const paymentIntentId = result.paymentIntent.id;
+                                return payStripeForPreSaleWithSavedCard({
+                                    variables: {
+                                        presaleId: roundId,
+                                        orderId: orderId,
+                                        amount: amount * 100,
+                                        cardId: savedCards[selectedSavedCard]
+                                            .id,
+                                        paymentIntentId,
+                                    },
+                                });
+                            });
+                    return setSuccessfulPayment(false);
+                } else if (stripePaymentSecondCall === true) {
+                    if (
+                        data.payStripeForPreSaleWithSavedCard.error ||
+                        data.payStripeForPreSaleWithSavedCard.requiresAction ===
+                            true
+                    ) {
+                        setRequestPending(false);
+                        return setSuccessfulPayment(false);
+                    }
+                    return setSuccessfulPayment(true);
+                }
+            },
+            onError: (error) => console.log(error),
+        }
+    );
 
     // Methods
     const submitPayment = () => {
         setRequestPending(true);
-        payStripeForAuctionWithSavedCard({
-            variables: {
-                roundId,
-                amount: amount * 100,
-                cardId: savedCards[selectedSavedCard].id,
-                paymentIntentId: null,
-            },
-        });
+        const type = getCookie(NDB_Paypal_TrxType);
+        if (type === NDB_Auction)
+            return payStripeForAuctionWithSavedCard({
+                variables: {
+                    roundId,
+                    amount: amount * 100,
+                    cardId: savedCards[selectedSavedCard].id,
+                    paymentIntentId: null,
+                },
+            });
+        else if (type === NDB_Presale) {
+            payStripeForPreSaleWithSavedCard({
+                variables: {
+                    presaleId: roundId,
+                    orderId: orderId,
+                    amount: amount * 100,
+                    cardId: savedCards[selectedSavedCard].id,
+                    paymentIntentId: null,
+                },
+            });
+        }
     };
 
     // Render

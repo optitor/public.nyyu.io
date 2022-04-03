@@ -17,7 +17,7 @@ const AuctionListHeader = ({ totalCount, auctionType, auctionTitle }) => {
                 </div>
                 <div className="d-flex align-items-center justify-content-end fw-bold">
                     <div className="text-white">{auctionTitle}
-                        <span className="text-success"> {currency.label}</span>
+                        <span className="text-success"> ({currency.label})</span>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client"
+import { gql } from "@apollo/client";
 
 export const GET_USER_TIER_TASK = gql`
     {
@@ -14,7 +14,7 @@ export const GET_USER_TIER_TASK = gql`
             }
         }
     }
-`
+`;
 export const GET_TASK_SETTING = gql`
     {
         getTaskSetting {
@@ -32,7 +32,7 @@ export const GET_TASK_SETTING = gql`
             }
         }
     }
-`
+`;
 
 export const GET_USER_TIERS = gql`
     {
@@ -43,4 +43,32 @@ export const GET_USER_TIERS = gql`
             svg
         }
     }
-`
+`;
+
+export const CHANGE_EMAIL = gql`
+    mutation {
+        changeEmail
+    }
+`;
+
+export const CONFIRM_CHANGE_EMAIL = gql`
+    mutation confirmChangeEmail($newEmail: String, $code: String) {
+        confirmChangeEmail(newEmail: $newEmail, code: $code)
+    }
+`;
+
+export const CHANGE_BUY_NAME = gql`
+    mutation changeBuyName($newName: String!) {
+        changeBuyName(newName: $newName)
+    }
+`;
+
+export const GET_ALL_BUY_NAME_PRICES = gql`
+    query {
+        getAllBuyNamePrices {
+            id
+            numOfChars
+            price
+        }
+    }
+`;

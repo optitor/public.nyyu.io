@@ -1111,16 +1111,20 @@ export const wallets = {
 export const externalWallets = [
     {
         icon: MetaMask,
-        title: "MetaMask Wallet"
+        title: "MetaMask Wallet",
+        value: 'metamask'
     }, {
         icon: WalletConnect,
-        title: "WalletConnect"
+        title: "WalletConnect",
+        value: 'wallet_connect'
     }, {
         icon: Coinbase,
-        title: "Coinbase account"
+        title: "Coinbase account",
+        value: 'coinbase_account'
     }, {
         icon: TrustWallet,
-        title: "Trust Wallet"
+        title: "Trust Wallet",
+        value: 'trust_wallet'
     },
 
 ]
@@ -1252,6 +1256,9 @@ export const AUCTION_TOOLTIP_CONTENT1 =
 
 export const AUCTION_TOOLTIP_CONTENT2 =
     "Access charts to see more detailed information about NDB token performance"
+
+export const NDB_WALLET_TOOLTIP_CONTENT = 'The balance will be available under the wallet page'
+export const EXTERNAL_WALLET_TOOLTIP_CONTENT = 'The balance will be transferred to your external wallet. Fees may be applicable.'
 
 export const FAQ_CONTENT = [
     {
@@ -1493,27 +1500,7 @@ export const VerificationStepThreeDocumentTypes = [
 
 export const navigationLinks = [
     {
-        label: "Home",
-        url: "https://ndb.money/",
-        active: false
-    },
-    {
-        label: "Vision",
-        url: "https://ndb.city",
-        active: false
-    },
-    {
-        label: "Technology",
-        url: "https://ndb.money/technology",
-        active: false
-    },
-    {
-        label: "Learn",
-        url: "https://ndb.money/learn",
-        active: false
-    },
-    {
-        label: "Sale",
+        label: "Nyyu",
         url: "/",
         active: true,
         subMenu: [
@@ -1544,8 +1531,14 @@ export const navigationLinks = [
         ]
     },
     {
-        label: "Contact Us",
-        url: "https://ndb.money/#contactUs",
+        label: "Money",
+        url: "https://ndb.money/",
+        active: false
+    },
+    
+    {
+        label: "City",
+        url: "https://ndb.city",
         active: false
     }
 ]

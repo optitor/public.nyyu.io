@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { numberWithCommas } from "../../utilities/number";
+import NumberFormat from "react-number-format";
+import { roundNumber } from "../../utilities/number";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 
 export default function OrderSummaryOfCreditCard({ bidAmount }) {
@@ -18,15 +19,29 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                     <div className="order-list-coinpayment border-0">
                         <div className="d-flex justify-content-between my-3">
                             <p className="order-list__label">Total order</p>
-                            <p className="order-list__detail">
-                                {bidAmount} USD
-                            </p>
+                            <NumberFormat
+                                className="order-list__detail"
+                                displayType={"text"}
+                                suffix=' USD'
+                                value={roundNumber(bidAmount, 2)}
+                                thousandSeparator={true}
+                                renderText={(value, props) => (
+                                    <p {...props}>~ {value}</p>
+                                )}
+                            />
                         </div>
                         <div className="d-flex justify-content-between my-3">
                             <p className="order-list__label">Fee</p>
-                            <p className="order-list__detail">
-                                {stripePaymentFee}
-                            </p>
+                            <NumberFormat
+                                className="order-list__detail"
+                                displayType={"text"}
+                                suffix=' USD'
+                                value={roundNumber(stripePaymentFee, 2)}
+                                thousandSeparator={true}
+                                renderText={(value, props) => (
+                                    <p {...props}>~ {value}</p>
+                                )}
+                            />
                         </div>
                         <div className="d-flex justify-content-between">
                             <p className="order-list__label">Discount</p>
@@ -44,12 +59,16 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                     >
                         Order total:
                     </p>
-                    <p className="order-total">
-                        {numberWithCommas(
-                            Number(bidAmount) + Number(stripePaymentFee)
-                        )}{" "}
-                        <span> USD</span>
-                    </p>
+                    <NumberFormat
+                        className="order-total"
+                        displayType={"text"}
+                        suffix=' USD'
+                        value={roundNumber(Number(bidAmount) + Number(stripePaymentFee), 2)}
+                        thousandSeparator={true}
+                        renderText={(value, props) => (
+                            <p {...props}>~ {value}</p>
+                        )}
+                    />
                 </div>
             </div>
         </div>

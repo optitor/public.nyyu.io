@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { numberWithCommas } from "../../utilities/number";
+import NumberFormat from "react-number-format";
+import { roundNumber } from "../../utilities/number";
 import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
 
 export default function OrderSummaryNDBWallet({ bidAmount }) {
@@ -18,11 +19,29 @@ export default function OrderSummaryNDBWallet({ bidAmount }) {
                     <div className="order-list-coinpayment border-0">
                         <div className="d-flex justify-content-between my-3">
                             <p className="order-list__label">Total order</p>
-                            <p className="order-list__detail">{bidAmount} USD</p>
+                            <NumberFormat
+                                className="order-list__detail"
+                                displayType={"text"}
+                                suffix=' USD'
+                                value={roundNumber(bidAmount, 2)}
+                                thousandSeparator={true}
+                                renderText={(value, props) => (
+                                    <p {...props}>~ {value}</p>
+                                )}
+                            />
                         </div>
                         <div className="d-flex justify-content-between my-3">
                             <p className="order-list__label">Fee</p>
-                            <p className="order-list__detail">{NDBWalletPaymentFee}</p>
+                            <NumberFormat
+                                className="order-list__detail"
+                                displayType={"text"}
+                                suffix=' USD'
+                                value={roundNumber(NDBWalletPaymentFee, 2)}
+                                thousandSeparator={true}
+                                renderText={(value, props) => (
+                                    <p {...props}>~ {value}</p>
+                                )}
+                            />
                         </div>
                         <div className="d-flex justify-content-between">
                             <p className="order-list__label">Discount</p>
@@ -37,10 +56,16 @@ export default function OrderSummaryNDBWallet({ bidAmount }) {
                     <p className="order-list__label" style={{ color: "dimgrey" }}>
                         Order total:
                     </p>
-                    <p className="order-total">
-                        {numberWithCommas(Number(bidAmount) + Number(NDBWalletPaymentFee))}{" "}
-                        <span> USD</span>
-                    </p>
+                    <NumberFormat
+                        className="order-total"
+                        displayType={"text"}
+                        suffix=' USD'
+                        value={roundNumber(Number(bidAmount) + Number(NDBWalletPaymentFee), 2)}
+                        thousandSeparator={true}
+                        renderText={(value, props) => (
+                            <p {...props}>~ {value}</p>
+                        )}
+                    />
                 </div>
             </div>
         </div>
