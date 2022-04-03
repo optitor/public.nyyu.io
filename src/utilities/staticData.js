@@ -18,7 +18,7 @@ import {
     TrustWallet,
     WalletConnect,
 } from "./imgImport"
-import { API_BASE_URL } from "./statciData3"
+import { API_BASE_URL } from "./staticData3"
 import { ROUTES } from "./routes"
 
 export const countries = [

@@ -11,7 +11,7 @@ import {
     getInMemoryAuthToken,
     // isBrowser 
 } from "../utilities/auth"
-import { API_BASE_URL } from "../utilities/statciData3";
+import { API_BASE_URL } from "../utilities/staticData3";
 // import { WebSocketLink } from '@apollo/client/link/ws';
 // import { getMainDefinition } from '@apollo/client/utilities';
 
