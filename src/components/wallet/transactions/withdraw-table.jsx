@@ -57,7 +57,7 @@ export default function WithdrawTable() {
                         ? Icons.down()
                         : sortType === up
                         ? Icons.up()
-                        : Icons.down()}
+                        : Icons.up()}
                 </div>
             </div>
         </th>

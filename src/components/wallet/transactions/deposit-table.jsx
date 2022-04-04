@@ -39,7 +39,6 @@ export default function DepositTable() {
     // Methods
     const headerTitle = ({ title, up, down, end }) => (
         <th scope="col">
-            {console.log(end)}
             <div
                 className={`d-flex align-items-center gap-1 noselect cursor-pointer ${
                     end && "justify-content-center justify-content-sm-end"
@@ -62,7 +61,7 @@ export default function DepositTable() {
                         ? Icons.down()
                         : sortType === up
                         ? Icons.up()
-                        : Icons.down()}
+                        : Icons.up()}
                 </div>
             </div>
         </th>
