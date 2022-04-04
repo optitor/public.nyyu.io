@@ -1,14 +1,65 @@
 import { Link } from "gatsby";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BTCGrayIcon, Credit, NdbWallet } from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 import { ROUTES } from "../../../utilities/routes";
 import Pagination from "react-js-pagination";
+import { Icons } from "../../../utilities/Icons";
 
 export default function BidTable() {
     // Containers
-    const { bidList: list, itemsCountPerPage } = useTransactions();
+    const { bidList, itemsCountPerPage } = useTransactions();
+    const [list, setList] = useState(bidList);
+    const [sortType, setSortType] = useState(null);
     const [activePage, setActivePage] = useState(1);
+
+    // Methods
+    const headerTitle = ({ title, up, down }) => (
+        <th scope="col">
+            <div
+                className="d-flex align-items-center gap-1 noselect cursor-pointer"
+                onClick={() =>
+                    sortType === down
+                        ? setSortType(up)
+                        : sortType === up
+                        ? setSortType(down)
+                        : setSortType(up)
+                }
+            >
+                <div>{title}</div>
+                <div
+                    className={`${
+                        (sortType === up || sortType === down) && "text-success"
+                    }`}
+                >
+                    {sortType === down
+                        ? Icons.down()
+                        : sortType === up
+                        ? Icons.up()
+                        : Icons.down()}
+                </div>
+            </div>
+        </th>
+    );
+    useEffect(() => {
+        // if (sortType === null) return setList(bidList);
+        // if (sortType === "date_down")
+        //     return setList(
+        //         bidList.sort(
+        //             (item2, item1) =>
+        //                 new Date(item2.date).getTime() -
+        //                 new Date(item1.date).getTime()
+        //         )
+        //     );
+        // if (sortType === "date_up")
+        //     return setList(
+        //         bidList.sort(
+        //             (item2, item1) =>
+        //                 new Date(item1.date).getTime() -
+        //                 new Date(item2.date).getTime()
+        //         )
+        //     );
+    }, [sortType]);
 
     // Render
     return (
@@ -17,13 +68,21 @@ export default function BidTable() {
                 <table className="wallet-transaction-table w-100">
                     <tr className="border-bottom-2-dark-gray py-3">
                         <th scope="col">Auction</th>
-                        <th scope="col">Date</th>
-                        <th scope="col" className="text-sm-end">
-                            Amount
-                        </th>
-                        <th scope="col" className="text-sm-end">
-                            Payment
-                        </th>
+                        {headerTitle({
+                            title: "Date",
+                            up: "date_up",
+                            down: "date_down",
+                        })}
+                        {headerTitle({
+                            title: "Amount",
+                            up: "amount_up",
+                            down: "amount_down",
+                        })}
+                        {headerTitle({
+                            title: "Payment",
+                            up: "payment_up",
+                            down: "payment_down",
+                        })}
                         <th scope="col" className="text-sm-end">
                             Status
                         </th>
