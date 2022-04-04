@@ -115,6 +115,9 @@ import supportUnlock from "../images/support/unlock.svg"
 import supportTag from "../images/support/tag.svg"
 import supportDelete from "../images/support/delete.svg"
 
+import supportHelpCenter from "../images/support/help-center.svg"
+import supportCommunity from "../images/support/community.svg"
+
 
 import greenCoin from "../images/green-coin.svg"
 import questionMark from "../images/icons/question-mark.svg"
@@ -255,6 +258,9 @@ export const SupportReset = supportReset
 export const SupportSecurity = supportSecurity
 export const SupportUnlock = supportUnlock
 export const SupportDelete = supportDelete
+
+export const SupportHelpCenter = supportHelpCenter
+export const SupportCommunity = supportCommunity
 
 export const GreenCoin = greenCoin
 export const QuestionMark = questionMark
