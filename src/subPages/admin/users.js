@@ -10,19 +10,6 @@ import WalletTable from "../../components/admin/users/WalletTable";
 import FiatTable from "../../components/admin/users/FiatTable";
 import KYBTable from "../../components/admin/users/KYBTable";
 
-const users = [
-    {name: 'Amy Matthews', avatar: 'Tesla.12', email: 'amy.matthers@mail.com', phone: '+32 932 429 32', password: '********', country: 'USA', privilege: 'user', 
-    ext_wallet_provider: 'ext_wallet_provider', ext_wallet_address: 'ext_wallet_address', terms_signed: 'terms_signed', birth: '1988/12/12', currency: 'Silver'},
-    {name: 'Amira Kandovsky', avatar: 'Voltapancake', email: 'amira.k@mail.com', phone: '+32 932 429 32', password: '********', country: 'FRA', privilege: 'Admin', 
-    ext_wallet_provider: 'ext_wallet_provider', ext_wallet_address: 'ext_wallet_address', terms_signed: 'terms_signed', birth: '1988/12/12', currency: 'Silver'},
-    {name: 'Bernard Lane', avatar: 'CutieCurry', email: 'amy.matthers@mail.com', phone: '+32 932 429 32', password: '********', country: 'USA', privilege: 'user', 
-    ext_wallet_provider: 'ext_wallet_provider', ext_wallet_address: 'ext_wallet_address', terms_signed: 'terms_signed', birth: '1988/12/12', currency: 'Silver'},
-    {name: 'Joseph Martini', avatar: 'Johnson Johnson', email: 'joseph1988@mail.com', phone: '+32 932 429 32', password: '********', country: 'GER', privilege: 'user', 
-    ext_wallet_provider: 'ext_wallet_provider', ext_wallet_address: 'ext_wallet_address', terms_signed: 'terms_signed', birth: '1988/12/12', currency: 'Silver'},
-    {name: 'Tom Jager', avatar: 'Cruto1431', email: 'Hunter999@mail.com', phone: '+32 932 429 32', password: '********', country: 'SWE', privilege: 'user', 
-    ext_wallet_provider: 'ext_wallet_provider', ext_wallet_address: 'ext_wallet_address', terms_signed: 'terms_signed', birth: '1988/12/12', currency: 'Silver'},
-];
-
 const bids = [
     {name: 'Amy Matthews', avatar: 'Tesla.12', status: 'active' },
     {name: 'Amira Kandovsky', avatar: 'Voltapancake', status: 'pending' },
@@ -48,6 +35,7 @@ const fiats = [
 ];
 
 const IndexPage = () => {
+
     return (
         <>
             <Seo title="Admin Users" />
@@ -63,8 +51,7 @@ const IndexPage = () => {
                                 <Tab>KYB</Tab>
                             </TabList>
                             <TabPanel>
-                                <UserTable data={users} />
-                                <PaginationBar />
+                                <UserTable/>
                             </TabPanel>
                             <TabPanel>
                                 <BidTable data={bids} />

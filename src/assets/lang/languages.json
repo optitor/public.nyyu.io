@@ -21,7 +21,7 @@
             "verify_company": "Verify Company",
             "verify_id": "Verify your identity",
             "subtitle": "Identity verificaton Consent",
-            "content": "I declare that i am at least 16 years of age; I agree to the collection, processing or storage of my personal information, including biometic data, by NDB for the purpose(s) of identiy verification; that the information I provide is true and accurate to the best of my knowledge; and I shall be fully responsible in case I provide wrong information or any of the documents I use are fake, forged, counterfeit etc.",
+            "content": "I declare that I am at least 16 years of age; I agree to the collection, processing or storage of my personal information, including biometic data, by NDB for the purpose(s) of identiy verification; that the information I provide is true and accurate to the best of my knowledge; and I shall be fully responsible in case I provide wrong information or any of the documents I use are fake, forged, counterfeit etc.",
             "agree": "I agree to the above statment, and I have read NDB "
         },
         "bcp47": "en",

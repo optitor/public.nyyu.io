@@ -25,7 +25,7 @@ const VerificationPage = () => {
     })
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
-            console.log(data)
+            // console.log(data)
             setShuftReference(data.getShuftiReference)
             return setShuftiReferenceLoading(false)
         },
@@ -34,12 +34,14 @@ const VerificationPage = () => {
     })
 
     // Methods
-    useEffect(async () => {
-        if (!shuftiReferenceLoading) {
-            const response = await getShuftiStatusByReference(shuftReference?.reference)
-            return setShuftiStatus(response)
-        }
-    }, [shuftiReferenceLoading])
+    useEffect(() => {
+        (async function() {
+            if (!shuftiReferenceLoading) {
+                const response = await getShuftiStatusByReference(shuftReference?.reference)
+                return setShuftiStatus(response)
+            }
+        })()
+    }, [shuftiReferenceLoading, shuftReference?.reference])
 
     if (loadingData) return <Loading />
     else

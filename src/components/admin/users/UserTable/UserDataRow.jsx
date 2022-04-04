@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from 'react-redux';
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import Modal from "react-modal";
@@ -7,6 +8,8 @@ import { width } from "./columnWidth";
 import DeleteConfirmModal from "../../DeleteConfirmModal";
 
 const UserDataRow = ({ datum, index }) => {
+    const { userTiers } = useSelector(state => state);
+
     const [show, setShow] = useState(false);
     const [showBtns, setShowBtns] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -31,7 +34,7 @@ const UserDataRow = ({ datum, index }) => {
                     </div>
                     <div className="password">
                         <p>
-                            {datum.password}{" "}
+                            ********{" "}
                             <span style={{ fontSize: 18, marginLeft: 20 }}>
                                 <Icon
                                     icon="clarity:refresh-line"
@@ -48,7 +51,7 @@ const UserDataRow = ({ datum, index }) => {
                     </div>
                     <div className="privilege">
                         <p className="privilege">
-                            {datum.privilege}
+                            {datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}
                             {!show && <Icon icon="whh:avatar" />}
                         </p>
                     </div>
@@ -120,13 +123,13 @@ const UserDataRow = ({ datum, index }) => {
                             </Main>
                             <Toggle style={{ display: show ? "flex" : "none" }}>
                                 <div className="btns">
-                                    <span className="mailbox">
+                                    <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
                                         <Icon icon="uil:mailbox" />
                                     </span>
-                                    <span className="user">
+                                    <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
                                         <Icon icon="ant-design:user-outlined" />
                                     </span>
-                                    <span className="phone">
+                                    <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
                                         <Icon icon="bi:phone" />
                                     </span>
                                 </div>
@@ -137,7 +140,7 @@ const UserDataRow = ({ datum, index }) => {
                 <div id={`id${index}`} className="collapse">
                     <Toggle>
                         <div className="name">
-                            <p>{datum.ext_wallet_provider}</p>
+                            <p>{datum.provider}</p>
                         </div>
                         <div className="contact">
                             <p>{datum.ext_wallet_address}</p>
@@ -149,17 +152,17 @@ const UserDataRow = ({ datum, index }) => {
                             <p>{datum.birth}</p>
                         </div>
                         <div className="privilege">
-                            <p>{datum.currency}</p>
+                            <p>{userTiers[datum.tierLevel]?.name}</p>
                         </div>
                         <div className="action">
                             <div className="btns">
-                                <span className="mailbox">
+                                <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
                                     <Icon icon="uil:mailbox" />
                                 </span>
-                                <span className="user">
+                                <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
                                     <Icon icon="ant-design:user-outlined" />
                                 </span>
-                                <span className="phone">
+                                <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
                                     <Icon icon="bi:phone" />
                                 </span>
                             </div>
@@ -223,13 +226,13 @@ const UserDataRow = ({ datum, index }) => {
                                 </Main>
                                 <Toggle style={{ display: show ? "flex" : "none" }}>
                                     <div className="btns">
-                                        <span className="mailbox">
+                                        <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
                                             <Icon icon="uil:mailbox" />
                                         </span>
-                                        <span className="user">
+                                        <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
                                             <Icon icon="ant-design:user-outlined" />
                                         </span>
-                                        <span className="phone">
+                                        <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
                                             <Icon icon="bi:phone" />
                                         </span>
                                     </div>
@@ -298,7 +301,7 @@ const UserDataRow = ({ datum, index }) => {
                         </div>
                         <div className="right" style={{ width: "50%" }}>
                             <p style={{ textTransform: "uppercase" }}>
-                                {datum.privilege}{" "}
+                                {datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}{" "}
                                 <span>
                                     <Icon icon="whh:avatar" />
                                 </span>
@@ -307,10 +310,18 @@ const UserDataRow = ({ datum, index }) => {
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className="left">
-                            <p style={{ color: "dimgray" }}>External Wallet Privider</p>
+                            <p style={{ color: "dimgray" }}>User Tier</p>
                         </div>
                         <div className="right">
-                            <p>{datum.ext_wallet_provider}</p>
+                            <p>{userTiers[datum.tierLevel]?.name}</p>
+                        </div>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
+                        <div className="left">
+                            <p style={{ color: "dimgray" }}>Privider</p>
+                        </div>
+                        <div className="right">
+                            <p>{datum.provider}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -494,17 +505,13 @@ const Toggle = styled.div`
             display: inline-block;
             text-align: center;
             font-size: 20px;
+            color: lightgrey;
         }
         span.mailbox {
-            color: #23c865;
             border-right: 2px solid dimgrey;
         }
         span.user {
-            color: #23c865;
             border-right: 2px solid dimgrey;
-        }
-        span.phone {
-            color: dimgrey;
         }
     }
 `

@@ -8,9 +8,19 @@ export const getCookie = (name) => {
     return Cookies.get(name);
 };
 
+export const removeCookie = (name) => {
+    return Cookies.remove(name);
+};
+
+// cookie variable name
 export const NDB_FavCoins = 'NDB_FavCoins';
 export const NDB_Paypal_TrxType = 'NDB_Paypal_TrxType';
 
+export const NDB_Privilege = 'NDB_Privilege'; // check if user is amin or not.
+
+// cookie values
 export const NDB_Auction = 'f920fd230rk_auc';
 export const NDB_Presale = 'dj039rjkjaq_pre';
 export const NDB_Deposit = 'f30fakjf203_dep';
+
+export const NDB_Admin = 'adkejldkf_adm';
