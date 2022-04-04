@@ -35,7 +35,6 @@ export default function WithdrawTable() {
     // Methods
     const headerTitle = ({ title, up, down, end }) => (
         <th scope="col">
-            {console.log(end)}
             <div
                 className={`d-flex align-items-center gap-1 noselect cursor-pointer ${
                     end && "justify-content-center justify-content-sm-end"
