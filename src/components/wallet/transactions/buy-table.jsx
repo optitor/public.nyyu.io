@@ -60,35 +60,23 @@ export default function BuyTable() {
 
         if (sortType === "amount_down")
             return setList(
-                presaleList.sort(
-                    (item2, item1) =>
-                        new Date(item2.amount).getTime() -
-                        new Date(item1.amount).getTime()
-                )
+                presaleList.sort((item2, item1) => item1.amount - item2.amount)
             );
 
         if (sortType === "amount_up")
             return setList(
-                presaleList.sort(
-                    (item2, item1) =>
-                        new Date(item1.amount).getTime() -
-                        new Date(item2.amount).getTime()
-                )
+                presaleList.sort((item2, item1) => item2.amount - item1.amount)
             );
         if (sortType === "transaction_down")
             return setList(
                 presaleList.sort(
-                    (item2, item1) =>
-                        new Date(item1.transaction).getTime() -
-                        new Date(item2.transaction).getTime()
+                    (item2, item1) => item1.transaction - item2.transaction
                 )
             );
         if (sortType === "transaction_up")
             return setList(
                 presaleList.sort(
-                    (item2, item1) =>
-                        new Date(item2.transaction).getTime() -
-                        new Date(item1.transaction).getTime()
+                    (item2, item1) => item2.transaction - item1.transaction
                 )
             );
     }, [sortType]);
