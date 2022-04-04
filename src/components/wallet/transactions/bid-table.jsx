@@ -42,23 +42,39 @@ export default function BidTable() {
         </th>
     );
     useEffect(() => {
-        // if (sortType === null) return setList(bidList);
-        // if (sortType === "date_down")
-        //     return setList(
-        //         bidList.sort(
-        //             (item2, item1) =>
-        //                 new Date(item2.date).getTime() -
-        //                 new Date(item1.date).getTime()
-        //         )
-        //     );
-        // if (sortType === "date_up")
-        //     return setList(
-        //         bidList.sort(
-        //             (item2, item1) =>
-        //                 new Date(item1.date).getTime() -
-        //                 new Date(item2.date).getTime()
-        //         )
-        //     );
+        if (sortType === null) return setList(bidList);
+        if (sortType === "date_down")
+            return setList(
+                bidList.sort(
+                    (item2, item1) =>
+                        new Date(item1.date).getTime() -
+                        new Date(item2.date).getTime()
+                )
+            );
+        if (sortType === "date_up")
+            return setList(
+                bidList.sort(
+                    (item2, item1) =>
+                        new Date(item2.date).getTime() -
+                        new Date(item1.date).getTime()
+                )
+            );
+        if (sortType === "amount_down")
+            return setList(
+                bidList.sort(
+                    (item2, item1) =>
+                        new Date(item2.date).getTime() -
+                        new Date(item1.date).getTime()
+                )
+            );
+        if (sortType === "amount_up")
+            return setList(
+                bidList.sort(
+                    (item2, item1) =>
+                        new Date(item1.date).getTime() -
+                        new Date(item2.date).getTime()
+                )
+            );
     }, [sortType]);
 
     // Render
@@ -78,11 +94,9 @@ export default function BidTable() {
                             up: "amount_up",
                             down: "amount_down",
                         })}
-                        {headerTitle({
-                            title: "Payment",
-                            up: "payment_up",
-                            down: "payment_down",
-                        })}
+                        <th scope="col" className="text-sm-end">
+                            Payment
+                        </th>
                         <th scope="col" className="text-sm-end">
                             Status
                         </th>
