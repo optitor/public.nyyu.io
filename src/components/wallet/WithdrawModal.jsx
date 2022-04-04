@@ -2,8 +2,8 @@
 import React, { useState, useMemo } from "react";
 import { useSelector } from 'react-redux';
 import jq from 'jquery';
+import ReactCodeInput from 'react-code-input';
 import Modal from "react-modal";
-import { navigate } from 'gatsby';
 import validator from "validator";
 import _ from "lodash";
 import styled from 'styled-components';
@@ -17,15 +17,20 @@ import { getPaypalPaymentFee } from "../../utilities/utility-methods";
 import {
     PaypalFiat,
     USDT } from '../../utilities/imgImport';
+import { roundNumber } from '../../utilities/number';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
-import { CREATE_CHARGE_FOR_DEPOSIT, PAYPAL_WITHDRAW_REQUEST } from "../../apollo/graphqls/mutations/Payment";
-import { ROUTES } from "../../utilities/routes";
+import * as Mutation from "../../apollo/graphqls/mutations/Payment";
+import { censorEmail } from "../../utilities/string";
 
 const CURRENCIES = [
     {label: 'USD', value: 'USD', symbol: '$'},
     // {label: 'GBP', value: 'GBP', symbol: '£'},
     // {label: 'EUR', value: 'EUR', symbol: '€'},
 ];
+
+const CRYPTOCURRENCY = 'CRYPTOCURRENCY';
+const PAYPAL = 'PAYPAL';
+const BANKTRANSFER = 'BANKTRANSFER';
 
 const TransferData = {
     EUR: {
@@ -58,6 +63,7 @@ const { Option } = components;
 const SupportedCoins = _.mapKeys(SUPPORTED_COINS, 'value');
 
 const SelectOption = (props) => {
+    const precision = props.data?.label === 'BTC'? 8: 4;
     return (
         <Option {...props}>
             <div className="d-flex justify-content-sm-start align-items-center ">
@@ -68,7 +74,7 @@ const SelectOption = (props) => {
                 />
                 <p className="coin-label ms-3">
                     <NumberFormat
-                        value={props.data?.amount}
+                        value={roundNumber(props.data?.amount, precision)}
                         displayType={'text'}
                         thousandSeparator={true}
                         renderText={(value, props) => <span {...props}>{value} </span>}
@@ -97,46 +103,30 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [currentStep, setCurrentStep] = useState(1);
-    const [isPaypalWithdraw, setIsPaypalWithdraw] = useState(false);
+    const [withdrawType, setWithdrawType] = useState(null);
     const [tabIndex, setTabIndex] = useState(1);
     const [pending, setPending] =useState(false);
 
     const networks = useMemo(() => (selectedAsset?.networks?? []), [selectedAsset]);    
     const [network, setNetwork] = useState(networks[0]);
     const [withdrawData, setWithdrawData] = useState({destAddress: '', amount: ''});
-    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) > selectedAsset.amount;
-
+    const [confirmCode, setConfirmCode] = useState('');
+    // const [returnValue, setReturnValue] = useState({});
+    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) > Number(selectedAsset.amount);
+    
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
     const [transferAmount, setTransferAmount] = useState('');
     const [paypalEmail, setPaypalEmail] = useState('');
     const [allFees, setAllFees] = useState({});
 
+    const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
     const paypalEmailError = useMemo(() => {
         if(!paypalEmail) return 'Please Enter Your PayPal Email.';
         if(!validator.isEmail(paypalEmail)) return 'Invalid Email';
     }, [paypalEmail]);
-
-    // const [createChargeForDepositMutation] = useMutation(
-    //     CREATE_CHARGE_FOR_DEPOSIT,
-    //     {
-    //         onCompleted: (data) => {
-    //             if (data.createChargeForDeposit) {
-    //                 const resData = data.createChargeForDeposit;
-
-    //                 setDepositData(resData);
-    //                 setPending(false);
-    //                 setCurrentStep(2);
-    //             }
-    //         },
-    //         onError: (err) => {
-    //             console.log("get deposit address: ", err);
-    //             setPending(false);
-    //         },
-    //     }
-    // );
 
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
@@ -151,31 +141,17 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         setTransferAmount('');
     };
 
-    const create_Charge_For_Deposit = () => {
-        setPending(true);
-        const createData = {
-            coin: network.value,
-            network: network.network,
-            cryptoType: selectedAsset.value,
-        };
-
-        createChargeForDepositMutation({
-            variables: { ...createData }
-        })
-    };
-
-    const handleCreditDeposit = () => {
-        navigate(ROUTES.creditDeposit);
-    };
-
     const closeModal = () => {
         setWithdrawData({});
         setShowModal(false);
     };
 
-    const [paypalWithdrawRequestMutation] = useMutation(PAYPAL_WITHDRAW_REQUEST, {
+    
+    const [generateWithdrawMutation] = useMutation(Mutation.GENERATE_WITHDRAW, {
         onCompleted: data => {
-            console.log(data.paypalWithdrawRequest);
+            if(data.generateWithdraw) {
+                setCurrentStep(4);
+            }
             setPending(false);
         },
         onError: err => {
@@ -184,23 +160,107 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         }
     });
 
-    const handleRequestPaypalTrx = () => {
-        if(paypalEmailError) {
+    const generate_Withdraw_Code = () => {
+        if(withdrawType === PAYPAL && paypalEmailError) {
             setShowError(true);
             return;
         }
+        setError('');
+        setConfirmCode('');
+        setPending(true);
+        generateWithdrawMutation();
+    };
+
+    //----------------- Paypal ------------------------
+    const [paypalWithdrawRequestMutation] = useMutation(Mutation.PAYPAL_WITHDRAW_REQUEST, {
+        onCompleted: data => {
+            if(data.paypalWithdrawRequest) {
+                setCurrentStep(5);
+            }
+            setPending(false);
+        },
+        onError: err => {
+            setPending(false);
+            if(err.message === 'insufficient_balance') {
+                setError("Sorry! Your wallet don't have sufficient balance.");
+            } else if(err.message === '2FA failed') {
+                setError("Sorry! Two-factor authentication failed. Try again.");
+            } else {
+                setError('Something went wrong! Try again.');
+            }
+        }
+    });
+
+    const paypal_Withdraw_Request = () => {
+        setError('');
         setPending(true);
         const requestData = {
             email: paypalEmail,
             target: currency.value,
             withdrawAmount: Number(transferAmount),
-            sourceToken: 'USDT'
+            sourceToken: 'USDT',
+            code: confirmCode
         };
         paypalWithdrawRequestMutation({
             variables: { ...requestData }
         });
     };
+
+    //-------------------Crypto Withdraw------------------------
+    const [cryptoWithdrawRequestMutation] = useMutation(Mutation.CRYPTO_WITHDRAW_REQUEST, {
+        onCompleted: data => {
+            if(data.cryptoWithdrawRequest) {
+                setCurrentStep(5);
+            }
+            setPending(false);
+        },
+        onError: err => {
+            setPending(false);
+            if(err.message === '2FA failed') {
+                setError("Sorry! Two-factor authentication failed. Try again.");
+            } else {
+                setError('Something went wrong! Try again.');
+            }
+        }
+    });
+
+    const crypto_Withdraw_Request = () => {
+        setError('');
+        setPending(true);
+        const requestData = {
+            amount: Number(withdrawData.amount),
+            sourceToken: selectedAsset.label,
+            network: network?.network,
+            des: withdrawData.destAddress,
+            code: confirmCode
+        };
+        cryptoWithdrawRequestMutation({
+            variables: { ...requestData }
+        });
+    };
+
+    const handleWithdrawRequest = () => {
+        if(withdrawType === CRYPTOCURRENCY) {
+            crypto_Withdraw_Request();
+        } else if(withdrawType === PAYPAL) {
+            paypal_Withdraw_Request();
+        }
+    };
+
+    const confirmDataForPaypal = [
+        {topic: 'User Email', content: censorEmail(user.email)},
+        {topic: 'De', content: paypalEmail},
+        {topic: 'Currency', content: currency.value},
+        {topic: 'Source Token', content: 'USDT'},
+        {topic: 'Withdraw Amount', content: transferAmount},
+    ];
     
+    const confirmDataForCrypto = [
+        {topic: 'User Email', content: censorEmail(user.email)},
+        {topic: 'Destination wallet address', content: withdrawData?.destAddress},
+        {topic: 'Source Token', content: 'USDT'},
+        {topic: 'Withdraw Amount', content: withdrawData.amount},
+    ]
 
     return (
         <Modal
@@ -224,6 +284,21 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                         icon="carbon:arrow-left"
                         onClick={() => {
                             setCurrentStep(2);
+                        }}
+                    />
+                )}
+                {currentStep === 4 && (
+                    <Icon
+                        className="icon"
+                        icon="carbon:arrow-left"
+                        onClick={() => {
+                            if(withdrawType === CRYPTOCURRENCY) {
+                                setCurrentStep(1);
+                                setTabIndex(1);
+                            } else {
+                                setCurrentStep(3);
+                            }
+                            setConfirmCode('');
                         }}
                     />
                 )}
@@ -304,17 +379,17 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         />
                                         <p className="btn"
                                             onClick={() => {
-                                                setWithdrawData({ ...withdrawData, amount: selectedAsset.amount })
+                                                setWithdrawData({ ...withdrawData, amount: roundNumber(selectedAsset.amount, 4) })
                                             }}
                                         ><span>MAX</span></p>
                                     </div>
                                 </div>
                                 <button
                                     className="btn btn-outline-light rounded-0 w-100 mt-40px fw-bold mb-3"
-                                    // onClick={create_Charge_For_Deposit}
+                                    onClick={() => { setWithdrawType(CRYPTOCURRENCY); generate_Withdraw_Code(); }}
                                     disabled={pending || invalidForWithdraw}
                                 >
-                                    {pending? <CustomSpinner />: 'WITHDRAW'}
+                                    {pending? <CustomSpinner />: 'NEXT'}
                                 </button>
                             </div>)
                         )}
@@ -323,7 +398,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 <div className="row mt-5">
                                     <div className="col-sm-6">
                                         <FiatButton className="active" onClick={() => {
-                                            setIsPaypalWithdraw(true); setCurrentStep(2);
+                                            setWithdrawType(PAYPAL); setCurrentStep(2);
                                         }}>
                                             <img src={PaypalFiat} alt="paypal" />
                                         </FiatButton>
@@ -343,7 +418,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     </div>
                 )}
                 {currentStep === 2 &&
-                    (isPaypalWithdraw? (
+                    (withdrawType === PAYPAL? (
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">PayPal withdraw</h5>
                             <div className="mt-3">
@@ -473,7 +548,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     ))
                 }
                 {currentStep === 3 &&
-                    (isPaypalWithdraw? (
+                    (withdrawType === PAYPAL? (
                         <div className='deposit width2'>
                             <div className="paypal_email">
                                 <h5>PayPal Email</h5>
@@ -481,12 +556,12 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     value={paypalEmail}
                                     onChange={e => setPaypalEmail(e.target.value)}
                                 />
-                                <p style={{height: 25}}>
+                                <p style={{height: 25, color: '#e16565'}}>
                                     {showError && paypalEmailError}
                                 </p>
                                 <button
                                     className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold d-flex align-items-center justify-content-center"
-                                    onClick={handleRequestPaypalTrx}
+                                    onClick={generate_Withdraw_Code}
                                     disabled={pending}
                                 >
                                     <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
@@ -499,6 +574,80 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     ): (
                         <></>
                     ))
+                }
+                {currentStep === 4 &&
+                    (withdrawType === PAYPAL || withdrawType === CRYPTOCURRENCY? (
+                        <div className='deposit width2'>
+                            <div className="confirm_div">
+                                <h3 className="mt-3"><strong>Confirm Withdraw</strong></h3>
+                                <p className="mt-5 mb-3">Enter Email Code</p>
+                                <ReactCodeInput type='number' fields={6}
+                                    value={confirmCode}
+                                    onChange={value => setConfirmCode(value)}
+                                />
+                                <div className="mt-3 d-flex align-items-center">
+                                    <p className="text-center">The code has been sent to {censorEmail(user.email)}</p>
+                                    <span className='text-green cursor-pointer ms-1'
+                                        style={{opacity: pending? 0.5: 1}}
+                                        onClick={generate_Withdraw_Code}
+                                        disabled={pending}
+                                    ><strong>Resend</strong></span>
+                                </div>
+                                <p className="mt-2" style={{color: '#e16565'}}>
+                                    {error}
+                                </p>
+                            </div>
+                            <div className="d-flex justify-content-center mt-2">
+                                <button className="btn btn-outline-light fw-bold rounded-0 w-50 mx-1"
+                                    onClick={closeModal}
+                                >CANCEL</button>
+                                <button className="btn btn-outline-light fw-bold rounded-0 w-50 mx-1 d-flex align-items-center justify-content-center"
+                                    onClick={handleWithdrawRequest}
+                                    disabled={pending || confirmCode.length < 6}
+                                >
+                                    <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                        <CustomSpinner />
+                                    </div>
+                                    <div className={`${pending ? "ms-3" : "pe-4"}`}>CONFIRM</div>
+                                </button>
+                            </div>
+                        </div>
+                    ): (
+                        <></>
+                    ))
+                }
+                {currentStep === 5 &&
+                    <div className='deposit width2'>
+                        <div className="confirm_div">
+                            <h3 className="mt-3"><strong>Withdraw Details</strong></h3>
+                            <h5 className="mt-2 text-green">
+                                Request sent successfully
+                            </h5>
+                            <div className="stats_div w-100 mt-2">
+                                {withdrawType === PAYPAL && confirmDataForPaypal.map(item => (
+                                    <div className="stats" key={item.topic}>
+                                        <p className="topic">{item.topic}</p>
+                                        <p className="content">
+                                            {item.content}
+                                        </p>
+                                    </div>
+                                ))}
+                                {withdrawType === CRYPTOCURRENCY && confirmDataForCrypto.map(item => (
+                                    <div className="stats" key={item.topic}>
+                                        <p className="topic">{item.topic}</p>
+                                        <p className="content">
+                                            {item.content}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-center mt-2">
+                            <button className="btn btn-outline-light fw-bold rounded-0 w-50 mx-1"
+                                onClick={closeModal}
+                            >CLOSE</button>
+                        </div>
+                    </div>
                 }
             </>
         </Modal>

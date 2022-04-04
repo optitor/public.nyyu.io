@@ -6,6 +6,7 @@ import chart from "../images/chart.svg"
 import qmark from "../images/question_mark.svg"
 import apart from "../images/apart.svg"
 import trees from "../images/trees.svg"
+import landingTokens from "../images/signup-bg.svg"
 
 import facebook from "../images/facebook.svg"
 import google from "../images/google.svg"
@@ -95,6 +96,8 @@ import paypal from "../images/payment/paypal.svg"
 import bidIcon from "../images/payment/bid.svg"
 import pillarChartIcon from "../images/payment/chart.svg"
 import paypalBrand from "../images/payment/paypal-brand.svg"
+import nyyuWallet from '../images/payment/nyyu-wallet.svg'
+import nyyuWalletSelected from '../images/payment/nyyu-wallet-selected.svg'
 
 import verifyIdStep1 from "../images/verify-id/verify-id-step-1.svg"
 import verifyIdStep2 from "../images/verify-id/verify-id-step-2.svg"
@@ -153,6 +156,7 @@ export const ChartIcon = chart
 export const Qmark = qmark
 export const Apart = apart
 export const Trees = trees
+export const LandingTokens = landingTokens
 
 export const Facebook = facebook
 export const Google = google
@@ -233,6 +237,8 @@ export const Paypal = paypal
 export const BidIcon = bidIcon
 export const PillarChartIcon = pillarChartIcon
 export const PaypalBrand = paypalBrand
+export const NyyuWallet = nyyuWallet
+export const NyyuWalletSelected = nyyuWalletSelected
 
 export const VerifyIdStep1 = verifyIdStep1
 export const VerifyIdStep2 = verifyIdStep2

@@ -31,7 +31,10 @@ import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
 import NDBWalletTab from "./NDBWalletTab";
 import PaymentExternalWalletTab from "./payment-external-wallet-tab";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
-import { GET_AUCTION } from "../../apollo/graphqls/querys/Auction";
+import {
+    GET_AUCTION,
+    GET_PRESALES,
+} from "../../apollo/graphqls/querys/Auction";
 import {
     PAYPAL_FOR_AUCTION,
     PAYPAL_FOR_PRESALE,
@@ -43,6 +46,7 @@ import {
     NDB_Presale,
 } from "../../utilities/cookies";
 import { ROUTES } from "../../utilities/routes";
+import { getCurrentMarketCap } from "../../utilities/utility-methods";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -70,10 +74,9 @@ const Payment = () => {
 
     const dispatch = useDispatch();
     const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
-
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
-    if (!isSSR && !currentRound) navigate(ROUTES.auction);
+    // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
@@ -102,6 +105,11 @@ const Payment = () => {
     useEffect(() => {
         if (barProgress < 1) setBarProgress(1);
     }, [barProgress]);
+
+    useEffect(async () => {
+        const response = await getCurrentMarketCap();
+        setCurrentCap(Number(response.marketcap));
+    }, []);
 
     const [paypalForAuctionMutation] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
@@ -134,7 +142,7 @@ const Payment = () => {
         },
         onError: (err) => {
             console.log(err);
-            alert("Error in PayPal checkout");
+            alert("Error in PayPal checkout from backend");
             setPayPalLoading(false);
         },
     });
@@ -224,6 +232,7 @@ const Payment = () => {
                                     <CreditCardTab
                                         amount={Number(bidAmount).toFixed(2)}
                                         round={currentRound}
+                                        orderId={orderId}
                                     />
                                 )}
                                 {tabIndex === 3 && (

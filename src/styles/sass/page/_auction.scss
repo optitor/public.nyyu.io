@@ -432,71 +432,79 @@
     line-height: 37px;
     margin-left: 18px;
 }
-.select-internal-wallet {
+
+.destination_wallet {
+    height: 250px;
+    padding: 20px;
     border: 1px solid white;
-    padding-top: 6px;
-    padding-bottom: 10px;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
     color: white;
-    z-index: 99;
+    transition: 0.3s;
+    cursor: pointer;
+    opacity: 0.7;
+    .wallet_header {
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+    .img_div {
+        height: 140px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+            width: 50px;
+            height: 50px;
+        }
+        img {
+            width: 50px;
+            height: 50px;
+        }
+    }
+    @include mq('laptop-wide', max) {
+        h4.text-center {
+            font-size: 22px;
+        }
+    }
     &:hover {
-        background-color: $mountainMeadow;
-        cursor: pointer;
-        border: 1px solid $mountainMeadow;
+        border: 1px solid #23c865;
+        opacity: 1;
     }
 }
-.select-external-wallet {
-    border: 1px solid white;
-    padding-top: 6px;
-    padding-bottom: 10px;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    color: white;
-    z-index: 99;
-    &:hover {
-        background-color: $white;
-        cursor: pointer;
-        border: 1px solid $white;
-        color: $black;
+
+.selected_wallet {
+    background-color: $green;
+    opacity: 1;
+    p {
+        color: white!important;
     }
 }
-.internal-wallet {
-    background-color: $mountainMeadow;
-    cursor: pointer;
-    border: 1px solid $mountainMeadow;
-}
-.external-wallet {
-    background-color: $white;
-    cursor: pointer;
-    border: 1px solid $white;
-    color: $black;
-}
-.wallet-content {
-    height: 260px;
-    margin-top: 10px;
-}
-.wallet-icon {
-    width: 24px;
-    height: 24px;
-}
-.url-input {
-    margin-left: 30px;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: white;
-    border: 1px solid $dimgrey;
-    background: transparent;
-    height: 40px;
-    width: 350px;
-}
-.url-error-input {
-    border: 1px solid $red;
-}
-@include media-breakpoint-down(lg) {
-    .range-label {
-        margin-bottom: 21px;
+
+.wallet_content {
+    height: 250px;
+    .external_wallet {
+        height: 112px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid dimgray;
+        margin-bottom: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        img {
+            width: 30px;
+            height: 30px;
+        }
+        p {
+            color: dimgray;
+            transition: 0.3s;
+        }
+        &:hover {
+            border: 1px solid $green;
+            p {
+                color: white;
+            }
+        }
     }
 }

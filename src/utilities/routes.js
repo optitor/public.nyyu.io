@@ -1,3 +1,5 @@
+import { isBrowser } from "./auth";
+
 export const ROUTES = {
     signIn: "/app/signin/",
     signUp: "/app/signup/",
@@ -18,3 +20,5 @@ export const ROUTES = {
     presale_auction: "/pre-sale/auction",
     presale_home: "/pre-sale/home",
 }
+
+export const isRedirectUrl = isBrowser && window.location.href.includes("token=");

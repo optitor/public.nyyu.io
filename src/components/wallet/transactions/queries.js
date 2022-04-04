@@ -194,6 +194,7 @@ export const GET_STATEMENTS = gql`
                 auctionId
                 userId
                 amount
+                fee
                 createdAt
                 confirmedAt
                 status
@@ -207,6 +208,7 @@ export const GET_STATEMENTS = gql`
                 id
                 userId
                 amount
+                fee
                 createdAt
                 confirmedAt
                 status
@@ -221,6 +223,7 @@ export const GET_STATEMENTS = gql`
                 id
                 userId
                 amount
+                fee
                 createdAt
                 status
                 cryptoType
@@ -237,6 +240,7 @@ export const GET_STATEMENTS = gql`
                 orderId
                 userId
                 amount
+                fee
                 createdAt
                 confirmedAt
                 status
@@ -249,6 +253,7 @@ export const GET_STATEMENTS = gql`
                 id
                 userId
                 amount
+                fee
                 createdAt
                 confirmedAt
                 status
@@ -263,6 +268,7 @@ export const GET_STATEMENTS = gql`
                 id
                 userId
                 amount
+                fee
                 createdAt
                 status
                 cryptoType
@@ -294,6 +300,7 @@ export const GET_STATEMENTS = gql`
                 id
                 userId
                 amount
+                fee
                 createdAt
                 status
                 cryptoType
@@ -302,6 +309,34 @@ export const GET_STATEMENTS = gql`
                 confirmedAt
                 depositAddress
                 coin
+            }
+            stripeDepositTxns {
+                id
+                userId
+                amount
+                fee
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paymentIntentId
+                paymentMethodId
+            }
+            bankDepositTxns{
+                id
+                userId
+                uid
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                usdAmount
+                cryptoType
+                cryptoPrice
+                fee
+                deposited
             }
         }
     }

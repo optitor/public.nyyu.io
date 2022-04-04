@@ -3,16 +3,20 @@ import { useDispatch } from "react-redux"
 import { navigate } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useMutation } from "@apollo/client"
+import { Icon } from '@iconify/react'
+import ReactTooltip from "react-tooltip"
 
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { PLACE_PRESALE_ORDER } from "../../apollo/graphqls/mutations/Bid"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import CustomSpinner from "../common/custom-spinner"
-import { externalWallets } from "../../utilities/staticData"
+import { CheckBox } from "../common/FormControl"
+import { externalWallets, NDB_WALLET_TOOLTIP_CONTENT, EXTERNAL_WALLET_TOOLTIP_CONTENT } from "../../utilities/staticData"
 import { ROUTES } from "../../utilities/routes"
 import { validURL } from "../../utilities/string"
 import { setPresaleOrderId } from '../../redux/actions/bidAction' 
+import { NyyuWallet, NyyuWalletSelected } from "../../utilities/imgImport";
 
 export default function PresalePlaceOrderWalletSelect() {
     const auction = useAuction()
@@ -21,20 +25,14 @@ export default function PresalePlaceOrderWalletSelect() {
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
     const [selectedWallet, setSelectedWallet] = useState(null)
+    const [externalWallet, setExternalWallet] = useState(null)
     const [externalUrl, setExternalUrl] = useState("")
     const [urlError, setUrlError] = useState(null)
 
-    function handleSelectWallet(selection) {
-        if (selection === "internal") {
-            setSelectedWallet(1)
-        } else if (selection === "external") {
-            setSelectedWallet(2)
-        }
-    }
 
     const [placePresaleOrderMutation] = useMutation(PLACE_PRESALE_ORDER, {
         onCompleted: data => {
-            console.log(data.placePreSaleOrder)
+            // console.log(data.placePreSaleOrder)
             if(data.placePreSaleOrder) {
                 dispatch(setPresaleOrderId(data.placePreSaleOrder?.id))
                 navigate(ROUTES.payment)
@@ -48,7 +46,7 @@ export default function PresalePlaceOrderWalletSelect() {
     })
 
     const handlePresale = () => {
-        if (selectedWallet === 2 && !validURL(externalUrl)) {
+        if (selectedWallet === 'external' && !validURL(externalUrl)) {
             setUrlError(true)
             return
         }
@@ -58,12 +56,21 @@ export default function PresalePlaceOrderWalletSelect() {
             variables: {
                 presaleId: optCurrentRound?.id,
                 ndbAmount: presaleNdbAmount,
-                destination: selectedWallet === 2 ? 2 : 1,
+                destination: selectedWallet === 'external' ? 2 : 1,
                 extAddr: selectedWallet === 2 ? externalUrl : ""
             },
         })
         dispatch(setBidInfo(Number(optCurrentRound?.tokenPrice * presaleNdbAmount)))
         dispatch(setCurrentRound(optCurrentRound?.id))
+    }
+
+    const handlePrevious = () => {
+        if(selectedWallet === 'external') {
+            setSelectedWallet(null);
+            setExternalWallet(null)
+            return;
+        }
+        setPresalePlaceOrderStage(0);
     }
 
     return (
@@ -75,72 +82,114 @@ export default function PresalePlaceOrderWalletSelect() {
                         icon={faArrowLeft}
                         className="left-arrow cursor-pointer text-light"
                         size="xs"
-                        onClick={() => setPresalePlaceOrderStage(0)}
+                        onClick={handlePrevious}
                     />
                 </div>
             </div>
-            <div className="row mt-25px">
-                <div className="col-sm-6">
-                    <div className={`select-internal-wallet ${selectedWallet === 1 ? "internal-wallet" : ""}`} onClick={() => handleSelectWallet("internal")}>
-                        NDB WALLET
-                    </div>
-                </div>
-                <div className="col-sm-6">
-                    <div className={`select-external-wallet ${selectedWallet === 2 ? "external-wallet" : ""}`} onClick={() => handleSelectWallet("external")}>
-                        EXTERNAL WALLET
-                    </div>
-                </div>
-            </div>
-
-            <div className="wallet-content">
-                {selectedWallet === 2 && <>
-                    <div className="row">
-                        {externalWallets.map((item, key) => (
-                            <div
-                                className="col-sm-6"
-                                key={key}
-                                role="presentation"
-                            >
-                                <div className="d-flex flex-column justify-content-center align-items-center border-dimgray pt-20px pb-20px mt-10px">
-                                    <img src={item.icon} alt="wallet icon" className="wallet-icon" />
-                                    <p>{item.title}</p>
+            <div className="my-3 wallet_content">
+                {selectedWallet === 'external'?
+                    <>
+                        <div className="row">
+                            {externalWallets.map((item, key) => (
+                                <div
+                                    className="col-sm-6"
+                                    key={key}
+                                    role="presentation"
+                                >
+                                    <div className={`external_wallet ${externalWallet === item.value? 'selected_wallet': ''}`}
+                                        onClick={() => setExternalWallet(item.value)}
+                                    >
+                                        <img src={item.icon} alt="wallet icon" className="wallet-icon" />
+                                        <p className="mt-1">{item.title}</p>
+                                    </div>
                                 </div>
+                            ))}
+                        </div>
+                        {/* <div className="w-100 d-flex align-items-center mt-10px">
+                            <span>External Wallet Address</span>
+                            <input
+                                type="text"
+                                value={externalUrl}
+                                onChange={(e) => setExternalUrl(e.target.value)}
+                                className={`url-input ${externalUrl && urlError ? "url-error-input" : ""}`}
+                                placeholder="Please place external address"
+                            />
+                        </div> */}
+                    </>
+                    :
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <div className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
+                                onClick={() => setSelectedWallet("internal")}
+                            >
+                                <div className="d-flex justify-content-end wallet_header">
+                                    <span data-tip='tooltip' data-for='ndb_wallet_tooltip'>
+                                        <Icon icon='bi:question-circle'/>
+                                    </span>
+                                    <ReactTooltip place="left" type="light" effect="solid" id='ndb_wallet_tooltip'>
+                                        <div
+                                            className="text-justify"
+                                            style={{
+                                                width: "200px",
+                                            }}
+                                        >
+                                            {NDB_WALLET_TOOLTIP_CONTENT}
+                                        </div>
+                                    </ReactTooltip>
+                                </div>
+                                <div className="img_div">
+                                    <img src={selectedWallet === 'internal'? NyyuWalletSelected: NyyuWallet} alt='nyyu wallet' />
+                                </div>
+                                <h4 className="text-center">
+                                    NYYU WALLET
+                                </h4>
                             </div>
-                        ))}
+                        </div>
+                        <div className="col-sm-6">
+                            <div className={`destination_wallet`}
+                                onClick={() => setSelectedWallet("external")}
+                            >
+                                <div className="d-flex justify-content-end wallet_header">
+                                    <span data-tip='tooltip' data-for='external_wallet_tooltip'>
+                                        <Icon icon='bi:question-circle'/>
+                                    </span>
+                                    <ReactTooltip place="left" type="light" effect="solid" id='external_wallet_tooltip'>
+                                        <div
+                                            className="text-justify"
+                                            style={{
+                                                width: "200px",
+                                            }}
+                                        >
+                                            {EXTERNAL_WALLET_TOOLTIP_CONTENT}
+                                        </div>
+                                    </ReactTooltip>
+                                </div>
+                                <div className="img_div">
+                                    <Icon icon='carbon:wallet' />
+                                </div>
+                                <h4 className="text-center">
+                                    EXTERNAL WALLET
+                                </h4>
+                            </div>
+                        </div>
                     </div>
-                    <div className="w-100 d-flex align-items-center mt-10px">
-                        <span>External Wallet Address</span>
-                        <input
-                            type="text"
-                            value={externalUrl}
-                            onChange={(e) => setExternalUrl(e.target.value)}
-                            className={`url-input ${externalUrl && urlError ? "url-error-input" : ""}`}
-                            placeholder="Please place external address"
-                        />
-                    </div>
-                </>}
+                }
             </div>
-            <div className="custom-checkbox pb-10px">
-                <input type="checkbox" id="cb1"/>
-                <label className="custom-control-label" htmlFor="cb1">Remember my selection</label>
+            
+            <div className="custom-checkbox pb-10px d-flex align-items-center ">
+                <CheckBox
+                    type="checkbox"
+                    name="allow_fraction"
+                    // value={}
+                    // onChange={handleAllowFraction}
+                    id='remember_select_wallet'
+                />
+                <label className="custom-control-label" htmlFor="remember_select_wallet">Remember my selection</label>
             </div>
             {error && (
                 <div className="mt-1 mb-2">
                     <div className="d-flex align-items-center gap-2">
-                        <svg
-                            className="icon-23px text-danger"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
+                        <Icon className="icon-23px text-danger" icon='bx:error-circle' />
                         <p className="text-danger fw-500 text-[#959595]">
                             {error}
                         </p>
@@ -150,7 +199,7 @@ export default function PresalePlaceOrderWalletSelect() {
             <button
                 className="btn btn-outline-light rounded-0 text-uppercase w-100 fw-bold py-12px fs-20px"
                 onClick={handlePresale}
-                disabled={reqPending && !selectedWallet}
+                disabled={reqPending || !selectedWallet}
             >
                 <div className="d-flex align-items-center justify-content-center gap-3">
                     {reqPending && <CustomSpinner />}

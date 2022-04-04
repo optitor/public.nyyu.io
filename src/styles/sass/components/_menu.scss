@@ -3,8 +3,7 @@
     position: fixed;
     top: 0;
     padding: 28px 0 !important;
-    background-color: $black;
-    z-index: 9999;
+    background-color: #1e1e1e !important;
     .image_div {
         width: 50px;
     }
@@ -142,6 +141,7 @@
 
     &.menu--active {
         .menu__toggler {
+            z-index: 99999;
             span {
                 &:first-child {
                     width: 30px;

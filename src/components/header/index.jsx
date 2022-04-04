@@ -1,125 +1,67 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useQuery, useMutation } from "@apollo/client";
-import { Link, navigate } from "gatsby";
-import { isBrowser } from "./../../utilities/auth";
-import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
-import ReactTooltip from "react-tooltip";
+import React, { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { useQuery, useMutation } from "@apollo/client"
+import { Link, navigate } from "gatsby"
+import { isBrowser } from "../../utilities/auth"
+import { Bell, Logo, NotificationBell } from "../../utilities/imgImport"
+import ReactTooltip from "react-tooltip"
 
-import {useAuth} from "../../hooks/useAuth";
-import {setCurrentAuthInfo, getAuthInfo} from "../../redux/actions/authAction";
-import {fetch_Avatar_Components} from "../../redux/actions/avatarAction";
+import { useAuth } from "../../hooks/useAuth"
+import { setCurrentAuthInfo, getAuthInfo } from "../../redux/actions/authAction"
+import { fetch_Avatar_Components } from "../../redux/actions/avatarAction"
 
-import Loading from "../common/FadeLoading";
-import DressupModal from "../dress-up/dressup-user-modal";
-import CurrencyChoice from "./currency-choice";
-import Avatar from "../dress-up/avatar";
-import UserTier from "./user-tier";
-import { profile_tabs } from "../../utilities/staticData";
-import {GET_USER} from "../../apollo/graphqls/querys/Auth";
-import {ROUTES} from "../../utilities/routes";
-import {GET_ALL_UNREAD_NOTIFICATIONS} from "../../apollo/graphqls/querys/Notification";
-import {UPDATE_AVATARSET} from "../../apollo/graphqls/mutations/AvatarComponent";
-import InformBannedModal from "./InformBannedModal";
+import Loading from "../common/FadeLoading"
+import DressupModal from "../dress-up/dressup-user-modal"
+import LoadCurrencyRates from "./LoadCurrencyRates"
+import Avatar from "../dress-up/avatar"
+import UserTier from "./user-tier"
+import InformBannedModal from "./InformBannedModal"
+import { navigationLinks, profile_tabs } from "../../utilities/staticData"
+import { GET_USER } from "../../apollo/graphqls/querys/Auth"
+import { ROUTES as Routes, ROUTES } from "../../utilities/routes"
+import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
+import { UPDATE_AVATARSET } from "../../apollo/graphqls/mutations/AvatarComponent"
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
-    const dispatch = useDispatch();
-    const [banned, setBanned] = useState(false);
-    const [isBannedOpen, setIsBannedOpen] = useState(false);
+    const dispatch = useDispatch()
+    const [banned, setBanned] = useState(false)
+    const [isBannedOpen, setIsBannedOpen] = useState(false)
 
     // Webservice
-    const { data: user_data } = useQuery(GET_USER);
+    const { data: user_data } = useQuery(GET_USER)
     useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
-        errorPolicy: 'none',
+        errorPolicy: "none",
         onCompleted: (data) => {
-            if (!data?.getAllUnReadNotifications) return;
-            setNewNotification(data?.getAllUnReadNotifications?.length !== 0);
+            if (!data?.getAllUnReadNotifications) return
+            setNewNotification(data?.getAllUnReadNotifications?.length !== 0)
         },
         onError: err => {
-            if(err.graphQLErrors[0]?.isBannedCountry) {
-                navigate('/');
-                setBanned(true);
-                setIsBannedOpen(true);
+            if (err.graphQLErrors[0]?.isBannedCountry) {
+                navigate("/")
+                setBanned(true)
+                setIsBannedOpen(true)
             }
         }
-    });
-    
+    })
+
     const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
-            dispatch(getAuthInfo());
+            dispatch(getAuthInfo())
         },
         onError: (err) => {
-            console.log("received Mutation data", err);
-        },
-    });
+            console.log("received Mutation data", err)
+        }
+    })
 
     // Containers
-    const auth = useAuth();
-    const userInfo = user_data?.getUser;
-    const [active, setActive] = useState(false);
-    const { avatarComponents } = useSelector((state) => state);
-    const [newNotification, setNewNotification] = useState(false);
-    const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false);
-    const { user, isAuthenticated } = useSelector((state) => state.auth);
-    const navigationLinks = [
-        {
-            label: "Home",
-            url: "https://ndb.money/",
-            active: false,
-        },
-        {
-            label: "Vision",
-            url: "https://ndb.city",
-            active: false,
-        },
-        {
-            label: "Technology",
-            url: "https://ndb.money/technology",
-            active: false,
-        },
-        {
-            label: "Learn",
-            url: "https://ndb.money/learn",
-            active: false,
-        },
-        {
-            label: "Sale",
-            url: "/",
-            active: true,
-            subMenu: [
-                {
-                    label: "Wallet",
-                    url: ROUTES.wallet,
-                    isDressup: false,
-                },
-                {
-                    label: "Sale",
-                    url: ROUTES.auction,
-                    isDressup: false,
-                },
-                {
-                    label: "Profile",
-                    url: ROUTES.profile,
-                    isDressup: false,
-                },
-                {
-                    label: "Dressup",
-                    isDressup: true,
-                },
-                {
-                    label: "Support",
-                    url: ROUTES.faq,
-                    isDressup: false,
-                },
-            ],
-        },
-        {
-            label: "Contact Us",
-            url: "https://ndb.money/#contactUs",
-            active: false,
-        },
-    ];
+    const auth = useAuth()
+    const userInfo = user_data?.getUser
+    const [active, setActive] = useState(false)
+    const { avatarComponents } = useSelector((state) => state)
+    const [newNotification, setNewNotification] = useState(false)
+    const [isDressUPModalOpen, setIsDressUPModalOpen] = useState(false)
+    const { user, isAuthenticated } = useSelector((state) => state.auth)
 
     const isShowNavLinks =
         isBrowser &&
@@ -129,37 +71,39 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             window.location.pathname === ROUTES.auction ||
             window.location.pathname === ROUTES.payment ||
             window.location.pathname === ROUTES.creditDeposit ||
-            window.location.pathname.includes(ROUTES.admin));
-            
+            window.location.pathname.includes(ROUTES.admin))
+
+    const isCurrentSignin = isBrowser && (window.location.pathname === Routes.signIn)
+
     // Methodsaypal
     useEffect(() => {
         if (!avatarComponents.loaded) {
-            dispatch(fetch_Avatar_Components());
+            dispatch(fetch_Avatar_Components())
         }
         if (!isAuthenticated && userInfo) {
-            dispatch(setCurrentAuthInfo(userInfo));
+            dispatch(setCurrentAuthInfo(userInfo))
         }
-    }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated]);
+    }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated])
 
     useEffect(() => {
         const handleEscKeyPress = (event) => {
             if (event.key === "Escape" && active) {
-                setActive(false);
+                setActive(false)
             }
-        };
-        document.addEventListener("keydown", handleEscKeyPress);
-        return () => document.removeEventListener("keydown", handleEscKeyPress);
-    });
+        }
+        document.addEventListener("keydown", handleEscKeyPress)
+        return () => document.removeEventListener("keydown", handleEscKeyPress)
+    })
 
     // Render
-    if (loading) return <Loading />;
+    if (loading) return <Loading/>
     else
         return (
             <nav className={active ? "menu menu--active" : "menu"}>
                 <div className="px-4 d-flex justify-content-between">
                     <div className="d-flex align-items-center gap-5 text-white text-uppercase fw-bold">
                         <Link to="/" className="menu__logo d-flex" title="Logo">
-                            <img src={Logo} alt="NDB Brand Logo" />
+                            <img src={Logo} alt="NDB Brand Logo"/>
                         </Link>
                         {isShowNavLinks && (
                             <div className="d-none d-md-flex justify-content-between gap-5">
@@ -226,9 +170,9 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     <div className="d-flex align-items-center">
                         <div>
                             {!auth?.isLoggedIn() ? (
-                                !banned? <Link className="header-btn" to={ROUTES.signIn} >
+                                !banned ? !isCurrentSignin ? <Link className="header-btn" to={ROUTES.signIn}>
                                     Sign In
-                                </Link>: ''
+                                </Link> : "" : ""
                             ) : (
                                 <ul className="d-flex align-items-center">
                                     <Link className="header-btn sale" to="/app/auction">
@@ -241,15 +185,15 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                                     isBrowser &&
                                                     window.location.pathname === ROUTES.profile
                                                         ? () => {
-                                                              setTabIndex(1);
-                                                              setCurrentProfileTab(profile_tabs[1]);
-                                                              setTab(1);
-                                                          }
+                                                            setTabIndex(1)
+                                                            setCurrentProfileTab(profile_tabs[1])
+                                                            setTab(1)
+                                                        }
                                                         : () => {
-                                                              dispatch({
-                                                                  type: "CREATE_NOTIFICATION_ROUTE",
-                                                              });
-                                                          }
+                                                            dispatch({
+                                                                type: "CREATE_NOTIFICATION_ROUTE"
+                                                            })
+                                                        }
                                                 }
                                                 src={newNotification ? NotificationBell : Bell}
                                                 alt="Bell Icon"
@@ -274,12 +218,12 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                             <Avatar
                                                 onClick={() => {
                                                     dispatch({
-                                                        type: "DISABLE_NOTIFICATION_ROUTE",
-                                                    });
+                                                        type: "DISABLE_NOTIFICATION_ROUTE"
+                                                    })
                                                 }}
                                                 className="user-avatar"
                                             />
-                                            <UserTier />
+                                            <UserTier/>
                                         </Link>
                                     </li>
                                     <DressupModal
@@ -287,22 +231,22 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                         isModalOpen={isDressUPModalOpen}
                                         onSave={(res) => {
                                             updateAvatarSet({
-                                                variables: { ...res },
-                                            });
+                                                variables: { ...res }
+                                            })
                                         }}
                                     />
                                 </ul>
                             )}
                         </div>
-                        <CurrencyChoice />
+                        <LoadCurrencyRates/>
                         <button
                             type="button"
                             className="menu__toggler"
                             onClick={() => setActive(!active)}
                         >
-                            <span />
-                            <span />
-                            <span />
+                            <span/>
+                            <span/>
+                            <span/>
                         </button>
                     </div>
 
@@ -326,8 +270,8 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                                             {subLink.isDressup ? (
                                                                 <div
                                                                     onClick={() => {
-                                                                        setActive(false);
-                                                                        setIsDressUPModalOpen(true);
+                                                                        setActive(false)
+                                                                        setIsDressUPModalOpen(true)
                                                                     }}
                                                                     className="fw-500 text-light fs-20px"
                                                                 >
@@ -343,7 +287,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                                                 </Link>
                                                             )}
                                                         </li>
-                                                    );
+                                                    )
                                                 })}
                                             </ul>
                                         )}
@@ -352,10 +296,10 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                             </ul>
                         </div>
                     </div>
-                    {isBannedOpen && <InformBannedModal isModalOpen={isBannedOpen} setIsModalOpen={setIsBannedOpen} />}
+                    {isBannedOpen && <InformBannedModal isModalOpen={isBannedOpen} setIsModalOpen={setIsBannedOpen}/>}
                 </div>
             </nav>
-        );
-};
+        )
+}
 
-export default Menu;
+export default Menu

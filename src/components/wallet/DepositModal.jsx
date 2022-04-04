@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import Modal from "react-modal";
@@ -35,6 +34,8 @@ const CURRENCIES = [
     // { label: "GBP", value: "GBP", symbol: "£" },
     // { label: "EUR", value: "EUR", symbol: "€" },
 ];
+
+const DEPOSIT_COINS = SUPPORTED_COINS.filter(item => item.value !== 'NDB');
 
 const TransferData = {
     EUR: {
@@ -196,6 +197,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                     break;
                 }
             }
+            setLoading(false);
         },
         onError: (err) => {
             console.log(err);
@@ -243,6 +245,7 @@ export default function DepositModal({ showModal, setShowModal }) {
             variables: { ...depositData },
         });
     };
+
     if (loading) return <Loading />;
 
     return (
@@ -315,7 +318,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <p className="subtitle">Select coin</p>
                                     <Select
                                         className="black_input"
-                                        options={SUPPORTED_COINS}
+                                        options={DEPOSIT_COINS}
                                         value={selectedAsset}
                                         onChange={(selected) => {
                                             setSelectedAsset(selected);

@@ -18,7 +18,8 @@ import {
     TrustWallet,
     WalletConnect,
 } from "./imgImport"
-import { API_BASE_URL, SITE_URL } from "./statciData3"
+import { API_BASE_URL } from "./staticData3"
+import { ROUTES } from "./routes"
 
 export const countries = [
     {
@@ -1110,16 +1111,20 @@ export const wallets = {
 export const externalWallets = [
     {
         icon: MetaMask,
-        title: "MetaMask Wallet"
+        title: "MetaMask Wallet",
+        value: 'metamask'
     }, {
         icon: WalletConnect,
-        title: "WalletConnect"
+        title: "WalletConnect",
+        value: 'wallet_connect'
     }, {
         icon: Coinbase,
-        title: "Coinbase account"
+        title: "Coinbase account",
+        value: 'coinbase_account'
     }, {
         icon: TrustWallet,
-        title: "Trust Wallet"
+        title: "Trust Wallet",
+        value: 'trust_wallet'
     },
 
 ]
@@ -1251,6 +1256,9 @@ export const AUCTION_TOOLTIP_CONTENT1 =
 
 export const AUCTION_TOOLTIP_CONTENT2 =
     "Access charts to see more detailed information about NDB token performance"
+
+export const NDB_WALLET_TOOLTIP_CONTENT = 'The balance will be available under the wallet page'
+export const EXTERNAL_WALLET_TOOLTIP_CONTENT = 'The balance will be transferred to your external wallet. Fees may be applicable.'
 
 export const FAQ_CONTENT = [
     {
@@ -1488,6 +1496,90 @@ export const VerificationStepThreeDocumentTypes = [
         label: "Bank statement",
         value: "bank_statement",
     },
+]
+
+export const navigationLinks = [
+    {
+        label: "Nyyu",
+        url: "/",
+        active: true,
+        subMenu: [
+            {
+                label: "Wallet",
+                url: ROUTES.wallet,
+                isDressup: false
+            },
+            {
+                label: "Sale",
+                url: ROUTES.auction,
+                isDressup: false
+            },
+            {
+                label: "Profile",
+                url: ROUTES.profile,
+                isDressup: false
+            },
+            {
+                label: "Dressup",
+                isDressup: true
+            },
+            {
+                label: "Support",
+                url: ROUTES.faq,
+                isDressup: false
+            }
+        ]
+    },
+    {
+        label: "Money",
+        url: "https://ndb.money/",
+        active: false
+    },
+    
+    {
+        label: "City",
+        url: "https://ndb.city",
+        active: false
+    }
+]
+
+export const footerLinks = [
+    {
+        label: "Fee",
+        url: "/",
+    },
+    {
+        label: "Bug bounty",
+        url: "/",
+    },
+    {
+        label: "Apply for listings",
+        url: "/",
+    },
+    {
+        label: "API",
+        url: "/",
+    },
+    {
+        label: "About us",
+        url: "/",
+    },
+    {
+        label: "Terms of use",
+        url: "/",
+    },
+    {
+        label: "Privacy policy",
+        url: "/",
+    },
+    {
+        label: "AML policy",
+        url: "/",
+    },
+    {
+        label: "Contacts",
+        url: "/",
+    }
 ]
 
 export const CLIENT_ID = "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425"

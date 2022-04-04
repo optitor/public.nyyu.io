@@ -176,6 +176,9 @@
         }
         .account-details,
         .tier-details {
+            button.btn {
+                padding: 0;
+            }
             h4 {
                 border-bottom: 2px solid #464646;
                 padding-bottom: 15px;
