@@ -1,12 +1,85 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BTCGrayIcon, Credit, NdbWallet } from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
+import { Icons } from "../../../utilities/Icons";
 
 export default function BuyTable() {
     // Containers
-    const { presaleList: list, itemsCountPerPage } = useTransactions();
+    const { presaleList, itemsCountPerPage } = useTransactions();
+    const [list, setList] = useState(presaleList);
+    const [sortType, setSortType] = useState(null);
     const [activePage, setActivePage] = useState(1);
+
+    // Methods
+    const headerTitle = ({ title, up, down }) => (
+        <th scope="col">
+            <div
+                className="d-flex align-items-center gap-1 noselect cursor-pointer"
+                onClick={() =>
+                    sortType === down
+                        ? setSortType(up)
+                        : sortType === up
+                        ? setSortType(down)
+                        : setSortType(up)
+                }
+            >
+                <div>{title}</div>
+                <div
+                    className={`${
+                        (sortType === up || sortType === down) && "text-success"
+                    }`}
+                >
+                    {sortType === down
+                        ? Icons.down()
+                        : sortType === up
+                        ? Icons.up()
+                        : Icons.up()}
+                </div>
+            </div>
+        </th>
+    );
+    useEffect(() => {
+        if (sortType === null) return setList(presaleList);
+        if (sortType === "date_down")
+            return setList(
+                presaleList.sort(
+                    (item2, item1) =>
+                        new Date(item1.date).getTime() -
+                        new Date(item2.date).getTime()
+                )
+            );
+        if (sortType === "date_up")
+            return setList(
+                presaleList.sort(
+                    (item2, item1) =>
+                        new Date(item2.date).getTime() -
+                        new Date(item1.date).getTime()
+                )
+            );
+
+        if (sortType === "amount_down")
+            return setList(
+                presaleList.sort((item2, item1) => item1.amount - item2.amount)
+            );
+
+        if (sortType === "amount_up")
+            return setList(
+                presaleList.sort((item2, item1) => item2.amount - item1.amount)
+            );
+        if (sortType === "transaction_down")
+            return setList(
+                presaleList.sort(
+                    (item2, item1) => item1.transaction - item2.transaction
+                )
+            );
+        if (sortType === "transaction_up")
+            return setList(
+                presaleList.sort(
+                    (item2, item1) => item2.transaction - item1.transaction
+                )
+            );
+    }, [sortType]);
 
     // Render
     return (
@@ -14,11 +87,21 @@ export default function BuyTable() {
             <div className="px-4 table-responsive transaction-section-tables mb-5 mb-sm-0">
                 <table className="wallet-transaction-table w-100">
                     <tr className="border-bottom-2-dark-gray py-3">
-                        <th scope="col">Transaction</th>
-                        <th scope="col">Date</th>
-                        <th scope="col" className="text-sm-end">
-                            Amount
-                        </th>
+                        {headerTitle({
+                            title: "Transaction",
+                            up: "transaction_up",
+                            down: "transaction_down",
+                        })}
+                        {headerTitle({
+                            title: "Date",
+                            up: "date_up",
+                            down: "date_down",
+                        })}
+                        {headerTitle({
+                            title: "Amount",
+                            up: "amount_up",
+                            down: "amount_down",
+                        })}
                         <th scope="col" className="text-sm-end">
                             Payment
                         </th>
@@ -54,7 +137,7 @@ export default function BuyTable() {
                                     <tr className="border-bottom-2-dark-gray">
                                         <td className="text-light pe-5 pe-sm-0 fw-light fs-16px">
                                             <div className="fw-500 white-space-nowrap">
-                                                {transaction}
+                                                {transaction + " #"}
                                             </div>
                                         </td>
                                         <td className="text-light pe-5 pe-sm-0 fw-light">
