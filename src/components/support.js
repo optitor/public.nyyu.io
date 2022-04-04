@@ -155,13 +155,12 @@ const FAQ = () => {
                         </div>
                         <div className="d-flex justify-content-md-between mt-3">
                             <div
-                                className="cursor-pointer position-fixed end-20px bottom-20px"
+                                className="cursor-pointer position-fixed p-sm-5 p-3 end-0 bottom-0"
                                 style={{ zIndex: 99999 }}
                             >
                                 {!isChatModalOpen && (
                                     <img
                                         src={ChatButton}
-                                        className="rounded-pill hover:scale-125"
                                         alt="Chat Button"
                                         onClick={() => setIsChatModalOpen(true)}
                                     />

@@ -1,11 +1,11 @@
 .faq-page {
     section {
-        margin-top: 40px;
+        margin-top: 20px;
         @include mq("tablet", max) {
-            margin-top: 40px;
+            margin-top: 10px;
         }
         @include mq("phone", max) {
-            margin-top: 16px;
+            margin-top: 5px;
         }
     }
     .menu {
