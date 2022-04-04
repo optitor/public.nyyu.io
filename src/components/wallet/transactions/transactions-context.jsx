@@ -265,7 +265,7 @@ const TransactionsProvider = ({ children }) => {
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
                     return {
-                        transaction: "123456789 #",
+                        transaction: item.id + " #",
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
                         amount: item.ndbAmount * item.ndbPrice,
@@ -282,7 +282,7 @@ const TransactionsProvider = ({ children }) => {
 
     // Binding
     const valueObject = {
-        // data
+        // Data
         paypalDepositTransactions,
         coinDepositTransactions,
         coinWithdrawTransactions,
@@ -293,6 +293,11 @@ const TransactionsProvider = ({ children }) => {
         presaleList,
         itemsCountPerPage,
 
+        // Methods
+        createDateFromDate,
+        createTimeFromDate,
+
+        // Utilities
         currentTab,
         setCurrentTab,
         tabs,

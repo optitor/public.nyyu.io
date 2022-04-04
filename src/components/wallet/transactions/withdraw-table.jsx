@@ -82,7 +82,7 @@ export default function WithdrawTable() {
     // Render
     return (
         <>
-            <div className="mt-4 px-4">
+            <div className="mt-4 px-md-4 d-inline-block">
                 <Select
                     isSearchable={false}
                     options={withdrawOptions}
