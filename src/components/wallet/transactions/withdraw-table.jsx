@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import {
@@ -8,6 +8,7 @@ import {
 import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
+import { Icons } from "../../../utilities/Icons";
 
 const withdrawOptions = [
     { value: "paypal", label: "Paypal" },
@@ -24,6 +25,7 @@ export default function WithdrawTable() {
         itemsCountPerPage,
     } = useTransactions();
     const [list, setList] = useState(paypalWithdrawTransactions);
+    const [sortType, setSortType] = useState(null);
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
     const [currentWithdrawType, setCurrentWithdrawType] = useState(
         withdrawOptions[0]
@@ -31,6 +33,37 @@ export default function WithdrawTable() {
     const [activePage, setActivePage] = useState(1);
 
     // Methods
+    const headerTitle = ({ title, up, down, end }) => (
+        <th scope="col">
+            {console.log(end)}
+            <div
+                className={`d-flex align-items-center gap-1 noselect cursor-pointer ${
+                    end && "justify-content-center justify-content-sm-end"
+                }`}
+                onClick={() =>
+                    sortType === down
+                        ? setSortType(up)
+                        : sortType === up
+                        ? setSortType(down)
+                        : setSortType(up)
+                }
+            >
+                <div>{title}</div>
+                <div
+                    className={`${
+                        (sortType === up || sortType === down) && "text-success"
+                    }`}
+                >
+                    {sortType === down
+                        ? Icons.down()
+                        : sortType === up
+                        ? Icons.up()
+                        : Icons.down()}
+                </div>
+            </div>
+        </th>
+    );
+
     const toggleDetails = (index) => {
         const previousItem = document.getElementById(
             `transaction-details-${currentRowOpen}`
@@ -79,6 +112,41 @@ export default function WithdrawTable() {
         if (type.value === "crypto") setList(coinWithdrawTransactions);
     };
 
+    useEffect(() => {
+        if (sortType === null) return changeDepositType(currentWithdrawType);
+        if (sortType === "date_down")
+            return setList(
+                list.sort(
+                    (item2, item1) =>
+                        new Date(item1.date).getTime() -
+                        new Date(item2.date).getTime()
+                )
+            );
+        if (sortType === "date_up")
+            return setList(
+                list.sort(
+                    (item2, item1) =>
+                        new Date(item2.date).getTime() -
+                        new Date(item1.date).getTime()
+                )
+            );
+
+        if (sortType === "amount_down")
+            return setList(
+                list.sort((item2, item1) => item1.amount - item2.amount)
+            );
+
+        if (sortType === "amount_up")
+            return setList(
+                list.sort((item2, item1) => item2.amount - item1.amount)
+            );
+        if (sortType === "fee_down")
+            return setList(list.sort((item2, item1) => item1.fee - item2.fee));
+
+        if (sortType === "fee_up")
+            return setList(list.sort((item2, item1) => item2.fee - item1.fee));
+    }, [sortType]);
+
     // Render
     return (
         <>
@@ -105,13 +173,23 @@ export default function WithdrawTable() {
                     )}
                     {list?.length && (
                         <tr className="border-bottom-2-dark-gray pb-3 pt-1">
-                            <th scope="col">Date</th>
-                            <th scope="col" className="text-sm-end">
-                                FIAT/Crypto
-                            </th>
-                            <th scope="col" className="text-center text-sm-end">
-                                Fee
-                            </th>
+                            {headerTitle({
+                                title: "Date",
+                                up: "date_up",
+                                down: "date_down",
+                            })}
+                            {headerTitle({
+                                title: "FIAT/Crypto",
+                                up: "amount_up",
+                                down: "amount_down",
+                                end: true,
+                            })}
+                            {headerTitle({
+                                title: "Fee",
+                                up: "fee_up",
+                                down: "fee_down",
+                                end: true,
+                            })}
                             <th scope="col" className="text-center text-sm-end">
                                 Status
                             </th>
