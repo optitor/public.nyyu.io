@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import Zendesk from "react-zendesk";
 import Header from "../components/header";
 import {
     ChatButton,
@@ -23,9 +25,29 @@ import ResetAuthenticatorModal from "../components/support/reset-authenticator-m
 import DeleteAccountModal from "../components/profile/delete-account-modal";
 import ChatModal from "../components/support/chat-modal";
 import SubmitRequestModal from "./support/SubmitRequestModal";
+import { ZENDESK_KEY } from "../utilities/staticData3";
 
 const FAQ = () => {
     // Containers
+    const setting = {
+        color: {
+            theme: "#000",
+        },
+        launcher: {
+            chatLabel: {
+                "en-US": "Need Help",
+            },
+        },
+        contactForm: {
+            fields: [
+                {
+                    id: "description",
+                    prefill: { "*": "My pre-filled description" },
+                },
+            ],
+        },
+    };
+
     const selfServiceData = [
         {
             id: 0,
@@ -225,6 +247,13 @@ const FAQ = () => {
                         setIsOpen={setIsSubmitRequestModalOpen}
                     />
                 </section>
+                <Zendesk
+                    defer
+                    zendeskKey={ZENDESK_KEY}
+                    {...setting}
+                    onLoaded={() => console.log("is loaded")}
+                />
+                ;
             </main>
         </>
     );
