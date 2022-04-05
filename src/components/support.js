@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import Zendesk from "react-zendesk";
 import Header from "../components/header";
 import {
-    ChatButton,
     SupportAuthenticator,
     SupportCommunity,
     SupportDelete,
@@ -23,8 +21,6 @@ import DepositAssetModal from "../components/support/deposit-asset-modal";
 import DepositMissingModal from "../components/support/deposit-missing-modal";
 import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal";
 import DeleteAccountModal from "../components/profile/delete-account-modal";
-import ChatModal from "../components/support/chat-modal";
-import SubmitRequestModal from "./support/SubmitRequestModal";
 import { ZENDESK_KEY } from "../utilities/staticData3";
 
 const FAQ = () => {
@@ -47,7 +43,6 @@ const FAQ = () => {
             ],
         },
     };
-
     const selfServiceData = [
         {
             id: 0,
@@ -116,9 +111,6 @@ const FAQ = () => {
     const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] =
         useState(false);
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
-        useState(false);
-    const [isChatModalOpen, setIsChatModalOpen] = useState(false);
-    const [isSubmitRequestModalOpen, setIsSubmitRequestModalOpen] =
         useState(false);
     // Render
     return (
@@ -191,24 +183,6 @@ const FAQ = () => {
                                 );
                             })}
                         </div>
-                        {/* <div className="d-flex justify-content-md-between mt-3">
-                            <div
-                                className="cursor-pointer position-fixed p-sm-5 p-3 end-0 bottom-0"
-                                style={{ zIndex: 99999 }}
-                            >
-                                {!isChatModalOpen && (
-                                    <img
-                                        src={ChatButton}
-                                        alt="Chat Button"
-                                        onClick={() => setIsChatModalOpen(true)}
-                                    />
-                                )}
-                                <ChatModal
-                                    isOpen={isChatModalOpen}
-                                    setIsOpen={setIsChatModalOpen}
-                                />
-                            </div>
-                        </div> */}
                         <DeleteAccountModal
                             isDeleteAccountModalOpen={isDeleteAccountModalOpen}
                             setIsDeleteAccountModalOpen={
@@ -242,18 +216,8 @@ const FAQ = () => {
                         isOpen={isDepositMissingModalOpen}
                         setIsOpen={setIsDepositMissingModalOpen}
                     />
-                    <SubmitRequestModal
-                        isOpen={isSubmitRequestModalOpen}
-                        setIsOpen={setIsSubmitRequestModalOpen}
-                    />
                 </section>
-                <Zendesk
-                    defer
-                    zendeskKey={ZENDESK_KEY}
-                    {...setting}
-                    onLoaded={() => console.log("is loaded")}
-                />
-                ;
+                <Zendesk defer zendeskKey={ZENDESK_KEY} {...setting} />;
             </main>
         </>
     );
