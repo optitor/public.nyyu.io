@@ -73,7 +73,12 @@ const FAQ = () => {
             id: 7,
             label: "Submit a Request",
             icon: SupportRequest,
-            clickEvent: () => setIsSubmitRequestModalOpen(true),
+            clickEvent: () => {
+                const link = document.createElement("a");
+                link.href = "https://help.nyyu.io/hc/en-gb/requests/new";
+                link.target = "_blank";
+                link.click();
+            },
         },
     ];
 
@@ -104,7 +109,7 @@ const FAQ = () => {
                         <div className="col-lg-3 ps-0 m-0 d-none d-lg-block">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
-                                href="https://help.nyyu.io/hc/en-gb"
+                                href="https://help.nyyu.io/"
                                 target="_blank"
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column">
@@ -122,7 +127,7 @@ const FAQ = () => {
                         <div className="col-lg-3 ps-0 m-0 d-none d-lg-block">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
-                                href="https://help.nyyu.io/hc/en-gb"
+                                href="https://help.nyyu.io/hc/en-gb/community/topics"
                                 target="_blank"
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column">
@@ -164,7 +169,7 @@ const FAQ = () => {
                                 );
                             })}
                         </div>
-                        <div className="d-flex justify-content-md-between mt-3">
+                        {/* <div className="d-flex justify-content-md-between mt-3">
                             <div
                                 className="cursor-pointer position-fixed p-sm-5 p-3 end-0 bottom-0"
                                 style={{ zIndex: 99999 }}
@@ -181,7 +186,7 @@ const FAQ = () => {
                                     setIsOpen={setIsChatModalOpen}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <DeleteAccountModal
                             isDeleteAccountModalOpen={isDeleteAccountModalOpen}
                             setIsDeleteAccountModalOpen={
