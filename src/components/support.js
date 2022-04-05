@@ -99,7 +99,11 @@ const FAQ = () => {
                 <section className="px-sm-5 px-2 pb-5 pb-sm-0 w-100">
                     <div className="row m-0">
                         <div className="col-lg-3 ps-0 m-0 d-none d-lg-block">
-                            <div className="h-100 border border-light text-light">
+                            <a
+                                className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
+                                href="https://help.nyyu.io/hc/en-gb"
+                                target="_blank"
+                            >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column">
                                     <div className="fw-bold text-uppercase fs-30px">
                                         help center
@@ -109,11 +113,15 @@ const FAQ = () => {
                                         alt="Support help center"
                                     />
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <div className="col-lg-3 ps-0 m-0 d-none d-lg-block">
-                            <div className="h-100 border border-light text-light">
+                            <a
+                                className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
+                                href="https://help.nyyu.io/hc/en-gb"
+                                target="_blank"
+                            >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column">
                                     <div className="fw-bold text-uppercase fs-30px">
                                         community
@@ -123,7 +131,7 @@ const FAQ = () => {
                                         alt="Support help center"
                                     />
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <div className="row col-lg-6 col-12 p-0 m-0">

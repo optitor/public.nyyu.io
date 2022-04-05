@@ -151,6 +151,14 @@
     }
 }
 
+.support-banner-item {
+    cursor: pointer;
+    transition: 500ms;
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
 .support-modal {
     max-width: 750px;
     &__header {
