@@ -265,7 +265,7 @@ const TransactionsProvider = ({ children }) => {
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
                     return {
-                        transaction: item.id + " #",
+                        transaction: item.id,
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
                         amount: item.ndbAmount * item.ndbPrice,
