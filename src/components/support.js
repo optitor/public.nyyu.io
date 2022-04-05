@@ -22,6 +22,7 @@ import DepositMissingModal from "../components/support/deposit-missing-modal";
 import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal";
 import DeleteAccountModal from "../components/profile/delete-account-modal";
 import ChatModal from "../components/support/chat-modal";
+import SubmitRequestModal from "./support/SubmitRequestModal";
 
 const FAQ = () => {
     // Containers
@@ -72,7 +73,7 @@ const FAQ = () => {
             id: 7,
             label: "Submit a Request",
             icon: SupportRequest,
-            clickEvent: () => {},
+            clickEvent: () => setIsSubmitRequestModalOpen(true),
         },
     ];
 
@@ -90,6 +91,8 @@ const FAQ = () => {
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
         useState(false);
     const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+    const [isSubmitRequestModalOpen, setIsSubmitRequestModalOpen] =
+        useState(false);
     // Render
     return (
         <>
@@ -211,6 +214,10 @@ const FAQ = () => {
                     <DepositMissingModal
                         isOpen={isDepositMissingModalOpen}
                         setIsOpen={setIsDepositMissingModalOpen}
+                    />
+                    <SubmitRequestModal
+                        isOpen={isSubmitRequestModalOpen}
+                        setIsOpen={setIsSubmitRequestModalOpen}
                     />
                 </section>
             </main>
