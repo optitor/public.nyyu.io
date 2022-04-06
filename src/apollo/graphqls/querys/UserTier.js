@@ -10,3 +10,13 @@ export const GET_USER_TIERS = gql`
         }
     }
 `;
+
+export const GET_USER_TIERS_WITHOUTSVG = gql`
+    query GetUserTiers{
+        getUserTiers {
+            level
+            name
+            point
+        }
+    }
+`;

@@ -17,3 +17,15 @@ export const CREATE_NEW_USER = gql`
         )
     }
 `;
+
+export const CHANGE_ROLE = gql`
+    mutation ChangeRole(
+        $email: String!
+        $role: String!
+    ) {
+        changeRole(
+        email: $email
+        role: $role
+        )
+    }
+`;

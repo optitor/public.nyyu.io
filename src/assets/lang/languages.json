@@ -7,8 +7,8 @@
             "verify_company": "Unternehmen verifizieren",
             "verify_id": "Bestätige deine Identität",
             "subtitle": "Einwilligung zur Identitätsprüfung",
-            "content": "Ich erkläre, dass ich mindestens 16 Jahre alt bin; ich stimme der Erhebung, Verarbeitung oder Speicherung meiner personenbezogenen Daten, einschließlich biometrischer Daten, durch NDB zum Zwecke der Identitätsprüfung zu; dass die Informationen Ich gebe nach bestem Wissen wahrheitsgemäß und genau an; und ich bin voll verantwortlich, falls ich falsche Informationen gebe oder eines der von mir verwendeten Dokumente gefälscht, gefälscht, gefälscht usw. ist.",
-            "agree": "Ich stimme der obigen Aussage zu und habe NDB gelesen "
+            "content": "Ich erkläre, dass ich mindestens 16 Jahre alt bin; ich stimme der Erhebung, Verarbeitung oder Speicherung meiner personenbezogenen Daten, einschließlich biometrischer Daten, durch Nyyu zum Zwecke der Identitätsprüfung zu; dass die Informationen Ich gebe nach bestem Wissen wahrheitsgemäß und genau an; und ich bin voll verantwortlich, falls ich falsche Informationen gebe oder eines der von mir verwendeten Dokumente gefälscht, gefälscht, gefälscht usw. ist.",
+            "agree": "Ich stimme der obigen Aussage zu und habe Nyyu gelesen "
         },
         "bcp47": "de",
         "native": "Deutsch"
@@ -21,8 +21,8 @@
             "verify_company": "Verify Company",
             "verify_id": "Verify your identity",
             "subtitle": "Identity verificaton Consent",
-            "content": "I declare that i am at least 16 years of age; I agree to the collection, processing or storage of my personal information, including biometic data, by NDB for the purpose(s) of identiy verification; that the information I provide is true and accurate to the best of my knowledge; and I shall be fully responsible in case I provide wrong information or any of the documents I use are fake, forged, counterfeit etc.",
-            "agree": "I agree to the above statment, and I have read NDB "
+            "content": "I declare that i am at least 16 years of age; I agree to the collection, processing or storage of my personal information, including biometic data, by Nyyu for the purpose(s) of identiy verification; that the information I provide is true and accurate to the best of my knowledge; and I shall be fully responsible in case I provide wrong information or any of the documents I use are fake, forged, counterfeit etc.",
+            "agree": "I agree to the above statment, and I have read Nyyu "
         },
         "bcp47": "en",
         "native": "English"
@@ -35,8 +35,8 @@
             "verify_company": "Vérifier l'entreprise",
             "verify_id": "Vérifiez votre identité",
             "subtitle": "Consentement de vérification d'identité",
-            "content": "Je déclare être âgé d'au moins 16 ans ; j'accepte la collecte, le traitement ou le stockage de mes informations personnelles, y compris les données biométriques, par NDB à des fins de vérification d'identité ; que les informations que je fournis est véridique et exacte au meilleur de ma connaissance ; et je serai entièrement responsable si je fournis des informations erronées ou si l'un des documents que j'utilise est faux, falsifié, contrefait, etc.",
-            "agree": "J'accepte la déclaration ci-dessus et j'ai lu NDB "
+            "content": "Je déclare être âgé d'au moins 16 ans ; j'accepte la collecte, le traitement ou le stockage de mes informations personnelles, y compris les données biométriques, par Nyyu à des fins de vérification d'identité ; que les informations que je fournis est véridique et exacte au meilleur de ma connaissance ; et je serai entièrement responsable si je fournis des informations erronées ou si l'un des documents que j'utilise est faux, falsifié, contrefait, etc.",
+            "agree": "J'accepte la déclaration ci-dessus et j'ai lu Nyyu "
         },
         "bcp47": "fr",
         "native": "français, langue française"
@@ -49,8 +49,8 @@
             "verify_company": "Verifica azienda",
             "verify_id": "Verifica la tua identità",
             "subtitle": "Identità verificata con consenso",
-            "content": "Dichiaro di avere almeno 16 anni di età; acconsento alla raccolta, elaborazione o archiviazione delle mie informazioni personali, compresi i dati biometrici, da parte di NDB ai fini della verifica dell'identità; che le informazioni Fornisco è veritiero e accurato al meglio delle mie conoscenze; e sarò pienamente responsabile nel caso in cui fornisco informazioni errate o uno qualsiasi dei documenti che utilizzo sono falsi, contraffatti, contraffatti, ecc.",
-            "agree": "Accetto la dichiarazione di cui sopra e ho letto NDB "
+            "content": "Dichiaro di avere almeno 16 anni di età; acconsento alla raccolta, elaborazione o archiviazione delle mie informazioni personali, compresi i dati biometrici, da parte di Nyyu ai fini della verifica dell'identità; che le informazioni Fornisco è veritiero e accurato al meglio delle mie conoscenze; e sarò pienamente responsabile nel caso in cui fornisco informazioni errate o uno qualsiasi dei documenti che utilizzo sono falsi, contraffatti, contraffatti, ecc.",
+            "agree": "Accetto la dichiarazione di cui sopra e ho letto Nyyu "
         },
         "bcp47": "it",
         "native": "Italiano"
@@ -77,8 +77,8 @@
             "verify_company": "Проверить компанию",
             "verify_id": "Подтвердите свою личность",
             "subtitle": "Согласие на проверку личности",
-            "content": "Я заявляю, что мне исполнилось 16 лет; я даю согласие на сбор, обработку или хранение моей личной информации, включая биометрические данные, компанией NDB для целей проверки личности; что информация Я предоставляю правдивые и точные данные, насколько мне известно; и я несу полную ответственность в случае, если я предоставляю неверную информацию или какие-либо документы, которые я использую, являются поддельными, поддельными, поддельными и т. д.",
-            "agree": "Я согласен с приведенным выше утверждением, и я прочитал NDB "
+            "content": "Я заявляю, что мне исполнилось 16 лет; я даю согласие на сбор, обработку или хранение моей личной информации, включая биометрические данные, компанией Nyyu для целей проверки личности; что информация Я предоставляю правдивые и точные данные, насколько мне известно; и я несу полную ответственность в случае, если я предоставляю неверную информацию или какие-либо документы, которые я использую, являются поддельными, поддельными, поддельными и т. д.",
+            "agree": "Я согласен с приведенным выше утверждением, и я прочитал Nyyu "
         },
         "bcp47": "ru",
         "native": "русский язык"
@@ -91,8 +91,8 @@
             "verify_company": "验证公司",
             "verify_id": "验证你的身份",
             "subtitle": "身份验证同意书",
-            "content": "我声明我已年满 16 岁；我同意 NDB 出于身份验证的目的收集、处理或存储我的个人信息，包括生物特征数据；该信息 据我所知，我提供的是真实和准确的；如果我提供错误的信息或我使用的任何文件是伪造的、伪造的、伪造的等，我将承担全部责任。",
-            "agree": "我同意上述声明，并且我已阅读 NDB"
+            "content": "我声明我已年满 16 岁；我同意 Nyyu 出于身份验证的目的收集、处理或存储我的个人信息，包括生物特征数据；该信息 据我所知，我提供的是真实和准确的；如果我提供错误的信息或我使用的任何文件是伪造的、伪造的、伪造的等，我将承担全部责任。",
+            "agree": "我同意上述声明，并且我已阅读 Nyyu"
         },
         "bcp47": "zh",
         "native": "中文 (Zhōngwén), 汉语, 漢語"

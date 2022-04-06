@@ -1,17 +1,24 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import Modal from "react-modal";
 import { device } from "../../../../utilities/device";
 import { width } from "./columnWidth";
 import DeleteConfirmModal from "../../DeleteConfirmModal";
+import EditUserRoleModal from '../../editModals/EditUserRoleModal';
 
-const UserDataRow = ({ datum, index }) => {
+const UserDataRow = ({ datum }) => {
+    const dispatch = useDispatch();
+    const { userTiers } = useSelector(state => state);
+
     const [show, setShow] = useState(false);
     const [showBtns, setShowBtns] = useState(false);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [isPassModalOpen, setIsPassModalOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [email, setEmail] = useState(datum.email);
+    const [pending, setPending] = useState(false);
 
     const deleteUser = () => {
         setIsConfirmOpen(false)
@@ -31,13 +38,13 @@ const UserDataRow = ({ datum, index }) => {
                     </div>
                     <div className="password">
                         <p>
-                            {datum.password}{" "}
+                            ********{" "}
                             <span style={{ fontSize: 18, marginLeft: 20 }}>
                                 <Icon
                                     icon="clarity:refresh-line"
                                     onClick={() => {
                                         setEmail(datum.email)
-                                        setModalIsOpen(true)
+                                        setIsPassModalOpen(true)
                                     }}
                                 />
                             </span>
@@ -48,20 +55,22 @@ const UserDataRow = ({ datum, index }) => {
                     </div>
                     <div className="privilege">
                         <p className="privilege">
-                            {datum.privilege}
+                            {datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}
                             {!show && <Icon icon="whh:avatar" />}
                         </p>
                     </div>
                     <div className="action">
                         <div className="btns">
                             <span className="edit">
-                                <Icon icon="clarity:note-edit-line" />
+                                <Icon icon="clarity:note-edit-line"
+                                    onClick={() => setIsEditOpen(true)}
+                                />
                             </span>
                             <span className="eye">
                                 <Icon
                                     icon="akar-icons:eye"
                                     data-bs-toggle="collapse"
-                                    data-bs-target={`#id${index}`}
+                                    data-bs-target={`#id${datum.id}`}
                                     onClick={() => setShow(!show)}
                                 />
                             </span>
@@ -87,7 +96,7 @@ const UserDataRow = ({ datum, index }) => {
                                     <Icon
                                         icon="ant-design:caret-up-filled"
                                         data-bs-toggle="collapse"
-                                        data-bs-target={`#id${index}`}
+                                        data-bs-target={`#id${datum.id}`}
                                         onClick={() => setShow(!show)}
                                     />
                                 </span>
@@ -97,13 +106,15 @@ const UserDataRow = ({ datum, index }) => {
                             <Main>
                                 <div className="btns">
                                     <span className="edit">
-                                        <Icon icon="clarity:note-edit-line" />
+                                        <Icon icon="clarity:note-edit-line"
+                                            onClick={() => setIsEditOpen(true)}
+                                        />
                                     </span>
                                     <span className="eye">
                                         <Icon
                                             icon="akar-icons:eye"
                                             data-bs-toggle="collapse"
-                                            data-bs-target={`#id${index}`}
+                                            data-bs-target={`#id${datum.id}`}
                                             onClick={() => {
                                                 setShow(!show)
                                                 setShowBtns(!showBtns)
@@ -120,13 +131,13 @@ const UserDataRow = ({ datum, index }) => {
                             </Main>
                             <Toggle style={{ display: show ? "flex" : "none" }}>
                                 <div className="btns">
-                                    <span className="mailbox">
+                                    <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
                                         <Icon icon="uil:mailbox" />
                                     </span>
-                                    <span className="user">
+                                    <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
                                         <Icon icon="ant-design:user-outlined" />
                                     </span>
-                                    <span className="phone">
+                                    <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
                                         <Icon icon="bi:phone" />
                                     </span>
                                 </div>
@@ -134,10 +145,10 @@ const UserDataRow = ({ datum, index }) => {
                         </BtnsContainer>
                     </div>
                 </Main>
-                <div id={`id${index}`} className="collapse">
+                <div id={`id${datum.id}`} className="collapse">
                     <Toggle>
                         <div className="name">
-                            <p>{datum.ext_wallet_provider}</p>
+                            <p>{datum.provider}</p>
                         </div>
                         <div className="contact">
                             <p>{datum.ext_wallet_address}</p>
@@ -149,17 +160,17 @@ const UserDataRow = ({ datum, index }) => {
                             <p>{datum.birth}</p>
                         </div>
                         <div className="privilege">
-                            <p>{datum.currency}</p>
+                            <p>{userTiers[datum.tierLevel]?.name}</p>
                         </div>
                         <div className="action">
                             <div className="btns">
-                                <span className="mailbox">
+                                <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
                                     <Icon icon="uil:mailbox" />
                                 </span>
-                                <span className="user">
+                                <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
                                     <Icon icon="ant-design:user-outlined" />
                                 </span>
-                                <span className="phone">
+                                <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
                                     <Icon icon="bi:phone" />
                                 </span>
                             </div>
@@ -200,13 +211,15 @@ const UserDataRow = ({ datum, index }) => {
                                 <Main>
                                     <div className="btns">
                                         <span className="edit">
-                                            <Icon icon="clarity:note-edit-line" />
+                                            <Icon icon="clarity:note-edit-line"
+                                                onClick={() => setIsEditOpen(true)}
+                                            />
                                         </span>
                                         <span className="eye">
                                             <Icon
                                                 icon="akar-icons:eye"
                                                 data-bs-toggle="collapse"
-                                                data-bs-target={`#id${index}`}
+                                                data-bs-target={`#id${datum.id}`}
                                                 onClick={() => {
                                                     setShow(!show)
                                                     setShowBtns(!showBtns)
@@ -223,13 +236,13 @@ const UserDataRow = ({ datum, index }) => {
                                 </Main>
                                 <Toggle style={{ display: show ? "flex" : "none" }}>
                                     <div className="btns">
-                                        <span className="mailbox">
+                                        <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
                                             <Icon icon="uil:mailbox" />
                                         </span>
-                                        <span className="user">
+                                        <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
                                             <Icon icon="ant-design:user-outlined" />
                                         </span>
-                                        <span className="phone">
+                                        <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
                                             <Icon icon="bi:phone" />
                                         </span>
                                     </div>
@@ -239,7 +252,7 @@ const UserDataRow = ({ datum, index }) => {
                         <div
                             className="right"
                             data-bs-toggle="collapse"
-                            data-bs-target={`#id${index}`}
+                            data-bs-target={`#id${datum.id}`}
                             onClick={() => setShow(!show)}
                             onKeyDown={() => setShow(!show)}
                             aria-hidden="true"
@@ -258,7 +271,7 @@ const UserDataRow = ({ datum, index }) => {
                         </div>
                     </UnitRowForMobile>
                 </div>
-                <div id={`id${index}`} className="collapse">
+                <div id={`id${datum.id}`} className="collapse">
                     <UnitRowForMobile>
                         <div className="left">
                             <p style={{ color: "dimgrey" }}>Contact</p>
@@ -278,7 +291,7 @@ const UserDataRow = ({ datum, index }) => {
                                 <span>
                                     <Icon
                                         icon="clarity:refresh-line"
-                                        onClick={() => setModalIsOpen(true)}
+                                        onClick={() => setIsPassModalOpen(true)}
                                     />
                                 </span>
                             </p>
@@ -298,7 +311,7 @@ const UserDataRow = ({ datum, index }) => {
                         </div>
                         <div className="right" style={{ width: "50%" }}>
                             <p style={{ textTransform: "uppercase" }}>
-                                {datum.privilege}{" "}
+                                {datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}{" "}
                                 <span>
                                     <Icon icon="whh:avatar" />
                                 </span>
@@ -307,10 +320,18 @@ const UserDataRow = ({ datum, index }) => {
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className="left">
-                            <p style={{ color: "dimgray" }}>External Wallet Privider</p>
+                            <p style={{ color: "dimgray" }}>User Tier</p>
                         </div>
                         <div className="right">
-                            <p>{datum.ext_wallet_provider}</p>
+                            <p>{userTiers[datum.tierLevel]?.name}</p>
+                        </div>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
+                        <div className="left">
+                            <p style={{ color: "dimgray" }}>Privider</p>
+                        </div>
+                        <div className="right">
+                            <p>{datum.provider}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -340,8 +361,8 @@ const UserDataRow = ({ datum, index }) => {
                 </div>
             </DataRowForMobile>
             <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
+                isOpen={isPassModalOpen}
+                onRequestClose={() => setIsPassModalOpen(false)}
                 ariaHideApp={false}
                 className="pwd-reset-modal"
                 overlayClassName="pwd-modal__overlay"
@@ -349,8 +370,8 @@ const UserDataRow = ({ datum, index }) => {
                 <div className="pwd-modal__header">
                     <p>Reset Password</p>
                     <div
-                        onClick={() => setModalIsOpen(false)}
-                        onKeyDown={() => setModalIsOpen(false)}
+                        onClick={() => setIsPassModalOpen(false)}
+                        onKeyDown={() => setIsPassModalOpen(false)}
                         role="button"
                         tabIndex="0"
                     >
@@ -373,17 +394,18 @@ const UserDataRow = ({ datum, index }) => {
                         />
                     </div>
                     <div className="pwd-modal__footer mt-5">
-                        <button className="btn previous" onClick={() => setModalIsOpen(false)}>
+                        <button className="btn previous" onClick={() => setIsPassModalOpen(false)}>
                             Cancel
                         </button>
                         <button className="btn next">Reset Password</button>
                     </div>
                 </form>
             </Modal>
+            {isEditOpen && <EditUserRoleModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />}
             <DeleteConfirmModal
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}
-                confirmData={datum.name}
+                confirmData={datum.email}
                 doAction={deleteUser}
             />
         </>
@@ -494,17 +516,13 @@ const Toggle = styled.div`
             display: inline-block;
             text-align: center;
             font-size: 20px;
+            color: lightgrey;
         }
         span.mailbox {
-            color: #23c865;
             border-right: 2px solid dimgrey;
         }
         span.user {
-            color: #23c865;
             border-right: 2px solid dimgrey;
-        }
-        span.phone {
-            color: dimgrey;
         }
     }
 `
@@ -571,4 +589,4 @@ const UnitRowForMobile = styled.div`
     svg {
         cursor: pointer;
     }
-`
+`;
