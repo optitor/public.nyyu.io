@@ -115,7 +115,7 @@ export default function AccountDetails({
                                     verified
                                 </div>
                             </div>
-                        ) : shuftiStatus?.event === "verification.declined" ? (
+                        ) : shuftiStatus?.event === "request.invalid" || shuftiStatus?.event === "verification.declined" ? (
                             <div className="d-flex align-items-center gap-2">
                                 <div className="circle circle-danger" />
                                 <Link
@@ -128,8 +128,7 @@ export default function AccountDetails({
                                     </span>
                                 </Link>
                             </div>
-                        ) : shuftiStatus?.event === "request.invalid" ||
-                          shuftiStatus?.event === "review.pending" ||
+                        ) : shuftiStatus?.event === "review.pending" ||
                           shuftiStatus === "PENDING" ? (
                             <div className="d-flex align-items-center gap-2">
                                 <div className="circle circle-warning" />
