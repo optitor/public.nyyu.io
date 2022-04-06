@@ -1,11 +1,11 @@
 .faq-page {
     section {
-        margin-top: 62px;
+        margin-top: 20px;
         @include mq("tablet", max) {
-            margin-top: 40px;
+            margin-top: 10px;
         }
         @include mq("phone", max) {
-            margin-top: 16px;
+            margin-top: 5px;
         }
     }
     .menu {
@@ -151,6 +151,14 @@
     }
 }
 
+.support-banner-item {
+    cursor: pointer;
+    transition: 500ms;
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
 .support-modal {
     max-width: 750px;
     &__header {
@@ -245,5 +253,12 @@
     font-size: 18px;
     &:hover {
         opacity: 0.6;
+    }
+}
+
+.support-banner-title {
+    font-size: 20px;
+    @include mq("phone") {
+        font-size: 30px;
     }
 }
