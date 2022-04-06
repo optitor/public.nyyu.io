@@ -9,13 +9,17 @@ import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import {
-    countries,
     passwordValidatorOptions,
     social_links,
 } from "../../utilities/staticData";
+import { countryList } from "../../utilities/countryAlpha2";
 import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf";
 import { useMutation } from "@apollo/client";
 import { ROUTES } from "../../utilities/routes";
+
+const countries = countryList.map(item => {
+    return {label: item.name, value: item['alpha-2']};
+});
 
 const Singup = () => {
     const [state, setState] = useReducer(
@@ -92,7 +96,7 @@ const Singup = () => {
                 pwdConfirmError: "Password doest not match it's repeat!",
             });
         if (!error)
-            signupMutation({ variables: { email, password: pwd, country } });
+            signupMutation({ variables: { email, password: pwd, country: country.value } });
     };
 
     return (

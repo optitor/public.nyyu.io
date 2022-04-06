@@ -21,6 +21,7 @@ import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { ROUTES as Routes, ROUTES } from "../../utilities/routes"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
 import { UPDATE_AVATARSET } from "../../apollo/graphqls/mutations/AvatarComponent"
+import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
@@ -80,8 +81,13 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         if (!avatarComponents.loaded) {
             dispatch(fetch_Avatar_Components())
         }
-        if (!isAuthenticated && userInfo) {
-            dispatch(setCurrentAuthInfo(userInfo))
+        if (userInfo) {
+            dispatch(setCurrentAuthInfo(userInfo));
+            if(userInfo.role.includes('ROLE_ADMIN')) {
+                setCookie(NDB_Privilege, NDB_Admin);
+            } else {
+                removeCookie(NDB_Privilege);
+            }            
         }
     }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated])
 

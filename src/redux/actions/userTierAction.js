@@ -39,6 +39,21 @@ export const get_User_Tiers = () => async dispatch => {
     }
 };
 
+export const get_User_Tiers_WithoutSvg = () => async dispatch => {
+    try {
+        const { data } = await client.query({
+            query: Query.GET_USER_TIERS_WITHOUTSVG
+        });
+        const dataList = _.mapKeys(data.getUserTiers, 'level');
+        dispatch({
+            type: types.GET_USER_TIERS,
+            payload: dataList
+        })
+    } catch(err) {
+        showFailAlarm('Getting User Tiers failed');
+    }
+};
+
 export const update_User_Tier = updateData => async dispatch => {
     try {
         const { data } = await client.mutate({

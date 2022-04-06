@@ -4,6 +4,7 @@ import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import validator from "validator";
 import names from 'random-names-generator';
+import _ from 'lodash';
 
 import Seo from "../../../components/seo"
 import Stepper from "../../../components/admin/Stepper";
@@ -19,15 +20,11 @@ import { set_Page } from "../../../redux/actions/paginationAction";
 import AvatarImage from "../../../components/admin/shared/AvatarImage";
 import ShowAvatarModal from "../../../components/admin/shared/ShowAvatarModal";
 import { create_New_User } from "../../../redux/actions/userAction";
+import { Roles } from "../../../utilities/staticData";
 
 const Countries = countryList.map(item => {
     return {label: item.name, value: item["alpha-2"]};
 });
-
-const Roles = [
-    {label: 'USER', value: 'ROLE_USER'},
-    {label: 'ADMIN', value: 'ROLE_ADMIN'}
-];
 
 const IndexPage = () => {
     const dispatch = useDispatch();
@@ -42,12 +39,28 @@ const IndexPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
     const [isShowAvatarOpen, setIsShowAvatarOpen] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
     const [pending, setPending] = useState(false);
+    const [searchedAvatars, setSearchedAvatars] = useState([]);
     const [avatarsPerPage, setAvatarsPerPage] = useState([]);
 
     useEffect(() => {
-        setAvatarsPerPage(Object.values(avatars).slice((page - 1) * limit, page * limit));
-    }, [avatars, page, limit]);
+        const avatarList = Object.values(avatars);
+        if(!searchValue) {
+            setSearchedAvatars(avatarList);
+            dispatch(set_Page(1, 8, avatarList.length));
+        } else {
+            const filteredAvatars = avatarList.filter(item => {
+                return (item?.fname + item?.surname).toLowerCase().includes(searchValue.toLowerCase());
+            });
+            setSearchedAvatars(filteredAvatars);
+            dispatch(set_Page(1, 8, filteredAvatars.length));
+        }
+    }, [searchValue, dispatch, avatars]);
+
+    useEffect(() => {
+        setAvatarsPerPage(Object.values(searchedAvatars).slice((page - 1) * limit, page * limit));
+    }, [searchedAvatars, page, limit, searchValue]);
 
     //------- Round Data and Validation
     // Round Data
@@ -65,7 +78,7 @@ const IndexPage = () => {
         if(!details.country.value) return {country: 'Please select country'};
         if(!details.role.value) return {role: 'Please select role'};
         return {};
-    }, [details]);    
+    }, [details]);
 
     //-------- Avatar Data and Validation
     // Avatar Data
@@ -193,15 +206,18 @@ const IndexPage = () => {
                     )}
                     {currentStep === 2 && (
                         <>
-                            <div className="avatar_div">
+                            <div>
                                 {showError? (avatarDataError? <Alert severity="error">{avatarDataError}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
                                 <div className="avatar_div">
-                                    <input className="black_input" placeholder="Search" />
+                                    <input className="black_input" placeholder="Search"
+                                        value={searchValue}
+                                        onChange={e => setSearchValue(e.target.value)}
+                                    />
                                     <div className="avatars mt-3">
                                         {avatarsPerPage.map((item, index) => {
                                             return (
                                                 <div className={`avatar ${avatar.id === item.id? 'avatar--selected': ''}`}
-                                                    key={index} onClick={() => selectAvatar(item)} onKeyDown={() => selectAvatar(item)} role="button" tabIndex={0}
+                                                    key={item.id} onClick={() => selectAvatar(item)} onKeyDown={() => selectAvatar(item)} role="button" tabIndex={0}
                                                 >
                                                     <div className="image">
                                                         <AvatarImage avatar={item} />
@@ -213,9 +229,15 @@ const IndexPage = () => {
                                             )
                                         })}
                                     </div>
-                                    <div className="pagination">
-                                        <PaginationBar />
-                                    </div>
+                                    {_.isEmpty(avatarsPerPage)?
+                                        <p className="text-center">
+                                            No avatar
+                                        </p>
+                                        :
+                                        <div className="d-flex justify-content-center">
+                                            <PaginationBar />
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <div className="button_div">
