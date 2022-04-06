@@ -34,6 +34,49 @@ export const CREATE_NEW_COMPONENT = gql`
     }
 `;
 
+export const UPDATE_COMPONENT = gql`
+    mutation UpdateComponent(
+        $groupId: String!
+        $compId: Int!
+        $tierLevel: Int
+        $price: Float
+        $limited: Int
+        $svg: String
+        $width: Int
+        $top: Int
+        $left: Int
+    ) {
+        updateComponent(
+            groupId: $groupId
+            compId: $compId
+            tierLevel: $tierLevel
+            price: $price
+            limited: $limited
+            svg: $svg
+            width: $width
+            top: $top
+            left: $left
+        ) {
+            groupId
+            compId
+            tierLevel
+            purchased
+        }
+    }
+`;
+
+export const DELETE_AVATAR_COMPONENT = gql`
+    mutation deleteAvatarComponent(
+        $groupId: String
+        $compId: Int
+    ) {
+        deleteAvatarComponent(
+            groupId: $groupId
+            compId: $compId
+        )
+    }
+`;
+
 export const CREATE_NEW_AVATAR = gql`
     mutation CreateNewAvatar(
         $fname: String!

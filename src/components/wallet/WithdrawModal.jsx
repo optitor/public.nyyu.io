@@ -219,7 +219,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
             if(err.message === '2FA failed') {
                 setError("Sorry! Two-factor authentication failed. Try again.");
             } else {
-                setError('Something went wrong! Try again.');
+                setError(err.message);
             }
         }
     });

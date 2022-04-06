@@ -87,7 +87,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 setCookie(NDB_Privilege, NDB_Admin);
             } else {
                 removeCookie(NDB_Privilege);
-            }            
+            }
         }
     }, [dispatch, userInfo, avatarComponents.loaded, isAuthenticated])
 

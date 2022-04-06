@@ -23,6 +23,41 @@ export const create_Avatar_Component = createData => async dispatch => {
     }
 };
 
+export const update_Avatar_Component = updateData => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+            mutation: Mutation.UPDATE_COMPONENT,
+            variables: { ...updateData }
+        });
+
+        showSuccessAlarm('Avatar Component updated successfully');
+        dispatch({
+            type: types.UPDATE_AVATAR_COMPONENT,
+            payload: { ...data?.updateComponent, ...updateData }
+        });
+    } catch(err) {
+        showFailAlarm('Action failed', 'Ops! Something went wrong!');
+    }
+};
+
+export const delete_Avatar_Component = deleteData => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+            mutation: Mutation.DELETE_AVATAR_COMPONENT,
+            variables: { ...deleteData }
+        });
+        if(data.deleteAvatarComponent) {
+            showSuccessAlarm('Avatar Component deleted successfully');
+            dispatch({
+                type: types.DELETE_AVATAR_COMPONENT,
+                payload: { ...deleteData }
+            });
+        }
+    } catch(err) {
+        showFailAlarm('Action failed', 'Ops! Something went wrong!');
+    }
+}
+
 export const fetch_Avatar_Components = () => async dispatch => {
     try {
         const { data } = await client.query({

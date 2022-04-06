@@ -67,7 +67,7 @@ const EditUserRoleModal = ({ isModalOpen, setIsModalOpen, datum }) => {
                     <button className="btn next"
                         onClick={handleChangeUserRole}
                     >
-                        {pending? 'Changing...': 'Change Role'}
+                        {pending? 'Changing. . .': 'Change Role'}
                     </button>
                 </div>
             </form>
