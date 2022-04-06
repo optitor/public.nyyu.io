@@ -8,6 +8,7 @@ import { width } from './columnWidth';
 import Loading from './../../shared/Loading';
 import { get_Users } from '../../../../redux/actions/userAction';
 import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
+import { set_Page } from '../../../../redux/actions/paginationAction';
 
 const UserTable = () => {
     const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const UserTable = () => {
 
     useEffect(() => {
         (async function() {
+            dispatch(set_Page());
             setLoading(true);
             await dispatch(get_User_Tiers_WithoutSvg());
             await dispatch(get_Users());

@@ -24,7 +24,7 @@ export const create_New_User = createData => async dispatch => {
 };
 
 export const get_Users = () => async dispatch => {
-    try {
+    try {   
         const { data } = await client.query({
             query: Query.GET_USERS
         });
@@ -37,5 +37,29 @@ export const get_Users = () => async dispatch => {
         }
     } catch(err) {
         console.log(err.message);
+    }
+};
+
+export const change_User_Role = updateData => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+            mutation: Mutation.CHANGE_ROLE,
+            variables: { ...updateData }
+        })
+        if(data.changeRole === 'Success') {
+            showSuccessAlarm(`User's role updated successfully`);
+            dispatch({
+                type: types.UPDATE_USER_ROLE,
+                payload: {
+                    id: updateData.id,
+                    role: [updateData.role]
+                }
+            })
+        } else {
+            showFailAlarm('Action failed', 'Ops! Something went wrong!');
+        }
+    } catch(err) {
+        console.log(err.message);
+        showFailAlarm('Action failed', 'Ops! Something went wrong!');
     }
 };

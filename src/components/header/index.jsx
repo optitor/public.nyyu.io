@@ -81,7 +81,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         if (!avatarComponents.loaded) {
             dispatch(fetch_Avatar_Components())
         }
-        if (!isAuthenticated && userInfo) {
+        if (userInfo) {
             dispatch(setCurrentAuthInfo(userInfo));
             if(userInfo.role.includes('ROLE_ADMIN')) {
                 setCookie(NDB_Privilege, NDB_Admin);

@@ -10,6 +10,9 @@ export const dataReducer = (state = {}, action) => {
     case types.DELETE_DATUM:
       delete state[action.payload];
       return { ...state };
+    case types.UPDATE_USER_ROLE:
+      state[action.payload.id].role = action.payload.role;
+      return { ...state };
     default:
       return state;
   }
