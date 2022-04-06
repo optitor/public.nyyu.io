@@ -255,3 +255,10 @@
         opacity: 0.6;
     }
 }
+
+.support-banner-title {
+    font-size: 20px;
+    @include mq("phone") {
+        font-size: 30px;
+    }
+}

@@ -119,15 +119,15 @@ const FAQ = () => {
             <main className="faq-page">
                 <Header />
                 <section className="px-sm-5 px-2 pb-5 pb-sm-0 w-100">
-                    <div className="row m-0">
-                        <div className="col-lg-3 ps-0 m-0 d-none d-lg-block">
+                    <div className="row m-0 mt-4 mt-sm-0">
+                        <div className="col-lg-3 col-6 ps-0 my-2 my-sm-0">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 href="https://help.nyyu.io/"
                                 target="_blank"
                             >
-                                <div className="h-100 d-flex align-items-center justify-content-around flex-column">
-                                    <div className="fw-bold text-uppercase fs-30px">
+                                <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
+                                    <div className="fw-bold text-uppercase support-banner-title">
                                         help center
                                     </div>
                                     <img
@@ -138,14 +138,14 @@ const FAQ = () => {
                             </a>
                         </div>
 
-                        <div className="col-lg-3 ps-0 m-0 d-none d-lg-block">
+                        <div className="col-lg-3 col-6 ps-0 pe-0 pe-sm-2 my-2 my-sm-0">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 href="https://help.nyyu.io/hc/en-gb/community/topics"
                                 target="_blank"
                             >
-                                <div className="h-100 d-flex align-items-center justify-content-around flex-column">
-                                    <div className="fw-bold text-uppercase fs-30px">
+                                <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
+                                    <div className="fw-bold text-uppercase support-banner-title">
                                         community
                                     </div>
                                     <img
@@ -161,17 +161,15 @@ const FAQ = () => {
                                 return (
                                     <button
                                         key={index}
-                                        className={`btn col-12 col-lg-6 py-0 ${
-                                            index % 2 === 0
-                                                ? "ps-lg-0 pe-lg-1 px-0"
-                                                : "pe-lg-0 ps-lg-1 px-0"
-                                        }`}
+                                        className={`btn col-12 col-lg-6 py-0 ${index % 2 === 0
+                                            ? "ps-lg-0 pe-lg-1 px-0"
+                                            : "pe-lg-0 ps-lg-1 px-0"
+                                            }`}
                                         onClick={item.clickEvent}
                                     >
                                         <div
-                                            className={`text-light border border-1 border-light text-center support-self-security-item col-12 ${
-                                                item.id <= 5 && "mb-2"
-                                            }`}
+                                            className={`text-light border border-1 border-light text-center support-self-security-item col-12 ${item.id <= 5 && "mb-2"
+                                                }`}
                                         >
                                             <img
                                                 src={item.icon}
