@@ -4,13 +4,13 @@
         overflow-y: hidden;
     }
     .menu {
-        background-color: transparent !important;
+        background-color: transparent;
     }
     .hero-image {
         width: 90%;
     }
     .home-section {
-        background: #1E1E1E;
+        background: #1e1e1e;
         // @extend %set-height2;
         height: calc(100vh - 100px);
         display: flex;

@@ -30,7 +30,7 @@ const IndexPage = () => {
     // Webservice
     useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => {
-            if(isRedirectUrl) return;
+            if (isRedirectUrl) return;
             setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },
@@ -294,12 +294,7 @@ const IndexPage = () => {
         </>
     );
     return (
-        <div
-            style={{
-                background:
-                    "radial-gradient(54.07% 44.7% at 47.35% 51.98%, rgba(0, 0, 0, 0) 0%, #000000 100%)",
-            }}
-        >
+        <div>
             <Seo title="Home" />
             <main className="home-page">
                 <Header />
@@ -308,7 +303,7 @@ const IndexPage = () => {
                     setIsModalOpen={setIsModalOpen}
                 />
                 <section className="home-section mt-5 mt-sm-0">
-                    <div className="container h-100 d-flex flex-column justify-content-xl-center justify-content-start mt-5 mt-md-5">
+                    <div className="container h-100 d-flex flex-column justify-content-xl-center justify-content-start mt-5 mt-md-0">
                         <div className="row m-0">
                             {currentRound?.auction
                                 ? auctionStatus === 1
