@@ -75,7 +75,7 @@ export default function DressupHorizontalList({
                         >
                             <div className="image_div mx-auto">
                                 {topic !== "hairColors" && (
-                                    <>                                
+                                    <>
                                         {topic === 'hairStyles' || !topic? <img src={EmptyAvatar} alt="Background Avatar" />: ''}
                                         {topic === 'hats' || topic === 'others' || topic === 'facialStyles' || topic === 'expressions'? (
                                             <>
