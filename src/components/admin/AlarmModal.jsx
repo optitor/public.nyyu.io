@@ -19,7 +19,7 @@ const AlarmModal = () => {
                 <div className="modal fade" id="alarmSuccessModal">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                         <div id="success" className="modal-content">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
                             <div className="modal-body">
                                 <div className='icon'>
                                     <img src={SuccesImage} alt="success" />
@@ -35,7 +35,7 @@ const AlarmModal = () => {
                 <div className="modal fade" id="alarmFailModal">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                         <div id="fail" className="modal-content">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
                             <div className="modal-body">
                                 <div className='icon'>
                                     <img src={FailImage} alt="fail" />

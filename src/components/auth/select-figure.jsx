@@ -25,7 +25,7 @@ const SelectFigure = () => {
     const [selected, setSelect] = useState(false)
     const [selectedId, setSelectId] = useState(0)
     const [modalIsOpen, setIsOpen] = useState(false)
-    const [searchValue, setSearchValue] = useState("")
+    const [searchValue, setSearchValue] = useState('')
     const [userDataLoading, setUserDataLoading] = useState(true)
     const [avatarsLoading, setAvatarsLoading] = useState(true)
     const [figuresArray, setFiguresArray] = useState([])

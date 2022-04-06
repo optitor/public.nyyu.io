@@ -53,10 +53,10 @@ const Signin = ({ error }) => {
             if (data.signin.status === "Failed") {
                 setState({ authError: true });
                 setSuccess(false);
-                if (data.signin.token === "Please set 2FA.") {
+                if (data.signin.token === "Please enable a two-step verification") {
                     //Open select 2FA modal
                     setState({ tfaOpen: true });
-                } else if (data.signin.token === "Please verify your email.") {
+                } else if (data.signin.token === "The account's email address is not verified") {
                     navigate(ROUTES.verifyEmail + email);
                 }
             } else if (data.signin.status === "Success") {

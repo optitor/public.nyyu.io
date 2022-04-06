@@ -471,7 +471,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         )}
                                     </div>
                                 </div>
-                                <p className="desc">
+                                <p className="desc mt-2">
                                     Send only <span>{selectedAsset.value}</span>{" "}
                                     to this deposit address. Ensure the network
                                     is <span>{network.label}</span>

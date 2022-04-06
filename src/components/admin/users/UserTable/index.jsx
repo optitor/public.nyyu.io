@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { device } from '../../../../utilities/device';
 import UserDataRow from './UserDataRow';
+import PaginationBar from '../../PaginationBar';
 import { width } from './columnWidth';
+import Loading from './../../shared/Loading';
+import { get_Users } from '../../../../redux/actions/userAction';
+import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
+import { set_Page } from '../../../../redux/actions/paginationAction';
 
-const UserTable = ({data}) => {
+const UserTable = () => {
+    const dispatch = useDispatch();
+    const { data } = useSelector(state => state);
+    const [loading, setLoading] = useState(false);
+    const { page, limit } = useSelector(state => state.pagination);
+    const [pageData, setPageData] = useState([]);
+
+    useEffect(() => {
+        (async function() {
+            dispatch(set_Page());
+            setLoading(true);
+            await dispatch(get_User_Tiers_WithoutSvg());
+            await dispatch(get_Users());
+            setLoading(false);
+        })();
+    }, [dispatch]);
+
+    useEffect(() => {
+        setPageData(Object.values(data).slice((page - 1) * limit, page * limit));
+    }, [dispatch, data, page, limit]);
+
     return (
         <>
             <TableHead>
@@ -19,11 +45,19 @@ const UserTable = ({data}) => {
             <TableHeadForMobile>
                 <div className='name'>Users Data</div>
             </TableHeadForMobile>
-            <TableBody>
-                {data.map((datum, index) => {
-                    return <UserDataRow key={index} datum={datum} index={index} />
-                })}
-            </TableBody>
+            {loading?
+                <Loading />:
+                (
+                    <>
+                        <TableBody>
+                            {pageData.map((datum) => {
+                                return <UserDataRow key={datum.id} datum={datum} index={datum.id} />
+                            })}
+                        </TableBody>
+                        <PaginationBar />
+                    </>
+                )
+            }
         </>
     );
 };
@@ -64,7 +98,7 @@ const TableHead = styled.div`
     }
     @media screen and (max-width: ${device['phone']}){
         display: none;
-    }    
+    }
 `;
 
 const TableHeadForMobile = styled.div`

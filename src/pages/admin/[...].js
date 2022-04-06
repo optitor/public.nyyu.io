@@ -1,10 +1,10 @@
 import React, { Suspense, lazy } from "react";
 import { navigate } from "gatsby";
-import { useSelector } from "react-redux";
 import { Router } from "@reach/router";
 import Loading from "../../components/common/Loading";
 import AlarmModal from './../../components/admin/AlarmModal';
 import { isBrowser } from "../../utilities/auth";
+import { getCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies";
 
 const Dashboard = lazy(() => import("./../../subPages/admin/dashboard"));
 const Rounds = lazy(() => import("./../../subPages/admin/rounds"));
@@ -23,8 +23,7 @@ const CreateGeoLocation = lazy(() => import("./../../subPages/admin/create/creat
 const NotFound = lazy(() => import("./../404"));
 
 const App = () => {
-    const { user } = useSelector(state => state.auth);
-    const isAdmin = user.role?.includes('ROLE_ADMIN');
+    const isAdmin = getCookie(NDB_Privilege) === NDB_Admin;
     // console.log(isAdmin)
     
     if(isAdmin) {

@@ -16,6 +16,7 @@ import CustomSpinner from "../../common/custom-spinner";
 import NumberFormat from "react-number-format";
 import { receiptTemplate } from "./receiptTemplate";
 import { useSelector } from "react-redux";
+import { Icons } from "../../../utilities/Icons";
 
 const depositOptions = [
     { value: "deposit", label: "Deposit" },
@@ -38,11 +39,12 @@ export default function StatementsTable() {
     // Containers
     const user = useSelector((state) => state.auth.user);
     const [loading, setLoading] = useState(true);
-    const { tabs, itemsCountPerPage, createDateFromDate, createTimeFromDate } =
+    const { itemsCountPerPage, createDateFromDate, createTimeFromDate } =
         useTransactions();
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
     const [activePage, setActivePage] = useState(1);
     const [list, setList] = useState([]);
+    const [sortType, setSortType] = useState(null);
     const [depositList, setDepositList] = useState([]);
     const [withdrawList, setWithdrawList] = useState([]);
     const [bidList, setBidList] = useState([]);
@@ -331,6 +333,35 @@ export default function StatementsTable() {
     });
 
     // Methods
+    const headerTitle = ({ title, up, down, end }) => (
+        <th scope="col">
+            <div
+                className={`d-flex align-items-center gap-1 noselect cursor-pointer ${
+                    end && "justify-content-center justify-content-sm-end"
+                }`}
+                onClick={() =>
+                    sortType === down
+                        ? setSortType(up)
+                        : sortType === up
+                        ? setSortType(down)
+                        : setSortType(up)
+                }
+            >
+                <div>{title}</div>
+                <div
+                    className={`${
+                        (sortType === up || sortType === down) && "text-success"
+                    }`}
+                >
+                    {sortType === down
+                        ? Icons.down()
+                        : sortType === up
+                        ? Icons.up()
+                        : Icons.up()}
+                </div>
+            </div>
+        </th>
+    );
     const toggleDetails = (index) => {
         const previousItem = document.getElementById(
             `transaction-details-${currentRowOpen}`
@@ -342,6 +373,7 @@ export default function StatementsTable() {
         if (item) item.classList.toggle("d-none");
     };
     const onPeriodOptionChange = async (option) => {
+        setSortType(null);
         setSelectedPeriodOption(option);
         setSelectedPeriodIndex(option.index);
         if (option.value === "custom") {
@@ -356,6 +388,7 @@ export default function StatementsTable() {
     };
 
     const onStartDateChange = async (day) => {
+        setSortType(null);
         setFrom(new Date(day));
         setList([]);
         setLoading(true);
@@ -364,6 +397,7 @@ export default function StatementsTable() {
     };
 
     const onEndDateChange = async (day) => {
+        setSortType(null);
         setTo(new Date(day));
         setList([]);
         setLoading(true);
@@ -372,6 +406,7 @@ export default function StatementsTable() {
     };
 
     const onTypeOptionsChange = (option) => {
+        setSortType(null);
         setSelectedDepositOption(option);
         if (option.value === "deposit") return setList(depositList);
         if (option.value === "withdraw") return setList(withdrawList);
@@ -422,6 +457,39 @@ export default function StatementsTable() {
         if (selectedDepositOption.value === "all")
             setList([...depositList, ...withdrawList, ...bidList, ...buyList]);
     }, [depositList, withdrawList, bidList, buyList]);
+
+    useEffect(() => {
+        if (sortType === "date_down")
+            return setList(
+                list.sort(
+                    (item2, item1) =>
+                        new Date(item1.date).getTime() -
+                        new Date(item2.date).getTime()
+                )
+            );
+        if (sortType === "date_up")
+            return setList(
+                list.sort(
+                    (item2, item1) =>
+                        new Date(item2.date).getTime() -
+                        new Date(item1.date).getTime()
+                )
+            );
+        if (sortType === "amount_down")
+            return setList(
+                list.sort((item2, item1) => item1.amount - item2.amount)
+            );
+
+        if (sortType === "amount_up")
+            return setList(
+                list.sort((item2, item1) => item2.amount - item1.amount)
+            );
+        if (sortType === "fee_down")
+            return setList(list.sort((item2, item1) => item1.fee - item2.fee));
+
+        if (sortType === "fee_up")
+            return setList(list.sort((item2, item1) => item2.fee - item1.fee));
+    }, [sortType]);
 
     // Render
     return (
@@ -511,13 +579,23 @@ export default function StatementsTable() {
                     )}
                     {!loading && list?.length !== 0 && (
                         <tr className="border-bottom-2-dark-gray py-3">
-                            <th scope="col">Date</th>
-                            <th scope="col" className="text-sm-end">
-                                FIAT/Crypto
-                            </th>
-                            <th scope="col" className="text-center text-sm-end">
-                                Fee
-                            </th>
+                            {headerTitle({
+                                title: "Date",
+                                up: "date_up",
+                                down: "date_down",
+                            })}
+                            {headerTitle({
+                                title: "FIAT/Crypto",
+                                up: "amount_up",
+                                down: "amount_down",
+                                end: true,
+                            })}
+                            {headerTitle({
+                                title: "Fee",
+                                up: "fee_up",
+                                down: "fee_down",
+                                end: true,
+                            })}
                             <th scope="col" className="text-center text-sm-end">
                                 Status
                             </th>
