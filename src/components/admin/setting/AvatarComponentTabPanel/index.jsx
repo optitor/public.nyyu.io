@@ -21,17 +21,17 @@ const AvatarCompTabel = () => {
     const [pageData, setPageData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    useDeepCompareEffect(() => {
         (async function() {
+            dispatch(set_Page(1, 5, compData.length));
             setLoading(true);
             await dispatch(get_User_Tiers_WithoutSvg());
             setLoading(false);
         })();
-    }, [dispatch]);
+    }, [dispatch, compData]);
 
     useDeepCompareEffect(() => {
         setPageData(compData.slice((page - 1) * limit, page * limit));
-        dispatch(set_Page(page, limit, compData.length));
     }, [dispatch, compData, page, limit]);
 
     return (
