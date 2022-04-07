@@ -1,5 +1,4 @@
 import axios from "axios";
-import { CLIENT_ID, SECRET } from "./staticData";
 
 export const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -22,6 +21,8 @@ export const getCurrentDate = () => {
 
 export const getShuftiStatusByReference = async (reference) => {
     if (!reference) return "INVALID";
+    const clientId = process.env.GATSBY_SHUFTI_CLIENT;
+    const secret = process.env.GATSBY_SHUFTI_SECRET;
     const output = {};
     const response = await axios
         .post(
@@ -31,7 +32,7 @@ export const getShuftiStatusByReference = async (reference) => {
             },
             {
                 headers: {
-                    Authorization: `Basic ${btoa(`${CLIENT_ID}:${SECRET}`)}`,
+                    Authorization: `Basic ${btoa(`${clientId}:${secret}`)}`,
                 },
             }
         )

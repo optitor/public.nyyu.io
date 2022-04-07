@@ -1,7 +1,6 @@
 import useFileUpload from "react-use-file-upload";
 import React, { useContext, useState } from "react";
 import { VerificationCountriesList } from "../../utilities/countries-list";
-import { CLIENT_ID, SECRET } from "../../utilities/staticData";
 import { getCurrentDate } from "../../utilities/utility-methods";
 import { API_BASE_URL, SITE_URL } from "../../utilities/staticData3";
 
@@ -11,7 +10,7 @@ export const useVerification = () => useContext(VerificationContext);
 
 const VerificationProvider = ({ children }) => {
     // Containers
-    const consentText = `I and Nyyu ${getCurrentDate()}`;
+    const consentText = `I and NYYU ${getCurrentDate()}`;
     const [address, setAddress] = useState("");
     const [firstName, setFirstName] = useState("");
     const [surname, setSurname] = useState("");
