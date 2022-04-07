@@ -11,7 +11,7 @@ export const useVerification = () => useContext(VerificationContext);
 
 const VerificationProvider = ({ children }) => {
     // Containers
-    const consentText = `I and NDB ${getCurrentDate()}`;
+    const consentText = `I and Nyyu ${getCurrentDate()}`;
     const [address, setAddress] = useState("");
     const [firstName, setFirstName] = useState("");
     const [surname, setSurname] = useState("");
@@ -41,7 +41,6 @@ const VerificationProvider = ({ children }) => {
     const shuftiProBaseUrl = "https://api.shuftipro.com";
 
     const callbackUrl = `${API_BASE_URL}/shufti`;
-    // const redirectUrl = "http://localhost:8000/app/profile/"
     const redirectUrl = `${SITE_URL}/app/profile`;
 
     // Methods
