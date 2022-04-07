@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Zendesk from "react-zendesk";
+import React, { useEffect, useState } from "react";
+import Zendesk, {ZendeskAPI} from "react-zendesk";
 import { useMutation } from '@apollo/client';
 import Header from "../components/header";
 import {
@@ -61,7 +61,7 @@ const FAQ = () => {
         onCompleted: data => {
             if(data.getZendeskJwt) {
                 const jwtToken = data.getZendeskJwt?.token;
-                window.open(`${ZendeskURLWithJWT}${jwtToken}`, '_blank');
+                window.location.assign(`${ZendeskURLWithJWT}${jwtToken}`);
             }
             setPending(false);
         },
