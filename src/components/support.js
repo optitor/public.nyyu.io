@@ -57,12 +57,6 @@ const FAQ = () => {
     const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
     const [pending, setPending] = useState(false);
 
-    useEffect(() => {
-        ZendeskAPI('webWidget:on', 'close', function() {
-            console.log('The widget has been closed!');
-          });
-    });
-
     const [getZendeskJwtMutation] = useMutation(GET_ZENDESK_JWT, {
         onCompleted: data => {
             if(data.getZendeskJwt) {
