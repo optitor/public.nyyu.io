@@ -69,12 +69,17 @@ const FAQ = () => {
             console.log(err.message);
             setPending(false);
         }
-    })
+    });
 
     const handleHelpCenter = () => {
         setPending(true);
         getZendeskJwtMutation();
-    }
+    };
+
+    const handleHelpCommunity = () => {
+        setPending(true);
+        getZendeskJwtMutation();
+    };
 
     const selfServiceData = [
         {
@@ -166,10 +171,10 @@ const FAQ = () => {
                         </div>
 
                         <div className="col-lg-3 col-6 ps-0 pe-0 pe-sm-2 my-2 my-sm-0">
-                            <button
+                            <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
-                                // href="https://help.nyyu.io/hc/en-gb/community/topics"
-                                // target="_blank"
+                                href='https://help.nyyu.io/hc/en-gb/community/topics'
+                                target='_blank'
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
                                     <div className="fw-bold text-uppercase support-banner-title">
@@ -180,7 +185,7 @@ const FAQ = () => {
                                         alt="Support help center"
                                     />
                                 </div>
-                            </button>
+                            </a>
                         </div>
 
                         <div className="row col-lg-6 col-12 p-0 m-0">
