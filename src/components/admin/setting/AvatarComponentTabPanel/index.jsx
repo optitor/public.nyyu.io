@@ -11,6 +11,7 @@ import PaginationBar from './../../PaginationBar';
 import { set_Page } from '../../../../redux/actions/paginationAction';
 import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
 
+
 const AvatarCompTabel = () => {
     const dispatch = useDispatch();
     const { loaded, hairStyles, facialStyles, expressions, hats, others } = useSelector(state => state.avatarComponents);
@@ -21,17 +22,17 @@ const AvatarCompTabel = () => {
     const [pageData, setPageData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    useDeepCompareEffect(() => {
         (async function() {
+            dispatch(set_Page(1, 5, compData.length));
             setLoading(true);
             await dispatch(get_User_Tiers_WithoutSvg());
             setLoading(false);
         })();
-    }, [dispatch]);
+    }, [dispatch, compData]);
 
     useDeepCompareEffect(() => {
         setPageData(compData.slice((page - 1) * limit, page * limit));
-        dispatch(set_Page(page, limit, compData.length));
     }, [dispatch, compData, page, limit]);
 
     return (

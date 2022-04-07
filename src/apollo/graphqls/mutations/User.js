@@ -29,3 +29,13 @@ export const CHANGE_ROLE = gql`
         )
     }
 `;
+
+export const RESET_PASSWORD_BY_ADMIN = gql`
+    mutation resetPasswordByAdmin(
+        $email: String!
+    ) {
+        resetPasswordByAdmin(
+            email: $email
+        )
+    }
+`;

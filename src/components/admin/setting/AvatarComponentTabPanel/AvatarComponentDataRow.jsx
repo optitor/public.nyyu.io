@@ -11,6 +11,7 @@ import EditAvatarComponentModal from '../../editModals/EditAvatarComponentModal'
 import { delete_Avatar_Component } from "../../../../redux/actions/avatarAction";
 import { EmptyAvatar, BaseHair, BaseExpression } from '../../../../utilities/imgImport';
 
+
 const AvatarComponentDataRow = ({ datum = {} }) => {
     const dispatch = useDispatch();
     const { userTiers } = useSelector(state => state);
@@ -97,7 +98,33 @@ const AvatarComponentDataRow = ({ datum = {} }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className='left' style={{width: '10%'}}>
-                            <img src={svgToDataURL(datum.groupId)} data-id={datum.id} alt="token" />
+                            <div className='image_avatar_div mx-auto'>
+                                {datum.groupId === 'hairStyle' || !datum.groupId? <img src={EmptyAvatar} alt="Background Avatar" />: ''}
+                                {datum.groupId === 'expression'? (
+                                    <>
+                                        <img src={EmptyAvatar} alt="Background Avatar" />
+                                        <div style={{top: '-9%', left: '-3%', width: '108%'}}>
+                                            <img src={BaseHair} alt="base hair" />
+                                        </div>
+                                    </>
+                                ): ''}
+                                {datum.groupId === 'hat' || datum.groupId === 'other' || datum.groupId === 'facialStyle'? (
+                                    <>
+                                        <img src={EmptyAvatar} alt="Background Avatar" />
+                                        <div style={{top: '-9%', left: '-3%', width: '108%'}}>
+                                            <img src={BaseHair} alt="base hair" />
+                                        </div>
+                                        <div style={{top: '31%', left: '25%', width: '53%'}}>
+                                            <img src={BaseExpression} alt="base expression" />
+                                        </div>
+                                    </>
+                                ): ''}
+                                {datum.svg? (
+                                    <div style={{top: `${datum.top}%`, left: `${datum.left}%`, width: `${datum.width}%`}}>
+                                        {parse(datum.svg)}
+                                    </div>
+                                ): ''}
+                            </div>
                         </div>
                         <div className='left' style={{width: '60%'}}>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.tokenName}</p>
@@ -122,26 +149,30 @@ const AvatarComponentDataRow = ({ datum = {} }) => {
                 <div id={`id${datum.id}`} className='collapse'>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Symbol</p>
+                            <p style={{color: 'dimgrey'}}>ID</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.tokenSymbol}</p>
+                            <p>{datum.groupId} {datum.compId}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Network</p>
+                            <p style={{color: 'dimgrey'}}>Position</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.position}</p>
+                            <p>Top: {datum.top}</p>
+                            <p>Left: {datum.left}</p>
+                            <p>Width: {datum.width}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Address</p>
+                            <p style={{color: 'dimgrey'}}>Config</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.config}</p>
+                            <p>Price: {datum.price}</p>
+                            <p>Limit: {datum.limited}</p>
+                            <p>Tier Level: <span className='text-uppercase'>{userTiers[datum.tierLevel]?.name}</span></p>
                         </div>
                     </UnitRowForMobile>
                 </div>
@@ -153,6 +184,7 @@ const AvatarComponentDataRow = ({ datum = {} }) => {
                 confirmData={datum.groupId + datum.compId}
                 doAction={deleteAvatarComponent}
                 pending={deletePending}
+                desc='Please check if this component is beging used.'
             />
         </>
     );
