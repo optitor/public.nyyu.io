@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import styled from 'styled-components';
 import { device } from '../../utilities/device';
 
-const DeleteConfirmModal = ({isModalOpen, setIsModalOpen, confirmData = '', doAction, pending = false}) => {
+const DeleteConfirmModal = ({isModalOpen, setIsModalOpen, confirmData = '', doAction, pending = false, desc = ''}) => {
     const [input, setInput] = useState('');
     const confirmed = useMemo(() => {
         if(input === confirmData) return true;
@@ -38,7 +38,7 @@ const DeleteConfirmModal = ({isModalOpen, setIsModalOpen, confirmData = '', doAc
             <DeleteConfirm>
                 <div className='text-center'>
                     <p>Are you sure you want to delete?</p>
-                    <p>Action cannot be undone.</p>
+                    <p>{desc? desc: `Action cannot be undone.`}</p>
                 </div>
                 <div className='confirm mt-3'>
                     <p className='description'>

@@ -184,6 +184,7 @@ const AvatarComponentDataRow = ({ datum = {} }) => {
                 confirmData={datum.groupId + datum.compId}
                 doAction={deleteAvatarComponent}
                 pending={deletePending}
+                desc='Please check if this component is beging used.'
             />
         </>
     );

@@ -577,5 +577,7 @@ export const Roles = [
     {label: 'ADMIN', value: 'ROLE_ADMIN'}
 ]
 
+export const ZendeskURLWithJWT = 'https://nyyu.zendesk.com/access/jwt?jwt=';
+
 export const CLIENT_ID = "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425"
 export const SECRET = "$2y$10$501VfRCMRXitkUmuHhJCPelM5MYTdvzO3S8qlY319L9bnDdVJp24C"

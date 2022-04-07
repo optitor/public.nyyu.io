@@ -11,6 +11,7 @@ import PaginationBar from './../../PaginationBar';
 import { set_Page } from '../../../../redux/actions/paginationAction';
 import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
 
+
 const AvatarCompTabel = () => {
     const dispatch = useDispatch();
     const { loaded, hairStyles, facialStyles, expressions, hats, others } = useSelector(state => state.avatarComponents);

@@ -154,6 +154,8 @@
 .support-banner-item {
     cursor: pointer;
     transition: 500ms;
+    background-color: transparent;
+    width: 100%;
     &:hover {
         opacity: 0.6;
     }
