@@ -19,6 +19,13 @@ export const getCurrentDate = () => {
     return today;
 };
 
+const validateVerificationObject = (object) => {
+    let output = 1;
+    Object.values(object).forEach((item) => (output *= item ? item : 0));
+    if (output === 1) return true;
+
+    return false;
+};
 export const getShuftiStatusByReference = async (reference) => {
     if (!reference) return "INVALID";
     const clientId = process.env.GATSBY_SHUFTI_CLIENT;
@@ -53,36 +60,22 @@ export const getShuftiStatusByReference = async (reference) => {
 
             // Document
             if ("document" in data.verification_result)
-                output["docStatus"] =
-                    data.verification_result.document.document === 1 ||
-                    (data.verification_result.document
-                        .document_must_not_be_expired === 1 &&
-                        data.verification_result.document
-                            .document_visibility === 1);
+                output["docStatus"] = validateVerificationObject(data.verification_result.document);
             else output["docStatus"] = true;
 
             // Address
             if ("address" in data.verification_result)
-                output["addrStatus"] =
-                    data.verification_result.address.full_address === 1 &&
-                    data.verification_result.address
-                        .match_address_proofs_with_document_proofs === 1 &&
-                    data.verification_result.address
-                        .address_document_must_not_be_expired === 1 &&
-                    data.verification_result.address
-                        .address_document_visibility === 1 &&
-                    data.verification_result.address.address_document === 1;
+                output["addrStatus"] = validateVerificationObject(data.verification_result.address);
             else output["addrStatus"] = true;
 
             //Consent
             if ("consent" in data.verification_result)
-                output["conStatus"] =
-                    data.verification_result.consent.consent === 1;
+                output["conStatus"] = validateVerificationObject(data.verification_result.consent);
             else output["conStatus"] = true;
 
             // Selfie
             if ("face" in data.verification_result)
-                output["selfieStatus"] = data.verification_result.face === 1;
+                output["selfieStatus"] = validateVerificationObject(data.verification_result.face);
             else output["selfieStatus"] = true;
 
             return output;
@@ -109,8 +102,7 @@ export const createPaymentIntent = (paymentMethodId, amount) => {
 export const getStripePaymentFee = (user, allFees, bidAmount) => {
     // finding the fee.
     let userTierLevel = user?.tierLevel;
-    if (userTierLevel === 0)
-        userTierLevel = 1
+    if (userTierLevel === 0) userTierLevel = 1;
     const userFee = allFees[userTierLevel]?.fee;
     const stripePaymentFee = ((2.9 + userFee) * bidAmount) / 100 + 0.3;
     return stripePaymentFee.toFixed(2);
@@ -120,15 +112,14 @@ export const getPaypalPaymentFee = (user, allFees, bidAmount) => {
     const PaypalTrxFee = 5;
     // finding the fee.
     let userTierLevel = user?.tierLevel;
-    if (userTierLevel === 0)
-        userTierLevel = 1
+    if (userTierLevel === 0) userTierLevel = 1;
     const userFee = allFees[userTierLevel]?.fee;
     const paypalPaymentFee = ((PaypalTrxFee + userFee) * bidAmount) / 100 + 0.3;
     return paypalPaymentFee.toFixed(2);
 };
 
 export const createDateFromDateObject = (newDate = new Date()) => {
-    const today = newDate
+    const today = newDate;
     let month = today.getMonth() + 1;
     if (month < 10) month = "0" + month;
     let day = today.getDate();
@@ -139,20 +130,16 @@ export const createDateFromDateObject = (newDate = new Date()) => {
 };
 export const getNDBWalletPaymentFee = (user, allFees, bidAmount) => {
     // Finding the fee based on the user.
-    const allFeesArray = Object.values(allFees)
+    const allFeesArray = Object.values(allFees);
     let userTierLevel = user?.tierLevel;
-    if (userTierLevel === 0)
-        userTierLevel = 1
-    const userFee = allFeesArray.filter(
-        (item) => item?.tierLevel === userTierLevel
-    )[0]?.fee;
+    if (userTierLevel === 0) userTierLevel = 1;
+    const userFee = allFeesArray.filter((item) => item?.tierLevel === userTierLevel)[0]?.fee;
 
-    return ((userFee * bidAmount) / 100)
-}
+    return (userFee * bidAmount) / 100;
+};
 
 export const getCurrentMarketCap = async () => {
-    const { data } = await axios.get("https://api.dev.nyyu.io/marketcap")
-    if (data)
-        return data
-    return null
-}
+    const { data } = await axios.get("https://api.dev.nyyu.io/marketcap");
+    if (data) return data;
+    return null;
+};
