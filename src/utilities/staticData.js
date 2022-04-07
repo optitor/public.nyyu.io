@@ -36,18 +36,18 @@ export const social_links = [
         icon: Google,
         to: API_BASE_URL + "/oauth2/authorize/google?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
-    {
-        icon: Twitter,
-        to: API_BASE_URL + "/oauth2/authorize/twitter?redirect_uri=" + OAUTH2_REDIRECT_URI,
-    },
+    // {
+    //     icon: Twitter,
+    //     to: API_BASE_URL + "/oauth2/authorize/twitter?redirect_uri=" + OAUTH2_REDIRECT_URI,
+    // },
     {
         icon: Linkedin,
         to: API_BASE_URL + "/oauth2/authorize/linkedin?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
-    {
-        icon: Apple,
-        to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
-    },
+    // {
+    //     icon: Apple,
+    //     to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
+    // },
     {
         icon: Amazon,
         to: API_BASE_URL + "/oauth2/authorize/amazon?redirect_uri=" + OAUTH2_REDIRECT_URI,
@@ -525,7 +525,7 @@ export const navigationLinks = [
         url: "https://ndb.money/",
         active: false
     },
-    
+
     {
         label: "City",
         url: "https://ndb.city",
@@ -573,8 +573,8 @@ export const footerLinks = [
 ]
 
 export const Roles = [
-    {label: 'USER', value: 'ROLE_USER'},
-    {label: 'ADMIN', value: 'ROLE_ADMIN'}
+    { label: 'USER', value: 'ROLE_USER' },
+    { label: 'ADMIN', value: 'ROLE_ADMIN' }
 ]
 
 export const ZendeskURLWithJWT = 'https://nyyu.zendesk.com/access/jwt?jwt=';
