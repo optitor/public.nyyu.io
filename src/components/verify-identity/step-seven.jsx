@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link } from "gatsby";
+import { navigate } from "gatsby";
 import { v4 as uuidv4 } from "uuid";
 import Loading from "../common/Loading";
 import React, { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { VerifyIdStep7 } from "../../utilities/imgImport";
 import { INSERT_UPDATE_REFERENCE } from "./kyc-webservice";
 import { getBase64 } from "../../utilities/utility-methods";
 import { useVerification } from "./verification-context";
+import CustomSpinner from "../common/custom-spinner";
 
 export default function StepSeven() {
     // Containers
@@ -20,7 +21,6 @@ export default function StepSeven() {
 
     // Methods
     const sendShuftiRequest = async () => {
-        console.log(verification.shuftReferencePayload);
         verification.setSubmitting(true);
         await insertUpdateReference({
             variables: {
@@ -36,6 +36,7 @@ export default function StepSeven() {
             language: "EN",
             verification_mode: "any",
             manual_review: "1",
+            email: verification.userEmail || "",
         };
 
         if (
@@ -48,6 +49,17 @@ export default function StepSeven() {
             payload["document"] = {
                 proof: documentProof,
                 supported_types: ["id_card", "passport", "driving_license"],
+                name: {
+                    first_name: verification.firstName,
+                    last_name: verification.surname,
+                },
+                dob: verification.dob,
+                expiry_date: "",
+                background_checks: {
+                    first_name: verification.firstName,
+                    last_name: verification.surname,
+                    dob: verification.dob,
+                },
                 verification_instructions: {
                     allow_paper_based: "1",
                     allow_photocopy: "1",
@@ -113,7 +125,7 @@ export default function StepSeven() {
                 allow_offline: "1",
             };
 
-        axios
+        await axios
             .post(verification.shuftiProBaseUrl, payload, {
                 headers: {
                     Authorization: `Basic ${token}`,
@@ -154,7 +166,7 @@ export default function StepSeven() {
                 </div>
                 <div className="my-sm-5 py-sm-5 verify-step1">
                     <div className="text-center">
-                        <p className="fs-25px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
+                        <p className="fs-2b 5px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
                             Thank you, your verification result will be sent to
                             your email soon.
                         </p>
@@ -170,18 +182,26 @@ export default function StepSeven() {
                                 <br />
                             </div>
                             Contact out Data Compliance Officer at{" "}
-                            <span className="text-success">
-                                privacy@ndb.technology
-                            </span>
+                            <span className="text-success">info@ndb.money</span>
                         </p>
                     </div>
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
-                        <Link
-                            to={ROUTES.profile}
+                        <button
+                            disabled={verification.submitting}
+                            onClick={() => navigate(ROUTES.profile)}
                             className="btn btn-success rounded-0 px-3 py-2 text-uppercase fw-500 text-light col-md-6 col-12"
                         >
-                            Back to Profile
-                        </Link>
+                            {verification.submitting ? (
+                                <div className="d-flex align-items-center justify-content-center gap-2">
+                                    <div>
+                                        <CustomSpinner sm />
+                                    </div>
+                                    <div>processing</div>
+                                </div>
+                            ) : (
+                                "Back to Profile"
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>

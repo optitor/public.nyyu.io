@@ -55,6 +55,7 @@ const VerificationPage = () => {
                     <VerificationProvider>
                         <VerificationSwitch
                             shuftReferencePayload={shuftiStatus}
+                            userEmail={userEmail}
                         />
                     </VerificationProvider>
                 </section>
