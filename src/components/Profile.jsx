@@ -190,8 +190,8 @@ const Profile = () => {
                         }}
                         redirect={false}
                         setIs2FAModalOpen={setIs2FAModalOpen}
-                    />   
-                      
+                    />
+
                     <Header
                         setTabIndex={setTabIndex}
                         setCurrentProfileTab={setCurrentProfileTab}
@@ -207,7 +207,7 @@ const Profile = () => {
                                     <div className="user-info__name">
                                         {currentTier?.length > 0 ? (
                                             <div
-                                                className="me-3"
+                                                className="me-2"
                                                 dangerouslySetInnerHTML={{
                                                     __html: currentTier[0]?.svg,
                                                 }}
@@ -215,7 +215,9 @@ const Profile = () => {
                                         ) : (
                                             <></>
                                         )}
-                                        {displayName}
+                                        {displayName.length > 17
+                                            ? displayName.slice(0, 16) + "..."
+                                            : displayName}
                                     </div>
                                     <p className="silver-cnt">
                                         {nextTier?.length > 0 &&
@@ -224,7 +226,10 @@ const Profile = () => {
                                                 "p to " +
                                                 nextTier[0]?.name}
                                     </p>
-                                    <TierProgressBar user={user} nextTier={nextTier} />
+                                    <TierProgressBar
+                                        user={user}
+                                        nextTier={nextTier}
+                                    />
                                 </div>
                                 <Tabs
                                     className="profile-tab"
