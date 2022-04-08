@@ -1,4 +1,5 @@
 import decode from "jwt-decode";
+import { removeCookie, NDB_Paypal_TrxType } from './cookies';
 
 let inMemoryAuthTokenDefault = {
   authToken: null,
@@ -30,6 +31,7 @@ export const isLoggedOut = () => {
 export const logout = (callback) => {
   inMemoryAuthToken = inMemoryAuthTokenDefault
   localStorage.removeItem(ACCESS_TOKEN)
+  removeCookie(NDB_Paypal_TrxType);
   setLoggedOutTime()
 
   if (callback) {

@@ -8,18 +8,17 @@ import { width } from './columnWidth';
 import Loading from './../../shared/Loading';
 import { get_Users } from '../../../../redux/actions/userAction';
 import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
-import { set_Page } from '../../../../redux/actions/paginationAction';
 
 const UserTable = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(state => state);
     const [loading, setLoading] = useState(false);
-    const { page, limit } = useSelector(state => state.pagination);
+    const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
+    const { page, limit } = pageInfo;
     const [pageData, setPageData] = useState([]);
 
     useEffect(() => {
         (async function() {
-            dispatch(set_Page());
             setLoading(true);
             await dispatch(get_User_Tiers_WithoutSvg());
             await dispatch(get_Users());
@@ -54,7 +53,7 @@ const UserTable = () => {
                                 return <UserDataRow key={datum.id} datum={datum} index={datum.id} />
                             })}
                         </TableBody>
-                        <PaginationBar />
+                        <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={Object.values(data).length} />
                     </>
                 )
             }

@@ -16,7 +16,6 @@ import { countryList } from "../../../utilities/countryAlpha2";
 
 import PaginationBar from "../../../components/admin/PaginationBar";
 import { fetch_Avatars } from './../../../redux/actions/avatarAction';
-import { set_Page } from "../../../redux/actions/paginationAction";
 import AvatarImage from "../../../components/admin/shared/AvatarImage";
 import ShowAvatarModal from "../../../components/admin/shared/ShowAvatarModal";
 import { create_New_User } from "../../../redux/actions/userAction";
@@ -29,10 +28,8 @@ const Countries = countryList.map(item => {
 const IndexPage = () => {
     const dispatch = useDispatch();
     const avatars = useSelector(state => state.data);
-    const { page, limit } = useSelector(state => state.pagination);
 
     useEffect(() => {
-        dispatch(set_Page(1, 8));
         dispatch(fetch_Avatars());
     }, [dispatch]);
 
@@ -43,23 +40,23 @@ const IndexPage = () => {
     const [pending, setPending] = useState(false);
     const [searchedAvatars, setSearchedAvatars] = useState([]);
     const [avatarsPerPage, setAvatarsPerPage] = useState([]);
+    const [pageInfo, setPageInfo] = useState({ page: 1, limit: 8 });
+    const { page, limit } = pageInfo;
 
     useEffect(() => {
         const avatarList = Object.values(avatars);
         if(!searchValue) {
             setSearchedAvatars(avatarList);
-            dispatch(set_Page(1, 8, avatarList.length));
         } else {
             const filteredAvatars = avatarList.filter(item => {
                 return (item?.fname + item?.surname).toLowerCase().includes(searchValue.toLowerCase());
             });
             setSearchedAvatars(filteredAvatars);
-            dispatch(set_Page(1, 8, filteredAvatars.length));
         }
     }, [searchValue, dispatch, avatars]);
 
     useEffect(() => {
-        setAvatarsPerPage(Object.values(searchedAvatars).slice((page - 1) * limit, page * limit));
+        setAvatarsPerPage(searchedAvatars.slice((page - 1) * limit, page * limit));
     }, [searchedAvatars, page, limit, searchValue]);
 
     //------- Round Data and Validation
@@ -235,7 +232,7 @@ const IndexPage = () => {
                                         </p>
                                         :
                                         <div className="d-flex justify-content-center">
-                                            <PaginationBar />
+                                            <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={searchedAvatars.length} />
                                         </div>
                                     }
                                 </div>

@@ -7,8 +7,7 @@ import { device } from '../../../../utilities/device';
 import AvatarComponentDataRow from './AvatarComponentDataRow';
 import { width } from './columnWidth';
 import Loading from './../../shared/Loading';
-import PaginationBar from './../../PaginationBar';
-import { set_Page } from '../../../../redux/actions/paginationAction';
+import PaginationBar from '../../PaginationBar';
 import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
 
 
@@ -17,19 +16,19 @@ const AvatarCompTabel = () => {
     const { loaded, hairStyles, facialStyles, expressions, hats, others } = useSelector(state => state.avatarComponents);
     const totalComp = { ...hairStyles, ...facialStyles, ...expressions, ...hats, ...others };
     const compData = _.orderBy(Object.values(totalComp), ['groupId'], ['asc']);
-    const { page, limit } = useSelector(state => state.pagination);
-
+    const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
+    const { page, limit } = pageInfo;
+    
     const [pageData, setPageData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useDeepCompareEffect(() => {
+    useEffect(() => {
         (async function() {
-            dispatch(set_Page(1, 5, compData.length));
             setLoading(true);
             await dispatch(get_User_Tiers_WithoutSvg());
             setLoading(false);
         })();
-    }, [dispatch, compData]);
+    }, [dispatch]);
 
     useDeepCompareEffect(() => {
         setPageData(compData.slice((page - 1) * limit, page * limit));
@@ -55,7 +54,7 @@ const AvatarCompTabel = () => {
                             return <AvatarComponentDataRow key={datum.compId} datum={datum} />
                         })}
                     </TableBody>
-                    <PaginationBar />
+                    <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={compData.length} />
                 </>
             }            
         </>

@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { device } from '../../../../utilities/device';
 import BidDataRow from './BidDataRow';
+import PaginationBar from '../../PaginationBar';
 import { width } from './columnWidth';
 
-const BidTable = ({data}) => {
+const BidTable = ({data = []}) => {
+    const [pageInfo, setPageInfo] = useState({
+        page: 1,
+        limit: 5
+    });
+
+    console.log(pageInfo)
+
     return (
         <>
             <TableHead>
@@ -23,6 +31,8 @@ const BidTable = ({data}) => {
                     return <BidDataRow key={index} datum={datum} index={index} />
                 })}
             </TableBody>
+            <input type='number' value={pageInfo.limit} onChange={e => setPageInfo({ ...pageInfo, limit: Number(e.target.value) })} />
+            <PaginationBar setPage={setPageInfo} page={pageInfo.page} limit={pageInfo.limit} total={36} />
         </>
     )
 };

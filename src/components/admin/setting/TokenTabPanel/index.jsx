@@ -6,20 +6,19 @@ import TokenDataRow from './TokenDataRow';
 import { width } from './columnWidth';
 import Loading from './../../shared/Loading';
 import PaginationBar from './../../PaginationBar';
-import { set_Page } from "../../../../redux/actions/paginationAction";
 import { get_Tokens } from "../../../../redux/actions/tokenAction";
 
 const TokenTable = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(state => state);
-    const { page, limit } = useSelector(state => state.pagination);
+    const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
+    const { page, limit } = pageInfo;
 
     const [loading, setLoading] = useState(false);
     const [pageData, setPageData] = useState([]);
 
     useEffect(() => {
         (async function() {
-            dispatch(set_Page(1, 5));
             setLoading(true);
             await dispatch(get_Tokens());
             setLoading(false);
@@ -51,7 +50,7 @@ const TokenTable = () => {
                             return <TokenDataRow key={datum.id} datum={datum} />
                         })}
                     </TableBody>
-                    <PaginationBar />
+                    <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={Object.values(data).length} />
                 </>
             }            
         </>
