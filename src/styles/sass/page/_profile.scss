@@ -1,5 +1,6 @@
 @use "sass:math";
 .profile-page {
+    overflow-y: visible !important;
     @include mq("phone", max) {
         margin: 0;
     }
