@@ -75,7 +75,7 @@ export const getShuftiStatusByReference = async (reference) => {
 
             // Selfie
             if ("face" in data.verification_result)
-                output["selfieStatus"] = validateVerificationObject(data.verification_result.face);
+                output["selfieStatus"] = data.verification_result.face === 1 ? true : false;
             else output["selfieStatus"] = true;
 
             return output;

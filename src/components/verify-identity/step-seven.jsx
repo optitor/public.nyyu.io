@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link } from "gatsby";
+import { navigate } from "gatsby";
 import { v4 as uuidv4 } from "uuid";
 import Loading from "../common/Loading";
 import React, { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { VerifyIdStep7 } from "../../utilities/imgImport";
 import { INSERT_UPDATE_REFERENCE } from "./kyc-webservice";
 import { getBase64 } from "../../utilities/utility-methods";
 import { useVerification } from "./verification-context";
+import CustomSpinner from "../common/custom-spinner";
 
 export default function StepSeven() {
     // Containers
@@ -124,7 +125,7 @@ export default function StepSeven() {
                 allow_offline: "1",
             };
 
-        axios
+        await axios
             .post(verification.shuftiProBaseUrl, payload, {
                 headers: {
                     Authorization: `Basic ${token}`,
@@ -185,12 +186,22 @@ export default function StepSeven() {
                         </p>
                     </div>
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
-                        <Link
-                            to={ROUTES.profile}
+                        <button
+                            disabled={verification.submitting}
+                            onClick={() => navigate(ROUTES.profile)}
                             className="btn btn-success rounded-0 px-3 py-2 text-uppercase fw-500 text-light col-md-6 col-12"
                         >
-                            Back to Profile
-                        </Link>
+                            {verification.submitting ? (
+                                <div className="d-flex align-items-center justify-content-center gap-2">
+                                    <div>
+                                        <CustomSpinner sm />
+                                    </div>
+                                    <div>processing</div>
+                                </div>
+                            ) : (
+                                "Back to Profile"
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>
