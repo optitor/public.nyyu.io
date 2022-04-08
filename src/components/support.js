@@ -138,7 +138,7 @@ const FAQ = () => {
                             </a>
                         </div>
 
-                        <div className="col-lg-3 col-6 ps-0 pe-0 pe-sm-2 my-2 my-sm-0">
+                        <div className="col-lg-3 col-6 ps-0 pe-0 pe-sm-10px my-2 my-sm-0">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 href="https://help.nyyu.io/hc/en-gb/community/topics"

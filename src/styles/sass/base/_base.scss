@@ -341,7 +341,7 @@ ul {
 }
 
 .text-green {
-    color: #23c865!important;
+    color: #23c865 !important;
 }
 
 .icon-23px {
@@ -361,6 +361,13 @@ ul {
 
 .ps-6px {
     padding-left: 6px !important;
+}
+
+.pe-sm-10px {
+    padding-right: 0px !important;
+    @include mq("phone") {
+        padding-right: 10px !important;
+    }
 }
 
 .text-\[\#959595\] {
