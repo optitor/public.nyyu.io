@@ -20,7 +20,6 @@ export default function StepSeven() {
 
     // Methods
     const sendShuftiRequest = async () => {
-        console.log(verification.shuftReferencePayload);
         verification.setSubmitting(true);
         await insertUpdateReference({
             variables: {
@@ -36,6 +35,7 @@ export default function StepSeven() {
             language: "EN",
             verification_mode: "any",
             manual_review: "1",
+            email: verification.userEmail || "",
         };
 
         if (
@@ -48,6 +48,17 @@ export default function StepSeven() {
             payload["document"] = {
                 proof: documentProof,
                 supported_types: ["id_card", "passport", "driving_license"],
+                name: {
+                    first_name: verification.firstName,
+                    last_name: verification.surname,
+                },
+                dob: verification.dob,
+                expiry_date: "",
+                background_checks: {
+                    first_name: verification.firstName,
+                    last_name: verification.surname,
+                    dob: verification.dob,
+                },
                 verification_instructions: {
                     allow_paper_based: "1",
                     allow_photocopy: "1",
@@ -154,7 +165,7 @@ export default function StepSeven() {
                 </div>
                 <div className="my-sm-5 py-sm-5 verify-step1">
                     <div className="text-center">
-                        <p className="fs-25px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
+                        <p className="fs-2b 5px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
                             Thank you, your verification result will be sent to
                             your email soon.
                         </p>
@@ -170,9 +181,7 @@ export default function StepSeven() {
                                 <br />
                             </div>
                             Contact out Data Compliance Officer at{" "}
-                            <span className="text-success">
-                                privacy@ndb.technology
-                            </span>
+                            <span className="text-success">info@ndb.money</span>
                         </p>
                     </div>
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">

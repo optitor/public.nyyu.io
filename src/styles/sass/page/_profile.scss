@@ -1,5 +1,6 @@
 @use "sass:math";
 .profile-page {
+    overflow-y: visible !important;
     @include mq("phone", max) {
         margin: 0;
     }
@@ -33,7 +34,7 @@
                 align-items: center;
                 margin-top: 24px;
                 font-weight: 600;
-                font-size: 24px;
+                font-size: 18px;
                 line-height: 23px;
                 color: white;
                 @include mq("phone", max) {
