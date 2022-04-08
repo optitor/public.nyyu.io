@@ -11,6 +11,7 @@ import EditUserRoleModal from '../../editModals/EditUserRoleModal';
 import * as Mutation from "../../../../apollo/graphqls/mutations/User";
 import { showFailAlarm, showSuccessAlarm } from "../../AlarmModal";
 
+
 const UserDataRow = ({ datum }) => {
     const dispatch = useDispatch();
     const { userTiers } = useSelector(state => state);

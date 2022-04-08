@@ -7,18 +7,18 @@ import { width } from './columnWidth';
 import Loading from './../../shared/Loading';
 import PaginationBar from '../../PaginationBar';
 import { get_Disallowed_Countries } from '../../../../redux/actions/geoLocationAction';
-import { set_Page } from '../../../../redux/actions/paginationAction';
 
 const GeoTable = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { data } = useSelector(state => state);
-    const { page, limit } = useSelector(state => state.pagination);
+    const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
+    const { page, limit } = pageInfo;
+
     const [pageData, setPageData] = useState([]);
 
     useEffect(() => {
         (async function() {
-            dispatch(set_Page(1, 5));
             setLoading(true);
             await dispatch(get_Disallowed_Countries());
             setLoading(false);
@@ -47,7 +47,7 @@ const GeoTable = () => {
                             return <GoeDataRow key={datum.id} datum={datum} />
                         })}
                     </TableBody>
-                    <PaginationBar />
+                    <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={Object.values(data).length} />
                 </>
             }
         </>

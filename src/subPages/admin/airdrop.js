@@ -1,7 +1,6 @@
 import React from "react"
 import Seo from "./../../components/seo"
 import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
-import PaginationBar from "./../../components/admin/PaginationBar";
 import AirdropTable from "../../components/admin/airdrop/AirdropTable";
 
 const airdrops = [
@@ -22,7 +21,6 @@ const IndexPage = () => {
                     <p className="title">AIRDROP</p>
                     <div className="rounds_table">
                         <AirdropTable data={airdrops} />
-                        <PaginationBar/>
                     </div>                    
                 </LayoutWithMenu>
             </main>

@@ -4,19 +4,18 @@ import AvatarComponent from './Avatar_Component';
 import Loading from './../../shared/Loading';
 import PaginationBar from './../../PaginationBar';
 import { fetch_Avatars } from './../../../../redux/actions/avatarAction';
-import { set_Page } from '../../../../redux/actions/paginationAction';
 
 
 const AvatarTabPanel = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { data } = useSelector(state => state);
-    const { page, limit } = useSelector(state => state.pagination);
+    const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
+    const { page, limit } = pageInfo;
     const [pageData, setPageData] = useState([]);
-    
+
     useEffect(() => {
-        (async function() {            
-            dispatch(set_Page(1, 5));
+        (async function() {
             setLoading(true);
             await dispatch(fetch_Avatars());
             setLoading(false);
@@ -36,7 +35,7 @@ const AvatarTabPanel = () => {
                         {pageData.map(avatar => {
                             return <AvatarComponent key={avatar.id} avatar={avatar} />
                         })}
-                        <PaginationBar />
+                        <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={Object.values(data).length} />
                     </>
                 )                
             }
