@@ -170,9 +170,7 @@ export default function StepSeven() {
                                 <br />
                             </div>
                             Contact out Data Compliance Officer at{" "}
-                            <span className="text-success">
-                                privacy@ndb.technology
-                            </span>
+                            <span className="text-success">info@ndb.money</span>
                         </p>
                     </div>
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
