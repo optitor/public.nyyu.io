@@ -18,6 +18,8 @@ const VerificationProvider = ({ children }) => {
     const [country, setCountry] = useState(VerificationCountriesList[0]);
     const [selfieImage, setSelfieImage] = useState();
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null);
+    const [userEmail, setUserEmail] = useState("");
+    const [dob, setDob] = useState("");
     const [step, setStep] = useState(-1); // --> initial value is -1
     const {
         files: documentFiles,
@@ -51,6 +53,10 @@ const VerificationProvider = ({ children }) => {
     };
 
     const providerValue = {
+        userEmail,
+        setUserEmail,
+        dob,
+        setDob,
         consentText,
         shuftReferencePayload,
         setShuftReferencePayload,

@@ -1,37 +1,59 @@
-import Select from "react-select"
-import React, { useState } from "react"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep3 } from "../../utilities/imgImport"
-import Loading from "../common/Loading"
-import { VerificationCountriesList } from "../../utilities/countries-list"
-import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData"
-import { useVerification } from "./verification-context"
+import Select from "react-select";
+import React, { useState } from "react";
+import {
+    NewDoc,
+    Pass,
+    Unpass1,
+    Unpass2,
+    VerifyIdStep3,
+} from "../../utilities/imgImport";
+import Loading from "../common/Loading";
+import { VerificationCountriesList } from "../../utilities/countries-list";
+import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData";
+import { useVerification } from "./verification-context";
 
 export default function StepThree() {
     // Containers
-    const verification = useVerification()
-    const [loading, setLoading] = useState(true)
-    const [docType, setDocType] = useState(VerificationStepThreeDocumentTypes[0])
+    const verification = useVerification();
+    const [loading, setLoading] = useState(true);
+    const [docType, setDocType] = useState(
+        VerificationStepThreeDocumentTypes[0]
+    );
 
     // Methods
     const onUserDropFile = (e) => {
-        verification.addressProof.handleDragDropEvent(e)
-        verification.addressProof.setFiles(e, "w")
-    }
+        verification.addressProof.handleDragDropEvent(e);
+        verification.addressProof.setFiles(e, "w");
+    };
 
     // Render
-    verification.shuftReferencePayload?.addrStatus === true && verification.nextStep()
+    verification.shuftReferencePayload?.addrStatus === true &&
+        verification.nextStep();
+
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
                 <Loading />
             </div>
-            <div className={`col-sm-12 col-10 mx-auto mt-3 mt-sm-0 ${loading && "d-none"}`}>
-                <h4 className="text-center  mt-5 mt-sm-2 mb-4">Verify your identity</h4>
+            <div
+                className={`col-sm-12 col-10 mx-auto mt-3 mt-sm-0 ${
+                    loading && "d-none"
+                }`}
+            >
+                <h4 className="text-center  mt-5 mt-sm-2 mb-4">
+                    Verify your identity
+                </h4>
                 <div className="text-center">
                     <div className="d-block d-sm-none">
-                        <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 2</div>
-                        <div className="text-light fs-14px">Confirm your address information</div>
-                        <div className="text-light fs-12px">Make edits if needed</div>
+                        <div className="txt-green text-uppercase fw-bold fs-18px mb-3">
+                            step 2
+                        </div>
+                        <div className="text-light fs-14px">
+                            Confirm your address information
+                        </div>
+                        <div className="text-light fs-12px">
+                            Make edits if needed
+                        </div>
                     </div>
                     <img
                         className="d-sm-block d-none"
@@ -69,7 +91,9 @@ export default function StepThree() {
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <div>No image from another image or device</div>
+                                    <div>
+                                        No image from another image or device
+                                    </div>
                                 </p>
                                 <p className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
@@ -80,15 +104,20 @@ export default function StepThree() {
                         <div className="col-md-6 col-12">
                             <div className="my-0 mt-lg-4">
                                 <div className="upload-doc">
-                                    <div className="my-5 mb-sm-3 mt-sm-0" id="file-upload-wrapper">
+                                    <div
+                                        className="my-5 mb-sm-3 mt-sm-0"
+                                        id="file-upload-wrapper"
+                                    >
                                         <label
                                             htmlFor="file-upload-input"
                                             className="file-upload cursor-pointer"
                                             onDragEnter={
-                                                verification.addressProof.handleDragDropEvent
+                                                verification.addressProof
+                                                    .handleDragDropEvent
                                             }
                                             onDragOver={
-                                                verification.addressProof.handleDragDropEvent
+                                                verification.addressProof
+                                                    .handleDragDropEvent
                                             }
                                             onDrop={onUserDropFile}
                                         >
@@ -97,7 +126,10 @@ export default function StepThree() {
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 onChange={(e) =>
-                                                    verification.addressProof.setFiles(e, "w")
+                                                    verification.addressProof.setFiles(
+                                                        e,
+                                                        "w"
+                                                    )
                                                 }
                                             />
                                             <div className="py-3 px-0">
@@ -108,17 +140,25 @@ export default function StepThree() {
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {verification.addressProof.files[0] ? (
+                                                {verification.addressProof
+                                                    .files[0] ? (
                                                     <p className="mt-30px">
-                                                        {verification.addressProof.files[0].name}{" "}
+                                                        {
+                                                            verification
+                                                                .addressProof
+                                                                .files[0].name
+                                                        }{" "}
                                                         <span className="txt-green fw-bold">
                                                             selected
                                                         </span>
                                                     </p>
                                                 ) : (
                                                     <p className="file-browse">
-                                                        Drag & drop files here or{" "}
-                                                        <span className="fw-bold">browse</span>
+                                                        Drag & drop files here
+                                                        or{" "}
+                                                        <span className="fw-bold">
+                                                            browse
+                                                        </span>
                                                     </p>
                                                 )}
                                             </div>
@@ -128,7 +168,11 @@ export default function StepThree() {
                             </div>
                             <div className="upload-rule__img">
                                 <img src={Pass} alt="pass" />
-                                <img className="mx-3" src={Unpass1} alt="pass" />
+                                <img
+                                    className="mx-3"
+                                    src={Unpass1}
+                                    alt="pass"
+                                />
                                 <img src={Unpass2} alt="pass" />
                             </div>
                         </div>
@@ -142,7 +186,9 @@ export default function StepThree() {
                             back
                         </button>
                         <button
-                            disabled={verification.addressProof.files.length === 0}
+                            disabled={
+                                verification.addressProof.files.length === 0
+                            }
                             className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                             onClick={() => verification.nextStep()}
                         >
@@ -152,5 +198,5 @@ export default function StepThree() {
                 </div>
             </div>
         </>
-    )
+    );
 }

@@ -1,43 +1,56 @@
-import React from "react"
-import { useState } from "react"
-import { VerifyIdStep2 } from "../../utilities/imgImport"
-import Loading from "../common/Loading"
-import { useVerification } from "./verification-context"
+import React from "react";
+import { useState } from "react";
+import { VerifyIdStep2 } from "../../utilities/imgImport";
+import Loading from "../common/Loading";
+import { useVerification } from "./verification-context";
 
 export default function StepTwo() {
     // Containers
-    const verification = useVerification()
-    const [firstNameError, setFirstNameError] = useState("")
-    const [surnameError, setSurnameError] = useState("")
-    const [loading, setLoading] = useState(true)
+    const verification = useVerification();
+    const [firstNameError, setFirstNameError] = useState("");
+    const [surnameError, setSurnameError] = useState("");
+    const [dateError, setDateError] = useState("");
+    const [loading, setLoading] = useState(true);
     const onNextButtonClick = (e) => {
-        e.preventDefault()
-        setFirstNameError("")
-        setSurnameError("")
-        let error = false
+        e.preventDefault();
+        setFirstNameError("");
+        setSurnameError("");
+        let error = false;
         if (!verification.firstName) {
-            error = true
-            setFirstNameError("Please fill out the first name field")
+            error = true;
+            setFirstNameError("Please fill out the first name field");
         }
         if (!verification.surname) {
-            error = true
-            setSurnameError("Please fill out the surname field")
+            error = true;
+            setSurnameError("Please fill out the surname field");
         }
-        if (!error) return verification.nextStep()
-    }
+        if (!verification.dob) {
+            error = true;
+            setDateError("Please fill out the date of birth field");
+        }
+        if (!error) return verification.nextStep();
+    };
 
     // Render
-    verification.shuftReferencePayload?.docStatus === true && verification.nextStep()
+    verification.shuftReferencePayload?.docStatus === true &&
+        verification.nextStep();
+
     return (
         <>
             <div className={`${!loading && "d-none"}`}>
                 <Loading />
             </div>
-            <div className={`col-12 mx-auto mt-3 mt-sm-0 ${loading && "d-none"}`}>
-                <h4 className="text-center  mt-5 mt-sm-2 mb-4">Verify your identity</h4>
+            <div
+                className={`col-12 mx-auto mt-3 mt-sm-0 ${loading && "d-none"}`}
+            >
+                <h4 className="text-center  mt-5 mt-sm-2 mb-4">
+                    Verify your identity
+                </h4>
                 <div className="text-center">
                     <div className="d-block d-sm-none">
-                        <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 1</div>
+                        <div className="txt-green text-uppercase fw-bold fs-18px mb-3">
+                            step 1
+                        </div>
                         <div className="text-light fs-14px fw-bold">
                             Confirm your ID information
                         </div>
@@ -52,7 +65,9 @@ export default function StepTwo() {
                 <div className="my-sm-5 verify-step1">
                     <div className="mt-5 text-light fs-25px fw-bold text-center d-sm-block d-none">
                         Confirm your ID information
-                        <div className="fs-16px fw-500">Make edits if needed</div>
+                        <div className="fs-16px fw-500">
+                            Make edits if needed
+                        </div>
                     </div>
                     <div className="col-sm-8 col-12 mx-auto">
                         <div className="">
@@ -61,10 +76,14 @@ export default function StepTwo() {
                                 type="text"
                                 className="form-control"
                                 value={verification.firstName}
-                                onChange={(e) => verification.setFirstName(e.target.value)}
+                                onChange={(e) =>
+                                    verification.setFirstName(e.target.value)
+                                }
                                 placeholder="First name"
                             />
-                            <div className="text-danger mt-2">{firstNameError}</div>
+                            <div className="text-danger mt-2 fs-12px">
+                                {firstNameError}
+                            </div>
                         </div>
                         <div>
                             <p className="form-label mt-4">Last Name</p>
@@ -72,10 +91,29 @@ export default function StepTwo() {
                                 type="text"
                                 className="form-control"
                                 value={verification.surname}
-                                onChange={(e) => verification.setSurname(e.target.value)}
+                                onChange={(e) =>
+                                    verification.setSurname(e.target.value)
+                                }
                                 placeholder="Surname name"
                             />
-                            <div className="text-danger mt-2">{surnameError}</div>
+                            <div className="text-danger mt-2 fs-12px">
+                                {surnameError}
+                            </div>
+                        </div>
+                        <div>
+                            <p className="form-label mt-4">Date of Birth</p>
+                            <input
+                                type="date"
+                                className="form-control"
+                                value={verification.dob}
+                                onChange={(e) =>
+                                    verification.setDob(e.target.value)
+                                }
+                                placeholder="Surname name"
+                            />
+                            <div className="text-danger mt-2 fs-12px">
+                                {dateError}
+                            </div>
                         </div>
                     </div>
 
@@ -96,5 +134,5 @@ export default function StepTwo() {
                 </div>
             </div>
         </>
-    )
+    );
 }
