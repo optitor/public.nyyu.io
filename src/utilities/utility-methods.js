@@ -9,6 +9,14 @@ export const getBase64 = (file) => {
     });
 };
 
+function blobToBase64(blob) {
+    return new Promise((resolve, _) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+}
+
 export const getCurrentDate = () => {
     let today = new Date();
     const dd = String(today.getDate()).padStart(2, "0");
@@ -26,6 +34,18 @@ const validateVerificationObject = (object) => {
 
     return false;
 };
+
+// download file from URL
+export async function downloadFileFromShufti(url) {
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'blob'
+    });
+    const base64 = await blobToBase64(response.data);
+    return base64;
+}
+
 export const getShuftiStatusByReference = async (reference) => {
     if (!reference) return "INVALID";
     const clientId = process.env.GATSBY_SHUFTI_CLIENT;
@@ -58,25 +78,46 @@ export const getShuftiStatusByReference = async (reference) => {
             if (data.event === null) output["event"] = "request.invalid";
             else output["event"] = data.event;
 
+            // default!
+            output["docStatus"] = false;
+            output["addrStatus"] = false;
+            output["conStatus"] = false;
+            output["selfieStatus"] = false;
+
+            output['proofs'] = data.proofs;
+            output['data'] = data.verification_data;
+
             // Document
-            if ("document" in data.verification_result)
+            if ("document" in data.verification_result) {
                 output["docStatus"] = validateVerificationObject(data.verification_result.document);
-            else output["docStatus"] = true;
+                if(!output["docStatus"]) {
+                    return output;
+                }
+            }
 
             // Address
-            if ("address" in data.verification_result)
+            if ("address" in data.verification_result) {
                 output["addrStatus"] = validateVerificationObject(data.verification_result.address);
-            else output["addrStatus"] = true;
+                if(!output["addrStatus"]) {
+                    return output;
+                }
+            }
 
             //Consent
-            if ("consent" in data.verification_result)
+            if ("consent" in data.verification_result) {
                 output["conStatus"] = validateVerificationObject(data.verification_result.consent);
-            else output["conStatus"] = true;
+                if(!output["conStatus"]) {
+                    return output;
+                }
+            }
 
             // Selfie
-            if ("face" in data.verification_result)
+            if ("face" in data.verification_result) {
                 output["selfieStatus"] = data.verification_result.face === 1 ? true : false;
-            else output["selfieStatus"] = true;
+                if(!output["selfieStatus"]) {
+                    return output;
+                }
+            }
 
             return output;
         }

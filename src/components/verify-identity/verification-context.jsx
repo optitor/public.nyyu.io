@@ -20,6 +20,8 @@ const VerificationProvider = ({ children }) => {
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null);
     const [userEmail, setUserEmail] = useState("");
     const [dob, setDob] = useState("");
+    const [gender, setGender] = useState({label: "Male", value: "M"});
+    const [expiryDate, setExpiryDate] = useState("");
     const [step, setStep] = useState(-1); // --> initial value is -1
     const {
         files: documentFiles,
@@ -57,6 +59,10 @@ const VerificationProvider = ({ children }) => {
         setUserEmail,
         dob,
         setDob,
+        expiryDate,
+        setExpiryDate,
+        gender,
+        setGender,
         consentText,
         shuftReferencePayload,
         setShuftReferencePayload,

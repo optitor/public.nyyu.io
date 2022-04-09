@@ -4,6 +4,7 @@ import React, { useRef, useState } from "react"
 import CustomSpinner from "../common/custom-spinner"
 import { useVerification } from "./verification-context"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
+import { downloadFileFromShufti } from "../../utilities/utility-methods"
 
 export default function StepSix() {
     // Containers
@@ -13,9 +14,9 @@ export default function StepSix() {
     const [openWebcam, setOpenWebcam] = useState(false)
 
     // Methods
-    const capture = () => {
-        const fooImage = webcamRef.current.getScreenshot()
-        verification.faceProof.setSelfieImage(fooImage)
+    const capture = async () => {
+        const fooImage = webcamRef.current.getScreenshot();
+        verification.faceProof.setSelfieImage(fooImage);
         return setOpenWebcam(false)
     }
 
