@@ -191,10 +191,22 @@ export default function StepSeven() {
             };
         }
 
-        payload["face"] = {
-            proof: verification.faceProof.selfieImage,
-            allow_offline: "1",
-        };
+        if (
+            verification.shuftReferencePayload?.selfieStatus === false ||
+            verification.shuftReferencePayload === "INVALID"
+        ) {
+            payload["face"] = {
+                proof: verification.faceProof.selfieImage,
+                allow_offline: "1",
+            };
+        } else {
+            const url = verification.shuftReferencePayload?.proofs.face.proof;
+            const selfieProof = await downloadFileFromShufti(url);
+            payload["face"] = {
+                proof: selfieProof,
+                allow_offline: "1",
+            };
+        }
 
         payload['background_checks'] = backgroundChecks;
 
