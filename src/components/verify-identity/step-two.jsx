@@ -1,8 +1,14 @@
 import React from "react";
 import { useState } from "react";
+import Select from "react-select";
 import { VerifyIdStep2 } from "../../utilities/imgImport";
 import Loading from "../common/Loading";
 import { useVerification } from "./verification-context";
+
+const GENDER_LIST = [
+    {label: "Female", value: "F"},
+    {label: "Male", value: "M"},
+]
 
 export default function StepTwo() {
     // Containers
@@ -94,11 +100,23 @@ export default function StepTwo() {
                                 onChange={(e) =>
                                     verification.setSurname(e.target.value)
                                 }
-                                placeholder="Surname name"
+                                placeholder="Surname"
                             />
                             <div className="text-danger mt-2 fs-12px">
                                 {surnameError}
                             </div>
+                        </div>
+                        <div>
+                            <p className="form-label mt-4">Gender</p>
+                            <Select
+                                options={GENDER_LIST}
+                                value={verification.gender}
+                                onChange={(v) => verification.setGender(v)}
+                                placeholder="Choose country"
+                            />
+                            {/* <div className="text-danger mt-2 fs-12px">
+                                {genderError}
+                            </div> */}
                         </div>
                         <div>
                             <p className="form-label mt-4">Date of Birth</p>
@@ -109,7 +127,22 @@ export default function StepTwo() {
                                 onChange={(e) =>
                                     verification.setDob(e.target.value)
                                 }
-                                placeholder="Surname name"
+                                placeholder="dd-mm-yyyy"
+                            />
+                            <div className="text-danger mt-2 fs-12px">
+                                {dateError}
+                            </div>
+                        </div>
+                        <div>
+                            <p className="form-label mt-4">Expiry Date</p>
+                            <input
+                                type="date"
+                                className="form-control"
+                                value={verification.expiryDate}
+                                onChange={(e) =>
+                                    verification.setExpiryDate(e.target.value)
+                                }
+                                placeholder="dd-mm-yyyy"
                             />
                             <div className="text-danger mt-2 fs-12px">
                                 {dateError}

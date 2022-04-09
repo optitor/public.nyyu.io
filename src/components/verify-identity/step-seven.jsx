@@ -7,7 +7,7 @@ import { useMutation } from "@apollo/client";
 import { ROUTES } from "../../utilities/routes";
 import { VerifyIdStep7 } from "../../utilities/imgImport";
 import { INSERT_UPDATE_REFERENCE } from "./kyc-webservice";
-import { getBase64 } from "../../utilities/utility-methods";
+import { getBase64, downloadFileFromShufti } from "../../utilities/utility-methods";
 import { useVerification } from "./verification-context";
 import CustomSpinner from "../common/custom-spinner";
 
@@ -27,7 +27,9 @@ export default function StepSeven() {
                 reference,
             },
         });
-        const token = btoa(`${verification.clientId}:${verification.secret}`);
+        const clientId = process.env.GATSBY_SHUFTI_CLIENT;
+        const secret = process.env.GATSBY_SHUFTI_SECRET;
+        const token = btoa(`${clientId}:${secret}`);
         const payload = {
             reference: `${reference}`,
             callback_url: verification.callbackUrl,
@@ -38,6 +40,8 @@ export default function StepSeven() {
             manual_review: "1",
             email: verification.userEmail || "",
         };
+
+        let backgroundChecks = {};
 
         if (
             verification.shuftReferencePayload?.docStatus === false ||
@@ -54,11 +58,41 @@ export default function StepSeven() {
                     last_name: verification.surname,
                 },
                 dob: verification.dob,
-                expiry_date: "",
+                expiry_date: verification.expiryDate,
+                gender: verification.gender.value,
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
+                },
+                allow_offline: "1",
+            };
+            backgroundChecks['name'] = {
+                first_name: verification.firstName,
+                last_name: verification.surname
+            }
+            backgroundChecks['dob'] = verification.dob;
+        } else {
+            const data = verification.shuftReferencePayload?.data.document;
+            const url = verification.shuftReferencePayload?.proofs.document.proof;
+            const documentProof = await downloadFileFromShufti(url);
+            payload["document"] = {
+                proof: documentProof,
+                supported_types: ["id_card", "passport", "driving_license"],
+                name: {
+                    first_name: data.name.first_name,
+                    last_name: data.name.last_name,
+                },
+                dob: data.dob,
+                expiry_date: data.expiry_date,
+                gender: data.gender,
                 background_checks: {
-                    first_name: verification.firstName,
-                    last_name: verification.surname,
-                    dob: verification.dob,
+                    first_name: data.name.first_name,
+                    last_name: data.name.last_name,
+                    dob: data.dob,
                 },
                 verification_instructions: {
                     allow_paper_based: "1",
@@ -70,6 +104,11 @@ export default function StepSeven() {
                 },
                 allow_offline: "1",
             };
+            backgroundChecks['name'] = {
+                first_name: data.name.firstName,
+                last_name: data.name.surname
+            }
+            backgroundChecks['dob'] = data.dob;
         }
 
         if (
@@ -81,6 +120,31 @@ export default function StepSeven() {
             );
             payload["address"] = {
                 full_address: verification.address,
+                proof: addressProof,
+                supported_types: [
+                    "utility_bill",
+                    "bank_statement",
+                    "driving_license",
+                    "rent_agreement",
+                    "employer_letter",
+                    "tax_bill",
+                ],
+                verification_instructions: {
+                    allow_paper_based: "1",
+                    allow_photocopy: "1",
+                    allow_laminated: "1",
+                    allow_screenshot: "1",
+                    allow_cropped: "1",
+                    allow_scanned: "1",
+                },
+                allow_offline: "1",
+            };
+        } else {
+            const data = verification.shuftReferencePayload?.data.address;
+            const url = verification.shuftReferencePayload?.proofs.address.proof;
+            const addressProof = await downloadFileFromShufti(url);
+            payload["address"] = {
+                full_address: data.full_address,
                 proof: addressProof,
                 supported_types: [
                     "utility_bill",
@@ -115,15 +179,24 @@ export default function StepSeven() {
                 supported_types: ["printed", "handwritten"],
                 allow_offline: "1",
             };
-        }
-        if (
-            verification.shuftReferencePayload?.selfieStatus === false ||
-            verification.shuftReferencePayload === "INVALID"
-        )
-            payload["face"] = {
-                proof: verification.faceProof.selfieImage,
+        } else {
+            const data = verification.shuftReferencePayload?.data.consent;
+            const url = verification.shuftReferencePayload?.proofs.consent.proof;
+            const consentProof = await downloadFileFromShufti(url);
+            payload["consent"] = {
+                proof: consentProof,
+                text: data.text,
+                supported_types: ["printed", "handwritten"],
                 allow_offline: "1",
             };
+        }
+
+        payload["face"] = {
+            proof: verification.faceProof.selfieImage,
+            allow_offline: "1",
+        };
+
+        payload['background_checks'] = backgroundChecks;
 
         await axios
             .post(verification.shuftiProBaseUrl, payload, {
@@ -175,7 +248,7 @@ export default function StepSeven() {
                             your email soon.
                         </p>
                         <p className="fs-14px px-sm-2 px-4 mt-3">
-                            As soley the data processor, NDB acknowledges your
+                            As soley the data processor, Nyyu acknowledges your
                             right to request access, erasure, and retention of
                             your data.
                             <div className="d-sm-block d-none">

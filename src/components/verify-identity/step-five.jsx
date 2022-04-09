@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import Loading from "../common/Loading"
 import { useVerification } from "./verification-context"
-import { NewDoc, Pass, Unpass1, Unpass2, VerifyIdStep5 } from "../../utilities/imgImport"
+import { NewDoc, VerifyIdStep5, ConsentPass, ConsentUnpass1, ConsentUnPass2 } from "../../utilities/imgImport"
 
 export default function StepOne() {
     // Containers
@@ -113,9 +113,9 @@ export default function StepOne() {
                                 </div>
                             </div>
                             <div className="upload-rule__img">
-                                <img src={Pass} alt="pass" />
-                                <img className="mx-3" src={Unpass1} alt="pass" />
-                                <img src={Unpass2} alt="pass" />
+                                <img src={ConsentPass} alt="pass" />
+                                <img className="mx-3" src={ConsentUnpass1} alt="pass" />
+                                <img src={ConsentUnPass2} alt="pass" />
                             </div>
                         </div>
                     </div>
