@@ -774,6 +774,11 @@
                     padding: 0!important;
                     text-align: center;
                 }
+                input[type="number"]::-webkit-inner-spin-button,
+                input[type="number"]::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
                 @include mq('phone', max) {
                     input {
                         width: 40px !important;

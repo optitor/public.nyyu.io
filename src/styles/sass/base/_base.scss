@@ -36,11 +36,11 @@ ul {
     list-style: none;
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+// input[type="number"]::-webkit-inner-spin-button,
+// input[type="number"]::-webkit-outer-spin-button {
+//     -webkit-appearance: none;
+//     margin: 0;
+// }
 .z-999 {
     z-index: 999 !important;
 }
@@ -341,7 +341,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .text-green {
-    color: #23c865!important;
+    color: #23c865 !important;
 }
 
 .icon-23px {
@@ -361,6 +361,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .ps-6px {
     padding-left: 6px !important;
+}
+
+.pe-sm-10px {
+    padding-right: 0px !important;
+    @include mq("phone") {
+        padding-right: 10px !important;
+    }
 }
 
 .text-\[\#959595\] {

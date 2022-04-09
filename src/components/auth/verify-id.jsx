@@ -35,13 +35,16 @@ const VerificationPage = () => {
 
     // Methods
     useEffect(() => {
-        (async function() {
+        (async function () {
             if (!shuftiReferenceLoading) {
-                const response = await getShuftiStatusByReference(shuftReference?.reference)
-                return setShuftiStatus(response)
+                const response = await getShuftiStatusByReference(
+                    shuftReference?.reference
+                );
+                console.log(response);
+                return setShuftiStatus(response);
             }
-        })()
-    }, [shuftiReferenceLoading, shuftReference?.reference])
+        })();
+    }, [shuftiReferenceLoading, shuftReference?.reference]);
 
     if (loadingData) return <Loading />;
     else
@@ -52,6 +55,7 @@ const VerificationPage = () => {
                     <VerificationProvider>
                         <VerificationSwitch
                             shuftReferencePayload={shuftiStatus}
+                            userEmail={userEmail}
                         />
                     </VerificationProvider>
                 </section>

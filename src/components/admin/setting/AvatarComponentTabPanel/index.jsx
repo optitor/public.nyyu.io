@@ -1,63 +1,67 @@
 import React, { useEffect, useState } from 'react';
+import useDeepCompareEffect from 'use-deep-compare-effect'
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import _ from 'lodash';
 import { device } from '../../../../utilities/device';
-import TokenDataRow from './TokenDataRow';
+import AvatarComponentDataRow from './AvatarComponentDataRow';
 import { width } from './columnWidth';
 import Loading from './../../shared/Loading';
-import PaginationBar from './../../PaginationBar';
-import { get_Tokens } from "../../../../redux/actions/tokenAction";
+import PaginationBar from '../../PaginationBar';
+import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
 
-const TokenTable = () => {
+
+const AvatarCompTabel = () => {
     const dispatch = useDispatch();
-    const { data } = useSelector(state => state);
+    const { loaded, hairStyles, facialStyles, expressions, hats, others } = useSelector(state => state.avatarComponents);
+    const totalComp = { ...hairStyles, ...facialStyles, ...expressions, ...hats, ...others };
+    const compData = _.orderBy(Object.values(totalComp), ['groupId'], ['asc']);
     const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
     const { page, limit } = pageInfo;
-
-    const [loading, setLoading] = useState(false);
+    
     const [pageData, setPageData] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         (async function() {
             setLoading(true);
-            await dispatch(get_Tokens());
+            await dispatch(get_User_Tiers_WithoutSvg());
             setLoading(false);
         })();
     }, [dispatch]);
 
-    useEffect(() => {
-        setPageData(Object.values(data).slice((page - 1) * limit, page * limit));
-    }, [dispatch, data, page, limit]);
+    useDeepCompareEffect(() => {
+        setPageData(compData.slice((page - 1) * limit, page * limit));
+    }, [dispatch, compData, page, limit]);
 
     return (
         <>
             <TableHead>
-                <div className='image'> </div>
-                <div className='name'>Token Name</div>
-                <div className='symbol'>Symbol</div>
-                <div className='network'>Network</div>
-                <div className='address'>Address</div>
+                <div className='image text-center'>Avatar Component</div>
+                <div className='groupId'>ID</div>
+                <div className='position'>Position (%)</div>
+                <div className='config'>Config</div>
                 <div className='edit'> </div>
             </TableHead>
             <TableHeadForMobile>
-                <div className='name'>Token Data</div>
+                <div className='name'>Avatar Component Data</div>
             </TableHeadForMobile>
-            {loading?
+            {!loaded || loading?
                 <Loading />:
                 <>
                     <TableBody className='custom_scrollbar'>
                         {pageData.map(datum => {
-                            return <TokenDataRow key={datum.id} datum={datum} />
+                            return <AvatarComponentDataRow key={datum.compId} datum={datum} />
                         })}
                     </TableBody>
-                    <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={Object.values(data).length} />
+                    <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={compData.length} />
                 </>
             }            
         </>
     )
 };
 
-export default TokenTable;
+export default AvatarCompTabel;
 
 const TableHead = styled.div`
     height: 40px;
@@ -72,10 +76,9 @@ const TableHead = styled.div`
         padding: 8px 2px;
     }
     &>div.image {width: ${width.image};}
-    &>div.name {width: ${width.name};}
-    &>div.symbol {width: ${width.symbol};}
-    &>div.network {width: ${width.network};}
-    &>div.address {width: ${width.address};}
+    &>div.groupId {width: ${width.groupId};}
+    &>div.position {width: ${width.position};}
+    &>div.config {width: ${width.config};}
     &>div.edit {width: ${width.edit};}
 
     @media screen and (max-width: ${device['phone']}){

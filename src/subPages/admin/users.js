@@ -3,20 +3,11 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
 import Seo from "./../../components/seo";
 import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
-import PaginationBar from './../../components/admin/PaginationBar';
 import UserTable from "../../components/admin/users/UserTable";
 import BidTable from "../../components/admin/users/BidTable";
 import WalletTable from "../../components/admin/users/WalletTable";
 import FiatTable from "../../components/admin/users/FiatTable";
 import KYBTable from "../../components/admin/users/KYBTable";
-
-const bids = [
-    {name: 'Amy Matthews', avatar: 'Tesla.12', status: 'active' },
-    {name: 'Amira Kandovsky', avatar: 'Voltapancake', status: 'pending' },
-    {name: 'Bernard Lane', avatar: 'CutieCurry', status: 'pending' },
-    {name: 'Joseph Martini', avatar: 'Johnson Johnson', status: 'active' },
-    {name: 'Tom Jager', avatar: 'Cruto1431', status: 'active' },
-];
 
 const wallets = [
     {name: 'Amy Matthews', avatar: 'Tesla.12' },
@@ -54,20 +45,16 @@ const IndexPage = () => {
                                 <UserTable/>
                             </TabPanel>
                             <TabPanel>
-                                <BidTable data={bids} />
-                                <PaginationBar />
+                                <BidTable/>
                             </TabPanel>
                             <TabPanel>
                                 <WalletTable data={wallets} />
-                                <PaginationBar />
                             </TabPanel>
                             <TabPanel>
                                 <FiatTable data={fiats} />
-                                <PaginationBar />
                             </TabPanel>
                             <TabPanel>
                                 <KYBTable />
-                                <PaginationBar />
                             </TabPanel>
                         </Tabs>
                     </div>                    

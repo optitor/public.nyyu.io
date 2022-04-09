@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
+import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import Modal from "react-modal";
@@ -7,6 +8,9 @@ import { device } from "../../../../utilities/device";
 import { width } from "./columnWidth";
 import DeleteConfirmModal from "../../DeleteConfirmModal";
 import EditUserRoleModal from '../../editModals/EditUserRoleModal';
+import * as Mutation from "../../../../apollo/graphqls/mutations/User";
+import { showFailAlarm, showSuccessAlarm } from "../../AlarmModal";
+
 
 const UserDataRow = ({ datum }) => {
     const dispatch = useDispatch();
@@ -20,7 +24,32 @@ const UserDataRow = ({ datum }) => {
     const [email, setEmail] = useState(datum.email);
     const [pending, setPending] = useState(false);
 
-    const deleteUser = () => {
+    const [resetPasswordMutation] = useMutation(Mutation.RESET_PASSWORD_BY_ADMIN, {
+        onCompleted: data => {
+            if(data.resetPasswordByAdmin) {
+                showSuccessAlarm(`User's password reseted successfully`);
+            }
+            setPending(false);
+            setIsPassModalOpen(false);
+        },
+        onError: err => {
+            console.log(err.message);
+            showFailAlarm('Action failed', 'Ops! Something went wrong!');
+            setPending(false);
+        }
+    });
+
+    const handleResetPassword = e => {
+        e.preventDefault();
+        setPending(true);
+        resetPasswordMutation({
+            variables: {
+                email: datum.email
+            }
+        });
+    };
+
+    const deleteUser = async () => {
         setIsConfirmOpen(false)
     };
 
@@ -397,7 +426,10 @@ const UserDataRow = ({ datum }) => {
                         <button className="btn previous" onClick={() => setIsPassModalOpen(false)}>
                             Cancel
                         </button>
-                        <button className="btn next">Reset Password</button>
+                        <button className="btn next"
+                            onClick={handleResetPassword}
+                            disabled={pending}
+                        >{pending? 'Reseting. . .': 'Reset Password'}</button>
                     </div>
                 </form>
             </Modal>

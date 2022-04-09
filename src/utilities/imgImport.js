@@ -62,6 +62,9 @@ import address from "../images/address.png"
 import pass from "../images/pass.svg"
 import unpass1 from "../images/unpass1.svg"
 import unpass2 from "../images/unpass2.svg"
+import consent_pass from "../images/consent_pass.svg"
+import consent_unpass1 from "../images/consent_unpass1.svg"
+import consent_unpass2 from "../images/consent_unpass2.svg"
 import newDoc from "../images/new_doc.png"
 import photoIcon from "../images/photo-icon.svg"
 import selfieImg from "../images/selfie-img.svg"
@@ -210,6 +213,9 @@ export const Address = address
 export const Pass = pass
 export const Unpass1 = unpass1
 export const Unpass2 = unpass2
+export const ConsentPass = consent_pass
+export const ConsentUnpass1 = consent_unpass1
+export const ConsentUnPass2 = consent_unpass2
 export const NewDoc = newDoc
 export const PhotoIcon = photoIcon
 export const SelfieImg = selfieImg

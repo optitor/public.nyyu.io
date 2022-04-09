@@ -7,6 +7,7 @@ import SocialTable from '../../components/admin/setting/SocialTable';
 import GeoTable from "../../components/admin/setting/GeoTable";
 import KYCTabPanel from "../../components/admin/setting/KYCTabPanel";
 import AMLTabPanel from "../../components/admin/setting/AMLTabPanel";
+import AvatarComponentTabPanel from "../../components/admin/setting/AvatarComponentTabPanel";
 import AvatarTabPanel from "../../components/admin/setting/AvatarTabPanel";
 import TokenTabPanel from "../../components/admin/setting/TokenTabPanel";
 import UserTiersPanel from "../../components/admin/setting/UserTiersPanel";
@@ -34,6 +35,7 @@ const IndexPage = () => {
                                 <Tab>Geo</Tab>
                                 <Tab>KYC</Tab>
                                 <Tab>AML</Tab>
+                                <Tab>AvatarComp</Tab>
                                 <Tab>Avatar</Tab>
                                 <Tab>Token</Tab>
                                 <Tab>User Tiers</Tab>
@@ -50,6 +52,9 @@ const IndexPage = () => {
                             </TabPanel>
                             <TabPanel>
                                 <AMLTabPanel />
+                            </TabPanel>
+                            <TabPanel>
+                                <AvatarComponentTabPanel />
                             </TabPanel>
                             <TabPanel>
                                 <AvatarTabPanel />

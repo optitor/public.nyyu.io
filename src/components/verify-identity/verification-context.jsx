@@ -1,7 +1,6 @@
 import useFileUpload from "react-use-file-upload";
 import React, { useContext, useState } from "react";
 import { VerificationCountriesList } from "../../utilities/countries-list";
-import { CLIENT_ID, SECRET } from "../../utilities/staticData";
 import { getCurrentDate } from "../../utilities/utility-methods";
 import { API_BASE_URL, SITE_URL } from "../../utilities/staticData3";
 
@@ -11,7 +10,7 @@ export const useVerification = () => useContext(VerificationContext);
 
 const VerificationProvider = ({ children }) => {
     // Containers
-    const consentText = `I and NDB ${getCurrentDate()}`;
+    const consentText = `I and NYYU ${getCurrentDate()}`;
     const [address, setAddress] = useState("");
     const [firstName, setFirstName] = useState("");
     const [surname, setSurname] = useState("");
@@ -19,6 +18,10 @@ const VerificationProvider = ({ children }) => {
     const [country, setCountry] = useState(VerificationCountriesList[0]);
     const [selfieImage, setSelfieImage] = useState();
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null);
+    const [userEmail, setUserEmail] = useState("");
+    const [dob, setDob] = useState("");
+    const [gender, setGender] = useState({label: "Male", value: "M"});
+    const [expiryDate, setExpiryDate] = useState("");
     const [step, setStep] = useState(-1); // --> initial value is -1
     const {
         files: documentFiles,
@@ -41,7 +44,6 @@ const VerificationProvider = ({ children }) => {
     const shuftiProBaseUrl = "https://api.shuftipro.com";
 
     const callbackUrl = `${API_BASE_URL}/shufti`;
-    // const redirectUrl = "http://localhost:8000/app/profile/"
     const redirectUrl = `${SITE_URL}/app/profile`;
 
     // Methods
@@ -53,6 +55,14 @@ const VerificationProvider = ({ children }) => {
     };
 
     const providerValue = {
+        userEmail,
+        setUserEmail,
+        dob,
+        setDob,
+        expiryDate,
+        setExpiryDate,
+        gender,
+        setGender,
         consentText,
         shuftReferencePayload,
         setShuftReferencePayload,

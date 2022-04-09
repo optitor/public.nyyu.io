@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import Zendesk from "react-zendesk";
+import React, { useEffect, useState } from "react";
+import Zendesk, {ZendeskAPI} from "react-zendesk";
+import { useMutation } from '@apollo/client';
 import Header from "../components/header";
 import {
     SupportAuthenticator,
@@ -14,6 +15,7 @@ import {
     SupportUnlock,
 } from "../utilities/imgImport";
 import ResetPasswordModal from "../components/support/reset-password-modal";
+import CustomSpinner from "./common/custom-spinner";
 import Seo from "../components/seo";
 import UnlockAccountModal from "../components/support/unlock-account-moda";
 import ResetPhoneModal from "../components/support/reset-phone-modal";
@@ -22,27 +24,63 @@ import DepositMissingModal from "../components/support/deposit-missing-modal";
 import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal";
 import DeleteAccountModal from "../components/profile/delete-account-modal";
 import { ZENDESK_KEY } from "../utilities/staticData3";
+import { ZendeskURLWithJWT } from "../utilities/staticData";
+import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';
+
+const setting = {
+    color: {
+        theme: "#000",
+    },
+    launcher: {
+        chatLabel: {
+            "en-US": "Need Help",
+        },
+    },
+    contactForm: {
+        fields: [
+            {
+                id: "description",
+                prefill: { "*": "My pre-filled description" },
+            },
+        ],
+    },
+};
 
 const FAQ = () => {
-    // Containers
-    const setting = {
-        color: {
-            theme: "#000",
+    // Container
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
+    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false);
+    const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false);
+    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false);
+    const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false);
+    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false);
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
+    const [pending, setPending] = useState(false);
+
+    const [getZendeskJwtMutation] = useMutation(GET_ZENDESK_JWT, {
+        onCompleted: data => {
+            if(data.getZendeskJwt) {
+                const jwtToken = data.getZendeskJwt?.token;
+                window.location.assign(`${ZendeskURLWithJWT}${jwtToken}`);
+            }
+            setPending(false);
         },
-        launcher: {
-            chatLabel: {
-                "en-US": "Need Help",
-            },
-        },
-        contactForm: {
-            fields: [
-                {
-                    id: "description",
-                    prefill: { "*": "My pre-filled description" },
-                },
-            ],
-        },
+        onError: err => {
+            console.log(err.message);
+            setPending(false);
+        }
+    });
+
+    const handleHelpCenter = () => {
+        setPending(true);
+        getZendeskJwtMutation();
     };
+
+    const handleHelpCommunity = () => {
+        setPending(true);
+        getZendeskJwtMutation();
+    };
+
     const selfServiceData = [
         {
             id: 0,
@@ -99,50 +137,44 @@ const FAQ = () => {
         },
     ];
 
-    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
-        useState(false);
-    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] =
-        useState(false);
-    const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false);
-    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] =
-        useState(false);
-    const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] =
-        useState(false);
-    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] =
-        useState(false);
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
-        useState(false);
     // Render
     return (
         <>
             <Seo title="Support" />
             <main className="faq-page">
                 <Header />
-                <section className="px-sm-5 px-2 pb-5 pb-sm-0 w-100">
+                <section className="px-sm-4 px-2 pb-5 pb-sm-0 w-100">
                     <div className="row m-0 mt-4 mt-sm-0">
                         <div className="col-lg-3 col-6 ps-0 my-2 my-sm-0">
-                            <a
+                            <button
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
-                                href="https://help.nyyu.io/"
-                                target="_blank"
+                                onClick={handleHelpCenter}
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
-                                    <div className="fw-bold text-uppercase support-banner-title">
-                                        help center
-                                    </div>
-                                    <img
-                                        src={SupportHelpCenter}
-                                        alt="Support help center"
-                                    />
+                                    {pending?
+                                        <CustomSpinner />
+                                        :
+                                        (
+                                            <>
+                                                <div className="fw-bold text-uppercase support-banner-title">
+                                                    help center
+                                                </div>
+                                                <img
+                                                    src={SupportHelpCenter}
+                                                    alt="Support help center"
+                                                />
+                                            </>
+                                        )
+                                    }
                                 </div>
-                            </a>
+                            </button>
                         </div>
 
-                        <div className="col-lg-3 col-6 ps-0 pe-0 pe-sm-2 my-2 my-sm-0">
+                        <div className="col-lg-3 col-6 ps-0 pe-0 pe-sm-10px my-2 my-sm-0">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
-                                href="https://help.nyyu.io/hc/en-gb/community/topics"
-                                target="_blank"
+                                href='https://help.nyyu.io/hc/en-gb/community/topics'
+                                target='_blank'
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
                                     <div className="fw-bold text-uppercase support-banner-title">

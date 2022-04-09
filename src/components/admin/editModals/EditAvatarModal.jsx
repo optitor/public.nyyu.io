@@ -54,7 +54,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
 
     // Stats Data Validation
     const statsDataError = useMemo(() => {
-        for (let i = 0; i < skills.length; i++) {
+        for (let i = 0; i < skills?.length; i++) {
             if (!skills[i].title) return { index: i, item: "title", desc: "Input is required" }
             if (!skills[i].stars) return { index: i, item: "stars", desc: "Rating is required" }
         }
