@@ -78,45 +78,27 @@ export const getShuftiStatusByReference = async (reference) => {
             if (data.event === null) output["event"] = "request.invalid";
             else output["event"] = data.event;
 
-            // default!
-            output["docStatus"] = false;
-            output["addrStatus"] = false;
-            output["conStatus"] = false;
-            output["selfieStatus"] = false;
-
             output['proofs'] = data.proofs;
             output['data'] = data.verification_data;
 
             // Document
             if ("document" in data.verification_result) {
                 output["docStatus"] = validateVerificationObject(data.verification_result.document);
-                if(!output["docStatus"]) {
-                    return output;
-                }
             }
 
             // Address
             if ("address" in data.verification_result) {
                 output["addrStatus"] = validateVerificationObject(data.verification_result.address);
-                if(!output["addrStatus"]) {
-                    return output;
-                }
             }
 
             //Consent
             if ("consent" in data.verification_result) {
                 output["conStatus"] = validateVerificationObject(data.verification_result.consent);
-                if(!output["conStatus"]) {
-                    return output;
-                }
             }
 
             // Selfie
             if ("face" in data.verification_result) {
                 output["selfieStatus"] = data.verification_result.face === 1 ? true : false;
-                if(!output["selfieStatus"]) {
-                    return output;
-                }
             }
 
             return output;
