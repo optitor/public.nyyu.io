@@ -34,6 +34,10 @@ export default function StepTwo() {
             error = true;
             setDateError("Please fill out the date of birth field");
         }
+        if (!verification.expiryDate) {
+            error = true;
+            setDateError("Please fill out the date of expiry field");
+        }
         if (!error) return verification.nextStep();
     };
 

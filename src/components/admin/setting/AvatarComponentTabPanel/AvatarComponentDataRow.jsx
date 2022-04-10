@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import svgToDataURL  from 'svg-to-dataurl';
 import parse from 'html-react-parser';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
@@ -10,7 +9,6 @@ import DeleteConfirmModal from '../../DeleteConfirmModal';
 import EditAvatarComponentModal from '../../editModals/EditAvatarComponentModal';
 import { delete_Avatar_Component } from "../../../../redux/actions/avatarAction";
 import { EmptyAvatar, BaseHair, BaseExpression } from '../../../../utilities/imgImport';
-
 
 const AvatarComponentDataRow = ({ datum = {} }) => {
     const dispatch = useDispatch();
@@ -141,12 +139,12 @@ const AvatarComponentDataRow = ({ datum = {} }) => {
                         </div>
                         <div className='right'>
                             <p>
-                                <span style={{fontSize: 16}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} data-bs-toggle="collapse" data-bs-target={`#id${datum.id}`} onClick={() => setShow(!show)} /></span>
+                                <span style={{fontSize: 16}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} data-bs-toggle="collapse" data-bs-target={`#id${datum.compId}`} onClick={() => setShow(!show)} /></span>
                             </p>
                         </div>
                     </UnitRowForMobile>
                 </div>
-                <div id={`id${datum.id}`} className='collapse'>
+                <div id={`id${datum.compId}`} className='collapse'>
                     <UnitRowForMobile>
                         <div className='left'>
                             <p style={{color: 'dimgrey'}}>ID</p>

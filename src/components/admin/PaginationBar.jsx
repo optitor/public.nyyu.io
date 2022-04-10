@@ -8,7 +8,7 @@ export default function PaginationBar({ setPage, page, limit, total }) {
     if(!total) return;
     const count = Math.ceil(total / limit);
     if(page > count) setPage({ page: count, limit });
-  }, [page, limit, total]);
+  }, [setPage, page, limit, total]);
 
   const handleSetPage = (event, value) => {
     event.preventDefault();
