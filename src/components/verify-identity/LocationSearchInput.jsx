@@ -74,6 +74,7 @@ const LocationSearchInput = () => {
 export default LocationSearchInput;
 
 const GooglePlacesDiv = styled.div`
+  position: relative;
   p {
     color: black;
   }
@@ -85,6 +86,8 @@ const GooglePlacesDiv = styled.div`
   }
   div.autocomplete-dropdown-container {
     background-color: white;
+    position: absolute;
+    width: 100%;
     .dropdown_item {
       min-height: 30px;
       p.desc {
