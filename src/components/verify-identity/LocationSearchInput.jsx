@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { useVerification } from './verification-context';
+import _ from 'lodash';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 
@@ -37,8 +38,8 @@ const LocationSearchInput = () => {
                   })}
               />
             </div>
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
+            <div className="autocomplete-dropdown-container" style={{paddingBottom: _.isEmpty(suggestions)? 0: 6}}>
+              {loading && <div className='text-center'>Loading...</div>}
               {suggestions.map((suggestion, index) => {
                 const className = suggestion.active
                   ? 'suggestion-item--active'
@@ -58,7 +59,7 @@ const LocationSearchInput = () => {
                       <p className='ps-2'>
                         <Icon icon='fa6-solid:location-dot' />
                       </p>
-                      <p className='ps-3'>{suggestion.description}</p>
+                      <p className='ps-3 desc'>{suggestion.description}</p>
                     </div>
                   </div>
                 );
@@ -74,14 +75,21 @@ export default LocationSearchInput;
 
 const GooglePlacesDiv = styled.div`
   p {
-    color: #000000;
+    color: black;
   }
   div#search_div {
     background-color: white;
-  }
-  div.autocomplete-dropdown-container {
-    .dropdown_item {
-      min-height: 30px;
+    input {
+      font-size: 13px;
     }
   }
-`
+  div.autocomplete-dropdown-container {
+    background-color: white;
+    .dropdown_item {
+      min-height: 30px;
+      p.desc {
+        font-size: 12px;
+      }
+    }
+  }
+`;
