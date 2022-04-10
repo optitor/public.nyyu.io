@@ -52,7 +52,7 @@ export default function StepFour() {
                         <div className="fs-16px fw-500">Make edits if needed</div>
                     </div>
                     <div className="col-sm-8 col-12 mx-auto">
-                        <div>
+                        <div className="mx-auto" style={{maxWidth: 530}}>
                             <p className="form-label mt-4">Address</p>
                             <LocationSearchInput />
                             <div className="text-danger mt-2">{addressError}</div>

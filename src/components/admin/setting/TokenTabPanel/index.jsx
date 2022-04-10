@@ -80,7 +80,7 @@ const TableHead = styled.div`
 
     @media screen and (max-width: ${device['phone']}){
         display: none;
-    }    
+    }
 `;
 
 const TableHeadForMobile = styled.div`
