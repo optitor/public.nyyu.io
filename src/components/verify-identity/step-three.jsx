@@ -10,7 +10,7 @@ import {
 import Loading from "../common/Loading";
 import { VerificationCountriesList } from "../../utilities/countries-list";
 import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData";
-import { useVerification } from "./verification-context";
+import  { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context";
 
 export default function StepThree() {
     // Containers
@@ -126,10 +126,17 @@ export default function StepThree() {
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 onChange={(e) =>
-                                                    verification.addressProof.setFiles(
-                                                        e,
-                                                        "w"
-                                                    )
+                                                    {
+                                                        const extension = e.target.files[0].type;
+                                                        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+                                                            /// warning message 
+                                                            return;
+                                                        }
+                                                        verification.addressProof.setFiles(
+                                                            e,
+                                                            "w"
+                                                        );
+                                                    }
                                                 }
                                             />
                                             <div className="py-3 px-0">

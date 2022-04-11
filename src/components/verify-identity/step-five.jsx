@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Loading from "../common/Loading"
-import { useVerification } from "./verification-context"
+import { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context"
 import { NewDoc, VerifyIdStep5, ConsentPass, ConsentUnpass1, ConsentUnPass2 } from "../../utilities/imgImport"
 
 export default function StepOne() {
@@ -83,7 +83,14 @@ export default function StepOne() {
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 onChange={(e) =>
-                                                    verification.consentProof.setFiles(e, "w")
+                                                    {
+                                                        const extension = e.target.files[0].type;
+                                                        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+                                                            /// warning message 
+                                                            return;
+                                                        }
+                                                        verification.consentProof.setFiles(e, "w")
+                                                    }
                                                 }
                                             />
                                             <div className="py-3 px-0">
