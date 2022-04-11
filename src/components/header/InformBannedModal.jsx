@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { device } from '../../utilities/device';
 import { SadFace } from '../../utilities/imgImport';
 
-const InformBannedModal = ({isModalOpen, setIsModalOpen}) => {
+const InformBannedModal = ({isModalOpen, setIsModalOpen, bannedCountry }) => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -32,10 +32,10 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen}) => {
             <InformBanned>
                 <div className='text-center mb-5 px-5'>
                     <img src={SadFace} />
-                    <p className='mt-3'>It seems you are accessing nyyu.io from an IP address belonging to the unallowed country.</p>
+                    <p className='mt-3'>It seems you are accessing nyyu.io from an IP address belonging to {bannedCountry}.</p>
                     <p className='mt-3'>
                         As per our
-                        <a target='_blank' href='https://ndb.technology' className='ms-2 text-green text-underline'>Terms of Use</a>
+                        <span className='ms-2 text-green text-underline'>Terms of Use</span>
                         , we are unable to provide services to users from this region.
                     </p>
                 </div>

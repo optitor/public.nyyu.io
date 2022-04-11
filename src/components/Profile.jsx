@@ -219,6 +219,7 @@ const Profile = () => {
                                     <div className="my-5 user-info__avatar"
                                        onClick={() => setIsDressUpModalOpen(true)}
                                        onKeyDown={() => setIsDressUpModalOpen(true)}
+                                       style={{opacity: loading? 0.5: 1}}
                                     >
                                         <Avatar />
                                     </div>
@@ -298,7 +299,7 @@ const Profile = () => {
                                                     onKeyDown={() => setIsDressUpModalOpen(true)}
                                                 >
                                                     <div className="pt-3">
-                                                        DressUp
+                                                        Dress Up
                                                     </div>
                                                 </Tab>
                                             </TabList>
@@ -382,11 +383,11 @@ const Profile = () => {
                                                 />
                                             </TabPanel>
                                             <TabPanel>
-                                                <div>
-                                                    <div className="user-info_avatar">
+                                                <>
+                                                    <div className="user-info_avatar" style={{opacity: loading? 0.5: 1}}>
                                                         <Avatar />
                                                     </div>
-                                                </div>
+                                                </>
                                             </TabPanel>
                                         </Tabs>
                                     </>
