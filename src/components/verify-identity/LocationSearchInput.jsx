@@ -38,7 +38,7 @@ const LocationSearchInput = () => {
                   })}
               />
             </div>
-            <div className="autocomplete-dropdown-container" style={{paddingBottom: _.isEmpty(suggestions)? 0: 6}}>
+            <div className="autocomplete-dropdown-container" style={{paddingBottom: _.isEmpty(suggestions)? 0: 4}}>
               {loading && <div className='text-center'>Loading...</div>}
               {suggestions.map((suggestion, index) => {
                 const className = suggestion.active
