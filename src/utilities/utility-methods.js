@@ -49,7 +49,9 @@ export async function downloadFileFromShufti(url) {
 export const getShuftiStatusByReference = async (reference) => {
     if (!reference) return "INVALID";
     const clientId = process.env.GATSBY_SHUFTI_CLIENT;
+    console.log("shufti clientId: ", clientId);
     const secret = process.env.GATSBY_SHUFTI_SECRET;
+    console.log("shufti secret: ", clientId);
     const output = {};
     const response = await axios
         .post(
@@ -63,7 +65,10 @@ export const getShuftiStatusByReference = async (reference) => {
                 },
             }
         )
-        .catch((error) => (output["event"] = "request.invalid"));
+        .catch((error) => {
+            (output["event"] = "request.invalid");
+            console.log(error);
+        });
 
     if ("event" in output) {
         output["docStatus"] = false;
