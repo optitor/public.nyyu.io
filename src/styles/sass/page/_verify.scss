@@ -247,6 +247,9 @@
         }
         &-step2,
         &-step1 {
+            input {
+                height: 38px;
+            }
             // margin-bottom: -30px;
             .upload {
                 &-doc {
