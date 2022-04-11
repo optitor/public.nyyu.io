@@ -9,12 +9,13 @@ export default function PrivacyPolicy({ agree, setAgree, lang }) {
         <div className="mt-5 privacy-policy">
             <div className="privacy-policy-checkout">
                 <button
+                    id='agree_policy'
                     onClick={() => setAgree(!agree)}
                     className={agree ? "check-box check-box_checked" : "check-box"}
                 >
                     {agree && <Icon icon="akar-icons:check" />}
                 </button>
-                <div className="ms-3">{lang?.agree}</div>
+                <label className="ms-3" htmlFor='agree_policy'>{lang?.agree}</label>
             </div>
             <Link to="#" className="txt-green link" onClick={() => setOpen(true)}>
                 Privacy Policy

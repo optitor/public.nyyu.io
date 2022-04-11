@@ -3,6 +3,7 @@ import { useState } from "react"
 import { VerifyIdStep4 } from "../../utilities/imgImport"
 import Loading from "../common/Loading"
 import { useVerification } from "./verification-context"
+import LocationSearchInput from "./LocationSearchInput"
 
 export default function StepFour() {
     // Containers
@@ -51,15 +52,9 @@ export default function StepFour() {
                         <div className="fs-16px fw-500">Make edits if needed</div>
                     </div>
                     <div className="col-sm-8 col-12 mx-auto">
-                        <div>
+                        <div className="mx-auto" style={{maxWidth: 530}}>
                             <p className="form-label mt-4">Address</p>
-                            <input
-                                type="text"
-                                value={verification.address}
-                                onChange={(e) => verification.setAddress(e.target.value)}
-                                className="form-control"
-                                placeholder="17th floor, Street name, city"
-                            />
+                            <LocationSearchInput />
                             <div className="text-danger mt-2">{addressError}</div>
                         </div>
                     </div>
