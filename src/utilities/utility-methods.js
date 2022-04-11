@@ -51,7 +51,7 @@ export const getShuftiStatusByReference = async (reference) => {
     const clientId = process.env.GATSBY_SHUFTI_CLIENT;
     console.log("shufti clientId: ", clientId);
     const secret = process.env.GATSBY_SHUFTI_SECRET;
-    console.log("shufti secret: ", clientId);
+    console.log("shufti secret: ", secret);
     const output = {};
     const response = await axios
         .post(
