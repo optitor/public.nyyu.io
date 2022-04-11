@@ -117,6 +117,7 @@ export default function StepTwo() {
                                 value={verification.gender}
                                 onChange={(v) => verification.setGender(v)}
                                 placeholder="Choose country"
+                                styles={GenderSelectStyle}
                             />
                             {/* <div className="text-danger mt-2 fs-12px">
                                 {genderError}
@@ -173,3 +174,10 @@ export default function StepTwo() {
         </>
     );
 }
+
+const GenderSelectStyle = {
+    singleValue: (provided) => ({
+        ...provided,
+        fontSize: 13,
+    }),
+};

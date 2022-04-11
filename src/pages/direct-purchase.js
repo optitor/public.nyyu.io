@@ -37,7 +37,7 @@ const IndexPage = () => {
                                     <div className="exclusive-label">exlusive sale of</div>
                                     <div className="ndb-tokens-label">10,000,000 NDB Tokens</div>
                                     <div className="miss-label">
-                                        Don't miss an opportunity to buy limited number of NDB
+                                        Do not miss an opportunity to buy limited number of NDB
                                         Tokens at the fixed price before the next auction round
                                         started.
                                     </div>

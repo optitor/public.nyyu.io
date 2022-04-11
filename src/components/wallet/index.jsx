@@ -208,9 +208,9 @@ const Wallet = () => {
                                 <div className="tab-top">
                                     <TabList>
                                         <Tab>market</Tab>
-                                        <Tab>stake</Tab>
-                                        <Tab>referral</Tab>
-                                        <Tab>airdrops</Tab>
+                                        <Tab disabled={true}>stake</Tab>
+                                        <Tab disabled={true}>referral</Tab>
+                                        <Tab disabled={true}>airdrops</Tab>
                                         <Tab>transaction</Tab>
                                     </TabList>
                                 </div>

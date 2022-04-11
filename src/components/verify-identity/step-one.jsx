@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Select from "react-select";
 import Loading from "../common/Loading";
 
-import { useVerification } from "./verification-context";
+import { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context";
 import { VerificationCountriesList } from "../../utilities/countries-list";
 import {
     NewDoc,
@@ -82,7 +82,7 @@ export default function StepOne() {
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot" />
-                                    <p>Don't fold the document</p>
+                                    <p>Do not fold the document</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot" />
@@ -121,10 +121,17 @@ export default function StepOne() {
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 onChange={(e) =>
-                                                    verification.documentProof.setFiles(
-                                                        e,
-                                                        "w"
-                                                    )
+                                                    {
+                                                        const extension = e.target.files[0].type;
+                                                        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+                                                            /// warning message 
+                                                            return;
+                                                        }
+                                                        verification.documentProof.setFiles(
+                                                            e,
+                                                            "w"
+                                                        )
+                                                    }
                                                 }
                                             />
                                             <div className="py-3 px-0">

@@ -1,7 +1,7 @@
 import Select from "react-select";
 import Loading from "./common/Loading";
 import { navigate } from "gatsby";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 
 import Header from "../components/header";
@@ -32,6 +32,9 @@ import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice";
 import { logout } from "../utilities/auth";
 import { getShuftiStatusByReference } from "../utilities/utility-methods";
 import TierProgressBar from "./profile/TierProgressBar";
+import DressupModal from "./dress-up/dressup-user-modal";
+import { getAuthInfo } from "../redux/actions/authAction";
+import { UPDATE_AVATARSET } from "../apollo/graphqls/mutations/AvatarComponent";
 
 const Profile = () => {
     const [tab, setTab] = useState(useSelector((state) => state.profileTab));
@@ -40,6 +43,7 @@ const Profile = () => {
     const [displayName, setDisplayName] = useState("");
     const [userTiersData, setUserTiersData] = useState(null);
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false);
+    const [isDressUpModalOpen, setIsDressUpModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [currentProfileTab, setCurrentProfileTab] = useState(
         profile_tabs[tab]
@@ -82,6 +86,16 @@ const Profile = () => {
         fetchPolicy: "network-only",
         errorpolicy: "ignore",
     });
+
+    const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
+        onCompleted: (data) => {
+            dispatch(getAuthInfo())
+        },
+        onError: (err) => {
+            console.log("received Mutation data", err)
+        }
+    })
+
     const loadingPage = !(displayName && userTiersData && shuftiStatus);
     // Containers
     const user = userData?.getUser;
@@ -160,6 +174,7 @@ const Profile = () => {
             </>
         );
     };
+    
 
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user]);
 
@@ -201,7 +216,10 @@ const Profile = () => {
                         <div className="row">
                             <div className="col-lg-3 profile-page__left border-light border-0 border-end">
                                 <div className="user-info">
-                                    <div className="my-5 user-info__avatar">
+                                    <div className="my-5 user-info__avatar"
+                                       onClick={() => setIsDressUpModalOpen(true)}
+                                       onKeyDown={() => setIsDressUpModalOpen(true)}
+                                    >
                                         <Avatar />
                                     </div>
                                     <div className="user-info__name">
@@ -273,6 +291,14 @@ const Profile = () => {
                                                 <Tab>
                                                     <div className="pt-3">
                                                         tier Details
+                                                    </div>
+                                                </Tab>
+                                                <Tab
+                                                    onClick={() => setIsDressUpModalOpen(true)}
+                                                    onKeyDown={() => setIsDressUpModalOpen(true)}
+                                                >
+                                                    <div className="pt-3">
+                                                        DressUp
                                                     </div>
                                                 </Tab>
                                             </TabList>
@@ -355,6 +381,13 @@ const Profile = () => {
                                                     shuftiStatus={shuftiStatus}
                                                 />
                                             </TabPanel>
+                                            <TabPanel>
+                                                <div>
+                                                    <div className="user-info_avatar">
+                                                        <Avatar />
+                                                    </div>
+                                                </div>
+                                            </TabPanel>
                                         </Tabs>
                                     </>
                                 )}
@@ -401,6 +434,15 @@ const Profile = () => {
                         setIsDeleteAccountModalOpen={
                             setIsDeleteAccountModalOpen
                         }
+                    />
+                    <DressupModal
+                        setIsModalOpen={setIsDressUpModalOpen}
+                        isModalOpen={isDressUpModalOpen}
+                        onSave={(res) => {
+                            updateAvatarSet({
+                                variables: { ...res }
+                            })
+                        }}
                     />
                 </main>
             </>
