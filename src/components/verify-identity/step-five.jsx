@@ -45,22 +45,22 @@ export default function StepOne() {
                             <p className="my-3 fw-bold">{verification.consentText}</p>
                             <div className="requirements mt-0">
                                 <p className="fs-14px">Photo requirements:</p>
-                                <p className="d-flex align-items-center gap-2 ms-2 item">
+                                <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <div>Upload entire document clearly</div>
-                                </p>
-                                <p className="d-flex align-items-center gap-2 ms-2 item">
+                                    <p>Upload entire document clearly</p>
+                                </div>
+                                <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <div>Don`t fold the document</div>
-                                </p>
-                                <p className="d-flex align-items-center gap-2 ms-2 item">
+                                    <p>Don`t fold the document</p>
+                                </div>
+                                <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <div>No image from another image or device</div>
-                                </p>
-                                <p className="d-flex align-items-center gap-2 ms-2 item">
+                                    <p>No image from another image or device</p>
+                                </div>
+                                <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <div>No paper-base document</div>
-                                </p>
+                                    <p>No paper-base document</p>
+                                </div>
                             </div>
                         </div>
                         <div className="col-md-6 col-12">

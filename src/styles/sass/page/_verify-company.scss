@@ -221,10 +221,6 @@
             justify-content: start;
             padding-top: 0 !important;
             padding-bottom: 0 !important;
-            .css-qc6sy-singleValue {
-                font-family: "Montserrat";
-                font-size: 13px;
-            }
             @include mq("phone", max) {
                 padding: 8px;
             }
