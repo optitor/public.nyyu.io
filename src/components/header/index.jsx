@@ -42,7 +42,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         onError: err => {
             if (err.graphQLErrors[0]?.isBannedCountry) {
                 setInformMessage({
-                    first: `It seems you are accessing nyyu.io from an IP address belonging to ${err.graphQLErrors[0].country}.`,
+                    first: `It seems you are accessing nyyu from an IP address belonging to ${err.graphQLErrors[0].country}.`,
                     second: 'we are unable to provide services to users from this region.'
                 });
                 navigate("/")
@@ -50,15 +50,13 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 setIsBannedOpen(true)
             } else if(err.graphQLErrors[0].isAnonymousIp) {
                 setInformMessage({
-                    first: 'It seems you are accessing nyyu.io via anonymous proxy or VPN.',
+                    first: 'It seems you are accessing nyyu via anonymous proxy, VPN or VPS.',
                     second: 'we are unable to provide services to you.'
                 });
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
             }
-            // isAnonymousIp
-            // message
         }
     })
 
