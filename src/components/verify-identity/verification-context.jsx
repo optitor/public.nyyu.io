@@ -5,7 +5,7 @@ import { getCurrentDate } from "../../utilities/utility-methods";
 import { API_BASE_URL, SITE_URL } from "../../utilities/staticData3";
 
 export const ACCEPTED_IMAGE_FORMAT = [
-    'image/jpge', 'image/jpg', 'image/png', 'application/pdf'
+    'image/jpeg', 'image/jpg', 'image/png', 'application/pdf'
 ]
 
 export const VerificationContext = React.createContext();

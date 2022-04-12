@@ -1,23 +1,34 @@
 import React, { useState } from "react"
+import useDeepCompareEffect from "use-deep-compare-effect"
 import Loading from "../common/Loading"
 import { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context"
 import { NewDoc, VerifyIdStep5, ConsentPass, ConsentUnpass1, ConsentUnPass2 } from "../../utilities/imgImport"
+import AlarmModal, { showFailAlarm } from "../admin/AlarmModal"
 
 export default function StepOne() {
     // Containers
     const verification = useVerification()
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
 
     // Methods
-    const onUserDropFile = (e) => {
-        const extension = e.target.files[0].type;
-        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
-            /// warning message 
+    const handleFileUpload = (e) => {
+        verification.consentProof.handleDragDropEvent(e);
+        verification.consentProof.setFiles(e, "w");
+    };
+
+    useDeepCompareEffect(() => {
+        const file = verification.consentProof.files[0]
+        const extension = file?.type;
+        if(!file) {
             return;
+        } else if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+            setError('Not_supported');
+            showFailAlarm('Wrong file format', 'You can only upload PNG, JPG, JPEG or PDF');
+        } else {
+            setError('');
         }
-        verification.consentProof.handleDragDropEvent(e)
-        verification.consentProof.setFiles(e, "w")
-    }
+    }, [verification.consentProof.files]);
 
     // Render
     verification.shuftReferencePayload?.conStatus === true && verification.nextStep()
@@ -56,7 +67,7 @@ export default function StepOne() {
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <p>Don`t fold the document</p>
+                                    <p>Do not fold the document</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
@@ -81,23 +92,14 @@ export default function StepOne() {
                                             onDragOver={
                                                 verification.consentProof.handleDragDropEvent
                                             }
-                                            onDrop={onUserDropFile}
+                                            onDrop={handleFileUpload}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 accept=".png, .jpg, .jpeg, .pdf"
-                                                onChange={(e) =>
-                                                    {
-                                                        const extension = e.target.files[0].type;
-                                                        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
-                                                            /// warning message 
-                                                            return;
-                                                        }
-                                                        verification.consentProof.setFiles(e, "w")
-                                                    }
-                                                }
+                                                onChange={handleFileUpload}
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -108,17 +110,35 @@ export default function StepOne() {
                                                     />
                                                 </div>
                                                 {verification.consentProof.files[0] ? (
-                                                    <p className="mt-30px">
-                                                        {verification.consentProof.files[0].name}{" "}
-                                                        <span className="txt-green fw-bold">
-                                                            selected
-                                                        </span>
-                                                    </p>
+                                                    <>
+                                                        <p className="mt-30px text-center">
+                                                            {
+                                                                verification
+                                                                    .consentProof
+                                                                    .files[0].name
+                                                            }{" "}
+                                                            <span className="txt-green fw-normal">
+                                                                selected
+                                                            </span>
+                                                        </p>
+                                                        {error === 'Not_supported' && 
+                                                        <p className="text-center">
+                                                            <small style={{color: 'red'}}>PDF, PNG or JPG file formats only</small>
+                                                        </p>}
+                                                    </>
                                                 ) : (
-                                                    <p className="file-browse">
-                                                        Drag & drop files here or{" "}
-                                                        <span className="fw-bold">browse</span>
-                                                    </p>
+                                                    <>
+                                                        <p className="file-browse">
+                                                            Drag & drop files here
+                                                            or{" "}
+                                                            <span className="fw-normal">
+                                                                browse
+                                                            </span>
+                                                        </p>
+                                                        <p className="text-center">
+                                                            <small>PDF, PNG or JPG file formats only</small>
+                                                        </p>
+                                                    </>
                                                 )}
                                             </div>
                                         </label>
@@ -150,6 +170,7 @@ export default function StepOne() {
                     </div>
                 </div>
             </div>
+            <AlarmModal />
         </>
     )
 }
