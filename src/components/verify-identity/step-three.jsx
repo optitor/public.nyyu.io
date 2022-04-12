@@ -1,5 +1,7 @@
 import Select from "react-select";
 import React, { useState } from "react";
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import AlarmModal, { showFailAlarm } from "../admin/AlarmModal";
 import {
     NewDoc,
     Pass,
@@ -19,17 +21,26 @@ export default function StepThree() {
     const [docType, setDocType] = useState(
         VerificationStepThreeDocumentTypes[0]
     );
+    const [error, setError] = useState('');
 
     // Methods
-    const onUserDropFile = (e) => {
-        const extension = e.target.files[0].type;
-        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
-            /// warning message 
-            return;
-        }
+    const handleFileUpload = (e) => {
         verification.addressProof.handleDragDropEvent(e);
         verification.addressProof.setFiles(e, "w");
     };
+
+    useDeepCompareEffect(() => {
+        const file = verification.addressProof.files[0]
+        const extension = file?.type;
+        if(!file) {
+            return;
+        } else if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+            setError('Not_supported');
+            showFailAlarm('Wrong file format', 'You can only upload PNG, JPG, JPEG, PDF');
+        } else {
+            setError('');
+        }
+    }, [verification.addressProof.files]);
 
     // Render
     verification.shuftReferencePayload?.addrStatus === true &&
@@ -124,26 +135,14 @@ export default function StepThree() {
                                                 verification.addressProof
                                                     .handleDragDropEvent
                                             }
-                                            onDrop={onUserDropFile}
+                                            onDrop={handleFileUpload}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 accept=".png, .jpg, .jpeg, .pdf"
-                                                onChange={(e) =>
-                                                    {
-                                                        const extension = e.target.files[0].type;
-                                                        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
-                                                            /// warning message 
-                                                            return;
-                                                        }
-                                                        verification.addressProof.setFiles(
-                                                            e,
-                                                            "w"
-                                                        );
-                                                    }
-                                                }
+                                                onChange={handleFileUpload}
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -153,26 +152,36 @@ export default function StepThree() {
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {verification.addressProof
-                                                    .files[0] ? (
-                                                    <p className="mt-30px">
-                                                        {
-                                                            verification
-                                                                .addressProof
-                                                                .files[0].name
-                                                        }{" "}
-                                                        <span className="txt-green fw-bold">
-                                                            selected
-                                                        </span>
-                                                    </p>
+                                                {verification.addressProof.files[0] ? (
+                                                    <>
+                                                        <p className="mt-30px text-center">
+                                                            {
+                                                                verification
+                                                                    .addressProof
+                                                                    .files[0].name
+                                                            }{" "}
+                                                            <span className="txt-green fw-normal">
+                                                                selected
+                                                            </span>
+                                                        </p>
+                                                        {error === 'Not_supported' && 
+                                                        <p className="text-center">
+                                                            <small style={{color: 'red'}}>PDF, PNG or JPG file formats only</small>
+                                                        </p>}
+                                                    </>
                                                 ) : (
-                                                    <p className="file-browse">
-                                                        Drag & drop files here
-                                                        or{" "}
-                                                        <span className="fw-bold">
-                                                            browse
-                                                        </span>
-                                                    </p>
+                                                    <>
+                                                        <p className="file-browse">
+                                                            Drag & drop files here
+                                                            or{" "}
+                                                            <span className="fw-normal">
+                                                                browse
+                                                            </span>
+                                                        </p>
+                                                        <p className="text-center">
+                                                            <small>PDF, PNG or JPG file formats only</small>
+                                                        </p>
+                                                    </>
                                                 )}
                                             </div>
                                         </label>
@@ -210,6 +219,7 @@ export default function StepThree() {
                     </div>
                 </div>
             </div>
+            <AlarmModal />
         </>
     );
 }
