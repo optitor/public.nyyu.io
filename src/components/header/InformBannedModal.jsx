@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { device } from '../../utilities/device';
 import { SadFace } from '../../utilities/imgImport';
 
-const InformBannedModal = ({isModalOpen, setIsModalOpen, informMessage }) => {
+const InformBannedModal = ({isModalOpen, setIsModalOpen, informMessage={} }) => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -31,14 +31,14 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen, informMessage }) => {
             </div>
             <InformBanned>
                 <div className='text-center mb-5 px-5'>
-                    <img src={SadFace} />
+                    <img src={SadFace} alt='Sad' />
                     <p className='mt-3'>
-                        {informMessage}
+                        {informMessage.first}
                     </p>
                     <p className='mt-3'>
                         As per our
                         <span className='ms-2 text-green text-underline'>Terms of Use</span>
-                        , we are unable to provide services to users from this region.
+                        , {informMessage.second}
                     </p>
                 </div>
             </InformBanned>
