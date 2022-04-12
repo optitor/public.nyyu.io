@@ -10,7 +10,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { setCurrentAuthInfo } from "../../redux/actions/authAction"
 import { fetch_Avatar_Components } from "../../redux/actions/avatarAction"
 
-import Loading from "../common/FadeLoading"
+// import Loading from "../common/FadeLoading"
 import LoadCurrencyRates from "./LoadCurrencyRates"
 import Avatar from "../dress-up/avatar"
 import UserTier from "./user-tier"
@@ -25,7 +25,10 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
     const [banned, setBanned] = useState(false)
     const [isBannedOpen, setIsBannedOpen] = useState(false)
-    const [informMessage, setInformMessage] = useState('');
+    const [informMessage, setInformMessage] = useState({
+        first: '',
+        second: ''
+    });
 
     // Webservice
     const { data: user_data } = useQuery(GET_USER)
@@ -38,12 +41,18 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         },
         onError: err => {
             if (err.graphQLErrors[0]?.isBannedCountry) {
-                setInformMessage(`It seems you are accessing nyyu.io from an IP address belonging to ${err.graphQLErrors[0].country}.`);
+                setInformMessage({
+                    first: `It seems you are accessing nyyu.io from an IP address belonging to ${err.graphQLErrors[0].country}.`,
+                    second: 'we are unable to provide services to users from this region.'
+                });
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
             } else if(err.graphQLErrors[0].isAnonymousIp) {
-                setInformMessage('It seems you are accessing nyyu.io via anonymous proxy or VPN.');
+                setInformMessage({
+                    first: 'It seems you are accessing nyyu.io via anonymous proxy or VPN.',
+                    second: 'we are unable to provide services to you.'
+                });
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
