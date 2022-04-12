@@ -155,13 +155,18 @@ export default function StepOne() {
                                                         </span>
                                                     </p>
                                                 ) : (
-                                                    <p className="file-browse">
-                                                        Drag & drop files here
-                                                        or{" "}
-                                                        <span className="fw-normal">
-                                                            browse
-                                                        </span>
-                                                    </p>
+                                                    <>
+                                                        <p className="file-browse">
+                                                            Drag & drop files here
+                                                            or{" "}
+                                                            <span className="fw-normal">
+                                                                browse
+                                                            </span>
+                                                        </p>
+                                                        <p className="text-center">
+                                                            <small>PDF, PNG or JPG file formats only</small>
+                                                        </p>
+                                                    </>
                                                 )}
                                             </div>
                                         </label>
