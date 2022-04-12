@@ -35,7 +35,7 @@ export default function StepOne() {
             return;
         } else if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
             setError('Not_supported');
-            showFailAlarm('Wrong file format', 'You can only upload PNG, JPG, JPEG, PDF');
+            showFailAlarm('Wrong file format', 'You can only upload PNG, JPG, JPEG or PDF');
         } else {
             setError('');
         }
