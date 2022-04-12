@@ -87,7 +87,7 @@ const AlarmModalContainer = styled.div`
         border-radius: 0;
         border: 1px solid white;
         div.modal-body {
-            padding: 2rem;
+            padding: 3rem;
             div.icon>img {
                 display: block;
                 margin: auto;
@@ -96,12 +96,12 @@ const AlarmModalContainer = styled.div`
             div.inform {
                 font-size: 32px;
                 font-weight: 600;
-                margin-top: 20px;
+                margin-top: 40px;
             }
             div.subInform {
-                font-size: 24px;
-                font-weight: 500;
+                font-size: 16px;
                 height: 50px;
+                color: lightgrey;
             }
             @media screen and (max-width: ${device['laptop']}) {
                 padding: 1rem;

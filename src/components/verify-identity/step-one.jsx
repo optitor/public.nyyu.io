@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import useDeepCompareEffect from 'use-deep-compare-effect'
 import Select from "react-select";
 import Loading from "../common/Loading";
+import AlarmModal, { showFailAlarm } from "../admin/AlarmModal";
 
 import { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context";
 import { VerificationCountriesList } from "../../utilities/countries-list";
@@ -18,17 +20,26 @@ export default function StepOne() {
     const verification = useVerification();
     const [loading, setLoading] = useState(true);
     const [docType, setDocType] = useState(VerificationDocumentTypes[0]);
+    const [error, setError] = useState('');
 
     // Methods
-    const onUserDropFile = (e) => {
+    const handleFileUpload = (e) => {
         verification.documentProof.handleDragDropEvent(e);
-        const extension = e.target.files[0].type;
-        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
-            /// warning message 
-            return;
-        }
         verification.documentProof.setFiles(e, "w");
     };
+
+    useDeepCompareEffect(() => {
+        const file = verification.documentProof.files[0]
+        const extension = file?.type;
+        if(!file) {
+            return;
+        } else if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+            setError('Not_supported');
+            showFailAlarm('Wrong file format', 'You can only upload PNG, JPG, JPEG, PDF');
+        } else {
+            setError('');
+        }
+    }, [verification.documentProof.files]);
 
     // Render
     verification.shuftReferencePayload?.docStatus === true &&
@@ -119,26 +130,14 @@ export default function StepOne() {
                                                 verification.documentProof
                                                     .handleDragDropEvent
                                             }
-                                            onDrop={onUserDropFile}
+                                            onDrop={handleFileUpload}
                                         >
                                             <input
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
                                                 accept=".png, .jpg, .jpeg, .pdf"
-                                                onChange={(e) =>
-                                                    {
-                                                        const extension = e.target.files[0].type;
-                                                        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
-                                                            /// warning message 
-                                                            return;
-                                                        }
-                                                        verification.documentProof.setFiles(
-                                                            e,
-                                                            "w"
-                                                        )
-                                                    }
-                                                }
+                                                onChange={handleFileUpload}
                                             />
                                             <div className="py-3 px-0">
                                                 <div className="new-doc mx-auto">
@@ -148,26 +147,36 @@ export default function StepOne() {
                                                         alt="new doc"
                                                     />
                                                 </div>
-                                                {verification.documentProof
-                                                    .files[0] ? (
-                                                    <p className="mt-30px">
-                                                        {
-                                                            verification
-                                                                .documentProof
-                                                                .files[0].name
-                                                        }{" "}
-                                                        <span className="txt-green fw-normal">
-                                                            selected
-                                                        </span>
-                                                    </p>
+                                                {verification.documentProof.files[0] ? (
+                                                    <>
+                                                        <p className="mt-30px text-center">
+                                                            {
+                                                                verification
+                                                                    .documentProof
+                                                                    .files[0].name
+                                                            }{" "}
+                                                            <span className="txt-green fw-normal">
+                                                                selected
+                                                            </span>
+                                                        </p>
+                                                        {error === 'Not_supported' && 
+                                                        <p className="text-center">
+                                                            <small style={{color: 'red'}}>PDF, PNG or JPG file formats only</small>
+                                                        </p>}
+                                                    </>
                                                 ) : (
-                                                    <p className="file-browse">
-                                                        Drag & drop files here
-                                                        or{" "}
-                                                        <span className="fw-normal">
-                                                            browse
-                                                        </span>
-                                                    </p>
+                                                    <>
+                                                        <p className="file-browse">
+                                                            Drag & drop files here
+                                                            or{" "}
+                                                            <span className="fw-normal">
+                                                                browse
+                                                            </span>
+                                                        </p>
+                                                        <p className="text-center">
+                                                            <small>PDF, PNG or JPG file formats only</small>
+                                                        </p>
+                                                    </>
                                                 )}
                                             </div>
                                         </label>
@@ -196,11 +205,11 @@ export default function StepOne() {
                             </button>
                             <button
                                 disabled={
-                                    verification.documentProof.files.length ===
-                                    0
+                                    verification.documentProof.files.length === 0 || error
                                 }
                                 className="btn btn-success rounded-0 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
                                 onClick={() => verification.nextStep()}
+
                             >
                                 next
                             </button>
@@ -208,6 +217,7 @@ export default function StepOne() {
                     </div>
                 </div>
             </div>
+            <AlarmModal />
         </>
     );
 }

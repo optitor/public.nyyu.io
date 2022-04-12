@@ -4,6 +4,9 @@ import Select from "react-select";
 import { VerifyIdStep2 } from "../../utilities/imgImport";
 import Loading from "../common/Loading";
 import { useVerification } from "./verification-context";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { MobileDateTimePicker   } from '@mui/lab';
 
 const GENDER_LIST = [
     {label: "Female", value: "F"},
@@ -174,6 +177,7 @@ export default function StepTwo() {
         </>
     );
 }
+
 
 const GenderSelectStyle = {
     control: provided => ({
