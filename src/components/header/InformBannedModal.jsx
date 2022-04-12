@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { device } from '../../utilities/device';
 import { SadFace } from '../../utilities/imgImport';
 
-const InformBannedModal = ({isModalOpen, setIsModalOpen, bannedCountry }) => {
+const InformBannedModal = ({isModalOpen, setIsModalOpen, informMessage }) => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -32,7 +32,9 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen, bannedCountry }) => {
             <InformBanned>
                 <div className='text-center mb-5 px-5'>
                     <img src={SadFace} />
-                    <p className='mt-3'>It seems you are accessing nyyu.io from an IP address belonging to {bannedCountry}.</p>
+                    <p className='mt-3'>
+                        {informMessage}
+                    </p>
                     <p className='mt-3'>
                         As per our
                         <span className='ms-2 text-green text-underline'>Terms of Use</span>
