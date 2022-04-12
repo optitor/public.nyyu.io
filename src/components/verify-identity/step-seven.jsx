@@ -210,9 +210,6 @@ export default function StepSeven() {
         }
 
         payload['background_checks'] = backgroundChecks;
-
-        console.log(payload);
-
         await axios
             .post(verification.shuftiProBaseUrl, payload, {
                 headers: {
@@ -228,7 +225,7 @@ export default function StepSeven() {
 
     useEffect(() => {
         if(verification.shuftiReferencePayload.event === 'verification.accepted')
-            return;
+            navigate(ROUTES.profile);
         sendShuftiRequest();
     }, []);
     // Render
