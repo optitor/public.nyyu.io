@@ -22,7 +22,7 @@ export default function StepSeven() {
     // Methods
     const sendShuftiRequest = async () => {
         verification.setSubmitting(true);
-        console.log(reference);
+        
         await insertUpdateReference({
             variables: {
                 reference,
@@ -227,6 +227,8 @@ export default function StepSeven() {
     };
 
     useEffect(() => {
+        if(verification.shuftiReferencePayload.event === 'verification.accepted')
+            return;
         sendShuftiRequest();
     }, []);
     // Render

@@ -14,6 +14,7 @@ export const useVerification = () => useContext(VerificationContext);
 
 const VerificationProvider = ({ children }) => {
     // Containers
+    const [event, setEvent] = useState("");
     const consentText = `I and NYYU ${getCurrentDate()}`;
     const [address, setAddress] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -59,6 +60,8 @@ const VerificationProvider = ({ children }) => {
     };
 
     const providerValue = {
+        event,
+        setEvent,
         userEmail,
         setUserEmail,
         dob,

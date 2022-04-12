@@ -42,9 +42,10 @@ const VerificationPage = () => {
                 const response = await getShuftiStatusByReference(
                     shuftReference?.reference
                 );
+                setShuftiStatus(response);
                 if(response.event === 'verification.accepted') 
                     navigate(ROUTES.profile);
-                return setShuftiStatus(response);
+                return;
             }
         })();
     }, [shuftiReferenceLoading, shuftReference?.reference]);
