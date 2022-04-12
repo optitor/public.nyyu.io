@@ -50,7 +50,7 @@ export default function StepTwo() {
             <div className={`${!loading && "d-none"}`}>
                 <Loading />
             </div>
-            <div
+            <div 
                 className={`col-12 mx-auto mt-3 mt-sm-0 ${loading && "d-none"}`}
             >
                 <h4 className="text-center  mt-5 mt-sm-2 mb-4">
@@ -176,6 +176,20 @@ export default function StepTwo() {
 }
 
 const GenderSelectStyle = {
+    control: provided => ({
+        ...provided,
+        height: 38,
+        borderRadius: 0
+    }),
+    valueContainer: provided => ({
+        ...provided,
+        paddingTop: 0
+    }),
+    input: provided => ({
+        ...provided,
+        padding: 0,
+        margin: 0
+    }),
     singleValue: (provided) => ({
         ...provided,
         fontSize: 13,

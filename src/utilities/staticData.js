@@ -496,27 +496,19 @@ export const navigationLinks = [
         subMenu: [
             {
                 label: "Wallet",
-                url: ROUTES.wallet,
-                isDressup: false
+                url: ROUTES.wallet
             },
             {
                 label: "Sale",
-                url: ROUTES.auction,
-                isDressup: false
+                url: ROUTES.auction
             },
             {
                 label: "Profile",
-                url: ROUTES.profile,
-                isDressup: false
-            },
-            {
-                label: "Dressup",
-                isDressup: true
+                url: ROUTES.profile
             },
             {
                 label: "Support",
-                url: ROUTES.faq,
-                isDressup: false
+                url: ROUTES.faq
             }
         ]
     },

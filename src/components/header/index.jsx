@@ -25,6 +25,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
     const [banned, setBanned] = useState(false)
     const [isBannedOpen, setIsBannedOpen] = useState(false)
+    const [bannedCountry, setBannedCountry] = useState('');
 
     // Webservice
     const { data: user_data } = useQuery(GET_USER)
@@ -37,6 +38,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         },
         onError: err => {
             if (err.graphQLErrors[0]?.isBannedCountry) {
+                setBannedCountry(err.graphQLErrors[0].country);
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
@@ -241,26 +243,14 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                         <ul className="my-4 d-block d-sm-none">
                                             {link.subMenu.map((subLink, index) => {
                                                 return (
-                                                    <li className="mb-3" key={index}>
-                                                        {subLink.isDressup ? (
-                                                            <div
-                                                                onClick={() => {
-                                                                    setActive(false)
-                                                                    setIsDressUPModalOpen(true)
-                                                                }}
-                                                                className="fw-500 text-light fs-20px"
-                                                            >
-                                                                {subLink.label}
-                                                            </div>
-                                                        ) : (
-                                                            <Link
-                                                                to={subLink.url}
-                                                                className="fw-500 fs-20px d-block text-light"
-                                                                activeClassName="first-letter:text-green"
-                                                            >
-                                                                {subLink.label}
-                                                            </Link>
-                                                        )}
+                                                    <li className="mb-3" key={index}>                                                        
+                                                        <Link
+                                                            to={subLink.url}
+                                                            className="fw-500 fs-20px d-block text-light"
+                                                            activeClassName="first-letter:text-green"
+                                                        >
+                                                            {subLink.label}
+                                                        </Link>
                                                     </li>
                                                 )
                                             })}
@@ -271,7 +261,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                         </ul>
                     </div>
                 </div>
-                {isBannedOpen && <InformBannedModal isModalOpen={isBannedOpen} setIsModalOpen={setIsBannedOpen}/>}
+                {isBannedOpen && <InformBannedModal isModalOpen={isBannedOpen} setIsModalOpen={setIsBannedOpen} bannedCountry={bannedCountry} />}
             </div>
         </nav>
     )
