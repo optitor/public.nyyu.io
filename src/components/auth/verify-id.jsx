@@ -7,6 +7,8 @@ import VerificationSwitch from "../verify-identity/verification-switch";
 import { GET_SHUFT_REFERENCE } from "../verify-identity/kyc-webservice";
 import VerificationProvider from "../verify-identity/verification-context";
 import { getShuftiStatusByReference } from "../../utilities/utility-methods";
+import { navigate } from "gatsby";
+import { ROUTES } from "../../utilities/routes";
 
 const VerificationPage = () => {
     // Containers
@@ -40,8 +42,10 @@ const VerificationPage = () => {
                 const response = await getShuftiStatusByReference(
                     shuftReference?.reference
                 );
-                console.log(response);
-                return setShuftiStatus(response);
+                setShuftiStatus(response);
+                if(response.event === 'verification.accepted') 
+                    navigate(ROUTES.profile);
+                return;
             }
         })();
     }, [shuftiReferenceLoading, shuftReference?.reference]);
