@@ -10,6 +10,11 @@ export default function StepOne() {
 
     // Methods
     const onUserDropFile = (e) => {
+        const extension = e.target.files[0].type;
+        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+            /// warning message 
+            return;
+        }
         verification.consentProof.handleDragDropEvent(e)
         verification.consentProof.setFiles(e, "w")
     }
@@ -82,6 +87,7 @@ export default function StepOne() {
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
+                                                accept=".png, .jpg, .jpeg, .pdf"
                                                 onChange={(e) =>
                                                     {
                                                         const extension = e.target.files[0].type;

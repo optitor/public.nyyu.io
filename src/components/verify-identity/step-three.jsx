@@ -22,6 +22,11 @@ export default function StepThree() {
 
     // Methods
     const onUserDropFile = (e) => {
+        const extension = e.target.files[0].type;
+        if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
+            /// warning message 
+            return;
+        }
         verification.addressProof.handleDragDropEvent(e);
         verification.addressProof.setFiles(e, "w");
     };
@@ -125,6 +130,7 @@ export default function StepThree() {
                                                 type="file"
                                                 id="file-upload-input"
                                                 className="d-none"
+                                                accept=".png, .jpg, .jpeg, .pdf"
                                                 onChange={(e) =>
                                                     {
                                                         const extension = e.target.files[0].type;
