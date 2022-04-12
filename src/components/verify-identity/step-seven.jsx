@@ -227,8 +227,11 @@ export default function StepSeven() {
     };
 
     useEffect(() => {
-        if(verification.shuftiReferencePayload.event === 'verification.accepted')
+        if(verification.shuftReferencePayload.event === 'verification.accepted')
+        {
+            navigate(ROUTES.profile);
             return;
+        } 
         sendShuftiRequest();
     }, []);
     // Render
