@@ -14,6 +14,7 @@ import { VerificationCountriesList } from "../../utilities/countries-list";
 import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData";
 import  { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context";
 
+
 export default function StepThree() {
     // Containers
     const verification = useVerification();
