@@ -36,7 +36,7 @@ export default function StepThree() {
             return;
         } else if(!ACCEPTED_IMAGE_FORMAT.includes(extension)) {
             setError('Not_supported');
-            showFailAlarm('Wrong file format', 'You can only upload PNG, JPG, JPEG, PDF');
+            showFailAlarm('Wrong file format', 'You can only upload PNG, JPG, JPEG or PDF');
         } else {
             setError('');
         }
@@ -103,7 +103,7 @@ export default function StepThree() {
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <p>Don`t fold the document</p>
+                                    <p>Do not fold the document</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
