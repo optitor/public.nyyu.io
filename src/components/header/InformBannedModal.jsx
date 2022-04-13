@@ -59,27 +59,6 @@ const InformBanned = styled.div`
             font-size: 14px;
         }
     }
-    button.btn {
-        color: #ffffff;
-        border: 1px solid #ffffff;
-        border-radius: 0;
-        display: block;
-        margin: 10px auto;
-        width: 150px;
-        text-transform: uppercase;
-        font-size: 18px;
-        font-weight: 600;
-        &:hover {
-            color: #23c865;
-        }
-    }
-    button.green {
-        border: 1px solid #23c865;
-    }
-    div.confirm {
-        width: 80%;
-        margin: auto;
-    }
     @media screen and (max-width: ${device['phone']}){
         p {
             font-size: 14px;
@@ -87,13 +66,6 @@ const InformBanned = styled.div`
             &.description {
                 font-size: 12px;
             }
-        }
-        button.btn {
-            font-size: 14px;
-            font-weight: 500;
-        }
-        div.confirm {
-            width: 100%;
         }
     }
 `;
