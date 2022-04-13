@@ -9,7 +9,6 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { MobileDatePicker } from '@mui/lab';
 
-
 const GENDER_LIST = [
     {label: "Female", value: "F"},
     {label: "Male", value: "M"},
@@ -135,7 +134,7 @@ export default function StepTwo() {
                                     showTodayButton
                                     value={verification.dob}
                                     onChange={(newValue) => {
-                                        verification.setDob(newValue.toDateString());
+                                        verification.setDob(newValue.toLocaleDateString('fr-CA'));
                                     }}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
@@ -149,7 +148,7 @@ export default function StepTwo() {
                                     showTodayButton
                                     value={verification.expiryDate}
                                     onChange={(newValue) => {
-                                        verification.setExpiryDate(newValue.toDateString());
+                                        verification.setExpiryDate(newValue.toLocaleDateString('fr-CA'));
                                     }}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
