@@ -336,7 +336,6 @@ export default function TwoFactorModal({
                                                         two_factors[selected].method,
                                                         result_code);
                                         } else {
-                                            console.log(redirect);
                                             confirmRequest2FA({
                                                 variables: {
                                                     email,

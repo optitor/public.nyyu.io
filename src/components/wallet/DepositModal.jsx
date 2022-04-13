@@ -221,7 +221,6 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [bankForDeposit] = useMutation(Mutation.BANK_FOR_DEPOSIT, {
         onCompleted: (data) => {
             if (data.bankForDeposit) {
-                console.log(data.bankForDeposit);
                 setPending(false);
                 setBankDepositStatus("success");
             }
