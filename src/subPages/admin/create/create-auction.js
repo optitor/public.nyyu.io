@@ -21,6 +21,7 @@ import Select from 'react-select';
 import { fetch_Avatars } from "../../../redux/actions/avatarAction";
 import AvatarImage from './../../../components/admin/shared/AvatarImage';
 import { create_Auction } from "../../../redux/actions/auctionAction";
+import { ROUTES } from "../../../utilities/routes";
 
 const IndexPage = () => {
     const dispatch = useDispatch();
@@ -201,7 +202,7 @@ const IndexPage = () => {
                                 </div>                                        
                             </div>                                    
                             <div className="button_div">
-                                <Link className="btn previous" to="/admin">Cancel</Link>
+                                <Link className="btn previous" to={ROUTES.admin}>Cancel</Link>
                                 <button className="btn next" onClick={setIDAndTime}>Next</button>
                             </div>
                         </>

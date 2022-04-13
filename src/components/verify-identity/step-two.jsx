@@ -7,7 +7,7 @@ import { useVerification } from "./verification-context";
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { MobileDatePicker } from '@mui/lab';
+import { MobileDatePicker } from "@mui/lab";
 
 const GENDER_LIST = [
     {label: "Female", value: "F"},
@@ -44,6 +44,7 @@ export default function StepTwo() {
         }
         if (!error) return verification.nextStep();
     };
+    
 
     // Render
     verification.shuftReferencePayload?.docStatus === true &&

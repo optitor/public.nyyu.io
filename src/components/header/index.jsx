@@ -70,12 +70,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
 
     const isShowNavLinks =
         isBrowser &&
-        (window.location.pathname === ROUTES.profile ||
-            window.location.pathname === ROUTES.faq ||
-            window.location.pathname === ROUTES.wallet ||
-            window.location.pathname === ROUTES.auction ||
-            window.location.pathname === ROUTES.payment ||
-            window.location.pathname === ROUTES.creditDeposit ||
+        (window.location.pathname.includes(ROUTES.app) ||
             window.location.pathname.includes(ROUTES.admin))
 
     const isCurrentSignin = isBrowser && (window.location.pathname === Routes.signIn)

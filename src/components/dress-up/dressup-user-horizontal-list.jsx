@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"
 import styled from "styled-components"
 import { EmptyAvatar, BaseHair } from "../../utilities/imgImport"
 
+
 const AVAILABLE = "AVAILABLE"
 const UNAVAILABLE = "UNAVAILABLE"
 const LOCKED = "LOCKED"
