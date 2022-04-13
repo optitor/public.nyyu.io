@@ -4,9 +4,11 @@ import Select from "react-select";
 import { VerifyIdStep2 } from "../../utilities/imgImport";
 import Loading from "../common/Loading";
 import { useVerification } from "./verification-context";
+import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { MobileDateTimePicker   } from '@mui/lab';
+import { MobileDatePicker } from '@mui/lab';
+
 
 const GENDER_LIST = [
     {label: "Female", value: "F"},
@@ -126,36 +128,36 @@ export default function StepTwo() {
                                 {genderError}
                             </div> */}
                         </div>
-                        <div>
-                            <p className="form-label mt-4">Date of Birth</p>
-                            <input
-                                type="date"
-                                className="form-control"
-                                value={verification.dob}
-                                onChange={(e) =>
-                                    verification.setDob(e.target.value)
-                                }
-                                placeholder="dd-mm-yyyy"
-                            />
-                            <div className="text-danger mt-2 fs-12px">
-                                {dateError}
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <div>
+                                <p className="form-label mt-4">Date of Birth</p>
+                                <MobileDatePicker
+                                    showTodayButton
+                                    value={verification.dob}
+                                    onChange={(newValue) => {
+                                        verification.setDob(newValue.toDateString());
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                                <div className="text-danger mt-2 fs-12px">
+                                    {dateError}
+                                </div>
                             </div>
-                        </div>
-                        <div>
-                            <p className="form-label mt-4">Expiry Date</p>
-                            <input
-                                type="date"
-                                className="form-control"
-                                value={verification.expiryDate}
-                                onChange={(e) =>
-                                    verification.setExpiryDate(e.target.value)
-                                }
-                                placeholder="dd-mm-yyyy"
-                            />
-                            <div className="text-danger mt-2 fs-12px">
-                                {dateError}
+                            <div>
+                                <p className="form-label mt-4">Expiry Date</p>
+                                <MobileDatePicker
+                                    showTodayButton
+                                    value={verification.expiryDate}
+                                    onChange={(newValue) => {
+                                        verification.setExpiryDate(newValue.toDateString());
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                                <div className="text-danger mt-2 fs-12px">
+                                    {dateError}
+                                </div>
                             </div>
-                        </div>
+                        </LocalizationProvider>
                     </div>
 
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">

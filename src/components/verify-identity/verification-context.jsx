@@ -24,9 +24,9 @@ const VerificationProvider = ({ children }) => {
     const [selfieImage, setSelfieImage] = useState();
     const [shuftReferencePayload, setShuftReferencePayload] = useState(null);
     const [userEmail, setUserEmail] = useState("");
-    const [dob, setDob] = useState("");
+    const [dob, setDob] = useState(Date.now());
     const [gender, setGender] = useState({label: "Male", value: "M"});
-    const [expiryDate, setExpiryDate] = useState("");
+    const [expiryDate, setExpiryDate] = useState(Date.now());
     const [step, setStep] = useState(-1); // --> initial value is -1
     const {
         files: documentFiles,
