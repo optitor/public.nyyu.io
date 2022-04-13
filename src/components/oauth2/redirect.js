@@ -21,7 +21,6 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     if (i === "0") email = d
                     else twoStep.push(d)
                 }
-                console.log(email, twoStep)
                 setState({
                     tempToken: dataType,
                     email: email,
