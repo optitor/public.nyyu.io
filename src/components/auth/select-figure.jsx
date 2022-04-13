@@ -17,6 +17,9 @@ import { ROUTES } from "../../utilities/routes"
 import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { SET_AVATAR } from "../../apollo/graphqls/mutations/Auth"
 import { GET_AVATARS } from "../../apollo/graphqls/querys/AvatarComponent"
+import { getShuftiStatusByReference } from "../../utilities/utility-methods";
+import { GET_SHUFT_REFERENCE } from "../verify-identity/kyc-webservice";
+
 
 const SelectFigure = () => {
     // Containers
@@ -29,6 +32,17 @@ const SelectFigure = () => {
     const [userDataLoading, setUserDataLoading] = useState(true)
     const [avatarsLoading, setAvatarsLoading] = useState(true)
     const [figuresArray, setFiguresArray] = useState([])
+    
+    useQuery(GET_SHUFT_REFERENCE, {
+        onCompleted: async (data) => {
+            const reference = data.getShuftiReference;
+            const response = await getShuftiStatusByReference(reference);
+            if(response.event === 'verification.accepted') navigate(ROUTES.profile);
+        },
+        fetchPolicy: "network-only",
+        errorpolicy: "ignore",
+    });    
+    
     const { data: userData } = useQuery(GET_USER, {
         onCompleted: () => {
             if (userData.getUser?.avatar) return navigate(ROUTES.verifyId)

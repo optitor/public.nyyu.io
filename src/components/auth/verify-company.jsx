@@ -180,7 +180,6 @@ const VerifyCompany = () => {
                                 className="btn-primary me-3 d-flex align-items-center justify-content-center add-another"
                                 onClick={() => {
                                     let newVerifiers = [...verifiers, ""]
-                                    console.log(state)
                                     setState({ verifiers: newVerifiers })
                                 }}
                             >

@@ -210,9 +210,6 @@ export default function StepSeven() {
         }
 
         payload['background_checks'] = backgroundChecks;
-
-        console.log(payload);
-
         await axios
             .post(verification.shuftiProBaseUrl, payload, {
                 headers: {
