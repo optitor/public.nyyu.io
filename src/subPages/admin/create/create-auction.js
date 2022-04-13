@@ -171,8 +171,7 @@ const IndexPage = () => {
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                                         <div>           
                                             <p className={`${showError && roundDataError.startTime? 'error': ''}`}>Round Start Time</p>                             
-                                            <MobileDateTimePicker  
-                                                className="datePicker1"
+                                            <MobileDateTimePicker
                                                 showTodayButton = {true}
                                                 value={roundData.startTime}
                                                 onChange={(newValue) => {
@@ -192,7 +191,7 @@ const IndexPage = () => {
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                         </div>
-                                        <div>          
+                                        <div>
                                             <p>Total Time</p>                              
                                             <input className="white_input" readOnly
                                                 value={secondsToDhms(duration / 1000)} 

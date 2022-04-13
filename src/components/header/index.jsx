@@ -26,8 +26,8 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const [banned, setBanned] = useState(false)
     const [isBannedOpen, setIsBannedOpen] = useState(false)
     const [informMessage, setInformMessage] = useState({
-        first: '',
-        second: ''
+        first: 'It seems you are accessing nyyu via anonymous proxy, VPN or VPS.',
+        second: 'we are unable to provide services to you.'
     });
 
     // Webservice
