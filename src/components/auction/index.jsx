@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Tabs } from "react-tabs"
+import _ from 'lodash';
+import { navigate } from "gatsby";
 
 import Seo from "../seo"
 import Loading from "../common/Loading"
@@ -19,11 +21,11 @@ const Auction = () => {
     useEffect(() => {
         if (auctions || presales) {
             const tempRounds = auctions?.concat(presales)
-            tempRounds && tempRounds.length && setEntireRounds(tempRounds.sort((a, b) => {
-                if (a?.round || b?.round) {
-                    return a?.round - b?.round
-                }
-            }))
+            if(_.isEmpty(tempRounds)) {
+                navigate('/');
+            } else {
+                setEntireRounds(_.orderBy(tempRounds, ['round'], 'asc'));
+            }
         }
     }, [auctions, presales])
 

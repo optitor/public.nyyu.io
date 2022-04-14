@@ -1,26 +1,22 @@
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useMutation } from "@apollo/client";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import validator from "validator";
 import Modal from "react-modal";
 import { FORGOT_PASSWORD, RESET_PASSWORD } from "../../apollo/graphqls/mutations/Auth";
-import { GET_USER } from "../../apollo/graphqls/querys/Auth";
-import { CloseIcon, FailImage, SuccesImage } from "../../utilities/imgImport";
+import { CloseIcon } from "../../utilities/imgImport";
 import { passwordValidatorOptions } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
-import validator from "validator";
+import { censorEmail } from "../../utilities/string";
+import { showSuccessAlarm, showFailAlarm } from "../admin/AlarmModal";
+
 
 export default function ResetPasswordModal({ isOpen, setIsOpen }) {
+    const { user } = useSelector(state => state.auth);
     // Webservice
-    useQuery(GET_USER, {
-        fetchPolicy: "network-only",
-        onCompleted: (res) => {
-            setUserEmail(res.getUser.email);
-        },
-    });
     const [forgotPassword] = useMutation(FORGOT_PASSWORD, {
         onCompleted: (res) => {
             setForgotPasswordSent(true);
@@ -29,29 +25,31 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
     const [resetPassword] = useMutation(RESET_PASSWORD, {
         onCompleted: (res) => {
             setPendingRequest(false);
-            setResetPasswordResult(res.resetPassword);
+            setIsOpen(false);
+            if(res.resetPassword === 'Success') {
+                showSuccessAlarm('Password reset successfully');
+            } else {
+                showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
+            }
         },
+        onError: err => {
+            showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
+            setIsOpen(false);
+        }
     });
 
     // Containers
-    const [userEmail, setUserEmail] = useState(null);
     const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
     const [error, setError] = useState("");
-    const loading = !userEmail && !forgotPasswordSent;
+    const loading = !user.email && !forgotPasswordSent;
     const [pendingRequest, setPendingRequest] = useState(false);
     const [sentCode, setSentCode] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    const [resetPasswordResult, setResetPasswordResult] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
 
     // Methods
     const censorWord = (str) => str[0] + "*".repeat(3) + str.slice(-1);
-
-    const censorEmail = (email) => {
-        const arr = email.split("@");
-        return censorWord(arr[0]) + "@" + censorWord(arr[1]);
-    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -77,7 +75,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
 
             resetPassword({
                 variables: {
-                    email: userEmail,
+                    email: user.email,
                     code: sentCode,
                     newPassword: newPassword,
                 },
@@ -85,14 +83,14 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
         }
     };
     useEffect(() => {
-        if (userEmail) {
+        if (user.email) {
             forgotPassword({
                 variables: {
-                    email: userEmail,
+                    email: user.email,
                 },
             });
         }
-    }, [userEmail, forgotPassword]);
+    }, [user.email, forgotPassword]);
 
     // Render
     return (
@@ -117,7 +115,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                     <div className="text-center">
                         <CustomSpinner />
                     </div>
-                ) : resetPasswordResult === null ? (
+                ) : (
                     <div>
                         <div className="text-center">
                             <p className="text-capitalize fs-30px fw-bold lh-36px">
@@ -139,7 +137,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                         placeholder="Enter code"
                                     />
                                     <div className="fs-12px">
-                                        The code have been sent to {censorEmail(userEmail)}{" "}
+                                        The code have been sent to {censorEmail(user.email)}{" "}
                                         <span className="txt-green fw-500 cursor-pointer">
                                             Resend
                                         </span>
@@ -201,20 +199,6 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                ) : resetPasswordResult === "Success" ? (
-                    <div className="text-center">
-                        <img src={SuccesImage} className="img-fluid" alt="success svg icon" />
-                        <div className="fw-500 fs-24px mt-5 text-light">
-                            Password changed successfully
-                        </div>
-                    </div>
-                ) : (
-                    <div className="text-center">
-                        <img src={FailImage} className="img-fluid" alt="success svg icon" />
-                        <div className="fw-500 fs-24px mt-5 text-light">
-                            Failed to change password
                         </div>
                     </div>
                 )}

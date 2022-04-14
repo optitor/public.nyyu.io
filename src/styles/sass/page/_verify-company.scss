@@ -59,14 +59,11 @@
 
 .verify-company {
     .languageDropdown {
-        width: 120px;
+        width: 150px;
         position: absolute;
         right: 50px;
         top: 24px;
         z-index: 100;
-        svg {
-            color: black !important;
-        }
     }
     &_container {
         padding: 50px 10px;
