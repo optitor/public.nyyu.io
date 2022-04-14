@@ -44,7 +44,7 @@ const VerificationPage = () => {
                 );
                 setShuftiStatus(response);
                 if(response.event === 'verification.accepted') 
-                    navigate(ROUTES.profile);
+                    await navigate(ROUTES.profile);
                 return;
             }
         })();

@@ -32,7 +32,6 @@ export const useSignIn2FA = () => {
 export const useSignUp2FA = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.CONFIRM_REQUEST_2FA, {
         onCompleted: (data) => {
-            console.log(data);
             if (data.confirmRequest2FA.status === "Failed") {
                 return
             } else if (data.confirmRequest2FA.status === "Success") {

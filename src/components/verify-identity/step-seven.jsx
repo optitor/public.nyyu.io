@@ -58,8 +58,8 @@ export default function StepSeven() {
                     first_name: verification.firstName,
                     last_name: verification.surname,
                 },
-                dob: verification.dob,
-                expiry_date: verification.expiryDate,
+                dob: new Date(verification.dob).toLocaleDateString('fr-CA'),
+                expiry_date: new Date(verification.expiryDate).toLocaleDateString('fr-CA'),
                 gender: verification.gender.value,
                 verification_instructions: {
                     allow_paper_based: "1",
@@ -75,7 +75,7 @@ export default function StepSeven() {
                 first_name: verification.firstName,
                 last_name: verification.surname
             }
-            backgroundChecks['dob'] = verification.dob;
+            backgroundChecks['dob'] = new Date(verification.dob).toLocaleDateString('fr-CA');
         } else {
             const data = verification.shuftReferencePayload?.data.document;
             const url = verification.shuftReferencePayload?.proofs.document.proof;
@@ -210,9 +210,6 @@ export default function StepSeven() {
         }
 
         payload['background_checks'] = backgroundChecks;
-
-        console.log(payload);
-
         await axios
             .post(verification.shuftiProBaseUrl, payload, {
                 headers: {
