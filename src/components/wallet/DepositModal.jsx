@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import Modal from "react-modal";
@@ -26,7 +25,6 @@ import {
 } from "../../utilities/imgImport";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
-import { ROUTES } from "../../utilities/routes";
 import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cookies';
 
 const CURRENCIES = [
@@ -164,10 +162,6 @@ export default function DepositModal({ showModal, setShowModal }) {
         createChargeForDepositMutation({
             variables: { ...createData },
         });
-    };
-
-    const handleCreditDeposit = () => {
-        navigate(ROUTES.creditDeposit);
     };
 
     const closeModal = () => {
@@ -485,7 +479,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="stats">
                                         <p className="topic">Received so far</p>
                                         <p className="content">
-                                            0.000000000 BTC
+                                            0.00000000 {selectedAsset.value}
                                         </p>
                                     </div>
                                     <hr />
