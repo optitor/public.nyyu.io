@@ -26,6 +26,7 @@ import DeleteAccountModal from "../components/profile/delete-account-modal";
 import { ZENDESK_KEY } from "../utilities/staticData3";
 import { ZendeskURLWithJWT } from "../utilities/staticData";
 import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';
+import AlarmModal from "./admin/AlarmModal";
 
 const setting = {
     color: {
@@ -247,7 +248,8 @@ const FAQ = () => {
                         setIsOpen={setIsDepositMissingModalOpen}
                     />
                 </section>
-                <Zendesk defer zendeskKey={ZENDESK_KEY} {...setting} />;
+                <Zendesk defer zendeskKey={ZENDESK_KEY} {...setting} />
+                <AlarmModal />
             </main>
         </>
     );

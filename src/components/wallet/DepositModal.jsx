@@ -453,7 +453,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                                 <Icon
                                                     icon={
                                                         copied
-                                                            ? "clarity:copy-line"
+                                                            ? "clarity:copy-solid"
                                                             : "clarity:copy-line"
                                                     }
                                                 />
