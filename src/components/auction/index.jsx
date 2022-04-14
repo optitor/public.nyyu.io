@@ -14,13 +14,17 @@ import AuctionPlaceBid from "./auction-place-bid"
 import AuctionPlaceBidModal from "./auction-place-bid-modal"
 import PresalePlaceOrder from "./presale-place-order"
 
+
 const Auction = () => {
     const auction = useAuction()
     const { auctions, presales, entireRounds, setEntireRounds, currentRound, currentRoundNumber, optCurrentRound, setOptCurrentRound, isAuction } = auction
 
     useEffect(() => {
         if (auctions || presales) {
-            const tempRounds = auctions?.concat(presales)
+            const tempRounds = auctions?.concat(presales);
+            // If tempRounds is null or undefined
+            if(!tempRounds) return;
+            // If tempRounds is []
             if(_.isEmpty(tempRounds)) {
                 navigate('/');
             } else {
@@ -33,9 +37,9 @@ const Auction = () => {
 
     useEffect(() => {
         if (auction.loading === false) {
-            if (currentRound.auction) {
+            if (currentRound?.auction) {
                 auction.setIsAuction(true)
-            } else if (currentRound.presale) {
+            } else if (currentRound?.presale) {
                 auction.setIsAuction(false)
             } else {
                 auction.setIsAuction(true)
@@ -47,7 +51,7 @@ const Auction = () => {
 
     useEffect(() => {
         setOptCurrentRound(entireRounds && entireRounds.filter(
-            (auction) => auction.round === currentRoundNumber
+            (item) => item?.round === currentRoundNumber
         )[0])
     }, [currentRoundNumber])
 
