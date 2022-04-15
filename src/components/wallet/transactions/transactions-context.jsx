@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import React, { useContext, useState } from "react";
+import _ from 'lodash';
 import {
     GET_BID_LIST_BY_USER,
     GET_COINPAYMENT_DEPOSIT_TX_BY_USER,
@@ -95,8 +96,8 @@ const TransactionsProvider = ({ children }) => {
     // Webserver
     useQuery(GET_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
-            const fooList = data.getPaypalDepositTxnsByUser
-                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+            console.log(data.getPaypalDepositTxnsByUser)
+            const fooList = _.orderBy(data.getPaypalDepositTxnsByUser, ['createdAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
 
@@ -118,8 +119,7 @@ const TransactionsProvider = ({ children }) => {
     });
     useQuery(GET_PAYPAL_WITHDRAW_TRANSACTIONS, {
         onCompleted: (data) => {
-            const fooList = data.getPaypalWithdrawByUser
-                .sort((tx1, tx2) => tx2.confirmedAt - tx1.confirmedAt)
+            const fooList = _.orderBy(data.getPaypalWithdrawByUser, ['confirmedAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.confirmedAt);
 
@@ -143,8 +143,7 @@ const TransactionsProvider = ({ children }) => {
 
     useQuery(GET_STRIPE_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
-            const fooList = data.getStripeDepositTxByUser
-                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+            const fooList = _.orderBy(data.getStripeDepositTxByUser, ['createdAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
 
@@ -166,8 +165,7 @@ const TransactionsProvider = ({ children }) => {
     });
     useQuery(GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER, {
         onCompleted: (data) => {
-            const fooList = data.getBankDepositTxnsByUser
-                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+            const fooList = _.orderBy(data.getBankDepositTxnsByUser, ['createdAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
 
@@ -190,8 +188,7 @@ const TransactionsProvider = ({ children }) => {
 
     useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
-            const fooList = data.getCoinpaymentDepositTxByUser
-                .sort((tx1, tx2) => tx2.createdAt - tx1.createdAt)
+            const fooList = _.orderBy(data.getCoinpaymentDepositTxByUser, ['createdAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
 
@@ -214,8 +211,7 @@ const TransactionsProvider = ({ children }) => {
 
     useQuery(GET_CRYPTO_WITHDRAW_BY_USER, {
         onCompleted: (data) => {
-            const fooList = data.getCryptoWithdrawByUser
-                .sort((tx1, tx2) => tx2.confirmedAt - tx1.confirmedAt)
+            const fooList = _.orderBy(data.getCryptoWithdrawByUser, ['confirmedAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.confirmedAt);
                     return {
@@ -237,8 +233,7 @@ const TransactionsProvider = ({ children }) => {
 
     useQuery(GET_BID_LIST_BY_USER, {
         onCompleted: (data) => {
-            const fooList = data.getBidListByUser
-                .sort((bid1, bid2) => bid2.placedAt - bid1.placedAt)
+            const fooList = _.orderBy(data.getBidListByUser, ['placedAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.placedAt);
                     return {
@@ -257,11 +252,7 @@ const TransactionsProvider = ({ children }) => {
 
     useQuery(GET_PRESALE_ORDERS_BY_USER, {
         onCompleted: (data) => {
-            const fooList = data.getPresaleOrdersByUser
-                .sort(
-                    (presale1, presale2) =>
-                        presale2.createdAt - presale1.createdAt
-                )
+            const fooList = _.orderBy(data.getPresaleOrdersByUser, ['createdAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
                     return {

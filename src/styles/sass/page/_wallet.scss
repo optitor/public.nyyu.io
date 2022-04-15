@@ -702,6 +702,7 @@
                         align-items: center;
                         svg {
                             font-size: 22px;
+                            color: black;
                         }
                     }
                 }
@@ -729,23 +730,32 @@
                 }
             }
         }
+        
         div.stats_div {
             margin-top: 50px;
             div.stats {
                 padding-top: 10px;
                 display: flex;
-                p.topic {
+                .topic {
                     width: 40%;
                     color: dimgray;
                 }
-                p.content {
+                .content {
                     width: 60%;
-                    text-align: right;
+                    display: flex;
+                    justify-content: flex-end;
+                    color: white;
+                    p.time {
+                        font-size: 24px;
+                    }
+                    .time-text {
+                        font-size: 12px;
+                    }
                 }
                 @include mq("phone", max) {
                     flex-direction: column;
-                    p.topic,
-                    p.content {
+                    .topic,
+                    .content {
                         width: 100%;
                     }
                 }

@@ -57,8 +57,9 @@ const AlarmModal = () => {
 
 export default AlarmModal;
 
-export const showSuccessAlarm = (inform = 'Action made successfully') => {
+export const showSuccessAlarm = (inform = 'Action made successfully', subInform = '') => {
     jq('div#alarmSuccessModal').find('div.inform').html(inform);
+    jq('div#alarmSuccessModal').find('div.subInform').html(subInform);
     jq('#success_alarm_btn').trigger('click');
 };
 
