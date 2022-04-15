@@ -17,7 +17,7 @@ import UserTier from "./user-tier"
 import InformBannedModal from "./InformBannedModal"
 import { navigationLinks, profile_tabs } from "../../utilities/staticData"
 import { GET_USER } from "../../apollo/graphqls/querys/Auth"
-import { ROUTES as Routes, ROUTES } from "../../utilities/routes"
+import { ROUTES } from "../../utilities/routes"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
 import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
 
@@ -48,7 +48,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
-            } else if(err.graphQLErrors[0].isAnonymousIp) {
+            } else if(err.graphQLErrors[0]?.isAnonymousIp) {
                 setInformMessage({
                     first: 'It seems you are accessing nyyu via anonymous proxy, VPN or VPS.',
                     second: 'we are unable to provide services to you.'
@@ -73,7 +73,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         (window.location.pathname.includes(ROUTES.app) ||
             window.location.pathname.includes(ROUTES.admin))
 
-    const isCurrentSignin = isBrowser && (window.location.pathname === Routes.signIn)
+    const isCurrentSignin = isBrowser && window.location.pathname.includes('/app/sign')
 
     // Methodsaypal
     useEffect(() => {
@@ -107,7 +107,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     <Link to="/" className="menu__logo d-flex" title="Logo">
                         <img src={Logo} alt="NDB Brand Logo"/>
                     </Link>
-                    {isShowNavLinks && (
+                    {auth?.isLoggedIn() && isShowNavLinks && (
                         <div className="d-none d-md-flex justify-content-between gap-5">
                             <Link
                                 to={ROUTES.wallet}

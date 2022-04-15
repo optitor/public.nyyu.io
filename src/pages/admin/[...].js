@@ -5,6 +5,8 @@ import Loading from "../../components/common/Loading";
 import AlarmModal from './../../components/admin/AlarmModal';
 import { isBrowser } from "../../utilities/auth";
 import { getCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies";
+import { useAuth } from "../../hooks/useAuth";
+import { ROUTES } from "../../utilities/routes";
 
 const Dashboard = lazy(() => import("./../../subPages/admin/dashboard"));
 const Rounds = lazy(() => import("./../../subPages/admin/rounds"));
@@ -24,7 +26,12 @@ const NotFound = lazy(() => import("./../404"));
 
 const App = () => {
     const isAdmin = getCookie(NDB_Privilege) === NDB_Admin;
-    // console.log(isAdmin)
+    const auth = useAuth();
+
+    if (!auth.isLoggedIn() && isBrowser && window.location.pathname !== ROUTES.signIn) {
+        navigate(ROUTES.signIn, { replace: true });
+        return null;
+    }
     
     if(isAdmin) {
         return (

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
+import parse from 'html-react-parser';
 import Modal from "react-modal";
-import _ from "lodash";
+import _, { set } from "lodash";
 import styled from "styled-components";
 import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
@@ -13,19 +14,22 @@ import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
 import StripeDepositSection from "./deposit/StripeDepositSection";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
-import { getStripePaymentFee, getPaypalPaymentFee } from "../../utilities/utility-methods";
+import { getStripePaymentFee, getPaypalPaymentFee, getBankTransferFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 import {
     Plaid,
     PaypalFiat,
     CreditCards,
-    USDT,
-    SuccesImage,
-    FailImage,
+    USDT
 } from "../../utilities/imgImport";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
+import * as Query from "../../apollo/graphqls/querys/Payment";
 import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cookies';
+import { roundNumber } from "../../utilities/number";
+import CountDown from "../../components/common/countdown";
+
+const IntervalTime = 5 * 1000;
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
@@ -33,15 +37,20 @@ const CURRENCIES = [
     // { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
+const CURRENCIES_BANK = [
+    { label: "USD", value: "USD", symbol: "$" },
+    { label: "GBP", value: "GBP", symbol: "£" },
+    { label: "EUR", value: "EUR", symbol: "€" },
+];
+
 const DEPOSIT_COINS = SUPPORTED_COINS.filter(item => item.value !== 'NDB');
 
-const TransferData = {
+const BankTransferData = {
     EUR: {
         "Account holder": "Voltamond",
         BIC: "TRWIBEB1XXX",
         IBAN: "BE36 9672 2651 6281",
         Address: "Avenue Louise 54, Room S52, Brussels, 1050, Belgium",
-        Reference: "123456789",
     },
     GBP: {
         "Account holder": "Voltamond",
@@ -59,9 +68,20 @@ const TransferData = {
     },
 };
 
-const TransferFee = 0.03;
+const BankTrxDescription = {
+    first: 'Incoming payments can take 3 working days to be added to your wallet',
+    second: `Please make sure you use the
+        <span className="text-green">reference number</span>
+        indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.`,
+}
+
 const { Option } = components;
 const MIN_VALUE = 1;
+
+const CRYPTOCURRENCY = 'CRYPTOCURRENCY';
+const PAYPAL = 'PAYPAL';
+const STRIP = 'STRIP';
+const BANKTRANSER = 'BANKTRANSER';
 
 const SelectOption = (props) => {
     return (
@@ -86,33 +106,31 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [copied, setCopied] = useState(false);
     const [pending, setPending] = useState(false);
 
-    const [bankDepositStatus, setBankDepositStatus] = useState("");
     const [coinQRCode, setCoinQRCode] = useState("");
 
     const [loading, setLoading] = useState(false);
 
     const networks = useMemo(() => selectedAsset.networks, [selectedAsset]);
     const [network, setNetwork] = useState(networks[0]);
-    const [depositData, setDepositData] = useState({});
+    const [depositData, setDepositData] = useState(null);
+    const [confirmById, setConfirmById] = useState(null);
 
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
     const [transferAmount, setTransferAmount] = useState("");
+    const [referenceNumber, setReferenceNumber] = useState(null);
 
     const [copyText, setCopyText] = useState("");
 
-    const [isPaypalDeposit, setIsPaypalDeposit] = useState(false);
-    const [isStripeDeposit, setIsStripeDeposit] = useState(false);
-    const [isBankAccountTransferDeposit, setIsBankAccountTransferDeposit] =
-        useState(false);
+    const [depositType, setDepositType] = useState('');
     const [allFees, setAllFees] = useState({});
 
     const loadingStripe = !allFees;
 
     useEffect(() => {
         (async function () {
-            if (depositData.depositAddress) {
-                const qrCode = await generateQR(depositData.depositAddress);
+            if (depositData?.depositAddress) {
+                const qrCode = await generateQR(depositData?.depositAddress);
                 setCoinQRCode(qrCode);
             }
             return "";
@@ -130,8 +148,8 @@ export default function DepositModal({ showModal, setShowModal }) {
         Mutation.CREATE_CHARGE_FOR_DEPOSIT,
         {
             onCompleted: (data) => {
-                if (data.createChargeForDeposit) {
-                    const resData = data.createChargeForDeposit;
+                if (data?.createChargeForDeposit) {
+                    const resData = data?.createChargeForDeposit;
 
                     setDepositData(resData);
                     setPending(false);
@@ -145,15 +163,17 @@ export default function DepositModal({ showModal, setShowModal }) {
         }
     );
 
-    const goBackToFiat = () => {
-        setCurrentStep(1);
+    const goBackToMain = () => {
+        setDepositData(null);
+        setConfirmById(null);
         setCurrency(CURRENCIES[0]);
         setTransferAmount("");
-        setBankDepositStatus("");
+        setCurrentStep(1);
     };
 
     const create_Charge_For_Deposit = () => {
         setPending(true);
+        setDepositType(CRYPTOCURRENCY);
         const createData = {
             coin: network.value,
             network: network.network,
@@ -164,8 +184,31 @@ export default function DepositModal({ showModal, setShowModal }) {
         });
     };
 
+    //-------- Fetching the state of confirming coinpayment trx.
+    const {startPolling, stopPolling} = useQuery(Query.GET_COINPAYMENT_DEPOSITTX_BYID, {
+        variables: {
+            id: depositData?.id
+        },
+        onCompleted: (data) => {
+            if (data.getCoinpaymentDepositTxById) {
+                setConfirmById(data.getCoinpaymentDepositTxById);
+            }
+        },
+        onError: (err) => {
+            console.log(err.message);
+        },
+        pollInterval: IntervalTime,
+        notifyOnNetworkStatusChange: true
+    });
+
+    useEffect(() => {
+        if(depositData?.id) return startPolling(IntervalTime);
+        return stopPolling();
+    }, [depositData?.id, startPolling, stopPolling]);
+    //-----------------------------------------------------------------
+
     const closeModal = () => {
-        setDepositData({});
+        setDepositData(null);
         setShowModal(false);
     };
 
@@ -216,27 +259,20 @@ export default function DepositModal({ showModal, setShowModal }) {
         onCompleted: (data) => {
             if (data.bankForDeposit) {
                 setPending(false);
-                setBankDepositStatus("success");
+                setReferenceNumber(data.bankForDeposit);
+                setCurrentStep(3);
             }
             setPending(false);
         },
         onError: (err) => {
             console.log(err.message);
             setPending(false);
-            setBankDepositStatus("fail");
         },
     });
 
     const handleBankForDeposit = () => {
         setPending(true);
-        const depositData = {
-            amount: Number(transferAmount),
-            currencyCode: currency.label,
-            cryptoType: "USDT",
-        };
-        bankForDeposit({
-            variables: { ...depositData },
-        });
+        bankForDeposit();
     };
 
     if (loading) return <Loading />;
@@ -254,14 +290,14 @@ export default function DepositModal({ showModal, setShowModal }) {
                     <Icon
                         className="icon"
                         icon="carbon:arrow-left"
-                        onClick={() => setCurrentStep(1)}
+                        onClick={goBackToMain}
                     />
                 )}
                 {currentStep === 3 && (
                     <Icon
                         className="icon"
                         icon="carbon:arrow-left"
-                        onClick={goBackToFiat}
+                        onClick={goBackToMain}
                     />
                 )}
                 {currentStep === 4 && (
@@ -367,11 +403,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         <FiatButton
                                             className="active"
                                             onClick={() => {
-                                                setIsPaypalDeposit(true);
-                                                setIsBankAccountTransferDeposit(
-                                                    false
-                                                );
-                                                setIsStripeDeposit(false);
+                                                setDepositType(PAYPAL)
                                                 setCurrentStep(3);
                                             }}
                                         >
@@ -387,11 +419,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         <FiatButton
                                             className="active"
                                             onClick={() => {
-                                                setIsStripeDeposit(true);
-                                                setIsPaypalDeposit(false);
-                                                setIsBankAccountTransferDeposit(
-                                                    false
-                                                );
+                                                setDepositType(STRIP)
                                                 setCurrentStep(3);
                                             }}
                                         >
@@ -403,17 +431,17 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                     <div className="col-sm-6">
                                         <FiatButton
-                                            className="inactive"
-                                            // onClick={() => {
-                                            //     setIsBankAccountTransferDeposit(
-                                            //         true
-                                            //     );
-                                            //     setIsStripeDeposit(false);
-                                            //     setIsPaypalDeposit(false);
-                                            //     setCurrentStep(3);
-                                            // }}
+                                            className="active"
+                                            onClick={() => {
+                                                setDepositType(BANKTRANSER)
+                                                handleBankForDeposit()
+                                            }}
+                                            disabled={pending}
                                         >
-                                            <p>Standard bank transfer</p>
+                                            {pending?
+                                                <CustomSpinner />:
+                                                <p>Standard bank transfer</p>
+                                            }
                                         </FiatButton>
                                     </div>
                                 </div>
@@ -423,7 +451,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 )}
                 {currentStep === 2 &&
                     !_.isEmpty(depositData) &&
-                    !isPaypalDeposit && (
+                    (depositType === CRYPTOCURRENCY) && (
                         <div className="deposit width3">
                             <div className="address_div">
                                 <p className="subtitle">Deposit Address</p>
@@ -473,13 +501,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="stats">
                                         <p className="topic">Status</p>
                                         <p className="content">
-                                            Waiting for your funds
+                                            {!confirmById?.status? 'Waiting for your funds': 'Received'}
                                         </p>
                                     </div>
                                     <div className="stats">
                                         <p className="topic">Received so far</p>
                                         <p className="content">
-                                            0.00000000 {selectedAsset.value}
+                                            {roundNumber(confirmById?.cryptoAmount, 8)} {selectedAsset.value}
                                         </p>
                                     </div>
                                     <hr />
@@ -487,7 +515,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         <p className="topic">
                                             Time left to confirm funds
                                         </p>
-                                        <p className="content">8h 0m 0s</p>
+                                        <div className="content">
+                                            {!confirmById?.status?
+                                                <CountDown deadline={Date.now() + 8 * 3600 * 1000} />
+                                                :
+                                                <span className='text-green'>Confirmed</span>
+                                            }
+                                        </div>
                                     </div>
                                     <div className="stats">
                                         <p className="topic">Payment ID</p>
@@ -499,14 +533,14 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                     )}
-                {currentStep === 3 && isBankAccountTransferDeposit && (
+                {currentStep === 3 && (depositType === BANKTRANSER) && (
                     <div className="deposit width2 mb-5">
                         <h5 className="text-center">Bank transfer deposit</h5>
                         <div>
                             <p className="subtitle">Select currency</p>
                             <Select
                                 className="black_input"
-                                options={CURRENCIES}
+                                options={CURRENCIES_BANK}
                                 value={currency}
                                 onChange={(selected) => {
                                     setCurrency(selected);
@@ -546,7 +580,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         displayType="text"
                                         allowNegative={false}
                                         value={
-                                            Number(transferAmount) * TransferFee
+                                            Number(getBankTransferFee(user, allFees, transferAmount))
                                         }
                                         decimalScale={2}
                                     />
@@ -573,7 +607,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </button>
                     </div>
                 )}
-                {currentStep === 4 && isBankAccountTransferDeposit && (
+                {currentStep === 4 && (depositType === BANKTRANSER) && (
                     <div className="deposit width2 mb-5">
                         <h4 className="text-center">
                             {currency.label} Deposits Only
@@ -584,10 +618,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 className="me-2"
                                 style={{ fontSize: 18 }}
                             />
-                            Incoming payments can take 3 working days to be
-                            added to your wallet
+                            {BankTrxDescription.first}
                         </p>
-                        {_.map(TransferData[currency.value], (val, key) => (
+                        {_.map(BankTransferData[currency.value], (val, key) => (
                             <div className="transfer_data_div" key={key}>
                                 <p className="subtitle pe-2">{key}:</p>
                                 <p className="value">
@@ -595,7 +628,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <Icon
                                         icon={
                                             copyText === val
-                                                ? "fluent:copy-20-filled"
+                                                ? "fluent:copy-24-filled"
                                                 : "fluent:copy-24-regular"
                                         }
                                         onClick={() =>
@@ -605,57 +638,35 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 </p>
                             </div>
                         ))}
+                        <div className="transfer_data_div mt-3">
+                            <p className="subtitle pe-2">Reference:</p>
+                            <p className="value">
+                                {referenceNumber}
+                                <Icon
+                                    icon={
+                                        copyText === referenceNumber
+                                            ? "fluent:copy-24-filled"
+                                            : "fluent:copy-24-regular"
+                                    }
+                                    onClick={() =>
+                                        handleCopyToClipboard(referenceNumber)
+                                    }
+                                />
+                            </p>
+                        </div>
                         <p className="subtitle mt-5">
-                            Please make sure you use the reference number
-                            indicated above when you are making the transfer,
-                            otherwise we may not be able to locate your
-                            transaction.
-                        </p>
-                        {!bankDepositStatus ? (
-                            <button
-                                className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
-                                onClick={handleBankForDeposit}
-                                disabled={pending}
-                            >
-                                {pending ? (
-                                    <CustomSpinner />
-                                ) : (
-                                    "CONFIRM REQUEST"
-                                )}
-                            </button>
-                        ) : bankDepositStatus === "success" ? (
-                            <div className="text-center mt-2">
-                                <img
-                                    src={SuccesImage}
-                                    alt="success"
-                                    style={{ width: 80 }}
-                                />
-                                <p
-                                    className="mt-2 text-green"
-                                    style={{ fontSize: 18, fontWeight: 600 }}
-                                >
-                                    REQUEST SENT SUCCESSFULLY
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="text-center mt-2">
-                                <img
-                                    src={FailImage}
-                                    alt="success"
-                                    style={{ width: 80 }}
-                                />
-                                <p
-                                    className="mt-2 text-danger"
-                                    style={{ fontSize: 18, fontWeight: 600 }}
-                                >
-                                    ERROR IN BANK DEPOSIT
-                                </p>
-                            </div>
-                        )}
+                            {parse(BankTrxDescription.second)}
+                        </p>                        
+                        <button
+                            className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
+                            onClick={closeModal}
+                        >
+                            CONFIRM
+                        </button>
                     </div>
                 )}
 
-                {currentStep === 3 && isPaypalDeposit && (
+                {currentStep === 3 && (depositType === PAYPAL) && (
                     <div className="deposit width2">
                         <h5 className="text-center">Paypal deposit</h5>
                         <div>
@@ -731,13 +742,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                             onClick={() => {
                                 initPaypalCheckout();
                             }}
-                            disabled={!transferAmount || Number(transferAmount) < 1}
+                            disabled={!transferAmount || Number(transferAmount) < MIN_VALUE}
                         >
                             CONTINUE
                         </button>
                     </div>
                 )}
-                {currentStep === 3 && isStripeDeposit && (
+                {currentStep === 3 && (depositType === STRIP) && (
                     <div className="deposit width2">
                         <div>
                             {loadingStripe ? (
@@ -837,7 +848,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </div>
                     </div>
                 )}
-                {currentStep === 4 && isStripeDeposit && (
+                {currentStep === 4 && (depositType === STRIP) && (
                     <StripeDepositSection
                         closeModal={closeModal}
                         amount={
@@ -940,8 +951,10 @@ const customSelectStyles = {
     }),
 };
 
-const FiatButton = styled.div`
+const FiatButton = styled.button`
     border: 1px solid white;
+    background-color: inherit;
+    width: 100%;
     height: 80px;
     display: flex;
     align-items: center;
@@ -962,4 +975,5 @@ const FiatButton = styled.div`
     &.inactive {
         opacity: 0.4;
     }
+
 `;
