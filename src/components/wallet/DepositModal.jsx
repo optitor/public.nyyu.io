@@ -517,7 +517,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </p>
                                         <div className="content">
                                             {!confirmById?.status?
-                                                <CountDown deadline={Date.now() + 8 * 3600 * 1000} />
+                                                <CountDown deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
                                                 :
                                                 <span className='text-green'>Confirmed</span>
                                             }
