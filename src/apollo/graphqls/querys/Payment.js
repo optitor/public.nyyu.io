@@ -37,6 +37,7 @@ export const GET_COINPAYMENT_DEPOSITTX_BYID = gql`
             id
             status
             cryptoAmount
+            createdAt
         }
     }
 `;
