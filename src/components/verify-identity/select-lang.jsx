@@ -36,6 +36,11 @@ const customSelectStyles = {
         border: '1px solid white',
         borderRadius: 0
     }),
+    menuList: (provided) => ({
+        ...provided,
+        margin: 0,
+        padding: 0,
+    }),
     singleValue: provided => ({
         ...provided,
         color: 'white',

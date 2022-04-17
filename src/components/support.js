@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Zendesk, {ZendeskAPI} from "react-zendesk";
+import React, { useState } from "react";
+import Zendesk from "react-zendesk";
 import { useMutation } from '@apollo/client';
 import Header from "../components/header";
 import {
@@ -94,30 +94,35 @@ const FAQ = () => {
             label: "Unlock Account",
             icon: SupportUnlock,
             clickEvent: () => setIsUnlockAccountModalOpen(true),
+            disabled: true,
         },
         {
             id: 2,
             label: "Reset Phone Security Verification",
             icon: SupportSecurity,
             clickEvent: () => setIsResetPhoneModalOpen(true),
+            disabled: true,
         },
         {
             id: 3,
             label: "Reset Google Authenticator",
             icon: SupportAuthenticator,
             clickEvent: () => setIsResetAuthenticatorModalOpen(true),
+            disabled: true,
         },
         {
             id: 4,
             label: "Deposit Non Credit Asset Recovery",
             icon: SupportRecovery,
             clickEvent: () => setIsDepositAssetModalOpen(true),
+            disabled: true,
         },
         {
             id: 5,
             label: "Deposit Missing Or Wrong Tag/Memo Asset Recovery",
             icon: SupportTag,
             clickEvent: () => setIsDepositMissingModalOpen(true),
+            disabled: true,
         },
         {
             id: 6,
@@ -199,6 +204,7 @@ const FAQ = () => {
                                             : "pe-lg-0 ps-lg-1 px-0"
                                             }`}
                                         onClick={item.clickEvent}
+                                        disabled={item.disabled? true: false}
                                     >
                                         <div
                                             className={`text-light border border-1 border-light text-center support-self-security-item col-12 ${item.id <= 5 && "mb-2"

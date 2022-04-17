@@ -26,3 +26,18 @@ export const GET_PAYPAL_DEPOSIT_TXN_BY_USER = gql` {
     }
 }
 `
+
+export const GET_COINPAYMENT_DEPOSITTX_BYID = gql`
+    query GetCoinpaymentDepositTxById(
+        $id: Int
+    ) {
+        getCoinpaymentDepositTxById(
+            id: $id
+        ) {
+            id
+            status
+            cryptoAmount
+            createdAt
+        }
+    }
+`;

@@ -248,7 +248,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
 
     const confirmDataForPaypal = [
         {topic: 'User Email', content: censorEmail(user.email)},
-        {topic: 'De', content: paypalEmail},
+        {topic: 'Destination paypal address', content: paypalEmail},
         {topic: 'Currency', content: currency.value},
         {topic: 'Source Token', content: 'USDT'},
         {topic: 'Withdraw Amount', content: transferAmount},
@@ -403,10 +403,10 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         </FiatButton>
                                     </div>
                                     <div className="col-sm-6">
-                                        <FiatButton className="inactive" 
-                                            // onClick={() => {
-                                            //     setIsPaypalWithdraw(false); setCurrentStep(2);
-                                            // }}
+                                        <FiatButton className="active" 
+                                            onClick={() => {
+                                                setWithdrawType(BANKTRANSFER); setCurrentStep(2);
+                                            }}
                                         >
                                             <p>Standard bank transfer</p>
                                         </FiatButton>

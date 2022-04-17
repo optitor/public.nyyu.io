@@ -144,6 +144,14 @@ export const getPaypalPaymentFee = (user, allFees, bidAmount) => {
     return paypalPaymentFee.toFixed(2);
 };
 
+export const getBankTransferFee = (user, allFees, bidAmount) => {
+    let userTierLevel = user?.tierLevel;
+    if(userTierLevel === 0) userTierLevel = 1;
+    const userFee = allFees[userTierLevel]?.fee;
+    const bankTransferFee = (userFee * bidAmount) / 100;
+    return bankTransferFee;
+};
+
 export const createDateFromDateObject = (newDate = new Date()) => {
     const today = newDate;
     let month = today.getMonth() + 1;
