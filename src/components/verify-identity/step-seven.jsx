@@ -110,6 +110,7 @@ export default function StepSeven() {
                 last_name: data.name.surname
             }
             backgroundChecks['dob'] = data.dob;
+            payload.country = verification.shuftReferencePayload.country;
         }
 
         if (
@@ -165,6 +166,7 @@ export default function StepSeven() {
                 },
                 allow_offline: "1",
             };
+            payload.country = verification.shuftReferencePayload.country;
         }
 
         if (
@@ -190,6 +192,7 @@ export default function StepSeven() {
                 supported_types: ["printed", "handwritten"],
                 allow_offline: "1",
             };
+            payload.country = verification.shuftReferencePayload.country;
         }
 
         if (
@@ -207,6 +210,7 @@ export default function StepSeven() {
                 proof: selfieProof,
                 allow_offline: "1",
             };
+            payload.country = verification.shuftReferencePayload.country;
         }
 
         payload['background_checks'] = backgroundChecks;
