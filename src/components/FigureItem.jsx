@@ -11,7 +11,7 @@ const FigureItem = ({ figure, onFigureSelect, active }) => {
             tabIndex="0"
         >
             <div className="figure-item__avatar">
-                <div className="mt-3 w-100">
+                <div className="mt-3 w-100 avatar_image">
                     <AvatarImage avatar={figure.avatar} />
                 </div>
             </div>

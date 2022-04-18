@@ -87,8 +87,8 @@ export default function TierDetailsTab({ shuftiStatus }) {
             <>
                 <div className="tier-details">
                     <div className="row w-100 mx-auto">
-                        <div className="col-6 my-auto br">Tier</div>
-                        <div className="col-6 text-end text-sm-start d-flex align-items-center justify-content-end justify-content-sm-start">
+                        <div className="detail_item my-auto br">Tier</div>
+                        <div className="detail_item text-end text-sm-start d-flex align-items-center justify-content-end justify-content-sm-start">
                             {currentTier?.length > 0 ? (
                                 <div
                                     className="me-3"
@@ -104,8 +104,8 @@ export default function TierDetailsTab({ shuftiStatus }) {
                         </div>
                     </div>
                     <div className="row w-100 mx-auto">
-                        <div className="col-6 br">Point to next tier</div>
-                        <div className="col-6 text-end text-sm-start">
+                        <div className="detail_item br">Point to next tier</div>
+                        <div className="detail_item text-end text-sm-start">
                             {nextTier?.length > 0 ? nextTier[0]?.point - userData?.tierPoint : ""}
                         </div>
                     </div>
@@ -114,7 +114,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                             <span className="txt-green">G</span>
                             ain Points
                         </h4>
-                        <div className="col-6 d-flex align-items-center br">
+                        <div className="detail_item d-flex align-items-center br">
                             <div
                                 className={`status me-2 ${
                                     shuftiStatus?.event !== "verification.accepted"
@@ -124,13 +124,13 @@ export default function TierDetailsTab({ shuftiStatus }) {
                             />
                             KYC/AML completion
                         </div>
-                        <div className="col-6 text-end text-sm-start">
+                        <div className="detail_item text-end text-sm-start">
                             {taskSettingData.verification}
                         </div>
                     </div>
 
                     <div className="row mx-0">
-                        <div className="col-6 d-flex align-items-center br">
+                        <div className="detail_item d-flex align-items-center br">
                             <div
                                 className={`status me-2 ${
                                     gainPointsData.wallet === 0 ? "deactive" : "active"
@@ -171,13 +171,13 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                 </div>
                             </ReactTooltip>
                         </div>
-                        <div className="col-6 text-end text-sm-start">
-                            {walletPoint}/6000
+                        <div className="detail_item text-end text-sm-start">
+                            {gainPointsData.wallet}/6000
                         </div>
                     </div>
 
                     <div className="row mx-0">
-                        <div className="col-6 d-flex align-items-center br">
+                        <div className="detail_item d-flex align-items-center br">
                             <div
                                 className={`status me-2 ${
                                     gainPointsData.auctions?.length ? "active" : "deactive"
@@ -185,7 +185,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                             />
                             Auction participation
                         </div>
-                        <div className="col-6 text-end text-sm-start">
+                        <div className="detail_item text-end text-sm-start">
                             {taskSettingData.auction * gainPointsData.auctions?.length || 0}
                         </div>
                     </div>

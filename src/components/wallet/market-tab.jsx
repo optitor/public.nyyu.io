@@ -38,6 +38,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         chart: [],
         min: 0,
+        max: 0,
         percent: "",
         price: "",
         volume: "",
@@ -45,45 +46,44 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const { chart, min, price, percent, volume } = state;
 
     useEffect(() => {
-        (async function() {
-            const getChartData = async () => {
-                if(!data.symbol) return;
-                const res = await axios.get(KLINE_ENDPOINT, {
-                        params: {
-                            symbol: data.symbol + QUOTE,
-                            interval: KLINE_INTERVAL,
-                            startTime: new Date().getTime() - 24 * 3600 * 1000,
-                        },
-                    });
-                const chartData = res.data.map((c) => c[1]);
-
-                setState({
-                    min: Math.min(chartData),
-                    max: Math.max(chartData),
-                    chart: chartData,
+        const getChartData = async () => {
+            if(!data.symbol) return;
+            const res = await axios.get(KLINE_ENDPOINT, {
+                    params: {
+                        symbol: data.symbol + QUOTE,
+                        interval: KLINE_INTERVAL,
+                        startTime: new Date().getTime() - 24 * 3600 * 1000,
+                    },
                 });
-            };
+            const chartData = res.data.map((c) => c[1]);
 
-            const getTicker24hr = async () => {
-                if(!data.symbol) return;
-                const res = await axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } });
-                setState({
-                    price: res.data.lastPrice,
-                    percent: res.data.priceChangePercent,
-                    volume: res.data.quoteVolume,
-                });
-            };
+            setState({
+                min: Math.min(chartData),
+                max: Math.max(chartData),
+                chart: chartData,
+            });
+        };
 
+        const getTicker24hr = async () => {
+            if(!data.symbol) return;
+            const res = await axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } });
+            setState({
+                price: res.data.lastPrice,
+                percent: res.data.priceChangePercent,
+                volume: res.data.quoteVolume,
+            });
+        };
+
+        getTicker24hr();
+        getChartData();
+
+        const interval_crypto = setInterval(() => {
             getTicker24hr();
             getChartData();
+        }, 1000 * REFRESH_TIME);
 
-            const interval1 = setInterval(() => {
-                getTicker24hr();
-                getChartData();
-            },1000 * REFRESH_TIME);
-            return () => clearInterval(interval1);
-        })();
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        return () => clearInterval(interval_crypto);
+    }, [])
     
     return (
         <tr>

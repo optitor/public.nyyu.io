@@ -10,6 +10,7 @@ const BidTable = ({data = []}) => {
         page: 1,
         limit: 5
     });
+    
     return (
         <>
             <TableHead>

@@ -98,40 +98,38 @@ export default function InternalWallet() {
     });
 
     useEffect(() => {
-        (async function () {
-            const get_Balances_Price = async () => {
-                let assets = { ...myAssets };
-                if (_.isEqual(myAssets, InitialAssets)) return;
-                
-                for (const item of Object.values(myAssets)) {
-                    let price = 0;
-                    if (
-                        !item.tokenSymbol ||
-                        item.tokenSymbol === "NDB" ||
-                        item.tokenSymbol === "VOLT"
-                    ) {
-                        price = 0;
-                    } else if(item.tokenSymbol === 'USDT') {
-                        price = 1;
-                    } else {
-                        const res = await axios.get(TICKER_price, {
-                            params: { symbol: item.tokenSymbol + QUOTE },
-                        });
-                        price = res.data.price;
-                    }
-                    const balance = (item.hold + item.free) * price;
-                    assets[item.tokenSymbol] = { ...item, price, balance: balance, value: item.tokenSymbol };
+        const get_Balances_Price = async () => {
+            let assets = { ...myAssets };
+            if (_.isEqual(myAssets, InitialAssets)) return;
+            
+            for (const item of Object.values(myAssets)) {
+                let price = 0;
+                if (
+                    !item.tokenSymbol ||
+                    item.tokenSymbol === "NDB" ||
+                    item.tokenSymbol === "VOLT"
+                ) {
+                    price = 0;
+                } else if(item.tokenSymbol === 'USDT') {
+                    price = 1;
+                } else {
+                    const res = await axios.get(TICKER_price, {
+                        params: { symbol: item.tokenSymbol + QUOTE },
+                    });
+                    price = res.data.price;
                 }
-                setMyAssets({ ...assets });
+                const balance = (item.hold + item.free) * price;
+                assets[item.tokenSymbol] = { ...item, price, balance: balance, value: item.tokenSymbol };
             }
+            setMyAssets({ ...assets });
+        }
 
+        get_Balances_Price();
+        const interval1 = setInterval(() => {
             get_Balances_Price();
-            const interval1 = setInterval(() => {
-                get_Balances_Price();
-            }, 1000 * REFRESH_TIME);
+        }, 1000 * REFRESH_TIME);
 
-            return () => clearInterval(interval1);
-        })();
+        return () => clearInterval(interval1);
     }, [Object.keys(myAssets).length]);
 
     const loadingSection = !myAssets;
