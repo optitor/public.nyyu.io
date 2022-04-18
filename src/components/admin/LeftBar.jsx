@@ -9,6 +9,10 @@ const LeftBar = () => {
           <p className="icon"><Icon icon="akar-icons:plus" /></p>
           <p className="desc">Create</p>
       </Link>
+      <Link id="link-transaction" to="/admin/transaction">
+          <p className="icon"><Icon icon="bx:money-withdraw" /></p>
+          <p className="desc">Transaction</p>
+      </Link>
       <Link id="link-rounds" to="/admin/rounds">
           <p className="icon"><Icon icon="ant-design:bar-chart-outlined" /></p>
           <p className="desc">Rounds</p>
