@@ -403,7 +403,8 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                     <div className="col-sm-6">
                                         <FiatButton
-                                            className="active"
+                                            disabled={true}
+                                            className="inactive"
                                             onClick={() => {
                                                 setDepositType(PAYPAL)
                                                 setCurrentStep(3);
