@@ -235,11 +235,13 @@ export default function DepositTable() {
                                         </td>
                                         <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
                                             <div className="text-sm-end fs-16px">
-                                                {currentDepositType.value === 'credit_card' ? (amount / 100).toFixed(2) : Number(amount).toFixed(8) + " " + asset}
+                                                {currentDepositType.value === 'credit_card' && (amount / 100).toFixed(2) + ' ' + asset}
+                                                {currentDepositType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
+                                                {currentDepositType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
                                             </div>
                                         </td>
                                         <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
-                                            {fee + " " + asset}
+                                            {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + asset}
                                         </td>
                                         <td className="d-flex align-items-center justify-content-end">
                                             <div
@@ -291,9 +293,9 @@ export default function DepositTable() {
                                                             amount:
                                                         </span>
                                                         <span className="fw-500">
-                                                            {amount +
-                                                                " " +
-                                                                asset}
+                                                            {currentDepositType.value === 'credit_card' && (amount / 100).toFixed(2) + ' ' + asset}
+                                                            {currentDepositType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
+                                                            {currentDepositType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
                                                         </span>
                                                     </div>
                                                     <div>
@@ -301,7 +303,7 @@ export default function DepositTable() {
                                                             fee:
                                                         </span>
                                                         <span className="fw-500">
-                                                            {fee + " " + asset}
+                                                            {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + asset}
                                                         </span>
                                                     </div>
                                                     <div>
