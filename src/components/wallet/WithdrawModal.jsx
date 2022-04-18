@@ -743,17 +743,18 @@ const customSelectStyles = {
     })
 };
 
-const FiatButton = styled.div`
+const FiatButton = styled.button`
     border: 1px solid white;
+    background-color: inherit;
+    width: 100%;
     height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 15px;
     transition: 0.3s;
-    cursor: pointer;
     p {
-        font-size: 18px!important;
+        font-size: 18px !important;
         font-weight: 600;
     }
     img {

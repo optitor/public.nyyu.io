@@ -229,12 +229,13 @@ export default function WithdrawTable() {
                                             </div>
                                         </td>
                                         <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                                            <div className="text-sm-end fs-16px">
-                                                {amount + "" + asset}
+                                            <div className="text-sm-end fs-16px">                                        
+                                                {currentWithdrawType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
+                                                {currentWithdrawType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
                                             </div>
                                         </td>
                                         <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
-                                            {fee + " " + asset}
+                                            {currentWithdrawType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + asset}
                                         </td>
                                         <td className="d-flex align-items-center justify-content-end">
                                             <div
@@ -285,10 +286,9 @@ export default function WithdrawTable() {
                                                         <span className="text-secondary pe-1">
                                                             amount:
                                                         </span>
-                                                        <span className="fw-500">
-                                                            {amount +
-                                                                " " +
-                                                                asset}
+                                                        <span className="fw-500">                                                    
+                                                            {currentWithdrawType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
+                                                            {currentWithdrawType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
                                                         </span>
                                                     </div>
                                                     <div>
@@ -296,7 +296,7 @@ export default function WithdrawTable() {
                                                             fee:
                                                         </span>
                                                         <span className="fw-500">
-                                                            {fee + " " + asset}
+                                                            {currentWithdrawType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + asset}
                                                         </span>
                                                     </div>
                                                     <div>
