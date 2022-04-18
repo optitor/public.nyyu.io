@@ -9,14 +9,24 @@ import ReactTooltip from "react-tooltip";
 
 export default function TierDetailsTab({ shuftiStatus }) {
     // Webserivce
-    useQuery(GET_USER_TIER_TASK, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => setGainPointsData(data.getUserTierTask),
-    });
-
     useQuery(GET_TASK_SETTING, {
         fetchPolicy: "network-only",
         onCompleted: (data) => setTaskSettingData(data.getTaskSetting),
+    });
+
+    useQuery(GET_USER_TIER_TASK, {
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+            setGainPointsData(data.getUserTierTask);
+            const walletBalance = data.getUserTierTask.wallet;
+            let _walletPoint = 0;
+            taskSettingData.wallet.forEach(elem => {
+                if(walletBalance > elem.amount) {
+                    _walletPoint += elem.point;
+                }
+            });
+            setWalletPoint(_walletPoint);
+        },
     });
 
     useQuery(GET_USER_TIERS, {
@@ -33,6 +43,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
     const [gainPointsData, setGainPointsData] = useState(null);
     const [taskSettingData, setTaskSettingData] = useState(null);
     const [userTiersData, setUserTiersData] = useState(null);
+    const [walletPoint, setWalletPoint] = useState(0);
     const [userData, setUserData] = useState(null);
     const loadingSection = !(gainPointsData && taskSettingData && userTiersData && userData);
     const currentTier = userTiersData?.filter((item) => item?.level === userData?.tierLevel);
