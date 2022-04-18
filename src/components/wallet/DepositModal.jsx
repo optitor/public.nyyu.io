@@ -395,7 +395,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                             <div className="width2 mt-5">
                                 <div className="row">
                                     <div className="col-sm-6">
-                                        <FiatButton className="inactive">
+                                        <FiatButton className="inactive"
+                                            disabled={true}
+                                        >
                                             <img src={Plaid} alt="plaid" />
                                         </FiatButton>
                                     </div>
@@ -961,7 +963,6 @@ const FiatButton = styled.button`
     justify-content: center;
     margin-top: 15px;
     transition: 0.3s;
-    cursor: pointer;
     p {
         font-size: 18px !important;
         font-weight: 600;
@@ -975,5 +976,4 @@ const FiatButton = styled.button`
     &.inactive {
         opacity: 0.4;
     }
-
 `;
