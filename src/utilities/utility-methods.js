@@ -83,6 +83,7 @@ export const getShuftiStatusByReference = async (reference) => {
 
             output['proofs'] = data.proofs;
             output['data'] = data.verification_data;
+            output.country = data.country;
 
             // Document
             if ("document" in data.verification_result) {
