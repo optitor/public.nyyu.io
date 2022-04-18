@@ -202,7 +202,8 @@
                 &:first-child {
                     border-top: 2px solid #464646;
                 }
-                .col-6 {
+                .detail_item {
+                    width: 50%;
                     font-family: "Montserrat";
                     font-weight: bold;
                     font-size: 18px;
@@ -212,11 +213,11 @@
                     text-transform: uppercase;
                     padding: 25px 12px;
                     @include mq("phone", max) {
+                        width: 100%;
                         font-size: 16px;
                         font-weight: normal;
                         line-height: 19.5px;
-                        padding-left: 0;
-                        padding-right: 0;
+                        padding: 10px;
                     }
                     .change-pwd {
                         font-weight: bold;

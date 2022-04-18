@@ -100,11 +100,12 @@ const SelectFigure = () => {
     const handleFigure = (id) => {
         setSelectId(id)
         setIsOpen(true)
-        setRandomName(figuresArray[id].lastname)
+        setRandomName(figuresArray[id]?.lastname)
     }
     const closeModal = () => {
         setIsOpen(false)
         setSelect(false)
+        setError('')
     }
     const handleOnConfirmButtonClick = (e) => {
         e.preventDefault()
@@ -163,9 +164,7 @@ const SelectFigure = () => {
                                 <div className="figure-intro__box">
                                     {!selected && (
                                         <p className="figure-name">
-                                            {figuresArray && (figuresArray[selectedId]?.firstname +
-                                                " " +
-                                                figuresArray[selectedId]?.lastname)}
+                                            {figuresArray && <p>{figuresArray[selectedId]?.firstname} {figuresArray[selectedId]?.lastname}</p>}
                                         </p>
                                     )}
                                     <div className="figure-intro__box--body">
@@ -326,9 +325,7 @@ const SelectFigure = () => {
                 >
                     <div className="figure-intro__box">
                         <div className="mobile-figure-header">
-                            {figuresArray && figuresArray[selectedId]?.firstname +
-                                " " +
-                                figuresArray[selectedId]?.lastname}
+                            {figuresArray && <p>{figuresArray[selectedId]?.firstname} {figuresArray[selectedId]?.lastname}</p>}
 
                             <div
                                 onClick={() => closeModal()}
@@ -373,13 +370,14 @@ const SelectFigure = () => {
                                         ))}
                                     </div>
                                     <p>{figuresArray && figuresArray[selectedId]?.intro}</p>
+                                    <button className="btn btn-outline-light round-0 w-100 mt-3" onClick={() => setSelect(true)}>Next</button>
                                 </>
                             ) : (
                                 <>
                                     <div className="main-content">
                                         <div className="d-flex align-items-end justify-content-start">
                                             <h3 className="random-display mb-0 fw-bold me-4">
-                                                {randomName}.
+                                                {figuresArray[selectedId]?.lastname}.
                                             </h3>
                                             <div className="random-generate">
                                                 <p className="form-label">Your display name</p>
@@ -392,7 +390,7 @@ const SelectFigure = () => {
                                             </div>
                                         </div>
                                         <p
-                                            className="random-text"
+                                            className="random-text w-100"
                                             onClick={() =>
                                                 setRandomName(names.random().substring(0, 7))
                                             }
@@ -403,6 +401,27 @@ const SelectFigure = () => {
                                         >
                                             Random generate
                                         </p>
+                                    </div>
+                                    <div className="mt-1">
+                                        {error && (
+                                            <span className="errorsapn">
+                                                <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                            </span>
+                                        )}
+                                        <button
+                                            className="btn btn-outline-light rounded-0 text-uppercase w-100 d-flex align-items-center justify-content-center text-uppercase fw-bold fs-24px"
+                                            disabled={pending}
+                                            onClick={handleOnConfirmButtonClick}
+                                        >
+                                            <div
+                                                className={`${pending ? "opacity-1" : "opacity-0"}`}
+                                            >
+                                                <CustomSpinner />
+                                            </div>
+                                            <div className={`${pending ? "ms-3" : "pe-4"}`}>
+                                                confirm
+                                            </div>
+                                        </button>
                                     </div>
                                 </>
                             )}

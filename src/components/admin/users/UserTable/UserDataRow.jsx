@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
@@ -12,7 +12,6 @@ import * as Mutation from "../../../../apollo/graphqls/mutations/User";
 import { showFailAlarm, showSuccessAlarm } from "../../AlarmModal";
 
 const UserDataRow = ({ datum }) => {
-    const dispatch = useDispatch();
     const { userTiers } = useSelector(state => state);
 
     const [show, setShow] = useState(false);

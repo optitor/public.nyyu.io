@@ -10,7 +10,7 @@ import { ROUTES } from "../../utilities/routes";
 
 const Dashboard = lazy(() => import("./../../subPages/admin/dashboard"));
 const Rounds = lazy(() => import("./../../subPages/admin/rounds"));
-const Transaction = lazy(() => import('./../../subPages/admin/transaction'));
+const Approval = lazy(() => import('./../../subPages/admin/approval'));
 const Users = lazy(() => import("./../../subPages/admin/users"));
 const Airdrop = lazy(() => import("./../../subPages/admin/airdrop"));
 const Setting = lazy(() => import("./../../subPages/admin/setting"));
@@ -43,7 +43,7 @@ const App = () => {
                             <Dashboard path="/" />
                             <Rounds path="/rounds" />
                             <Users path="/users" />
-                            <Transaction path='/transaction' />
+                            <Approval path='/approval' />
                             <Airdrop path="/airdrop" />
                             <Setting path="/setting" />
                             <CreateAuction path="/create/auction" />

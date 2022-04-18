@@ -1,12 +1,12 @@
 import React from "react";
 import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 
-import Seo from "./../../components/seo";
+import Seo from "../../components/seo";
 import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
-import BankDepositTable from "../../components/admin/transaction/BankDepositTable";
-import CryptoWithdrawTable from "../../components/admin/transaction/CryptoWithdrawTable";
-import PaypalWithdrawTable from "../../components/admin/transaction/PayPalWithdrawTable";
-import BankWithdrawTable from "../../components/admin/transaction/BankWithdrawTable";
+import BankDepositTable from "../../components/admin/approval/BankDepositTable";
+import CryptoWithdrawTable from "../../components/admin/approval/CryptoWithdrawTable";
+import PaypalWithdrawTable from "../../components/admin/approval/PayPalWithdrawTable";
+import BankWithdrawTable from "../../components/admin/approval/BankWithdrawTable";
 
 const IndexPage = () => {
 

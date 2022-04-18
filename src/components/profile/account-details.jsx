@@ -44,10 +44,10 @@ export default function AccountDetails({
             )}
             <div className="account-details">
                 <div className="row w-100 mx-auto">
-                    <div className="col-6 col-sm-4 col-md-6 br">
+                    <div className="detail_item col-sm-4 col-md-6 br">
                         display name
                     </div>
-                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
+                    <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start">
                         <div className="d-flex align-items-center justify-content-between">
                             <div>{displayName}</div>
                             <button
@@ -60,8 +60,8 @@ export default function AccountDetails({
                     </div>
                 </div>
                 <div className="row w-100 mx-auto">
-                    <div className="col-6 col-sm-4 col-md-6 br">email</div>
-                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
+                    <div className="detail_item col-sm-4 col-md-6 br">email</div>
+                    <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
                         <div className="d-flex align-items-center justify-content-between">
                             <div>{user && user?.email}</div>
                             <button
@@ -74,8 +74,8 @@ export default function AccountDetails({
                     </div>
                 </div>
                 <div className="row w-100 mx-auto change-password">
-                    <div className="col-6 col-sm-4 col-md-6 br">password</div>
-                    <div className="col-6 col-sm-8 col-md-6 justify-content-sm-between justify-content-end">
+                    <div className="detail_item col-sm-4 col-md-6 br">password</div>
+                    <div className="detail_item col-sm-8 col-md-6 d-flex align-items-center justify-content-sm-between justify-content-end">
                         <p>********</p>
                         <button
                             className="btn-primary change-pwd"
@@ -94,10 +94,10 @@ export default function AccountDetails({
                     </div>
                 </div>
                 <div className="row w-100 mx-auto">
-                    <div className="col-6 col-sm-4 col-md-6 br">
+                    <div className="detail_item col-sm-4 col-md-6 br">
                         kyc/aml verification
                     </div>
-                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
+                    <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
                         {shuftiStatus === "UNSET" ? (
                             <div className="d-flex align-items-center gap-2">
                                 <div className="circle circle-dark" />
@@ -150,8 +150,8 @@ export default function AccountDetails({
                     </div>
                 </div>
                 <div className="row w-100 mx-auto">
-                    <div className="col-6 col-sm-4 col-md-6 br">Currency</div>
-                    <div className="col-6 col-sm-8 col-md-6 text-end text-sm-start">
+                    <div className="detail_item col-sm-4 col-md-6 br">Currency</div>
+                    <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start">
                         <div className="d-flex align-items-center justify-content-between">
                             <div className="d-flex align-items-center">
                                 <div className='flag_div'>
