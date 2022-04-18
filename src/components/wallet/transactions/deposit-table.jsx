@@ -235,7 +235,7 @@ export default function DepositTable() {
                                         </td>
                                         <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
                                             <div className="text-sm-end fs-16px">
-                                                {amount + " " + asset}
+                                                {currentDepositType.value === 'credit_card' ? (amount / 100).toFixed(2) : Number(amount).toFixed(8) + " " + asset}
                                             </div>
                                         </td>
                                         <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
