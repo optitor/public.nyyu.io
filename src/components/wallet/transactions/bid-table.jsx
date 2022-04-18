@@ -141,8 +141,8 @@ export default function BidTable() {
                                             </div>
                                         </td>
                                         <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                                            <div className="text-sm-end fs-16px">
-                                                {amount} USD
+                                            <div className="text-sm-start fs-16px">
+                                                {Number(amount).toFixed(2)} USD
                                             </div>
                                         </td>
                                         <td className="text-end pe-5 pe-sm-0">
