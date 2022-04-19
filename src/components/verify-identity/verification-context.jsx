@@ -28,6 +28,11 @@ const VerificationProvider = ({ children }) => {
     const [gender, setGender] = useState({label: "Male", value: "M"});
     const [expiryDate, setExpiryDate] = useState(Date.now());
     const [step, setStep] = useState(-1); // --> initial value is -1
+
+    // used doc type
+    // name of document, value! not lavel
+    const [usedDocType, setUsedDocType] = useState("");
+
     const {
         files: documentFiles,
         handleDragDropEvent: documentHandleDragDropEvent,
@@ -62,6 +67,8 @@ const VerificationProvider = ({ children }) => {
     const providerValue = {
         event,
         setEvent,
+        usedDocType,
+        setUsedDocType,
         userEmail,
         setUserEmail,
         dob,

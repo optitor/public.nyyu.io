@@ -453,14 +453,14 @@ export const VerificationDocumentTypes = [
     },
     {
         label: "Driving License",
-        value: "driver_license",
+        value: "driving_license",
     },
 ]
 
 export const VerificationStepThreeDocumentTypes = [
     {
         label: "National Identification Card",
-        value: "national_id",
+        value: "id_card",
     },
     {
         label: "Driving license",
