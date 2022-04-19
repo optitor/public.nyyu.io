@@ -42,7 +42,7 @@ export default function StepOne() {
                 <div className="text-center">
                     <div className="d-block d-sm-none">
                         <div className="txt-green text-uppercase fw-bold fs-18px mb-3">step 3</div>
-                        <div className="text-light fs-14px fw-bold">consentProof verification</div>
+                        <div className="text-light fs-14px fw-bold">Consent verification</div>
                     </div>
                     <img
                         className="d-sm-block d-none"
@@ -55,27 +55,23 @@ export default function StepOne() {
                     <div className="col-12 d-flex flex-sm-row flex-column gap-sm-5 gap-0">
                         <div className="col-md-6 col-12 mt-5 mt-sm-0">
                             <p>
-                                Write the following text on a blank paper, <br />
-                                upload its photo along with your face.
+                            Write the following text on a blank paper, <br />
+                            upload its photo along with your face.
                             </p>
                             <p className="my-3 fw-bold">{verification.consentText}</p>
                             <div className="requirements mt-0">
                                 <p className="fs-14px">Photo requirements:</p>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <p>Upload entire document clearly</p>
+                                    <p>Hold the written consent next to your face</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <p>Do not fold the document</p>
+                                    <p>Upload the entire document clearly</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
                                     <p>No image from another image or device</p>
-                                </div>
-                                <div className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
-                                    <p>No paper-base document</p>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +119,7 @@ export default function StepOne() {
                                                         </p>
                                                         {error === 'Not_supported' && 
                                                         <p className="text-center">
-                                                            <small style={{color: 'red'}}>PDF, PNG or JPG file formats only</small>
+                                                            <small style={{color: 'red'}}>PDF, PNG, or JPG file formats only</small>
                                                         </p>}
                                                     </>
                                                 ) : (
@@ -136,7 +132,7 @@ export default function StepOne() {
                                                             </span>
                                                         </p>
                                                         <p className="text-center">
-                                                            <small>PDF, PNG or JPG file formats only</small>
+                                                            <small>PDF, PNG, or JPG file formats only</small>
                                                         </p>
                                                     </>
                                                 )}

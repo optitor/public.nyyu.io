@@ -37,7 +37,7 @@ export default function StepFour() {
                         <div className="text-light fs-14px fw-bold">
                             Confirm your address information
                         </div>
-                        <div className="text-light fs-12px">Make edits if needed</div>
+                        <div className="text-light fs-12px">Make edits if needed. The address list is only there to guide you.</div>
                     </div>
                     <img
                         className="d-sm-block d-none"
@@ -49,7 +49,7 @@ export default function StepFour() {
                 <div className="my-sm-5 verify-step1">
                     <div className="mt-5 text-light fs-25px fw-bold text-center d-sm-block d-none">
                         Confirm your address information
-                        <div className="fs-16px fw-500">Make edits if needed</div>
+                        <div className="fs-16px fw-500">Make edits if needed. The address list is only there to guide you.</div>
                     </div>
                     <div className="col-sm-8 col-12 mx-auto">
                         <div className="mx-auto" style={{maxWidth: 530}}>
