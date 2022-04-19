@@ -73,6 +73,7 @@ export default function StepOne() {
                                     <div className="small-white-dot"></div>
                                     <p>No image from another image or device</p>
                                 </div>
+                            </div>
                         </div>
                         <div className="col-md-6 col-12">
                             <div className="my-0">
