@@ -1,5 +1,5 @@
 import Select from "react-select";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import AlarmModal, { showFailAlarm } from "../admin/AlarmModal";
 import {
@@ -15,12 +15,14 @@ import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData";
 import  { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context";
 
 export default function StepThree() {
+    
+    
     // Containers
     const verification = useVerification();
     const [loading, setLoading] = useState(true);
-    const [docType, setDocType] = useState(
-        VerificationStepThreeDocumentTypes[0]
-    );
+    const [docTypes, setDocTypes] = useState([]);
+
+    const [docType, setDocType] = useState([]);
     const [error, setError] = useState('');
 
     // Methods
@@ -28,6 +30,15 @@ export default function StepThree() {
         verification.addressProof.handleDragDropEvent(e);
         verification.addressProof.setFiles(e, "w");
     };
+
+    useEffect(() => {
+        // filter already used document 
+        const filteredDocTypes = VerificationStepThreeDocumentTypes.filter((elem) => {
+            return elem.value != verification.usedDocType;
+        });
+        setDocTypes(filteredDocTypes);
+        setDocType(filteredDocTypes[0])
+    }, []);
 
     useDeepCompareEffect(() => {
         const file = verification.addressProof.files[0]
@@ -83,7 +94,7 @@ export default function StepThree() {
                         <div className="col-md-6 col-12">
                             <p className="form-label mt-4">Document type</p>
                             <Select
-                                options={VerificationStepThreeDocumentTypes}
+                                options={docTypes}
                                 value={docType}
                                 onChange={(v) => setDocType(v)}
                                 placeholder="Document type"

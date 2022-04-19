@@ -41,6 +41,11 @@ export default function StepOne() {
         }
     }, [verification.documentProof.files]);
 
+    const onDocTypeSelected = (e) => {
+        setDocType(e);
+        verification.setUsedDocType(e.value);
+    }
+
     // Render
     verification.shuftReferencePayload?.docStatus === true &&
         verification.nextStep();
@@ -80,7 +85,7 @@ export default function StepOne() {
                             <Select
                                 options={VerificationDocumentTypes}
                                 value={docType}
-                                onChange={(v) => setDocType(v)}
+                                onChange={(v) => onDocTypeSelected(v)}
                                 placeholder="Document type"
                             />
                             <p className="form-label mt-4">Issuing country</p>
