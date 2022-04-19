@@ -41,6 +41,11 @@ export default function StepOne() {
         }
     }, [verification.documentProof.files]);
 
+    const onDocTypeSelected = (e) => {
+        setDocType(e);
+        verification.setUsedDocType(e.value);
+    }
+
     // Render
     verification.shuftReferencePayload?.docStatus === true &&
         verification.nextStep();
@@ -80,10 +85,10 @@ export default function StepOne() {
                             <Select
                                 options={VerificationDocumentTypes}
                                 value={docType}
-                                onChange={(v) => setDocType(v)}
+                                onChange={(v) => onDocTypeSelected(v)}
                                 placeholder="Document type"
                             />
-                            <p className="form-label mt-4">Country issuing</p>
+                            <p className="form-label mt-4">Issuing country</p>
                             <Select
                                 options={VerificationCountriesList}
                                 value={verification.country}
@@ -94,7 +99,7 @@ export default function StepOne() {
                                 <p className="fs-14px">Photo requirements:</p>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot" />
-                                    <p>Upload entire document clearly</p>
+                                    <p>Upload the entire document clearly</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot" />
@@ -102,13 +107,11 @@ export default function StepOne() {
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot" />
-                                    <p>
-                                        No image from another image or device
-                                    </p>
+                                    <p>No image from another image or device</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot" />
-                                    <p>No paper-base document</p>
+                                    <p>No paper-based document</p>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +164,7 @@ export default function StepOne() {
                                                         </p>
                                                         {error === 'Not_supported' && 
                                                         <p className="text-center">
-                                                            <small style={{color: 'red'}}>PDF, PNG or JPG file formats only</small>
+                                                            <small style={{color: 'red'}}>PDF, PNG, or JPG file formats only</small>
                                                         </p>}
                                                     </>
                                                 ) : (
@@ -174,7 +177,7 @@ export default function StepOne() {
                                                             </span>
                                                         </p>
                                                         <p className="text-center">
-                                                            <small>PDF, PNG or JPG file formats only</small>
+                                                            <small>PDF, PNG, or JPG file formats only</small>
                                                         </p>
                                                     </>
                                                 )}

@@ -67,7 +67,7 @@ export default function StepTwo() {
                             step 1
                         </div>
                         <div className="text-light fs-14px fw-bold">
-                            Confirm your ID information
+                        Confirm your ID information
                         </div>
                     </div>
                     <img
