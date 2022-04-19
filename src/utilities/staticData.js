@@ -459,7 +459,7 @@ export const VerificationDocumentTypes = [
 
 export const VerificationStepThreeDocumentTypes = [
     {
-        label: "National ID",
+        label: "National Identification Card",
         value: "national_id",
     },
     {
