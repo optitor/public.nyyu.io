@@ -261,21 +261,17 @@ export default function StepSeven() {
                 <div className="my-sm-5 py-sm-5 verify-step1">
                     <div className="text-center">
                         <p className="fs-2b 5px fw-bold text-light d-sm-block d-none my-sm-0 my-5">
-                            Thank you, your verification result will be sent to
-                            your email soon.
+                        Thank you, your verification result will be sent to your email soon.
                         </p>
                         <p className="fs-16px fw-bold text-light d-block d-sm-none">
-                            Thank you, your verification result will be sent to
-                            your email soon.
+                        Thank you, your verification result will be sent to your email soon.
                         </p>
                         <p className="fs-14px px-sm-2 px-4 mt-3">
-                            As soley the data processor, Nyyu acknowledges your
-                            right to request access, erasure, and retention of
-                            your data.
+                        As solely the data processor, Nyyu acknowledges your right to request access, erasure, and retention of your data.
                             <div className="d-sm-block d-none">
                                 <br />
                             </div>
-                            Contact out Data Compliance Officer at{" "}
+                            Contact our Data Compliance Officer at{" "}
                             <span className="text-success">info@ndb.money</span>
                         </p>
                     </div>

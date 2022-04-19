@@ -65,10 +65,10 @@ export default function StepThree() {
                             step 2
                         </div>
                         <div className="text-light fs-14px">
-                            Confirm your address information
+                        Confirm your address information
                         </div>
                         <div className="text-light fs-12px">
-                            Make edits if needed
+                        Make edits if needed
                         </div>
                     </div>
                     <img
@@ -88,7 +88,7 @@ export default function StepThree() {
                                 onChange={(v) => setDocType(v)}
                                 placeholder="Document type"
                             />
-                            <p className="form-label mt-4">Country issuing</p>
+                            <p className="form-label mt-4">Issuing country</p>
                             <Select
                                 options={VerificationCountriesList}
                                 value={verification.country}
@@ -99,7 +99,11 @@ export default function StepThree() {
                                 <p className="fs-14px">Photo requirements:</p>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <p>Upload entire document clearly</p>
+                                    <p>Do not use a document used in previous steps</p>
+                                </div>
+                                <div className="d-flex align-items-center gap-2 ms-2 item">
+                                    <div className="small-white-dot"></div>
+                                    <p>Upload the entire document clearly</p>
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
@@ -107,13 +111,7 @@ export default function StepThree() {
                                 </div>
                                 <div className="d-flex align-items-center gap-2 ms-2 item">
                                     <div className="small-white-dot"></div>
-                                    <p>
-                                        No image from another image or device
-                                    </p>
-                                </div>
-                                <div className="d-flex align-items-center gap-2 ms-2 item">
-                                    <div className="small-white-dot"></div>
-                                    <p>No paper-base document</p>
+                                    <p>No image from another image or device</p>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +164,7 @@ export default function StepThree() {
                                                         </p>
                                                         {error === 'Not_supported' && 
                                                         <p className="text-center">
-                                                            <small style={{color: 'red'}}>PDF, PNG or JPG file formats only</small>
+                                                            <small style={{color: 'red'}}>PDF, PNG, or JPG file formats only</small>
                                                         </p>}
                                                     </>
                                                 ) : (
@@ -179,7 +177,7 @@ export default function StepThree() {
                                                             </span>
                                                         </p>
                                                         <p className="text-center">
-                                                            <small>PDF, PNG or JPG file formats only</small>
+                                                            <small>PDF, PNG, or JPG file formats only</small>
                                                         </p>
                                                     </>
                                                 )}
