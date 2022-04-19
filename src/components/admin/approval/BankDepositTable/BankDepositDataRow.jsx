@@ -1,59 +1,67 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import NumberFormat from 'react-number-format';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-
-const Status = {
-    '0': 'pending',
-    '1': 'countdown',
-    '2': 'started',
-    '3': 'ended',
-};
+import ApproveBankDepositModal from './ApproveBankDepositModal';
 
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
+    const [isApproveOpen, setIsApproveOpen] = useState(false);
+
+    const renderNumberFormat = (value, unit = '') => {
+        return (
+            <NumberFormat
+                value={value}
+                displayType={'text'}
+                thousandSeparator={true}
+                decimalScale={4}
+                renderText={(value, props) => <p {...props}>{value} {unit}</p>}
+            />
+        );
+    }
 
     return (
         <>
             <DataRow>
                 <div className='reference'>
                     <Main>
-                        <p className='first'>{datum.uid}</p>
+                        <p>{datum.uid}</p>
                     </Main>
                 </div>
                 <div className='email'>
                     <Main>
-                        <p>someone@some.com</p>
+                        <p>{datum.email}</p>
                     </Main>
                 </div>
                 <div className='amount'>
                     <Main>
-                        <p className='first'>{datum.amount} {datum.fiatType}</p>
+                        {renderNumberFormat(datum.amount, datum.fiatType)}
                     </Main>
                 </div>
                 <div className='usdAmount'>
                     <Main>
-                        <p className='first'>{datum.usdAmount}</p>
+                        {renderNumberFormat(datum.usdAmount)}
                     </Main>
                 </div>
                 <div className='fee'>
                     <Main>
-                        <p>{datum.fee}</p>
+                        {renderNumberFormat(datum.fee)}
                     </Main>
                 </div>
                 <div className='deposited'>
                     <Main>
-                        <p className='second'>{datum.deposited}</p>
+                        {renderNumberFormat(datum.deposited)}
                     </Main>
                 </div>
                 <div className='approve'>
                     <Main>
-                        {!datum.status?
+                        {datum.status?
                             <p className='text-green text-center' style={{fontSize: 30}}>
-                                <Icon icon='line-md:confirm-circle' />
+                                <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
                             </p>:
-                            <button className='text-green bg-transparent border-0'>Approve</button>
+                            <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}>Approve</button>
                         }
                     </Main>
                 </div>
@@ -63,14 +71,14 @@ const RoundDataRow = ({ datum }) => {
                     <UnitRowForMobile>
                         <div className='left'>
                             <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>Reference</p>
-                            <p>{datum.uid}</p>
+                            <p style={{color: 'white'}}>{datum.uid}</p>
                         </div>
                         <div className='right'>
-                            {!datum.status?
+                            {datum.status?
                                 <p className='text-green text-center' style={{fontSize: 30}}>
-                                    <Icon icon='line-md:confirm-circle' />
+                                    <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
                                 </p>:
-                                <button className='text-green bg-transparent border-0'>Approve</button>
+                                <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}>Approve</button>
                             }
                         </div>
                         <div className='right'>
@@ -86,7 +94,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>User Email</p>
                         </div>
                         <div className='right'>
-                            <p>someone@some.com</p>
+                            <p>{datum.email}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -94,7 +102,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Deposit Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.amount}</p>
+                            {renderNumberFormat(datum.amount, datum.fiatType)}
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -102,27 +110,28 @@ const RoundDataRow = ({ datum }) => {
                             <p>USD Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.usdAmount}</p>
+                            {renderNumberFormat(datum.usdAmount)}
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Fee</p>
+                            <p>Fee (USD)</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.fee}</p>
+                            {renderNumberFormat(datum.fee)}
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Deposited</p>
+                            <p>Deposited (USD)</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.deposited}</p>
+                            {renderNumberFormat(datum.deposited)}
                         </div>
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
+            {isApproveOpen && <ApproveBankDepositModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />}
         </>
     );
 };
