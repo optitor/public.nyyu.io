@@ -199,6 +199,16 @@
             padding-right: 0;
         }
     }
+    .width1 {
+        width: 50%;
+        margin: auto;
+        @include mq('phone', max) {
+            width: 100%;
+        }
+        input.black_input {
+            height: 47px;
+        }
+    }
 }
 
 .chat-modal {

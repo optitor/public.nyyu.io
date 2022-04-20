@@ -8,7 +8,7 @@ import BankDepositDataRow from './BankDepositDataRow';
 import { width } from './columnWidth';
 import PaginationBar from './../../PaginationBar';
 import Loading from './../../shared/Loading';
-import { get_Unconfirmed_BankDeposit_Txns } from '../../../../redux/actions/approvalAction';
+import { get_All_BankDeposit_Txns } from '../../../../redux/actions/approvalAction';
 
 const RoundsTable = () => {
     const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const RoundsTable = () => {
     useEffect(() => {
         (async function() {
             setLoading(true);
-            await dispatch(get_Unconfirmed_BankDeposit_Txns());
+            await dispatch(get_All_BankDeposit_Txns());
             setLoading(false);
         })();
     }, [dispatch]);
