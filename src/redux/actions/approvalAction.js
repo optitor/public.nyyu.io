@@ -70,3 +70,19 @@ export const get_All_Crypto_Withdraws = () => async dispatch => {
         showFailAlarm('Action failed', err.message);
     }
 };
+
+export const get_All_Paypal_Withdraws = () => async dispatch => {
+    try {
+        const { data } = await client.query({
+            query: Query.GET_ALL_PAYPAL_WITHDRAWS
+        });
+        const dataListObject = _.mapKeys(data.getAllPaypalWithdraws, 'id');
+        dispatch({
+            type: types.FETCH_DATA,
+            payload: dataListObject
+        });
+    } catch(err) {
+        // console.log(err.message);
+        showFailAlarm('Action failed', err.message);
+    }
+};

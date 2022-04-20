@@ -64,8 +64,7 @@ const RoundsTable = () => {
             <TableHead>
                 <div className='email'>User's Email</div>
                 <div className='sourceToken'>Source Token</div>
-                <div className='amount'>Amount</div>
-                <div className='destination'>Destination</div>
+                <div className='amount'>Withdraw Amount</div>
                 <div className='time'>Request Time</div>
                 <div className='approve'>Approve</div>
             </TableHead>
@@ -111,7 +110,6 @@ const TableHead = styled.div`
     &>div.email {width: ${width.email}; padding-left: 16px;}
     &>div.sourceToken {width: ${width.sourceToken};}
     &>div.amount {width: ${width.amount};}
-    &>div.destination {width: ${width.destination};}
     &>div.time {width: ${width.time};}
     &>div.approve {width: ${width.approve}; text-align: center;}
 
