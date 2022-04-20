@@ -4,7 +4,7 @@ import NumberFormat from 'react-number-format';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-import ApproveBankDepositModal from './ApproveBankDepositModal';
+// import ApproveBankDepositModal from './ApproveBankDepositModal';
 
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
@@ -25,34 +25,34 @@ const RoundDataRow = ({ datum }) => {
     return (
         <>
             <DataRow>
-                <div className='reference'>
-                    <Main>
-                        <p>{datum.uid}</p>
-                    </Main>
-                </div>
                 <div className='email'>
                     <Main>
                         <p>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
                     </Main>
                 </div>
+                <div className='sourceToken'>
+                    <Main>
+                        <p>Source Token: {datum.sourceToken}</p>
+                        <p>Token Price: {datum.tokenPrice}</p>
+                        <p>Network: {datum.network}</p>
+                    </Main>
+                </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumberFormat(datum.amount, datum.fiatType)}</p>
+                        <p>Withdraw: {renderNumberFormat(datum.withdrawAmount)}</p>
+                        <p>Fee: {renderNumberFormat(datum.fee)}</p>
+                        <p>Token: {renderNumberFormat(datum.tokenAmount)}</p>
                     </Main>
                 </div>
-                <div className='usdAmount'>
+                <div className='destination'>
                     <Main>
-                        <p>{renderNumberFormat(datum.usdAmount)}</p>
+                        <p>{datum.destination}</p>
                     </Main>
                 </div>
-                <div className='fee'>
+                <div className='time'>
                     <Main>
-                        <p>{renderNumberFormat(datum.fee)}</p>
-                    </Main>
-                </div>
-                <div className='deposited'>
-                    <Main>
-                        <p>{renderNumberFormat(datum.deposited)}</p>
+                        <p>{new Date(datum.requestedAt).toDateString()}</p>
+                        <p>{new Date(datum.requestedAt).toLocaleTimeString()}</p>
                     </Main>
                 </div>
                 <div className='approve'>
@@ -72,8 +72,8 @@ const RoundDataRow = ({ datum }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>Reference</p>
-                            <p style={{color: 'white'}}>{datum.uid}</p>
+                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>User's email</p>
+                            <p style={{color: 'white'}}>{datum.email}</p>
                         </div>
                         <div className='right'>
                             {datum.status?
@@ -95,31 +95,39 @@ const RoundDataRow = ({ datum }) => {
                 <div id={`id${datum.id}`} className="collapse">
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>User Email</p>
+                            <p>Source Token</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
+                            <p>{datum.sourceToken}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Deposit Amount</p>
+                            <p>Token Price</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.amount, datum.fiatType)}</p>
+                            <p>{datum.tokenPrice}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>USD Amount</p>
+                            <p>Network</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.usdAmount)}</p>
+                            <p>{datum.network}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Fee (USD)</p>
+                            <p>Withdraw Amount</p>
+                        </div>
+                        <div className='right'>
+                            <p>{renderNumberFormat(datum.withdrawAmount)}</p>
+                        </div>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
+                        <div className='left'>
+                            <p>Fee</p>
                         </div>
                         <div className='right'>
                             <p>{renderNumberFormat(datum.fee)}</p>
@@ -127,15 +135,32 @@ const RoundDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Deposited (USD)</p>
+                            <p>Token Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.deposited)}</p>
+                            <p>{renderNumberFormat(datum.tokenAmount)}</p>
+                        </div>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
+                        <div className='left'>
+                            <p>Destination</p>
+                        </div>
+                        <div className='right'>
+                            <p>{renderNumberFormat(datum.destination)}</p>
+                        </div>
+                    </UnitRowForMobile>
+                    <UnitRowForMobile>
+                        <div className='left'>
+                            <p>Request Time</p>
+                        </div>
+                        <div className='right'>
+                            <p>{new Date(datum.requestedAt).toDateString()}</p>
+                            <p>{new Date(datum.requestedAt).toLocaleTimeString()}</p>
                         </div>
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
-            {isApproveOpen && <ApproveBankDepositModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />}
+            {/* {isApproveOpen && <ApproveBankDepositModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />} */}
         </>
     );
 };
@@ -154,12 +179,11 @@ const DataRow = styled.div`
     }
 
 
-    &>div.reference {width: ${width.reference}; padding-left: 16px;}
-    &>div.email {width: ${width.email};}
+    &>div.email {width: ${width.email}; padding-left: 16px;}
+    &>div.sourceToken {width: ${width.sourceToken};}
     &>div.amount {width: ${width.amount};}
-    &>div.usdAmount {width: ${width.usdAmount};}
-    &>div.fee {width: ${width.fee};}
-    &>div.deposited {width: ${width.deposited};}
+    &>div.destination {width: ${width.destination};}
+    &>div.time {width: ${width.time};}
     &>div.approve {width: ${width.approve};}
 
     @media screen and (max-width: ${device['phone']}){

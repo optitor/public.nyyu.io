@@ -278,3 +278,8 @@ div.button_div {
         }
     }
 }
+
+button:disabled {
+    opacity: 0.5;
+    cursor: unset;
+}

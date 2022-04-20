@@ -54,3 +54,19 @@ export const confirm_Bank_Deposit = confirmData => async dispatch => {
         showFailAlarm('Action failed', err.message);
     }
 };
+
+export const get_All_Crypto_Withdraws = () => async dispatch => {
+    try {
+        const { data } = await client.query({
+            query: Query.GET_ALL_CRYPTO_WITHDRAWS
+        });
+        const dataListObject = _.mapKeys(data.getAllCryptoWithdraws, 'id');
+        dispatch({
+            type: types.FETCH_DATA,
+            payload: dataListObject
+        });
+    } catch(err) {
+        // console.log(err.message);
+        showFailAlarm('Action failed', err.message);
+    }
+};
