@@ -71,7 +71,7 @@ const BankTransferData = {
 const BankTrxDescription = {
     first: 'Incoming payments can take 3 working days to be added to your wallet',
     second: `Please make sure you use the
-        <span className="text-green">reference number</span>
+        <span className="txt-green">reference number</span>
         indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.`,
 }
 
@@ -521,7 +521,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                             {!confirmById?.status?
                                                 <CountDown deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
                                                 :
-                                                <span className='text-green'>Confirmed</span>
+                                                <span className='txt-green'>Confirmed</span>
                                             }
                                         </div>
                                     </div>

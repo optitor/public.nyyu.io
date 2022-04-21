@@ -79,7 +79,7 @@ ul {
     background-clip: unset !important;
 }
 
-.hover\:text-green {
+.hover\:txt-green {
     transition: 500ms;
     &:hover {
         color: $green;
@@ -296,7 +296,7 @@ ul {
     margin-left: 40px;
 }
 
-.first-letter\:text-green {
+.first-letter\:txt-green {
     color: white !important;
     &::first-letter {
         color: $green !important;
@@ -338,10 +338,6 @@ ul {
 
 .text-underline {
     text-decoration: underline !important;
-}
-
-.text-green {
-    color: #23c865 !important;
 }
 
 .icon-23px {
@@ -387,7 +383,7 @@ ul {
 }
 
 .txt-green {
-    color: $green;
+    color: $green!important;
 }
 .txt-grey {
     color: $grey;
@@ -459,4 +455,12 @@ ul {
 .form-check-input:checked {
     background-color: $black;
     border-color: white;
+}
+
+.font-30px {
+    font-size: 30px!important;
+}
+
+.font-14px {
+    font-size:  14px!important;
 }

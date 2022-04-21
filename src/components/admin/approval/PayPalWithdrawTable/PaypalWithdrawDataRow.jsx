@@ -1,26 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import NumberFormat from 'react-number-format';
 import { Icon } from '@iconify/react';
+import { renderNumberFormat } from '../../../../utilities/number';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-// import ApproveBankDepositModal from './ApproveBankDepositModal';
+import ApprovePaypalWithdrawModal from './ApprovePaypalWithdrawModal';
 
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
-
-    const renderNumberFormat = (value, unit = '') => {
-        return (
-            <NumberFormat
-                value={value}
-                displayType={'text'}
-                thousandSeparator={true}
-                decimalScale={4}
-                renderText={(value, props) => <span {...props}>{value} {unit}</span>}
-            />
-        );
-    }
 
     return (
         <>
@@ -32,7 +20,7 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='sourceToken'>
                     <Main>
-                        <p>{datum.sourceToken}</p>
+                        <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
                     </Main>
                 </div>
                 <div className='amount'>
@@ -48,14 +36,13 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='approve'>
                     <Main>
-                        {datum.status?
-                            <p className='text-green text-center' style={{fontSize: 30}}>
-                                <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
-                            </p>:
-                            <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
-                                disabled={!datum.email}
-                            >Approve</button>
-                        }
+                        <button className='bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
+                            disabled={!datum.email}
+                        >
+                            {datum.status === 0 && <span className='text-warning'>Approve</span>}
+                            {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='healthicons:yes-outline' /></span>}
+                            {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='clarity:no-access-line' /></span>}
+                        </button>
                     </Main>
                 </div>
             </DataRow>
@@ -67,14 +54,13 @@ const RoundDataRow = ({ datum }) => {
                             <p style={{color: 'white'}}>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
                         </div>
                         <div className='right'>
-                            {datum.status?
-                                <p className='text-green text-center' style={{fontSize: 30}}>
-                                    <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
-                                </p>:
-                                <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
-                                    disabled={!datum.email}
-                                >Approve</button>
-                            }
+                            <button className='bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
+                                disabled={!datum.email}
+                            >
+                                {datum.status === 0 && <span className='text-warning'>Approve</span>}
+                                {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='healthicons:yes-outline' /></span>}
+                                {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='clarity:no-access-line' /></span>}
+                            </button>
                         </div>
                         <div className='right'>
                             <p style={{fontSize: 16}}>
@@ -86,15 +72,15 @@ const RoundDataRow = ({ datum }) => {
                 <div id={`id${datum.id}`} className="collapse">
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Source Token</p>
+                            <p>Token Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.sourceToken}</p>
+                            <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Withdraw Amount</p>
+                            <p>Withdraw Amount (USD)</p>
                         </div>
                         <div className='right'>
                             <p>{renderNumberFormat(datum.withdrawAmount)}</p>
@@ -111,7 +97,7 @@ const RoundDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
-            {/* {isApproveOpen && <ApproveBankDepositModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />} */}
+            {isApproveOpen && <ApprovePaypalWithdrawModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />}
         </>
     );
 };

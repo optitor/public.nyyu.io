@@ -255,7 +255,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                                         <Link
                                                             to={subLink.url}
                                                             className="fw-500 fs-20px d-block text-light"
-                                                            activeClassName="first-letter:text-green"
+                                                            activeClassName="first-letter:txt-green"
                                                         >
                                                             {subLink.label}
                                                         </Link>

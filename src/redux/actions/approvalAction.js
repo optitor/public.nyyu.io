@@ -86,3 +86,39 @@ export const get_All_Paypal_Withdraws = () => async dispatch => {
         showFailAlarm('Action failed', err.message);
     }
 };
+
+export const confirm_Crypto_Withdraw = (datum, confirmData) => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+                mutation: Mutation.CONFIRM_CRYPTO_WITHDRAW,
+                variables: { ...confirmData }
+        });
+        if(data.confirmCryptoWithdraw) {
+            showSuccessAlarm('Action done successfully');
+            dispatch({
+                type: types.UPDATE_DATUM,
+                payload: { ...datum }
+            });
+        }
+    } catch(err) {
+        showFailAlarm('Action failed', err.message);
+    }
+};
+
+export const confirm_Paypal_Withdraw = (datum, confirmData) => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+                mutation: Mutation.CONFIRM_PAYPAL_WITHDRAW,
+                variables: { ...confirmData }
+        });
+        if(data.confirmPaypalWithdraw) {
+            showSuccessAlarm('Action done successfully');
+            dispatch({
+                type: types.UPDATE_DATUM,
+                payload: { ...datum }
+            });
+        }
+    } catch(err) {
+        showFailAlarm('Action failed', err.message);
+    }
+};

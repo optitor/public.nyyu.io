@@ -257,9 +257,9 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const confirmDataForCrypto = [
         {topic: 'User Email', content: censorEmail(user.email)},
         {topic: 'Destination wallet address', content: withdrawData?.destAddress},
-        {topic: 'Source Token', content: 'USDT'},
+        {topic: 'Source Token', content: selectedAsset.value},
         {topic: 'Withdraw Amount', content: withdrawData.amount},
-    ]
+    ];
 
     return (
         <Modal
@@ -375,6 +375,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                                 setWithdrawData({ ...withdrawData, amount: values.value });
                                             }}
                                             allowNegative={false}
+                                            decimalScale={8}
                                         />
                                         <p className="btn"
                                             onClick={() => {
@@ -455,6 +456,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
                                         placeholder={'Min 1 ' + currency.symbol}
+                                        decimalScale={8}
                                         autoComplete='off'
                                     />
                                     <div>
@@ -521,6 +523,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         allowNegative={false}
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
+                                        decimalScale={8}
                                         autoComplete='off'
                                     />
                                     <div>
@@ -586,7 +589,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                                 <div className="mt-3 d-flex align-items-center">
                                     <p className="text-center">The code has been sent to {censorEmail(user.email)}</p>
-                                    <span className='text-green cursor-pointer ms-1'
+                                    <span className='txt-green cursor-pointer ms-1'
                                         style={{opacity: pending? 0.5: 1}}
                                         onClick={generate_Withdraw_Code}
                                         disabled={pending}
@@ -619,7 +622,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     <div className='deposit width2'>
                         <div className="confirm_div">
                             <h3 className="mt-3"><strong>Withdraw Details</strong></h3>
-                            <h5 className="mt-2 text-green">
+                            <h5 className="mt-2 txt-green">
                                 Request sent successfully
                             </h5>
                             <div className="stats_div w-100 mt-2">

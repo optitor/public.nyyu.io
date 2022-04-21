@@ -62,7 +62,7 @@ export default function PresalePlaceOrderHome() {
             <div className="text-center" style={{height: 20, fontWeight: 600}}>
                 {currency.label !== 'USD'?
                     <NumberFormat
-                        className="text-green"
+                        className="txt-green"
                         value={Math.round(Number(Math.max(optCurrentRound?.tokenPrice * amount)).toFixed(2) * 10**2) / 10**2}
                         thousandSeparator={true}
                         displayType='text'

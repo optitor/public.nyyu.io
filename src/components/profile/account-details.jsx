@@ -161,7 +161,7 @@ export default function AccountDetails({
                                     />
                                 </div>
                                 <p className="ms-2">{savedCurrency.label}</p>
-                                <p className="ms-2 text-green">( {savedCurrency.sign} )</p>
+                                <p className="ms-2 txt-green">( {savedCurrency.sign} )</p>
                             </div>
                             <button
                                 onClick={() => setIsCurrencyModalOpen(true)}
