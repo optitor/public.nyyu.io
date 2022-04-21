@@ -1,5 +1,5 @@
-main.admin-transaction-page {
-    a#link-transaction {
+main.admin-approval-page {
+    a#link-approval {
         p {
             color: white;
         }
@@ -83,7 +83,10 @@ main.admin-transaction-page {
                         font-size: 12px;
                         font-weight: 500;
                     }
-                }                
+                }
+                div.left p {
+                    color: dimgray;
+                }
             }
         }
     }

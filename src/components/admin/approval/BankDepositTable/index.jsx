@@ -8,12 +8,11 @@ import BankDepositDataRow from './BankDepositDataRow';
 import { width } from './columnWidth';
 import PaginationBar from './../../PaginationBar';
 import Loading from './../../shared/Loading';
-import { get_Unconfirmed_BankDeposit_Txns } from '../../../../redux/actions/approvalAction';
+import { get_All_BankDeposit_Txns } from '../../../../redux/actions/approvalAction';
 
 const RoundsTable = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(state => state);
-    const sortedData = _.orderBy(data, ['createdAt'], ['desc']);
     
     const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
     const { page, limit } = pageInfo;
@@ -34,7 +33,7 @@ const RoundsTable = () => {
     useEffect(() => {
         (async function() {
             setLoading(true);
-            await dispatch(get_Unconfirmed_BankDeposit_Txns());
+            await dispatch(get_All_BankDeposit_Txns());
             setLoading(false);
         })();
     }, [dispatch]);
@@ -72,7 +71,7 @@ const RoundsTable = () => {
                 <div className='approve'>Approve</div>
             </TableHead>
             <TableHeadForMobile>
-                <div className='name'>Rounds Data</div>
+                <div className='name'>Data</div>
             </TableHeadForMobile>
             {loading?
                 <Loading />:

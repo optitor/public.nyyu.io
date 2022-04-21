@@ -12,8 +12,8 @@ const IndexPage = () => {
 
     return (
         <>
-            <Seo title="Admin Transaction" />
-            <main className="admin-transaction-page">
+            <Seo title="Admin Approval" />
+            <main className="admin-approval-page">
                 <LayoutWithMenu>
                     <div className="tabs_container">
                         <Tabs>
