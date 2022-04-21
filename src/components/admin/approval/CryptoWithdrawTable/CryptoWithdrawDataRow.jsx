@@ -4,7 +4,7 @@ import NumberFormat from 'react-number-format';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-import ApproveBankDepositModal from './ApproveBankDepositModal';
+// import ApproveBankDepositModal from './ApproveBankDepositModal';
 
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
@@ -25,34 +25,25 @@ const RoundDataRow = ({ datum }) => {
     return (
         <>
             <DataRow>
-                <div className='reference'>
-                    <Main>
-                        <p>{datum.uid}</p>
-                    </Main>
-                </div>
                 <div className='email'>
                     <Main>
                         <p>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
                     </Main>
                 </div>
+                <div className='sourceToken'>
+                    <Main>
+                        <p>{datum.sourceToken}</p>
+                    </Main>
+                </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumberFormat(datum.amount, datum.fiatType)}</p>
+                        <p>{renderNumberFormat(datum.withdrawAmount)}</p>
                     </Main>
                 </div>
-                <div className='usdAmount'>
+                <div className='time'>
                     <Main>
-                        <p>{renderNumberFormat(datum.usdAmount)}</p>
-                    </Main>
-                </div>
-                <div className='fee'>
-                    <Main>
-                        <p>{renderNumberFormat(datum.fee)}</p>
-                    </Main>
-                </div>
-                <div className='deposited'>
-                    <Main>
-                        <p>{renderNumberFormat(datum.deposited)}</p>
+                        <p>{new Date(datum.requestedAt).toLocaleDateString()}</p>
+                        <p>{new Date(datum.requestedAt).toLocaleTimeString()}</p>
                     </Main>
                 </div>
                 <div className='approve'>
@@ -72,8 +63,8 @@ const RoundDataRow = ({ datum }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>Reference</p>
-                            <p style={{color: 'white'}}>{datum.uid}</p>
+                            <p style={{fontSize: 16, fontWeight: 700, color: 'white'}}>User's email</p>
+                            <p style={{color: 'white'}}>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
                         </div>
                         <div className='right'>
                             {datum.status?
@@ -95,47 +86,32 @@ const RoundDataRow = ({ datum }) => {
                 <div id={`id${datum.id}`} className="collapse">
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>User Email</p>
+                            <p>Source Token</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
+                            <p>{datum.sourceToken}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Deposit Amount</p>
+                            <p>Withdraw Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.amount, datum.fiatType)}</p>
+                            <p>{renderNumberFormat(datum.withdrawAmount)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>USD Amount</p>
+                            <p>Request Time</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.usdAmount)}</p>
-                        </div>
-                    </UnitRowForMobile>
-                    <UnitRowForMobile>
-                        <div className='left'>
-                            <p>Fee (USD)</p>
-                        </div>
-                        <div className='right'>
-                            <p>{renderNumberFormat(datum.fee)}</p>
-                        </div>
-                    </UnitRowForMobile>
-                    <UnitRowForMobile>
-                        <div className='left'>
-                            <p>Deposited (USD)</p>
-                        </div>
-                        <div className='right'>
-                            <p>{renderNumberFormat(datum.deposited)}</p>
+                            <p>{new Date(datum.requestedAt).toLocaleDateString()}</p>
+                            <p>{new Date(datum.requestedAt).toLocaleTimeString()}</p>
                         </div>
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
-            {isApproveOpen && <ApproveBankDepositModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />}
+            {/* {isApproveOpen && <ApproveBankDepositModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />} */}
         </>
     );
 };
@@ -154,12 +130,10 @@ const DataRow = styled.div`
     }
 
 
-    &>div.reference {width: ${width.reference}; padding-left: 16px;}
-    &>div.email {width: ${width.email};}
+    &>div.email {width: ${width.email}; padding-left: 16px;}
+    &>div.sourceToken {width: ${width.sourceToken};}
     &>div.amount {width: ${width.amount};}
-    &>div.usdAmount {width: ${width.usdAmount};}
-    &>div.fee {width: ${width.fee};}
-    &>div.deposited {width: ${width.deposited};}
+    &>div.time {width: ${width.time};}
     &>div.approve {width: ${width.approve};}
 
     @media screen and (max-width: ${device['phone']}){

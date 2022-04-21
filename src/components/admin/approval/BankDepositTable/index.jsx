@@ -13,7 +13,6 @@ import { get_All_BankDeposit_Txns } from '../../../../redux/actions/approvalActi
 const RoundsTable = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(state => state);
-    const sortedData = _.orderBy(data, ['createdAt'], ['desc']);
     
     const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
     const { page, limit } = pageInfo;
@@ -72,7 +71,7 @@ const RoundsTable = () => {
                 <div className='approve'>Approve</div>
             </TableHead>
             <TableHeadForMobile>
-                <div className='name'>Rounds Data</div>
+                <div className='name'>Data</div>
             </TableHeadForMobile>
             {loading?
                 <Loading />:

@@ -37,3 +37,29 @@ export const GET_ALL_BANKDEPOSIT_TXNS = gql`
         }
     }
 `;
+
+export const GET_ALL_CRYPTO_WITHDRAWS = gql`
+    query {
+        getAllCryptoWithdraws {
+            id
+            email
+            sourceToken
+            withdrawAmount
+            status
+            requestedAt
+        }
+    }
+`;
+
+export const GET_ALL_PAYPAL_WITHDRAWS = gql`
+    query {
+        getAllPaypalWithdraws {
+            id
+            email
+            sourceToken
+            withdrawAmount
+            status
+            requestedAt
+        }
+    }
+`;
