@@ -172,7 +172,7 @@ export default function AuctionPlaceBid() {
                     <div className="text-center mt-8px" style={{height: 20, fontWeight: 600}}>
                         {currency.label !== 'USD'?
                             <NumberFormat
-                                className="text-green"
+                                className="txt-green"
                                 value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount)).toFixed(3) * 10**3) / 10**3}
                                 thousandSeparator={true}
                                 displayType='text'

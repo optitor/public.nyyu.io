@@ -77,7 +77,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         <span className="text-muted me-2">Reference:</span> {datum.uid}
                     </p>
                     <p>
-                        <span className="text-muted me-2">User's email</span> {datum.email}
+                        <span className="text-muted me-2">User's email:</span> {datum.email}
                     </p>
                 </div>
                 <div className='mt-3'>

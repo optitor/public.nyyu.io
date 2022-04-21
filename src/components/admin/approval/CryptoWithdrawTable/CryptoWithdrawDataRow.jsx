@@ -1,26 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import NumberFormat from 'react-number-format';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
+import { renderNumberFormat } from '../../../../utilities/number';
 import { width } from './columnWidth';
-// import ApproveBankDepositModal from './ApproveBankDepositModal';
+import ApproveCryptoWithdrawModal from './ApproveCryptoWithdrawModal';
 
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
-
-    const renderNumberFormat = (value, unit = '') => {
-        return (
-            <NumberFormat
-                value={value}
-                displayType={'text'}
-                thousandSeparator={true}
-                decimalScale={4}
-                renderText={(value, props) => <span {...props}>{value} {unit}</span>}
-            />
-        );
-    }
 
     return (
         <>
@@ -32,12 +20,12 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='sourceToken'>
                     <Main>
-                        <p>{renderNumberFormat(datum.tokenAmount)} {datum.sourceToken}</p>
+                        <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
                     </Main>
                 </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumberFormat(datum.withdrawAmount)}</p>
+                        <p>{renderNumberFormat(datum.withdrawAmount, '', 2)}</p>
                     </Main>
                 </div>
                 <div className='time'>
@@ -48,18 +36,13 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='approve'>
                     <Main>
-                        {datum.status === 0 &&
-                        <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
+                        <button className='bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
                             disabled={!datum.email}
-                        >Approve</button>}
-                        {datum.status === 1 &&
-                        <p className='text-green text-center' style={{fontSize: 30}}>
-                            <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
-                        </p>}
-                        {datum.status === 2 &&
-                        <p className='text-danger text-center' style={{fontSize: 30}}>
-                            <Icon icon='teenyicons:denied-solid' style={{cursor: 'unset'}} />
-                        </p>}
+                        >
+                            {datum.status === 0 && <span className='text-warning'>Approve</span>}
+                            {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='line-md:confirm-circle' /></span>}
+                            {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='teenyicons:denied-solid' /></span>}
+                        </button>
                     </Main>
                 </div>
             </DataRow>
@@ -71,22 +54,17 @@ const RoundDataRow = ({ datum }) => {
                             <p style={{color: 'white'}}>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
                         </div>
                         <div className='right'>
-                            {datum.status === 0 &&
-                            <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
+                            <button className='bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
                                 disabled={!datum.email}
-                            >Approve</button>}
-                            {datum.status === 1 &&
-                            <p className='text-green text-center' style={{fontSize: 30}}>
-                                <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
-                            </p>}
-                            {datum.status === 2 &&
-                            <p className='text-danger text-center' style={{fontSize: 30}}>
-                                <Icon icon='teenyicons:denied-solid' style={{cursor: 'unset'}} />
-                            </p>}
+                            >
+                                {datum.status === 0 && <span className='text-warning'>Approve</span>}
+                                {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='line-md:confirm-circle' /></span>}
+                                {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='teenyicons:denied-solid' /></span>}
+                            </button>
                         </div>
                         <div className='right'>
                             <p style={{fontSize: 16}}>
-                                <span><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} data-bs-toggle="collapse" data-bs-target={`#id${datum.id}`} onClick={() => setShow(!show)} /></span>
+                                <span><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} className='cursor-pointer' data-bs-toggle="collapse" data-bs-target={`#id${datum.id}`} onClick={() => setShow(!show)} /></span>
                             </p>
                         </div>
                     </UnitRowForMobile>
@@ -97,7 +75,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Token Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.tokenAmount)} {datum.sourceToken}</p>
+                            <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -105,7 +83,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Withdarw Amount (USD)</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.withdrawAmount)}</p>
+                            <p>{renderNumberFormat(datum.withdrawAmount, '', 2)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -119,7 +97,7 @@ const RoundDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
-            {/* {isApproveOpen && <ApproveBankDepositModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />} */}
+            {isApproveOpen && <ApproveCryptoWithdrawModal isOpen={isApproveOpen} setIsOpen={setIsApproveOpen} datum={datum} />}
         </>
     );
 };
@@ -133,10 +111,6 @@ const DataRow = styled.div`
     display: flex;
     justify-content: space-between;
     flex-flow: row wrap;
-    svg {
-        cursor: pointer;
-    }
-
 
     &>div.email {width: ${width.email}; padding-left: 16px;}
     &>div.sourceToken {width: ${width.sourceToken};}
@@ -161,10 +135,7 @@ const DataRowForMobile = styled.div`
     min-height: 80px;
     border-bottom: 1px solid #464646;
     padding: 16px;
-    display: none;    
-    svg {
-        cursor: pointer;
-    }
+    display: none;
     @media screen and (max-width: ${device['phone']}){
         display: flex;
         flex-direction: column;

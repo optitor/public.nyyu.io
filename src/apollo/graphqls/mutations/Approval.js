@@ -27,3 +27,17 @@ export const CONFIRM_BANK_DEPOSIT = gql`
         }
     }
 `;
+
+export const CONFIRM_CRYPTO_WITHDRAW = gql`    
+    mutation ConfirmCryptoWithdraw(
+        $requestId: Int
+        $status: Int
+        $reason: String
+    ) {
+        confirmCryptoWithdraw(
+            requestId: $requestId
+            status: $status
+            reason: $reason
+        )
+    }
+`;

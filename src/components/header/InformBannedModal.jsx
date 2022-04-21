@@ -37,7 +37,7 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen, informMessage={} }) => 
                     </p>
                     <p className='mt-3'>
                         As per our
-                        <span className='ms-2 text-green text-underline'>Terms of Use</span>
+                        <span className='ms-2 txt-green text-underline'>Terms of Use</span>
                         , {informMessage.second}
                     </p>
                 </div>
