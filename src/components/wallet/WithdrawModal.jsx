@@ -375,6 +375,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                                 setWithdrawData({ ...withdrawData, amount: values.value });
                                             }}
                                             allowNegative={false}
+                                            decimalScale={8}
                                         />
                                         <p className="btn"
                                             onClick={() => {
@@ -455,6 +456,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
                                         placeholder={'Min 1 ' + currency.symbol}
+                                        decimalScale={8}
                                         autoComplete='off'
                                     />
                                     <div>
@@ -521,6 +523,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                         allowNegative={false}
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
+                                        decimalScale={8}
                                         autoComplete='off'
                                     />
                                     <div>

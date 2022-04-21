@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from 'axios';
-import { CURRENCIES } from "../../utilities/staticData2";
+// import { CURRENCIES } from "../../utilities/staticData2";
 import { setCurrencyRates } from "../../redux/actions/bidAction";
 
-const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.exchangerate.host/latest';
-// const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.currencyfreaks.com/latest';
-// const API_KEY = '013a5b710f794e2b8515478f6d5e166b';
-
-const SYMBOLS = CURRENCIES;
+const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.exchangerate.host/latest?base=USD';
 
 export default function LoadCurrencyRates() {
     const dispatch = useDispatch();
@@ -16,8 +12,9 @@ export default function LoadCurrencyRates() {
     useEffect(() => {
         (async function() {
             try {
-                const res = await axios.get(GET_CURRENCY_PRICES_ENDPOINT, { params: { base: 'USD', symbols: SYMBOLS } });
-                // const res = await axios.get(GET_CURRENCY_PRICES_ENDPOINT, { params: { apikey: API_KEY, symbols: SYMBOLS } });
+                const res = await axios.get(GET_CURRENCY_PRICES_ENDPOINT, 
+                    // {params: {symbols: CURRENCIES}}
+                );
                 dispatch(setCurrencyRates(res.data.rates));
             } catch(err) {
                 console.log(err);

@@ -32,7 +32,7 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='sourceToken'>
                     <Main>
-                        <p>{datum.sourceToken}</p>
+                        <p>{renderNumberFormat(datum.tokenAmount)} {datum.sourceToken}</p>
                     </Main>
                 </div>
                 <div className='amount'>
@@ -48,14 +48,18 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='approve'>
                     <Main>
-                        {datum.status?
-                            <p className='text-green text-center' style={{fontSize: 30}}>
-                                <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
-                            </p>:
-                            <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
-                                disabled={!datum.email}
-                            >Approve</button>
-                        }
+                        {datum.status === 0 &&
+                        <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
+                            disabled={!datum.email}
+                        >Approve</button>}
+                        {datum.status === 1 &&
+                        <p className='text-green text-center' style={{fontSize: 30}}>
+                            <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
+                        </p>}
+                        {datum.status === 2 &&
+                        <p className='text-danger text-center' style={{fontSize: 30}}>
+                            <Icon icon='teenyicons:denied-solid' style={{cursor: 'unset'}} />
+                        </p>}
                     </Main>
                 </div>
             </DataRow>
@@ -67,14 +71,18 @@ const RoundDataRow = ({ datum }) => {
                             <p style={{color: 'white'}}>{datum.email? datum.email: <span className='text-danger'>Deleted User</span>}</p>
                         </div>
                         <div className='right'>
-                            {datum.status?
-                                <p className='text-green text-center' style={{fontSize: 30}}>
-                                    <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
-                                </p>:
-                                <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
-                                    disabled={!datum.email}
-                                >Approve</button>
-                            }
+                            {datum.status === 0 &&
+                            <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
+                                disabled={!datum.email}
+                            >Approve</button>}
+                            {datum.status === 1 &&
+                            <p className='text-green text-center' style={{fontSize: 30}}>
+                                <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
+                            </p>}
+                            {datum.status === 2 &&
+                            <p className='text-danger text-center' style={{fontSize: 30}}>
+                                <Icon icon='teenyicons:denied-solid' style={{cursor: 'unset'}} />
+                            </p>}
                         </div>
                         <div className='right'>
                             <p style={{fontSize: 16}}>
@@ -86,15 +94,15 @@ const RoundDataRow = ({ datum }) => {
                 <div id={`id${datum.id}`} className="collapse">
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Source Token</p>
+                            <p>Token Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.sourceToken}</p>
+                            <p>{renderNumberFormat(datum.tokenAmount)} {datum.sourceToken}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Withdraw Amount</p>
+                            <p>Withdarw Amount (USD)</p>
                         </div>
                         <div className='right'>
                             <p>{renderNumberFormat(datum.withdrawAmount)}</p>

@@ -94,7 +94,7 @@ const RoundDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Withdraw Amount</p>
+                            <p>Withdraw Amount (USD)</p>
                         </div>
                         <div className='right'>
                             <p>{renderNumberFormat(datum.withdrawAmount)}</p>

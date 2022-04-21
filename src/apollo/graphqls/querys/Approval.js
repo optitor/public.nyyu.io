@@ -44,6 +44,7 @@ export const GET_ALL_CRYPTO_WITHDRAWS = gql`
             id
             email
             sourceToken
+            tokenAmount
             withdrawAmount
             status
             requestedAt

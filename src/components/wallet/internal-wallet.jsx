@@ -21,7 +21,7 @@ const Asset = ({ item }) => {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
-    const precision = item.tokenSymbol === 'BTC'? 8: 4;
+    const precision = 8;
 
     return (
         <tr>
