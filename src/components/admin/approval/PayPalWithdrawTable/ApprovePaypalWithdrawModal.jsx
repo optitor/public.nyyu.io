@@ -8,7 +8,7 @@ import Select, { components } from 'react-select';
 import * as Query from '../../../../apollo/graphqls/querys/Approval'
 import { renderNumberFormat } from '../../../../utilities/number';
 import CustomSpinner from "../../../common/custom-spinner";
-import { confirm_Crypto_Withdraw } from "../../../../redux/actions/approvalAction";
+import { confirm_Paypal_Withdraw } from "../../../../redux/actions/approvalAction";
 import { showFailAlarm } from "../../AlarmModal";
 
 const STATUSES = [
@@ -35,13 +35,13 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
 
     const disabled = status.value === 2 && !deniedReason;
 
-    useQuery(Query.GET_CRYPTO_WITHDRAW_BY_ID, {
+    useQuery(Query.GET_PAYPAL_WITHDRAW_BY_ID, {
         variables: {
             id: datum.id
         },
         onCompleted: data => {
-            if(data.getCryptoWithdrawById) {
-                setWithdrawData(data.getCryptoWithdrawById);
+            if(data.getPaypalWithdrawById) {
+                setWithdrawData(data.getPaypalWithdrawById);
             }
             setLoading(false);
         },
@@ -58,7 +58,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             status: status.value,
             deniedReason: deniedReason,
         };
-        await dispatch(confirm_Crypto_Withdraw({...datum, status: status.value}, confirmData));
+        await dispatch(confirm_Paypal_Withdraw({...datum, status: status.value}, confirmData));
         setPending(false);
         setIsOpen(false);
     };
@@ -92,7 +92,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             </div>
             <div className='width2'>
                 <div className="text-center">
-                    <h4 className='mt-3'>Approve Cryptocurrency Withdraw</h4>
+                    <h4 className='mt-3'>Approve PayPal Withdraw</h4>
                     <p>
                         <span className="text-muted me-2">User's email:</span> {datum.email}
                     </p>
@@ -108,11 +108,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         </div>
                         <div className="row">
                             <p className="col-6 text-muted">Withdraw Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
-                        </div>
-                        <div className="row">
-                            <p className="col-6 text-muted">Network</p>
-                            <p className="col-6 text-end">{withdrawData.network}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, 'USD', 2)}</p>
                         </div>
                         <div className="row">
                             <p className="col-6 text-muted">Destination Address</p>

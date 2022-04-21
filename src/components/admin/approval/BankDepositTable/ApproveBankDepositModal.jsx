@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
 import NumberFormat from "react-number-format";
 import Modal from 'react-modal';
-import _ from 'lodash';
 import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
 import { CloseIcon } from "../../../../utilities/imgImport";
@@ -57,8 +56,8 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
         >
             <div className="support-modal__header justify-content-end">
                 <div
-                    onClick={() => setIsOpen(false)}
-                    onKeyDown={() => setIsOpen(false)}
+                    onClick={closeModal}
+                    onKeyDown={closeModal}
                     role="button"
                     tabIndex="0"
                 >

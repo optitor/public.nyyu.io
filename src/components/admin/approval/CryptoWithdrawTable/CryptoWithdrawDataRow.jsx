@@ -25,7 +25,7 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumberFormat(datum.withdrawAmount, '', 2)}</p>
+                        <p>{renderNumberFormat(datum.withdrawAmount, datum.sourceToken)}</p>
                     </Main>
                 </div>
                 <div className='time'>
@@ -40,8 +40,8 @@ const RoundDataRow = ({ datum }) => {
                             disabled={!datum.email}
                         >
                             {datum.status === 0 && <span className='text-warning'>Approve</span>}
-                            {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='line-md:confirm-circle' /></span>}
-                            {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='teenyicons:denied-solid' /></span>}
+                            {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='healthicons:yes-outline' /></span>}
+                            {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='clarity:no-access-line' /></span>}
                         </button>
                     </Main>
                 </div>
@@ -58,8 +58,8 @@ const RoundDataRow = ({ datum }) => {
                                 disabled={!datum.email}
                             >
                                 {datum.status === 0 && <span className='text-warning'>Approve</span>}
-                                {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='line-md:confirm-circle' /></span>}
-                                {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='teenyicons:denied-solid' /></span>}
+                                {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='healthicons:yes-outline' /></span>}
+                                {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='clarity:no-access-line' /></span>}
                             </button>
                         </div>
                         <div className='right'>
@@ -80,10 +80,10 @@ const RoundDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Withdarw Amount (USD)</p>
+                            <p>Withdarw Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.withdrawAmount, '', 2)}</p>
+                            <p>{renderNumberFormat(datum.withdrawAmount, datum.sourceToken)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>

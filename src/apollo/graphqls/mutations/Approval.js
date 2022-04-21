@@ -30,14 +30,28 @@ export const CONFIRM_BANK_DEPOSIT = gql`
 
 export const CONFIRM_CRYPTO_WITHDRAW = gql`    
     mutation ConfirmCryptoWithdraw(
-        $requestId: Int
+        $id: Int
         $status: Int
-        $reason: String
+        $deniedReason: String
     ) {
         confirmCryptoWithdraw(
-            requestId: $requestId
+            id: $id
             status: $status
-            reason: $reason
+            deniedReason: $deniedReason
+        )
+    }
+`;
+
+export const CONFIRM_PAYPAL_WITHDRAW = gql`
+    mutation ConfirmPaypalWithdraw(
+        $id: Int
+        $status: Int
+        $deniedReason: String
+    ) {
+        confirmPaypalWithdraw(
+            id: $id
+            status: $status
+            deniedReason: $deniedReason
         )
     }
 `;

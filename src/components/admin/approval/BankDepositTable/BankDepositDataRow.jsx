@@ -47,7 +47,7 @@ const RoundDataRow = ({ datum }) => {
                     <Main>
                         {datum.status?
                             <p className='txt-green text-center' style={{fontSize: 30}}>
-                                <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
+                                <Icon icon='healthicons:yes-outline' style={{cursor: 'unset'}} />
                             </p>:
                             <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
                                 disabled={!datum.email}
@@ -66,7 +66,7 @@ const RoundDataRow = ({ datum }) => {
                         <div className='right'>
                             {datum.status?
                                 <p className='txt-green text-center' style={{fontSize: 30}}>
-                                    <Icon icon='line-md:confirm-circle' style={{cursor: 'unset'}} />
+                                    <Icon icon='healthicons:yes-outline' style={{cursor: 'unset'}} />
                                 </p>:
                                 <button className='text-warning bg-transparent border-0' onClick={() => setIsApproveOpen(true)}
                                     disabled={!datum.email}

@@ -58,6 +58,7 @@ export const GET_ALL_PAYPAL_WITHDRAWS = gql`
             id
             email
             sourceToken
+            tokenAmount
             withdrawAmount
             status
             requestedAt
@@ -85,6 +86,30 @@ export const GET_CRYPTO_WITHDRAW_BY_ID = gql`
             confirmedAt
             network
             destination
+        }
+    }
+`;
+
+export const GET_PAYPAL_WITHDRAW_BY_ID = gql`
+    query GetPaypalWithdrawById(
+        $id: Int
+    ) {
+        getPaypalWithdrawById(
+            id: $id
+        ) {
+            id
+            userId
+            email
+            targetCurrency
+            sourceToken
+            withdrawAmount
+            fee
+            tokenAmount
+            status
+            deniedReason
+            requestedAt
+            confirmedAt
+            receiver
         }
     }
 `;
