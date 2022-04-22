@@ -13,9 +13,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import CustomSpinner from "../common/custom-spinner";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import { getPaypalPaymentFee } from "../../utilities/utility-methods";
-import {
-    PaypalFiat,
-    USDT } from '../../utilities/imgImport';
+import { PaypalFiat } from '../../utilities/imgImport';
 import { roundNumber } from '../../utilities/number';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
@@ -23,8 +21,8 @@ import { censorEmail } from "../../utilities/string";
 
 const CURRENCIES = [
     {label: 'USD', value: 'USD', symbol: '$'},
-    // {label: 'GBP', value: 'GBP', symbol: '£'},
-    // {label: 'EUR', value: 'EUR', symbol: '€'},
+    {label: 'GBP', value: 'GBP', symbol: '£'},
+    {label: 'EUR', value: 'EUR', symbol: '€'},
 ];
 
 const CRYPTOCURRENCY = 'CRYPTOCURRENCY';
@@ -99,8 +97,11 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
             networks: SupportedCoins[item.tokenSymbol]?.networks
         };
     }), ['balance'], ['desc']);
+
+    const myAssetsFiat = myAssets.filter(item => item.value !== 'NDB');
     
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
+    const [selectedAssetFiat, setSelectedAssetFiat] = useState(myAssetsFiat[0]);
     const [currentStep, setCurrentStep] = useState(1);
     const [withdrawType, setWithdrawType] = useState(null);
     const [tabIndex, setTabIndex] = useState(1);
@@ -137,6 +138,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const goBackToFiat = () => {
         setCurrentStep(1);
         setCurrency(CURRENCIES[0]);
+        setSelectedAssetFiat(myAssetsFiat[0]);
         setTransferAmount('');
     };
 
@@ -423,12 +425,23 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <h5 className="text-center">PayPal withdraw</h5>
                             <div className="mt-3">
                                 <p className="subtitle">Source of fund</p>
-                                <div className="black_input usdt_div">
-                                    <img src={USDT} alt='usdt' className="ms-2" />
-                                    <p className="ms-2">USDT</p>
-                                </div>
-                                <p className="desc">
-                                    The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your paypal account
+                                <Select
+                                    className="black_input"
+                                    options={myAssetsFiat}
+                                    value={selectedAssetFiat}
+                                    onChange={(selected) => {
+                                        setSelectedAssetFiat(selected)
+                                    }}
+                                    styles={customSelectStylesWithIcon}
+                                    placeholder="Select Coin"
+                                    components={{
+                                        Option: SelectOption,
+                                        SingleValue: SelectOption,
+                                        IndicatorSeparator: null                                            
+                                    }}
+                                />
+                                <p className="mt-1">
+                                    The <span className='txt-green'>{selectedAssetFiat.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your paypal account
                                 </p>
                             </div>
                             <div>
@@ -491,12 +504,23 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <h5 className="text-center">Bank transfer withdraw</h5>
                             <div className="mt-3">
                                 <p className="subtitle">Source of fund</p>
-                                <div className="black_input usdt_div">
-                                    <img src={USDT} alt='usdt' className="ms-2" />
-                                    <p className="ms-2">USDT</p>
-                                </div>
-                                <p className="desc">
-                                    The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your bank
+                                <Select
+                                    className="black_input"
+                                    options={myAssetsFiat}
+                                    value={selectedAssetFiat}
+                                    onChange={(selected) => {
+                                        setSelectedAssetFiat(selected)
+                                    }}
+                                    styles={customSelectStylesWithIcon}
+                                    placeholder="Select Coin"
+                                    components={{
+                                        Option: SelectOption,
+                                        SingleValue: SelectOption,
+                                        IndicatorSeparator: null                                            
+                                    }}
+                                />
+                                <p className="mt-1">
+                                    The <span className='txt-green'>{selectedAssetFiat.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your bank account
                                 </p>
                             </div>
                             <div>

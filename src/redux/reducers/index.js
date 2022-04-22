@@ -24,6 +24,6 @@ const rootReducer = combineReducers({
     allFees: allFeesReducer,
     profileTab: profileTabReducer,
     currencyRates: currencyRatesReducer,
-})
+});
 
-export default rootReducer
+export default rootReducer;

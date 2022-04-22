@@ -33,8 +33,8 @@ const IntervalTime = 5 * 1000;
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
-    // { label: "GBP", value: "GBP", symbol: "£" },
-    // { label: "EUR", value: "EUR", symbol: "€" },
+    { label: "GBP", value: "GBP", symbol: "£" },
+    { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
 const CURRENCIES_BANK = [
@@ -590,9 +590,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be
-                                converted to <span>USDT</span> and deposited to
+                            <p>
+                                The <span className='txt-green'>{currency.label}</span> will be
+                                converted to <span className='txt-green'>USDT</span> and deposited to
                                 the wallet
                             </p>
                             <div className="black_input usdt_div">
@@ -729,9 +729,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be
-                                converted to <span>USDT</span> and deposited to
+                            <p>
+                                The <span className='txt-green'>{currency.label}</span> will be
+                                converted to <span className='txt-green'>USDT</span> and deposited to
                                 the wallet
                             </p>
                             <div className="black_input usdt_div">
@@ -823,10 +823,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </div>
                                     </div>
                                     <div className="mt-3">
-                                        <p className="desc">
-                                            The <span>{currency.label}</span>{" "}
+                                        <p>
+                                            The <span className='txt-green'>{currency.label}</span>{" "}
                                             will be converted to{" "}
-                                            <span>USDT</span> and deposited to
+                                            <span className='txt-green'>USDT</span> and deposited to
                                             the wallet
                                         </p>
                                         <div className="black_input usdt_div">
