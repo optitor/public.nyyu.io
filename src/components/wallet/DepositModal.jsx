@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import parse from 'html-react-parser';
 import Modal from "react-modal";
-import _, { set } from "lodash";
+import _ from "lodash";
 import styled from "styled-components";
 import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";

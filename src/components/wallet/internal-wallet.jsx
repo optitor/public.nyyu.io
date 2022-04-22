@@ -116,7 +116,7 @@ export default function InternalWallet() {
                     const res = await axios.get(TICKER_price, {
                         params: { symbol: item.tokenSymbol + QUOTE },
                     });
-                    price = res.data.price;
+                    price = Number(res.data.price);
                 }
                 const balance = (item.hold + item.free) * price;
                 assets[item.tokenSymbol] = { ...item, price, balance: balance, value: item.tokenSymbol };
@@ -263,7 +263,7 @@ export default function InternalWallet() {
                             <WithdrawModal
                                 showModal={isWithdrawOpen}
                                 setShowModal={setIsWithdrawOpen}
-                                assets = {Object.values(myAssets)}
+                                assets = {myAssets}
                             />
                         )}
                         {isDepositOpen && (

@@ -12,7 +12,7 @@ import { Icon } from "@iconify/react";
 import { useQuery, useMutation } from '@apollo/client';
 import CustomSpinner from "../common/custom-spinner";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
-import { getPaypalPaymentFee } from "../../utilities/utility-methods";
+import { getPaypalPaymentFee, getBankTransferFee } from "../../utilities/utility-methods";
 import { PaypalFiat } from '../../utilities/imgImport';
 import { roundNumber } from '../../utilities/number';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
@@ -29,38 +29,14 @@ const CRYPTOCURRENCY = 'CRYPTOCURRENCY';
 const PAYPAL = 'PAYPAL';
 const BANKTRANSFER = 'BANKTRANSFER';
 
-const TransferData = {
-    EUR: {
-        'Account holder': 'Voltamond',
-        'BIC': 'TRWIBEB1XXX',
-        'IBAN': 'BE36 9672 2651 6281',
-        'Address': 'Avenue Louise 54, Room S52, Brussels, 1050, Belgium',
-        'Reference': '123456789'
-    },
-    GBP: {
-        'Account holder': 'Voltamond',
-        'Sort code': '23-14-70',
-        'Account number': '22063784',
-        'IBAN': 'GB29 TRWI 2314 7022 0637 84',
-        'Address': '56 Shoreditch High Street, London, E1 6JJ, United Kingdom',
-    },
-    USD: {
-        'Account holder': 'Voltamond',
-        'Routing number': '084009519',
-        'Account number': '9600001149793466',
-        'Account type': 'Checking',
-        'Address': '19 W 24th Street, New York NY 10010, United States',
-    }
-};
-
-const TransferFee = 0.03; 
-
 const { Option } = components;
+
+const MIN_VALUE = 1;
 
 const SupportedCoins = _.mapKeys(SUPPORTED_COINS, 'value');
 
 const SelectOption = (props) => {
-    const precision = props.data?.label === 'BTC'? 8: 4;
+    const value = roundNumber(props.data?.amount, 8);
     return (
         <Option {...props}>
             <div className="d-flex justify-content-sm-start align-items-center ">
@@ -71,7 +47,7 @@ const SelectOption = (props) => {
                 />
                 <p className="coin-label ms-3">
                     <NumberFormat
-                        value={roundNumber(props.data?.amount, precision)}
+                        value={value}
                         displayType={'text'}
                         thousandSeparator={true}
                         renderText={(value, props) => <span {...props}>{value} </span>}
@@ -85,7 +61,8 @@ const SelectOption = (props) => {
 
 export default function DepositModal({ showModal, setShowModal, assets }) {
     const user = useSelector((state) => state.auth.user);
-    const myAssets = _.orderBy(assets.filter(item => {
+    const { currencyRates } = useSelector((state) => state);
+    const myAssets = _.orderBy(Object.values(assets).filter(item => {
         return item.tokenSymbol !== 'VOLT';
     }).map(item => {
         return {
@@ -98,7 +75,13 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         };
     }), ['balance'], ['desc']);
 
-    const myAssetsFiat = myAssets.filter(item => item.value !== 'NDB');
+    const myAssetsFiat = myAssets.filter(item => item.value !== 'NDB').map(item => {
+        return {
+            value: item.value,
+            label: item.label,
+            icon: item.icon
+        };
+    });
     
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [selectedAssetFiat, setSelectedAssetFiat] = useState(myAssetsFiat[0]);
@@ -122,6 +105,8 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
 
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
+
+    const transferAmountToFiat = transferAmount * assets[selectedAssetFiat.value]?.price * currencyRates[currency.value];
 
     const paypalEmailError = useMemo(() => {
         if(!paypalEmail) return 'Please Enter Your PayPal Email.';
@@ -199,7 +184,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
             email: paypalEmail,
             target: currency.value,
             withdrawAmount: Number(transferAmount),
-            sourceToken: 'USDT',
+            sourceToken: selectedAssetFiat.value,
             code: confirmCode
         };
         paypalWithdrawRequestMutation({
@@ -368,7 +353,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     />
                                 </div>
                                 <div className="select_div">
-                                    <p className="subtitle">Amount</p>
+                                    <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
                                     <div className='black_input withdraw_amount ps-2'>
                                         <NumberFormat
                                             value={withdrawData.amount}
@@ -399,9 +384,11 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <div className="width2 mt-5 pt-5">
                                 <div className="row mt-5">
                                     <div className="col-sm-6">
-                                        <FiatButton className="active" onClick={() => {
-                                            setWithdrawType(PAYPAL); setCurrentStep(2);
-                                        }}>
+                                        <FiatButton className="active"
+                                            onClick={() => {
+                                                setWithdrawType(PAYPAL); setCurrentStep(2);
+                                            }}
+                                        >
                                             <img src={PaypalFiat} alt="paypal" />
                                         </FiatButton>
                                     </div>
@@ -460,11 +447,10 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <div className="mt-3">
-                                <p className="subtitle">Amount</p>
+                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
                                 <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
-                                        prefix={currency.symbol + ' '}
                                         allowNegative={false}
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
@@ -483,7 +469,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                                 getPaypalPaymentFee(
                                                     user,
                                                     allFees,
-                                                    transferAmount
+                                                    transferAmountToFiat
                                                 )
                                             )}
                                             decimalScale={2}
@@ -494,7 +480,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <button
                                 className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
                                 onClick={() => setCurrentStep(3)}
-                                disabled={!transferAmount || Number(transferAmount) < 1}
+                                disabled={!transferAmount || Number(transferAmountToFiat) < MIN_VALUE}
                             >
                                 NEXT
                             </button>
@@ -539,14 +525,14 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <div className="mt-3">
-                                <p className="subtitle">Amount</p>
+                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
                                 <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
-                                        prefix={currency.symbol + ' '}
                                         allowNegative={false}
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
+                                        placeholder={'Min 1 ' + currency.symbol}
                                         decimalScale={8}
                                         autoComplete='off'
                                     />
@@ -557,7 +543,11 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                             suffix={' ' + currency.symbol}
                                             displayType='text'
                                             allowNegative={false}
-                                            value={Number(transferAmount) * TransferFee}
+                                            value={Number(getBankTransferFee(
+                                                user,
+                                                allFees,
+                                                transferAmountToFiat
+                                            ))}
                                             decimalScale={2}
                                         />
                                     </div>
@@ -566,7 +556,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <button
                                 className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
                                 onClick={() => setCurrentStep(3)}
-                                disabled={!transferAmount}
+                                disabled={!transferAmount || Number(transferAmountToFiat) < MIN_VALUE}
                             >
                                 NEXT
                             </button>
