@@ -517,12 +517,16 @@ export const navigationLinks = [
         url: "https://ndb.money/",
         active: false
     },
-
     {
         label: "City",
         url: "https://ndb.city",
         active: false
     }
+    {
+        label: "Watt",
+        url: "https://watt.green/",
+        active: false
+    },
 ]
 
 export const footerLinks = [
