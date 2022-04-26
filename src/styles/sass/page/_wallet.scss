@@ -575,7 +575,6 @@
             width: 100%;
         }
         div.button-group {
-            margin-top: 30px;
             display: flex;
             justify-content: space-between;
             button.btn {
@@ -791,6 +790,16 @@
         .col-sm-6 {
             padding-left: 1%;
             padding-right: 1%;
+        }
+    }
+    .bankDetail {
+        height: 460px;
+        overflow-y: auto;
+        @include mq('phone', max) {
+            height: 100vh;
+        }
+        &>div {
+            width: 97%;
         }
     }
 }

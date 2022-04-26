@@ -1,7 +1,7 @@
-/* eslint-disable */
 import React, { useEffect, useState, useMemo } from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
 import { useSelector } from 'react-redux';
-import _, { round } from "lodash";
+import _ from "lodash";
 import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
 import DepositModal from "./DepositModal";
@@ -97,7 +97,7 @@ export default function InternalWallet() {
         },
     });
 
-    useEffect(() => {
+    useDeepCompareEffect(() => {
         const get_Balances_Price = async () => {
             let assets = { ...myAssets };
             if (_.isEqual(myAssets, InitialAssets)) return;
@@ -130,7 +130,7 @@ export default function InternalWallet() {
         }, 1000 * REFRESH_TIME);
 
         return () => clearInterval(interval1);
-    }, [Object.keys(myAssets).length]);
+    }, [Object.keys(myAssets).length, InitialAssets, myAssets]);
 
     const loadingSection = !myAssets;
 
