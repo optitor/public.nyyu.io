@@ -18,6 +18,7 @@ import { roundNumber } from '../../utilities/number';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { censorEmail } from "../../utilities/string";
+import { countryList } from "../../utilities/countryAlpha2";
 
 const CURRENCIES = [
     {label: 'USD', value: 'USD', symbol: '$'},
@@ -29,12 +30,15 @@ const CRYPTOCURRENCY = 'CRYPTOCURRENCY';
 const PAYPAL = 'PAYPAL';
 const BANKTRANSFER = 'BANKTRANSFER';
 
-const { Option } = components;
-
 const MIN_VALUE = 1;
 
 const SupportedCoins = _.mapKeys(SUPPORTED_COINS, 'value');
 
+const Countries = countryList.map((item) => {
+    return { label: item.name, value: item["alpha-2"] }
+})
+
+const { Option } = components;
 const SelectOption = (props) => {
     const value = roundNumber(props.data?.amount, 8);
     return (
@@ -103,6 +107,16 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [paypalEmail, setPaypalEmail] = useState('');
     const [allFees, setAllFees] = useState({});
 
+    // Variables for bank withdraw
+    const [bankWithdarwData, setBankWithdrawData] = useState({
+        country: Countries[0],
+        mode: 1,
+        holderName: '',
+        bankName: '',
+        accNumber: '',
+        metadata: ''
+    });
+
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
@@ -167,8 +181,8 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         },
         onError: err => {
             setPending(false);
-            if(err.message === 'insufficient_balance') {
-                setError("Sorry! Your wallet don't have sufficient balance.");
+            if(err.message === 'Insufficient funds') {
+                setError("Sorry! Your wallet don't have sufficient funds.");
             } else if(err.message === '2FA failed') {
                 setError("Sorry! Two-factor authentication failed. Try again.");
             } else {
@@ -281,6 +295,8 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             if(withdrawType === CRYPTOCURRENCY) {
                                 setCurrentStep(1);
                                 setTabIndex(1);
+                            } else if(withdrawType === BANKTRANSFER) {
+                                setCurrentStep(2);
                             } else {
                                 setCurrentStep(3);
                             }
@@ -353,7 +369,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     />
                                 </div>
                                 <div className="select_div">
-                                    <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
+                                    <p className="subtitle">Amount</p>
                                     <div className='black_input withdraw_amount ps-2'>
                                         <NumberFormat
                                             value={withdrawData.amount}
@@ -364,9 +380,9 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                             allowNegative={false}
                                             decimalScale={8}
                                         />
-                                        <p className="btn"
+                                        <p className="btn" aria-hidden="true"
                                             onClick={() => {
-                                                setWithdrawData({ ...withdrawData, amount: roundNumber(selectedAsset.amount, 4) })
+                                                setWithdrawData({ ...withdrawData, amount: roundNumber(selectedAsset.amount, 8) })
                                             }}
                                         ><span>MAX</span></p>
                                     </div>
@@ -407,7 +423,8 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     </div>
                 )}
                 {currentStep === 2 &&
-                    (withdrawType === PAYPAL? (
+                <>
+                    {withdrawType === PAYPAL &&
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">PayPal withdraw</h5>
                             <div className="mt-3">
@@ -448,7 +465,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             </div>
                             <div className="mt-3">
                                 <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
-                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
                                         allowNegative={false}
@@ -485,7 +502,8 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 NEXT
                             </button>
                         </div>
-                    ): (
+                    }
+                    {withdrawType === BANKTRANSFER &&
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">Bank transfer withdraw</h5>
                             <div className="mt-3">
@@ -502,7 +520,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     components={{
                                         Option: SelectOption,
                                         SingleValue: SelectOption,
-                                        IndicatorSeparator: null                                            
+                                        IndicatorSeparator: null
                                     }}
                                 />
                                 <p className="mt-1">
@@ -526,7 +544,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             </div>
                             <div className="mt-3">
                                 <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
-                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
                                         allowNegative={false}
@@ -554,19 +572,24 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 </div>
                             </div>
                             <button
-                                className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
+                                className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold d-flex align-items-center justify-content-center"
                                 onClick={() => setCurrentStep(3)}
                                 disabled={!transferAmount || Number(transferAmountToFiat) < MIN_VALUE}
                             >
-                                NEXT
+                                <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                    <CustomSpinner />
+                                </div>
+                                <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
                             </button>
                         </div>
-                    ))
+                    }
+                </>
                 }
                 {currentStep === 3 &&
-                    (withdrawType === PAYPAL? (
+                <>
+                    {withdrawType === PAYPAL &&
                         <div className='deposit width2'>
-                            <div className="paypal_email">
+                            <div className="d-flex flex-column justify-content-center" style={{minHeight: 420}}>
                                 <h5>PayPal Email</h5>
                                 <input className="black_input"
                                     value={paypalEmail}
@@ -583,16 +606,32 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
                                         <CustomSpinner />
                                     </div>
-                                    <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Request withdraw</div>
+                                    <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
                                 </button>
                             </div>
                         </div>
-                    ): (
-                        <></>
-                    ))
+                    }
+                    {withdrawType === BANKTRANSFER &&
+                        <div className="deposit width2">
+                            <div className="select_div">
+                                <p className="subtitle">Select Country</p>
+                                <Select
+                                    className="black_input"
+                                    options={Countries}
+                                    value={bankWithdarwData.country}
+                                    onChange={(selected) => setBankWithdrawData({...bankWithdarwData, country: selected})}
+                                    styles={customSelectStyles}
+                                    components={{
+                                        IndicatorSeparator: null                                            
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    }
+                </>
                 }
                 {currentStep === 4 &&
-                    (withdrawType === PAYPAL || withdrawType === CRYPTOCURRENCY? (
+                    (
                         <div className='deposit width2'>
                             <div className="confirm_div">
                                 <h3 className="mt-3"><strong>Confirm Withdraw</strong></h3>
@@ -603,7 +642,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                                 <div className="mt-3 d-flex align-items-center">
                                     <p className="text-center">The code has been sent to {censorEmail(user.email)}</p>
-                                    <span className='txt-green cursor-pointer ms-1'
+                                    <span className='txt-green cursor-pointer ms-1' aria-hidden="true"
                                         style={{opacity: pending? 0.5: 1}}
                                         onClick={generate_Withdraw_Code}
                                         disabled={pending}
@@ -628,9 +667,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 </button>
                             </div>
                         </div>
-                    ): (
-                        <></>
-                    ))
+                    )
                 }
                 {currentStep === 5 &&
                     <div className='deposit width2'>

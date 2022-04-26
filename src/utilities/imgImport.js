@@ -41,6 +41,8 @@ import sol from '../images/sol.svg'
 import shib from '../images/shib.svg'
 import doge from '../images/doge.svg'
 import bnb from '../images/bnb.svg'
+import ada from '../images/ada.svg'
+import busd from '../images/busd.svg'
 import nickToken from "../images/nickToken.svg";
 import btcGrayIcon from "../images/btc-gray-icon.svg";
 import downloadIcon from "../images/icons/download.svg"
@@ -201,6 +203,8 @@ export const SOL = sol
 export const SHIB = shib
 export const DOGE = doge
 export const BNB = bnb
+export const ADA = ada
+export const BUSD = busd
 export const Airdrop = airdrop
 export const NickToken = nickToken
 

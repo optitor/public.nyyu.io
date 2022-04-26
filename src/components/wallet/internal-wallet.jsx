@@ -254,7 +254,7 @@ export default function InternalWallet() {
                                 onClick={() => {
                                     setIsWithdrawOpen(true)
                                 }}
-                                // disabled={loadingOfAssets}
+                                disabled={loadingOfAssets}
                             >
                                 withdraw
                             </button>

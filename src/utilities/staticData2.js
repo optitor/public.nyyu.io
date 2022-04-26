@@ -8,6 +8,8 @@ import {
     SOL,
     DOGE,
     SHIB,
+    ADA,
+    BUSD,
     NDB,
 } from "./imgImport";
 
@@ -103,19 +105,36 @@ export const SUPPORTED_COINS = [
         ],
     },
     {
+        value: "ADA",
+        label: "ADA",
+        icon: ADA,
+        networks: [
+            { label: "ADA Cardano (BC Chain)", value: "ADA.BEP2", network: "BEP2" }
+        ],
+    },
+    {
+        value: "BUSD",
+        label: "BUSD",
+        icon: BUSD,
+        networks: [
+            { label: "Binance USD (ERC20)", value: "BUSD", network: "ERC20" },
+            { label: "BUSD Token (BSC Chain)", value: "BUSD.BEP20", network: "BEP20" }
+        ],
+    },
+    {
         value: "NDB",
         label: "NDB",
         icon: NDB,
         networks: [
             { label: "NDB (BSC Chain)", value: "NDB.BEP20", network: "BEP20", }
         ]
-    }
+    },
 ];
 
 export const CURRENCIES = `USD,AUD,BRL,CAD,CHF,CLP,CNY,CZK,DKK,EUR,GBP,HKD,HUF,IDR,ILS,INR,JPY,KRW,MXN,MYR,NOK,NZD,
         PHP,PKR,PLN,RUB,SEK,SGD,THB,TRY,TWD,ZAR,AED,BGN,HRK,MUR,RON,ISK,NGN,COP,ARS,PEN,
         VND,UAH,BOB,ALL,AMD,AZN,BAM,BDT,BHD,BMD,BYN,CRC,CUP,DOP,DZD,EGP,GEL,GHS,GTQ,HNL,
-        IQD,IRR,JMD,JOD,KES,KGS,KHR,KWD,KZT,LBP,LKR,MAD,MDL,MKD,MMK,MNT,NAD,NIO,NPR,OMR,
+        IQD,IRR,JMD,JOD,KES,KGS,KHR,KWD,KZ\T,LBP,LKR,MAD,MDL,MKD,MMK,MNT,NAD,NIO,NPR,OMR,
         PAB,QAR,RSD,SAR,SSP,TND,TTD,UGX,UYU,UZS,VES`;
 
 

@@ -495,9 +495,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                 </div>
                                 <p className="desc mt-2">
-                                    Send only <span>{selectedAsset.value}</span>{" "}
+                                    Send only <span className="txt-green">{selectedAsset.value}</span>{" "}
                                     to this deposit address. Ensure the network
-                                    is <span>{network.label}</span>
+                                    is <span className="txt-green">{network.label}</span>
                                 </p>
                                 <div className="stats_div">
                                     <div className="stats">
