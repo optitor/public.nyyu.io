@@ -597,12 +597,6 @@
             color: $lightgrey;
             margin-bottom: 5px;
         }
-        p.desc {
-            margin-bottom: 5px;
-            span {
-                color: $green;
-            }
-        }
         button.btn {
             height: 47px;
         }
@@ -765,12 +759,6 @@
                 color: white;
                 margin-top: 25px;
             }
-        }
-        div.paypal_email {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 420px;
         }
         div.confirm_div {
             display: flex;

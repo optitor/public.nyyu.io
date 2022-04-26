@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import parse from 'html-react-parser';
 import Modal from "react-modal";
-import _, { set } from "lodash";
+import _ from "lodash";
 import styled from "styled-components";
 import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
@@ -33,8 +33,8 @@ const IntervalTime = 5 * 1000;
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
-    // { label: "GBP", value: "GBP", symbol: "£" },
-    // { label: "EUR", value: "EUR", symbol: "€" },
+    { label: "GBP", value: "GBP", symbol: "£" },
+    { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
 const CURRENCIES_BANK = [
@@ -495,9 +495,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                 </div>
                                 <p className="desc mt-2">
-                                    Send only <span>{selectedAsset.value}</span>{" "}
+                                    Send only <span className="txt-green">{selectedAsset.value}</span>{" "}
                                     to this deposit address. Ensure the network
-                                    is <span>{network.label}</span>
+                                    is <span className="txt-green">{network.label}</span>
                                 </p>
                                 <div className="stats_div">
                                     <div className="stats">
@@ -590,9 +590,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be
-                                converted to <span>USDT</span> and deposited to
+                            <p>
+                                The <span className='txt-green'>{currency.label}</span> will be
+                                converted to <span className='txt-green'>USDT</span> and deposited to
                                 the wallet
                             </p>
                             <div className="black_input usdt_div">
@@ -729,9 +729,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be
-                                converted to <span>USDT</span> and deposited to
+                            <p>
+                                The <span className='txt-green'>{currency.label}</span> will be
+                                converted to <span className='txt-green'>USDT</span> and deposited to
                                 the wallet
                             </p>
                             <div className="black_input usdt_div">
@@ -823,10 +823,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </div>
                                     </div>
                                     <div className="mt-3">
-                                        <p className="desc">
-                                            The <span>{currency.label}</span>{" "}
+                                        <p>
+                                            The <span className='txt-green'>{currency.label}</span>{" "}
                                             will be converted to{" "}
-                                            <span>USDT</span> and deposited to
+                                            <span className='txt-green'>USDT</span> and deposited to
                                             the wallet
                                         </p>
                                         <div className="black_input usdt_div">

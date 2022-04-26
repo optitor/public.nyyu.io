@@ -127,6 +127,10 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         </div>
                         {withdrawData.status !== 0 &&
                             <>
+                                <p className="text-center my-3 font-30px fw-bold">
+                                    {withdrawData.status === 1 && <span className="txt-green">APPROVED</span>}
+                                    {withdrawData.status === 2 && <span className="text-danger">DENIED</span>}
+                                </p>
                                 <div className="row">
                                     <p className="col-6 text-muted">Confirmed Time</p>
                                     <p className="col-6 text-end">
@@ -134,10 +138,6 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                                         <span className="ms-2">{new Date(withdrawData.confirmedAt).toLocaleTimeString()}</span>
                                     </p>
                                 </div>
-                                <p className="text-center mt-3 font-30px">
-                                    {withdrawData.status === 1 && <span className="txt-green">APPROVED</span>}
-                                    {withdrawData.status === 2 && <span className="text-danger">DENIED</span>}
-                                </p>
                                 {withdrawData.status === 2 && withdrawData.deniedReason && (
                                     <>
                                         <p className="text-muted">Denied Reason</p>

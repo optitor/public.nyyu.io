@@ -521,7 +521,7 @@ export const navigationLinks = [
         label: "City",
         url: "https://ndb.city",
         active: false
-    }
+    },
     {
         label: "Watt",
         url: "https://watt.green/",
