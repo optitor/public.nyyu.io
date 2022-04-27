@@ -15,6 +15,7 @@ export default function LoadCurrencyRates() {
                 const res = await axios.get(GET_CURRENCY_PRICES_ENDPOINT, 
                     // {params: {symbols: CURRENCIES}}
                 );
+                console.log(res.data)
                 dispatch(setCurrencyRates(res.data.rates));
             } catch(err) {
                 console.log(err);
