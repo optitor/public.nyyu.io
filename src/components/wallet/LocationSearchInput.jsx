@@ -63,7 +63,7 @@ const LocationSearchInput = ({ address, setAddress, className }) => {
         )}
       </PlacesAutocomplete>
     )
-}
+};
 
 export default LocationSearchInput;
 

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from 'axios';
-// import { CURRENCIES } from "../../utilities/staticData2";
+import { CURRENCIES } from "../../utilities/staticData2";
 import { setCurrencyRates } from "../../redux/actions/bidAction";
 
-const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.exchangerate.host/latest?base=USD';
+const GET_CURRENCY_PRICES_ENDPOINT = 'https://api.exchangerate.host/latest';
 
 export default function LoadCurrencyRates() {
     const dispatch = useDispatch();
@@ -13,9 +13,10 @@ export default function LoadCurrencyRates() {
         (async function() {
             try {
                 const res = await axios.get(GET_CURRENCY_PRICES_ENDPOINT, 
-                    // {params: {symbols: CURRENCIES}}
+                    {
+                        params: {base: 'USD', symbols: CURRENCIES, timestamp: Date.now()},
+                    },
                 );
-                console.log(res.data)
                 dispatch(setCurrencyRates(res.data.rates));
             } catch(err) {
                 console.log(err);

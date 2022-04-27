@@ -122,7 +122,7 @@ export default function InternalWallet() {
                 assets[item.tokenSymbol] = { ...item, price, balance: balance, value: item.tokenSymbol };
             }
             setMyAssets({ ...assets });
-        }
+        };
 
         get_Balances_Price();
         const interval1 = setInterval(() => {
