@@ -36,7 +36,7 @@ const DOMESTIC_BANK_PER_COUNTRY = {
     },
     'JP': {
         meta: ['Branch Name', 'Account type'],
-        info: 'Enter the recipient name exactly as it appears in their Japanese bank account ( it is usually written in Katakana).'
+        info: 'Enter the recipient name exactly as it appears in their Japanese bank account (It is usually written in Katakana).'
     },
     'MX': {
         meta: ['CLABE']
@@ -101,7 +101,7 @@ const SelectOption = (props) => {
     );
 };
 
-export default function DepositModal({ showModal, setShowModal, assets }) {
+export default function WithdrawModal({ showModal, setShowModal, assets }) {
     const user = useSelector((state) => state.auth.user);
     const { currencyRates } = useSelector((state) => state);
     const myAssets = _.orderBy(Object.values(assets).filter(item => {
@@ -124,7 +124,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
             icon: item.icon
         };
     });
-    
+    console.log(myAssetsFiat)
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [selectedAssetFiat, setSelectedAssetFiat] = useState(myAssetsFiat[0]);
     const [currentStep, setCurrentStep] = useState(1);
@@ -168,7 +168,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
-    const transferAmountToFiat = transferAmount * assets[selectedAssetFiat.value]?.price * currencyRates[currency.value];
+    const transferAmountToFiat = transferAmount * assets[selectedAssetFiat?.value]?.price * currencyRates[currency.value];
 
     // Bank withdraw validation
     const bankWithDrawError = useMemo(() => {
@@ -264,7 +264,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
             email: paypalEmail,
             target: currency.value,
             withdrawAmount: Number(transferAmount),
-            sourceToken: selectedAssetFiat.value,
+            sourceToken: selectedAssetFiat?.value,
             code: confirmCode
         };
         paypalWithdrawRequestMutation({
@@ -496,7 +496,12 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                 )}
                 {currentStep === 2 &&
                 <>
-                    {withdrawType === PAYPAL &&
+                    {_.isEmpty(selectedAssetFiat) && (
+                        <h5 className="text-center mt-5">
+                            No Assets that can be withdrawed
+                        </h5>
+                    )}
+                    {!_.isEmpty(selectedAssetFiat) && withdrawType === PAYPAL &&
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">PayPal withdraw</h5>
                             <div className="mt-3">
@@ -517,7 +522,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     }}
                                 />
                                 <p className="mt-1">
-                                    The <span className='txt-green'>{selectedAssetFiat.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your paypal account
+                                    The <span className='txt-green'>{selectedAssetFiat?.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your paypal account
                                 </p>
                             </div>
                             <div>
@@ -536,7 +541,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <div className="mt-3">
-                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
+                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat?.value}</span>)</p>
                                 <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
@@ -575,7 +580,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             </button>
                         </div>
                     }
-                    {withdrawType === BANKTRANSFER &&
+                    {!_.isEmpty(selectedAssetFiat) && withdrawType === BANKTRANSFER &&
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">Bank transfer withdraw</h5>
                             <div className="mt-3">
@@ -596,7 +601,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     }}
                                 />
                                 <p className="mt-1">
-                                    The <span className='txt-green'>{selectedAssetFiat.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your bank account
+                                    The <span className='txt-green'>{selectedAssetFiat?.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your bank account
                                 </p>
                             </div>
                             <div>
@@ -615,7 +620,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <div className="mt-3">
-                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat.value}</span>)</p>
+                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat?.value}</span>)</p>
                                 <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
