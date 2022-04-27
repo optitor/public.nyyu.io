@@ -29,6 +29,7 @@ const censorWord = (str) => {
 };
  
 export const censorEmail = (email) => {
+    if(!email) return '';
     var arr = email.split("@");
     return censorWord(arr[0]) + "@" + censorWord(arr[1]);
 };
