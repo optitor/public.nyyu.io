@@ -1,18 +1,9 @@
 import React from "react"
 import {
-    Apple,
     Facebook,
     Amazon,
     Google,
     Linkedin,
-    Twitter,
-    ETH,
-    BTC,
-    BCH,
-    DOGE,
-    DAI,
-    USDC,
-    LTC,
     Coinbase,
     MetaMask,
     TrustWallet,
@@ -215,29 +206,8 @@ export const TRANSACTION_TYPES = {
     withdraw: "WITHDRAW",
 }
 
-export const FOO_COINS = [
-    { value: "ETH", label: "ETH", icon: ETH, address: "9CQNH4YRb8GCSBhCK9YZbmkchvphpPf8JY6SJAJM" },
-    { value: "BTC", label: "BTC", icon: BTC, address: "EFAP9RyPVuAQajgrF8axC9FTNukkmreEX8kgMjcF" },
-    { value: "BCH", label: "BCH", icon: BCH, address: "HaA5Y5qLJTp8ZRUgkyLraWvZm6qX4F9LLDFTNXxZ" },
-    {
-        value: "DOGE",
-        label: "DOGE",
-        icon: DOGE,
-        address: "7QxMw5vyT5ZFYKCz6MNmAAeEWQBGA6TxRyVEZjeP",
-    },
-    { value: "DAI", label: "DAI", icon: DAI, address: "BWFc2nfpjQW79TmUQ6nLkkTmKaMk2qpTfDE6BjSY" },
-    {
-        value: "USDC",
-        label: "USDC",
-        icon: USDC,
-        address: "p542WphWj7CJZG554M9RGRgAFg7FqFfhaVeEV6Jx",
-    },
-    { value: "LTC", label: "LTC", icon: LTC, address: "DepKxnyTE9dFFCt6wkahVQCz275dQ9Sw9uq2fCnQ" },
-]
-
 export const PAYMENT_FRACTION_TOOLTIP_CONTENT =
     "If your bid is the last one to be accepted and there are not enough tokens to fulfil your order, by checking this box you allow us to complete your order with the remaining tokens only."
-
 
 export const TWO_FACTOR_AUTH_TOOLTIP_CONTENT = "Enable 2FA to secure your account. Email 2FA can be used along with mobile or Google authentication."
 

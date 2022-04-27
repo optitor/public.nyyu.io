@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import jq from 'jquery';
 import ReactCodeInput from 'react-code-input';
@@ -19,6 +19,44 @@ import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { censorEmail } from "../../utilities/string";
 import { countryList } from "../../utilities/countryAlpha2";
+import LocationSearchInput from "./LocationSearchInput";
+
+const DOMESTIC_BANK_PER_COUNTRY = {
+    'GB': {
+        meta: ['Sort code']
+    },
+    'US': {
+        meta: ['ACH  routing number', 'Account type']
+    },
+    'FJ': {
+        meta: ['Branch code']
+    },
+    'AR': {
+        meta: ['Tax ID: CUIL / CUIT']
+    },
+    'JP': {
+        meta: ['Branch Name', 'Account type'],
+        info: 'Enter the recipient name exactly as it appears in their Japanese bank account ( it is usually written in Katakana).'
+    },
+    'MX': {
+        meta: ['CLABE']
+    },
+    'HK': {
+        info: 'We can only pay out to HKD accounts in Hong Kong.'
+    },
+    'CA': {
+        meta: ['Transit Number']
+    },
+    'AU': {
+        meta: ['BSB Code (Bank State Branch)']
+    },
+    'CN': {
+        meta: ['Card number']
+    },
+    'IN': {
+        meta: ['IFSC code']
+    }
+};
 
 const CURRENCIES = [
     {label: 'USD', value: 'USD', symbol: '$'},
@@ -36,7 +74,7 @@ const SupportedCoins = _.mapKeys(SUPPORTED_COINS, 'value');
 
 const Countries = countryList.map((item) => {
     return { label: item.name, value: item["alpha-2"] }
-})
+});
 
 const { Option } = components;
 const SelectOption = (props) => {
@@ -108,20 +146,49 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [allFees, setAllFees] = useState({});
 
     // Variables for bank withdraw
-    const [bankWithdarwData, setBankWithdrawData] = useState({
+    const [bankWithdrawData, setBankWithdrawData] = useState({
         country: Countries[0],
         mode: 1,
         holderName: '',
         bankName: '',
         accNumber: '',
-        metadata: ''
+        recipient_country: Countries[0],
+        recipient_city: '',
+        postCode: '',
+        swiftBicCode: '',
+        ibanCode: ''
     });
+    const [recipientAddress, setRecipientAddress] = useState('');
+    const [bankSpecificData, setBankSpecificData] = useState({});
+    // Initialize bank Specific data when changing the country.
+    useEffect(() => {
+        setBankSpecificData({});
+    }, [bankWithdrawData.country.value]);
 
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
     const transferAmountToFiat = transferAmount * assets[selectedAssetFiat.value]?.price * currencyRates[currency.value];
 
+    // Bank withdraw validation
+    const bankWithDrawError = useMemo(() => {
+        if(!bankWithdrawData.holderName) return {holderName: 'Full name of the account holder is required'};
+        if(!bankWithdrawData.bankName) return {bankName: 'Bank name is required'};
+        if(bankWithdrawData.mode === 2 && !bankWithdrawData.swiftBicCode) return {swiftBicCode: 'SWIFT / BIC code is required'};
+        if(DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta) {
+            for(const item of DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta) {
+                if(!bankSpecificData[item]) return {[item]: `${item} is required`};
+            }
+        }
+        if(!bankWithdrawData.accNumber) return {accNumber: 'Account number is required'};
+        if(!bankWithdrawData.recipient_city) return {recipient_city: 'City is required'};
+        if(!recipientAddress) return {recipientAddress: 'Address is required'};
+        if(!bankWithdrawData.postCode) return {postCode: 'Post Code is required'};
+
+        return {};
+    }, [bankWithdrawData, recipientAddress, bankSpecificData]);
+
+    // Paypal email validation
     const paypalEmailError = useMemo(() => {
         if(!paypalEmail) return 'Please Enter Your PayPal Email.';
         if(!validator.isEmail(paypalEmail)) return 'Invalid Email';
@@ -145,7 +212,6 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         setWithdrawData({});
         setShowModal(false);
     };
-
     
     const [generateWithdrawMutation] = useMutation(Mutation.GENERATE_WITHDRAW, {
         onCompleted: data => {
@@ -161,7 +227,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     });
 
     const generate_Withdraw_Code = () => {
-        if(withdrawType === PAYPAL && paypalEmailError) {
+        if((withdrawType === PAYPAL && paypalEmailError) || (withdrawType === BANKTRANSFER && !_.isEmpty(bankWithDrawError))) {
             setShowError(true);
             return;
         }
@@ -239,11 +305,18 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         });
     };
 
+    //-------------------------Bank Withdraw---------------------------------
+    const bank_Withdraw_Request = () => {
+        console.log('bank')
+    };
+
     const handleWithdrawRequest = () => {
         if(withdrawType === CRYPTOCURRENCY) {
             crypto_Withdraw_Request();
         } else if(withdrawType === PAYPAL) {
             paypal_Withdraw_Request();
+        } else if(withdrawType === BANKTRANSFER) {
+            bank_Withdraw_Request();
         }
     };
 
@@ -284,6 +357,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                         icon="carbon:arrow-left"
                         onClick={() => {
                             setCurrentStep(2);
+                            setShowError(false);
                         }}
                     />
                 )}
@@ -295,8 +369,6 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             if(withdrawType === CRYPTOCURRENCY) {
                                 setCurrentStep(1);
                                 setTabIndex(1);
-                            } else if(withdrawType === BANKTRANSFER) {
-                                setCurrentStep(2);
                             } else {
                                 setCurrentStep(3);
                             }
@@ -312,7 +384,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     <div className="deposit min_height2">
                         <div className="width1">
                             <h4 className="text-center mb-4">Withdraw</h4>
-                            <div className="button-group">
+                            <div className="button-group pt-2">
                                 <button className={`btn ${tabIndex === 1? 'selected': ''}`}
                                     onClick={() => setTabIndex(1)}
                                 >Cryptocurrency</button>
@@ -612,19 +684,141 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                         </div>
                     }
                     {withdrawType === BANKTRANSFER &&
-                        <div className="deposit width2">
-                            <div className="select_div">
+                        <div className="deposit width2 bankDetail">
+                            <div className="mb-2">
                                 <p className="subtitle">Select Country</p>
                                 <Select
                                     className="black_input"
                                     options={Countries}
-                                    value={bankWithdarwData.country}
-                                    onChange={(selected) => setBankWithdrawData({...bankWithdarwData, country: selected})}
+                                    value={bankWithdrawData.country}
+                                    onChange={(selected) => setBankWithdrawData({...bankWithdrawData, country: selected})}
                                     styles={customSelectStyles}
                                     components={{
                                         IndicatorSeparator: null                                            
                                     }}
                                 />
+                            </div>
+                            <div className="button-group pb-3">
+                                <button className={`btn ${bankWithdrawData.mode === 1? 'selected': ''}`}
+                                    onClick={() => setBankWithdrawData({ ...bankWithdrawData, mode: 1 })}
+                                    style={{height: 47}}
+                                >Domestic transfer</button>
+                                <button className={`btn ${bankWithdrawData.mode === 2? 'selected': ''}`}
+                                    onClick={() => setBankWithdrawData({ ...bankWithdrawData, mode: 2 })}
+                                    style={{height: 47}}
+                                >Foreign transfer</button>
+                            </div>
+                            {bankWithdrawData.mode === 1 && DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.info && (
+                                <div className="d-flex align-items-center">
+                                    <p className="font-30px pe-2">
+                                        <Icon icon='ant-design:warning-filled' />
+                                    </p>
+                                    <p>
+                                        {DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.info}
+                                    </p>
+                                </div>
+                            )}
+                            <div className="mt-2">
+                                <p className="subtitle">Full name of the account holder</p>
+                                <input className={`black_input ${showError && bankWithDrawError.holderName? 'error': ''}`}
+                                    value={bankWithdrawData.holderName}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, holderName: e.target.value })}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p className="subtitle">Bank name</p>
+                                <input  className={`black_input ${showError && bankWithDrawError.bankName? 'error': ''}`}
+                                    value={bankWithdrawData.bankName}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, bankName: e.target.value })}
+                                />
+                            </div>
+                            {bankWithdrawData.mode === 1 && DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta && (
+                                <>
+                                    {DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta.map(item => (
+                                        <div className="mt-2" key={item}>
+                                            <p className="subtitle">{item}</p>
+                                            <input  className={`black_input ${showError && bankWithDrawError[item]? 'error': ''}`}
+                                                value={bankSpecificData[item] || ''}
+                                                onChange={e => setBankSpecificData({ ...bankSpecificData, [item]: e.target.value })}
+                                            />
+                                        </div>
+                                    ))}
+                                </>
+                            )}
+                            {bankWithdrawData.mode === 2 && (
+                                <>
+                                    <div className="mt-2">
+                                        <p className="subtitle">SWIFT / BIC code</p>
+                                        <input  className={`black_input ${showError && bankWithDrawError.swiftBicCode? 'error': ''}`}
+                                            value={bankWithdrawData.swiftBicCode}
+                                            onChange={e => setBankWithdrawData({ ...bankWithdrawData, swiftBicCode: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="mt-2">
+                                        <p className="subtitle">IBAN code (if applicable)</p>
+                                        <input  className='black_input'
+                                            value={bankWithdrawData.ibanCode}
+                                            onChange={e => setBankWithdrawData({ ...bankWithdrawData, ibanCode: e.target.value })}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                            <div className="mt-2">
+                                <p className="subtitle">Account number</p>
+                                <input  className={`black_input ${showError && bankWithDrawError.accNumber? 'error': ''}`}
+                                    value={bankWithdrawData.accNumber}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, accNumber: e.target.value })}
+                                />
+                            </div>
+                            <h4 className="mt-2">Recipient address</h4>
+                            <div className="mt-2">
+                                <p className="subtitle">Country</p>
+                                <Select
+                                    className="black_input"
+                                    options={Countries}
+                                    value={bankWithdrawData.recipient_country}
+                                    onChange={(selected) => setBankWithdrawData({...bankWithdrawData, recipient_country: selected})}
+                                    styles={customSelectStyles}
+                                    components={{
+                                        IndicatorSeparator: null
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p className="subtitle">City</p>
+                                <input  className={`black_input ${showError && bankWithDrawError.recipient_city? 'error': ''}`}
+                                    value={bankWithdrawData.recipient_city}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, recipient_city: e.target.value })}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p className="subtitle">Address</p>
+                                <LocationSearchInput
+                                    className={`black_input ${showError && bankWithDrawError.recipientAddress? 'error': ''}`}
+                                    address={recipientAddress} setAddress={setRecipientAddress}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p className="subtitle">Post code</p>
+                                <input  className={`black_input ${showError && bankWithDrawError.postCode? 'error': ''}`}
+                                    value={bankWithdrawData.postCode}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, postCode: e.target.value })}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p style={{height: 25, color: '#e16565'}}>
+                                    {showError && Object.values(bankWithDrawError)[0]}
+                                </p>
+                                <button
+                                    className="btn btn-outline-light rounded-0 w-100 mt-3 fw-bold d-flex align-items-center justify-content-center"
+                                    onClick={generate_Withdraw_Code}
+                                    disabled={pending}
+                                >
+                                    <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                        <CustomSpinner />
+                                    </div>
+                                    <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
+                                </button>
                             </div>
                         </div>
                     }
@@ -771,6 +965,11 @@ const customSelectStyles = {
         borderRadius: 0,
         height: 47,
         cursor: 'pointer'
+    }),
+    input: provided => ({
+        ...provided,
+        color: 'white',
+        paddingLeft: 7
     }),
     menu: (provided) => ({
         ...provided,

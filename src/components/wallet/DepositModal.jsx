@@ -73,7 +73,7 @@ const BankTrxDescription = {
     second: `Please make sure you use the
         <span className="txt-green">reference number</span>
         indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.`,
-}
+};
 
 const { Option } = components;
 const MIN_VALUE = 1;
@@ -321,7 +321,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 {currentStep === 1 && (
                     <div className="deposit min_height1">
                         <div className="width1">
-                            <h4 className="text-center mb-4">Deposit</h4>
+                            <h4 className="text-center mb-5">Deposit</h4>
                             <div className="button-group">
                                 <button
                                     className={`btn ${
@@ -550,14 +550,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 styles={customSelectStyles}
                                 components={{
                                     IndicatorSeparator: null,
-                                    IndicatorSeparator: null,
                                 }}
                             />
                         </div>
                         <div className="mt-3">
                             <p className="subtitle">Amount</p>
                             <div
-                                className="black_input transfer_input"
+                                className="black_input transfer_input" aria-hidden="true"
                                 onClick={() =>
                                     jq("input#transferAmount").trigger("focus")
                                 }
@@ -689,7 +688,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         <div className="mt-3">
                             <p className="subtitle">Amount</p>
                             <div
-                                className="black_input transfer_input"
+                                className="black_input transfer_input" aria-hidden="true"
                                 onClick={() =>
                                     jq("input#transferAmount").trigger("focus")
                                 }
@@ -780,7 +779,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="mt-3">
                                         <p className="subtitle">Amount</p>
                                         <div
-                                            className="black_input transfer_input"
+                                            className="black_input transfer_input" aria-hidden="true"
                                             onClick={() =>
                                                 jq(
                                                     "input#transferAmount"
