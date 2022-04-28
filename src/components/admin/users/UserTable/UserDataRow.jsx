@@ -158,13 +158,13 @@ const UserDataRow = ({ datum }) => {
                             </Main>
                             <Toggle style={{ display: show ? "flex" : "none" }}>
                                 <div className="btns">
-                                    <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
+                                    <span className={`mailbox ${datum.verify?.emailVerified? 'txt-green': ''}`}>
                                         <Icon icon="uil:mailbox" />
                                     </span>
-                                    <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
+                                    <span className={`user ${datum.verify?.kycVerified? 'txt-green': ''}`}>
                                         <Icon icon="ant-design:user-outlined" />
                                     </span>
-                                    <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
+                                    <span className={`phone ${datum.verify?.phoneVerified? 'txt-green': ''}`}>
                                         <Icon icon="bi:phone" />
                                     </span>
                                 </div>
@@ -191,13 +191,13 @@ const UserDataRow = ({ datum }) => {
                         </div>
                         <div className="action">
                             <div className="btns">
-                                <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
+                                <span className={`mailbox ${datum.verify?.emailVerified? 'txt-green': ''}`}>
                                     <Icon icon="uil:mailbox" />
                                 </span>
-                                <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
+                                <span className={`user ${datum.verify?.kycVerified? 'txt-green': ''}`}>
                                     <Icon icon="ant-design:user-outlined" />
                                 </span>
-                                <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
+                                <span className={`phone ${datum.verify?.phoneVerified? 'txt-green': ''}`}>
                                     <Icon icon="bi:phone" />
                                 </span>
                             </div>
@@ -263,13 +263,13 @@ const UserDataRow = ({ datum }) => {
                                 </Main>
                                 <Toggle style={{ display: show ? "flex" : "none" }}>
                                     <div className="btns">
-                                        <span className={`mailbox ${datum.verify?.emailVerified? 'text-green': ''}`}>
+                                        <span className={`mailbox ${datum.verify?.emailVerified? 'txt-green': ''}`}>
                                             <Icon icon="uil:mailbox" />
                                         </span>
-                                        <span className={`user ${datum.verify?.kycVerified? 'text-green': ''}`}>
+                                        <span className={`user ${datum.verify?.kycVerified? 'txt-green': ''}`}>
                                             <Icon icon="ant-design:user-outlined" />
                                         </span>
-                                        <span className={`phone ${datum.verify?.phoneVerified? 'text-green': ''}`}>
+                                        <span className={`phone ${datum.verify?.phoneVerified? 'txt-green': ''}`}>
                                             <Icon icon="bi:phone" />
                                         </span>
                                     </div>

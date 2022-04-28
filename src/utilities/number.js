@@ -1,4 +1,6 @@
 /* eslint-disable */
+import React from 'react';
+import NumberFormat from "react-number-format";
 
 export const numberWithLength = (num, len=2) => {
     return `${num}`.padStart(len, "0")
@@ -194,6 +196,18 @@ export const getFormatedDateOnBids = (date, period) => {
 }
 
 export const roundNumber = (number, decimals) => {
-    if(!number) return 0;
+    if(!number && number !== 0) return null;
     return Math.floor(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };
+
+export const renderNumberFormat = (value, unit = '', decimalScale = 8) => {
+    return (
+        <NumberFormat
+            value={value}
+            displayType={'text'}
+            thousandSeparator={true}
+            decimalScale={decimalScale}
+            renderText={(value, props) => <span {...props}>{value} {unit}</span>}
+        />
+    );
+}

@@ -68,7 +68,7 @@ const RoundsTable = () => {
                 <div className='usdAmount'>USD Amount</div>
                 <div className='fee'>Fee (USD)</div>
                 <div className='deposited'>Deposited (USD)</div>
-                <div className='approve'>Approve</div>
+                <div className='approve'></div>
             </TableHead>
             <TableHeadForMobile>
                 <div className='name'>Data</div>
@@ -156,10 +156,6 @@ const SearchBar = styled.div`
     button {
         background: inherit;
         border: none;
-        &:disabled {
-            opacity: 0.5;
-            cursor: unset;
-        }
     }
     svg {
         font-size: 25px;

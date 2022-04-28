@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
 import parse from 'html-react-parser';
 import Modal from "react-modal";
-import _, { set } from "lodash";
+import _ from "lodash";
 import styled from "styled-components";
 import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
@@ -33,8 +33,8 @@ const IntervalTime = 5 * 1000;
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
-    // { label: "GBP", value: "GBP", symbol: "£" },
-    // { label: "EUR", value: "EUR", symbol: "€" },
+    { label: "GBP", value: "GBP", symbol: "£" },
+    { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
 const CURRENCIES_BANK = [
@@ -71,9 +71,9 @@ const BankTransferData = {
 const BankTrxDescription = {
     first: 'Incoming payments can take 3 working days to be added to your wallet',
     second: `Please make sure you use the
-        <span className="text-green">reference number</span>
+        <span className="txt-green">reference number</span>
         indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.`,
-}
+};
 
 const { Option } = components;
 const MIN_VALUE = 1;
@@ -321,7 +321,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 {currentStep === 1 && (
                     <div className="deposit min_height1">
                         <div className="width1">
-                            <h4 className="text-center mb-4">Deposit</h4>
+                            <h4 className="text-center mb-5">Deposit</h4>
                             <div className="button-group">
                                 <button
                                     className={`btn ${
@@ -495,9 +495,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                 </div>
                                 <p className="desc mt-2">
-                                    Send only <span>{selectedAsset.value}</span>{" "}
+                                    Send only <span className="txt-green">{selectedAsset.value}</span>{" "}
                                     to this deposit address. Ensure the network
-                                    is <span>{network.label}</span>
+                                    is <span className="txt-green">{network.label}</span>
                                 </p>
                                 <div className="stats_div">
                                     <div className="stats">
@@ -521,7 +521,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                             {!confirmById?.status?
                                                 <CountDown deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
                                                 :
-                                                <span className='text-green'>Confirmed</span>
+                                                <span className='txt-green'>Confirmed</span>
                                             }
                                         </div>
                                     </div>
@@ -550,14 +550,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 styles={customSelectStyles}
                                 components={{
                                     IndicatorSeparator: null,
-                                    IndicatorSeparator: null,
                                 }}
                             />
                         </div>
                         <div className="mt-3">
                             <p className="subtitle">Amount</p>
                             <div
-                                className="black_input transfer_input"
+                                className="black_input transfer_input" aria-hidden="true"
                                 onClick={() =>
                                     jq("input#transferAmount").trigger("focus")
                                 }
@@ -590,9 +589,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be
-                                converted to <span>USDT</span> and deposited to
+                            <p>
+                                The <span className='txt-green'>{currency.label}</span> will be
+                                converted to <span className='txt-green'>USDT</span> and deposited to
                                 the wallet
                             </p>
                             <div className="black_input usdt_div">
@@ -689,7 +688,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         <div className="mt-3">
                             <p className="subtitle">Amount</p>
                             <div
-                                className="black_input transfer_input"
+                                className="black_input transfer_input" aria-hidden="true"
                                 onClick={() =>
                                     jq("input#transferAmount").trigger("focus")
                                 }
@@ -729,9 +728,9 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <p className="desc">
-                                The <span>{currency.label}</span> will be
-                                converted to <span>USDT</span> and deposited to
+                            <p>
+                                The <span className='txt-green'>{currency.label}</span> will be
+                                converted to <span className='txt-green'>USDT</span> and deposited to
                                 the wallet
                             </p>
                             <div className="black_input usdt_div">
@@ -780,7 +779,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="mt-3">
                                         <p className="subtitle">Amount</p>
                                         <div
-                                            className="black_input transfer_input"
+                                            className="black_input transfer_input" aria-hidden="true"
                                             onClick={() =>
                                                 jq(
                                                     "input#transferAmount"
@@ -823,10 +822,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </div>
                                     </div>
                                     <div className="mt-3">
-                                        <p className="desc">
-                                            The <span>{currency.label}</span>{" "}
+                                        <p>
+                                            The <span className='txt-green'>{currency.label}</span>{" "}
                                             will be converted to{" "}
-                                            <span>USDT</span> and deposited to
+                                            <span className='txt-green'>USDT</span> and deposited to
                                             the wallet
                                         </p>
                                         <div className="black_input usdt_div">

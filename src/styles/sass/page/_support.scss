@@ -209,6 +209,16 @@
             height: 47px;
         }
     }
+    .width2 {
+        width: 70%;
+        margin: auto;
+        @include mq('phone', max) {
+            width: 100%;
+        }
+        input.black_input {
+            height: 47px;
+        }
+    }
 }
 
 .chat-modal {

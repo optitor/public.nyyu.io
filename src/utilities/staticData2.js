@@ -8,6 +8,8 @@ import {
     SOL,
     DOGE,
     SHIB,
+    // ADA,
+    BUSD,
     NDB,
 } from "./imgImport";
 
@@ -102,6 +104,23 @@ export const SUPPORTED_COINS = [
             { label: "Solana", value: "SOL", network: "SOL" }
         ],
     },
+    // {
+    //     value: "ADA",
+    //     label: "ADA",
+    //     icon: ADA,
+    //     networks: [
+    //         { label: "ADA Cardano (BC Chain)", value: "ADA.BEP2", network: "BEP2" }
+    //     ],
+    // },
+    {
+        value: "BUSD",
+        label: "BUSD",
+        icon: BUSD,
+        networks: [
+            { label: "Binance USD (ERC20)", value: "BUSD", network: "ERC20" },
+            { label: "BUSD Token (BSC Chain)", value: "BUSD.BEP20", network: "BEP20" }
+        ],
+    },
     {
         value: "NDB",
         label: "NDB",
@@ -109,7 +128,7 @@ export const SUPPORTED_COINS = [
         networks: [
             { label: "NDB (BSC Chain)", value: "NDB.BEP20", network: "BEP20", }
         ]
-    }
+    },
 ];
 
 export const CURRENCIES = `USD,AUD,BRL,CAD,CHF,CLP,CNY,CZK,DKK,EUR,GBP,HKD,HUF,IDR,ILS,INR,JPY,KRW,MXN,MYR,NOK,NZD,

@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import { authReducer } from "./authReducer";
-import { paginationReducer } from "./pageReducer";
 import { errorsReducer } from "./errorReducer";
 import { avatarComponentsReducer } from "./avatarReducer";
 import { bidReducer, currencyRatesReducer } from "./bidReducer";
@@ -14,7 +13,6 @@ const rootReducer = combineReducers({
     auth: authReducer,
     avatarComponents: avatarComponentsReducer,
     errors: errorsReducer,
-    pagination: paginationReducer,
     userTiers: userTierReducer,
     placeBid: bidReducer,
     kycSettings: kycSettingsReducer,
@@ -24,6 +22,6 @@ const rootReducer = combineReducers({
     allFees: allFeesReducer,
     profileTab: profileTabReducer,
     currencyRates: currencyRatesReducer,
-})
+});
 
-export default rootReducer
+export default rootReducer;

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import jq from 'jquery';
 import ReactCodeInput from 'react-code-input';
@@ -12,57 +12,73 @@ import { Icon } from "@iconify/react";
 import { useQuery, useMutation } from '@apollo/client';
 import CustomSpinner from "../common/custom-spinner";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
-import { getPaypalPaymentFee } from "../../utilities/utility-methods";
-import {
-    PaypalFiat,
-    USDT } from '../../utilities/imgImport';
+import { getPaypalPaymentFee, getBankTransferFee } from "../../utilities/utility-methods";
+import { PaypalFiat } from '../../utilities/imgImport';
 import { roundNumber } from '../../utilities/number';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { censorEmail } from "../../utilities/string";
+import { countryList } from "../../utilities/countryAlpha2";
+import LocationSearchInput from "./LocationSearchInput";
+
+const DOMESTIC_BANK_PER_COUNTRY = {
+    'GB': {
+        meta: ['Sort code']
+    },
+    'US': {
+        meta: ['ACH  routing number', 'Account type']
+    },
+    'FJ': {
+        meta: ['Branch code']
+    },
+    'AR': {
+        meta: ['Tax ID: CUIL / CUIT']
+    },
+    'JP': {
+        meta: ['Branch Name', 'Account type'],
+        info: 'Enter the recipient name exactly as it appears in their Japanese bank account (It is usually written in Katakana).'
+    },
+    'MX': {
+        meta: ['CLABE']
+    },
+    'HK': {
+        info: 'We can only pay out to HKD accounts in Hong Kong.'
+    },
+    'CA': {
+        meta: ['Transit Number']
+    },
+    'AU': {
+        meta: ['BSB Code (Bank State Branch)']
+    },
+    'CN': {
+        meta: ['Card number']
+    },
+    'IN': {
+        meta: ['IFSC code']
+    }
+};
 
 const CURRENCIES = [
     {label: 'USD', value: 'USD', symbol: '$'},
-    // {label: 'GBP', value: 'GBP', symbol: '£'},
-    // {label: 'EUR', value: 'EUR', symbol: '€'},
+    {label: 'GBP', value: 'GBP', symbol: '£'},
+    {label: 'EUR', value: 'EUR', symbol: '€'},
 ];
 
 const CRYPTOCURRENCY = 'CRYPTOCURRENCY';
 const PAYPAL = 'PAYPAL';
 const BANKTRANSFER = 'BANKTRANSFER';
 
-const TransferData = {
-    EUR: {
-        'Account holder': 'Voltamond',
-        'BIC': 'TRWIBEB1XXX',
-        'IBAN': 'BE36 9672 2651 6281',
-        'Address': 'Avenue Louise 54, Room S52, Brussels, 1050, Belgium',
-        'Reference': '123456789'
-    },
-    GBP: {
-        'Account holder': 'Voltamond',
-        'Sort code': '23-14-70',
-        'Account number': '22063784',
-        'IBAN': 'GB29 TRWI 2314 7022 0637 84',
-        'Address': '56 Shoreditch High Street, London, E1 6JJ, United Kingdom',
-    },
-    USD: {
-        'Account holder': 'Voltamond',
-        'Routing number': '084009519',
-        'Account number': '9600001149793466',
-        'Account type': 'Checking',
-        'Address': '19 W 24th Street, New York NY 10010, United States',
-    }
-};
-
-const TransferFee = 0.03; 
-
-const { Option } = components;
+const MIN_VALUE = 1;
 
 const SupportedCoins = _.mapKeys(SUPPORTED_COINS, 'value');
 
+const Countries = countryList.map((item) => {
+    return { label: item.name, value: item["alpha-2"] }
+});
+
+const { Option } = components;
 const SelectOption = (props) => {
-    const precision = props.data?.label === 'BTC'? 8: 4;
+    const value = roundNumber(props.data?.amount, 8);
     return (
         <Option {...props}>
             <div className="d-flex justify-content-sm-start align-items-center ">
@@ -73,7 +89,7 @@ const SelectOption = (props) => {
                 />
                 <p className="coin-label ms-3">
                     <NumberFormat
-                        value={roundNumber(props.data?.amount, precision)}
+                        value={value}
                         displayType={'text'}
                         thousandSeparator={true}
                         renderText={(value, props) => <span {...props}>{value} </span>}
@@ -85,22 +101,33 @@ const SelectOption = (props) => {
     );
 };
 
-export default function DepositModal({ showModal, setShowModal, assets }) {
+export default function WithdrawModal({ showModal, setShowModal, assets }) {
     const user = useSelector((state) => state.auth.user);
-    const myAssets = _.orderBy(assets.filter(item => {
+    const { currencyRates } = useSelector((state) => state);
+    const myAssets = _.orderBy(Object.values(assets).filter(item => {
         return item.tokenSymbol !== 'VOLT';
     }).map(item => {
         return {
             value: item.tokenSymbol,
             label: item.tokenSymbol,
-            amount: item.free + item.hold,
+            amount: item.free,
             icon: item.symbol,
             balance: item.balance,
             networks: SupportedCoins[item.tokenSymbol]?.networks
         };
     }), ['balance'], ['desc']);
+
+    const myAssetsFiat = myAssets.filter(item => (item.value !== 'NDB' && Number(item.value) !== 0)
+    ).map(item => {
+        return {
+            value: item.value,
+            label: item.label,
+            icon: item.icon
+        };
+    });
     
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
+    const [selectedAssetFiat, setSelectedAssetFiat] = useState(myAssetsFiat[0]);
     const [currentStep, setCurrentStep] = useState(1);
     const [withdrawType, setWithdrawType] = useState(null);
     const [tabIndex, setTabIndex] = useState(1);
@@ -111,7 +138,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [withdrawData, setWithdrawData] = useState({destAddress: '', amount: ''});
     const [confirmCode, setConfirmCode] = useState('');
     // const [returnValue, setReturnValue] = useState({});
-    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) > Number(selectedAsset.amount);
+    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) === 0 || Number(withdrawData.amount) > Number(selectedAsset.amount);
     
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
@@ -119,9 +146,47 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const [paypalEmail, setPaypalEmail] = useState('');
     const [allFees, setAllFees] = useState({});
 
+    // Variables for bank withdraw
+    const [bankWithdrawData, setBankWithdrawData] = useState({
+        country: Countries[0],
+        mode: 1,
+        holderName: '',
+        bankName: '',
+        accNumber: '',
+        postCode: '',
+        swiftBicCode: '',
+        ibanCode: ''
+    });
+    const [recipientAddress, setRecipientAddress] = useState('');
+    const [bankSpecificData, setBankSpecificData] = useState({});
+    // Initialize bank Specific data when changing the country.
+    useEffect(() => {
+        setBankSpecificData({});
+    }, [bankWithdrawData.country.value]);
+
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
 
+    const transferAmountToFiat = transferAmount * assets[selectedAssetFiat?.value]?.price * currencyRates[currency.value];
+
+    // Bank withdraw validation
+    const bankWithDrawError = useMemo(() => {
+        if(!bankWithdrawData.holderName) return {holderName: 'Full name of the account holder is required'};
+        if(!bankWithdrawData.bankName) return {bankName: 'Bank name is required'};
+        if(bankWithdrawData.mode === 2 && !bankWithdrawData.swiftBicCode) return {swiftBicCode: 'SWIFT / BIC code is required'};
+        if(DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta) {
+            for(const item of DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta) {
+                if(!bankSpecificData[item]) return {[item]: `${item} is required`};
+            }
+        }
+        if(!bankWithdrawData.accNumber) return {accNumber: 'Account number is required'};
+        if(!recipientAddress) return {recipientAddress: 'Address is required'};
+        if(!bankWithdrawData.postCode) return {postCode: 'Post Code is required'};
+
+        return {};
+    }, [bankWithdrawData, recipientAddress, bankSpecificData]);
+
+    // Paypal email validation
     const paypalEmailError = useMemo(() => {
         if(!paypalEmail) return 'Please Enter Your PayPal Email.';
         if(!validator.isEmail(paypalEmail)) return 'Invalid Email';
@@ -137,6 +202,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const goBackToFiat = () => {
         setCurrentStep(1);
         setCurrency(CURRENCIES[0]);
+        setSelectedAssetFiat(myAssetsFiat[0]);
         setTransferAmount('');
     };
 
@@ -144,7 +210,6 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         setWithdrawData({});
         setShowModal(false);
     };
-
     
     const [generateWithdrawMutation] = useMutation(Mutation.GENERATE_WITHDRAW, {
         onCompleted: data => {
@@ -160,7 +225,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     });
 
     const generate_Withdraw_Code = () => {
-        if(withdrawType === PAYPAL && paypalEmailError) {
+        if((withdrawType === PAYPAL && paypalEmailError) || (withdrawType === BANKTRANSFER && !_.isEmpty(bankWithDrawError))) {
             setShowError(true);
             return;
         }
@@ -180,8 +245,8 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         },
         onError: err => {
             setPending(false);
-            if(err.message === 'insufficient_balance') {
-                setError("Sorry! Your wallet don't have sufficient balance.");
+            if(err.message === 'Insufficient funds') {
+                setError("Sorry! Your wallet don't have sufficient funds.");
             } else if(err.message === '2FA failed') {
                 setError("Sorry! Two-factor authentication failed. Try again.");
             } else {
@@ -197,7 +262,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
             email: paypalEmail,
             target: currency.value,
             withdrawAmount: Number(transferAmount),
-            sourceToken: 'USDT',
+            sourceToken: selectedAssetFiat?.value,
             code: confirmCode
         };
         paypalWithdrawRequestMutation({
@@ -238,11 +303,20 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
         });
     };
 
+    //-------------------------Bank Withdraw---------------------------------
+    const bank_Withdraw_Request = () => {
+        console.log(bankWithdrawData)
+        console.log(recipientAddress)
+        console.log(bankSpecificData)
+    };
+
     const handleWithdrawRequest = () => {
         if(withdrawType === CRYPTOCURRENCY) {
             crypto_Withdraw_Request();
         } else if(withdrawType === PAYPAL) {
             paypal_Withdraw_Request();
+        } else if(withdrawType === BANKTRANSFER) {
+            bank_Withdraw_Request();
         }
     };
 
@@ -257,9 +331,9 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
     const confirmDataForCrypto = [
         {topic: 'User Email', content: censorEmail(user.email)},
         {topic: 'Destination wallet address', content: withdrawData?.destAddress},
-        {topic: 'Source Token', content: 'USDT'},
-        {topic: 'Withdraw Amount', content: withdrawData.amount},
-    ]
+        {topic: 'Source Token', content: selectedAsset?.value},
+        {topic: 'Withdraw Amount', content: withdrawData?.amount},
+    ];
 
     return (
         <Modal
@@ -283,6 +357,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                         icon="carbon:arrow-left"
                         onClick={() => {
                             setCurrentStep(2);
+                            setShowError(false);
                         }}
                     />
                 )}
@@ -309,7 +384,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     <div className="deposit min_height2">
                         <div className="width1">
                             <h4 className="text-center mb-4">Withdraw</h4>
-                            <div className="button-group">
+                            <div className="button-group pt-2">
                                 <button className={`btn ${tabIndex === 1? 'selected': ''}`}
                                     onClick={() => setTabIndex(1)}
                                 >Cryptocurrency</button>
@@ -375,10 +450,11 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                                 setWithdrawData({ ...withdrawData, amount: values.value });
                                             }}
                                             allowNegative={false}
+                                            decimalScale={8}
                                         />
-                                        <p className="btn"
+                                        <p className="btn" aria-hidden="true"
                                             onClick={() => {
-                                                setWithdrawData({ ...withdrawData, amount: roundNumber(selectedAsset.amount, 4) })
+                                                setWithdrawData({ ...withdrawData, amount: roundNumber(selectedAsset.amount, 8) })
                                             }}
                                         ><span>MAX</span></p>
                                     </div>
@@ -396,9 +472,11 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <div className="width2 mt-5 pt-5">
                                 <div className="row mt-5">
                                     <div className="col-sm-6">
-                                        <FiatButton className="active" onClick={() => {
-                                            setWithdrawType(PAYPAL); setCurrentStep(2);
-                                        }}>
+                                        <FiatButton className="active"
+                                            onClick={() => {
+                                                setWithdrawType(PAYPAL); setCurrentStep(2);
+                                            }}
+                                        >
                                             <img src={PaypalFiat} alt="paypal" />
                                         </FiatButton>
                                     </div>
@@ -417,17 +495,34 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                     </div>
                 )}
                 {currentStep === 2 &&
-                    (withdrawType === PAYPAL? (
+                <>
+                    {_.isEmpty(selectedAssetFiat) && (
+                        <h5 className="text-center mt-5">
+                            No Assets to withdraw
+                        </h5>
+                    )}
+                    {!_.isEmpty(selectedAssetFiat) && withdrawType === PAYPAL &&
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">PayPal withdraw</h5>
                             <div className="mt-3">
                                 <p className="subtitle">Source of fund</p>
-                                <div className="black_input usdt_div">
-                                    <img src={USDT} alt='usdt' className="ms-2" />
-                                    <p className="ms-2">USDT</p>
-                                </div>
-                                <p className="desc">
-                                    The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your paypal account
+                                <Select
+                                    className="black_input"
+                                    options={myAssetsFiat}
+                                    value={selectedAssetFiat}
+                                    onChange={(selected) => {
+                                        setSelectedAssetFiat(selected)
+                                    }}
+                                    styles={customSelectStylesWithIcon}
+                                    placeholder="Select Coin"
+                                    components={{
+                                        Option: SelectOption,
+                                        SingleValue: SelectOption,
+                                        IndicatorSeparator: null                                            
+                                    }}
+                                />
+                                <p className="mt-1">
+                                    The <span className='txt-green'>{selectedAssetFiat?.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your paypal account
                                 </p>
                             </div>
                             <div>
@@ -446,15 +541,15 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <div className="mt-3">
-                                <p className="subtitle">Amount</p>
-                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat?.value}</span>)</p>
+                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
-                                        prefix={currency.symbol + ' '}
                                         allowNegative={false}
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
                                         placeholder={'Min 1 ' + currency.symbol}
+                                        decimalScale={8}
                                         autoComplete='off'
                                     />
                                     <div>
@@ -468,7 +563,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                                 getPaypalPaymentFee(
                                                     user,
                                                     allFees,
-                                                    transferAmount
+                                                    transferAmountToFiat
                                                 )
                                             )}
                                             decimalScale={2}
@@ -479,22 +574,34 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                             <button
                                 className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
                                 onClick={() => setCurrentStep(3)}
-                                disabled={!transferAmount || Number(transferAmount) < 1}
+                                disabled={!transferAmount || Number(transferAmountToFiat) < MIN_VALUE}
                             >
                                 NEXT
                             </button>
                         </div>
-                    ): (
+                    }
+                    {!_.isEmpty(selectedAssetFiat) && withdrawType === BANKTRANSFER &&
                         <div className="deposit width2 mb-5">
                             <h5 className="text-center">Bank transfer withdraw</h5>
                             <div className="mt-3">
                                 <p className="subtitle">Source of fund</p>
-                                <div className="black_input usdt_div">
-                                    <img src={USDT} alt='usdt' className="ms-2" />
-                                    <p className="ms-2">USDT</p>
-                                </div>
-                                <p className="desc">
-                                    The <span>USDT</span> will be converted to <span>{currency.label}</span> and deposited to your bank
+                                <Select
+                                    className="black_input"
+                                    options={myAssetsFiat}
+                                    value={selectedAssetFiat}
+                                    onChange={(selected) => {
+                                        setSelectedAssetFiat(selected)
+                                    }}
+                                    styles={customSelectStylesWithIcon}
+                                    placeholder="Select Coin"
+                                    components={{
+                                        Option: SelectOption,
+                                        SingleValue: SelectOption,
+                                        IndicatorSeparator: null
+                                    }}
+                                />
+                                <p className="mt-1">
+                                    The <span className='txt-green'>{selectedAssetFiat?.value}</span> will be converted to <span className='txt-green'>{currency.label}</span> and deposited to your bank account
                                 </p>
                             </div>
                             <div>
@@ -513,14 +620,15 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <div className="mt-3">
-                                <p className="subtitle">Amount</p>
-                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} >
+                                <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat?.value}</span>)</p>
+                                <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
                                     <NumberFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
-                                        prefix={currency.symbol + ' '}
                                         allowNegative={false}
                                         value={transferAmount}
                                         onValueChange={values => setTransferAmount(values.value)}
+                                        placeholder={'Min 1 ' + currency.symbol}
+                                        decimalScale={8}
                                         autoComplete='off'
                                     />
                                     <div>
@@ -530,26 +638,35 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                             suffix={' ' + currency.symbol}
                                             displayType='text'
                                             allowNegative={false}
-                                            value={Number(transferAmount) * TransferFee}
+                                            value={Number(getBankTransferFee(
+                                                user,
+                                                allFees,
+                                                transferAmountToFiat
+                                            ))}
                                             decimalScale={2}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <button
-                                className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
+                                className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold d-flex align-items-center justify-content-center"
                                 onClick={() => setCurrentStep(3)}
-                                disabled={!transferAmount}
+                                disabled={!transferAmount || Number(transferAmountToFiat) < MIN_VALUE}
                             >
-                                NEXT
+                                <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                    <CustomSpinner />
+                                </div>
+                                <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
                             </button>
                         </div>
-                    ))
+                    }
+                </>
                 }
                 {currentStep === 3 &&
-                    (withdrawType === PAYPAL? (
+                <>
+                    {withdrawType === PAYPAL &&
                         <div className='deposit width2'>
-                            <div className="paypal_email">
+                            <div className="d-flex flex-column justify-content-center" style={{minHeight: 420}}>
                                 <h5>PayPal Email</h5>
                                 <input className="black_input"
                                     value={paypalEmail}
@@ -566,16 +683,134 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                     <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
                                         <CustomSpinner />
                                     </div>
-                                    <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Request withdraw</div>
+                                    <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
                                 </button>
                             </div>
                         </div>
-                    ): (
-                        <></>
-                    ))
+                    }
+                    {withdrawType === BANKTRANSFER &&
+                        <div className="deposit width2 bankDetail">
+                            <div className="mb-2">
+                                <p className="subtitle">Select Country</p>
+                                <Select
+                                    className="black_input"
+                                    options={Countries}
+                                    value={bankWithdrawData.country}
+                                    onChange={(selected) => setBankWithdrawData({...bankWithdrawData, country: selected})}
+                                    styles={customSelectStyles}
+                                    components={{
+                                        IndicatorSeparator: null                                            
+                                    }}
+                                />
+                            </div>
+                            <div className="button-group pb-3">
+                                <button className={`btn ${bankWithdrawData.mode === 1? 'selected': ''}`}
+                                    onClick={() => setBankWithdrawData({ ...bankWithdrawData, mode: 1 })}
+                                    style={{height: 47}}
+                                >Domestic transfer</button>
+                                <button className={`btn ${bankWithdrawData.mode === 2? 'selected': ''}`}
+                                    onClick={() => setBankWithdrawData({ ...bankWithdrawData, mode: 2 })}
+                                    style={{height: 47}}
+                                >Foreign transfer</button>
+                            </div>
+                            {bankWithdrawData.mode === 1 && DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.info && (
+                                <div className="d-flex align-items-center">
+                                    <p className="font-30px pe-2">
+                                        <Icon icon='ant-design:warning-filled' />
+                                    </p>
+                                    <p>
+                                        {DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.info}
+                                    </p>
+                                </div>
+                            )}
+                            <div className="mt-2">
+                                <p className="subtitle">Full name of the account holder</p>
+                                <input className={`black_input ${showError && bankWithDrawError.holderName? 'error': ''}`}
+                                    value={bankWithdrawData.holderName}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, holderName: e.target.value })}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p className="subtitle">Bank name</p>
+                                <input  className={`black_input ${showError && bankWithDrawError.bankName? 'error': ''}`}
+                                    value={bankWithdrawData.bankName}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, bankName: e.target.value })}
+                                />
+                            </div>
+                            {bankWithdrawData.mode === 1 && DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta && (
+                                <>
+                                    {DOMESTIC_BANK_PER_COUNTRY[bankWithdrawData.country?.value]?.meta.map(item => (
+                                        <div className="mt-2" key={item}>
+                                            <p className="subtitle">{item}</p>
+                                            <input  className={`black_input ${showError && bankWithDrawError[item]? 'error': ''}`}
+                                                value={bankSpecificData[item] || ''}
+                                                onChange={e => setBankSpecificData({ ...bankSpecificData, [item]: e.target.value })}
+                                            />
+                                        </div>
+                                    ))}
+                                </>
+                            )}
+                            {bankWithdrawData.mode === 2 && (
+                                <>
+                                    <div className="mt-2">
+                                        <p className="subtitle">SWIFT / BIC code</p>
+                                        <input  className={`black_input ${showError && bankWithDrawError.swiftBicCode? 'error': ''}`}
+                                            value={bankWithdrawData.swiftBicCode}
+                                            onChange={e => setBankWithdrawData({ ...bankWithdrawData, swiftBicCode: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="mt-2">
+                                        <p className="subtitle">IBAN code (if applicable)</p>
+                                        <input  className='black_input'
+                                            value={bankWithdrawData.ibanCode}
+                                            onChange={e => setBankWithdrawData({ ...bankWithdrawData, ibanCode: e.target.value })}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                            <div className="mt-2">
+                                <p className="subtitle">Account number</p>
+                                <input  className={`black_input ${showError && bankWithDrawError.accNumber? 'error': ''}`}
+                                    value={bankWithdrawData.accNumber}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, accNumber: e.target.value })}
+                                />
+                            </div>
+                            <h4 className="mt-2">Recipient address</h4>
+                            <div className="mt-2">
+                                <p className="subtitle">Address</p>
+                                <LocationSearchInput
+                                    className={`black_input ${showError && bankWithDrawError.recipientAddress? 'error': ''}`}
+                                    address={recipientAddress} setAddress={setRecipientAddress}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p className="subtitle">Post code</p>
+                                <input  className={`black_input ${showError && bankWithDrawError.postCode? 'error': ''}`}
+                                    value={bankWithdrawData.postCode}
+                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, postCode: e.target.value })}
+                                />
+                            </div>
+                            <div className="mt-2">
+                                <p style={{height: 25, color: '#e16565'}}>
+                                    {showError && Object.values(bankWithDrawError)[0]}
+                                </p>
+                                <button
+                                    className="btn btn-outline-light rounded-0 w-100 mt-3 fw-bold d-flex align-items-center justify-content-center"
+                                    onClick={generate_Withdraw_Code}
+                                    disabled={pending}
+                                >
+                                    <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                        <CustomSpinner />
+                                    </div>
+                                    <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </>
                 }
                 {currentStep === 4 &&
-                    (withdrawType === PAYPAL || withdrawType === CRYPTOCURRENCY? (
+                    (
                         <div className='deposit width2'>
                             <div className="confirm_div">
                                 <h3 className="mt-3"><strong>Confirm Withdraw</strong></h3>
@@ -586,7 +821,7 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 />
                                 <div className="mt-3 d-flex align-items-center">
                                     <p className="text-center">The code has been sent to {censorEmail(user.email)}</p>
-                                    <span className='text-green cursor-pointer ms-1'
+                                    <span className='txt-green cursor-pointer ms-1' aria-hidden="true"
                                         style={{opacity: pending? 0.5: 1}}
                                         onClick={generate_Withdraw_Code}
                                         disabled={pending}
@@ -611,15 +846,13 @@ export default function DepositModal({ showModal, setShowModal, assets }) {
                                 </button>
                             </div>
                         </div>
-                    ): (
-                        <></>
-                    ))
+                    )
                 }
                 {currentStep === 5 &&
                     <div className='deposit width2'>
                         <div className="confirm_div">
                             <h3 className="mt-3"><strong>Withdraw Details</strong></h3>
-                            <h5 className="mt-2 text-green">
+                            <h5 className="mt-2 txt-green">
                                 Request sent successfully
                             </h5>
                             <div className="stats_div w-100 mt-2">
@@ -717,6 +950,11 @@ const customSelectStyles = {
         borderRadius: 0,
         height: 47,
         cursor: 'pointer'
+    }),
+    input: provided => ({
+        ...provided,
+        color: 'white',
+        paddingLeft: 7
     }),
     menu: (provided) => ({
         ...provided,

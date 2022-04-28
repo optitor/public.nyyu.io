@@ -44,9 +44,10 @@ export default function StepSix() {
                 <div className="my-sm-5 verify-step1">
                     <div className="text-center mt-3 mt-sm-0">
                         <p className="fs-16px">
-                        Face the camera. Have good lighting and face the camera straight on.
-                            <div className="d-sm-block d-none"></div>
-                        Make sure your face is visible, including the ears.
+                            Face the camera. Have good lighting and face the camera straight on.
+                        </p>
+                        <p className="fs-16px">
+                            Make sure your face is visible, including the ears.
                         </p>
                         {openWebcam ? (
                             <div className="mx-auto col-sm-8 col-12">

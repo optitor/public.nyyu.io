@@ -1,7 +1,7 @@
-/* eslint-disable */
 import React, { useEffect, useState, useMemo } from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
 import { useSelector } from 'react-redux';
-import _, { round } from "lodash";
+import _ from "lodash";
 import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
 import DepositModal from "./DepositModal";
@@ -21,7 +21,7 @@ const Asset = ({ item }) => {
     const currency = useSelector(state => state.placeBid.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
-    const precision = item.tokenSymbol === 'BTC'? 8: 4;
+    const precision = 8;
 
     return (
         <tr>
@@ -97,7 +97,7 @@ export default function InternalWallet() {
         },
     });
 
-    useEffect(() => {
+    useDeepCompareEffect(() => {
         const get_Balances_Price = async () => {
             let assets = { ...myAssets };
             if (_.isEqual(myAssets, InitialAssets)) return;
@@ -116,13 +116,13 @@ export default function InternalWallet() {
                     const res = await axios.get(TICKER_price, {
                         params: { symbol: item.tokenSymbol + QUOTE },
                     });
-                    price = res.data.price;
+                    price = Number(res.data.price);
                 }
                 const balance = (item.hold + item.free) * price;
                 assets[item.tokenSymbol] = { ...item, price, balance: balance, value: item.tokenSymbol };
             }
             setMyAssets({ ...assets });
-        }
+        };
 
         get_Balances_Price();
         const interval1 = setInterval(() => {
@@ -130,7 +130,7 @@ export default function InternalWallet() {
         }, 1000 * REFRESH_TIME);
 
         return () => clearInterval(interval1);
-    }, [Object.keys(myAssets).length]);
+    }, [Object.keys(myAssets).length, InitialAssets, myAssets]);
 
     const loadingSection = !myAssets;
 
@@ -249,12 +249,12 @@ export default function InternalWallet() {
                         </div>
                         <div className="col-6 ps-2">
                             <button
-                                disabled={true} // waiting for admin panel
+                                // disabled={true} // waiting for admin panel
                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
                                     setIsWithdrawOpen(true)
                                 }}
-                                // disabled={loadingOfAssets}
+                                disabled={loadingOfAssets}
                             >
                                 withdraw
                             </button>
@@ -263,7 +263,7 @@ export default function InternalWallet() {
                             <WithdrawModal
                                 showModal={isWithdrawOpen}
                                 setShowModal={setIsWithdrawOpen}
-                                assets = {Object.values(myAssets)}
+                                assets = {myAssets}
                             />
                         )}
                         {isDepositOpen && (

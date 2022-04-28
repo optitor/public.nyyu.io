@@ -40,7 +40,7 @@ const RoundsTable = () => {
 
     const showData = useMemo(() => {
         const sortedData = _.orderBy(data, ['requestedAt'], ['desc']);
-        return !searchValue? sortedData: sortedData.filter(item => String(item?.email).includes(searchValue)) ;
+        return !searchValue? sortedData: sortedData.filter(item => String(item?.email).toLowerCase().includes(searchValue.toLowerCase())) ;
     }, [data, searchValue]);
 
     useEffect(() => {
@@ -63,10 +63,10 @@ const RoundsTable = () => {
             </SearchBar>
             <TableHead>
                 <div className='email'>User's Email</div>
-                <div className='sourceToken'>Source Token</div>
-                <div className='amount'>Withdraw Amount</div>
+                <div className='sourceToken'>Token Amount</div>
+                <div className='amount'>Withdraw Amount (USD)</div>
                 <div className='time'>Request Time</div>
-                <div className='approve'>Approve</div>
+                <div className='approve'></div>
             </TableHead>
             <TableHeadForMobile>
                 <div className='name'>Data</div>

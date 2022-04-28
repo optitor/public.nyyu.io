@@ -231,3 +231,36 @@ export const CRYPTO_WITHDRAW_REQUEST = gql`
         }
     }
 `;
+
+export const BANK_WITHDRAW_REQUEST = gql`
+    mutation BankWithdrawRequest(
+        $targetCurrency: String
+        $amount: Float
+        $sourceToken: String
+        $mode: Int
+        $country: String
+        $holderName: String
+        $bankName: String
+        $accNumber: String
+        $metadata: String
+        $code: String
+    ) {
+        bankWithdrawRequest(
+            targetCurrency: $targetCurrency
+            amount: $amount
+            sourceToken: $sourceToken
+            mode: $mode
+            country: $country
+            holderName: $holdername
+            bankName: $bankName
+            accNumber: $accNumber
+            metadata: $metadata
+            code: $code
+        ) {
+            id
+            userId
+            targetCurrency
+            withdrawAmount
+        }
+    }
+`;

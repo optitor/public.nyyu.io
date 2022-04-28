@@ -288,28 +288,28 @@ export default function MarketTab() {
                     <th className="text-center">
                         Name
                         <Icon icon={sortOption['symbol'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
-                            className={sortOption['symbol']? 'text-green': ''}
+                            className={sortOption['symbol']? 'txt-green': ''}
                             onClick={() => set_SortOption('symbol')}
                         />
                     </th>
                     <th className="text-center">
                         Price ({currency.label})
                         <Icon icon={sortOption['price'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
-                            className={sortOption['price']? 'text-green': ''}
+                            className={sortOption['price']? 'txt-green': ''}
                             onClick={() => set_SortOption('price')}
                         />
                     </th>
                     <th className="laptop-not text-center">
                         Price Chart
                         <Icon icon={sortOption['percent'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
-                            className={sortOption['percent']? 'text-green': ''}
+                            className={sortOption['percent']? 'txt-green': ''}
                             onClick={() => set_SortOption('percent')}
                         />
                     </th>
                     <th className="mobile-not text-center">
                         Volume (24h)
                         <Icon icon={sortOption['volume'] === 'desc'? "ant-design:caret-up-filled": "ant-design:caret-down-filled"}
-                            className={sortOption['volume']? 'text-green': ''}
+                            className={sortOption['volume']? 'txt-green': ''}
                             onClick={() => set_SortOption('volume')}
                         />
                     </th>

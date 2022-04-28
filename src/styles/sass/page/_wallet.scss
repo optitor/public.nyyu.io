@@ -359,7 +359,7 @@
                         svg {
                             cursor: pointer;
                             margin-left: 4px;
-                            &.text-green {
+                            &.txt-green {
                                 color: $green;
                             }
                         }
@@ -575,7 +575,6 @@
             width: 100%;
         }
         div.button-group {
-            margin-top: 30px;
             display: flex;
             justify-content: space-between;
             button.btn {
@@ -596,12 +595,6 @@
         p.subtitle {
             color: $lightgrey;
             margin-bottom: 5px;
-        }
-        p.desc {
-            margin-bottom: 5px;
-            span {
-                color: $green;
-            }
         }
         button.btn {
             height: 47px;
@@ -766,12 +759,6 @@
                 margin-top: 25px;
             }
         }
-        div.paypal_email {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 420px;
-        }
         div.confirm_div {
             display: flex;
             flex-direction: column;
@@ -803,6 +790,16 @@
         .col-sm-6 {
             padding-left: 1%;
             padding-right: 1%;
+        }
+    }
+    .bankDetail {
+        height: 460px;
+        overflow-y: auto;
+        @include mq('phone', max) {
+            height: 100vh;
+        }
+        &>div {
+            width: 97%;
         }
     }
 }

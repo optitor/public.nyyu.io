@@ -11,7 +11,7 @@ export const generateQR = async text => {
     } catch(err) {
         console.log(err);
     }
-}
+};
 
 export function validURL(str) {
     const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -21,7 +21,7 @@ export function validURL(str) {
         '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
         '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
     return !!pattern.test(str);
-}
+};
 
 const censorWord = (str) => {
     const repeatLength = str.length >= 5? 3: str.length - 2;
@@ -29,6 +29,7 @@ const censorWord = (str) => {
 };
  
 export const censorEmail = (email) => {
+    if(!email) return '';
     var arr = email.split("@");
     return censorWord(arr[0]) + "@" + censorWord(arr[1]);
 };
