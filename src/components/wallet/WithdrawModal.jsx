@@ -361,15 +361,25 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         {topic: 'Withdraw Amount', content: transferAmount},
     ];
 
+    //-------------- Result of bank wihdraw -------
+    const metaDataForBankTransfer = useMemo(() => {
+        if(!returnValue?.metadata) return [];
+        const metadata = JSON.parse(returnValue?.metadata);
+        if(_.isEmpty(metadata)) return [];
+        return Object.keys(metadata).map(key => ({ topic: key, content: metadata[key] }));
+    }, [returnValue]);
+
     const confirmDataForBankTransfer = [
         {topic: 'Account Holder Name', content: returnValue.holderName},
         {topic: 'Bank Name', content: returnValue.bankName},
+        ...metaDataForBankTransfer,
         {topic: 'Account Number', content: returnValue.accountNumber},
         {topic: 'Recipient Address', content: returnValue.address},
         {topic: 'Post Code', content: returnValue.postCode},
         {topic: 'token Amount', content: renderNumberFormat(Number(returnValue.tokenAmount).toFixed(8), returnValue.sourceToken)},
         {topic: 'Withdraw Amount', content: renderNumberFormat(Number(returnValue.withdrawAmount).toFixed(2), returnValue.targetCurrency)},
     ];
+    // -----------------------------------------------
     
     const confirmDataForCrypto = [
         {topic: 'User Email', content: censorEmail(user.email)},
