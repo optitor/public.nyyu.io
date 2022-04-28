@@ -64,7 +64,7 @@ const RoundsTable = () => {
             <TableHead>
                 <div className='email'>User's Email</div>
                 <div className='sourceToken'>Token Amount</div>
-                <div className='amount'>Withdraw Amount (USD)</div>
+                <div className='amount'>Withdraw Amount</div>
                 <div className='time'>Request Time</div>
                 <div className='approve'></div>
             </TableHead>

@@ -166,6 +166,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
 
     const [error, setError] = useState('');
     const [showError, setShowError] = useState(false);
+    const [returnValue, setReturnValue] = useState({});
 
     const transferAmountToFiat = transferAmount * assets[selectedAssetFiat?.value]?.price * currencyRates[currency.value];
 
@@ -247,10 +248,8 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             setPending(false);
             if(err.message === 'Insufficient funds') {
                 setError("Sorry! Your wallet don't have sufficient funds.");
-            } else if(err.message === '2FA failed') {
-                setError("Sorry! Two-factor authentication failed. Try again.");
             } else {
-                setError('Something went wrong! Try again.');
+                setError(err.message);
             }
         }
     });
@@ -304,10 +303,43 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     };
 
     //-------------------------Bank Withdraw---------------------------------
+    const [bankWithdrawRequestMutation] = useMutation(Mutation.BANK_WITHDRAW_REQUEST, {
+        onCompleted: data => {
+            if(data.bankWithdrawRequest) {
+                console.log(data.bankWithdrawRequest);
+            }
+            setPending(false);
+        },
+        onError: err => {
+            setPending(false);
+            setError(err.message);
+        }
+    });
+
     const bank_Withdraw_Request = () => {
-        console.log(bankWithdrawData)
-        console.log(recipientAddress)
-        console.log(bankSpecificData)
+        setError('');
+        setPending(true);
+        const metaData = bankWithdrawData.mode === 1? { ...bankSpecificData }: {
+            'SWIFT / BIC code': bankWithdrawData.swiftBicCode,
+            'IBAN code': bankWithdrawData.ibanCode
+        };
+        const requestData = {
+            targetCurrency: currency.value,
+            amount: Number(transferAmount),
+            sourceToken: selectedAssetFiat?.value,
+            mode: bankWithdrawData.mode,
+            country: bankWithdrawData.country?.value,
+            holderName: bankWithdrawData.holderName,
+            bankName: bankWithdrawData.bankName,
+            accNumber: bankWithdrawData.accNumber,
+            metadata: JSON.stringify(metaData),
+            address: recipientAddress,
+            postCode: bankWithdrawData.postCode,
+            code: confirmCode
+        };
+        bankWithdrawRequestMutation({
+            variables: { ...requestData }
+        });
     };
 
     const handleWithdrawRequest = () => {
@@ -324,8 +356,12 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         {topic: 'User Email', content: censorEmail(user.email)},
         {topic: 'Destination paypal address', content: paypalEmail},
         {topic: 'Currency', content: currency.value},
-        {topic: 'Source Token', content: 'USDT'},
+        {topic: 'Source Token', content: selectedAssetFiat?.label},
         {topic: 'Withdraw Amount', content: transferAmount},
+    ];
+
+    const confirmDataForBankTransfer = [
+
     ];
     
     const confirmDataForCrypto = [
@@ -395,9 +431,9 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                         </div>
                         {tabIndex === 1 &&
                         (_.isEmpty(myAssets)?
-                            <p className='text-center mt-3'>
+                            <h5 className='text-center mt-5'>
                                 No Assets to withdraw
-                            </p>:
+                            </h5>:
                             (<div className="width1">
                                 <div className="select_div">
                                     <p className="subtitle">Select coin</p>
@@ -931,6 +967,7 @@ const customSelectStylesWithIcon = {
         color: 'dimgrey'
     })
 };
+
 const customSelectStyles = {
     option: (provided, state) => ({
         ...provided,

@@ -60,6 +60,7 @@ export const GET_ALL_PAYPAL_WITHDRAWS = gql`
             sourceToken
             tokenAmount
             withdrawAmount
+            targetCurrency
             status
             requestedAt
         }

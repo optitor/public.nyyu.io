@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useDispatch } from 'react-redux';
 import NumberFormat from "react-number-format";
 import Modal from 'react-modal';
@@ -19,7 +19,13 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
 
     const [currencyCode, setCurrencyCode] = useState(CURRENCIES[0]);
     const [depositAmount, setDepositAmount] = useState('');
+    const [showError, setShowError] = useState(false);
     const [pending, setPending] = useState(false);
+
+    const error = useMemo(() => {
+        if(!depositAmount || Number(depositAmount) === 0) return 'Amount is required';
+        return '';
+    }, [depositAmount]);
 
     const DropdownIndicator = props => {
         return (
@@ -30,6 +36,10 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
     };
 
     const handleSubmit = async () => {
+        if(error) {
+            setShowError(true);
+            return;
+        }
         setPending(true);
         const confirmData = {
             id: datum.id,
@@ -106,6 +116,9 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         }
                         decimalScale={2}
                     />
+                    <p className="text-danger">
+                        {showError && error}
+                    </p>
                     <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
                         onClick={handleSubmit}
                     >
