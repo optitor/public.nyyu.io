@@ -104,8 +104,7 @@ const SelectOption = (props) => {
 export default function WithdrawModal({ showModal, setShowModal, assets }) {
     const user = useSelector((state) => state.auth.user);
     const { currencyRates } = useSelector((state) => state);
-    const temp = []
-    const myAssets = _.orderBy(Object.values(temp).filter(item => {
+    const myAssets = _.orderBy(Object.values(assets).filter(item => {
         return item.tokenSymbol !== 'VOLT';
     }).map(item => {
         return {
