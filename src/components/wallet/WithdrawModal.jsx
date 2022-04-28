@@ -110,21 +110,22 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         return {
             value: item.tokenSymbol,
             label: item.tokenSymbol,
-            amount: item.free + item.hold,
+            amount: item.free,
             icon: item.symbol,
             balance: item.balance,
             networks: SupportedCoins[item.tokenSymbol]?.networks
         };
     }), ['balance'], ['desc']);
 
-    const myAssetsFiat = myAssets.filter(item => item.value !== 'NDB').map(item => {
+    const myAssetsFiat = myAssets.filter(item => (item.value !== 'NDB' && Number(item.value) !== 0)
+    ).map(item => {
         return {
             value: item.value,
             label: item.label,
             icon: item.icon
         };
     });
-    console.log(myAssetsFiat)
+    
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [selectedAssetFiat, setSelectedAssetFiat] = useState(myAssetsFiat[0]);
     const [currentStep, setCurrentStep] = useState(1);
@@ -137,7 +138,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     const [withdrawData, setWithdrawData] = useState({destAddress: '', amount: ''});
     const [confirmCode, setConfirmCode] = useState('');
     // const [returnValue, setReturnValue] = useState({});
-    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) > Number(selectedAsset.amount);
+    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) === 0 || Number(withdrawData.amount) > Number(selectedAsset.amount);
     
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
@@ -152,8 +153,6 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         holderName: '',
         bankName: '',
         accNumber: '',
-        recipient_country: Countries[0],
-        recipient_city: '',
         postCode: '',
         swiftBicCode: '',
         ibanCode: ''
@@ -181,7 +180,6 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             }
         }
         if(!bankWithdrawData.accNumber) return {accNumber: 'Account number is required'};
-        if(!bankWithdrawData.recipient_city) return {recipient_city: 'City is required'};
         if(!recipientAddress) return {recipientAddress: 'Address is required'};
         if(!bankWithdrawData.postCode) return {postCode: 'Post Code is required'};
 
@@ -307,7 +305,9 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
 
     //-------------------------Bank Withdraw---------------------------------
     const bank_Withdraw_Request = () => {
-        console.log('bank')
+        console.log(bankWithdrawData)
+        console.log(recipientAddress)
+        console.log(bankSpecificData)
     };
 
     const handleWithdrawRequest = () => {
@@ -331,8 +331,8 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     const confirmDataForCrypto = [
         {topic: 'User Email', content: censorEmail(user.email)},
         {topic: 'Destination wallet address', content: withdrawData?.destAddress},
-        {topic: 'Source Token', content: selectedAsset.value},
-        {topic: 'Withdraw Amount', content: withdrawData.amount},
+        {topic: 'Source Token', content: selectedAsset?.value},
+        {topic: 'Withdraw Amount', content: withdrawData?.amount},
     ];
 
     return (
@@ -498,7 +498,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                 <>
                     {_.isEmpty(selectedAssetFiat) && (
                         <h5 className="text-center mt-5">
-                            No Assets that can be withdrawed
+                            No Assets to withdraw
                         </h5>
                     )}
                     {!_.isEmpty(selectedAssetFiat) && withdrawType === PAYPAL &&
@@ -776,26 +776,6 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <h4 className="mt-2">Recipient address</h4>
-                            <div className="mt-2">
-                                <p className="subtitle">Country</p>
-                                <Select
-                                    className="black_input"
-                                    options={Countries}
-                                    value={bankWithdrawData.recipient_country}
-                                    onChange={(selected) => setBankWithdrawData({...bankWithdrawData, recipient_country: selected})}
-                                    styles={customSelectStyles}
-                                    components={{
-                                        IndicatorSeparator: null
-                                    }}
-                                />
-                            </div>
-                            <div className="mt-2">
-                                <p className="subtitle">City</p>
-                                <input  className={`black_input ${showError && bankWithDrawError.recipient_city? 'error': ''}`}
-                                    value={bankWithdrawData.recipient_city}
-                                    onChange={e => setBankWithdrawData({ ...bankWithdrawData, recipient_city: e.target.value })}
-                                />
-                            </div>
                             <div className="mt-2">
                                 <p className="subtitle">Address</p>
                                 <LocationSearchInput
