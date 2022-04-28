@@ -499,7 +499,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                 <>
                     {_.isEmpty(selectedAssetFiat) && (
                         <h5 className="text-center mt-5">
-                            No Assets that can be withdrawed
+                            No Assets to withdraw
                         </h5>
                     )}
                     {!_.isEmpty(selectedAssetFiat) && withdrawType === PAYPAL &&
