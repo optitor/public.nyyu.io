@@ -243,6 +243,8 @@ export const BANK_WITHDRAW_REQUEST = gql`
         $bankName: String
         $accNumber: String
         $metadata: String
+        $address: String
+        $postCode: String
         $code: String
     ) {
         bankWithdrawRequest(
@@ -251,16 +253,25 @@ export const BANK_WITHDRAW_REQUEST = gql`
             sourceToken: $sourceToken
             mode: $mode
             country: $country
-            holderName: $holdername
+            holderName: $holderName
             bankName: $bankName
             accNumber: $accNumber
             metadata: $metadata
+            address: $address
+            postCode: $postCode
             code: $code
         ) {
-            id
             userId
             targetCurrency
+            sourceToken
             withdrawAmount
+            tokenAmount
+            holderName
+            bankName
+            accountNumber
+            metadata
+            address
+            postCode
         }
     }
 `;

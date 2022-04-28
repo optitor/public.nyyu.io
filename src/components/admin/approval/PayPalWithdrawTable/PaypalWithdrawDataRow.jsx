@@ -9,6 +9,7 @@ import ApprovePaypalWithdrawModal from './ApprovePaypalWithdrawModal';
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
+    
 
     return (
         <>
@@ -20,12 +21,12 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='sourceToken'>
                     <Main>
-                        <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
+                        <p>{renderNumberFormat(Number(datum.tokenAmount).toFixed(8), datum.sourceToken)}</p>
                     </Main>
                 </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumberFormat(datum.withdrawAmount)}</p>
+                        <p>{renderNumberFormat(Number(datum.withdrawAmount).toFixed(2), datum.targetCurrency)}</p>
                     </Main>
                 </div>
                 <div className='time'>
@@ -75,15 +76,15 @@ const RoundDataRow = ({ datum }) => {
                             <p>Token Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
+                            <p>{renderNumberFormat(Number(datum.tokenAmount).toFixed(8), datum.sourceToken)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className='left'>
-                            <p>Withdraw Amount (USD)</p>
+                            <p>Withdraw Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(datum.withdrawAmount)}</p>
+                            <p>{renderNumberFormat(Number(datum.withdrawAmount).toFixed(2), datum.targetCurrency)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>

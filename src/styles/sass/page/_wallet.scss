@@ -583,6 +583,9 @@
                 border-radius: 0;
                 width: 49%;
                 height: 40px;
+                @include mq('phone', max) {
+                    font-size: 14px;
+                }
             }
             button.selected {
                 color: black;
