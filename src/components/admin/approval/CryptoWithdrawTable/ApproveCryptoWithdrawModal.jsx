@@ -102,23 +102,23 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         <CustomSpinner />
                     </div>:
                     <div className='mt-3'>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Token Amount</p>
                             <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
                         </div>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Withdraw Amount</p>
                             <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
                         </div>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Network</p>
                             <p className="col-6 text-end">{withdrawData.network}</p>
                         </div>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Destination Address</p>
                             <p className="col-6 text-end text-break">{withdrawData.destination}</p>
                         </div>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Requested Time</p>
                             <p className="col-6 text-end">
                                 {new Date(withdrawData.requestedAt).toLocaleDateString()}

@@ -102,19 +102,19 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         <CustomSpinner />
                     </div>:
                     <div className='mt-3'>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Token Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(Number(withdrawData.tokenAmount).toFixed(8), withdrawData.sourceToken)}</p>
                         </div>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Withdraw Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, 'USD', 2)}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(Number(withdrawData.withdrawAmount).toFixed(2), withdrawData.targetCurrency)}</p>
                         </div>
-                        <div className="row">
-                            <p className="col-6 text-muted">Destination Address</p>
-                            <p className="col-6 text-end text-break">{withdrawData.destination}</p>
+                        <div className="row mb-2">
+                            <p className="col-6 text-muted">Recipient <span className="txt-green">Paypal</span> Email</p>
+                            <p className="col-6 text-end text-break">{withdrawData.receiver}</p>
                         </div>
-                        <div className="row">
+                        <div className="row mb-2">
                             <p className="col-6 text-muted">Requested Time</p>
                             <p className="col-6 text-end">
                                 {new Date(withdrawData.requestedAt).toLocaleDateString()}

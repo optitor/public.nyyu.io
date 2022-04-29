@@ -10,6 +10,7 @@ import PaginationBar from './../../PaginationBar';
 import Loading from './../../shared/Loading';
 import { get_All_Paypal_Withdraws } from '../../../../redux/actions/approvalAction';
 
+
 const RoundsTable = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(state => state);
@@ -64,7 +65,7 @@ const RoundsTable = () => {
             <TableHead>
                 <div className='email'>User's Email</div>
                 <div className='sourceToken'>Token Amount</div>
-                <div className='amount'>Withdraw Amount (USD)</div>
+                <div className='amount'>Withdraw Amount</div>
                 <div className='time'>Request Time</div>
                 <div className='approve'></div>
             </TableHead>

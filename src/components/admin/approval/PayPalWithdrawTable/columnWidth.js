@@ -1,7 +1,7 @@
 export const width = {
     email: '30%',
-    sourceToken: '15%',
+    sourceToken: '25%',
     amount: '25%',
-    time: '20%',
+    time: '10%',
     approve: '10%'
 };

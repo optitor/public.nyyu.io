@@ -207,7 +207,7 @@ export const renderNumberFormat = (value, unit = '', decimalScale = 8) => {
             displayType={'text'}
             thousandSeparator={true}
             decimalScale={decimalScale}
-            renderText={(value, props) => <span {...props}>{value} {unit}</span>}
+            renderText={(value, props) => <span {...props}>{value} <b style={{color: '#23c865'}}>{unit}</b></span>}
         />
     );
 }
