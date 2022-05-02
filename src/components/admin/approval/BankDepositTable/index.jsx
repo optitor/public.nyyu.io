@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
@@ -8,14 +8,16 @@ import BankDepositDataRow from './BankDepositDataRow';
 import { width } from './columnWidth';
 import PaginationBar from './../../PaginationBar';
 import Loading from './../../shared/Loading';
-import * as Query from '../../../../apollo/graphqls/querys/Approval'
+import { get_All_BankDeposit_Txns } from '../../../../redux/actions/approvalAction';
 
 const RoundsTable = () => {
-    const [data, setData] = useState([]);
+    const dispatch = useDispatch();
+    const { data } = useSelector(state => state);
+    
     const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
     const { page, limit } = pageInfo;
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [pageData, setPageData] = useState([]);
 
     // Search Bar
@@ -28,19 +30,13 @@ const RoundsTable = () => {
         }
     };
 
-    // Loading data
-    useQuery(Query.GET_ALL_BANKDEPOSIT_TXNS, {
-        onCompleted: data => {
-            if(data.getAllBankDepositTxns) {
-                setData(data.getAllBankDepositTxns);
-            }
+    useEffect(() => {
+        (async function() {
+            setLoading(true);
+            await dispatch(get_All_BankDeposit_Txns());
             setLoading(false);
-        },
-        onError: err => {
-            console.log(err.message);
-            setLoading(false);
-        }
-    });
+        })();
+    }, [dispatch]);
 
     const showData = useMemo(() => {
         const sortedData = _.orderBy(data, ['createdAt'], ['desc']);
@@ -49,7 +45,7 @@ const RoundsTable = () => {
 
     useEffect(() => {
         setPageData(showData.slice((page - 1) * limit, page * limit));
-    }, [showData, page, limit]);
+    }, [dispatch, showData, page, limit]);
 
     return (
         <>
