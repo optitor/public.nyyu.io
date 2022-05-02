@@ -187,7 +187,7 @@ export const PAYPAL_WITHDRAW_REQUEST = gql`
         ) {
             id
             userId
-            amount
+            withdrawAmount
             fee
             status
             deniedReason
