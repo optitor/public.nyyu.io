@@ -174,20 +174,20 @@ export const PAYPAL_WITHDRAW_REQUEST = gql`
     mutation PaypalWithdrawRequest(
         $email: String
         $target: String
-        $withdrawAmount: Float
+        $amount: Float
         $sourceToken: String
         $code: String
     ) {
         paypalWithdrawRequest(
             email: $email
             target: $target
-            withdrawAmount: $withdrawAmount
+            amount: $amount
             sourceToken: $sourceToken
             code: $code
         ) {
             id
             userId
-            withdrawAmount
+            amount
             fee
             status
             deniedReason
