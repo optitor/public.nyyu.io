@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import Modal from 'react-modal';
 import { CloseIcon } from "../../../../utilities/imgImport";
 import { Icon } from "@iconify/react";
@@ -8,8 +7,9 @@ import Select, { components } from 'react-select';
 import * as Query from '../../../../apollo/graphqls/querys/Approval'
 import { renderNumberFormat } from '../../../../utilities/number';
 import CustomSpinner from "../../../common/custom-spinner";
-import { confirm_Paypal_Withdraw } from "../../../../redux/actions/approvalAction";
-import { showFailAlarm } from "../../AlarmModal";
+import { showSuccessAlarm, showFailAlarm } from "../../AlarmModal";
+import { usePaypalWithdraw } from "./usePaypalWithdraw";
+import * as Mutation from '../../../../apollo/graphqls/mutations/Approval';
 
 const STATUSES = [
     { label: 'APPROVE', value: 1 },  
@@ -25,7 +25,7 @@ const DropdownIndicator = props => {
 };
 
 const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
-    const dispatch = useDispatch();
+    const paypalWithdraw = usePaypalWithdraw();
 
     const [withdrawData, setWithdrawData] = useState({});
     const [status, setStatus] = useState(STATUSES[0]);
@@ -51,6 +51,23 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
         }
     });
 
+    const [confirmPaypalWithdrawMutation] = useMutation(Mutation.CONFIRM_PAYPAL_WITHDRAW, {
+        onCompleted: data => {
+            if(data.confirmPaypalWithdraw) {
+                paypalWithdraw.updateDatum({ ...datum, status: status.value });
+                showSuccessAlarm('Action done successfully');
+            }
+            setPending(false);
+            setIsOpen(false);
+        },
+        onError: err => {
+            // console.log(err);
+            showFailAlarm('Action failed', err.message);
+            setPending(false);
+            setIsOpen(false);
+        }
+    });
+
     const handleSubmit = async () => {
         setPending(true);
         const confirmData = {
@@ -58,9 +75,9 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             status: status.value,
             deniedReason: deniedReason,
         };
-        await dispatch(confirm_Paypal_Withdraw({...datum, status: status.value}, confirmData));
-        setPending(false);
-        setIsOpen(false);
+        confirmPaypalWithdrawMutation({
+            variables: { ...confirmData }
+        });        
     };
 
     const closeModal = () => {

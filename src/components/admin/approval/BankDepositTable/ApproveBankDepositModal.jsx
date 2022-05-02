@@ -1,12 +1,14 @@
 import React, { useMemo, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useMutation } from "@apollo/client";
 import NumberFormat from "react-number-format";
 import Modal from 'react-modal';
 import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
 import { CloseIcon } from "../../../../utilities/imgImport";
 import CustomSpinner from "../../../common/custom-spinner";
-import { confirm_Bank_Deposit } from "../../../../redux/actions/approvalAction";
+import * as Mutation from '../../../../apollo/graphqls/mutations/Approval';
+import { useBankDeposit } from "./useBankDeposit";
+import { showSuccessAlarm, showFailAlarm } from "../../AlarmModal";
 
 const CURRENCIES = [
     { label: "USD", value: "USD", symbol: "$" },
@@ -15,7 +17,7 @@ const CURRENCIES = [
 ];
 
 const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
-    const dispatch = useDispatch();
+    const bankDeposit = useBankDeposit();
 
     const [currencyCode, setCurrencyCode] = useState(CURRENCIES[0]);
     const [depositAmount, setDepositAmount] = useState('');
@@ -35,6 +37,23 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
         );
     };
 
+    const [confirmBankDepositMutation] = useMutation(Mutation.CONFIRM_BANK_DEPOSIT, {
+        onCompleted: data => {
+            if(data.confirmBankDeposit) {
+                bankDeposit.updateDatum(data.confirmBankDeposit);
+                showSuccessAlarm('Bank Deposit Request approved');
+            }
+            setPending(false);
+            setIsOpen(false);
+        },
+        onError: err => {
+            console.log(err);
+            showFailAlarm('Action failed', err.message);
+            setPending(false);
+            setIsOpen(false);
+        }
+    });
+
     const handleSubmit = async () => {
         if(error) {
             setShowError(true);
@@ -47,9 +66,9 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             amount: Number(depositAmount),
             cryptoType: 'USDT'
         };
-        await dispatch(confirm_Bank_Deposit(confirmData));
-        setPending(false);
-        setIsOpen(false);
+        confirmBankDepositMutation({
+            variables: { ...confirmData }
+        });
     };
 
     const closeModal = () => {
