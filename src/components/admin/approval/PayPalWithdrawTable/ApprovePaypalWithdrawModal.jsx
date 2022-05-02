@@ -35,13 +35,13 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
 
     const disabled = status.value === 2 && !deniedReason;
 
-    useQuery(Query.GET_PAYPAL_WITHDRAW_BY_ID, {
+    useQuery(Query.GET_PAYPAL_WITHDRAW_BY_ID_BY_ADMIN, {
         variables: {
             id: datum.id
         },
         onCompleted: data => {
-            if(data.getPaypalWithdrawById) {
-                setWithdrawData(data.getPaypalWithdrawById);
+            if(data.getPaypalWithdrawByIdByAdmin) {
+                setWithdrawData(data.getPaypalWithdrawByIdByAdmin);
             }
             setLoading(false);
         },

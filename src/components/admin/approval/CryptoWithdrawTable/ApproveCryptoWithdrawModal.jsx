@@ -35,13 +35,13 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
 
     const disabled = status.value === 2 && !deniedReason;
 
-    useQuery(Query.GET_CRYPTO_WITHDRAW_BY_ID, {
+    useQuery(Query.GET_CRYPTO_WITHDRAW_BY_ID_BY_ADMIN, {
         variables: {
             id: datum.id
         },
         onCompleted: data => {
-            if(data.getCryptoWithdrawById) {
-                setWithdrawData(data.getCryptoWithdrawById);
+            if(data.getCryptoWithdrawByIdByAdmin) {
+                setWithdrawData(data.getCryptoWithdrawByIdByAdmin);
             }
             setLoading(false);
         },
@@ -108,7 +108,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         </div>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Withdraw Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.withdrawAmount, withdrawData.sourceToken)}</p>
                         </div>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Network</p>
