@@ -260,7 +260,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         const requestData = {
             email: paypalEmail,
             target: currency.value,
-            withdrawAmount: Number(transferAmount),
+            amount: Number(transferAmount),
             sourceToken: selectedAssetFiat?.value,
             code: confirmCode
         };
