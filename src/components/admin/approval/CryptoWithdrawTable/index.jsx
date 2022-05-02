@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useQuery } from '@apollo/client';
 import _ from 'lodash';
 import { Icon } from '@iconify/react';
 import styled from 'styled-components';
@@ -8,16 +8,14 @@ import CryptoWithdrawDataRow from './CryptoWithdrawDataRow';
 import { width } from './columnWidth';
 import PaginationBar from './../../PaginationBar';
 import Loading from './../../shared/Loading';
-import { get_All_Crypto_Withdraws } from '../../../../redux/actions/approvalAction';
+import * as Query from '../../../../apollo/graphqls/querys/Approval'
 
 const RoundsTable = () => {
-    const dispatch = useDispatch();
-    const { data } = useSelector(state => state);
-    
+    const [data, setData] = useState([]);    
     const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
     const { page, limit } = pageInfo;
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pageData, setPageData] = useState([]);
 
     // Search Bar
@@ -30,13 +28,19 @@ const RoundsTable = () => {
         }
     };
 
-    useEffect(() => {
-        (async function() {
-            setLoading(true);
-            await dispatch(get_All_Crypto_Withdraws());
+    // Loading data
+    useQuery(Query.GET_ALL_CRYPTO_WITHDRAWS, {
+        onCompleted: data => {
+            if(data.getAllCryptoWithdraws) {
+                setData(data.getAllCryptoWithdraws);
+            }
             setLoading(false);
-        })();
-    }, [dispatch]);
+        },
+        onError: err => {
+            console.log(err.message);
+            setLoading(false);
+        }
+    });
 
     const showData = useMemo(() => {
         const sortedData = _.orderBy(data, ['requestedAt'], ['desc']);
@@ -45,7 +49,7 @@ const RoundsTable = () => {
 
     useEffect(() => {
         setPageData(showData.slice((page - 1) * limit, page * limit));
-    }, [dispatch, showData, page, limit]);
+    }, [showData, page, limit]);
 
     return (
         <>
