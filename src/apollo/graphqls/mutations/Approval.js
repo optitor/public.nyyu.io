@@ -55,3 +55,25 @@ export const CONFIRM_PAYPAL_WITHDRAW = gql`
         )
     }
 `;
+
+export const APPROVE_BANK_WITHDRAW_REQUEST = gql`
+    mutation ApproveBankWithdrawRequest(
+        $id: Int
+    ) {
+        approveBankWithdrawRequest(
+            id: $id
+        )
+    }
+`;
+
+export const DENY_BANK_WITHDRAW_REQUEST = gql`
+    mutation DenyBankWithdrawRequest(
+        $id: Int
+        $reason: String
+    ) {
+        denyBankWithdrawRequest(
+            id: $id
+            reason: $reason
+        )
+    }
+`;

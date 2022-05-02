@@ -163,17 +163,48 @@ export const GET_PAYPAL_WITHDRAW_BY_ID_BY_ADMIN = gql`
     }
 `;
 
-export const GET_BANK_WITHDRAW_REQUESTS = gql`
+export const GET_BANK_WITHDRAW_REQUESTS_BY_ADMIN = gql`
     query {
-        getBankWithdrawRequests {
+        getBankWithdrawRequestsByAdmin {
             id
-            userId
+            email
             targetCurrency
             withdrawAmount
             sourceToken
             tokenAmount
             status
             requestedAt
+            confirmedAt
+        }
+    }
+`;
+
+export const GET_BANK_WITHDRAW_REQUEST_BY_ID_BY_ADMIN = gql`
+    query GetBankWithdrawRequestByIdByAdmin(
+        $id: Int
+    ) {
+        getBankWithdrawRequestByIdByAdmin(
+            id: $id
+        ) {
+            id
+            email
+            targetCurrency
+            withdrawAmount
+            sourceToken
+            tokenPrice
+            tokenAmount
+            status
+            deniedReason
+            requestedAt
+            confirmedAt
+            mode
+            country
+            holderName
+            bankName
+            accountNumber
+            metadata
+            address
+            postCode
         }
     }
 `;

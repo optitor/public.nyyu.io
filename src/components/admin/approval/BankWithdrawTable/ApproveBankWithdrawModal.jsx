@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useQuery, useMutation } from "@apollo/client";
+import _ from 'lodash';
 import Modal from 'react-modal';
 import { CloseIcon } from "../../../../utilities/imgImport";
 import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
-import * as Query from '../../../../apollo/graphqls/querys/Approval'
+import * as Query from '../../../../apollo/graphqls/querys/Approval';
+import * as Mutation from '../../../../apollo/graphqls/mutations/Approval';
 import { renderNumberFormat } from '../../../../utilities/number';
 import CustomSpinner from "../../../common/custom-spinner";
-import { useCryptoWithdraw } from "./useCryptoWithdraw";
-import * as Mutation from '../../../../apollo/graphqls/mutations/Approval';
-import { showSuccessAlarm, showFailAlarm } from "../../AlarmModal";
+import { showFailAlarm, showSuccessAlarm } from "../../AlarmModal";
+import { useBankWithdraw } from "./useBankWithdraw";
+import { countryList } from "../../../../utilities/countryAlpha2";
+
+const countries = _.mapKeys(countryList, 'alpha-2');
 
 const STATUSES = [
     { label: 'APPROVE', value: 1 },  
@@ -24,24 +28,28 @@ const DropdownIndicator = props => {
     );
 };
 
-const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
-    const cryptoWithdraw = useCryptoWithdraw();
+const ApproveBankWithdrawModal = ({ isOpen, setIsOpen, datum }) => {
+    const bankWithdraw = useBankWithdraw();
 
     const [withdrawData, setWithdrawData] = useState({});
     const [status, setStatus] = useState(STATUSES[0]);
     const [deniedReason, setDeniedReason] = useState('');
     const [loading, setLoading] = useState(true);
     const [pending, setPending] = useState(false);
+    const metaData = useMemo(() => {
+        if(!withdrawData.metadata) return null;
+        return JSON.parse(withdrawData?.metadata);
+    }, [withdrawData]);
 
     const disabled = status.value === 2 && !deniedReason;
 
-    useQuery(Query.GET_CRYPTO_WITHDRAW_BY_ID_BY_ADMIN, {
+    useQuery(Query.GET_BANK_WITHDRAW_REQUEST_BY_ID_BY_ADMIN, {
         variables: {
             id: datum.id
         },
         onCompleted: data => {
-            if(data.getCryptoWithdrawByIdByAdmin) {
-                setWithdrawData(data.getCryptoWithdrawByIdByAdmin);
+            if(data.getBankWithdrawRequestByIdByAdmin) {
+                setWithdrawData(data.getBankWithdrawRequestByIdByAdmin);
             }
             setLoading(false);
         },
@@ -51,11 +59,28 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
         }
     });
 
-    const [confirmCryptoWithdrawMutation] = useMutation(Mutation.CONFIRM_CRYPTO_WITHDRAW, {
+    const [approveBankWithdrawRequestMutation] = useMutation(Mutation.APPROVE_BANK_WITHDRAW_REQUEST, {
         onCompleted: data => {
-            if(data.confirmCryptoWithdraw) {
-                cryptoWithdraw.updateDatum({ ...datum, status: status.value });
-                showSuccessAlarm('Action done successfully');
+            if(data.ApproveBankWithdrawRequest) {
+                showSuccessAlarm('Bank Withdraw Request approved');
+                bankWithdraw.updateDatum({ ...datum, status: status.value });
+            }
+            setPending(false);
+            setIsOpen(false);
+        },
+        onError: err => {
+            // console.log(err);
+            showFailAlarm('Action failed', err.message);
+            setPending(false);
+            setIsOpen(false);
+        }
+    });
+
+    const [denyBankWithdrawRequestMutation] = useMutation(Mutation.DENY_BANK_WITHDRAW_REQUEST, {
+        onCompleted: data => {
+            if(data.denyBankWithdrawRequest) {
+                showSuccessAlarm('Bank Withdraw Request denied');
+                bankWithdraw.updateDatum({ ...datum, status: status.value });
             }
             setPending(false);
             setIsOpen(false);
@@ -70,14 +95,15 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
 
     const handleSubmit = async () => {
         setPending(true);
-        const confirmData = {
-            id: datum.id,
-            status: status.value,
-            deniedReason: deniedReason,
-        };
-        confirmCryptoWithdrawMutation({
-            variables: { ...confirmData }
-        });        
+        if(status.value === 1) {
+            approveBankWithdrawRequestMutation({
+                variables: { id: datum.id}
+            });
+        } else {
+            denyBankWithdrawRequestMutation({
+                variables: { id: datum.id, reason: deniedReason}
+            });
+        }
     };
 
     const closeModal = () => {
@@ -109,7 +135,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             </div>
             <div className='width2'>
                 <div className="text-center">
-                    <h4 className='mt-3'>Approve Cryptocurrency Withdraw</h4>
+                    <h4 className='mt-3'>Approve PayPal Withdraw</h4>
                     <p>
                         <span className="text-muted me-2">User's email:</span> {datum.email}
                     </p>
@@ -121,19 +147,51 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                     <div className='mt-3'>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Token Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(Number(withdrawData.tokenAmount).toFixed(8), withdrawData.sourceToken)}</p>
                         </div>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Withdraw Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.withdrawAmount, withdrawData.sourceToken)}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(Number(withdrawData.withdrawAmount).toFixed(2), withdrawData.targetCurrency)}</p>
+                        </div>
+                        <hr className='text-white' />
+                        <div className="row mb-2">
+                            <p className="col-6 text-muted">Transfer Mode</p>
+                            <p className="col-6 text-end">
+                                {withdrawData.mode === 1 && 'Domestic Transfer'}
+                                {withdrawData.mode === 2 && 'Foreign Transfer'}
+                            </p>
                         </div>
                         <div className="row mb-2">
-                            <p className="col-6 text-muted">Network</p>
-                            <p className="col-6 text-end">{withdrawData.network}</p>
+                            <p className="col-6 text-muted">Country</p>
+                            <p className="col-6 text-end text-break">{countries[withdrawData.country]?.name}</p>
                         </div>
                         <div className="row mb-2">
-                            <p className="col-6 text-muted">Destination Address</p>
-                            <p className="col-6 text-end text-break">{withdrawData.destination}</p>
+                            <p className="col-6 text-muted">Holder Name</p>
+                            <p className="col-6 text-end text-break">{withdrawData.holderName}</p>
+                        </div>
+                        <div className="row mb-2">
+                            <p className="col-6 text-muted">Bank Name</p>
+                            <p className="col-6 text-end text-break">{withdrawData.bankName}</p>
+                        </div>
+                        {!_.isEmpty(metaData) && (
+                            <>
+                                <hr className='text-white' />
+                                {Object.keys(metaData).map((key, index) => (
+                                    <div className="row mb-2" key={index}>
+                                        <p className="col-6 text-muted">{key}</p>
+                                        <p className="col-6 text-end text-break">{metaData[key]}</p>
+                                    </div>
+                                ))}
+                                <hr className='text-white' />
+                            </>
+                        )}
+                        <div className="row mb-2">
+                            <p className="col-6 text-muted">Recipient Address</p>
+                            <p className="col-6 text-end text-break">{withdrawData.address}</p>
+                        </div>
+                        <div className="row mb-2">
+                            <p className="col-6 text-muted">Recipient Post Code</p>
+                            <p className="col-6 text-end text-break">{withdrawData.postCode}</p>
                         </div>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Requested Time</p>
@@ -203,7 +261,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
     );
 };
 
-export default ApproveBankDepositModal;
+export default ApproveBankWithdrawModal;
 
 const customSelectStyles = {
     option: (provided, state) => ({

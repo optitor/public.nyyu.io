@@ -1,11 +1,12 @@
 import React from 'react';
+import BankWithdrawProvider from './useBankWithdraw';
+import DataTable from './DataTable';
 
-const BankWithdrawTable = () => {
-    return (
-        <div>
-            <p>BankWithdrawTable</p>
-        </div>
-    );
-};
+const BankWithdrawTable = () => (
+    <BankWithdrawProvider>
+        <DataTable />
+    </BankWithdrawProvider>
+);
+
 
 export default BankWithdrawTable;
