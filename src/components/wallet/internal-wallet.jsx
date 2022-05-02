@@ -249,12 +249,12 @@ export default function InternalWallet() {
                         </div>
                         <div className="col-6 ps-2">
                             <button
-                                // disabled={true} // waiting for admin panel
+                                disabled={true} // waiting for admin panel
                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
                                     setIsWithdrawOpen(true)
                                 }}
-                                disabled={loadingOfAssets}
+                                // disabled={loadingOfAssets}
                             >
                                 withdraw
                             </button>
