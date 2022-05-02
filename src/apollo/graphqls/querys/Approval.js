@@ -162,3 +162,18 @@ export const GET_PAYPAL_WITHDRAW_BY_ID_BY_ADMIN = gql`
         }
     }
 `;
+
+export const GET_BANK_WITHDRAW_REQUESTS = gql`
+    query {
+        getBankWithdrawRequests {
+            id
+            userId
+            targetCurrency
+            withdrawAmount
+            sourceToken
+            tokenAmount
+            status
+            requestedAt
+        }
+    }
+`;
