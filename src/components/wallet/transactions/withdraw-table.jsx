@@ -239,16 +239,16 @@ export default function WithdrawTable() {
                                         </td>
                                         <td className="d-flex align-items-center justify-content-end">
                                             <div
-                                                className={`${
-                                                    status
-                                                        ? "green-bullet"
-                                                        : "red-bullet"
-                                                } me-2`}
+                                                className={`
+                                                ${status === 0 ? "gray-bullet" : ""}
+                                                ${status === 1 ? "green-bullet" : ""}
+                                                ${status === 2 ? "red-bullet" : ""}
+                                                    me-2`}
                                             ></div>
                                             <div>
-                                                {status
-                                                    ? "Completed"
-                                                    : "Failed"}
+                                                {status === 0 && "Pending"}
+                                                {status === 1 && "Completed"}
+                                                {status === 2 && "Denied"}
                                             </div>
                                             <button className="btn text-light border-0">
                                                 {id === currentRowOpen ? (
@@ -341,9 +341,9 @@ export default function WithdrawTable() {
                                                             Status:
                                                         </span>
                                                         <span className="fw-500">
-                                                            {status
-                                                                ? "Success"
-                                                                : "Failed"}
+                                                            {status === 0 && "Pending"}
+                                                            {status === 1 && "Success"}
+                                                            {status === 2 && "Denied"}
                                                         </span>
                                                     </div>
                                                 </div>
