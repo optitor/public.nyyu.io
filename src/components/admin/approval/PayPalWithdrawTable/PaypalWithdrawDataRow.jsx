@@ -43,6 +43,7 @@ const RoundDataRow = ({ datum }) => {
                             {datum.status === 0 && <span className='text-warning'>Approve</span>}
                             {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='healthicons:yes-outline' /></span>}
                             {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='clarity:no-access-line' /></span>}
+                            {datum.status === 3 && <span className='txt-green'>SENT FUNDS</span>}
                         </button>
                     </Main>
                 </div>
@@ -61,6 +62,7 @@ const RoundDataRow = ({ datum }) => {
                                 {datum.status === 0 && <span className='text-warning'>Approve</span>}
                                 {datum.status === 1 && <span className='txt-green font-30px'><Icon icon='healthicons:yes-outline' /></span>}
                                 {datum.status === 2 && <span className='text-danger font-30px'><Icon icon='clarity:no-access-line' /></span>}
+                                {datum.status === 3 && <span className='txt-green'>SENT FUNDS</span>}
                             </button>
                         </div>
                         <div className='right'>

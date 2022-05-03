@@ -143,6 +143,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                                 <p className="text-center my-3 font-30px fw-bold">
                                     {withdrawData.status === 1 && <span className="txt-green">APPROVED</span>}
                                     {withdrawData.status === 2 && <span className="text-danger">DENIED</span>}
+                                    {withdrawData.status === 3 && <span className="txt-green">SENT FUNDS</span>}
                                 </p>
                                 <div className="row">
                                     <p className="col-6 text-muted">Confirmed Time</p>

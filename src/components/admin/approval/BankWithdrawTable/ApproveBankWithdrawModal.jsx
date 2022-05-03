@@ -135,7 +135,7 @@ const ApproveBankWithdrawModal = ({ isOpen, setIsOpen, datum }) => {
             </div>
             <div className='width2'>
                 <div className="text-center">
-                    <h4 className='mt-3'>Approve PayPal Withdraw</h4>
+                    <h4 className='mt-3'>Approve Bank Withdraw</h4>
                     <p>
                         <span className="text-muted me-2">User's email:</span> {datum.email}
                     </p>
