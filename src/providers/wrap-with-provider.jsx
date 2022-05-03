@@ -20,7 +20,7 @@ const chains = defaultChains;
 
 // Set up connectors
 const defaultChain = chain.mainnet;
-if(window !== undefined) {
+if(typeof window !== `undefined`) {
   window.Buffer = window.Buffer || require("buffer").Buffer;
 }
 const connectors = createClient({
