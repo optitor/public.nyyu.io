@@ -46,7 +46,6 @@ export default function PaginationBar({ setPage, page, limit = 5, total }) {
     }
   };
 
-  console.log(navPage)
   return (
     <div className="row mt-2 mb-4">
       <div className="col-md-6">
