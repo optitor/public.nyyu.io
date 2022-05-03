@@ -2,7 +2,7 @@ import React from "react"
 import { AuthProvider } from "../hooks/useAuth"
 import { ApolloProvider } from "@apollo/client"
 import { Provider as ReduxProvider } from "react-redux";
-
+import { isBrowser } from "../../utilities/auth";
 import { Provider as WalletProvider, chain, defaultChains, createClient } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
@@ -22,7 +22,9 @@ const chains = defaultChains;
 
 // Set up connectors
 const defaultChain = chain.mainnet;
-window.Buffer = window.Buffer || require("buffer").Buffer;
+if(window !== undefined) {
+  window.Buffer = window.Buffer || require("buffer").Buffer;
+}
 const connectors = createClient({
     autoConnect: true,
     connectors({chainId}) {
