@@ -60,6 +60,7 @@ export default function PaginationBar({ setPage, page, limit = 5, total }) {
             value={navPage}
             onChange={e => setNavPage(e.target.value)}
             onKeyPress={handleKeyDown}
+            placeholder='Go to page'
           />
         </div>
         <div className="w-50 ps-2">
