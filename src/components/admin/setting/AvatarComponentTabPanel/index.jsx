@@ -103,8 +103,6 @@ const TableHeadForMobile = styled.div`
 const TableBody = styled.div`
     border-left: 1px solid #464646;
     border-right: 1px solid #464646;
-    max-height: 70vh;
-    overflow: auto;
     @media screen and (max-width: ${device['phone']}){
         max-height: unset;
     }

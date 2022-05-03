@@ -80,9 +80,9 @@ export default function AuctionPlaceBid() {
 
     useEffect(() => {
         if (price === maxPrice) {
-            setTimeout(() => setMaxPrice(2*maxPrice), 200)
+            setTimeout(() => setMaxPrice(2 * maxPrice), 200)
         }
-    }, [price])
+    }, [price, maxPrice])
 
     useEffect(() => {
         if (getBid)
@@ -111,14 +111,12 @@ export default function AuctionPlaceBid() {
                 <div className="place-bid">
                     <h3 className="range-label">amount of token</h3>
                     <div className="d-flex align-items-center mb-4">
-                        <input
-                            type="number"
+                        <NumberFormat className="range-input"
                             value={amount}
-                            onChange={(e) =>
-                                setAmount(e.target.value ? e.target.value : 1)
-                            }
-                            className="range-input"
-                            min={1}
+                            onValueChange={values => setAmount(values.value)}
+                            isAllowed={({ floatValue }) => floatValue >= 1}
+                            thousandSeparator={true}
+                            allowNegative={false}
                         />
                         <Slider
                             value={amount}
@@ -130,18 +128,12 @@ export default function AuctionPlaceBid() {
                     </div>
                     <h3 className="range-label">per token price (USD)</h3>
                     <div className="d-flex align-items-center mb-4">
-                        <input
-                            type="number"
+                        <NumberFormat className="range-input"
                             value={price}
-                            onChange={(e) =>
-                                setPrice(
-                                    e.target.value
-                                        ? e.target.value
-                                        : optCurrentRound?.minPrice
-                                )
-                            }
-                            className="range-input"
-                            min={optCurrentRound?.minPrice}
+                            onValueChange={values => setPrice(values.value? values.value: optCurrentRound?.minPrice)}
+                            isAllowed={({ floatValue }) => floatValue >= optCurrentRound?.minPrice}
+                            thousandSeparator={true}
+                            allowNegative={false}
                         />
                         <Slider
                             value={price}
