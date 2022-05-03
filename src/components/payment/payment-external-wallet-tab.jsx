@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useReducer, useState } from "re
 import { useDispatch, useSelector } from "react-redux"
 import { ethers } from "ethers"
 import { useMutation, useQuery } from "@apollo/client"
-import { useConnect, useAccount, useBalance, useTransaction } from "wagmi"
+import { useConnect, useAccount, useBalance, useSendTransaction } from "wagmi"
 import { navigate } from "gatsby"
 import { isMobile } from "react-device-detect"
 import ReactTooltip from "react-tooltip"
@@ -54,7 +54,7 @@ export default function PaymentExternalWalletTab({ currentRound, bidAmount }) {
         addressOrName: accountInfo?.address
     })
 
-    const [{ data: transactionInfo, error: transactionError, loading: transactionLoading }, sendTransaction] = useTransaction({
+    const [{ data: transactionInfo, error: transactionError, loading: transactionLoading }, sendTransaction] = useSendTransaction({
         request: {
             to: depositAddress,
             value: coinQuantity ? ethers.utils.parseEther(coinQuantity.toString()) : null

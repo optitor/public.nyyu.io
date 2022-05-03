@@ -67,7 +67,7 @@ export const COLOR_OFF = "#626161"
 export const INFURA_ID = "b3926273acc243d1ab72dfe9f2be8539"
 
 export const wallets = {
-    injected: {
+    metaMask: {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
         warn: "MetaMask is not supported by your Browser",
@@ -77,7 +77,7 @@ export const wallets = {
         desc: "Scan with WalletConnect to connect",
         warn: "WalletConnect is not supported",
     },
-    walletLink: {
+    coinbaseWallet: {
         icon: Coinbase,
         desc: "Connect to your Coinbase Account",
         warn: "Coinbase Account is not supported",
