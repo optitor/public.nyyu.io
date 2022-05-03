@@ -1,17 +1,19 @@
 import React from "react"
 import { navigate } from "gatsby"
 import { wallets } from "../../utilities/staticData"
-import { useConnect, useAccount } from "wagmi"
+import { useConnect, useAccount, useDisconnect } from "wagmi"
 import { isMobile } from "react-device-detect"
 import { SITE_URL } from "../../utilities/staticData3"
 
 const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${SITE_URL}`;
 
 export default function ConnectWalletTab() {
-    const [{ data: connectData, error: connectError }, connect] = useConnect()
-    const [{ data: accountData }, disconnect] = useAccount({
-        fetchEns: true,
-    })
+    const { connect, connectors, error, isConnecting, pendingConnector } = useConnect();
+    const { data: accountData } = useAccount();
+    const { disconnect } = useDisconnect();
+
+    console.log('connectors: ', connectors);
+    console.log('wallets: ', wallets);
 
     return (
         <div className="row">
@@ -27,7 +29,7 @@ export default function ConnectWalletTab() {
                 </div>
             ) : (
                 <>
-                    {connectData.connectors.map((x, idx) => (
+                    {connectors.map((x, idx) => (
                         <div
                             className="col-sm-6"
                             key={idx}
@@ -58,9 +60,9 @@ export default function ConnectWalletTab() {
                     </div>
                 </>
             )}
-            {connectError && (
+            {error && (
                 <div className="py-2" style={{ color: "#e8503a" }}>
-                    {connectError?.message ?? "Failed to connect"}
+                    {error?.message ?? "Failed to connect"}
                 </div>
             )}
         </div>
