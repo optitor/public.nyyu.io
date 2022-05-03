@@ -12,7 +12,7 @@ const CryptoWithdrawProvider = ({ children }) => {
 
     const updateDatum = datum => {
         setData({ ...data, [datum.id]: datum });
-    }
+    };
 
     const providerValue = {
         data,

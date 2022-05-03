@@ -907,6 +907,7 @@ const customSelectStylesWithIcon = {
         color: "dimgrey",
     }),
 };
+
 const customSelectStyles = {
     option: (provided, state) => ({
         ...provided,
