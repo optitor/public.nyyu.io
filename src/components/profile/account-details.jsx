@@ -142,8 +142,8 @@ export default function AccountDetails({
                 </div>
                 <div className="row w-100 mx-auto">
                     <div className="detail_item col-sm-4 col-md-6 br">Currency</div>
-                    <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start">
-                        <div className="d-flex align-items-center justify-content-between">
+                    <div className="detail_item col-sm-8 col-md-6">
+                        <div className="d-flex align-items-center justify-content-between" style={{height: 30}}>
                             <div className="d-flex align-items-center">
                                 <div className='flag_div' style={{width: 14, height: 14}}>
                                     <img

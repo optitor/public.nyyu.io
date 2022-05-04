@@ -138,7 +138,7 @@ const customSelectStyles = {
     }),
     input: provided => ({
         ...provided,
-        position: 'absolute'
+        position: 'absolute',
     }),
     menu: (provided) => ({
         ...provided,

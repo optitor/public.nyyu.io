@@ -77,6 +77,7 @@ const Profile = () => {
             return setUserTiersData(data?.getUserTiers);
         },
     });
+    
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
             setShuftiReference(data?.getShuftiReference);
