@@ -91,40 +91,6 @@
                     }
                 }
             }
-            &__select {
-                display: none;
-                width: 300px;
-                margin: 0 auto;
-                .css-1s2u09g-control,
-                .css-1pahdxg-control {
-                    @extend %select-style;
-                    padding-top: 7px;
-                    padding-bottom: 7px;
-                    .css-qc6sy-singleValue {
-                        text-align: center;
-                        font-weight: bold;
-                        font-size: 24px;
-                        line-height: 29px;
-                        color: white;
-                        text-transform: uppercase;
-                    }
-                }
-                .css-1okebmr-indicatorSeparator {
-                    display: none;
-                }
-                .css-319lph-ValueContainer {
-                    padding: 0;
-                }
-                .css-tlfecz-indicatorContainer {
-                    padding: 0;
-                }
-                .css-6j8wv5-Input {
-                    display: none;
-                }
-                @include mq("laptop", max) {
-                    display: block;
-                }
-            }
             .react-tabs__tab-panel {
                 display: none;
             }
@@ -198,7 +164,7 @@
                 }
             }
             .row {
-                border-bottom: 2px solid #464646;
+                border-bottom: 1px solid #464646;
                 &:first-child {
                     border-top: 2px solid #464646;
                 }
@@ -218,7 +184,7 @@
                     padding: 25px 12px;
                     @include mq("phone", max) {
                         width: unset;
-                        font-size: 12px;
+                        font-size: 14px;
                         font-weight: normal;
                         line-height: 30px;
                         padding: 20px 10px;
@@ -255,6 +221,7 @@
                     }
                 }
             }
+
             .change-password {
                 .col-6 {
                     padding: 9px 12px;
@@ -314,6 +281,7 @@
                         @include mq("phone", max) {
                             padding-left: 0;
                             padding-right: 0;
+                            border-bottom: 1px solid #464646;
                         }
                         .security-item {
                             margin-left: 12px;

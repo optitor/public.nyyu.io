@@ -6,7 +6,6 @@ import { useMutation } from "@apollo/client"
 import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
-
 import CustomSpinner from "../common/custom-spinner"
 import { ROUTES } from "../../utilities/routes"
 import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid"

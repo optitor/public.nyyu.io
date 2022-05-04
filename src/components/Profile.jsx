@@ -48,8 +48,7 @@ const Profile = () => {
     const [currentProfileTab, setCurrentProfileTab] = useState(
         profile_tabs[tab]
     );
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
-        useState(false);
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
     const [shuftiStatus, setShuftiStatus] = useState(null);
     const [shuftReference, setShuftiReference] = useState(null);
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
@@ -271,7 +270,8 @@ const Profile = () => {
                                         options={profile_tabs}
                                         value={currentProfileTab}
                                         onChange={(v) => handleProfileTab(v)}
-                                        className="profile-tab__select mb-3"
+                                        className="black_input w-75 m-auto mb-3 d-block d-lg-none"
+                                        styles={customSelectStyles}
                                     />
                                     <TabPanel>0</TabPanel>
                                     <TabPanel>1</TabPanel>
@@ -286,12 +286,12 @@ const Profile = () => {
                                             <TabList>
                                                 <Tab>
                                                     <div className="pt-3">
-                                                        account detaiLs
+                                                        account
                                                     </div>
                                                 </Tab>
                                                 <Tab>
                                                     <div className="pt-3">
-                                                        tier Details
+                                                        tier
                                                     </div>
                                                 </Tab>
                                                 <Tab
@@ -484,3 +484,57 @@ const Profile = () => {
 };
 
 export default Profile;
+
+const customSelectStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: "white",
+        backgroundColor: state.isSelected? '#000000': undefined,
+        fontSize: 14,
+        borderBottom: '1px solid dimgrey',
+        cursor: 'pointer',
+        ':hover': {
+            backgroundColor: 'inherit'
+        }
+    }),
+    control: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "none",
+        borderRadius: 0,
+        height: 47,
+        cursor: 'pointer'
+    }),
+    input: provided => ({
+        ...provided,
+        color: 'white',
+        paddingLeft: 7
+    }),
+    menu: (provided) => ({
+        ...provided,
+        borderRadius: 0,
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+    }),
+    menuList: provided => ({
+        ...provided,
+        borderRadius: 0,
+        margin: 0,
+        padding: 0
+    }),
+    valueContainer: provided => ({
+        ...provided,
+        padding: 0
+    }),
+    singleValue: (provided) => ({
+        ...provided,
+        color: "white",
+        fontSize: 20,
+        fontWeight: "bold",
+        marginLeft: 10
+    }),
+    placeholder: provided => ({
+        ...provided,
+        color: 'dimgrey'
+    })
+};
