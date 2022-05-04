@@ -113,22 +113,22 @@ export const externalWallets = [
 export const profile_tabs = [
     {
         value: "account details",
-        label: "account details",
+        label: "ACCOUNT DETAILS",
         index: 0,
     },
     {
         value: "notifications",
-        label: "notifications",
+        label: "NOTIFICATIONS",
         index: 1,
     },
     {
         value: "connect wallet",
-        label: "connect wallet",
+        label: "CONNECT WALLET",
         index: 2,
     },
     {
         value: "sign out",
-        label: "sign out",
+        label: "SIGN OUT",
         index: 3,
     },
 ]

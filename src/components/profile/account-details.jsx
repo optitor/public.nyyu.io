@@ -44,7 +44,7 @@ export default function AccountDetails({
             )}
             <div className="account-details">
                 <div className="row w-100 mx-auto">
-                    <div className="detail_item col-sm-4 col-md-6 br">
+                    <div className="detail_item col-sm-4 col-md-6  br">
                         display name
                     </div>
                     <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start">
@@ -52,7 +52,7 @@ export default function AccountDetails({
                             <div>{displayName}</div>
                             <button
                                 onClick={() => setIsChangeNameModalOpen(true)}
-                                className="btn fs-13px text-success text-underline ms-1"
+                                className="btn fs-10px text-success text-underline ms-1"
                             >
                                 Change
                             </button>
@@ -66,7 +66,7 @@ export default function AccountDetails({
                             <div>{user && user?.email}</div>
                             <button
                                 onClick={() => setIsChangeEmailModalOpen(true)}
-                                className="btn fs-13px text-success text-underline text-capitalize ms-1"
+                                className="btn fs-10px text-success text-underline text-capitalize ms-1"
                             >
                                 Change
                             </button>
@@ -86,7 +86,7 @@ export default function AccountDetails({
                 </div>
                 <div className="row w-100 mx-auto">
                     <div className="detail_item col-sm-4 col-md-6 br">
-                        kyc/aml verification
+                        Identity verification
                     </div>
                     <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start text-lowercase">
                         {shuftiStatus === "UNSET" ? (
@@ -145,17 +145,17 @@ export default function AccountDetails({
                     <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start">
                         <div className="d-flex align-items-center justify-content-between">
                             <div className="d-flex align-items-center">
-                                <div className='flag_div' style={{width: 18, height: 18}}>
+                                <div className='flag_div' style={{width: 14, height: 14}}>
                                     <img
                                         src={savedCurrency.value !=='EUR'? `${CurrencyIconEndpoint}/${String(savedCurrency.value).toLowerCase()}.png`: EuropeanFlag}
                                         alt={savedCurrency.value}
                                     />
                                 </div>
-                                <p className="ms-2">{savedCurrency.label} ( {savedCurrency.sign} )</p>
+                                <p className="ms-2">{savedCurrency.label}</p>
                             </div>
                             <button
                                 onClick={() => setIsCurrencyModalOpen(true)}
-                                className="btn fs-13px text-success text-underline text-capitalize ms-1"
+                                className="btn fs-10px text-success text-underline text-capitalize ms-1"
                             >
                                 Change
                             </button>
@@ -165,4 +165,4 @@ export default function AccountDetails({
             </div>
         </>
     );
-}
+};
