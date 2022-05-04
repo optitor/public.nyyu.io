@@ -10,6 +10,8 @@ export const STRIPE_PAYMENT = gql`
     mutation (
         $roundId: Int
         $amount: Float
+        $fiatAmount: Float
+        $fiatType: String
         $paymentIntentId: String
         $paymentMethodId: String
         $isSaveCard: Boolean
@@ -17,6 +19,8 @@ export const STRIPE_PAYMENT = gql`
         payStripeForAuction(
             roundId: $roundId
             amount: $amount
+            fiatAmount: $fiatAmount
+            fiatType: $fiatType
             paymentIntentId: $paymentIntentId
             paymentMethodId: $paymentMethodId
             isSaveCard: $isSaveCard
@@ -34,6 +38,8 @@ export const PAY_STRIPE_FOR_PRESALE = gql`
         $presaleId: Int
         $orderId: Int
         $amount: Float
+        $fiatAmount: Float
+        $fiatType: String
         $paymentIntentId: String
         $paymentMethodId: String
         $isSaveCard: Boolean
@@ -42,6 +48,8 @@ export const PAY_STRIPE_FOR_PRESALE = gql`
             presaleId: $presaleId
             orderId: $orderId
             amount: $amount
+            fiatAmount: $fiatAmount
+            fiatType: $fiatType
             paymentIntentId: $paymentIntentId
             paymentMethodId: $paymentMethodId
             isSaveCard: $isSaveCard
@@ -94,6 +102,8 @@ export const DELETE_CARD = gql`
 export const STRIPE_FOR_DEPOSIT = gql`
     mutation stripeForDeposit(
         $amount: Float
+        $fiatAmount: Float
+        $fiatType: String
         $cryptoType: String
         $paymentMethodId: String
         $paymentIntentId: String
@@ -101,6 +111,8 @@ export const STRIPE_FOR_DEPOSIT = gql`
     ) {
         stripeForDeposit(
             amount: $amount
+            fiatAmount: $fiatAmount
+            fiatType: $fiatType
             cryptoType: $cryptoType
             paymentMethodId: $paymentMethodId
             paymentIntentId: $paymentIntentId
@@ -117,12 +129,16 @@ export const STRIPE_FOR_DEPOSIT = gql`
 export const STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD = gql`
     mutation stripeForDepositWithSavedCard(
         $amount: Float
+        $fiatAmount: Float
+        $fiatType: String
         $cryptoType: String
         $cardId: Int
         $paymentIntentId: String
     ) {
         stripeForDepositWithSavedCard(
             amount: $amount
+            fiatAmount: $fiatAmount
+            fiatType: $fiatType
             cryptoType: $cryptoType
             cardId: $cardId
             paymentIntentId: $paymentIntentId
@@ -139,12 +155,16 @@ export const PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD = gql`
     mutation payStripeForAuctionWithSavedCard(
         $roundId: Int
         $amount: Float
+        $fiatAmount: Float
+        $fiatType: String
         $cardId: Int
         $paymentIntentId: String
     ) {
         payStripeForAuctionWithSavedCard(
             roundId: $roundId
             amount: $amount
+            fiatAmount: $fiatAmount
+            fiatType: $fiatType
             cardId: $cardId
             paymentIntentId: $paymentIntentId
         ) {
@@ -161,6 +181,8 @@ export const PAY_STRIPE_FOR_PRESALE_WITH_SAVED_CARD = gql`
         $presaleId: Int
         $orderId: Int
         $amount: Float
+        $fiatAmount: Float
+        $fiatType: String
         $cardId: Int
         $paymentIntentId: String
     ) {
@@ -168,6 +190,8 @@ export const PAY_STRIPE_FOR_PRESALE_WITH_SAVED_CARD = gql`
             presaleId: $presaleId
             orderId: $orderId
             amount: $amount
+            fiatAmount: $fiatAmount
+            fiatType: $fiatType
             cardId: $cardId
             paymentIntentId: $paymentIntentId
         ) {
