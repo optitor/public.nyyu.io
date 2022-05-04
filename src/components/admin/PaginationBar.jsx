@@ -29,20 +29,24 @@ export default function PaginationBar({ setPage, page, limit = 5, total }) {
     setNavPage(value);
   };
 
+  const handleNavPage = () => {
+    if(Number(navPage) > count) {
+      setPage({ page: count, limit });
+      setNavPage(count);
+    } else if(Number(navPage) <= 0) {
+      setPage({ page: 1, limit });
+      setNavPage(1);
+    } else {
+      setPage({ page: Number(navPage), limit });
+    }
+  };
+
   const handleKeyDown = e => {
     if(e.key === '.') {
       e.preventDefault();
     }
     if(e.key === 'Enter') {
-      if(Number(navPage) > count) {
-        setPage({ page: count, limit });
-        setNavPage(count);
-      } else if(Number(navPage) <= 0) {
-        setPage({ page: 1, limit });
-        setNavPage(1);
-      } else {
-        setPage({ page: Number(navPage), limit });
-      }
+      handleNavPage();
     }
   };
 
@@ -54,14 +58,17 @@ export default function PaginationBar({ setPage, page, limit = 5, total }) {
         </Stack>
       </div>
       <div className="col-md-6 d-flex">
-        <div className="w-50 pe-2">
-          <input className="black_input" type='number' style={{height: 40}}
+        <div className="w-50 pe-2 d-flex ">
+          <input className="black_input me-1" type='number' style={{height: 40}}
             min={1} step={1} max={count}
             value={navPage}
             onChange={e => setNavPage(e.target.value)}
             onKeyPress={handleKeyDown}
             placeholder='Go to page'
           />
+          <button className='btn btn-outline-light' style={{height: 40}} onClick={handleNavPage}>
+            Go
+          </button>
         </div>
         <div className="w-50 ps-2">
           <Select
