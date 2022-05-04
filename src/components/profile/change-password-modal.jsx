@@ -145,7 +145,7 @@ export default function ProfileChangePasswordModal({
                         </div>
                     </button>
                     <button
-                        className="btn-cancel pointer-cursor mx-auto mt-3"
+                        className="btn-cancel fs-18px pointer-cursor mx-auto mt-3"
                         onClick={(e) => {
                             e.preventDefault()
                             setIsPasswordModalOpen(false)

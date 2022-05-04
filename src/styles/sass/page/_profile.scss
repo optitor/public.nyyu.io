@@ -267,7 +267,7 @@
                     img {
                         position: absolute;
                         top: 0;
-                        right: 0;
+                        right: 10px;
                     }
                     @include mq('phone', min) {
                         display: none;
@@ -275,12 +275,10 @@
                 }
                 .row {
                     .col-md-4 {
-                        padding: 25px 12px;
+                        padding: 25px 10px;
                         display: flex;
                         align-items: flex-start;
                         @include mq("phone", max) {
-                            padding-left: 0;
-                            padding-right: 0;
                             border-bottom: 1px solid #464646;
                         }
                         .security-item {
