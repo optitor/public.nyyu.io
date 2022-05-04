@@ -202,6 +202,10 @@
                 &:first-child {
                     border-top: 2px solid #464646;
                 }
+                @include mq('phone', max) {
+                    display: flex;
+                    justify-content: space-between;
+                }
                 .detail_item {
                     width: 50%;
                     font-family: "Montserrat";
@@ -213,22 +217,24 @@
                     text-transform: uppercase;
                     padding: 25px 12px;
                     @include mq("phone", max) {
-                        width: 100%;
-                        font-size: 16px;
+                        width: unset;
+                        font-size: 12px;
                         font-weight: normal;
-                        line-height: 19.5px;
-                        padding: 10px;
+                        line-height: 30px;
+                        padding: 20px 10px;
                     }
                     .change-pwd {
+                        color: $green;
+                        border-color: $green;
                         font-weight: bold;
-                        font-size: 18px;
-                        line-height: 22px;
+                        font-size: 14px;
                         letter-spacing: 0.04em;
                         text-transform: uppercase;
-                        padding: 15px 26px;
+                        padding: 2px 26px;
                         background: #1e1e1e;
-                        @include mq("phone", max) {
-                            display: none;
+                        @include mq('phone', max) {
+                            font-size: 12px;
+                            padding: 3px 20px;
                         }
                     }
                 }
@@ -278,6 +284,28 @@
             }
             .account-security {
                 margin-top: 32px;
+                img {
+                    width: 25px;
+                }
+                .title_desktop {
+                    display: flex;
+                    align-items: center;
+                    @include mq('phone', max) {
+                        display: none;
+                    }
+                }
+                .title_mobile {
+                    width: 100%;
+                    position: relative;
+                    img {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
+                    @include mq('phone', min) {
+                        display: none;
+                    }
+                }
                 .row {
                     .col-md-4 {
                         padding: 25px 12px;
@@ -317,6 +345,7 @@
                             margin-top: 18px;
                             @include mq("phone", max) {
                                 margin-right: 0;
+                                margin-top: 0;
                             }
                             .security-link {
                                 cursor: pointer;
