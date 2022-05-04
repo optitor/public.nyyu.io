@@ -145,14 +145,13 @@ export default function AccountDetails({
                     <div className="detail_item col-sm-8 col-md-6 text-end text-sm-start">
                         <div className="d-flex align-items-center justify-content-between">
                             <div className="d-flex align-items-center">
-                                <div className='flag_div'>
+                                <div className='flag_div' style={{width: 18, height: 18}}>
                                     <img
                                         src={savedCurrency.value !=='EUR'? `${CurrencyIconEndpoint}/${String(savedCurrency.value).toLowerCase()}.png`: EuropeanFlag}
                                         alt={savedCurrency.value}
                                     />
                                 </div>
-                                <p className="ms-2">{savedCurrency.label}</p>
-                                <p className="ms-2 txt-green">( {savedCurrency.sign} )</p>
+                                <p className="ms-2">{savedCurrency.label} ( {savedCurrency.sign} )</p>
                             </div>
                             <button
                                 onClick={() => setIsCurrencyModalOpen(true)}
