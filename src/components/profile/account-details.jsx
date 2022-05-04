@@ -52,9 +52,9 @@ export default function AccountDetails({
                             <div>{displayName}</div>
                             <button
                                 onClick={() => setIsChangeNameModalOpen(true)}
-                                className="btn fs-13px text-success text-underline"
+                                className="btn fs-13px text-success text-underline ms-1"
                             >
-                                Buy name change
+                                Change
                             </button>
                         </div>
                     </div>
@@ -66,7 +66,7 @@ export default function AccountDetails({
                             <div>{user && user?.email}</div>
                             <button
                                 onClick={() => setIsChangeEmailModalOpen(true)}
-                                className="btn fs-13px text-success text-underline text-capitalize"
+                                className="btn fs-13px text-success text-underline text-capitalize ms-1"
                             >
                                 Change
                             </button>
@@ -75,16 +75,7 @@ export default function AccountDetails({
                 </div>
                 <div className="row w-100 mx-auto change-password">
                     <div className="detail_item col-sm-4 col-md-6 br">password</div>
-                    <div className="detail_item col-sm-8 col-md-6 d-flex align-items-center justify-content-sm-between justify-content-end">
-                        <p>********</p>
-                        <button
-                            className="btn-primary change-pwd"
-                            onClick={() => setIsPasswordModalOpen(true)}
-                        >
-                            Change Password
-                        </button>
-                    </div>
-                    <div className="col-12 justify-content-center">
+                    <div className="detail_item col-sm-8 col-md-6 d-flex align-items-center justify-content-end">
                         <button
                             className="btn-primary change-pwd"
                             onClick={() => setIsPasswordModalOpen(true)}
@@ -165,9 +156,9 @@ export default function AccountDetails({
                             </div>
                             <button
                                 onClick={() => setIsCurrencyModalOpen(true)}
-                                className="btn fs-13px text-success text-underline text-capitalize"
+                                className="btn fs-13px text-success text-underline text-capitalize ms-1"
                             >
-                                Currency Change
+                                Change
                             </button>
                         </div>
                     </div>

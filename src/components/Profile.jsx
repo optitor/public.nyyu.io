@@ -322,36 +322,68 @@ const Profile = () => {
                                                     />
                                                     <div className="account-security">
                                                         <h4 className="d-flex align-items-center">
-                                                            <div>
-                                                                Increase your
-                                                                account security
-                                                            </div>
-                                                            <img
-                                                                data-tip
-                                                                data-for="question-mark-tooltip"
-                                                                className="cursor-pointer ms-2"
-                                                                src={
-                                                                    QuestionMark
-                                                                }
-                                                                alt="Question Mark"
-                                                            />
-                                                            <ReactTooltip
-                                                                id="question-mark-tooltip"
-                                                                place="right"
-                                                                type="light"
-                                                                effect="solid"
-                                                            >
-                                                                <div
-                                                                    className="text-capitalize text-start fw-normal"
-                                                                    style={{
-                                                                        width: "320px",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        TWO_FACTOR_AUTH_TOOLTIP_CONTENT
-                                                                    }
+                                                            <div className="title_desktop">
+                                                                <div>
+                                                                    Security
                                                                 </div>
-                                                            </ReactTooltip>
+                                                                <img
+                                                                    data-tip
+                                                                    data-for="question-mark-tooltip"
+                                                                    className="cursor-pointer ms-2"
+                                                                    src={
+                                                                        QuestionMark
+                                                                    }
+                                                                    alt="Question Mark"
+                                                                />
+                                                                <ReactTooltip
+                                                                    id="question-mark-tooltip"
+                                                                    place="right"
+                                                                    type="light"
+                                                                    effect="solid"
+                                                                >
+                                                                    <div
+                                                                        className="text-capitalize text-start fw-normal"
+                                                                        style={{
+                                                                            width: "320px",
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            TWO_FACTOR_AUTH_TOOLTIP_CONTENT
+                                                                        }
+                                                                    </div>
+                                                                </ReactTooltip>
+                                                            </div>
+                                                            <div className="title_mobile">
+                                                                <div className="text-center">
+                                                                    Security
+                                                                </div>
+                                                                <img
+                                                                    data-tip
+                                                                    data-for="question-mark-tooltip"
+                                                                    className="cursor-pointer ms-2"
+                                                                    src={
+                                                                        QuestionMark
+                                                                    }
+                                                                    alt="Question Mark"
+                                                                />
+                                                                <ReactTooltip
+                                                                    id="question-mark-tooltip"
+                                                                    place="left"
+                                                                    type="light"
+                                                                    effect="solid"
+                                                                >
+                                                                    <div
+                                                                        className="text-capitalize text-start fw-normal"
+                                                                        style={{
+                                                                            width: "250px",
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            TWO_FACTOR_AUTH_TOOLTIP_CONTENT
+                                                                        }
+                                                                    </div>
+                                                                </ReactTooltip>
+                                                            </div>
                                                         </h4>
                                                         <div className="row w-100 mx-auto">
                                                             <div className="col-md-4 br">
