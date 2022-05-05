@@ -16,7 +16,7 @@ const init = {
     hats: { index: 0, updatable: false },
     others: { index: 0, updatable: false },
     hairColors: { index: 0, updatable: false },
-}
+};
 
 export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const avatarComponents = useSelector((state) => state.avatarComponents)

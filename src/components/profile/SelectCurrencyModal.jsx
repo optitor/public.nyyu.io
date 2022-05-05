@@ -83,6 +83,8 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
                 <h4 className='mt-3'>Currency Change</h4>
                 <div className='mt-5 d-flex justify-content-center'>
                     <Select
+                        id='select_currency_in_profile'
+                        isSearchable={false}
                         className={`${loading? 'disabled': ''} w-50`}
                         options={Currencies}
                         value={selectedCurrency}

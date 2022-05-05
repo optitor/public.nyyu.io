@@ -272,6 +272,9 @@ const Profile = () => {
                                         value={currentProfileTab}
                                         onChange={(v) => handleProfileTab(v)}
                                         className="black_input w-75 m-auto mb-3 d-block d-lg-none"
+                                        components={{
+                                            IndicatorSeparator: null,
+                                        }}
                                         styles={customSelectStyles}
                                     />
                                     <TabPanel>0</TabPanel>
@@ -399,7 +402,6 @@ const Profile = () => {
                                                                     method="phone"
                                                                 />
                                                             </div>
-
                                                             <div className="col-md-4">
                                                                 <TfaConfig
                                                                     title="2FA Google Authentication"
@@ -492,6 +494,7 @@ const customSelectStyles = {
         color: "white",
         backgroundColor: state.isSelected? '#000000': undefined,
         fontSize: 14,
+        fontWeight: 'bold',
         borderBottom: '1px solid dimgrey',
         cursor: 'pointer',
         ':hover': {
