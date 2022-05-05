@@ -8,6 +8,7 @@ const AVAILABLE = "AVAILABLE"
 const UNAVAILABLE = "UNAVAILABLE"
 const LOCKED = "LOCKED"
 const OWNED = "OWNED"
+
 export default function DressupHorizontalList({
     list = [],
     topic,

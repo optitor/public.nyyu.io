@@ -842,7 +842,6 @@
         padding: 20px;
         @include mq("phone", max) {
             border-left: none;
-            border-top: 1px solid white;
         }
     }
     &-items-horizontal-list {
@@ -908,6 +907,9 @@
                     font-size: 12px;
                 }
             }
+            .border-4 {
+                border-width: 2px!important;
+            }
         }
         &::-webkit-scrollbar {
             height: 0 !important;
@@ -917,6 +919,20 @@
         }
         &::-webkit-scrollbar-thumb {
             background: #ffffff !important;
+        }
+    }
+    .react-tabs__tab {
+        width: 33.3%;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        color: dimgrey;
+        &--selected {
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid $green;
+            color: white;
         }
     }
 }

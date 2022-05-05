@@ -7,6 +7,7 @@ import { DressupData } from "../../utilities/dressup-data"
 import { CloseIcon, EmptyAvatar } from "../../utilities/imgImport"
 import DressupHorizontalList from "./dressup-horizontal-list"
 import { hairColors } from './dressup-data';
+import { TabList, Tab } from 'react-tabs';
 
 
 export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAvatarItems}) {
@@ -122,22 +123,38 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                                 </>)}
                             </div>
                         </div>
-
-                        {/* <span className="text-center dress-up-modal-avatar-name mt-3">Tesla</span> */}
-                        <div className="dress-up-modal-sections-list">
-                            {DressupData.tabs.map((item) => (
-                                <div
-                                    onClick={() => setSelectedTab(item.index)}
-                                    onKeyDown={() => setSelectedTab(item.index)}
-                                    role="presentation"
-                                    key={item.index}
-                                    className={`${item.index === selectedTab && "active"}`}
-                                >
-                                    {item.title}
-                                </div>
-                            ))}
-                          </div>
-                        <button className="btn-save" onClick={saveAvatarItems}>save</button>
+                        <div className="d-none d-sm-block">
+                            <div className="dress-up-modal-sections-list">
+                                {DressupData.tabs.map((item) => (
+                                    <div
+                                        onClick={() => setSelectedTab(item.index)}
+                                        onKeyDown={() => setSelectedTab(item.index)}
+                                        role="presentation"
+                                        key={item.index}
+                                        className={`${item.index === selectedTab && "active"}`}
+                                    >
+                                        {item.title}
+                                    </div>
+                                ))}
+                            </div>
+                            <button className="btn-save" onClick={saveAvatarItems}>save</button>
+                        </div>
+                        <div className="d-block d-sm-none">
+                            <TabList>
+                                {DressupData.tabs.map(item => (
+                                    <Tab
+                                        onClick={() => setSelectedTab(item.index)}
+                                        onKeyDown={() => setSelectedTab(item.index)}
+                                        key={item.index}
+                                        selected={selectedTab === item.index}
+                                    >
+                                        <div className="pt-3">
+                                            {item.title}
+                                        </div>
+                                    </Tab>
+                                ))}
+                            </TabList>
+                        </div>
                     </div>
                 </div>
                 <div className="col-sm-8 components">
@@ -203,6 +220,14 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                             />
                         </div>
                     )}
+                    <div className="d-block d-sm-none">
+                        <button
+                            className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase w-100 mt-4`}
+                            onClick={saveAvatarItems}
+                        >
+                            save
+                        </button>
+                    </div>
                 </div>
             </div>
         </Modal>
