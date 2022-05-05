@@ -321,26 +321,26 @@
         }
     }
     .input_mobile {
-        display: flex;
+        width: 50%;
+        margin: auto;
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        @include mq('phone', max) {
+            width: 100%;
+        }
         .mobile-input-field {
-            width: 400px;
-            margin-top: 60px;
             font-size: 14px;
-            display: flex;
             align-items: center;
             justify-content: center;
             .country-code-select {
-                width: 240px;
-                margin-right: 10px;
                 position: relative;
                 .search-icon {
                     position: absolute;
                     top: 8px;
                     width: 22px;
                     left: 8px;
+                    font-size: 22px;
                     z-index: 10;
                     color: black !important;
                 }
@@ -376,8 +376,6 @@
             }
         }
         button {
-            margin-top: 40px;
-            width: 400px;
             font-size: 20px;
         }
     }
