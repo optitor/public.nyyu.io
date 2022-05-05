@@ -219,6 +219,11 @@
             height: 47px;
         }
     }
+    #select_currency_in_profile {
+        input {
+            position: absolute!important;
+        }
+    }
 }
 
 .chat-modal {
