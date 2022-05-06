@@ -16,6 +16,7 @@ import { countryList } from "../../utilities/countryAlpha2";
 import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf";
 import { useMutation } from "@apollo/client";
 import { ROUTES } from "../../utilities/routes";
+import Seo from '../seo';
 
 const countries = countryList.map(item => {
     return {label: item.name, value: item['alpha-2']};
@@ -100,148 +101,151 @@ const Singup = () => {
     };
 
     return (
-        <AuthLayout>
-            <h3 className="signup-head mb-4">Create an Account</h3>
-            <form className="form" onSubmit={signUserUp}>
-                <div className="form-group">
-                    <FormInput
-                        name="email"
-                        type="text"
-                        label="Email"
-                        value={email}
-                        onChange={(e) => setState({ email: e.target.value })}
-                        placeholder="Enter email"
-                        error={emailError}
-                    />
-                </div>
-                <div className="row">
-                    <div className="form-group col-md-6 mb-0 position-relative">
-                        <FormInput
-                            type={pwdVisible ? "text" : "password"}
-                            label="Password"
-                            value={pwd}
-                            onChange={(e) => setState({ pwd: e.target.value })}
-                            placeholder="Enter password"
-                        />
-                    </div>
-                    <div className="form-group col-md-6 mb-0 position-relative">
-                        <FormInput
-                            type={pwdVisible ? "text" : "password"}
-                            label="Password confirmation"
-                            value={pwdConfirm}
-                            onChange={(e) =>
-                                setState({ pwdConfirm: e.target.value })
-                            }
-                            placeholder="Enter password"
-                        />
-                    </div>
-                    {pwdError && (
-                        <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                            {pwdError}
-                        </span>
-                    )}
-                    {!pwdError && pwdConfirmError && (
-                        <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                            {pwdConfirmError}
-                        </span>
-                    )}
-                </div>
-                <div className="form-group mt-3">
-                    <p className="form-label">Country of residence</p>
-                    <Select
-                        options={countries}
-                        value={country}
-                        id="signup-country-dropdown"
-                        onChange={(v) => setState({ country: v })}
-                        placeholder="Choose country"
-                        className="text-left"
-                    />
-                </div>
-                <div className="d-flex flex-wrap justify-content-between">
-                    <div className="form-group me-4">
-                        <label className="d-flex align-items-center gap-2">
-                            <input
-                                type="checkbox"
-                                value={pwdVisible}
-                                className="form-check-input"
-                                onChange={() =>
-                                    setState({ pwdVisible: !pwdVisible })
-                                }
-                            />
-                            <div className="keep-me-signed-in-text">
-                                Show password
-                            </div>
-                        </label>
-                    </div>
+        <>
+            <Seo title='Sign Up' />
+            <AuthLayout>
+                <h3 className="signup-head mb-4">Create an Account</h3>
+                <form className="form" onSubmit={signUserUp}>
                     <div className="form-group">
-                        <label className="d-flex align-items-center gap-2">
-                            <input
-                                type="checkbox"
-                                value={agree}
-                                className="form-check-input"
-                                onChange={() => setState({ agree: !agree })}
-                            />
-                            <div className="keep-me-signed-in-text">
-                                Agree to{" "}
-                                <a
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    href={termsAndConditionsFile}
-                                    className="text-info terms-link"
-                                >
-                                    Terms & Conditions
-                                </a>
-                            </div>
-                        </label>
+                        <FormInput
+                            name="email"
+                            type="text"
+                            label="Email"
+                            value={email}
+                            onChange={(e) => setState({ email: e.target.value })}
+                            placeholder="Enter email"
+                            error={emailError}
+                        />
                     </div>
-                </div>
-                <div className="mt-3">
-                    {result.length > 0 && result !== "Success" && (
-                        <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                            {result}
-                        </span>
-                    )}
-                    {agreeError && (
-                        <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
-                            {agreeError}
-                        </span>
-                    )}
-                    <button
-                        type="submit"
-                        className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
-                        disabled={loading}
-                    >
-                        <div
-                            className={`${loading ? "opacity-1" : "opacity-0"}`}
+                    <div className="row">
+                        <div className="form-group col-md-6 mb-0 position-relative">
+                            <FormInput
+                                type={pwdVisible ? "text" : "password"}
+                                label="Password"
+                                value={pwd}
+                                onChange={(e) => setState({ pwd: e.target.value })}
+                                placeholder="Enter password"
+                            />
+                        </div>
+                        <div className="form-group col-md-6 mb-0 position-relative">
+                            <FormInput
+                                type={pwdVisible ? "text" : "password"}
+                                label="Password confirmation"
+                                value={pwdConfirm}
+                                onChange={(e) =>
+                                    setState({ pwdConfirm: e.target.value })
+                                }
+                                placeholder="Enter password"
+                            />
+                        </div>
+                        {pwdError && (
+                            <span className="errorsapn">
+                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                {pwdError}
+                            </span>
+                        )}
+                        {!pwdError && pwdConfirmError && (
+                            <span className="errorsapn">
+                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                {pwdConfirmError}
+                            </span>
+                        )}
+                    </div>
+                    <div className="form-group mt-3">
+                        <p className="form-label">Country of residence</p>
+                        <Select
+                            options={countries}
+                            value={country}
+                            id="signup-country-dropdown"
+                            onChange={(v) => setState({ country: v })}
+                            placeholder="Choose country"
+                            className="text-left"
+                        />
+                    </div>
+                    <div className="d-flex flex-wrap justify-content-between">
+                        <div className="form-group me-4">
+                            <label className="d-flex align-items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value={pwdVisible}
+                                    className="form-check-input"
+                                    onChange={() =>
+                                        setState({ pwdVisible: !pwdVisible })
+                                    }
+                                />
+                                <div className="keep-me-signed-in-text">
+                                    Show password
+                                </div>
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <label className="d-flex align-items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    value={agree}
+                                    className="form-check-input"
+                                    onChange={() => setState({ agree: !agree })}
+                                />
+                                <div className="keep-me-signed-in-text">
+                                    Agree to{" "}
+                                    <a
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        href={termsAndConditionsFile}
+                                        className="text-info terms-link"
+                                    >
+                                        Terms & Conditions
+                                    </a>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div className="mt-3">
+                        {result.length > 0 && result !== "Success" && (
+                            <span className="errorsapn">
+                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                {result}
+                            </span>
+                        )}
+                        {agreeError && (
+                            <span className="errorsapn">
+                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                {agreeError}
+                            </span>
+                        )}
+                        <button
+                            type="submit"
+                            className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
+                            disabled={loading}
                         >
-                            <CustomSpinner />
-                        </div>
-                        <div className={`${loading ? "ms-3" : "pe-4"}`}>
-                            sign up with email
-                        </div>
-                    </button>
-                </div>
-            </form>
-            <ul className="social-links">
-                {social_links.map((item, idx) => (
-                    <li key={idx}>
-                        <a href={item.to}>
-                            <img src={item.icon} alt="icon" />
-                        </a>
-                    </li>
-                ))}
-            </ul>
-            <p className="text-white text-center">
-                Already have an account?{" "}
-                <Link to="/app/signin" className="signup-link">
-                    Sign In
-                </Link>
-            </p>
-        </AuthLayout>
+                            <div
+                                className={`${loading ? "opacity-1" : "opacity-0"}`}
+                            >
+                                <CustomSpinner />
+                            </div>
+                            <div className={`${loading ? "ms-3" : "pe-4"}`}>
+                                sign up with email
+                            </div>
+                        </button>
+                    </div>
+                </form>
+                <ul className="social-links">
+                    {social_links.map((item, idx) => (
+                        <li key={idx}>
+                            <a href={item.to}>
+                                <img src={item.icon} alt="icon" />
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+                <p className="text-white text-center">
+                    Already have an account?{" "}
+                    <Link to="/app/signin" className="signup-link">
+                        Sign In
+                    </Link>
+                </p>
+            </AuthLayout>
+        </>
     );
 };
 

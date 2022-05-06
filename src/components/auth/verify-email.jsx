@@ -7,6 +7,7 @@ import CustomSpinner from "../common/custom-spinner"
 import { ROUTES } from "../../utilities/routes"
 import AuthLayout from "../common/AuthLayout"
 import TwoFactorModal from "../profile/two-factor-modal"
+import Seo from '../seo';
 
 const VerifyEmail = ({ email }) => {
     const [code, setCode] = useState("")
@@ -30,77 +31,80 @@ const VerifyEmail = ({ email }) => {
     })
 
     return (
-        <AuthLayout>
-            <TwoFactorModal
-                is2FAModalOpen={tfaOpen}
-                setIs2FAModalOpen={(res) => {
-                    setTfaOpen(res)
-                    if (!res) navigate(ROUTES.signIn)
-                }}
-                email={email}
-                twoStep={[]}
-                onResult={(result) => {
-                    if (result) {
-                        // navigate(ROUTES.signIn)
-                    } else navigate(ROUTES.verifyFailed)
-                }}
-                redirect={true}
-            />
-            <h3 className="signup-head mb-5">Verify email</h3>
-            <form
-                className="form"
-                onSubmit={(e) => {
-                    e.preventDefault()
-                    verifyAccount({
-                        variables: {
-                            email,
-                            code,
-                        },
-                    })
-                }}
-            >
-                <div className="form-group">
-                    <Input
-                        type="text"
-                        name="code"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        placeholder="Enter code"
-                    />
-                </div>
-                <div className="form-group text-white">
-                    Didn’t receive your code?{" "}
-                    <Link
-                        className={`signup-link ${resending ? "text-white" : "txt-green"}`}
-                        to="#"
-                        onClick={() =>
-                            resendVerifyCode({
-                                variables: {
-                                    email,
-                                },
-                            })
-                        }
-                    >
-                        Send again
-                    </Link>
-                </div>
-                <button
-                    type="submit"
-                    className="btn-primary w-100 text-uppercase my-5 d-flex align-items-center justify-content-center"
+        <>
+            <Seo title='Verify Email' />
+            <AuthLayout>
+                <TwoFactorModal
+                    is2FAModalOpen={tfaOpen}
+                    setIs2FAModalOpen={(res) => {
+                        setTfaOpen(res)
+                        if (!res) navigate(ROUTES.signIn)
+                    }}
+                    email={email}
+                    twoStep={[]}
+                    onResult={(result) => {
+                        if (result) {
+                            // navigate(ROUTES.signIn)
+                        } else navigate(ROUTES.verifyFailed)
+                    }}
+                    redirect={true}
+                />
+                <h3 className="signup-head mb-5">Verify email</h3>
+                <form
+                    className="form"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                        verifyAccount({
+                            variables: {
+                                email,
+                                code,
+                            },
+                        })
+                    }}
                 >
-                    <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
-                        <CustomSpinner />
+                    <div className="form-group">
+                        <Input
+                            type="text"
+                            name="code"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            placeholder="Enter code"
+                        />
                     </div>
-                    <div className={`${loading ? "ms-3" : "pe-4"}`}>Confirm Code</div>
-                </button>
-            </form>
-            <p className="text-white text-center">
-                Return to{" "}
-                <Link to="/app/signup" className="signup-link">
-                    Sign up
-                </Link>
-            </p>
-        </AuthLayout>
+                    <div className="form-group text-white">
+                        Didn’t receive your code?{" "}
+                        <Link
+                            className={`signup-link ${resending ? "text-white" : "txt-green"}`}
+                            to="#"
+                            onClick={() =>
+                                resendVerifyCode({
+                                    variables: {
+                                        email,
+                                    },
+                                })
+                            }
+                        >
+                            Send again
+                        </Link>
+                    </div>
+                    <button
+                        type="submit"
+                        className="btn-primary w-100 text-uppercase my-5 d-flex align-items-center justify-content-center"
+                    >
+                        <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                            <CustomSpinner />
+                        </div>
+                        <div className={`${loading ? "ms-3" : "pe-4"}`}>Confirm Code</div>
+                    </button>
+                </form>
+                <p className="text-white text-center">
+                    Return to{" "}
+                    <Link to="/app/signup" className="signup-link">
+                        Sign up
+                    </Link>
+                </p>
+            </AuthLayout>
+        </>
     )
 }
 

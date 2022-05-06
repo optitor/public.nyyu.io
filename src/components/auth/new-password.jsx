@@ -4,6 +4,7 @@ import { FormInput, CheckBox } from "../common/FormControl"
 import AuthLayout from "../common/AuthLayout"
 // import { useSigninMutation } from "../../apollo/model/auth"
 import { useAuth } from "../../hooks/useAuth"
+import Seo from '../seo';
 
 const NewPassword = () => {
     const auth = useAuth()
@@ -47,6 +48,8 @@ const NewPassword = () => {
     // const disableForm = signinMutationResults.loading
 
     return (
+    <>
+        <Seo title='New Password' />
         <AuthLayout>
             <h3 className="signup-head">New Password</h3>
             <form
@@ -104,6 +107,7 @@ const NewPassword = () => {
                 </Link>
             </p>
         </AuthLayout>
+    </>
     )
 }
 
