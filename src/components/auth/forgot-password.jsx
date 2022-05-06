@@ -9,6 +9,7 @@ import CustomSpinner from "../common/custom-spinner"
 import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import Seo from '../seo';
 
 const ForgetPassword = () => {
     // Containers
@@ -36,6 +37,8 @@ const ForgetPassword = () => {
     }
 
     return (
+    <>
+        <Seo title='Forgot Password' />
         <AuthLayout>
             <h3 className="signup-head mb-0">Forgot password</h3>
             <form className="form">
@@ -80,6 +83,7 @@ const ForgetPassword = () => {
                 </Link>
             </p>
         </AuthLayout>
+    </>
     )
 }
 

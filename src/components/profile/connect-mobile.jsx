@@ -8,7 +8,7 @@ import { getCountryCallingCode } from "react-phone-number-input/input"
 
 const Countries = countryList.map((item) => {
     return { label: item.name, value: item["alpha-2"] }
-})
+});
 
 export default function ConnectMobile({ confirm }) {
     const [country, setCountry] = useState(null)

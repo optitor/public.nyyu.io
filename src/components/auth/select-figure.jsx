@@ -7,6 +7,7 @@ import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import names from "random-names-generator"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
+import Seo from '../seo';
 import Header from "../header"
 import FigureItem from "../FigureItem"
 import Loading from "../common/Loading"
@@ -123,6 +124,8 @@ const SelectFigure = () => {
     if (loadingPage) return <Loading />
     else
         return (
+        <>
+            <Seo title='Select Figure' />
             <main className="select-figure-page">
                 <Header />
                 <section className="container position-relative h-100">
@@ -429,6 +432,7 @@ const SelectFigure = () => {
                     </div>
                 </Modal>
             </main>
+        </>
         )
 }
 
