@@ -80,7 +80,7 @@ const Payment = () => {
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
-
+    
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
             setTotalRounds(data.getAuctions?.length);

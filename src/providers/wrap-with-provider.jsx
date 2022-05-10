@@ -16,7 +16,21 @@ import { INFURA_ID } from "../utilities/staticData"
 // const infuraId = process.env.INFURA_ID
 const infuraId = INFURA_ID
 // Chains for connectors to support
-const chains = defaultChains;
+const chains = defaultChains
+const bscChain = {
+  id: 56,
+  name: 'Binance Smart Chain',
+  nativeCurrency: {
+    name: 'Binance', symbol: 'BNB', decimals: 18
+  },
+  rpcUrls: {
+    default: 'https://bsc-dataseed.binance.org/'
+  },
+  blockExplorers: {
+    default: {name: 'Bscscan', url: 'https://bscscan.com'}
+  }
+};
+chains.push(bscChain);
 
 // Set up connectors
 const defaultChain = chain.mainnet;
@@ -24,11 +38,10 @@ if(typeof window !== `undefined`) {
   window.Buffer = window.Buffer || require("buffer").Buffer;
 }
 const connectors = createClient({
-    autoConnect: true,
+    autoConnect: false,
     connectors({chainId}) {
         const chain = defaultChain;
-        console.log('chain: ', chain);
-        const rpcUrl = chain.rpcUrls.default;
+        const rpcUrl = "https://mainnet.infura.io/v3/03021c5a727a40eb8d086a4d46d32ec7";
         return [
             new MetaMaskConnector({chains}),
             new CoinbaseWalletConnector({
