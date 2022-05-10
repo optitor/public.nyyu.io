@@ -8,16 +8,15 @@ import { SITE_URL } from "../../utilities/staticData3"
 const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${SITE_URL}`;
 
 export default function ConnectWalletTab() {
-    const { connect, connectors, error, isConnecting, pendingConnector } = useConnect();
     const { data: accountData } = useAccount();
+    const { connect, connectors, error, isConnecting, pendingConnector } = useConnect();
+    
     const { disconnect } = useDisconnect();
 
-    console.log('connectors: ', connectors);
-    console.log('wallets: ', wallets);
-
+    console.log(accountData);
     return (
         <div className="row">
-            {accountData ? (
+            {accountData?.connector ? (
                 <div className="mb-10px">
                     <div className="connected">
                         <img src={wallets[accountData.connector.id]?.icon} alt="wallet icon" />

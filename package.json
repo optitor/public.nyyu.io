@@ -62,6 +62,7 @@
     "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "node-sass": "^6.0.1",
     "npx-languages": "^1.0.2",
     "path": "^0.12.7",
@@ -115,10 +116,12 @@
     "util": "^0.12.4",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
-    "wagmi": "^0.3.2"
+    "wagmi": "^0.3.2",
+    "web3": "^1.7.3"
   },
   "devDependencies": {
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "webpack": "^5.72.0"
   },
   "keywords": [
     "gatsby"
@@ -128,7 +131,7 @@
     "build": "set NODE_OPTIONS=--max-old-space-size=8192 && gatsby build",
     "develop": "gatsby develop --port 4000",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "gatsby develop",
+    "start": "set NODE_OPTIONS=--max-old-space-size=8192 && gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
