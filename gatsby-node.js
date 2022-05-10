@@ -24,7 +24,7 @@ exports.onCreatePage = async ({ page, actions }) => {
     }
 };
 
-exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins }) => {
+exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }) => {
     actions.setWebpackConfig({
         resolve: {
             fallback: {
@@ -81,4 +81,15 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins }) => {
             })()
             ]
     });
+
+    if(stage === 'build-javascript' || stage === 'develop') {
+        const config = getConfig();
+        const miniCssExtractPlugin = config.plugins.find(
+            plugin => plugin.constructor.name === 'MiniCssExtractPlugin'
+          )
+          if (miniCssExtractPlugin) {
+            miniCssExtractPlugin.options.ignoreOrder = true
+          }
+          actions.replaceWebpackConfig(config)
+    }
 };
