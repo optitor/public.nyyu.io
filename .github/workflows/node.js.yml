@@ -21,4 +21,4 @@ jobs:
         cache: 'npm'
     - run: npm install -g gatsby-cli
     - run: npm install
-    - run: npm run build
+    - run: set NODE_OPTIONS=--max-old-space-size=8192 && gatsby build
