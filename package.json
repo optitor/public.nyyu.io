@@ -36,7 +36,7 @@
     "echarts-for-react": "^3.0.2",
     "ethers": "^5.6.1",
     "fs": "^0.0.1-security",
-    "gatsby": "^4.6.0",
+    "gatsby": "^4.14.0",
     "gatsby-plugin-apollo": "^3.0.2",
     "gatsby-plugin-gatsby-cloud": "^4.1.0",
     "gatsby-plugin-google-fonts": "^1.0.1",
