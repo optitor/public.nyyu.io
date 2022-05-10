@@ -92,4 +92,10 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
           }
           actions.replaceWebpackConfig(config)
     }
+
+    if (getConfig().mode === 'production') {
+        actions.setWebpackConfig({
+          devtool: false
+        });
+    }
 };
