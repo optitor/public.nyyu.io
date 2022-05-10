@@ -3,6 +3,9 @@
 
 name: Node.js CI
 
+
+  
+
 on:
   push:
     branches: [ main ]
@@ -26,4 +29,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - run: npm install -g gatsby-cli
     - run: npm run build
