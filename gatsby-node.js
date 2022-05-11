@@ -1,5 +1,6 @@
 const TerserPlugin = require('terser-webpack-plugin');
-
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const webpack = require('webpack');
 // Implement the Gatsby API “onCreatePage”. This is
 // called after every page is created.
 exports.onCreatePage = async ({ page, actions }) => {
@@ -23,42 +24,78 @@ exports.onCreatePage = async ({ page, actions }) => {
     }
 };
 
-exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins }) => {
-    if (stage === "build-html" || stage === "develop-html") {
-        actions.setWebpackConfig({
-            module: {
-                rules: [
-                    {
-                        test: /bad-module/,
-                        use: loaders.null(),
+exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }) => {
+    actions.setWebpackConfig({
+        resolve: {
+            fallback: {
+                "crypto": false,
+                "stream": require.resolve("stream-browserify"),
+                "assert": false,
+                "util": false,
+                "http": require.resolve('stream-http'),
+                "https": require.resolve('https-browserify'),
+                "os": false
+            },
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.html$/,
+                    loader: require.resolve('html-loader'),
+                    options: {
+                        minimize: false,
                     },
-                ],
-            },
-        })
+                },
+                {
+                    test: /bad-module/,
+                    use: loaders.null(),
+                },
+            ],
+        },
+        optimization: {
+            splitChunks: false,
+            minimize: true,
+            minimizer: [
+                new TerserPlugin({
+                    parallel: true,
+                }),
+            ],
+        },
+        plugins: [
+            new NodePolyfillPlugin(),
+            new webpack.ProvidePlugin({
+                Buffer: [require.resolve("buffer/"), "Buffer"],
+            }),
+        ],
+        externals: [
+            (function () {
+                var IGNORES = [
+                    'electron'
+                ];
+                return function (context, request, callback) {
+                if (IGNORES.indexOf(request) >= 0) {
+                    return callback(null, "require('" + request + "')");
+                }
+                return callback();
+                };
+            })()
+            ]
+    });
+
+    if(stage === 'build-javascript' || stage === 'develop') {
+        const config = getConfig();
+        const miniCssExtractPlugin = config.plugins.find(
+            plugin => plugin.constructor.name === 'MiniCssExtractPlugin'
+          )
+          if (miniCssExtractPlugin) {
+            miniCssExtractPlugin.options.ignoreOrder = true
+          }
+          actions.replaceWebpackConfig(config)
+    }
+
+    if (getConfig().mode === 'production') {
         actions.setWebpackConfig({
-            module: {
-                rules: [
-                    {
-                        test: /\.html$/,
-                        loader: require.resolve('html-loader'),
-                        options: {
-                            minimize: false,
-                        },
-                    },
-                ],
-            },
-            optimization: {
-                splitChunks: false,
-                minimize: true,
-                minimizer: [
-                    new TerserPlugin({
-                        parallel: true,
-                    }),
-                ],
-            },
-            plugins: [plugins.provide({
-                Buffer: ['buffer/', 'Buffer'],
-            })]
+          devtool: false
         });
     }
 };

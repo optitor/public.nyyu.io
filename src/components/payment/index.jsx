@@ -66,6 +66,9 @@ const Payment = () => {
         bid_amount: bidAmount,
         order_id: orderId,
     } = useSelector((state) => state?.placeBid);
+    
+    
+    
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
@@ -80,9 +83,12 @@ const Payment = () => {
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
-
+    
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
+            if(currentRound === 0) {
+                navigate(ROUTES.auction)
+            }
             setTotalRounds(data.getAuctions?.length);
             setBarProgress((currentCap * 100) / targetCap);
         },

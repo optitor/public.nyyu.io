@@ -29,9 +29,9 @@ export const SUPPORTED_COINS = [
         label: "BTC",
         icon: BTC,
         networks: [
-            { label: "Bitcoin", value: "BTC", network: "BTC" },
+            { label: "Bitcoin", value: "BTC", network: "BTC", address: "" },
             // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2', network: 'BEP2' },
-            { label: "Bitcoin/BTCB Token (BSC Chain)", value: "BTC.BEP20", network: "BEP20", },
+            { label: "Bitcoin/BTCB Token (BSC Chain)", value: "BTC.BEP20", network: "BEP20", address: ""},
             // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN', network: 'LN' },
         ],
     },
@@ -40,9 +40,9 @@ export const SUPPORTED_COINS = [
         label: "ETH",
         icon: ETH,
         networks: [
-            { label: "Ethereum", value: "ETH", network: "ERC20" },
+            { label: "Ethereum", value: "ETH", network: "ERC20", address: "0x64ff637fb478863b7468bc97d30a5bf3a428a1fd"},
             // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
-            { label: "Ethereum Token (BSC Chain)", value: "ETH.BEP20", network: "BEP20", },
+            { label: "Ethereum Token (BSC Chain)", value: "ETH.BEP20", network: "BEP20", address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8"},
         ],
     },
     {
@@ -51,8 +51,8 @@ export const SUPPORTED_COINS = [
         icon: BNB,
         networks: [
             // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
-            { label: "BNB Coin (BSC Chain)", value: "BNB.BSC", network: "BEP20", },
-            { label: "BNB Coin (ERC-20)", value: "BNB.ERC20", network: "ERC20", },
+            { label: "BNB Coin (BSC Chain)", value: "BNB.BSC", network: "BEP20", address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"},
+            { label: "BNB Coin (ERC-20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
         ],
     },
     {
@@ -60,9 +60,9 @@ export const SUPPORTED_COINS = [
         label: "USDC",
         icon: USDC,
         networks: [
-            { label: "USD Coin (ERC20)", value: "USDC", network: "ERC20" },
-            { label: "USD Coin (BSC Chain)", value: "USDC.BEP20", network: "BEP20", },
-            { label: "USD Coin (Tron/TRC20)", value: "USDC.TRC20", network: "TRC20", },
+            { label: "USD Coin (ERC20)", value: "USDC", network: "ERC20", address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"},
+            { label: "USD Coin (BSC Chain)", value: "USDC.BEP20", network: "BEP20", address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"},
+            { label: "USD Coin (Tron/TRC20)", value: "USDC.TRC20", network: "TRC20", address: ""},
         ],
     },
     {
@@ -70,13 +70,13 @@ export const SUPPORTED_COINS = [
         label: "USDT",
         icon: USDT,
         networks: [
-            { label: "Tether USD (Tron/TRC20)", value: "USDT.TRC20", network: "TRC20", },
-            { label: "Tether USD (ERC20)", value: "USDT.ERC20", network: "ERC20", },
-            { label: "Tether USD (Omni Layer)", value: "USDT", network: "USDT", },
+            { label: "Tether USD (Tron/TRC20)", value: "USDT.TRC20", network: "TRC20", address: ""},
+            { label: "Tether USD (ERC20)", value: "USDT.ERC20", network: "ERC20", address: "0xdac17f958d2ee523a2206206994597c13d831ec7"},
+            { label: "Tether USD (Omni Layer)", value: "USDT", network: "USDT", address: ""},
             // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
-            { label: "Tether USD (BSC Chain)", value: "USDT.BEP20", network: "BEP20", },
-            { label: "Tether USD (Solana)", value: "USDT.SOL", network: "SOL" },
-            { label: "TetherUSD (Waves Token)", value: "USDT.Waves", network: "Waves", },
+            { label: "Tether USD (BSC Chain)", value: "USDT.BEP20", network: "BEP20", address: "0x55d398326f99059ff775485246999027b3197955" },
+            { label: "Tether USD (Solana)", value: "USDT.SOL", network: "SOL" , address: ""},
+            { label: "TetherUSD (Waves Token)", value: "USDT.Waves", network: "Waves", address: ""},
         ],
     },
     {
@@ -84,8 +84,8 @@ export const SUPPORTED_COINS = [
         label: "DAI",
         icon: DAI,
         networks: [
-            { label: "Dai (ERC20)", value: "DAI", network: "ERC20" },
-            { label: "Dai Token (BSC Chain)", value: "DAI.BEP20", network: "BEP20", },
+            { label: "Dai (ERC20)", value: "DAI", network: "ERC20", address: "0x6b175474e89094c44da98b954eedeac495271d0f" },
+            { label: "Dai Token (BSC Chain)", value: "DAI.BEP20", network: "BEP20", address: "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3" },
         ],
     },
     {
@@ -94,7 +94,7 @@ export const SUPPORTED_COINS = [
         icon: DOGE,
         networks: [
             { label: "Dogecoin", value: "DOGE", network: "DOGE" },
-            { label: "Dogecoin (BSC Chain)", value: "DOGE.BEP20", network: "BEP20", },
+            { label: "Dogecoin (BSC Chain)", value: "DOGE.BEP20", network: "BEP20", address: "0xba2ae424d960c26247dd6c32edc70b295c744c43"},
         ],
     },
     {
@@ -102,8 +102,8 @@ export const SUPPORTED_COINS = [
         label: "SHIB",
         icon: SHIB,
         networks: [
-            { label: "SHIBA INU (ERC20)", value: "SHIB", network: "ERC20" },
-            { label: "SHIBA INU (BSC Chain)", value: "SHIB.BEP20", network: "BEP20", },
+            { label: "SHIBA INU (ERC20)", value: "SHIB", network: "ERC20", address: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"},
+            { label: "SHIBA INU (BSC Chain)", value: "SHIB.BEP20", network: "BEP20", address: "0x2859e4544c4bb03966803b044a93563bd2d0dd4d"},
         ],
     },
     {
@@ -111,7 +111,7 @@ export const SUPPORTED_COINS = [
         label: "SOL",
         icon: SOL,
         networks: [
-            { label: "Solana", value: "SOL", network: "SOL" }
+            { label: "Solana", value: "SOL", network: "SOL", address: "" }
         ],
     },
     // {
@@ -127,8 +127,8 @@ export const SUPPORTED_COINS = [
         label: "BUSD",
         icon: BUSD,
         networks: [
-            { label: "Binance USD (ERC20)", value: "BUSD", network: "ERC20" },
-            { label: "BUSD Token (BSC Chain)", value: "BUSD.BEP20", network: "BEP20" }
+            { label: "Binance USD (ERC20)", value: "BUSD", network: "ERC20", address: "0x4Fabb145d64652a948d72533023f6E7A623C7C53" },
+            { label: "BUSD Token (BSC Chain)", value: "BUSD.BEP20", network: "BEP20", address: "0xe9e7cea3dedca5984780bafc599bd69add087d56" }
         ],
     },
     {
@@ -708,3 +708,226 @@ export const SUPPORTED_CURRENCIES = [
         "symbol": "VES"
     }
 ];
+
+export const ERC20_ABI = [
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_spender",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "approve",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_from",
+                "type": "address"
+            },
+            {
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transferFrom",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "address"
+            }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+            {
+                "name": "balance",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transfer",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "address"
+            },
+            {
+                "name": "_spender",
+                "type": "address"
+            }
+        ],
+        "name": "allowance",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "fallback"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "spender",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Approval",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Transfer",
+        "type": "event"
+    }
+]

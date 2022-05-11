@@ -36,18 +36,22 @@
     "echarts-for-react": "^3.0.2",
     "ethers": "^5.6.1",
     "fs": "^0.0.1-security",
-    "gatsby": "^4.6.0",
+    "gatsby": "^4.14.0",
     "gatsby-plugin-apollo": "^3.0.2",
     "gatsby-plugin-gatsby-cloud": "^4.1.0",
     "gatsby-plugin-google-fonts": "^1.0.1",
     "gatsby-plugin-image": "^2.1.0",
     "gatsby-plugin-manifest": "^4.1.0",
+    "gatsby-plugin-mdx": "^3.14.0",
+    "gatsby-plugin-no-sourcemaps": "^4.14.0",
     "gatsby-plugin-offline": "^5.1.0",
+    "gatsby-plugin-perf-budgets": "^0.0.18",
     "gatsby-plugin-react-helmet": "^5.1.0",
     "gatsby-plugin-sass": "^5.1.0",
     "gatsby-plugin-sharp": "^4.1.0",
     "gatsby-plugin-styled-components": "^5.4.0",
     "gatsby-plugin-use-query-params": "^1.0.1",
+    "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.27",
     "gatsby-source-filesystem": "^4.1.0",
     "gatsby-transformer-sharp": "^4.1.0",
     "glob": "^7.2.0",
@@ -61,7 +65,9 @@
     "jquery": "^3.6.0",
     "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",
+    "lmdb-store": "^1.6.14",
     "lodash": "^4.17.21",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "node-sass": "^6.0.1",
     "npx-languages": "^1.0.2",
     "path": "^0.12.7",
@@ -115,10 +121,12 @@
     "util": "^0.12.4",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
-    "wagmi": "^0.3.2"
+    "wagmi": "^0.3.2",
+    "web3": "^1.7.3"
   },
   "devDependencies": {
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "webpack": "^5.72.0"
   },
   "keywords": [
     "gatsby"
@@ -128,7 +136,7 @@
     "build": "set NODE_OPTIONS=--max-old-space-size=8192 && gatsby build",
     "develop": "gatsby develop --port 4000",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "gatsby develop",
+    "start": "set NODE_OPTIONS=--max-old-space-size=8192 && gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"

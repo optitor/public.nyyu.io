@@ -150,6 +150,27 @@ export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
             cryptoPrice
             fee
             deposited
+            amount
+        }
+    }
+`;
+
+export const GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER = gql`
+    query {
+        getBankWithdrawRequests {
+            id
+            userId
+            sourceToken
+            tokenPrice
+            tokenAmount
+            fee
+            targetCurrency
+            withdrawAmount
+            status
+            deniedReason
+            requestedAt
+            confirmedAt
+            holderName
         }
     }
 `;
