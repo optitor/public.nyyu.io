@@ -71,21 +71,25 @@ export const wallets = {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
         warn: "MetaMask is not supported by your Browser",
+        short: 'MetaMask Wallet'
     },
     walletConnect: {
         icon: WalletConnect,
         desc: "Scan with WalletConnect to connect",
         warn: "WalletConnect is not supported",
+        short: 'WalletConnect Wallet'
     },
     coinbaseWallet: {
         icon: Coinbase,
         desc: "Connect to your Coinbase Account",
         warn: "Coinbase Account is not supported",
+        short: 'CoinBase Wallet'
     },
     trustWallet: {
         icon: TrustWallet,
         desc: "Connect to your Trust wallet",
         warn: "Trust wallet is only supported on Mobile",
+        short: 'TrustWallet'
     },
 }
 

@@ -17,20 +17,19 @@ import TokenSelectModal from './token-select-modal';
 export default function PaymentExternalWalletTab() {
     const { round_id: currentRound, bid_amount: bidAmount, order_id: orderId } = useSelector((state) => state?.placeBid);
 
-    // wagmi hooks
+    // wagmi hook
     const { data: accountInfo } = useAccount();
     const { connect, connectors, error: connectError, isConnecting, pendingConnector } = useConnect();
     const { disconnect } = useDisconnect();
     
     // selected coin
+    // const [ loadingData, setLoadingData ] = useState(true);
     const [ isTokenModalOpen, setIsTokenModalOpen ] = useState(false);
     const [ tokenToPay, setTokenToPay ] = useState({});
     const onSelectToken = (token) => {
         // getting token price based on bid amount!
         setTokenToPay(token);
     }
-
-    const loadingData = false;
 
     const showTokenModal = () => {
         setIsTokenModalOpen(true);
@@ -40,10 +39,11 @@ export default function PaymentExternalWalletTab() {
         setIsTokenModalOpen(false);
     }
 
-    return (loadingData ? 
-            <div className="text-center">
-                <CustomSpinner/>
-            </div> : 
+    return (
+        // loadingData ? 
+        //     <div className="text-center">
+        //         <CustomSpinner/>
+        //     </div> : 
         <div className="row">
             <TokenSelectModal 
                 isTokenModalOpen={isTokenModalOpen}
@@ -145,6 +145,7 @@ export default function PaymentExternalWalletTab() {
                 </span>
             </p>
         </div>
-    </div>)
+        </div>
+    )
 
 }
