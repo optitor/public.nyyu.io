@@ -155,6 +155,10 @@ import accordionUpIcon from "../images/icons/accordion-up-icon.svg"
 import receiptQRCode from "../images/receipt-qr-code.svg"
 import sadFace from '../images/sadFace.svg'
 
+import letter_N from '../images/loading/N.svg';
+import letter_Y from '../images/loading/Y.svg';
+import letter_U from '../images/loading/U.svg';
+
 
 export const Logo = logo
 export const LogoDarkText = logoDarkText
@@ -305,3 +309,7 @@ export const AccordionDownIcon = accordionDownIcon
 export const AccordionUpIcon = accordionUpIcon
 export const ReceiptQRCode = receiptQRCode
 export const SadFace = sadFace
+
+export const Letter_N = letter_N
+export const Letter_Y = letter_Y
+export const Letter_U = letter_U
