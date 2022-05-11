@@ -379,7 +379,7 @@ export default function WithdrawTable() {
                         )}
                 </table>
             </div>
-            {list?.length > 3 && (
+            {list?.length > 5 && (
                 <div className="px-4">
                     <Pagination
                         activePage={activePage}
