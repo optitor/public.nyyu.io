@@ -54,7 +54,7 @@ export default function PaymentExternalWalletTab() {
                 accountInfo={accountInfo}
             />
             <>
-                {connectors.map((connector, idx) => (accountInfo && (accountInfo?.connector.name === connector.name)) ? (
+                {connectors?.map((connector, idx) => (accountInfo && (accountInfo?.connector.name === connector.name)) ? (
                     <div className="col-sm-6 mb-10px" key={idx}>
                         <div className="connected">
                             <img src={wallets[accountInfo.connector.id]?.icon} alt="wallet icon"/>
