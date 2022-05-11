@@ -171,3 +171,16 @@ export const CREATE_NEW_REFERENCE = gql`
         createNewReference
     }
 `
+
+export const RESET_GOOGLE_AUTH = gql`
+    mutation {
+        resetGoogleAuth
+    }
+`
+
+export const CONFIRM_GOOGLE_AUTH_RESET = gql`
+    mutation confirmGoogleAuthReset($code: String!) {
+        confirmGoogleAuthReset(code: $code)
+    }
+    
+`

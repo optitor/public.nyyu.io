@@ -27,6 +27,7 @@ import { ZENDESK_KEY } from "../utilities/staticData3";
 import { ZendeskURLWithJWT } from "../utilities/staticData";
 import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';
 import AlarmModal from "./admin/AlarmModal";
+import { RESET_GOOGLE_AUTH } from "../apollo/graphqls/mutations/Auth";
 
 const setting = {
     color: {
@@ -47,42 +48,11 @@ const setting = {
     },
 };
 
+const GOOGLE_AUTH_INDEX = 3;
+
 const FAQ = () => {
-    // Container
-    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
-    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false);
-    const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false);
-    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false);
-    const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false);
-    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false);
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
-    const [pending, setPending] = useState(false);
 
-    const [getZendeskJwtMutation] = useMutation(GET_ZENDESK_JWT, {
-        onCompleted: data => {
-            if(data.getZendeskJwt) {
-                const jwtToken = data.getZendeskJwt?.token;
-                window.location.assign(`${ZendeskURLWithJWT}${jwtToken}`);
-            }
-            setPending(false);
-        },
-        onError: err => {
-            console.log(err.message);
-            setPending(false);
-        }
-    });
-
-    const handleHelpCenter = () => {
-        setPending(true);
-        getZendeskJwtMutation();
-    };
-
-    const handleHelpCommunity = () => {
-        setPending(true);
-        getZendeskJwtMutation();
-    };
-
-    const selfServiceData = [
+    const [ selfServiceData, setSelfServiceData ] = useState([
         {
             id: 0,
             label: "Reset Password",
@@ -107,8 +77,11 @@ const FAQ = () => {
             id: 3,
             label: "Reset Google Authenticator",
             icon: SupportAuthenticator,
-            clickEvent: () => setIsResetAuthenticatorModalOpen(true),
-            disabled: true,
+            clickEvent: () => handleGoogleAuth(),
+            disabled: false,
+            error: 'Cannot Reset Google Authenticator',
+            hasError: false,
+            pending: false,
         },
         {
             id: 4,
@@ -141,7 +114,94 @@ const FAQ = () => {
                 link.click();
             },
         },
-    ];
+    ]);
+
+    // Container
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
+    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false);
+    const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false);
+    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false);
+    const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false);
+    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false);
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
+    const [pending, setPending] = useState(false);
+
+    const [ qrcode, setQRcode ] = useState("");
+
+    const [getZendeskJwtMutation] = useMutation(GET_ZENDESK_JWT, {
+        onCompleted: data => {
+            if(data.getZendeskJwt) {
+                const jwtToken = data.getZendeskJwt?.token;
+                window.location.assign(`${ZendeskURLWithJWT}${jwtToken}`);
+            }
+            setPending(false);
+        },
+        onError: err => {
+            console.log(err.message);
+            setPending(false);
+        }
+    });
+
+    const [ getGoogleAuthSecret ] = useMutation(RESET_GOOGLE_AUTH, {
+        onCompleted: data => {
+            setPending(false);
+            if(data.resetGoogleAuth) {
+                const filtered = selfServiceData
+                    .map(item => {
+                        if(item.id === GOOGLE_AUTH_INDEX) {
+                            item.hasError = false;
+                            item.pending = false;
+                        }
+                        return item;
+                });
+                setSelfServiceData(filtered);
+                setQRcode(data.resetGoogleAuth);
+                // open modal
+                setIsResetAuthenticatorModalOpen(true);
+            }
+        },
+        onError: err => {
+            setPending(false);
+            //set error
+            const filtered = selfServiceData
+                .map(item => {
+                    if(item.id === GOOGLE_AUTH_INDEX) {
+                        item.hasError = true;
+                        item.pending = false;
+                    }
+                    return item;
+            });
+            setSelfServiceData(filtered);
+        }
+    })
+
+    const handleGoogleAuth = () => {
+        // send google auth reset request
+        const filtered = selfServiceData
+            .map(item => {
+                if(item.id === GOOGLE_AUTH_INDEX) {
+                    item.hasError = true;
+                    item.pending = true;
+                }
+                return item;
+            });
+        setSelfServiceData(filtered);
+        getGoogleAuthSecret();
+    }
+
+    const openGoogleAuthModal = (secret) => {
+        
+    }
+
+    const handleHelpCenter = () => {
+        setPending(true);
+        getZendeskJwtMutation();
+    };
+
+    const handleHelpCommunity = () => {
+        setPending(true);
+        getZendeskJwtMutation();
+    };
 
     // Render
     return (
@@ -203,18 +263,21 @@ const FAQ = () => {
                                             ? "ps-lg-0 pe-lg-1 px-0"
                                             : "pe-lg-0 ps-lg-1 px-0"
                                             }`}
-                                        onClick={item.clickEvent}
-                                        disabled={item.disabled? true: false}
+                                        onClick={item?.clickEvent}
+                                        disabled={item?.disabled? true: false}
                                     >
+                                        
                                         <div
                                             className={`text-light border border-1 border-light text-center support-self-security-item col-12 ${item.id <= 5 && "mb-2"
                                                 }`}
                                         >
-                                            <img
-                                                src={item.icon}
+                                            {item?.pending ? <CustomSpinner /> : 
+                                            <><img
+                                                src={item?.icon}
                                                 alt="item figure"
                                             />
                                             <div>{item.label}</div>
+                                            {item?.hasError && <div className="error-message">{item?.error}</div>}</>}
                                         </div>
                                     </button>
                                 );
@@ -244,6 +307,7 @@ const FAQ = () => {
                     <ResetAuthenticatorModal
                         isOpen={isResetAuthenticatorModalOpen}
                         setIsOpen={setIsResetAuthenticatorModalOpen}
+                        secret={qrcode}
                     />
                     <DepositAssetModal
                         isOpen={isDepositAssetModalOpen}

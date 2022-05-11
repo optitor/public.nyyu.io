@@ -1,23 +1,59 @@
 import React from "react";
 import { useState } from "react";
 import Modal from "react-modal";
-
+import { useMutation } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+
+import { CONFIRM_GOOGLE_AUTH_RESET } from "../../apollo/graphqls/mutations/Auth";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { CloseIcon } from "../../utilities/imgImport";
+import { showSuccessAlarm, showFailAlarm } from "../admin/AlarmModal";
 
-export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
+export default function ResetAuthenticatorModal({ isOpen, setIsOpen, secret }) {
     const [sentCode, setSentCode] = useState("");
-    const [loading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error] = useState("");
+    
+    const resetModal = () => {
+        setSentCode(''); setLoading(false); setIsOpen(false);
+    }
+
+    const [ confirmResetGoogleAuth ] = useMutation(CONFIRM_GOOGLE_AUTH_RESET, {
+        onCompleted: data => {
+            if(data.confirmGoogleAuthReset === 'Success') {
+                showSuccessAlarm('Google Authenticator has been updated.');
+            } else {
+                // close modal
+                showFailAlarm('Cannot Reset Google Authenticator.')
+            }
+            resetModal();
+        },
+        onError: error => {
+            // show message and close modal
+            showFailAlarm('Cannot Reset Google Authenticator.')
+            resetModal();
+        }
+    })
+
+    const handleSubmit = (e) => {
+        e.stopPropagation();
+        setLoading(true);
+        confirmResetGoogleAuth({
+            variables: {
+                code: sentCode
+            }
+        });
+    }
+
     return (
         <Modal
             isOpen={isOpen}
             onRequestClose={() => setIsOpen(false)}
             className="support-modal border-0"
             overlayClassName="support-modal__overlay"
+            ariaHideApp={false}
         >
             <div className="support-modal__header justify-content-end">
                 <div
@@ -37,11 +73,15 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
             <div className="my-5">
                 <div className="text-center">
                     <p className="text-capitalize fs-30px fw-bold lh-36px">
-                        reset password
+                        Get codes from authenticator app
                     </p>
-                    <p className="fs-16px mt-2 text-light fw-normald">
-                        To secure your account, please complete the following
-                        verification
+                    <p className="fs-16px mt-2 text-light fw-normald mb-3">
+                        Scan the QR code below or mannually type the secret key into
+                                        your authenticator app.
+                    </p>
+                    <img src={secret} width={120} alt="qr code" />
+                    <p>
+                        <small className="fw-bold">123456xxxx</small>
                     </p>
                 </div>
 
@@ -50,17 +90,11 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
                         <div className="form-group">
                             <FormInput
                                 type="text"
-                                label="Email"
+                                label="Auth code"
                                 value={sentCode}
                                 onChange={(e) => setSentCode(e.target.value)}
                                 placeholder="Enter code"
                             />
-                            <div className="fs-12px">
-                                The code have been sent to email_address{" "}
-                                <span className="txt-green fw-500 cursor-pointer">
-                                    Resend
-                                </span>
-                            </div>
                         </div>
                         <div className="my-5">
                             {error && (
@@ -74,8 +108,8 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen }) {
                             <button
                                 type="submit"
                                 className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
-                                disabled={loading}
-                                // onClick={signUserIn}
+                                disabled={loading || sentCode === ''}
+                                onClick={handleSubmit}
                             >
                                 <div
                                     className={`${
