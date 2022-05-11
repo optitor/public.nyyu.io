@@ -9,7 +9,6 @@ import DressupHorizontalList from "./dressup-horizontal-list"
 import { hairColors } from './dressup-data';
 import { TabList, Tab } from 'react-tabs';
 
-
 export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAvatarItems}) {
     const avatarComponents = useSelector(state => state.avatarComponents);
     let { loaded, hairStyles, facialStyles, expressions, hats, others } = avatarComponents;
@@ -76,8 +75,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                         alt="close"
                     />
                 </div>
-            </div>
-            
+            </div>            
             <div className="row m-0 py-4 text-white">
                 <div className="col-sm-4">
                     <div className="row">

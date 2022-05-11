@@ -55,6 +55,7 @@ const App = () => {
                             <CreateEmail path="/create/email" />
                             <CreateToken path="/create/token" />
                             <CreateGeoLocation path="/create/geo-location" />
+                            <Loading path="/loading" />
                             <NotFound default />
                         </Router>
                     </Suspense>

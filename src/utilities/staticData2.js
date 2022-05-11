@@ -13,6 +13,15 @@ import {
     NDB,
 } from "./imgImport";
 
+export const Letter_N = `<svg width="147" height="122" viewBox="0 0 147 122" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.1601 0H134.439V12.1601H146.599V121.57H97.9896V24.3202H48.6405V121.57H0V12.1601H12.1601V0Z" fill="#1E1E1E"/>
+</svg>`
+export const Letter_Y = `<svg width="146" height="122" viewBox="0 0 146 122" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0.0310059 0H48.641V36.4803H60.801V48.6404H85.121V36.4803H97.281V0H145.922V48.61H133.762V60.7701H121.601V72.9302H97.281V121.571H48.641V72.9302H24.321V60.7701H12.16V48.61H0V0H0.0310059Z" fill="#1E1E1E"/>
+</svg>`
+export const Letter_U = `<svg width="147" height="122" viewBox="0 0 147 122" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M134.44 121.571H12.16V109.411H0V0H48.61V97.251H97.959V0H146.6V109.411H134.44V121.571Z" fill="#1E1E1E"/>
+</svg>`
 
 export const SUPPORTED_COINS = [
     {
