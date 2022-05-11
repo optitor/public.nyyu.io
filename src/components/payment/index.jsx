@@ -16,7 +16,7 @@ import {
     CryptoCoin,
     Paypal,
     Credit,
-    NdbWallet,
+    NyyuWalletPayment,
     ExternalWallet,
     PaypalBrand,
 } from "../../utilities/imgImport";
@@ -50,9 +50,9 @@ import { getCurrentMarketCap } from "../../utilities/utility-methods";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
-    { icon: Credit, value: "creditcard", label: "Credit / Debit card" },
+    { icon: Credit, value: "creditcard", label: "Credit / Debit Card" },
     { icon: Paypal, value: "paypal", label: "PayPal" },
-    { icon: NdbWallet, value: "ndb_wallet", label: "Ndb wallet" },
+    { icon: NyyuWalletPayment, value: "nyyu_wallet", label: "Nyyu Wallet" },
     {
         icon: ExternalWallet,
         value: "externalwallets",

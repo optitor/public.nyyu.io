@@ -96,6 +96,7 @@ import successImage from "./../images/success.svg"
 import cryptoCoin from "../images/payment/cryptocoin.svg"
 import credit from "../images/payment/credit.svg"
 import ndbWallet from "../images/payment/ndb-wallet.svg"
+import nyyuWalletPayment from "../images/payment/nyyu-wallet-payment.svg"
 import externalWallet from "../images/payment/external-wallet.svg"
 import paypal from "../images/payment/paypal.svg"
 import bidIcon from "../images/payment/bid.svg"
@@ -247,6 +248,7 @@ export const SuccesImage = successImage
 export const CryptoCoin = cryptoCoin
 export const Credit = credit
 export const NdbWallet = ndbWallet
+export const NyyuWalletPayment = nyyuWalletPayment
 export const ExternalWallet = externalWallet
 export const Paypal = paypal
 export const BidIcon = bidIcon

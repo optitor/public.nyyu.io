@@ -62,7 +62,7 @@ export default function DeleteAccountModal({
                     <>
                         <h4 className="title">Delete Account</h4>
                         <p className="content-text">
-                            To delete your account, please withdraw all your assets from NDB Wallet.
+                            To delete your account, please withdraw all your assets from Nyyu Wallet.
                             <br />
                             Please note deleting process is irreversible.
                         </p>

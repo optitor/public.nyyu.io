@@ -1,4 +1,5 @@
-import React from "react"
+import React from "react";
+import { NyyuWalletSelected } from "../../utilities/imgImport";
 
 const Loading = ({ position }) => {
     const style = position ? {
@@ -7,10 +8,18 @@ const Loading = ({ position }) => {
 
     return (
         <div style={style} className="lds-ellipsis">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+            <div className="symbol_div">
+                <div className="img_border">
+                    <img src={NyyuWalletSelected} alt='NDB' />
+                </div>
+            </div>
+            <div className="dots_div">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
     )
 }

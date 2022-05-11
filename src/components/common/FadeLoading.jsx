@@ -1,4 +1,5 @@
 import React from "react"
+import { NDB } from "../../utilities/imgImport"
 
 const Loading = ({ position }) => {
     const style = position
@@ -8,8 +9,14 @@ const Loading = ({ position }) => {
         : null
 
     return (
-        <div style={{ width: "100%", height: "100%", backgroundColor: "#1e1e1e80" }}>
-            <div style={style} className="lds-ellipsis">
+        <div style={style} className="lds-ellipsis">
+            <div className="symbol_div">
+                <div className="img_border">
+                    <img src={NDB} alt='NDB' />
+                </div>
+            </div>
+            <div className="dots_div">
+                <div></div>
                 <div></div>
                 <div></div>
                 <div></div>
