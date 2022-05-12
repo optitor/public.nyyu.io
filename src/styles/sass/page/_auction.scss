@@ -169,7 +169,7 @@
             position: relative;
             border-left: 2px solid #464646;
             @include mq("tablet", max) {
-                display: none;
+                border-left: none;
             }
 
             #switch_btns {
@@ -185,10 +185,12 @@
             }
 
             .place-bid {
-                display: none;
                 margin: 58px 50px;
-                @include mq("tablet") {
-                    display: block;
+                @include mq('laptop', max) {
+                    margin: 58px 0;
+                }
+                @include mq('tablet', max) {
+                    margin: 20px 0;
                 }
             }
             .chart-area {
@@ -317,6 +319,16 @@
     margin: 0 auto;
     padding: 31px 41px;
     border: 1px solid #464646;
+    div.title {
+        font-size: 30px;
+        line-height: 30px;
+        @include mq('laptop-md', max) {
+            font-size: 20px;
+        }
+        @include mq('phone', max) {
+            font-size: 16px;
+        }
+    }
     // max-width: 683px;
     @include mq("tablet", max) {
         padding: 19px 12px;
@@ -422,7 +434,6 @@
 .presale-total-input {
     width: 100%;
     padding: 8px 10px;
-    margin-right: 18px;
     background: #1e1e1e;
     border: 1px solid #ffffff;
     font-weight: bold;
@@ -430,7 +441,6 @@
     text-align: center;
     font-size: 30px;
     line-height: 37px;
-    margin-left: 18px;
 }
 
 .destination_wallet {
@@ -481,7 +491,15 @@
 }
 
 .wallet_content {
-    height: 250px;
+    min-height: 250px;
+    .col-lg-6 {
+        @include mq('tablet', max) {
+            width: 50%;
+        }
+        @include mq('phone', max) {
+            width: 100%;
+        }
+    }
     .external_wallet {
         height: 112px;
         display: flex;

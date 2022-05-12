@@ -80,7 +80,7 @@ const Auction = () => {
                                 </div>
                             </div>
                             <AuctionRoundDetails/>
-                            {optCurrentRound?.status !== 3 && (
+                            {isAuction && optCurrentRound?.status !== 3 && (
                                 <>
                                     <div className="d-block d-sm-none">
                                         <div
@@ -98,7 +98,10 @@ const Auction = () => {
                         </div>
 
                         <div className="auction-right col-lg-8 col-md-7">
-                            {isAuction ? <AuctionPlaceBid/> : <PresalePlaceOrder/>}
+                            {isAuction ?
+                                <div className="d-none d-sm-block"><AuctionPlaceBid/></div>
+                                : <PresalePlaceOrder/>
+                            }
                         </div>
                     </div>
                 </section>
