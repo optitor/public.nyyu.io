@@ -24,14 +24,12 @@ export default function PresalePlaceOrderHome() {
         <>
             <h3 className="range-label">amount of token</h3>
             <div className="d-flex align-items-center mb-4">
-                <input
-                    type="number"
+                <NumberFormat className="range-input"
                     value={amount}
-                    onChange={(e) =>
-                        setAmount(e.target.value ? e.target.value : 1)
-                    }
-                    className="range-input"
-                    min={1}
+                    onValueChange={values => setAmount(values.value)}
+                    isAllowed={({ floatValue }) => floatValue >= 1}
+                    thousandSeparator={true}
+                    allowNegative={false}
                 />
                 <Slider
                     value={amount}
@@ -42,8 +40,8 @@ export default function PresalePlaceOrderHome() {
                 />
             </div>
             <div className="row">
-                <div className="col-md-4"><div className="range-label mt-15px">Total price</div></div>
-                <div className="col-md-8">
+                <div className="col-lg-4"><div className="range-label mt-15px">Total price</div></div>
+                <div className="col-lg-8">
                     <div className="w-100 d-flex justify-content-between align-items-center">
                         <div className="w-100 d-flex flex-column justify-content-center align-items-end">
                             <NumberFormat
@@ -55,7 +53,7 @@ export default function PresalePlaceOrderHome() {
                                 renderText={(value, props) => <span {...props}>{value}</span>}
                             />
                         </div>
-                        <h3 className="symbol-label mt-10px">{currency.label}</h3>
+                        <h3 className="symbol-label mt-10px ml-7px">{currency.label}</h3>
                     </div>
                 </div>
             </div>

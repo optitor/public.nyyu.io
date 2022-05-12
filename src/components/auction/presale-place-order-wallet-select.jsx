@@ -20,7 +20,6 @@ import { NyyuWallet, NyyuWalletSelected } from "../../utilities/imgImport";
 import { useAccount, useConnect } from "wagmi"
 
 export default function PresalePlaceOrderWalletSelect() {
-
     // wagmi connect
     const { connect, connectors } = useConnect();
     const { data: accountInfo } = useAccount();
@@ -85,9 +84,9 @@ export default function PresalePlaceOrderWalletSelect() {
 
     return (
         <div className="my-30px mx-40px">
-            <div className="w-100 d-flex justify-content-center align-items-center position-relative text-white fw-700 fs-30px">
+            <div className="w-100 d-flex justify-content-center align-items-center position-relative text-white fw-700 title">
                 SELECT DESTINATION WALLET
-                <div className="position-absolute top-0px left-0px">
+                <div className="position-absolute top-0px left-0px fs-30px">
                     <FontAwesomeIcon
                         icon={faArrowLeft}
                         className="left-arrow cursor-pointer text-light"
@@ -101,7 +100,7 @@ export default function PresalePlaceOrderWalletSelect() {
                     <>
                         <div className="row">
                             {connectors?.map((connector, idx) => (accountInfo && (accountInfo?.connector.name === connector.name)) ? (
-                                <div className="col-sm-6 mb-10px" key={idx}>
+                                <div className="col-lg-6 mb-10px" key={idx}>
                                     <div className="presale-connected external_wallet">
                                         <img src={wallets[accountInfo.connector.id]?.icon} alt="wallet icon" className="wallet-icon"/>
                                         <p>{shortFormatAddr(accountInfo.address)}</p>
@@ -109,7 +108,7 @@ export default function PresalePlaceOrderWalletSelect() {
                                 </div>
                             ) : ( 
                             <div
-                                className="col-sm-6"
+                                className="col-lg-6"
                                 key={idx}
                                 role="presentation"
                                 onClick={() => connect(connector)}
@@ -123,7 +122,7 @@ export default function PresalePlaceOrderWalletSelect() {
                     </>
                     :
                     <div className="row">
-                        <div className="col-sm-6">
+                        <div className="col-lg-6 mt-2">
                             <div className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
                                 onClick={() => setSelectedWallet("internal")}
                             >
@@ -150,7 +149,7 @@ export default function PresalePlaceOrderWalletSelect() {
                                 </h4>
                             </div>
                         </div>
-                        <div className="col-sm-6">
+                        <div className="col-lg-6 mt-2">
                             <div className={`destination_wallet`}
                                 onClick={() => setSelectedWallet("external")}
                             >
