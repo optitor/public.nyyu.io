@@ -20,7 +20,6 @@ import { NyyuWallet, NyyuWalletSelected } from "../../utilities/imgImport";
 import { useAccount, useConnect } from "wagmi"
 
 export default function PresalePlaceOrderWalletSelect() {
-
     // wagmi connect
     const { connect, connectors } = useConnect();
     const { data: accountInfo } = useAccount();
