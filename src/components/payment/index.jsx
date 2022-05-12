@@ -67,8 +67,6 @@ const Payment = () => {
         order_id: orderId,
     } = useSelector((state) => state?.placeBid);
     
-    
-    
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
     const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
