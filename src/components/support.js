@@ -189,19 +189,15 @@ const FAQ = () => {
         getGoogleAuthSecret();
     }
 
-    const openGoogleAuthModal = (secret) => {
-        
-    }
-
     const handleHelpCenter = () => {
         setPending(true);
         getZendeskJwtMutation();
     };
 
-    const handleHelpCommunity = () => {
-        setPending(true);
-        getZendeskJwtMutation();
-    };
+    // const handleHelpCommunity = () => {
+    //     setPending(true);
+    //     getZendeskJwtMutation();
+    // };
 
     // Render
     return (
@@ -241,6 +237,7 @@ const FAQ = () => {
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 href='https://help.nyyu.io/hc/en-gb/community/topics'
                                 target='_blank'
+                                rel="noreferrer"
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
                                     <div className="fw-bold text-uppercase support-banner-title">

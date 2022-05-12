@@ -46,6 +46,14 @@ export default function WithdrawTable() {
                         ? setSortType(down)
                         : setSortType(up)
                 }
+                onKeyDown={() =>
+                    sortType === down
+                        ? setSortType(up)
+                        : sortType === up
+                        ? setSortType(down)
+                        : setSortType(up)
+                }
+                role="tab"
             >
                 <div>{title}</div>
                 <div
@@ -144,7 +152,7 @@ export default function WithdrawTable() {
 
         if (sortType === "fee_up")
             return setList(list.sort((item2, item1) => item2.fee - item1.fee));
-    }, [sortType]);
+    }, [sortType, currentWithdrawType, list]);
 
     // Render
     return (
