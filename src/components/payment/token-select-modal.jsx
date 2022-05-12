@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import Select, { components } from "react-select";
 import { useQuery, useMutation } from '@apollo/client';
 import { useSendTransaction, useNetwork  } from 'wagmi';
-import _, { toInteger } from "lodash";
+import _ from "lodash";
 import { CircularProgress } from '@mui/material';
 import Web3 from 'web3';
 import { BigNumber } from 'ethers';
@@ -136,6 +136,36 @@ export default function TokenSelectModal({
         }
     );
 
+    const [ createChargeForAuction ] = useMutation(
+        Mutation.CREATE_CRYPTO_PAYMENT,{
+            onCompleted: async (data) => {
+                if(data.createCryptoPaymentForAuction) {
+                    const resData = data.createCryptoPaymentForAuction;
+
+                    const weiUnit = 100000000;
+                    let _payAmount = resData?.cryptoAmount * weiUnit;
+                    const payamount = _payAmount * 10000000000;
+
+                    try {
+                        const result = await sendTransactionAsync({
+                            request: {
+                                to: resData?.depositAddress,
+                                value: BigNumber.from(_.toInteger(payamount))
+                            }
+                        });
+                        console.log(result);
+                        await navigate(ROUTES.auction); 
+                    } catch (error) {
+                        setPending(false);
+                    }
+                }
+            },
+            onError: (err) => {
+
+            }
+        }
+    )
+
     const confirmToPay = async () => {
         // check chainId with selected network
         if(network && network.network === 'ERC20' && activeChain.id !== 1) {
@@ -148,19 +178,35 @@ export default function TokenSelectModal({
             closeModal();
         }
         setPending(true);
-        const createdData = {
-            presaleId: currentRound,
-            orderId,
-            amount: bidAmount,
-            cryptoType: selectedCoin.value,
-            network: network.network,
-            coin: network.value,
-            cryptoAmount: coinQuantity
+        
+        // checking auction or presale
+        if(orderId === 0) {
+            // auction
+            const createdData = {
+                roundId: currentRound,
+                amount: coinQuantity,
+                cryptoType: selectedCoin.value,
+                network: network.network,
+                coin: network.value
+            }
+            createChargeForAuction({
+                variables: {...createdData}
+            });
+        } else {
+            const createdData = {
+                presaleId: currentRound,
+                orderId,
+                amount: bidAmount,
+                cryptoType: selectedCoin.value,
+                network: network.network,
+                coin: network.value,
+                cryptoAmount: coinQuantity
+            }
+            createChargeForPresale({
+                variables: {...createdData},
+            });
         }
-        console.log(createdData);
-        createChargeForPresale({
-            variables: {...createdData},
-        });
+        
     }
     
     const onChangeNetwork = async (v) => {
