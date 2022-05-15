@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import { passwordValidatorOptions } from "../../utilities/staticData"
 import PasswordEyeIcon from "../common/password-eye-icon"
+import Seo from '../seo';
 
 const ForgetPassword = () => {
     // Containers
@@ -52,6 +53,8 @@ const ForgetPassword = () => {
     if (resetPasswordResults?.data?.resetPassword === "Success") navigate(ROUTES.signIn)
     if (loading) return <Loading />
     return (
+    <>
+        <Seo title='Change Password' />
         <AuthLayout>
             <h3 className="signup-head mb-4">Change password</h3>
             <form className="form">
@@ -125,6 +128,7 @@ const ForgetPassword = () => {
                 </div>
             </form>
         </AuthLayout>
+    </>
     )
 }
 

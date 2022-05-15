@@ -32,6 +32,32 @@ export const CREATE_CRYPTO_PAYMENT = gql`
     }
 `;
 
+export const CRYPTO_CHARGE_FOR_PRESALE = gql`
+    mutation CreateChargeForPresale(
+        $presaleId: Int!,
+        $orderId: Int!,
+        $amount: Float!,
+        $coin: String!,
+        $network: String!,
+        $cryptoType: String!,
+        $cryptoAmount: Float!
+    ) {
+        createChargeForPresale(
+            presaleId: $presaleId
+            orderId: $orderId
+            amount: $amount
+            coin: $coin
+            network: $network
+            cryptoType: $cryptoType
+            cryptoAmount: $cryptoAmount
+        ) {
+            id,
+            depositAddress
+            cryptoAmount
+        }
+    }
+`;
+
 export const GET_DEPOSIT_ADDRESS = gql`
     mutation GetDepositAddress($currency: String!) {
         getDepositAddress(currency: $currency)

@@ -5,14 +5,14 @@ main.admin-users-page {
         }
     }
     .container {
-        max-height: 80vh;
+        height: calc(100vh - 100px);;
         overflow: auto;
         @include mq("laptop-wide", max) {
             max-width: 95%;
         }
         @include mq("phone", max) {
             max-width: 100%;
-            max-height: unset;
+            height: unset;
         }
         
         .row {

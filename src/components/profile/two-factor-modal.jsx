@@ -12,7 +12,6 @@ import {
 import CustomSpinner from "../common/custom-spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-
 import "react-phone-number-input/style.css";
 import ConnectMobile from "./connect-mobile";
 

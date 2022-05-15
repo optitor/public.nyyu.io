@@ -12,6 +12,7 @@ import { ROUTES } from "../../utilities/routes"
 import PrivacyPolicy from "../verify-identity/privacy-policy"
 import languages from "../../assets/lang/languages.json"
 import SelectLang from "../verify-identity/select-lang"
+import Seo from '../seo';
 
 const Verifier = ({ isFirst }) => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
@@ -100,6 +101,8 @@ const VerifyCompany = () => {
     }, [])
 
     return (
+    <>
+        <Seo title='Verify Company' />
         <main className="verify-company">
             <SimpleHeader />
             <section>
@@ -247,6 +250,7 @@ const VerifyCompany = () => {
                 {step !== -1 && <img src={Trees} alt="trees" className="trees-img w-100" />}
             </section>
         </main>
+    </>
     )
 }
 

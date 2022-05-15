@@ -219,6 +219,11 @@
             height: 47px;
         }
     }
+    #select_currency_in_profile {
+        input {
+            position: absolute!important;
+        }
+    }
 }
 
 .chat-modal {
@@ -283,4 +288,8 @@
     @include mq("phone") {
         font-size: 30px;
     }
+}
+
+.error-message {
+    color: rgb(218, 1, 1);
 }

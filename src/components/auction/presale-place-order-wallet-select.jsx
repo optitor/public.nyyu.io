@@ -12,23 +12,23 @@ import { PLACE_PRESALE_ORDER } from "../../apollo/graphqls/mutations/Bid"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import CustomSpinner from "../common/custom-spinner"
 import { CheckBox } from "../common/FormControl"
-import { externalWallets, NDB_WALLET_TOOLTIP_CONTENT, EXTERNAL_WALLET_TOOLTIP_CONTENT } from "../../utilities/staticData"
+import { wallets, NDB_WALLET_TOOLTIP_CONTENT, EXTERNAL_WALLET_TOOLTIP_CONTENT } from "../../utilities/staticData"
 import { ROUTES } from "../../utilities/routes"
-import { validURL } from "../../utilities/string"
 import { setPresaleOrderId } from '../../redux/actions/bidAction' 
 import { NyyuWallet, NyyuWalletSelected } from "../../utilities/imgImport";
+import { useAccount, useConnect } from "wagmi"
 
 export default function PresalePlaceOrderWalletSelect() {
+    // wagmi connect
+    const { connect, connectors } = useConnect();
+    const { data: accountInfo } = useAccount();
+
     const auction = useAuction()
     const dispatch = useDispatch()
     const { setPresalePlaceOrderStage, optCurrentRound, presaleNdbAmount } = auction
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
     const [selectedWallet, setSelectedWallet] = useState(null)
-    const [externalWallet, setExternalWallet] = useState(null)
-    const [externalUrl, setExternalUrl] = useState("")
-    const [urlError, setUrlError] = useState(null)
-
 
     const [placePresaleOrderMutation] = useMutation(PLACE_PRESALE_ORDER, {
         onCompleted: data => {
@@ -46,10 +46,6 @@ export default function PresalePlaceOrderWalletSelect() {
     })
 
     const handlePresale = () => {
-        if (selectedWallet === 'external' && !validURL(externalUrl)) {
-            setUrlError(true)
-            return
-        }
         setReqPending(true)
         setError("")
         placePresaleOrderMutation({
@@ -57,7 +53,7 @@ export default function PresalePlaceOrderWalletSelect() {
                 presaleId: optCurrentRound?.id,
                 ndbAmount: presaleNdbAmount,
                 destination: selectedWallet === 'external' ? 2 : 1,
-                extAddr: selectedWallet === 2 ? externalUrl : ""
+                extAddr: selectedWallet === 'external' ? accountInfo?.address : ""
             },
         })
         dispatch(setBidInfo(Number(optCurrentRound?.tokenPrice * presaleNdbAmount)))
@@ -67,17 +63,20 @@ export default function PresalePlaceOrderWalletSelect() {
     const handlePrevious = () => {
         if(selectedWallet === 'external') {
             setSelectedWallet(null);
-            setExternalWallet(null)
             return;
         }
         setPresalePlaceOrderStage(0);
     }
 
+    const shortFormatAddr = (addr) => {
+        return addr.substring(0, 6) + "..." + addr.substring(addr.length - 4);
+    }
+
     return (
         <div className="my-30px mx-40px">
-            <div className="w-100 d-flex justify-content-center align-items-center position-relative text-white fw-700 fs-30px">
+            <div className="w-100 d-flex justify-content-center align-items-center position-relative text-white fw-700 title">
                 SELECT DESTINATION WALLET
-                <div className="position-absolute top-0px left-0px">
+                <div className="position-absolute top-0px left-0px fs-30px">
                     <FontAwesomeIcon
                         icon={faArrowLeft}
                         className="left-arrow cursor-pointer text-light"
@@ -90,37 +89,34 @@ export default function PresalePlaceOrderWalletSelect() {
                 {selectedWallet === 'external'?
                     <>
                         <div className="row">
-                            {externalWallets.map((item, key) => (
-                                <div
-                                    className="col-sm-6"
-                                    key={key}
-                                    role="presentation"
-                                >
-                                    <div className={`external_wallet ${externalWallet === item.value? 'selected_wallet': ''}`}
-                                        onClick={() => setExternalWallet(item.value)}
-                                    >
-                                        <img src={item.icon} alt="wallet icon" className="wallet-icon" />
-                                        <p className="mt-1">{item.title}</p>
+                            {connectors?.map((connector, idx) => (accountInfo && (accountInfo?.connector.name === connector.name)) ? (
+                                <div className="col-lg-6 mb-10px" key={idx}>
+                                    <div className="presale-connected external_wallet">
+                                        <img src={wallets[accountInfo.connector.id]?.icon} alt="wallet icon" className="wallet-icon"/>
+                                        <p>{shortFormatAddr(accountInfo.address)}</p>
                                     </div>
                                 </div>
-                            ))}
+                            ) : ( 
+                            <div
+                                className="col-lg-6"
+                                key={idx}
+                                role="presentation"
+                                onClick={() => connect(connector)}
+                            >
+                                <div className={`wallet-item  external_wallet ${!connector.ready && "inactive"}`}>
+                                    <img src={wallets[connector.id]?.icon} alt="wallet icon" className="wallet-icon"/>
+                                    <p>{connector.ready ? wallets[connector.id]?.short : "Not supported"}</p>
+                                </div>
+                            </div>))}
                         </div>
-                        {/* <div className="w-100 d-flex align-items-center mt-10px">
-                            <span>External Wallet Address</span>
-                            <input
-                                type="text"
-                                value={externalUrl}
-                                onChange={(e) => setExternalUrl(e.target.value)}
-                                className={`url-input ${externalUrl && urlError ? "url-error-input" : ""}`}
-                                placeholder="Please place external address"
-                            />
-                        </div> */}
                     </>
                     :
                     <div className="row">
-                        <div className="col-sm-6">
+                        <div className="col-lg-6 mt-2">
                             <div className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
+                                role="button"
                                 onClick={() => setSelectedWallet("internal")}
+                                onKeyDown={() => setSelectedWallet("inernal")}
                             >
                                 <div className="d-flex justify-content-end wallet_header">
                                     <span data-tip='tooltip' data-for='ndb_wallet_tooltip'>
@@ -145,8 +141,10 @@ export default function PresalePlaceOrderWalletSelect() {
                                 </h4>
                             </div>
                         </div>
-                        <div className="col-sm-6">
+                        <div className="col-lg-6 mt-2">
                             <div className={`destination_wallet`}
+                                role="button"
+                                onKeyDown={() => setSelectedWallet("external")}
                                 onClick={() => setSelectedWallet("external")}
                             >
                                 <div className="d-flex justify-content-end wallet_header">

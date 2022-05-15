@@ -96,6 +96,7 @@ import successImage from "./../images/success.svg"
 import cryptoCoin from "../images/payment/cryptocoin.svg"
 import credit from "../images/payment/credit.svg"
 import ndbWallet from "../images/payment/ndb-wallet.svg"
+import nyyuWalletPayment from "../images/payment/nyyu-wallet-payment.svg"
 import externalWallet from "../images/payment/external-wallet.svg"
 import paypal from "../images/payment/paypal.svg"
 import bidIcon from "../images/payment/bid.svg"
@@ -153,6 +154,10 @@ import accordionUpIcon from "../images/icons/accordion-up-icon.svg"
 
 import receiptQRCode from "../images/receipt-qr-code.svg"
 import sadFace from '../images/sadFace.svg'
+
+import letter_N from '../images/loading/N.svg';
+import letter_Y from '../images/loading/Y.svg';
+import letter_U from '../images/loading/U.svg';
 
 
 export const Logo = logo
@@ -247,6 +252,7 @@ export const SuccesImage = successImage
 export const CryptoCoin = cryptoCoin
 export const Credit = credit
 export const NdbWallet = ndbWallet
+export const NyyuWalletPayment = nyyuWalletPayment
 export const ExternalWallet = externalWallet
 export const Paypal = paypal
 export const BidIcon = bidIcon
@@ -303,3 +309,7 @@ export const AccordionDownIcon = accordionDownIcon
 export const AccordionUpIcon = accordionUpIcon
 export const ReceiptQRCode = receiptQRCode
 export const SadFace = sadFace
+
+export const Letter_N = letter_N
+export const Letter_Y = letter_Y
+export const Letter_U = letter_U

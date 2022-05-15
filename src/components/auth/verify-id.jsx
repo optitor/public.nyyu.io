@@ -9,6 +9,7 @@ import VerificationProvider from "../verify-identity/verification-context";
 import { getShuftiStatusByReference } from "../../utilities/utility-methods";
 import { navigate } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
+import Seo from '../seo';
 
 const VerificationPage = () => {
     // Containers
@@ -53,17 +54,20 @@ const VerificationPage = () => {
     if (loadingData) return <Loading />;
     else
         return (
-            <main className="verify-page">
-                <SimpleHeader />
-                <section className="d-flex justify-content-center align-items-start align-items-xl-center">
-                    <VerificationProvider>
-                        <VerificationSwitch
-                            shuftReferencePayload={shuftiStatus}
-                            userEmail={userEmail}
-                        />
-                    </VerificationProvider>
-                </section>
-            </main>
+            <>
+                <Seo title='Verify ID' />
+                <main className="verify-page">
+                    <SimpleHeader />
+                    <section className="d-flex justify-content-center align-items-start align-items-xl-center">
+                        <VerificationProvider>
+                            <VerificationSwitch
+                                shuftReferencePayload={shuftiStatus}
+                                userEmail={userEmail}
+                            />
+                        </VerificationProvider>
+                    </section>
+                </main>
+            </>
         );
 };
 

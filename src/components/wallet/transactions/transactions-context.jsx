@@ -10,6 +10,7 @@ import {
     GET_PAYPAL_WITHDRAW_TRANSACTIONS,
     GET_CRYPTO_WITHDRAW_BY_USER,
     GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER,
+    GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER
 } from "./queries";
 
 export const TransactionsContext = React.createContext();
@@ -43,20 +44,17 @@ const TransactionsProvider = ({ children }) => {
     // Containers
     const [currentTab, setCurrentTab] = useState(0);
 
-    const [paypalDepositTransactions, setPaypalDepositTransactions] =
-        useState(null);
-    const [paypalWithdrawTransactions, setPaypalWithdrawTransactions] =
-        useState(null);
+    const [paypalDepositTransactions, setPaypalDepositTransactions] = useState(null);
+    const [paypalWithdrawTransactions, setPaypalWithdrawTransactions] = useState(null);
 
-    const [coinDepositTransactions, setCoinDepositTransactions] =
-        useState(null);
-    const [coinWithdrawTransactions, setCoinWithdrawTransactions] =
-        useState(null);
+    const [coinDepositTransactions, setCoinDepositTransactions] = useState(null);
+    const [coinWithdrawTransactions, setCoinWithdrawTransactions] = useState(null);
 
-    const [stripeDepositTransactions, setStripeDepositTransactions] =
-        useState(null);
-    const [bankDepositTransactions, setBankDepositTransactions] =
-        useState(null);
+    const [stripeDepositTransactions, setStripeDepositTransactions] = useState(null);
+    
+    const [bankDepositTransactions, setBankDepositTransactions] = useState(null);
+    const [ bankWithdrawTransactions, setBankWithdrawTransactions ] = useState(null);
+    
     const [bidList, setBidList] = useState(null);
     const [presaleList, setPresaleList] = useState(null);
     const loading = !(
@@ -66,10 +64,11 @@ const TransactionsProvider = ({ children }) => {
         coinWithdrawTransactions &&
         stripeDepositTransactions &&
         bankDepositTransactions &&
+        bankWithdrawTransactions &&
         bidList &&
         presaleList
     );
-    const itemsCountPerPage = 3;
+    const itemsCountPerPage = 5;
 
     // Methods
     const createDateFromDate = (createdTime) => {
@@ -108,9 +107,11 @@ const TransactionsProvider = ({ children }) => {
                         fee: item.fee,
                         status: item.status,
                         amount: item.fiatAmount,
+                        deposited: item.deposited,
                         type: "Paypal Deposit",
                         paymentId: item.paypalOrderId,
                         asset: item.fiatType,
+                        cryptoAsset: item.cryptoType
                     };
                 });
 
@@ -154,9 +155,11 @@ const TransactionsProvider = ({ children }) => {
                         fee: item.fee,
                         status: item.status,
                         amount: item.amount,
+                        deposited: item.deposited,
                         type: "Credit Card Deposit",
                         paymentId: item.paymentIntentId,
                         asset: "USD",
+                        cryptoAsset: item.cryptoType
                     };
                 });
             setStripeDepositTransactions(fooList);
@@ -175,16 +178,20 @@ const TransactionsProvider = ({ children }) => {
                         time: createTimeFromDate(createdTime),
                         fee: item.fee,
                         status: item.status,
-                        amount: item.deposited,
+                        amount: item.amount,
+                        deposited: item.deposited,
                         type: "Bank Deposit",
-                        paymentId: "---",
-                        asset: item.cryptoType,
+                        paymentId: item.uid,
+                        asset: item.fiatType,
+                        cryptoAsset: item.cryptoType
                     };
                 });
             setBankDepositTransactions(fooList);
         },
         onError: (error) => console.log(error),
     });
+
+
 
     useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
@@ -230,6 +237,26 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
+
+    useQuery(GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER, {
+        onCompleted: (data) => {
+            const list = _.orderBy(data.getBankWithdrawRequests, ['confirmedAt'], ['desc'])
+                .map(item => {
+                    const createdTime = new Date(item.requestedAt);
+                    return {
+                        id: item.id,
+                        date: createDateFromDate(createdTime),
+                        time: createTimeFromDate(createdTime),
+                        fee: item.fee,
+                        status: item.status,
+                        asset: item.sourceToken,
+                        amount: item.withdrawAmount,
+                        type: 'Bank Withdraw',
+                    }
+                })
+            setBankWithdrawTransactions(list);
+        }
+    })
 
     useQuery(GET_BID_LIST_BY_USER, {
         onCompleted: (data) => {
@@ -280,6 +307,7 @@ const TransactionsProvider = ({ children }) => {
         stripeDepositTransactions,
         paypalWithdrawTransactions,
         bankDepositTransactions,
+        bankWithdrawTransactions,
         bidList,
         presaleList,
         itemsCountPerPage,

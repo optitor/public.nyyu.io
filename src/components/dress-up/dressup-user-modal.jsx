@@ -8,6 +8,7 @@ import { DressupData } from "../../utilities/dressup-data"
 import { CloseIcon, EmptyAvatar } from "../../utilities/imgImport"
 import DressupHorizontalList from "./dressup-user-horizontal-list"
 import { hairColors } from "./dressup-data"
+import { Tab, TabList } from "react-tabs";
 
 const init = {
     hairStyles: { index: 0, updatable: false },
@@ -16,7 +17,7 @@ const init = {
     hats: { index: 0, updatable: false },
     others: { index: 0, updatable: false },
     hairColors: { index: 0, updatable: false },
-}
+};
 
 export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const avatarComponents = useSelector((state) => state.avatarComponents)
@@ -78,7 +79,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const closeModal = () => {
         setState(init)
         setIsModalOpen(false)
-    }
+    };
 
     const selectedHairColor =  state.hairColors?.index ?? 0
     const selectedHairStyle = state.hairStyles?.index ?? 0
@@ -93,15 +94,6 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
         state.expressions?.updatable &&
         state.hats?.updatable &&
         state.others?.updatable
-
-    // console.log(
-    //     state.hairStyles?.updatable,
-    //     state.hairColors?.updatable,
-    //     state.facialStyles?.updatable,
-    //     state.expressions?.updatable,
-    //     state.hats?.updatable,
-    //     state.others?.updatable
-    // )
 
     return (
         <Modal
@@ -187,30 +179,47 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                 )}
                             </div>
                         </div>
-
-                        <div className="dress-up-modal-sections-list">
-                            {DressupData.tabs.map((item) => (
-                                <div
-                                    onClick={() => setSelectedTab(item.index)}
-                                    onKeyDown={() => setSelectedTab(item.index)}
-                                    role="presentation"
-                                    key={item.index}
-                                    className={`${item.index === selectedTab && "active"}`}
+                        <div className="d-none d-sm-block">
+                            <div className="dress-up-modal-sections-list">
+                                {DressupData.tabs.map((item) => (
+                                    <div
+                                        onClick={() => setSelectedTab(item.index)}
+                                        onKeyDown={() => setSelectedTab(item.index)}
+                                        role="presentation"
+                                        key={item.index}
+                                        className={`${item.index === selectedTab && "active"}`}
+                                    >
+                                        {item.title}
+                                    </div>
+                                ))}
+                            </div>
+                            <div>
+                                <button
+                                    className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase ${
+                                        !saveButtonActive && "btn-secondary"
+                                    } ms-4`}
+                                    onClick={saveAvatarItems}
+                                    disabled={!saveButtonActive}
                                 >
-                                    {item.title}
-                                </div>
-                            ))}
+                                    save
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button
-                                className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase ${
-                                    !saveButtonActive && "btn-secondary"
-                                } ms-4`}
-                                onClick={saveAvatarItems}
-                                disabled={!saveButtonActive}
-                            >
-                                save
-                            </button>
+                        <div className="d-block d-sm-none">
+                            <TabList>
+                                {DressupData.tabs.map(item => (
+                                    <Tab
+                                        onClick={() => setSelectedTab(item.index)}
+                                        onKeyDown={() => setSelectedTab(item.index)}
+                                        key={item.index}
+                                        selected={selectedTab === item.index}
+                                    >
+                                        <div className="pt-3">
+                                            {item.title}
+                                        </div>
+                                    </Tab>
+                                ))}
+                            </TabList>
                         </div>
                     </div>
                 </div>
@@ -277,6 +286,17 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                             />
                         </div>
                     )}
+                    <div className="d-block d-sm-none">
+                        <button
+                            className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase w-100 mt-4 ${
+                                !saveButtonActive && "btn-secondary"
+                            }`}
+                            onClick={saveAvatarItems}
+                            disabled={!saveButtonActive}
+                        >
+                            save
+                        </button>
+                    </div>
                 </div>
             </div>
         </Modal>

@@ -68,6 +68,7 @@ export default function NotificationRecent() {
             },
         });
     };
+    
     if (loadingSection)
         return (
             <div className="d-flex justify-content-center mt-5">
@@ -110,9 +111,17 @@ export default function NotificationRecent() {
                     )}
                 </div>
                 <div className="row">
-                    <div className="col-9">
+                    <div className="col-md-3 justify-content-center align-items-end text-end mt-3 d-block d-md-none">
+                        <button
+                            onClick={setNotificationReadFlagAll}
+                            className="btn text-white text-decoration-underline fs-6"
+                        >
+                            Mark as all read
+                        </button>
+                    </div>
+                    <div className="col-md-9">
                         {NTList.length && (
-                            <div>
+                            <div className="my-2 d-flex justify-content-center justify-content-md-start">
                                 <Pagination
                                     activePage={activePage}
                                     itemsCountPerPage={itemsCountPerPage}
@@ -125,7 +134,7 @@ export default function NotificationRecent() {
                             </div>
                         )}
                     </div>
-                    <div className="col-3 justify-content-center align-items-end text-end mt-3">
+                    <div className="col-md-3 justify-content-center align-items-end text-end mt-3 d-none d-md-block">
                         <button
                             onClick={setNotificationReadFlagAll}
                             className="btn text-white text-decoration-underline fs-6"
@@ -136,4 +145,4 @@ export default function NotificationRecent() {
                 </div>
             </>
         );
-}
+};

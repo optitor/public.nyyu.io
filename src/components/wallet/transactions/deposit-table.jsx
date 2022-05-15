@@ -14,6 +14,7 @@ const depositOptions = [
     { value: "paypal", label: "Paypal" },
     { value: "crypto", label: "Crypto" },
     { value: "credit_card", label: "Credit Card" },
+    { value: 'standard_bank_transfer', label: 'Bank Transfer' }
 ];
 
 export default function DepositTable() {
@@ -50,6 +51,14 @@ export default function DepositTable() {
                         ? setSortType(down)
                         : setSortType(up)
                 }
+                onKeyDown={() =>
+                    sortType === down
+                        ? setSortType(up)
+                        : sortType === up
+                        ? setSortType(down)
+                        : setSortType(up)
+                }
+                role="tab"
             >
                 <div>{title}</div>
                 <div
@@ -113,8 +122,8 @@ export default function DepositTable() {
         if (type.value === "paypal") setList(paypalDepositTransactions);
         if (type.value === "crypto") setList(coinDepositTransactions);
         if (type.value === "credit_card") setList(stripeDepositTransactions);
-        // if (type.value === "standard_bank_transfer")
-        //     setList(bankDepositTransactions);
+        if (type.value === "standard_bank_transfer")
+            setList(bankDepositTransactions);
     };
     useEffect(() => {
         if (sortType === null) return changeDepositType(currentDepositType);
@@ -210,11 +219,13 @@ export default function DepositTable() {
                                 date,
                                 time,
                                 amount,
+                                deposited,
                                 asset,
                                 fee,
                                 status,
                                 type,
                                 paymentId,
+                                cryptoAsset
                             }) => (
                                 <>
                                     <tr
@@ -238,10 +249,11 @@ export default function DepositTable() {
                                                 {currentDepositType.value === 'credit_card' && (amount / 100).toFixed(2) + ' ' + asset}
                                                 {currentDepositType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
                                                 {currentDepositType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
+                                                {currentDepositType.value === 'standard_bank_transfer' && (amount).toFixed(2) + ' ' + (asset === null ? 'USD': asset)}
                                             </div>
                                         </td>
                                         <td className="text-end pe-5 pe-sm-0 white-space-nowrap">
-                                            {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + asset}
+                                            {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + "USDT"}
                                         </td>
                                         <td className="d-flex align-items-center justify-content-end">
                                             <div
@@ -254,7 +266,7 @@ export default function DepositTable() {
                                             <div>
                                                 {status
                                                     ? "Completed"
-                                                    : "Failed"}
+                                                    : "Pending"}
                                             </div>
                                             <button className="btn text-light border-0">
                                                 {id === currentRowOpen ? (
@@ -296,14 +308,25 @@ export default function DepositTable() {
                                                             {currentDepositType.value === 'credit_card' && (amount / 100).toFixed(2) + ' ' + asset}
                                                             {currentDepositType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
                                                             {currentDepositType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
+                                                            {currentDepositType.value === 'standard_bank_transfer' && (amount).toFixed(2) + ' ' + (asset === null ? 'USD': asset)}
                                                         </span>
                                                     </div>
+                                                    {currentDepositType.value !== 'crypto' && <div>
+                                                        <span className="text-secondary pe-1">
+                                                            deposited:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {currentDepositType.value === 'credit_card' && (deposited).toFixed(2) + ' ' + asset}
+                                                            {currentDepositType.value === 'paypal' && Number(deposited).toFixed(2) + ' ' + (cryptoAsset === null ? 'USDT': cryptoAsset)}
+                                                            {currentDepositType.value === 'standard_bank_transfer' && (deposited).toFixed(2) + ' ' + (cryptoAsset === null ? 'USDT': cryptoAsset)}
+                                                        </span>
+                                                    </div>}
                                                     <div>
                                                         <span className="text-secondary pe-1">
                                                             fee:
                                                         </span>
                                                         <span className="fw-500">
-                                                            {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + asset}
+                                                            {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + "USDT"}
                                                         </span>
                                                     </div>
                                                     <div>
@@ -350,7 +373,7 @@ export default function DepositTable() {
                                                         <span className="fw-500">
                                                             {status
                                                                 ? "Success"
-                                                                : "Failed"}
+                                                                : "Pending"}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -386,7 +409,7 @@ export default function DepositTable() {
                         )}
                 </table>
             </div>
-            {list?.length > 3 && (
+            {list?.length > 5 && (
                 <div className="px-4">
                     <Pagination
                         activePage={activePage}
