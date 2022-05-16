@@ -18,7 +18,7 @@ const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
 const REFRESH_TIME = 30;
 
 const Asset = ({ item }) => {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
     const precision = 8;
@@ -52,7 +52,7 @@ const Asset = ({ item }) => {
 };
 
 export default function InternalWallet() {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
 

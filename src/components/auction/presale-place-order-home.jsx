@@ -6,7 +6,7 @@ import { useAuction } from "../../providers/auction-context"
 
 
 export default function PresalePlaceOrderHome() {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
 

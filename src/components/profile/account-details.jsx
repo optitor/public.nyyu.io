@@ -19,7 +19,7 @@ export default function AccountDetails({
     const [isChangeEmailModalOpen, setIsChangeEmailModalOpen] = useState(false);
     const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
 
-    const savedCurrency = useSelector(state => state.placeBid.currency); 
+    const savedCurrency = useSelector(state => state.favAssets.currency); 
 
     // Render
     return (
