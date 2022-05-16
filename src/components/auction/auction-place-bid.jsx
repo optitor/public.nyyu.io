@@ -13,7 +13,7 @@ import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid"
 const initialMaxPrice = 100
 
 export default function AuctionPlaceBid() {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
 

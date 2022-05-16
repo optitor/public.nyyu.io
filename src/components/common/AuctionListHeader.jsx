@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { GreenCup } from "../../utilities/imgImport"
 
 const AuctionListHeader = ({ totalCount, auctionType, auctionTitle }) => {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
 
     return (
         <div className="w-100 row border-bottom-scorpion py-8px px-12px">

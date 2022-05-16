@@ -6,7 +6,7 @@ import { numberWithLength } from "../../utilities/number"
 import PercentageBar from "./percentage-bar"
 
 export default function AuctionRoundDetails() {
-    const currency = useSelector(state => state.placeBid.currency)
+    const currency = useSelector(state => state.favAssets.currency)
     const currencyRates = useSelector(state => state.currencyRates)
     const currencyRate = currencyRates[currency.value] ?? 1
 

@@ -709,6 +709,8 @@ export const SUPPORTED_CURRENCIES = [
     }
 ];
 
+export const Currencies = (SUPPORTED_CURRENCIES.map(item => ({label: item.symbol, value: item.symbol, sign: item.sign})));
+
 export const ERC20_ABI = [
     {
         "constant": true,

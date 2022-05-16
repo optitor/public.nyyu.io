@@ -4,7 +4,7 @@ import { useAuction } from "../../providers/auction-context"
 import { floatWithCommas } from "../../utilities/number"
 
 const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult, isCurrentUser }) => {
-    const currency = useSelector(state => state.placeBid.currency)
+    const currency = useSelector(state => state.favAssets.currency)
     const currencyRates = useSelector(state => state.currencyRates)
     const { isAuction } = useAuction()
 
