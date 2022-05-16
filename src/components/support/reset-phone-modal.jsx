@@ -56,7 +56,7 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
                                 placeholder="Enter code"
                             />
                             <div className="fs-12px">
-                                The code have been sent to email_address{" "}
+                                The code has been sent to email_address{" "}
                                 <span className="txt-green fw-500 cursor-pointer">
                                     Resend
                                 </span>
