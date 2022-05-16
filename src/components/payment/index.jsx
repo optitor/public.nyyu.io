@@ -26,7 +26,7 @@ import CoinPaymentsTab from "./CoinPaymentsTab";
 import OrderSummary from "./order-summary";
 import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
 import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
-import { set_All_Fees } from "../../redux/actions/allFeesAction";
+import { set_All_Fees } from "../../redux/actions/settingAction";
 import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
 import NDBWalletTab from "./NDBWalletTab";
 import PaymentExternalWalletTab from "./payment-external-wallet-tab";

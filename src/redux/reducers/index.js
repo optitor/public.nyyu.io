@@ -8,6 +8,7 @@ import { dataReducer } from './dataReducer';
 import { kycSettingsReducer } from "./settingReducer";
 import { allFeesReducer } from "./allFeesReducer";
 import { tempReducer, profileTabReducer } from './tempReducer';
+import { favorAssetsReducer } from "./settingReducer";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
     allFees: allFeesReducer,
     profileTab: profileTabReducer,
     currencyRates: currencyRatesReducer,
+    favAssets: favorAssetsReducer,
 });
 
 export default rootReducer;
