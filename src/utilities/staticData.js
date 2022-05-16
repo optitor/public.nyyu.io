@@ -501,6 +501,11 @@ export const navigationLinks = [
         url: "https://watt.green/",
         active: false
     },
+    {
+        label: "Charenji",
+        url: "https://charenji.me/",
+        active: false
+    },
 ]
 
 export const footerLinks = [
