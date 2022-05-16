@@ -207,8 +207,6 @@ export default function MarketTab() {
         SHIB: {symbol: 'SHIB'},
         LTC: {symbol: 'LTC'},
         ADA: {symbol: 'ADA'},
-
-
         CAKE: {symbol: 'CAKE'},
     };
 
@@ -267,7 +265,7 @@ export default function MarketTab() {
     // console.log(loading)
     const set_SortOption = sortName => {
         setSortOption({[sortName]: (sortOption[sortName] === 'desc'? 'asc': 'desc')});
-    }
+    };
     
     return (
         <table className="wallet-transaction-table">
