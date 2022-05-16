@@ -137,7 +137,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                         placeholder="Enter code"
                                     />
                                     <div className="fs-12px">
-                                        The code have been sent to {censorEmail(user.email)}{" "}
+                                        The code has been sent to {censorEmail(user.email)}{" "}
                                         <span className="txt-green fw-500 cursor-pointer">
                                             Resend
                                         </span>
