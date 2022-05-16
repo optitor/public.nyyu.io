@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
@@ -206,3 +207,213 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
         </Modal>
     );
 }
+=======
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useMutation } from "@apollo/client";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import validator from "validator";
+import Modal from "react-modal";
+import { FORGOT_PASSWORD, RESET_PASSWORD } from "../../apollo/graphqls/mutations/Auth";
+import { CloseIcon } from "../../utilities/imgImport";
+import { passwordValidatorOptions } from "../../utilities/staticData";
+import CustomSpinner from "../common/custom-spinner";
+import { FormInput } from "../common/FormControl";
+import { censorEmail } from "../../utilities/string";
+import { showSuccessAlarm, showFailAlarm } from "../admin/AlarmModal";
+
+
+export default function ResetPasswordModal({ isOpen, setIsOpen }) {
+    const { user } = useSelector(state => state.auth);
+    // Webservice
+    const [forgotPassword] = useMutation(FORGOT_PASSWORD, {
+        onCompleted: (res) => {
+            setForgotPasswordSent(true);
+        },
+    });
+    const [resetPassword] = useMutation(RESET_PASSWORD, {
+        onCompleted: (res) => {
+            setPendingRequest(false);
+            setIsOpen(false);
+            if(res.resetPassword === 'Success') {
+                showSuccessAlarm('Password reset successfully');
+            } else {
+                showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
+            }
+        },
+        onError: err => {
+            showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
+            setIsOpen(false);
+        }
+    });
+
+    // Containers
+    const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
+    const [error, setError] = useState("");
+    const loading = !user.email && !forgotPasswordSent;
+    const [pendingRequest, setPendingRequest] = useState(false);
+    const [sentCode, setSentCode] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
+    // Methods
+    const censorWord = (str) => str[0] + "*".repeat(3) + str.slice(-1);
+
+    const submit = (e) => {
+        e.preventDefault();
+        setError("");
+        setPendingRequest(false);
+        let error = false;
+        if (!sentCode) {
+            setError("Please enter the code!");
+            return (error = true);
+        }
+        if (!newPassword || !validator.isStrongPassword(newPassword, passwordValidatorOptions)) {
+            setError(
+                "Password must contain at least 8 characters, including UPPER/lowercase and numbers!"
+            );
+            return (error = true);
+        }
+        if (!confirmNewPassword || newPassword !== confirmNewPassword) {
+            setError("Password doest not match it's repeat!");
+            return (error = true);
+        }
+        if (!error) {
+            setPendingRequest(true);
+
+            resetPassword({
+                variables: {
+                    email: user.email,
+                    code: sentCode,
+                    newPassword: newPassword,
+                },
+            });
+        }
+    };
+    useEffect(() => {
+        if (user.email) {
+            forgotPassword({
+                variables: {
+                    email: user.email,
+                },
+            });
+        }
+    }, [user.email, forgotPassword]);
+
+    // Render
+    return (
+        <Modal
+            isOpen={isOpen}
+            onRequestClose={() => setIsOpen(false)}
+            className="support-modal border-0"
+            overlayClassName="support-modal__overlay"
+        >
+            <div className="support-modal__header justify-content-end">
+                <div
+                    onClick={() => setIsOpen(false)}
+                    onKeyDown={() => setIsOpen(false)}
+                    role="button"
+                    tabIndex="0"
+                >
+                    <img width="14px" height="14px" src={CloseIcon} alt="close" />
+                </div>
+            </div>
+            <div className="my-5">
+                {loading ? (
+                    <div className="text-center">
+                        <CustomSpinner />
+                    </div>
+                ) : (
+                    <div>
+                        <div className="text-center">
+                            <p className="text-capitalize fs-30px fw-bold lh-36px">
+                                reset password
+                            </p>
+                            <p className="fs-16px mt-2 text-light fw-normald">
+                                To secure your account, please complete the following verification
+                            </p>
+                        </div>
+
+                        <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light my-5">
+                            <form action="form">
+                                <div className="form-group">
+                                    <FormInput
+                                        type="text"
+                                        label="Code"
+                                        value={sentCode}
+                                        onChange={(e) => setSentCode(e.target.value)}
+                                        placeholder="Enter code"
+                                    />
+                                    <div className="fs-12px">
+                                        The code has been sent to {censorEmail(user.email)}{" "}
+                                        <span className="txt-green fw-500 cursor-pointer">
+                                            Resend
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="form-group mt-3">
+                                    <FormInput
+                                        type={showPassword ? "text" : "password"}
+                                        label="New password"
+                                        placeholder="Enter new password"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <FormInput
+                                        type={showPassword ? "text" : "password"}
+                                        label="Confirm new password"
+                                        placeholder="Confirm new password"
+                                        value={confirmNewPassword}
+                                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                    />
+                                </div>
+                                <label className="d-flex align-items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        value={showPassword}
+                                        className="form-check-input bg-transparent border mt-0"
+                                        onChange={() => setShowPassword(!showPassword)}
+                                    />
+                                    <div className="keep-me-signed-in-text">Show password</div>
+                                </label>
+                                <div className="mb-5 mt-4">
+                                    {error && (
+                                        <span className="errorsapn">
+                                            <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                        </span>
+                                    )}
+                                    <button
+                                        type="submit"
+                                        className="btn btn-outline-light rounded-0 w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
+                                        disabled={pendingRequest}
+                                        onClick={submit}
+                                    >
+                                        <div
+                                            className={`${
+                                                pendingRequest ? "opacity-1" : "opacity-0"
+                                            }`}
+                                        >
+                                            <CustomSpinner />
+                                        </div>
+                                        <div
+                                            className={`fs-20px ${
+                                                pendingRequest ? "ms-3" : "pe-4"
+                                            }`}
+                                        >
+                                            submit
+                                        </div>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </Modal>
+    );
+}
+>>>>>>> 34e88146a677b222e9639614901f57f31dbf7ba3
