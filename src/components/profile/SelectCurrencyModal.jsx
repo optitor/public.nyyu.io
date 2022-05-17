@@ -110,6 +110,7 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
                 </div>
                 <button className="btn btn-outline-light rounded-0 w-50 mt-50px mb-5 fw-bold" style={{height: 47}}
                     onClick={selectCurrency}
+                    disabled={pending}
                 >
                     {pending? <CustomSpinner />: 'CONFIRM'}
                 </button>
