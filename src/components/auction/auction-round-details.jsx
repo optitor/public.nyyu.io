@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 
 import { useAuction } from "../../providers/auction-context"
-import { numberWithLength } from "../../utilities/number"
+import { numberWithLength, renderNumberFormat } from "../../utilities/number"
 import PercentageBar from "./percentage-bar"
 
 export default function AuctionRoundDetails() {
@@ -62,10 +62,7 @@ export default function AuctionRoundDetails() {
                         {isAuction ? "Reserved Price" : "Token Price"}{" "}
                     </p>
                     <p className="value">
-                        {Number((isAuction ? optCurrentRound?.minPrice : optCurrentRound?.tokenPrice) * currencyRate).toFixed(3)}
-                        <span className="txt-green ms-1">
-                            {currency.label}
-                        </span>
+                        {renderNumberFormat(Number((isAuction ? optCurrentRound?.minPrice : optCurrentRound?.tokenPrice) * currencyRate).toFixed(4), currency.label)}
                     </p>
                 </div>
                 <div>
