@@ -99,10 +99,10 @@ export default function AuctionPlaceBid() {
     return (
         <>
             {optCurrentRound?.status === 3 ? (
-                <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
+                <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center vh-85">
                     round is over
                 </div>
-            ) : optCurrentRound?.status === 1 ? <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
+            ) : optCurrentRound?.status === 1 ? <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center vh-85">
                 countdown
             </div> : !auction.currentRoundBidList ? (
                 <></>
