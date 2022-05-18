@@ -127,11 +127,11 @@ const Profile = () => {
         const config = !!getSecurityStatus(method);
 
         let available = true;
-        if (method === "phone") {
-            if (twoStep.includes("app")) available = false;
-        } else if (method === "app") {
-            if (twoStep.includes("phone")) available = false;
-        }
+        // if (method === "phone") {
+        //     if (twoStep.includes("app")) available = false;
+        // } else if (method === "app") {
+        //     if (twoStep.includes("phone")) available = false;
+        // }
 
         return (
             <>
