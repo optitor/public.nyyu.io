@@ -16,6 +16,17 @@ import { showSuccessAlarm, showFailAlarm } from "../admin/AlarmModal";
 
 export default function ResetPasswordModal({ isOpen, setIsOpen }) {
     const { user } = useSelector(state => state.auth);
+    
+    // Containers
+    const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
+    const [error, setError] = useState("");
+    const loading = !user.email && !forgotPasswordSent;
+    const [pendingRequest, setPendingRequest] = useState(false);
+    const [sentCode, setSentCode] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    
     // Webservice
     const [forgotPassword] = useMutation(FORGOT_PASSWORD, {
         onCompleted: (res) => {
@@ -28,25 +39,15 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
             setIsOpen(false);
             if(res.resetPassword === 'Success') {
                 showSuccessAlarm('Password reset successfully');
-            } else {
-                showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
+            }
+            else {
+                setError("Unknown error occurred in server.");
             }
         },
         onError: err => {
-            showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
-            setIsOpen(false);
+            setError(err.message);
         }
     });
-
-    // Containers
-    const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
-    const [error, setError] = useState("");
-    const loading = !user.email && !forgotPasswordSent;
-    const [pendingRequest, setPendingRequest] = useState(false);
-    const [sentCode, setSentCode] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
 
     // Methods
     const censorWord = (str) => str[0] + "*".repeat(3) + str.slice(-1);
@@ -137,7 +138,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                         placeholder="Enter code"
                                     />
                                     <div className="fs-12px">
-                                        The code have been sent to {censorEmail(user.email)}{" "}
+                                        The code has been sent to {censorEmail(user.email)}{" "}
                                         <span className="txt-green fw-500 cursor-pointer">
                                             Resend
                                         </span>

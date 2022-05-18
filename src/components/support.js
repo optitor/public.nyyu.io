@@ -28,6 +28,7 @@ import { ZendeskURLWithJWT } from "../utilities/staticData";
 import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';
 import AlarmModal from "./admin/AlarmModal";
 import { RESET_GOOGLE_AUTH } from "../apollo/graphqls/mutations/Auth";
+import { UNKNOWN_MEMO_RECOVERY } from "../apollo/graphqls/mutations/Support";
 
 const setting = {
     color: {
@@ -71,7 +72,7 @@ const FAQ = () => {
             label: "Reset Phone Security Verification",
             icon: SupportSecurity,
             clickEvent: () => setIsResetPhoneModalOpen(true),
-            disabled: true,
+            disabled: false,
         },
         {
             id: 3,
@@ -88,14 +89,14 @@ const FAQ = () => {
             label: "Deposit Non Credit Asset Recovery",
             icon: SupportRecovery,
             clickEvent: () => setIsDepositAssetModalOpen(true),
-            disabled: true,
+            disabled: false,
         },
         {
             id: 5,
             label: "Deposit Missing Or Wrong Tag/Memo Asset Recovery",
             icon: SupportTag,
             clickEvent: () => setIsDepositMissingModalOpen(true),
-            disabled: true,
+            disabled: false,
         },
         {
             id: 6,
@@ -189,19 +190,15 @@ const FAQ = () => {
         getGoogleAuthSecret();
     }
 
-    const openGoogleAuthModal = (secret) => {
-        
-    }
-
     const handleHelpCenter = () => {
         setPending(true);
         getZendeskJwtMutation();
     };
 
-    const handleHelpCommunity = () => {
-        setPending(true);
-        getZendeskJwtMutation();
-    };
+    // const handleHelpCommunity = () => {
+    //     setPending(true);
+    //     getZendeskJwtMutation();
+    // };
 
     // Render
     return (
@@ -241,6 +238,7 @@ const FAQ = () => {
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 href='https://help.nyyu.io/hc/en-gb/community/topics'
                                 target='_blank'
+                                rel="noreferrer"
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
                                     <div className="fw-bold text-uppercase support-banner-title">
@@ -300,19 +298,19 @@ const FAQ = () => {
                         isOpen={isUnlockAccountModalOpen}
                         setIsOpen={setIsUnlockAccountModalOpen}
                     />
-                    <ResetPhoneModal
+                    {isResetPhoneModalOpen && <ResetPhoneModal
                         isOpen={isResetPhoneModalOpen}
                         setIsOpen={setIsResetPhoneModalOpen}
-                    />
+                    />}
                     <ResetAuthenticatorModal
                         isOpen={isResetAuthenticatorModalOpen}
                         setIsOpen={setIsResetAuthenticatorModalOpen}
                         secret={qrcode}
                     />
-                    <DepositAssetModal
+                    {isDepositAssetModalOpen && <DepositAssetModal
                         isOpen={isDepositAssetModalOpen}
                         setIsOpen={setIsDepositAssetModalOpen}
-                    />
+                    />}
                     <DepositMissingModal
                         isOpen={isDepositMissingModalOpen}
                         setIsOpen={setIsDepositMissingModalOpen}

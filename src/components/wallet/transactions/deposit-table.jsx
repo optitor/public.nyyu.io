@@ -51,6 +51,14 @@ export default function DepositTable() {
                         ? setSortType(down)
                         : setSortType(up)
                 }
+                onKeyDown={() =>
+                    sortType === down
+                        ? setSortType(up)
+                        : sortType === up
+                        ? setSortType(down)
+                        : setSortType(up)
+                }
+                role="tab"
             >
                 <div>{title}</div>
                 <div

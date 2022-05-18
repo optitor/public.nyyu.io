@@ -7,10 +7,45 @@ import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { CloseIcon } from "../../utilities/imgImport";
+import { useMutation } from "@apollo/client";
+import * as Mutation from '../../apollo/graphqls/mutations/Support';
+import { showSuccessAlarm } from "../admin/AlarmModal";
 
 export default function DepositMissingModal({ isOpen, setIsOpen }) {
-    const [loading] = useState(false);
-    const [error] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    // payload
+    const [ payload, setPayload ] = useState({});
+
+    const [unknownMemoRecovery] = useMutation(
+        Mutation.UNKNOWN_MEMO_RECOVERY, {
+            onCompleted: data => {
+                if(data.unknownMemoRecovery === 'Success') {
+                    showSuccessAlarm('Your request has been sent.');
+                    setIsOpen(false);
+                } else {
+                    setError('Cannot send your request.');
+                }
+                setLoading(false);
+            },
+            onError: err => {
+                setError(err.message);
+                setLoading(false);
+            }
+        }
+    )
+
+    const handleSubmit = () => {
+        setLoading(true);
+        unknownMemoRecovery({
+            variables: {
+                ...payload,
+                depositAmount: Number(payload.depositAmount)
+            }
+        })
+    }
+
     return (
         <Modal
             isOpen={isOpen}
@@ -50,6 +85,10 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                                 type="text"
                                 label="Coin"
                                 placeholder="Choose your deposit coin"
+                                value={payload.coin || ""}
+                                onChange={e => {
+                                    setPayload({...payload, coin: e.target.value})
+                                }}
                             />
                         </div>
                         <div className="form-group">
@@ -57,6 +96,10 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                                 type="text"
                                 label="Deposit Amount"
                                 placeholder="Input your deposit amount"
+                                value={payload.depositAmount || ''}
+                                onChange={e => {
+                                    setPayload({...payload, depositAmount: e.target.value})
+                                }}
                             />
                         </div>
                         <div className="form-group">
@@ -64,6 +107,10 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                                 type="text"
                                 label="TxID/TxHash"
                                 placeholder="Enter your TxID/TxHash"
+                                value={payload.txId || ''}
+                                onChange={e => {
+                                    setPayload({...payload, txId: e.target.value})
+                                }}
                             />
                             <div className="fst-italic fw-normal text-light fs-12px my-3">
                                 Please note that in order to maximize the
@@ -84,7 +131,7 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                                 type="submit"
                                 className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
                                 disabled={loading}
-                                // onClick={signUserIn}
+                                onClick={handleSubmit}
                             >
                                 <div
                                     className={`${

@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import Select, { components } from "react-select";
 import { useQuery, useMutation } from '@apollo/client';
 import { useSendTransaction, useNetwork  } from 'wagmi';
-import _, { toInteger } from "lodash";
+import _ from "lodash";
 import { CircularProgress } from '@mui/material';
 import Web3 from 'web3';
 import { BigNumber } from 'ethers';
@@ -13,11 +13,10 @@ import NumberFormat from 'react-number-format';
 
 import { roundNumber } from '../../utilities/number';
 import { QUOTE, TICKER_24hr } from './data';
-import { SUPPORTED_COINS, ERC20_ABI } from '../../utilities/staticData2';
+import { ERC20_ABI } from '../../utilities/staticData2';
 import { CloseIcon } from '../../utilities/imgImport';
 import * as Query from './../../apollo/graphqls/querys/Payment';
 import * as Mutation from './../../apollo/graphqls/mutations/Payment';
-import CustomSpinner from '../common/custom-spinner';
 import { ROUTES } from '../../utilities/routes';
 import { navigate } from 'gatsby';
 
@@ -45,7 +44,9 @@ const SelectOption = (props) => {
 export default function TokenSelectModal({
     isTokenModalOpen,
     closeModal,
-    accountInfo
+    accountInfo,
+    SUPPORTED_COINS,
+    defaultNetwork,
 }) {  
     // load from redux
     const { round_id: currentRound, bid_amount: bidAmount, order_id: orderId } = useSelector((state) => state?.placeBid);
@@ -53,19 +54,16 @@ export default function TokenSelectModal({
     const { activeChain, switchNetworkAsync } = useNetwork();
     const [ supportedCoins, setSupportedCoins ] = useState([]);
     const [ selectedCoin, setSelectedCoin ] = useState({}); 
-    const [ network, setNetwork ] = useState("");
+    const [ network, setNetwork ] = useState(defaultNetwork);
     const [ sufficient, setSufficient ] = useState(true);
     const [ balance, setBalance ] = useState(0);
-    const [ depositAddress, setDepositAddress ] = useState("");
-    const [ paymentId, setPaymentId ] = useState("");
-    const [coinQuantity, setCoinQuantity] = useState(0);
-    const [ pending, setPending ] = useState(false);
+    const [ coinQuantity, setCoinQuantity ] = useState(0);
+    const [ pending, setPending ] = useState(true);
     const [ BTCPrice, setBTCPrice ] = useState(null);
-    const networks = useMemo(() => selectedCoin.networks, [selectedCoin]);
-    let loadingData = _.isEmpty(supportedCoins);
+    const networks = useMemo(() => selectedCoin?.networks, [selectedCoin]);
     
-    const { data: recipient, isSuccess, sendTransactionAsync } = useSendTransaction();
-    
+    const { sendTransactionAsync } = useSendTransaction();
+
     useQuery(Query.GET_EXCHANGE_RATE, {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
@@ -84,10 +82,9 @@ export default function TokenSelectModal({
                 setSelectedCoin(coins[0]);
 
                 setNetwork(null);
-                setDepositAddress("");
-                setPaymentId(null);
                 setBalance(0);
                 setSufficient(true);
+                setPending(false);
             }
         },
         onError: (err) => {
@@ -111,9 +108,6 @@ export default function TokenSelectModal({
             onCompleted: async (data) => {
                 if (data.createChargeForPresale) {
                     const resData = data.createChargeForPresale;
-
-                    setDepositAddress(resData?.depositAddress);
-                    setPaymentId(resData?.id);
 
                     // transfer funds to deposit address
                     const weiUnit = 100000000;
@@ -142,6 +136,36 @@ export default function TokenSelectModal({
         }
     );
 
+    const [ createChargeForAuction ] = useMutation(
+        Mutation.CREATE_CRYPTO_PAYMENT,{
+            onCompleted: async (data) => {
+                if(data.createCryptoPaymentForAuction) {
+                    const resData = data.createCryptoPaymentForAuction;
+
+                    const weiUnit = 100000000;
+                    let _payAmount = resData?.cryptoAmount * weiUnit;
+                    const payamount = _payAmount * 10000000000;
+
+                    try {
+                        const result = await sendTransactionAsync({
+                            request: {
+                                to: resData?.depositAddress,
+                                value: BigNumber.from(_.toInteger(payamount))
+                            }
+                        });
+                        console.log(result);
+                        await navigate(ROUTES.auction); 
+                    } catch (error) {
+                        setPending(false);
+                    }
+                }
+            },
+            onError: (err) => {
+
+            }
+        }
+    )
+
     const confirmToPay = async () => {
         // check chainId with selected network
         if(network && network.network === 'ERC20' && activeChain.id !== 1) {
@@ -154,23 +178,39 @@ export default function TokenSelectModal({
             closeModal();
         }
         setPending(true);
-        loadingData = true;
-        const createdData = {
-            presaleId: currentRound,
-            orderId,
-            amount: bidAmount,
-            cryptoType: selectedCoin.value,
-            network: network.network,
-            coin: network.value,
-            cryptoAmount: coinQuantity
+        
+        // checking auction or presale
+        if(orderId === 0) {
+            // auction
+            const createdData = {
+                roundId: currentRound,
+                amount: coinQuantity,
+                cryptoType: selectedCoin.value,
+                network: network.network,
+                coin: network.value
+            }
+            createChargeForAuction({
+                variables: {...createdData}
+            });
+        } else {
+            const createdData = {
+                presaleId: currentRound,
+                orderId,
+                amount: bidAmount,
+                cryptoType: selectedCoin.value,
+                network: network.network,
+                coin: network.value,
+                cryptoAmount: coinQuantity
+            }
+            createChargeForPresale({
+                variables: {...createdData},
+            });
         }
-        console.log(createdData);
-        createChargeForPresale({
-            variables: {...createdData},
-        });
+        
     }
     
     const onChangeNetwork = async (v) => {
+        setPending(true);
         setNetwork(v);
 
         if(!activeChain) return;
@@ -190,13 +230,12 @@ export default function TokenSelectModal({
         
         if(_balance > coinQuantity) setSufficient(true);
         else setSufficient(false);
+        setPending(false);
     }
 
     const onChangeCoin = (v) => {
         setSelectedCoin(v);
         setNetwork(null);
-        setDepositAddress("");
-        setPaymentId(null);
         setBalance(0);
         setSufficient(true);
         // get pay amount
@@ -205,10 +244,7 @@ export default function TokenSelectModal({
     }
     
 
-    return loadingData ? (
-        <div className="text-center">
-            <CustomSpinner />
-        </div>) : (
+    return (
         <Modal
             isOpen={isTokenModalOpen}
             onRequestClose={closeModal}
@@ -230,6 +266,11 @@ export default function TokenSelectModal({
                 <div className='payment-page'>
                     <div className='payment-type__tab'>
                         <div className="cryptocoin-tab">
+                            <div style={{color: "white", textAlign:"center", fontSize:"20px"}}>
+                                {accountInfo?.connector && <>Select Token To Pay in {
+                                    accountInfo.connector?.name 
+                                }</>}
+                            </div>
                             <div className="payment-content">
                                 <div className="set-cryptocoin">
                                     <div className="d-flex flex-column justify-content-between coin-address">
@@ -293,7 +334,7 @@ export default function TokenSelectModal({
                                         <button
                                             className="btn btn-light rounded-0 text-uppercase fw-bold mt-2 py-10px w-100"
                                             onClick={confirmToPay}
-                                            disabled={!sufficient}
+                                            disabled={!sufficient || network === '' || network === null}
                                         >
                                             {pending ? (
                                                 <CircularProgress

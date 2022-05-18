@@ -14,7 +14,6 @@ import CustomSpinner from "../common/custom-spinner"
 import { CheckBox } from "../common/FormControl"
 import { wallets, NDB_WALLET_TOOLTIP_CONTENT, EXTERNAL_WALLET_TOOLTIP_CONTENT } from "../../utilities/staticData"
 import { ROUTES } from "../../utilities/routes"
-import { validURL } from "../../utilities/string"
 import { setPresaleOrderId } from '../../redux/actions/bidAction' 
 import { NyyuWallet, NyyuWalletSelected } from "../../utilities/imgImport";
 import { useAccount, useConnect } from "wagmi"
@@ -30,10 +29,6 @@ export default function PresalePlaceOrderWalletSelect() {
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
     const [selectedWallet, setSelectedWallet] = useState(null)
-    const [externalWallet, setExternalWallet] = useState(null)
-    const [externalUrl, setExternalUrl] = useState("")
-    const [urlError, setUrlError] = useState(null)
-
 
     const [placePresaleOrderMutation] = useMutation(PLACE_PRESALE_ORDER, {
         onCompleted: data => {
@@ -51,10 +46,6 @@ export default function PresalePlaceOrderWalletSelect() {
     })
 
     const handlePresale = () => {
-        // if (selectedWallet === 'external' && !validURL(externalUrl)) {
-        //     setUrlError(true)
-        //     return
-        // }
         setReqPending(true)
         setError("")
         placePresaleOrderMutation({
@@ -72,7 +63,6 @@ export default function PresalePlaceOrderWalletSelect() {
     const handlePrevious = () => {
         if(selectedWallet === 'external') {
             setSelectedWallet(null);
-            setExternalWallet(null)
             return;
         }
         setPresalePlaceOrderStage(0);
@@ -124,7 +114,9 @@ export default function PresalePlaceOrderWalletSelect() {
                     <div className="row">
                         <div className="col-lg-6 mt-2">
                             <div className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
+                                role="button"
                                 onClick={() => setSelectedWallet("internal")}
+                                onKeyDown={() => setSelectedWallet("inernal")}
                             >
                                 <div className="d-flex justify-content-end wallet_header">
                                     <span data-tip='tooltip' data-for='ndb_wallet_tooltip'>
@@ -151,6 +143,8 @@ export default function PresalePlaceOrderWalletSelect() {
                         </div>
                         <div className="col-lg-6 mt-2">
                             <div className={`destination_wallet`}
+                                role="button"
+                                onKeyDown={() => setSelectedWallet("external")}
                                 onClick={() => setSelectedWallet("external")}
                             >
                                 <div className="d-flex justify-content-end wallet_header">

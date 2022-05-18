@@ -9,27 +9,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
 
 import { CheckBox } from "../common/FormControl"
-import CustomSpinner from "../common/custom-spinner"
 import { TRUST_URL } from "./data"
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT, wallets } from "../../utilities/staticData"
 import TokenSelectModal from './token-select-modal';
+import { SUPPORTED_COINS } from "../../utilities/staticData2";
 
 export default function PaymentExternalWalletTab() {
     const { round_id: currentRound, bid_amount: bidAmount, order_id: orderId } = useSelector((state) => state?.placeBid);
 
     // wagmi hook
     const { data: accountInfo } = useAccount();
-    const { connect, connectors, error: connectError, isConnecting, pendingConnector } = useConnect();
+    const { activeConnector, connect, connectors, error: connectError } = useConnect();
     const { disconnect } = useDisconnect();
     
-    // selected coin
-    // const [ loadingData, setLoadingData ] = useState(true);
     const [ isTokenModalOpen, setIsTokenModalOpen ] = useState(false);
-    const [ tokenToPay, setTokenToPay ] = useState({});
-    const onSelectToken = (token) => {
-        // getting token price based on bid amount!
-        setTokenToPay(token);
-    }
 
     const showTokenModal = () => {
         setIsTokenModalOpen(true);
@@ -40,19 +33,16 @@ export default function PaymentExternalWalletTab() {
     }
 
     return (
-        // loadingData ? 
-        //     <div className="text-center">
-        //         <CustomSpinner/>
-        //     </div> : 
         <div className="row">
-            <TokenSelectModal 
+            {activeConnector && isTokenModalOpen && <TokenSelectModal 
                 isTokenModalOpen={isTokenModalOpen}
                 closeModal={closeModal}
-                onChangeToken={onSelectToken}
                 bidAmount={bidAmount}
                 currentRound={currentRound}
                 accountInfo={accountInfo}
-            />
+                SUPPORTED_COINS={SUPPORTED_COINS}
+                defaultNetwork={null}
+            />}
             <>
                 {connectors?.map((connector, idx) => (accountInfo && (accountInfo?.connector.name === connector.name)) ? (
                     <div className="col-sm-6 mb-10px" key={idx}>
