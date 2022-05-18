@@ -31,7 +31,7 @@ const REFRESH_TIME = 30;
 
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
 
@@ -190,7 +190,7 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
 }
 
 export default function MarketTab() {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
 
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
@@ -207,8 +207,6 @@ export default function MarketTab() {
         SHIB: {symbol: 'SHIB'},
         LTC: {symbol: 'LTC'},
         ADA: {symbol: 'ADA'},
-
-
         CAKE: {symbol: 'CAKE'},
     };
 
@@ -267,7 +265,7 @@ export default function MarketTab() {
     // console.log(loading)
     const set_SortOption = sortName => {
         setSortOption({[sortName]: (sortOption[sortName] === 'desc'? 'asc': 'desc')});
-    }
+    };
     
     return (
         <table className="wallet-transaction-table">

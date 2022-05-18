@@ -20,6 +20,7 @@ import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { ROUTES } from "../../utilities/routes"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
 import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
+import { fetch_Favor_Assets } from '../../redux/actions/settingAction';
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
@@ -99,6 +100,10 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         document.addEventListener("keydown", handleEscKeyPress)
         return () => document.removeEventListener("keydown", handleEscKeyPress)
     })
+
+    useEffect(() => {
+        dispatch(fetch_Favor_Assets());
+    }, [dispatch])
     
     return (
         <nav className={active ? "menu menu--active" : "menu"}>

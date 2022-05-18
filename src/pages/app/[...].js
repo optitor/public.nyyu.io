@@ -19,7 +19,7 @@ const SelectFigure = lazy(() => import("../../components/auth/select-figure"))
 const Wallet = lazy(() => import("../../components/wallet"))
 const AuctionWrapper = lazy(() => import("../../components/auction/auction-wrapper"))
 const Payment = lazy(() => import("../../components/payment"))
-const Support = lazy(() => import("../../components/support"))
+const Support = lazy(() => import("../../components/Support"))
 
 const NotFound = lazy(() => import("./../404"))
 

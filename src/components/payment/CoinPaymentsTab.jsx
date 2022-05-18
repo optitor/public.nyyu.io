@@ -36,7 +36,7 @@ const SelectOption = (props) => {
     const { data } = props;
     return (
         <Option {...props}>
-            <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
+            <div className="d-flex justify-content-start align-items-center ">
                 <img
                     src={data.icon}
                     style={{ width: "30px", height: "30px" }}
@@ -358,6 +358,13 @@ const customSelectWithIconStyles = {
         ":hover": {
             backgroundColor: "inherit",
         },
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+        borderRadius: 0,
+        padding: 0,
     }),
     menuList: (provided) => ({
         ...provided,

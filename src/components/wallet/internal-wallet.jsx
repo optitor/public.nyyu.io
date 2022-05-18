@@ -18,7 +18,7 @@ const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
 const REFRESH_TIME = 30;
 
 const Asset = ({ item }) => {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
     const precision = 8;
@@ -52,7 +52,7 @@ const Asset = ({ item }) => {
 };
 
 export default function InternalWallet() {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
 
@@ -249,6 +249,7 @@ export default function InternalWallet() {
                         </div>
                         <div className="col-6 ps-2">
                             <button
+                                // disabled={true} // waiting for admin panel
                                 className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                                 onClick={() => {
                                     setIsWithdrawOpen(true)

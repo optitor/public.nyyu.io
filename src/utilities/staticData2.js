@@ -72,11 +72,11 @@ export const SUPPORTED_COINS = [
         networks: [
             { label: "Tether USD (Tron/TRC20)", value: "USDT.TRC20", network: "TRC20", address: ""},
             { label: "Tether USD (ERC20)", value: "USDT.ERC20", network: "ERC20", address: "0xdac17f958d2ee523a2206206994597c13d831ec7"},
-            { label: "Tether USD (Omni Layer)", value: "USDT", network: "USDT", address: ""},
+            // { label: "Tether USD (Omni Layer)", value: "USDT", network: "USDT", address: ""},
             // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
             { label: "Tether USD (BSC Chain)", value: "USDT.BEP20", network: "BEP20", address: "0x55d398326f99059ff775485246999027b3197955" },
             { label: "Tether USD (Solana)", value: "USDT.SOL", network: "SOL" , address: ""},
-            { label: "TetherUSD (Waves Token)", value: "USDT.Waves", network: "Waves", address: ""},
+            // { label: "TetherUSD (Waves Token)", value: "USDT.Waves", network: "Waves", address: ""},
         ],
     },
     {
@@ -708,6 +708,8 @@ export const SUPPORTED_CURRENCIES = [
         "symbol": "VES"
     }
 ];
+
+export const Currencies = (SUPPORTED_CURRENCIES.map(item => ({label: item.symbol, value: item.symbol, sign: item.sign})));
 
 export const ERC20_ABI = [
     {
