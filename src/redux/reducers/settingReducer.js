@@ -50,3 +50,18 @@ export const tasksReducer = (state = InitialTask, action) => {
             return state;
     }
 };
+
+const InitialFavAssets = {
+    currency: 'USD',
+    assets: []
+};
+
+export const favorAssetsReducer = (state = InitialFavAssets, action) => {
+    switch(action.type) {
+        case types.FETCH_FAVOR_ASSETS:
+        case types.UPDATE_FAVOR_ASSETS:
+            return { ...action.payload };
+        default:
+            return state;
+    }
+};
