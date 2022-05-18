@@ -13,7 +13,7 @@ import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid"
 const initialMaxPrice = 100
 
 export default function AuctionPlaceBid() {
-    const currency = useSelector(state => state.placeBid.currency);
+    const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
 
@@ -99,10 +99,10 @@ export default function AuctionPlaceBid() {
     return (
         <>
             {optCurrentRound?.status === 3 ? (
-                <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
+                <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center vh-85">
                     round is over
                 </div>
-            ) : optCurrentRound?.status === 1 ? <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center h-85">
+            ) : optCurrentRound?.status === 1 ? <div className="d-sm-flex d-none text-light fw-bold fs-24px text-uppercase w-100 align-items-center justify-content-center vh-85">
                 countdown
             </div> : !auction.currentRoundBidList ? (
                 <></>

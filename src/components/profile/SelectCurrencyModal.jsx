@@ -5,12 +5,11 @@ import _ from 'lodash';
 import { CloseIcon } from "../../utilities/imgImport";
 import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
-import { setCurrencyInfo } from "../../redux/actions/bidAction";
+import { update_Favor_Assets } from '../../redux/actions/settingAction';
 import { EuropeanFlag } from "../../utilities/imgImport";
-import { SUPPORTED_CURRENCIES } from "../../utilities/staticData2";
+import { Currencies } from "../../utilities/staticData2";
 import { CurrencyIconEndpoint } from "../../utilities/staticData3";
-
-const Currencies = SUPPORTED_CURRENCIES.map(item => ({label: item.symbol, value: item.symbol, sign: item.sign}));
+import CustomSpinner from "../common/custom-spinner";
 
 const { Option } = components;
 
@@ -32,9 +31,12 @@ const SelectOption = (props) => {
 };
 
 const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
-    const savedCurrency = useSelector(state => state.placeBid.currency);
+    const favAssets = useSelector(state => state.favAssets);
+    const savedCurrency = favAssets.currency;
+    const assets = favAssets.assets;
     const { currencyRates } = useSelector(state => state); 
     const dispatch = useDispatch();
+    const [pending, setPending] = useState(false);
 
     const [selectedCurrency, setSelectedCurrency] = useState(savedCurrency);
     const loading = _.isEmpty(currencyRates);
@@ -47,8 +49,13 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
         );
     };
 
-    const selectCurrency = () => {
-        dispatch(setCurrencyInfo(selectedCurrency));
+    const selectCurrency = async () => {
+        setPending(true);
+        const updateData = {
+            assets: selectedCurrency.value + ',' + assets.join(',')
+        };
+        await dispatch(update_Favor_Assets(updateData));
+        setPending(false);
         setIsOpen(false);
     };
 
@@ -103,8 +110,9 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
                 </div>
                 <button className="btn btn-outline-light rounded-0 w-50 mt-50px mb-5 fw-bold" style={{height: 47}}
                     onClick={selectCurrency}
+                    disabled={pending}
                 >
-                    CONFIRM
+                    {pending? <CustomSpinner />: 'CONFIRM'}
                 </button>
             </div>
         </Modal>

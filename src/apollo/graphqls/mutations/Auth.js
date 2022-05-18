@@ -182,5 +182,5 @@ export const CONFIRM_GOOGLE_AUTH_RESET = gql`
     mutation confirmGoogleAuthReset($code: String!) {
         confirmGoogleAuthReset(code: $code)
     }
+    
 `
-

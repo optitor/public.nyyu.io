@@ -147,11 +147,11 @@ export default function TwoFactorModal({
                                         ? twoStep?.includes(item.method)
                                         : false;
                                     let available = true;
-                                    // if (item.method === "phone") {
-                                    //     if (twoStep?.includes("app")) available = false;
-                                    // } else if (item.method === "app") {
-                                    //     if (twoStep?.includes("phone")) available = false;
-                                    // }
+                                    if (item.method === "phone") {
+                                        if (twoStep?.includes("app")) available = false;
+                                    } else if (item.method === "app") {
+                                        if (twoStep?.includes("phone")) available = false;
+                                    }
                                     return (
                                         <div key={idx} className="tfa-line">
                                             <div className="tfa-line_labels">
@@ -210,15 +210,15 @@ export default function TwoFactorModal({
                                                     </>
                                                 ) : available === true ? (
                                                     <button
-                                                        // disabled={
-                                                        //     (!!twoStep &&
-                                                        //         two_factors[idx].method === "app" &&
-                                                        //         twoStep?.includes("phone")) ||
-                                                        //     (!!twoStep &&
-                                                        //         two_factors[idx].method ===
-                                                        //             "phone" &&
-                                                        //         twoStep?.includes("app"))
-                                                        // }
+                                                        disabled={
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method === "app" &&
+                                                                twoStep?.includes("phone")) ||
+                                                            (!!twoStep &&
+                                                                two_factors[idx].method ===
+                                                                    "phone" &&
+                                                                twoStep?.includes("app"))
+                                                        }
                                                         className="btn-primary select-tfa d-flex align-items-center justify-content-center enable"
                                                         onClick={() => {
                                                             setSelected(idx);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Zendesk from "react-zendesk";
 import { useMutation } from '@apollo/client';
-import Header from "../components/header";
+import Header from "./header";
 import {
     SupportAuthenticator,
     SupportCommunity,
@@ -14,15 +14,15 @@ import {
     SupportTag,
     SupportUnlock,
 } from "../utilities/imgImport";
-import ResetPasswordModal from "../components/support/reset-password-modal";
+import ResetPasswordModal from "./support/reset-password-modal";
 import CustomSpinner from "./common/custom-spinner";
-import Seo from "../components/seo";
-import UnlockAccountModal from "../components/support/unlock-account-moda";
-import ResetPhoneModal from "../components/support/reset-phone-modal";
-import DepositAssetModal from "../components/support/deposit-asset-modal";
-import DepositMissingModal from "../components/support/deposit-missing-modal";
-import ResetAuthenticatorModal from "../components/support/reset-authenticator-modal";
-import DeleteAccountModal from "../components/profile/delete-account-modal";
+import Seo from "./seo";
+import UnlockAccountModal from "./support/unlock-account-moda";
+import ResetPhoneModal from "./support/reset-phone-modal";
+import DepositAssetModal from "./support/deposit-asset-modal";
+import DepositMissingModal from "./support/deposit-missing-modal";
+import ResetAuthenticatorModal from "./support/reset-authenticator-modal";
+import DeleteAccountModal from "./profile/delete-account-modal";
 import { ZENDESK_KEY } from "../utilities/staticData3";
 import { ZendeskURLWithJWT } from "../utilities/staticData";
 import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';

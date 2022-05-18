@@ -1,15 +1,15 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import { useAuction } from "../../providers/auction-context"
-import { floatWithCommas } from "../../utilities/number"
+import { renderNumberFormat } from "../../utilities/number"
 
 const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult, isCurrentUser }) => {
-    const currency = useSelector(state => state.placeBid.currency)
+    const currency = useSelector(state => state.favAssets.currency)
     const currencyRates = useSelector(state => state.currencyRates)
     const { isAuction } = useAuction()
 
     const currencyRate = currencyRates[currency.value] ?? 1
-    const totalBidAmount = floatWithCommas((Number(mainAmount * currencyRate).toFixed(2)).toLocaleString())
+    const totalBidAmount = renderNumberFormat((Number(mainAmount * currencyRate).toFixed(4)))
     return (
         <div className="w-100 row border-bottom-scorpion p-2 bid-list-item px-12px">
             <div className="col-2 d-flex align-items-center justify-content-start">

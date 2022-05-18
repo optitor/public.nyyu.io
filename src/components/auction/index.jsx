@@ -54,7 +54,7 @@ const Auction = () => {
             (item) => item?.round === currentRoundNumber
         )[0])
     }, [currentRoundNumber])
-
+    console.log(optCurrentRound?.status, typeof(optCurrentRound?.status))
     useEffect(() => {
         auction.setIsAuction(optCurrentRound?.kind === 1)
     }, [optCurrentRound])
@@ -80,21 +80,31 @@ const Auction = () => {
                                 </div>
                             </div>
                             <AuctionRoundDetails/>
-                            {isAuction && optCurrentRound?.status !== 3 && (
+                            <div className="d-block d-sm-none">
+                                {isAuction && optCurrentRound?.status === 2 &&
                                 <>
-                                    <div className="d-block d-sm-none">
-                                        <div
-                                            className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
-                                            onClick={() =>
-                                                auction.setBidModal(true)
-                                            }
-                                        >
-                                            place bid
-                                        </div>
+                                    <div
+                                        className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
+                                        onClick={() =>
+                                            auction.setBidModal(true)
+                                        }
+                                    >
+                                        place bid
                                     </div>
                                     <AuctionPlaceBidModal/>
                                 </>
-                            )}
+                                }
+                                {optCurrentRound?.status === 1 &&
+                                    <h3 className="mt-2 text-uppercase text-center fw-bold">
+                                        Countdown
+                                    </h3>
+                                }
+                                {optCurrentRound?.status === 3 &&
+                                    <h3 className="mt-2 text-uppercase text-center fw-bold">
+                                        Round is over
+                                    </h3>
+                                }
+                            </div>
                         </div>
 
                         <div className="auction-right col-lg-8 col-md-7">
@@ -105,7 +115,6 @@ const Auction = () => {
                         </div>
                     </div>
                 </section>
-                {optCurrentRound?.status !== 3 && <AuctionPlaceBidModal/>}
             </main>
         </>
     )
