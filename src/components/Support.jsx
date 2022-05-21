@@ -28,7 +28,6 @@ import { ZendeskURLWithJWT } from "../utilities/staticData";
 import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';
 import AlarmModal from "./admin/AlarmModal";
 import { RESET_GOOGLE_AUTH } from "../apollo/graphqls/mutations/Auth";
-import { UNKNOWN_MEMO_RECOVERY } from "../apollo/graphqls/mutations/Support";
 
 const setting = {
     color: {
@@ -128,6 +127,7 @@ const FAQ = () => {
     const [pending, setPending] = useState(false);
 
     const [ qrcode, setQRcode ] = useState("");
+    const [ token, setToken ] = useState("");
 
     const [getZendeskJwtMutation] = useMutation(GET_ZENDESK_JWT, {
         onCompleted: data => {
@@ -146,7 +146,7 @@ const FAQ = () => {
     const [ getGoogleAuthSecret ] = useMutation(RESET_GOOGLE_AUTH, {
         onCompleted: data => {
             setPending(false);
-            if(data.resetGoogleAuth) {
+            if(data.resetGoogleAuthRequest) {
                 const filtered = selfServiceData
                     .map(item => {
                         if(item.id === GOOGLE_AUTH_INDEX) {
@@ -156,7 +156,8 @@ const FAQ = () => {
                         return item;
                 });
                 setSelfServiceData(filtered);
-                setQRcode(data.resetGoogleAuth);
+                setQRcode(data.resetGoogleAuthRequest.secret);
+                setToken(data.resetGoogleAuthRequest.token);
                 // open modal
                 setIsResetAuthenticatorModalOpen(true);
             }
@@ -294,27 +295,28 @@ const FAQ = () => {
                             setIsOpen={setIsResetPasswordModalOpen}
                         />
                     )}
-                    <UnlockAccountModal
+                    {isUnlockAccountModalOpen && <UnlockAccountModal
                         isOpen={isUnlockAccountModalOpen}
                         setIsOpen={setIsUnlockAccountModalOpen}
-                    />
+                    />}
                     {isResetPhoneModalOpen && <ResetPhoneModal
                         isOpen={isResetPhoneModalOpen}
                         setIsOpen={setIsResetPhoneModalOpen}
                     />}
-                    <ResetAuthenticatorModal
+                    {isResetAuthenticatorModalOpen && <ResetAuthenticatorModal
                         isOpen={isResetAuthenticatorModalOpen}
                         setIsOpen={setIsResetAuthenticatorModalOpen}
                         secret={qrcode}
-                    />
+                        token={token}
+                    />}
                     {isDepositAssetModalOpen && <DepositAssetModal
                         isOpen={isDepositAssetModalOpen}
                         setIsOpen={setIsDepositAssetModalOpen}
                     />}
-                    <DepositMissingModal
+                    {isDepositMissingModalOpen && <DepositMissingModal
                         isOpen={isDepositMissingModalOpen}
                         setIsOpen={setIsDepositMissingModalOpen}
-                    />
+                    />}
                 </section>
                 <Zendesk defer zendeskKey={ZENDESK_KEY} {...setting} />
                 <AlarmModal />

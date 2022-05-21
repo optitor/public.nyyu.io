@@ -42,31 +42,57 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
     
     // some state vars
     const [ country, setCountry ] = useState(null);
-    const [countryCode, setCountryCode] = useState("");
-    const [sentCode, setSentCode] = useState("");
-    const [mobile, setMobile] = useState("");
-    const [error, setError] = useState(null);   
-    const [ pending, setPending ] = useState(false);
-    const [sent, setSent] = useState(false);
+    const [ countryCode, setCountryCode ] = useState("");
+    const [ sentCode, setSentCode ] = useState("");
+    const [ mobile, setMobile ] = useState("");
+    const [ error, setError] = useState(null);   
     const [ loading, setLoading ] = useState(false);
+    
+    const [ pending, setPending ] = useState(false);
+    const [ phoneVerify, setPhoneVerify ] = useState({
+        sent:false, error: ''
+    });
+    const [ token, setToken ] = useState("");
+
+    const [ verifyCode, setVerifyCode ] = useState("");
+    const [ verifyPending, setVerifyPending ] = useState(false);
+    const [ mailVerify, setMailVerify ] = useState({
+        sent: false, error: '', email: ''
+    });
+
+    const [ sendVerifyCode ] = useMutation(
+        Mutation.SEND_VERIFY_CODE, {
+            onCompleted: data => {
+                if(data.sendVerifyCode !== 'Failed') {
+                    setMailVerify({...mailVerify, error: '', email: data.sendVerifyCode, sent: true});
+                } else {
+                    setMailVerify({...mailVerify, error: 'Cannot get verify code', email: '', sent: false});
+                }
+            },
+            onError: err => {
+                setMailVerify({...mailVerify, error: err.message, email: '', sent: false});
+            }
+        }
+    )
 
     const [requesetPhone2FA] = useMutation(
         Mutation.REQUEST_PHONE_2FA, {
             onCompleted: data => {
-                console.log(data);
-                if(data.requestPhone2FA === "queued") {
-                    setSent(true);
+                if(data.requestPhone2FA !== "Failed") {
+                    setPhoneVerify({...phoneVerify, sent: true, error: ''});
+                    setToken(data.requestPhone2FA);
+                } else {
+                    setPhoneVerify({...phoneVerify, sent: false, error: 'Cannot get SMS code'});
                 }
             },
             onError: err => {
-                setSent(false);
-                setError(err.message);
+                setPhoneVerify({...phoneVerify, sent: false, error: err.message});
             }
         }
     )
 
     const [confirmPhone2FA] = useMutation(
-        Mutation.CONFORM_PHONE_2FA, {
+        Mutation.CONFIRM_PHONE_2FA, {
             onCompleted: data => {
                 if(data.confirmPhone2FA === 'Success') {
                     showSuccessAlarm('New phone number is verified.');
@@ -87,15 +113,16 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
         setLoading(true);
         confirmPhone2FA({
             variables: {
-                code: sentCode.trim()
+                mailCode: verifyCode.trim(),
+                smsCode: sentCode.trim(),
+                token
             }
         })
     }
 
     const getCode = () => {
         if(pending) return;    
-        setSent(false);
-        setError(null);
+        setPhoneVerify({...phoneVerify, sent: false, error: ''});
         setPending(true);
         setTimeout(() => {
             setPending(false);
@@ -105,6 +132,16 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
                 phone: mobile
             }
         })
+    }
+
+    const getVerifyCode = () => {
+        if(verifyPending) return;
+        setMailVerify({...mailVerify, error: '', email: '', sent: false});
+        setVerifyPending(true);
+        setTimeout(() => {
+            setVerifyPending(false);
+        }, 6000);
+        sendVerifyCode();
     }
 
     return (
@@ -142,58 +179,83 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
 
                 <div className="col-12 col-sm-10 col-md-8 col-lg-7 mx-auto text-light my-5">
                     <form action="form">
-                    <div className="input_mobile form-group">
-                        <div className="mobile-input-field mt-3">
-                            <label className="mb-2">select country</label>
-                            <div className="country-code-select">
-                                <Icon icon="akar-icons:search" className="search-icon text-light" />
-                                <Select
-                                    className="mb-2"
-                                    styles={selectStyles}
-                                    options={Countries}
-                                    value={country}
-                                    onChange={(selected) => {
-                                        const code = `+${getCountryCallingCode(selected?.value)} `
-                                        setCountry(selected)
-                                        setCountryCode(code)
-                                        setMobile(code)
-                                    }}
-                                    placeholder='Country'
-                                />
-                            </div>
-                            <FormInput
-                                type="text"
-                                label="New phone number"
-                                value={mobile}
-                                onChange={(e) => {
-                                    const input = e.target.value;
-                                    setMobile(countryCode + input.substr(countryCode.length))
-                                }}
-                                placeholder='Phone number'
-                            />
-                        </div>
-                        
-                    </div>
                         <div className="form-group">
                             <FormInput
                                 type="text"
-                                label="new phone number verification"
+                                label="Email verification code"
+                                value={verifyCode}
+                                onChange={(e) => setVerifyCode(e.target.value)}
+                                placeholder="Enter code"
+                            />
+                        </div>
+                        <div className="fs-12px d-flex">
+                            <span className={(mailVerify.error ? "text-danger" : "")}>
+                                {mailVerify.sent && 
+                                    `The code has been sent to ${mailVerify.email}`
+                                }
+                                {mailVerify.error !== '' && mailVerify.error}
+                            </span>
+                            <span 
+                                className={"fw-500 cursor-pointer ms-auto " + (verifyPending ? "txt-grey" : "txt-green") }
+                                onClick={getVerifyCode}
+                            >
+                                Get Code
+                            </span>
+                        </div>
+                        <div className="input_mobile form-group mb-4">
+                            <div className="mobile-input-field mt-1">
+                                <label className="mb-2">Select country</label>
+                                <div className="country-code-select mb-4">
+                                    <Icon icon="akar-icons:search" className="search-icon text-light" />
+                                    <Select
+                                        className="mb-2"
+                                        styles={selectStyles}
+                                        options={Countries}
+                                        value={country}
+                                        onChange={(selected) => {
+                                            const code = `+${getCountryCallingCode(selected?.value)} `
+                                            setCountry(selected)
+                                            setCountryCode(code)
+                                            setMobile(code)
+                                        }}
+                                        placeholder='Country'
+                                    />
+                                </div>
+                                <FormInput
+                                    type="text"
+                                    label="New phone number"
+                                    value={mobile}
+                                    onChange={(e) => {
+                                        const input = e.target.value;
+                                        setMobile(countryCode + input.substr(countryCode.length))
+                                    }}
+                                    placeholder='Phone number'
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <FormInput
+                                type="text"
+                                label="New phone number verification"
                                 value={sentCode}
                                 onChange={(e) => setSentCode(e.target.value)}
                                 placeholder="Enter code"
                             />
                         </div>
-                        <div className="fs-12px get-code">
-                                {sent && <span>
-                                    The code has been sent&nbsp;&nbsp;    
-                                </span>}
+                        <div className="fs-12px d-flex">
+                                <span className={(phoneVerify.error ? "text-danger" : "")}>
+                                    {phoneVerify.sent && 
+                                        `The code has been sent`
+                                    }
+                                    {phoneVerify.error !== '' && phoneVerify.error}
+                                </span>
                                 <span 
-                                    className={"fw-500 cursor-pointer " + (pending ? "txt-grey" : "txt-green") }
+                                    className={"fw-500 cursor-pointer ms-auto " + (pending ? "txt-grey" : "txt-green") }
                                     onClick={getCode}
                                 >
                                     Get Code
                                 </span>
-                            </div>
+                        </div>
                         <div className="my-5">
                             {error && (
                                 <span className="errorsapn">
@@ -206,7 +268,7 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
                             <button
                                 type="submit"
                                 className="btn-primary w-100 text-uppercase d-flex align-items-center justify-content-center py-2"
-                                disabled={pending || error !== null || loading || (sentCode.length < 6)}
+                                disabled={verifyCode.length < 6 || mailVerify.error !== '' || phoneVerify.error !== '' || loading || (sentCode.length < 6)}
                                 onClick={handleSubmit}
                             >
                                 <div
