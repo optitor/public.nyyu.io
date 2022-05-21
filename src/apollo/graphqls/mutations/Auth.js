@@ -174,13 +174,24 @@ export const CREATE_NEW_REFERENCE = gql`
 
 export const RESET_GOOGLE_AUTH = gql`
     mutation {
-        resetGoogleAuth
+        resetGoogleAuthRequest {
+            secret,
+            token
+        }
     }
 `
 
 export const CONFIRM_GOOGLE_AUTH_RESET = gql`
-    mutation confirmGoogleAuthReset($code: String!) {
-        confirmGoogleAuthReset(code: $code)
+    mutation confirmGoogleAuthReset(
+        $googleCode: String!,
+        $mailCode: String,
+        $token: String
+    ) {
+        confirmGoogleAuthReset(
+            googleCode: $googleCode
+            mailCode: $mailCode
+            token: $token
+        )
     }
     
 `
