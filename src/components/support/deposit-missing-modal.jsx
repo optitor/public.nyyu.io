@@ -41,7 +41,8 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
         unknownMemoRecovery({
             variables: {
                 ...payload,
-                depositAmount: Number(payload.depositAmount)
+                depositAmount: Number(payload.depositAmount),
+                receiverAddr: ''
             }
         })
     }
