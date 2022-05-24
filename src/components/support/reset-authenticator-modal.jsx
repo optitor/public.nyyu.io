@@ -5,44 +5,79 @@ import { useMutation } from "@apollo/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
+import * as Mutation from '../../apollo/graphqls/mutations/Support';
 import { CONFIRM_GOOGLE_AUTH_RESET } from "../../apollo/graphqls/mutations/Auth";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
 import { CloseIcon } from "../../utilities/imgImport";
 import { showSuccessAlarm, showFailAlarm } from "../admin/AlarmModal";
 
-export default function ResetAuthenticatorModal({ isOpen, setIsOpen, secret }) {
+export default function ResetAuthenticatorModal({ isOpen, setIsOpen, secret, token }) {
     const [sentCode, setSentCode] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error] = useState("");
+    const [error, setError] = useState("");
+
+    const [ verifyCode, setVerifyCode ] = useState("");
+    const [ verifyPending, setVerifyPending ] = useState(false);
+    const [ mailVerify, setMailVerify ] = useState({
+        sent: false, error: '', email: ''
+    });
+
+    const [ sendVerifyCode ] = useMutation(
+        Mutation.SEND_VERIFY_CODE, {
+            onCompleted: data => {
+                if(data.sendVerifyCode !== 'Failed') {
+                    setMailVerify({...mailVerify, error: '', email: data.sendVerifyCode, sent: true});
+                } else {
+                    setMailVerify({...mailVerify, error: 'Cannot get verify code', email: '', sent: false});
+                }
+            },
+            onError: err => {
+                setMailVerify({...mailVerify, error: err.message, email: '', sent: false});
+            }
+        }
+    )
     
     const resetModal = () => {
-        setSentCode(''); setLoading(false); setIsOpen(false);
+        setSentCode(''); setLoading(false);
     }
 
     const [ confirmResetGoogleAuth ] = useMutation(CONFIRM_GOOGLE_AUTH_RESET, {
         onCompleted: data => {
             if(data.confirmGoogleAuthReset === 'Success') {
                 showSuccessAlarm('Google Authenticator has been updated.');
+                setIsOpen(false);
             } else {
                 // close modal
-                showFailAlarm('Cannot Reset Google Authenticator.')
+                setError('Cannot Reset Google Authenticator.')
             }
             resetModal();
         },
         onError: error => {
             // show message and close modal
-            showFailAlarm('Cannot Reset Google Authenticator.')
+            setError(error.message);
             resetModal();
         }
     })
+
+    const getVerifyCode = () => {
+        if(verifyPending) return;
+        setMailVerify({...mailVerify, error: '', email: '', sent: false});
+        setVerifyPending(true);
+        setTimeout(() => {
+            setVerifyPending(false);
+        }, 6000);
+        sendVerifyCode();
+    }
 
     const handleSubmit = (e) => {
         e.stopPropagation();
         setLoading(true);
         confirmResetGoogleAuth({
             variables: {
-                code: sentCode
+                googleCode: sentCode,
+                mailCode: verifyCode,
+                token
             }
         });
     }
@@ -85,9 +120,9 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen, secret }) {
                     </p>
                 </div>
 
-                <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light my-5">
+                <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-light my-1">
                     <form action="form">
-                        <div className="form-group">
+                        <div className="form-group mb-3">
                             <FormInput
                                 type="text"
                                 label="Auth code"
@@ -96,7 +131,30 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen, secret }) {
                                 placeholder="Enter code"
                             />
                         </div>
-                        <div className="my-5">
+                        <div className="form-group">
+                            <FormInput
+                                type="text"
+                                label="Email verification code"
+                                value={verifyCode}
+                                onChange={(e) => setVerifyCode(e.target.value)}
+                                placeholder="Enter code"
+                            />
+                        </div>
+                        <div className="fs-12px d-flex">
+                            <span className={(mailVerify.error ? "text-danger" : "")}>
+                                {mailVerify.sent && 
+                                    `The code has been sent to ${mailVerify.email}`
+                                }
+                                {mailVerify.error !== '' && mailVerify.error}
+                            </span>
+                            <span 
+                                className={"fw-500 cursor-pointer ms-auto " + (verifyPending ? "txt-grey" : "txt-green") }
+                                onClick={getVerifyCode}
+                            >
+                                Get Code
+                            </span>
+                        </div>
+                        <div className="my-3">
                             {error && (
                                 <span className="errorsapn">
                                     <FontAwesomeIcon
