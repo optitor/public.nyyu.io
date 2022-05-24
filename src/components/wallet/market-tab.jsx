@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useReducer, useEffect, useState } from "react";
 import useDeepCompareEffect from 'use-deep-compare-effect';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from "axios";
 import NumberFormat from "react-number-format";
 import { numberSign, numFormatter } from "../../utilities/number";
@@ -13,7 +13,7 @@ import _ from 'lodash';
 import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
-import { setCookie, getCookie, NDB_FavCoins } from '../../utilities/cookies';
+import { update_Favor_Assets } from "../../redux/actions/settingAction";
 
 const QUOTE = "USDT";
 
@@ -190,34 +190,21 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
 }
 
 export default function MarketTab() {
-    const currency = useSelector(state => state.favAssets.currency);
+    const { currency, assets } = useSelector(state => state.favAssets);
+    const dispatch = useDispatch();
 
     const [searchValue, setSearchValue] = useState("");
     const [cryptoList, setCryptoList] = useState({});
     const [sortOption, setSortOption] = useState({});
 
     const [favours, setFavours] = useState({});
+    const [pending, setPending] = useState(false);
 
-
-    const InitialFavours = {
-        BTC: {symbol: 'BTC'},
-        ETH: {symbol: 'ETH'},
-        SOL: {symbol: 'SOL'},
-        DOGE: {symbol: 'DOGE'},
-        SHIB: {symbol: 'SHIB'},
-        LTC: {symbol: 'LTC'},
-        ADA: {symbol: 'ADA'},
-        CAKE: {symbol: 'CAKE'},
-    };
-
-    useEffect(() => {
-        if(getCookie(NDB_FavCoins)) {
-            setFavours(JSON.parse(getCookie(NDB_FavCoins)));
-        } else {
-            setFavours(InitialFavours);
-            setCookie(NDB_FavCoins, JSON.stringify(InitialFavours));
-        }
-    }, []);
+    useDeepCompareEffect(() => {
+        const favArray = assets.map(item => ({ symbol: item }));
+        const favObj = _.mapKeys(favArray, 'symbol');
+        setFavours(favObj);
+    }, [assets]);
 
     useEffect(() => {
         axios.get(ALLPRICES).then((res) => {
@@ -230,7 +217,7 @@ export default function MarketTab() {
     }, []);
 
     const [favoursData, setFavoursData] = useState({});
-    
+
     useDeepCompareEffect(() => {
         (async function() {
             let assets = { ...favours };
@@ -253,13 +240,21 @@ export default function MarketTab() {
             setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
-            setCookie(NDB_FavCoins, JSON.stringify(favours));
             
             return;
         }
         const temp = { ...favours, [item.symbol]: item };
         setFavours(temp);
-        setCookie(NDB_FavCoins, JSON.stringify(temp));
+    };
+
+    const save_Favorite_Assets = async () => {
+        setSearchValue('');
+        setPending(true);
+        const updateData = {
+            assets: currency.label + ',' + Object.keys(favours).join(',')
+        };
+        await dispatch(update_Favor_Assets(updateData));
+        setPending(false);
     };
 
     // console.log(loading)
@@ -272,7 +267,7 @@ export default function MarketTab() {
             <div className="search">
                 <Icon className="search-icon text-light"
                     icon={searchValue? "bi:list-stars": "carbon:search"}
-                    onClick={() => {setSearchValue(''); }}
+                    onClick={() => setSearchValue('')}
                     disabled={!searchValue}
                 />
                 <input className="black_input"
@@ -280,6 +275,12 @@ export default function MarketTab() {
                     onChange={e => setSearchValue(e.target.value)}
                     placeholder="Search"
                 />
+                <button className="btn btn-outline-light fw-bold rounded-0 d-flex justify-content-center align-items-center" style={{width: 100}}
+                    onClick={save_Favorite_Assets}
+                    disabled={_.isEqual(Object.keys(favours), assets) || pending}
+                >
+                    {pending? <CustomSpinner />: 'SAVE'}
+                </button>
             </div>
             <thead>
                 <tr>
