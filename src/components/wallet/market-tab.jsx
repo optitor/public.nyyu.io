@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useReducer, useEffect, useState } from "react";
+import React, { useReducer, useEffect, useState, useRef } from "react";
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from "axios";
@@ -13,6 +13,7 @@ import _ from 'lodash';
 import {NickToken} from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
+import { setCookie, getCookie, NDB_FavAssets } from '../../utilities/cookies';
 import { update_Favor_Assets } from "../../redux/actions/settingAction";
 
 const QUOTE = "USDT";
@@ -198,12 +199,38 @@ export default function MarketTab() {
     const [sortOption, setSortOption] = useState({});
 
     const [favours, setFavours] = useState({});
-    const [pending, setPending] = useState(false);
+    const [favoursData, setFavoursData] = useState({});
+
+    const componentWillUnmount = useRef(false);
+
+    // This is componentWillUnmount
+    useEffect(() => {
+        return () => {
+            componentWillUnmount.current = true
+        }
+    }, []);
+
+    useEffect(() => {
+        return function cleanup() {
+            if(componentWillUnmount.current && !_.isEmpty(favoursData)) {
+                const updateData = {
+                    assets: currency.label + ',' + Object.keys(favoursData).join(',')
+                };
+                dispatch(update_Favor_Assets(updateData));
+            }
+        }
+    }, [favoursData]);
 
     useDeepCompareEffect(() => {
-        const favArray = assets.map(item => ({ symbol: item }));
-        const favObj = _.mapKeys(favArray, 'symbol');
-        setFavours(favObj);
+        const fav_Cookie = JSON.parse(getCookie(NDB_FavAssets) ?? '{}');
+        if(!_.isEmpty(fav_Cookie)) {
+            setFavours(fav_Cookie);
+        } else {
+            const favArray = assets.map(item => ({ symbol: item }));
+            const favObj = _.mapKeys(favArray, 'symbol');
+            setFavours(favObj);
+            setCookie(NDB_FavAssets, JSON.stringify(favObj));
+        }
     }, [assets]);
 
     useEffect(() => {
@@ -215,8 +242,6 @@ export default function MarketTab() {
             setCryptoList(_.mapKeys(cryptos, 'symbol'));
         });
     }, []);
-
-    const [favoursData, setFavoursData] = useState({});
 
     useDeepCompareEffect(() => {
         (async function() {
@@ -240,21 +265,13 @@ export default function MarketTab() {
             setFavoursData({ ...favoursData });
             delete favours[item.symbol];
             setFavours({ ...favours });
-            
+            setCookie(NDB_FavAssets, JSON.stringify(favours));
+
             return;
         }
         const temp = { ...favours, [item.symbol]: item };
         setFavours(temp);
-    };
-
-    const save_Favorite_Assets = async () => {
-        setSearchValue('');
-        setPending(true);
-        const updateData = {
-            assets: currency.label + ',' + Object.keys(favours).join(',')
-        };
-        await dispatch(update_Favor_Assets(updateData));
-        setPending(false);
+        setCookie(NDB_FavAssets, JSON.stringify(temp));
     };
 
     // console.log(loading)
@@ -275,12 +292,6 @@ export default function MarketTab() {
                     onChange={e => setSearchValue(e.target.value)}
                     placeholder="Search"
                 />
-                <button className="btn btn-outline-light fw-bold rounded-0 d-flex justify-content-center align-items-center" style={{width: 100}}
-                    onClick={save_Favorite_Assets}
-                    disabled={_.isEqual(Object.keys(favours), assets) || pending}
-                >
-                    {pending? <CustomSpinner />: 'SAVE'}
-                </button>
             </div>
             <thead>
                 <tr>

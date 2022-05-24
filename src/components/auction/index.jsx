@@ -54,7 +54,7 @@ const Auction = () => {
             (item) => item?.round === currentRoundNumber
         )[0])
     }, [currentRoundNumber])
-    console.log(optCurrentRound?.status, typeof(optCurrentRound?.status))
+    
     useEffect(() => {
         auction.setIsAuction(optCurrentRound?.kind === 1)
     }, [optCurrentRound])
