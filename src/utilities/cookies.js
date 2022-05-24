@@ -13,7 +13,6 @@ export const removeCookie = (name) => {
 };
 
 // cookie variable name
-export const NDB_FavCoins = 'NDB_FavCoins';
 export const NDB_Paypal_TrxType = 'NDB_Paypal_TrxType';
 
 export const NDB_Privilege = 'NDB_Privilege'; // check if user is amin or not.

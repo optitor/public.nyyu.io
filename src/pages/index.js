@@ -14,7 +14,6 @@ import { useQuery } from "@apollo/client"
 import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
 
-
 const IndexPage = () => {
     // Containers
     const auth = useAuth()
