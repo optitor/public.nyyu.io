@@ -16,11 +16,10 @@ export const removeCookie = (name) => {
 export const NDB_Paypal_TrxType = 'NDB_Paypal_TrxType';
 
 export const NDB_Privilege = 'NDB_Privilege'; // check if user is amin or not.
-
+export const NDB_FavAssets = 'NDB_FavAssets';
 // cookie values
 export const NDB_Auction = 'f920fd230rk_auc';
 export const NDB_Presale = 'dj039rjkjaq_pre';
 export const NDB_Deposit = 'f30fakjf203_dep';
 
-export const NDB_Admin = 'adke!#%^fj@#$ldkf_adm';
-export const NDB_FavAssets = 'NDB_FavAssets';
+export const NDB_Admin = 'adke!#%^fj@#$ldkf_hku68';
