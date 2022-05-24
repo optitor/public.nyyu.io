@@ -23,3 +23,4 @@ export const NDB_Presale = 'dj039rjkjaq_pre';
 export const NDB_Deposit = 'f30fakjf203_dep';
 
 export const NDB_Admin = 'adke!#%^fj@#$ldkf_adm';
+export const NDB_FavAssets = 'NDB_FavAssets';
