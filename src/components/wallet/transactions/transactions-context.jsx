@@ -12,6 +12,7 @@ import {
     GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER,
     GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER
 } from "./queries";
+import { GET_CURRENT_ROUND } from "../../../apollo/graphqls/querys/Auction";
 
 export const TransactionsContext = React.createContext();
 export const useTransactions = () => useContext(TransactionsContext);
@@ -44,6 +45,8 @@ const TransactionsProvider = ({ children }) => {
     // Containers
     const [currentTab, setCurrentTab] = useState(0);
 
+    const [currentRound, setCurrentRound] = useState(null);
+
     const [paypalDepositTransactions, setPaypalDepositTransactions] = useState(null);
     const [paypalWithdrawTransactions, setPaypalWithdrawTransactions] = useState(null);
 
@@ -66,7 +69,8 @@ const TransactionsProvider = ({ children }) => {
         bankDepositTransactions &&
         bankWithdrawTransactions &&
         bidList &&
-        presaleList
+        presaleList &&
+        currentRound
     );
     const itemsCountPerPage = 5;
 
@@ -93,9 +97,19 @@ const TransactionsProvider = ({ children }) => {
     };
 
     // Webserver
+    useQuery(GET_CURRENT_ROUND, {
+        onCompleted: data => {
+            if(data.getCurrentRound) {
+                setCurrentRound(data.getCurrentRound);
+            }
+        },
+        onError: err => {
+            console.log(err);
+        }
+    });
+    
     useQuery(GET_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
-            console.log(data.getPaypalDepositTxnsByUser)
             const fooList = _.orderBy(data.getPaypalDepositTxnsByUser, ['createdAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
@@ -118,6 +132,7 @@ const TransactionsProvider = ({ children }) => {
             setPaypalDepositTransactions(fooList);
         },
     });
+
     useQuery(GET_PAYPAL_WITHDRAW_TRANSACTIONS, {
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getPaypalWithdrawByUser, ['confirmedAt'], ['desc'])
@@ -166,6 +181,7 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
+
     useQuery(GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER, {
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getBankDepositTxnsByUser, ['createdAt'], ['desc'])
@@ -190,8 +206,6 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
-
-
 
     useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
@@ -311,6 +325,7 @@ const TransactionsProvider = ({ children }) => {
         bidList,
         presaleList,
         itemsCountPerPage,
+        currentRound,
 
         // Methods
         createDateFromDate,

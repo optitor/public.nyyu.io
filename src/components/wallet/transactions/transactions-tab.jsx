@@ -6,6 +6,7 @@ import { useTransactions } from "./transactions-context";
 import WithdrawTable from "./withdraw-table";
 import CustomSpinner from "../../common/custom-spinner";
 import StatementsTable from "./statements-table";
+
 export default function Transactions() {
     const { loading, currentTab, setCurrentTab, tabs } = useTransactions();
     return (
