@@ -51,7 +51,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
     });
 
     const [ sendVerifyCode ] = useMutation(
-        Mutation.SEND_VERIFY_CDE, {
+        Mutation.SEND_VERIFY_CODE, {
             onCompleted: data => {
                 if(data.sendVerifyCode !== 'Failed') {
                     setMailVerify({...mailVerify, error: '', email: data.sendVerifyCode, sent: true});

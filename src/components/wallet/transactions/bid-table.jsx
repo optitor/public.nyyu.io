@@ -8,11 +8,13 @@ import { Icons } from "../../../utilities/Icons";
 
 export default function BidTable() {
     // Containers
-    const { bidList, itemsCountPerPage } = useTransactions();
-    const [list, setList] = useState(bidList);
+    const { bidList, itemsCountPerPage, currentRound } = useTransactions();
+    const bidListForIncreaseBid = bidList.filter(item => item.status !== 0);
+
+    const [list, setList] = useState(null);
     const [sortType, setSortType] = useState(null);
     const [activePage, setActivePage] = useState(1);
-
+    
     // Methods
     const headerTitle = ({ title, up, down }) => (
         <th scope="col">
@@ -25,6 +27,7 @@ export default function BidTable() {
                         ? setSortType(down)
                         : setSortType(up)
                 }
+                aria-hidden='true'
             >
                 <div>{title}</div>
                 <div
@@ -41,11 +44,12 @@ export default function BidTable() {
             </div>
         </th>
     );
+
     useEffect(() => {
-        if (sortType === null) return setList(bidList);
+        if (sortType === null) return setList(bidListForIncreaseBid);
         if (sortType === "date_down")
             return setList(
-                bidList.sort(
+                bidListForIncreaseBid.sort(
                     (item2, item1) =>
                         new Date(item1.date).getTime() -
                         new Date(item2.date).getTime()
@@ -53,7 +57,7 @@ export default function BidTable() {
             );
         if (sortType === "date_up")
             return setList(
-                bidList.sort(
+                bidListForIncreaseBid.sort(
                     (item2, item1) =>
                         new Date(item2.date).getTime() -
                         new Date(item1.date).getTime()
@@ -61,7 +65,7 @@ export default function BidTable() {
             );
         if (sortType === "amount_down")
             return setList(
-                bidList.sort(
+                bidListForIncreaseBid.sort(
                     (item2, item1) =>
                         new Date(item2.date).getTime() -
                         new Date(item1.date).getTime()
@@ -69,7 +73,7 @@ export default function BidTable() {
             );
         if (sortType === "amount_up")
             return setList(
-                bidList.sort(
+                bidListForIncreaseBid.sort(
                     (item2, item1) =>
                         new Date(item1.date).getTime() -
                         new Date(item2.date).getTime()
@@ -125,66 +129,75 @@ export default function BidTable() {
                                 payment,
                                 status,
                             }) => (
-                                <>
-                                    <tr className="border-bottom-2-dark-gray">
-                                        <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
-                                            <div className="fw-500">
-                                                Round {round}
-                                            </div>
-                                        </td>
-                                        <td className="text-light pe-5 pe-sm-0 fw-light">
-                                            <div className="fs-16px">
-                                                {date}
-                                            </div>
-                                            <div className="text-secondary fs-12px mt-1 fw-500">
-                                                {time}
-                                            </div>
-                                        </td>
-                                        <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
-                                            <div className="text-sm-start fs-16px">
-                                                {Number(amount).toFixed(2)} USD
-                                            </div>
-                                        </td>
-                                        <td className="text-end pe-5 pe-sm-0">
-                                            <img
-                                                src={
-                                                    payment === 1
-                                                        ? Credit
-                                                        : payment === 2
-                                                        ? BTCGrayIcon
-                                                        : NdbWallet
-                                                }
-                                                alt=""
-                                            />
-                                        </td>
-                                        {status === 0 ? (
-                                            <td className="d-flex flex-column align-items-end">
-                                                <div className="d-flex align-items-center justify-content-end">
-                                                    <div className="gray-bullet me-2"></div>
-                                                    <div>Processing</div>
-                                                </div>
-                                                {status === 0 && (
-                                                    <Link
-                                                        to={ROUTES.auction}
-                                                        className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success white-space-nowrap fs-14px"
-                                                    >
-                                                        Increase bid
-                                                    </Link>
+                                <tr className="border-bottom-2-dark-gray" key={date + time}>
+                                    <td className="text-light pe-5 pe-sm-0 fw-light fs-16px ">
+                                        <div className="fw-500">
+                                            Round {round}
+                                        </div>
+                                    </td>
+                                    <td className="text-light pe-5 pe-sm-0 fw-light">
+                                        <div className="fs-16px">
+                                            {date}
+                                        </div>
+                                        <div className="text-secondary fs-12px mt-1 fw-500">
+                                            {time}
+                                        </div>
+                                    </td>
+                                    <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
+                                        <div className="text-sm-start fs-16px">
+                                            {Number(amount).toFixed(2)} USD
+                                        </div>
+                                    </td>
+                                    <td className="text-end pe-5 pe-sm-0">
+                                        <img
+                                            src={
+                                                payment === 1
+                                                    ? Credit
+                                                    : payment === 2
+                                                    ? BTCGrayIcon
+                                                    : NdbWallet
+                                            }
+                                            alt=""
+                                        />
+                                    </td>
+                                    {currentRound.auction && currentRound.auction?.round === round? (
+                                        <td className="d-flex flex-column align-items-end">
+                                            <div className="d-flex align-items-center justify-content-end">
+                                                {status === 1 ? (
+                                                    <>
+                                                        <div className="green-bullet me-2"></div>
+                                                        <div>Won</div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="red-bullet me-2"></div>
+                                                        <div>Lost</div>
+                                                    </>
                                                 )}
-                                            </td>
-                                        ) : status === 1 ? (
-                                            <td className="d-flex align-items-center justify-content-end">
-                                                <div className="green-bullet me-2"></div>
-                                                <div>Won</div>
-                                            </td>
-                                        ) : (
-                                            <td className="d-flex align-items-center justify-content-end">
-                                                <div className="red-bullet me-2"></div>
-                                                <div>Lost</div>
-                                            </td>
-                                        )}
-                                    </tr>
-                                </>
+                                            </div>
+                                            <Link
+                                                to={ROUTES.auction}
+                                                className="text-success mt-1 fw-500 text-decoration-underline text-decoration-success white-space-nowrap fs-14px"
+                                            >
+                                                Increase bid
+                                            </Link>
+                                        </td>
+                                    ): (
+                                        <>
+                                            {status === 1 ? (
+                                                <td className="d-flex align-items-center justify-content-end">
+                                                    <div className="green-bullet me-2"></div>
+                                                    <div>Won</div>
+                                                </td>
+                                            ) : (
+                                                <td className="d-flex align-items-center justify-content-end">
+                                                    <div className="red-bullet me-2"></div>
+                                                    <div>Lost</div>
+                                                </td>
+                                            )}
+                                        </>
+                                    )}
+                                </tr>
                             )
                         )}
                 </table>

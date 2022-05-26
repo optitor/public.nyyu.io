@@ -496,15 +496,13 @@ export default function StatementsTable() {
         <>
             <div className="text-capitalize text-light pt-4 px-4">
                 <div className="d-flex align-items-center justify-content-between">
-                    <div>
+                    <div className='d-flex'>
                         <Select
                             isSearchable={false}
                             options={depositOptions}
                             value={selectedDepositOption}
                             onChange={onTypeOptionsChange}
                         />
-                    </div>
-                    <div>
                         <Select
                             isSearchable={false}
                             options={periodOptions}

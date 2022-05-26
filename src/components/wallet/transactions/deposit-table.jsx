@@ -158,7 +158,7 @@ export default function DepositTable() {
 
         if (sortType === "fee_up")
             return setList(list.sort((item2, item1) => item2.fee - item1.fee));
-    }, [sortType]);
+    }, [sortType, currentDepositType, list]);
 
     // Render
     return (
