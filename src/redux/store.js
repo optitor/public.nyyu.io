@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
 
-const NODE_CLIENT_ENV = 'development';
+const NODE_CLIENT_ENV = 'production';
 
 const storeMiddleware = NODE_CLIENT_ENV === 'production'? applyMiddleware(thunk): composeWithDevTools(applyMiddleware(thunk));
 const store = createStore(rootReducer, storeMiddleware);
