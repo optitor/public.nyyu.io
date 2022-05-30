@@ -265,7 +265,6 @@ const FAQ = () => {
                                         onClick={item?.clickEvent}
                                         disabled={item?.disabled? true: false}
                                     >
-                                        
                                         <div
                                             className={`text-light border border-1 border-light text-center support-self-security-item col-12 ${item.id <= 5 && "mb-2"
                                                 }`}

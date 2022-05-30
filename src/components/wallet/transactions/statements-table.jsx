@@ -96,7 +96,7 @@ export default function StatementsTable() {
     ];
     const [from, setFrom] = useState(timeFrames[selectedPeriodIndex]);
     const [to, setTo] = useState(now);
-
+    
     // Webserver
     const { refetch } = useQuery(GET_STATEMENTS, {
         fetchPolicy: "network-only",
@@ -327,9 +327,13 @@ export default function StatementsTable() {
                 ...paypalBuyFooList,
                 ...coinPaymentBuyFooList,
             ]);
+
             setLoading(false);
         },
-        onError: (error) => console.log(error),
+        onError: (error) => {
+            console.log(error);
+            setLoading(false);
+        },
     });
 
     // Methods
@@ -495,8 +499,8 @@ export default function StatementsTable() {
     return (
         <>
             <div className="text-capitalize text-light pt-4 px-4">
-                <div className="d-flex align-items-center justify-content-between">
-                    <div className='d-flex'>
+                <div className="row">
+                    <div className='col-xl-5 d-flex justify-content-around mb-2'>
                         <Select
                             isSearchable={false}
                             options={depositOptions}
@@ -510,56 +514,58 @@ export default function StatementsTable() {
                             onChange={onPeriodOptionChange}
                         />
                     </div>
-                    <div className="d-flex align-items-center gap-2">
-                        <div className="date-title">start date:</div>
-                        {selectedPeriodOption.value === "custom" ? (
-                            <DayPickerInput
-                                placeholder="DD/MM/YYYY"
-                                format="DD/MM/YYYY"
-                                className="start-date-picker"
-                                value={new Date(from)}
-                                onDayChange={onStartDateChange}
-                                dayPickerProps={{
-                                    disabledDays: {
-                                        after: now,
-                                    },
-                                }}
-                            />
-                        ) : (
-                            <input
-                                type="text"
-                                disabled
-                                value={createDateFromDateObject(new Date(from))}
-                                className="start-date-picker disabled text-secondary"
-                            />
-                        )}
-                    </div>
-                    <div className="d-flex align-items-center gap-2">
-                        <div className="date-title">end date:</div>
-                        {selectedPeriodOption.value === "custom" ? (
-                            <DayPickerInput
-                                placeholder="DD/MM/YYYY"
-                                format="DD/MM/YYYY"
-                                className="start-date-picker"
-                                value={new Date(to)}
-                                onDayChange={onEndDateChange}
-                                dayPickerProps={{
-                                    disabledDays: {
-                                        before: from,
-                                    },
-                                }}
-                            />
-                        ) : (
-                            <input
-                                type="text"
-                                disabled
-                                value={createDateFromDateObject(new Date(to))}
-                                className="start-date-picker disabled text-secondary"
-                            />
-                        )}
-                    </div>
-                    <div>
-                        <img src={DownloadIcon} alt="Download icon" />
+                    <div className='col-xl-7 d-flex flex-column flex-sm-row justify-content-start justify-content-sm-around align-items-center date_pickers'>
+                        <div className="d-flex align-items-center gap-2 mb-2 ">
+                            <div className="date-title">start date:</div>
+                            {selectedPeriodOption.value === "custom" ? (
+                                <DayPickerInput
+                                    placeholder="DD/MM/YYYY"
+                                    format="DD/MM/YYYY"
+                                    className="start-date-picker"
+                                    value={new Date(from)}
+                                    onDayChange={onStartDateChange}
+                                    dayPickerProps={{
+                                        disabledDays: {
+                                            after: now,
+                                        },
+                                    }}
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    disabled
+                                    value={createDateFromDateObject(new Date(from))}
+                                    className="start-date-picker disabled text-secondary"
+                                />
+                            )}
+                        </div>
+                        <div className="d-flex align-items-center gap-2 mb-2">
+                            <div className="date-title">end date:</div>
+                            {selectedPeriodOption.value === "custom" ? (
+                                <DayPickerInput
+                                    placeholder="DD/MM/YYYY"
+                                    format="DD/MM/YYYY"
+                                    className="start-date-picker"
+                                    value={new Date(to)}
+                                    onDayChange={onEndDateChange}
+                                    dayPickerProps={{
+                                        disabledDays: {
+                                            before: from,
+                                        },
+                                    }}
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    disabled
+                                    value={createDateFromDateObject(new Date(to))}
+                                    className="start-date-picker disabled text-secondary"
+                                />
+                            )}
+                        </div>
+                        <div className='mb-2'>
+                            <img src={DownloadIcon} alt="Download icon" />
+                        </div>
                     </div>
                 </div>
             </div>

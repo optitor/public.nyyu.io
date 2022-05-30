@@ -2,7 +2,9 @@ import { gql } from "@apollo/client";
 
 export const GET_PAPAL_DEPOSIT_TRANSACTIONS = gql`
     query {
-        getPaypalDepositTxnsByUser {
+        getPaypalDepositTxnsByUser(
+            showStatus: 0
+        ) {
             id
             userId
             amount
@@ -21,7 +23,9 @@ export const GET_PAPAL_DEPOSIT_TRANSACTIONS = gql`
 `;
 export const GET_PAYPAL_WITHDRAW_TRANSACTIONS = gql`
     query {
-        getPaypalWithdrawByUser {
+        getPaypalWithdrawByUser(
+            showStatus: 0
+        ) {
             id
             userId
             targetCurrency
@@ -79,7 +83,9 @@ export const GET_PRESALE_ORDERS_BY_USER = gql`
 `;
 export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
     query {
-        getCoinpaymentDepositTxByUser {
+        getCoinpaymentDepositTxByUser(
+            showStatus: 0
+        ) {
             id
             userId
             amount
@@ -96,7 +102,9 @@ export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
 `;
 export const GET_CRYPTO_WITHDRAW_BY_USER = gql`
     query {
-        getCryptoWithdrawByUser {
+        getCryptoWithdrawByUser(
+            showStatus: 0
+        ) {
             id
             userId
             sourceToken
@@ -116,7 +124,9 @@ export const GET_CRYPTO_WITHDRAW_BY_USER = gql`
 
 export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
     query {
-        getStripeDepositTxByUser {
+        getStripeDepositTxByUser(
+            showStatus: 0
+        ) {
             id
             userId
             amount
@@ -137,7 +147,9 @@ export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
 
 export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
     query {
-        getBankDepositTxnsByUser {
+        getBankDepositTxnsByUser(
+            showStatus: 0
+        ) {
             id
             userId
             uid
@@ -157,7 +169,9 @@ export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
 
 export const GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER = gql`
     query {
-        getBankWithdrawRequests {
+        getBankWithdrawRequestsByUser(
+            showStatus: 0
+        ) {
             id
             userId
             sourceToken
