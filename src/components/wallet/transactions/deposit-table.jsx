@@ -75,6 +75,7 @@ export default function DepositTable() {
             </div>
         </th>
     );
+    
     const toggleDetails = (index) => {
         const previousItem = document.getElementById(
             `transaction-details-${currentRowOpen}`
