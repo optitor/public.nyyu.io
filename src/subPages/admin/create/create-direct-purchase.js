@@ -283,7 +283,7 @@ const IndexPage = () => {
                                     );
                                 })}                                
                                 <div className="add_btn_div">
-                                    <Icon className={taskDataError.item === 'noTask'? 'error': ''} icon='akar-icons:plus' onClick={() => setTaskData([...taskData, {title: '', url: ''}])}/>
+                                    <Icon className={taskDataError.item === 'noTask'? 'error': ''} icon='akar-icons:plus' onClick={() => setTaskData([...taskData, {task: '', url: ''}])}/>
                                 </div>
                             </div>
                             <div className="button_div">
@@ -300,21 +300,21 @@ const IndexPage = () => {
                                         <div className="item">
                                             <p>Round ID</p>
                                             <p>Auto-generated</p>
-                                        </div>                                        
+                                        </div>
                                         <div className="item">
                                             <p>Round Number</p>
                                             <p>{roundData.roundNumber}</p>
-                                        </div>                                        
+                                        </div>
                                         <div className="item">
                                             <p>Round Time</p>
                                             <p>{secondsToDhms(duration / 1000)}</p>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                     <div className="col-sm-5 col-6">
                                         <div className="item">
                                             <p>Token Amount</p>
                                             <p>{tokenData.tokenAmount}</p>
-                                        </div>  
+                                        </div>
                                         <div className="item">
                                             <p>Reserved Price</p>
                                             <p>{tokenData.ReservedPrice}</p>
@@ -328,7 +328,7 @@ const IndexPage = () => {
                                             })}
                                         </div>  
                                     </div>
-                                </div>                                                              
+                                </div>
                             </div>
                             <div className="button_div">
                                 <button className="btn previous" onClick={() => setCurrentStep(3)}>Previous</button>

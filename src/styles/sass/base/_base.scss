@@ -8,7 +8,7 @@
 }
 
 body {
-    background-color: $black;
+    background-color: $black !important;
     main {
         @extend %set-height;
         overflow-x: hidden !important;
