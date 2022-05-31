@@ -280,7 +280,6 @@ const TransactionsProvider = ({ children }) => {
             showStatus: showStatus.withdraw
         },
         onCompleted: (data) => {
-            console.log(data.getBankWithdrawRequestsByUser)
             const list = _.orderBy(data.getBankWithdrawRequestsByUser, ['confirmedAt'], ['desc'])
                 .map(item => {
                     const createdTime = new Date(item.requestedAt);
@@ -359,6 +358,10 @@ const TransactionsProvider = ({ children }) => {
         // Methods
         createDateFromDate,
         createTimeFromDate,
+        setPaypalDepositTransactions,
+        setCoinDepositTransactions,
+        setStripeDepositTransactions,
+        setBankDepositTransactions,
         setShowStatus,
 
         // Utilities

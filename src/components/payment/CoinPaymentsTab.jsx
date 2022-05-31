@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import axios from "axios";
 import _ from "lodash";
 import Select, { components } from "react-select";
@@ -16,7 +16,6 @@ import NumberFormat from "react-number-format";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useMutation } from "@apollo/client";
 
 import CustomSpinner from "../common/custom-spinner";
 import { generateQR } from "../../utilities/string";
@@ -29,6 +28,7 @@ import * as Query from "./../../apollo/graphqls/querys/Payment";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import { QUOTE, TICKER_24hr } from "./data"
 import { roundNumber } from "../../utilities/number";
+import { useAuction } from "../../providers/auction-context";
 
 const { Option } = components;
 
@@ -51,7 +51,11 @@ const SelectOption = (props) => {
 const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
+    const { order_id } = useSelector(state => state.placeBid);
     const { allFees } = useSelector(state => state);
+
+    const auction = useAuction();
+    const { isAuction } = auction;
     
     const [copied, setCopied] = useState(false);
 
@@ -142,17 +146,15 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         })();
     }, [depositAddress]);
 
-    const [createCryptoPaymentMutation] = useMutation(
-        Mutation.CREATE_CRYPTO_PAYMENT,
-        {
+    const [createCryptoPaymentMutation] = useMutation(Mutation.CREATE_CRYPTO_PAYMENT, {
             onCompleted: (data) => {
                 if (data.createCryptoPaymentForAuction) {
                     const resData = data.createCryptoPaymentForAuction;
 
                     setDepositAddress(resData?.depositAddress);
                     setPaymentId(resData?.id);
-                    setPending(false);
                 }
+                setPending(false);
             },
             onError: (err) => {
                 console.log("get deposit address: ", err);
@@ -161,19 +163,49 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         }
     );
 
+    const [createChargeForPresaleMutation] = useMutation(Mutation.CREATE_CHARGE_FOR_PRESALE, {
+        onCompleted: data => {
+            if(data.createChargeForPresale) {
+                const resData = data.createChargeForPresale;
+
+                setDepositAddress(resData?.depositAddress);
+                setPaymentId(resData?.id);
+            }
+            setPending(false);
+        },
+        onError: err => {
+            console.log('get deposit address for presale', err);
+            setPending(false);
+        },
+    })
+
     const create_Crypto_Payment = () => {
         setPending(true);
-        const createData = {
-            roundId: currentRound,
-            amount: bidAmount,
-            cryptoType: coin.value,
-            network: network.network,
-            coin: network.value,
-        };
+        if(isAuction) {
+            const createData = {
+                roundId: currentRound,
+                amount: bidAmount,
+                cryptoType: coin.value,
+                network: network.network,
+                coin: network.value,
+            };
+    
+            createCryptoPaymentMutation({
+                variables: { ...createData },
+            });
+        } else {
+            const createData = {
+                presaleId: currentRound,
+                orderId: order_id,
+                coin: network.value,
+                network: network.network,
+                cryptoType: coin.value,
+            };
 
-        createCryptoPaymentMutation({
-            variables: { ...createData },
-        });
+            createChargeForPresaleMutation({
+                variables: { ...createData },
+            });
+        }
     };
 
     const handleAllowFraction = useCallback(

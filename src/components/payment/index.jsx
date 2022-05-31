@@ -47,6 +47,7 @@ import {
 } from "../../utilities/cookies";
 import { ROUTES } from "../../utilities/routes";
 import { getCurrentMarketCap } from "../../utilities/utility-methods";
+import AuctionProvider from "../../providers/auction-context";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -171,7 +172,7 @@ const Payment = () => {
 
     if (loading) return <Loading />;
     return (
-        <>
+        <AuctionProvider>
             <Seo title="Payment" />
             <main className="payment-page">
                 <Header />
@@ -323,7 +324,7 @@ const Payment = () => {
                     </div>
                 </section>
             </main>
-        </>
+        </AuctionProvider>
     );
 };
 

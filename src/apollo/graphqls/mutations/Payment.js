@@ -32,28 +32,28 @@ export const CREATE_CRYPTO_PAYMENT = gql`
     }
 `;
 
-export const CRYPTO_CHARGE_FOR_PRESALE = gql`
+export const CREATE_CHARGE_FOR_PRESALE = gql`
     mutation CreateChargeForPresale(
-        $presaleId: Int!,
-        $orderId: Int!,
-        $amount: Float!,
-        $coin: String!,
-        $network: String!,
-        $cryptoType: String!,
-        $cryptoAmount: Float!
+        $presaleId: Int
+        $orderId: Int
+        $coin: String
+        $network: String
+        $cryptoType: String
     ) {
         createChargeForPresale(
             presaleId: $presaleId
             orderId: $orderId
-            amount: $amount
             coin: $coin
             network: $network
             cryptoType: $cryptoType
-            cryptoAmount: $cryptoAmount
         ) {
-            id,
+            id
+            userId
+            amount
+            createdAt
             depositAddress
-            cryptoAmount
+            coin
+            orderId
         }
     }
 `;
