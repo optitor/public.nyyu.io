@@ -8,14 +8,15 @@ import CustomSpinner from "../common/custom-spinner"
 import AuctionListHeader from "../common/AuctionListHeader"
 import AuctionList from "../common/AuctionList"
 
-import { GET_BID } from "../../apollo/graphqls/querys/Auction"
+import { GET_BID, GET_CURRENT_ROUND} from "../../apollo/graphqls/querys/Auction"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graphqls/querys/Bid"
 import { GET_PRESALE_LIST_BY_ROUND } from "../../apollo/graphqls/querys/Presale"
+import { setCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
     const auction = useAuction()
-    const { optCurrentRound, currentRoundNumber, isAuction } = auction
+    const { optCurrentRound, currentRoundNumber, isAuction, entireRounds } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
     const [displayedBidList, setDisplayedBidList] = useState(null)
     const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
@@ -50,7 +51,7 @@ export default function AuctionRoundBidList() {
             setCurrentAuctionUserExist(false)
             setCurrentUserBidData([])
             if (!isAuction) {
-                const sortList = list.sort((a, b) => a.ndbAmount - b.ndbAmount)
+                const sortList = list.sort((a, b) => b.ndbAmount - a.ndbAmount)
                 const tempList = sortList.map(({ranking, ...item}, key) => ({
                     ...item,
                     ranking: key + 1
@@ -68,6 +69,32 @@ export default function AuctionRoundBidList() {
         pollInterval: pollIntervalValue,
         notifyOnNetworkStatusChange: true
     })
+
+    const pollingCurrentRound = useQuery(GET_CURRENT_ROUND, {
+        onCompleted: (data) => {
+            if(data.getCurrentRound) {
+                if(data.getCurrentRound.auction) {
+                    auction.setOptCurrentRound(data.getCurrentRound.auction);
+                } else if (data.getCurrentRound.presale) {
+                    auction.setOptCurrentRound(data.getCurrentRound.presale);
+                }
+
+                if(data.getCurrentRound?.auction) {
+                    setCookie(NDB_Paypal_TrxType, NDB_Auction);
+                } else if(data.getCurrentRound?.presale) {
+                    setCookie(NDB_Paypal_TrxType, NDB_Presale);
+                } else {
+                    setCookie(NDB_Paypal_TrxType, '');
+                }
+            }
+        },
+        onError: (error) => console.log(error),
+        fetchPolicy: "no-cache",
+        errorPolicy: "ignore",
+        pollInterval: pollIntervalValue,
+        notifyOnNetworkStatusChange: true
+    })
+
 
     useQuery(GET_BID, {
         variables: {
@@ -95,10 +122,15 @@ export default function AuctionRoundBidList() {
             if (currentUserBidInfo) {
                 setCurrentUserBidData(currentUserBidInfo)
                 setCurrentAuctionUserExist(true)
-                const restList = currentRoundBidList?.filter(
-                    (auction) => auction.userId !== currentUser.id
-                )
-                setDisplayedBidList(restList)
+                
+                if(isAuction) {
+                    const restList = currentRoundBidList?.filter(
+                        (auction) => auction.userId !== currentUser.id
+                    )
+                    setDisplayedBidList(restList)
+                } else {
+                    setDisplayedBidList(currentRoundBidList);
+                }
             } else {
                 setDisplayedBidList(currentRoundBidList)
             }
@@ -110,6 +142,11 @@ export default function AuctionRoundBidList() {
         if (optCurrentRound && optCurrentRound.status === 2) return startPolling(pollIntervalValue)
         return stopPolling()
     }, [optCurrentRound, startPolling, stopPolling])
+
+    useEffect(() => {
+        if (optCurrentRound && optCurrentRound.status === 2) return pollingCurrentRound.startPolling(pollIntervalValue)
+        return pollingCurrentRound.stopPolling()
+    }, [optCurrentRound, pollingCurrentRound]);
 
     // Render
     if (loadingData)
@@ -123,7 +160,7 @@ export default function AuctionRoundBidList() {
         <div className="d-flex flex-column align-items-center pt-5 list-part">
             <AuctionListHeader totalCount={currentRoundBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
                                auctionTitle={isAuction ? "Bid" : "Order"}/>
-            {currentAuctionUserExist ? <div className="auction-bid-list-content-final">
+            {currentAuctionUserExist && isAuction ? <div className="auction-bid-list-content-final">
                 <AuctionList
                     ranking={currentUserBidData.ranking}
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
