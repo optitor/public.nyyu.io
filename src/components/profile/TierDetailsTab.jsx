@@ -19,6 +19,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
         onCompleted: (data) => {
             setGainPointsData(data.getUserTierTask);
             const walletBalance = data.getUserTierTask.wallet;
+
             let _walletPoint = 0;
             taskSettingData.wallet.forEach(elem => {
                 if(walletBalance > elem.amount) {
@@ -187,6 +188,19 @@ export default function TierDetailsTab({ shuftiStatus }) {
                         </div>
                         <div className="detail_item text-end text-sm-start">
                             {taskSettingData.auction * gainPointsData.auctions?.length || 0}
+                        </div>
+                    </div>
+                    <div className="row mx-0">
+                        <div className="detail_item d-flex align-items-center br">
+                            <div
+                                className={`status me-2 ${
+                                    gainPointsData.direct > 0 ? "active" : "deactive"
+                                }`}
+                            />
+                            Direct Purchase
+                        </div>
+                        <div className="detail_item text-end text-sm-start">
+                            {gainPointsData.direct || 0}
                         </div>
                     </div>
                 </div>

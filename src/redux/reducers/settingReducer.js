@@ -52,7 +52,7 @@ export const tasksReducer = (state = InitialTask, action) => {
 };
 
 const InitialFavAssets = {
-    currency: 'USD',
+    currency: { label: 'USD', value: 'USD', sign: '$' },
     assets: []
 };
 

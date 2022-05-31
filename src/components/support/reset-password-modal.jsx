@@ -1,62 +1,76 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import validator from "validator";
 import Modal from "react-modal";
-import { FORGOT_PASSWORD, RESET_PASSWORD } from "../../apollo/graphqls/mutations/Auth";
+
+import * as Mutation from '../../apollo/graphqls/mutations/Support';
+import { RESET_PASSWORD } from "../../apollo/graphqls/mutations/Auth";
 import { CloseIcon } from "../../utilities/imgImport";
 import { passwordValidatorOptions } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
-import { censorEmail } from "../../utilities/string";
-import { showSuccessAlarm, showFailAlarm } from "../admin/AlarmModal";
+import { showSuccessAlarm } from "../admin/AlarmModal";
 
 
 export default function ResetPasswordModal({ isOpen, setIsOpen }) {
     const { user } = useSelector(state => state.auth);
-    // Webservice
-    const [forgotPassword] = useMutation(FORGOT_PASSWORD, {
-        onCompleted: (res) => {
-            setForgotPasswordSent(true);
-        },
+    
+    // Containers
+    const [error, setError] = useState("");
+    const [pendingRequest, setPendingRequest] = useState(false);
+    
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    
+    
+    const [ verifyCode, setVerifyCode ] = useState("");
+    const [ verifyPending, setVerifyPending ] = useState(false);
+    const [ mailVerify, setMailVerify ] = useState({
+        sent: false, error: '', email: ''
     });
+    const loading = !user.email && !mailVerify.sent;
+
     const [resetPassword] = useMutation(RESET_PASSWORD, {
         onCompleted: (res) => {
             setPendingRequest(false);
             setIsOpen(false);
             if(res.resetPassword === 'Success') {
                 showSuccessAlarm('Password reset successfully');
-            } else {
-                showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
+            }
+            else {
+                setError("Unknown error occurred in server.");
             }
         },
         onError: err => {
-            showFailAlarm('Failed to reset password', 'Ops! Something went wrong. Try again!');
-            setIsOpen(false);
+            setError(err.message);
         }
     });
 
-    // Containers
-    const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
-    const [error, setError] = useState("");
-    const loading = !user.email && !forgotPasswordSent;
-    const [pendingRequest, setPendingRequest] = useState(false);
-    const [sentCode, setSentCode] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-
-    // Methods
-    const censorWord = (str) => str[0] + "*".repeat(3) + str.slice(-1);
+    const [ sendVerifyCode ] = useMutation(
+        Mutation.SEND_VERIFY_CODE, {
+            onCompleted: data => {
+                if(data.sendVerifyCode !== 'Failed') {
+                    setMailVerify({...mailVerify, error: '', email: data.sendVerifyCode, sent: true});
+                } else {
+                    setMailVerify({...mailVerify, error: 'Cannot get verify code', email: '', sent: false});
+                }
+            },
+            onError: err => {
+                setMailVerify({...mailVerify, error: err.message, email: '', sent: false});
+            }
+        }
+    )
 
     const submit = (e) => {
         e.preventDefault();
         setError("");
         setPendingRequest(false);
         let error = false;
-        if (!sentCode) {
+        if (!mailVerify.sent) {
             setError("Please enter the code!");
             return (error = true);
         }
@@ -76,21 +90,22 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
             resetPassword({
                 variables: {
                     email: user.email,
-                    code: sentCode,
+                    code: verifyCode,
                     newPassword: newPassword,
                 },
             });
         }
     };
-    useEffect(() => {
-        if (user.email) {
-            forgotPassword({
-                variables: {
-                    email: user.email,
-                },
-            });
-        }
-    }, [user.email, forgotPassword]);
+ 
+    const getVerifyCode = () => {
+        if(verifyPending) return;
+        setMailVerify({...mailVerify, error: '', email: '', sent: false});
+        setVerifyPending(true);
+        setTimeout(() => {
+            setVerifyPending(false);
+        }, 6000);
+        sendVerifyCode();
+    }
 
     // Render
     return (
@@ -131,19 +146,27 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                 <div className="form-group">
                                     <FormInput
                                         type="text"
-                                        label="Code"
-                                        value={sentCode}
-                                        onChange={(e) => setSentCode(e.target.value)}
+                                        label="Email verification code"
+                                        value={verifyCode}
+                                        onChange={(e) => setVerifyCode(e.target.value)}
                                         placeholder="Enter code"
                                     />
-                                    <div className="fs-12px">
-                                        The code has been sent to {censorEmail(user.email)}{" "}
-                                        <span className="txt-green fw-500 cursor-pointer">
-                                            Resend
-                                        </span>
-                                    </div>
                                 </div>
-                                <div className="form-group mt-3">
+                                <div className="fs-12px d-flex">
+                                    <span className={(mailVerify.error ? "text-danger" : "")}>
+                                        {mailVerify.sent && 
+                                            `The code has been sent to ${mailVerify.email}`
+                                        }
+                                        {mailVerify.error !== '' && mailVerify.error}
+                                    </span>
+                                    <span 
+                                        className={"fw-500 cursor-pointer ms-auto " + (verifyPending ? "txt-grey" : "txt-green") }
+                                        onClick={getVerifyCode}
+                                    >
+                                        Get Code
+                                    </span>
+                                </div>
+                                <div className="form-group mb-3">
                                     <FormInput
                                         type={showPassword ? "text" : "password"}
                                         label="New password"

@@ -219,6 +219,64 @@
             height: 47px;
         }
     }
+    .input_mobile {
+        margin: auto;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        @include mq('phone', max) {
+            width: 100%;
+        }
+        .mobile-input-field {
+            font-size: 16px;
+            align-items: center;
+            justify-content: center;
+            .country-code-select {
+                position: relative;
+                .search-icon {
+                    position: absolute;
+                    top: 8px;
+                    width: 22px;
+                    left: 8px;
+                    font-size: 22px;
+                    z-index: 10;
+                    color: black !important;
+                }
+            }
+            .css-1s2u09g-control,
+            .css-1pahdxg-control {
+                svg {
+                    color: transparent !important;
+                }
+                flex-direction: row-reverse;
+                border-radius: unset;
+                .css-319lph-ValueContainer {
+                    justify-content: start;
+                    padding: 0 !important;
+                    .css-qc6sy-singleValue {
+                        font-family: "Montserrat";
+                        font-size: 13px;
+                    }
+                    @include mq("phone", max) {
+                        padding: 8px;
+                    }
+                }
+                .css-1hb7zxy-IndicatorsContainer {
+                    .css-1okebmr-indicatorSeparator {
+                        display: none;
+                    }
+                }
+                .css-6j8wv5-Input {
+                    input {
+                        color: transparent !important;
+                    }
+                }
+            }
+        }
+        button {
+            font-size: 20px;
+        }
+    }
     #select_currency_in_profile {
         input {
             position: absolute!important;

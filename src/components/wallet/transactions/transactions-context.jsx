@@ -12,6 +12,7 @@ import {
     GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER,
     GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER
 } from "./queries";
+import { GET_CURRENT_ROUND } from "../../../apollo/graphqls/querys/Auction";
 
 export const TransactionsContext = React.createContext();
 export const useTransactions = () => useContext(TransactionsContext);
@@ -44,6 +45,8 @@ const TransactionsProvider = ({ children }) => {
     // Containers
     const [currentTab, setCurrentTab] = useState(0);
 
+    const [currentRound, setCurrentRound] = useState(null);
+
     const [paypalDepositTransactions, setPaypalDepositTransactions] = useState(null);
     const [paypalWithdrawTransactions, setPaypalWithdrawTransactions] = useState(null);
 
@@ -66,7 +69,8 @@ const TransactionsProvider = ({ children }) => {
         bankDepositTransactions &&
         bankWithdrawTransactions &&
         bidList &&
-        presaleList
+        presaleList &&
+        currentRound
     );
     const itemsCountPerPage = 5;
 
@@ -93,9 +97,19 @@ const TransactionsProvider = ({ children }) => {
     };
 
     // Webserver
+    useQuery(GET_CURRENT_ROUND, {
+        onCompleted: data => {
+            if(data.getCurrentRound) {
+                setCurrentRound(data.getCurrentRound);
+            }
+        },
+        onError: err => {
+            console.log(err);
+        }
+    });
+    
     useQuery(GET_PAPAL_DEPOSIT_TRANSACTIONS, {
         onCompleted: (data) => {
-            console.log(data.getPaypalDepositTxnsByUser)
             const fooList = _.orderBy(data.getPaypalDepositTxnsByUser, ['createdAt'], ['desc'])
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
@@ -118,6 +132,7 @@ const TransactionsProvider = ({ children }) => {
             setPaypalDepositTransactions(fooList);
         },
     });
+
     useQuery(GET_PAYPAL_WITHDRAW_TRANSACTIONS, {
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getPaypalWithdrawByUser, ['confirmedAt'], ['desc'])
@@ -133,7 +148,8 @@ const TransactionsProvider = ({ children }) => {
                         amount: item.withdrawAmount,
                         type: "Paypal Withdraw",
                         paymentId: item.senderBatchId,
-                        asset: item.targetCurrency,
+                        currency: item.targetCurrency,
+                        asset: item.sourceToken,
                     };
                 });
 
@@ -166,6 +182,7 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
+
     useQuery(GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER, {
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getBankDepositTxnsByUser, ['createdAt'], ['desc'])
@@ -190,8 +207,6 @@ const TransactionsProvider = ({ children }) => {
         },
         onError: (error) => console.log(error),
     });
-
-
 
     useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
         onCompleted: (data) => {
@@ -240,7 +255,8 @@ const TransactionsProvider = ({ children }) => {
 
     useQuery(GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER, {
         onCompleted: (data) => {
-            const list = _.orderBy(data.getBankWithdrawRequests, ['confirmedAt'], ['desc'])
+            console.log(data.getBankWithdrawRequestsByUser)
+            const list = _.orderBy(data.getBankWithdrawRequestsByUser, ['confirmedAt'], ['desc'])
                 .map(item => {
                     const createdTime = new Date(item.requestedAt);
                     return {
@@ -250,6 +266,7 @@ const TransactionsProvider = ({ children }) => {
                         fee: item.fee,
                         status: item.status,
                         asset: item.sourceToken,
+                        currency: item.targetCurrency,
                         amount: item.withdrawAmount,
                         type: 'Bank Withdraw',
                     }
@@ -311,6 +328,7 @@ const TransactionsProvider = ({ children }) => {
         bidList,
         presaleList,
         itemsCountPerPage,
+        currentRound,
 
         // Methods
         createDateFromDate,

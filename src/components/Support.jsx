@@ -71,7 +71,7 @@ const FAQ = () => {
             label: "Reset Phone Security Verification",
             icon: SupportSecurity,
             clickEvent: () => setIsResetPhoneModalOpen(true),
-            disabled: true,
+            disabled: false,
         },
         {
             id: 3,
@@ -88,14 +88,14 @@ const FAQ = () => {
             label: "Deposit Non Credit Asset Recovery",
             icon: SupportRecovery,
             clickEvent: () => setIsDepositAssetModalOpen(true),
-            disabled: true,
+            disabled: false,
         },
         {
             id: 5,
             label: "Deposit Missing Or Wrong Tag/Memo Asset Recovery",
             icon: SupportTag,
             clickEvent: () => setIsDepositMissingModalOpen(true),
-            disabled: true,
+            disabled: false,
         },
         {
             id: 6,
@@ -127,6 +127,7 @@ const FAQ = () => {
     const [pending, setPending] = useState(false);
 
     const [ qrcode, setQRcode ] = useState("");
+    const [ token, setToken ] = useState("");
 
     const [getZendeskJwtMutation] = useMutation(GET_ZENDESK_JWT, {
         onCompleted: data => {
@@ -145,7 +146,7 @@ const FAQ = () => {
     const [ getGoogleAuthSecret ] = useMutation(RESET_GOOGLE_AUTH, {
         onCompleted: data => {
             setPending(false);
-            if(data.resetGoogleAuth) {
+            if(data.resetGoogleAuthRequest) {
                 const filtered = selfServiceData
                     .map(item => {
                         if(item.id === GOOGLE_AUTH_INDEX) {
@@ -155,7 +156,8 @@ const FAQ = () => {
                         return item;
                 });
                 setSelfServiceData(filtered);
-                setQRcode(data.resetGoogleAuth);
+                setQRcode(data.resetGoogleAuthRequest.secret);
+                setToken(data.resetGoogleAuthRequest.token);
                 // open modal
                 setIsResetAuthenticatorModalOpen(true);
             }
@@ -263,7 +265,6 @@ const FAQ = () => {
                                         onClick={item?.clickEvent}
                                         disabled={item?.disabled? true: false}
                                     >
-                                        
                                         <div
                                             className={`text-light border border-1 border-light text-center support-self-security-item col-12 ${item.id <= 5 && "mb-2"
                                                 }`}
@@ -293,27 +294,28 @@ const FAQ = () => {
                             setIsOpen={setIsResetPasswordModalOpen}
                         />
                     )}
-                    <UnlockAccountModal
+                    {isUnlockAccountModalOpen && <UnlockAccountModal
                         isOpen={isUnlockAccountModalOpen}
                         setIsOpen={setIsUnlockAccountModalOpen}
-                    />
-                    <ResetPhoneModal
+                    />}
+                    {isResetPhoneModalOpen && <ResetPhoneModal
                         isOpen={isResetPhoneModalOpen}
                         setIsOpen={setIsResetPhoneModalOpen}
-                    />
-                    <ResetAuthenticatorModal
+                    />}
+                    {isResetAuthenticatorModalOpen && <ResetAuthenticatorModal
                         isOpen={isResetAuthenticatorModalOpen}
                         setIsOpen={setIsResetAuthenticatorModalOpen}
                         secret={qrcode}
-                    />
-                    <DepositAssetModal
+                        token={token}
+                    />}
+                    {isDepositAssetModalOpen && <DepositAssetModal
                         isOpen={isDepositAssetModalOpen}
                         setIsOpen={setIsDepositAssetModalOpen}
-                    />
-                    <DepositMissingModal
+                    />}
+                    {isDepositMissingModalOpen && <DepositMissingModal
                         isOpen={isDepositMissingModalOpen}
                         setIsOpen={setIsDepositMissingModalOpen}
-                    />
+                    />}
                 </section>
                 <Zendesk defer zendeskKey={ZENDESK_KEY} {...setting} />
                 <AlarmModal />
