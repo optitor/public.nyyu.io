@@ -20,7 +20,7 @@ import { Input } from "../common/FormControl";
 import { useWindowSize } from "../../utilities/customHook";
 import AirdropDetail from "../AirdropDetail";
 import MarketTab from "../wallet/market-tab";
-import Transactions from "./transactions/transactions-tab";
+import Transactions from "./transactions";
 import ReferralTab from "../wallet/referral-tab";
 import StakeTab from "../wallet/stake-tab";
 import { GET_BID_LIST_BY_USER } from "../../apollo/graphqls/querys/Bid";

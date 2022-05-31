@@ -148,7 +148,8 @@ const TransactionsProvider = ({ children }) => {
                         amount: item.withdrawAmount,
                         type: "Paypal Withdraw",
                         paymentId: item.senderBatchId,
-                        asset: item.targetCurrency,
+                        currency: item.targetCurrency,
+                        asset: item.sourceToken,
                     };
                 });
 
@@ -254,7 +255,8 @@ const TransactionsProvider = ({ children }) => {
 
     useQuery(GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER, {
         onCompleted: (data) => {
-            const list = _.orderBy(data.getBankWithdrawRequests, ['confirmedAt'], ['desc'])
+            console.log(data.getBankWithdrawRequestsByUser)
+            const list = _.orderBy(data.getBankWithdrawRequestsByUser, ['confirmedAt'], ['desc'])
                 .map(item => {
                     const createdTime = new Date(item.requestedAt);
                     return {
@@ -264,6 +266,7 @@ const TransactionsProvider = ({ children }) => {
                         fee: item.fee,
                         status: item.status,
                         asset: item.sourceToken,
+                        currency: item.targetCurrency,
                         amount: item.withdrawAmount,
                         type: 'Bank Withdraw',
                     }

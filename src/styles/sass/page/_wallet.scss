@@ -236,6 +236,7 @@
         &__right {
             position: relative;
             height: 100%;
+            overflow-y: auto;
             padding: 0;
             .verify-link {
                 @include mq("laptop", max) {
@@ -382,7 +383,6 @@
                     }
                 }
                 tbody {
-                    @include custom-scroll(35vh);
                     min-height: 100px;
                     @include mq("tablet", max) {
                         max-height: 350px;
@@ -1294,6 +1294,14 @@ div.wallet_balances {
         }
         &::-ms-input-placeholder {
             color: #fff;
+        }
+    }
+    .date_pickers {
+        & > div {
+            width: auto;
+            @include mq('phone', max) {
+                width: 90%;
+            }
         }
     }
 }
