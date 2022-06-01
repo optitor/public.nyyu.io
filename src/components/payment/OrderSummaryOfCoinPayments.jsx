@@ -2,6 +2,22 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { roundNumber } from "../../utilities/number";
 import NumberFormat from "react-number-format";
+import Countdown from 'react-countdown';
+
+const Completionist = () => <span>Payment expired!</span>;
+
+// Renderer callback with condition
+const renderer = ({ hours, minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a completed state
+    return <Completionist />;
+  } else {
+    // Render a countdown
+    return <span>{hours}h: {minutes}m: {seconds}s</span>;
+  }
+};
+
+const EXPIRE_TIME = 8 * 3600 * 1000;
 
 export default function OrderSummary({ bidAmount }) {
     const { temp: coinData } = useSelector((state) => state);
@@ -47,7 +63,17 @@ export default function OrderSummary({ bidAmount }) {
                         <p className="order-list__label">
                             Time left to confirm funds
                         </p>
-                        <p className="order-list__detail">8h 0m 0s</p>
+                        <p className="order-list__detail">
+                            {coinData?.paymentId? (
+                                <Countdown
+                                    zeroPadTime={2}
+                                    date={Date.now() + EXPIRE_TIME}
+                                    renderer={renderer}
+                                />
+                            ): (
+                                <span>8h: 0m: 0s</span>
+                            )}
+                        </p>
                     </div>
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Payment ID</p>
