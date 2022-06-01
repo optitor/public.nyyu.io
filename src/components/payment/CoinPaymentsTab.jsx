@@ -95,7 +95,8 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
                 const temp = JSON.parse(data.getExchangeRate);
-                const coins = SUPPORTED_COINS?.map((item) => {
+                const coins = SUPPORTED_COINS?.filter(item => item.value !== 'NDB')
+                .map((item) => {
                     return { ...item, detail: temp?.result[item.value] };
                 });
                 setFooCoins(coins);
@@ -119,9 +120,8 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
 
     useEffect(() => {
         let coinPrice = BTCPrice * coin?.detail?.rate_btc;
-
-        let precision = 4;
-        if (coin.value === "BTC") precision = 8;
+        if(coin.label === 'USDT') coinPrice = 1;
+        let precision = 8;
 
         let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
         if (quantity === Infinity) quantity = null;
