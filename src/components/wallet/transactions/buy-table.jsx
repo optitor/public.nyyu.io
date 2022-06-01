@@ -62,7 +62,6 @@ export default function BuyTable() {
             return setList(
                 presaleList.sort((item2, item1) => item1.amount - item2.amount)
             );
-
         if (sortType === "amount_up")
             return setList(
                 presaleList.sort((item2, item1) => item2.amount - item1.amount)

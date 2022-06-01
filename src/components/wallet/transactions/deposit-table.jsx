@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { client } from "../../../apollo/client";
 import Select from "react-select";
+import _ from 'lodash';
 import axios from "axios";
 
 import {
@@ -10,7 +10,6 @@ import {
 } from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
-import _ from 'lodash';
 import { Icons } from "../../../utilities/Icons";
 import * as Mutation from "./mutations";
 import { API_BASE_URL } from "../../../utilities/staticData3";
@@ -24,7 +23,6 @@ const depositOptions = [
 
 export default function DepositTable() {
     // Containers
-    const user = useSelector((state) => state.auth.user);
     const {
         tabs,
         paypalDepositTransactions,
@@ -272,7 +270,7 @@ export default function DepositTable() {
             </div>
             <div className="px-sm-4 px-3 table-responsive transaction-section-tables mb-5 mb-sm-0">
                 <table className="wallet-transaction-table w-100">
-                    {list?.length === 0 && (
+                    {_.isEmpty(list) && (
                         <tr className="py-4 text-center">
                             <td
                                 colSpan={4}
@@ -282,7 +280,7 @@ export default function DepositTable() {
                             </td>
                         </tr>
                     )}
-                    {list?.length && (
+                    {!_.isEmpty(list) && (
                         <tr className="border-bottom-2-dark-gray pb-3 pt-1">
                             {headerTitle({
                                 title: "Date",
@@ -306,7 +304,7 @@ export default function DepositTable() {
                             </th>
                         </tr>
                     )}
-                    {list
+                    {!_.isEmpty(list) && list
                         ?.slice(
                             (activePage - 1) * itemsCountPerPage,
                             activePage * itemsCountPerPage

@@ -5,6 +5,7 @@ import React, {
     useReducer,
     useMemo,
 } from "react";
+import { navigate } from "gatsby";
 import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useQuery, useMutation } from "@apollo/client";
@@ -16,6 +17,7 @@ import NumberFormat from "react-number-format";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import CircularProgress from "@mui/material/CircularProgress";
+import Countdown from 'react-countdown';
 
 import CustomSpinner from "../common/custom-spinner";
 import { generateQR } from "../../utilities/string";
@@ -29,6 +31,7 @@ import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import { QUOTE, TICKER_24hr } from "./data"
 import { roundNumber } from "../../utilities/number";
 import { useAuction } from "../../providers/auction-context";
+import { ROUTES } from '../../utilities/routes';
 
 const { Option } = components;
 
@@ -47,6 +50,25 @@ const SelectOption = (props) => {
         </Option>
     );
 };
+
+// Renderer callback with condition
+const renderer = ({ minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a completed state
+    navigate(ROUTES.auction);
+    return <></>;
+  } else {
+    // Render a countdown
+    return (
+        <>
+            <span className="me-2">PAYMENT EXPIRES IN</span>
+            <span className="txt-green">{minutes}m: {seconds}s</span>
+        </>
+    );
+  }
+};
+
+const SESSION_EXPIRE_TIME = 10 * 60 * 1000;
 
 const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const dispatch = useDispatch();
@@ -365,8 +387,10 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                     </div>
                     {depositAddress && (
                         <p className="payment-expire my-auto">
-                            payment expires in{" "}
-                            <span className="txt-green">10 minutes</span>
+                            <Countdown
+                                date={Date.now() + SESSION_EXPIRE_TIME}
+                                renderer={renderer}
+                            />
                         </p>
                     )}
                 </div>
