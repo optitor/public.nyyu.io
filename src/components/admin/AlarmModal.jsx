@@ -9,23 +9,21 @@ const AlarmModal = () => {
         <>
             <div style={{display: 'none!important'}}>
                 <button type="button" id="success_alarm_btn" data-bs-toggle="modal" data-bs-target="#alarmSuccessModal" style={{display: 'none'}}>
-                    Open modal
                 </button>
                 <button type="button" id="fail_alarm_btn" data-bs-toggle="modal" data-bs-target="#alarmFailModal" style={{display: 'none'}}>
-                    Open modal
                 </button>
             </div>
             <AlarmModalContainer>
                 <div className="modal fade" id="alarmSuccessModal">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                         <div id="success" className="modal-content">
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}></button>
                             <div className="modal-body">
                                 <div className='icon'>
                                     <img src={SuccesImage} alt="success" />
                                 </div>
                                 <div className='inform'>
-                                    Action made successfully
+                                    
                                 </div>
                                 <div className='subInform'></div>
                             </div>
@@ -35,16 +33,16 @@ const AlarmModal = () => {
                 <div className="modal fade" id="alarmFailModal">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                         <div id="fail" className="modal-content">
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}>close</button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}></button>
                             <div className="modal-body">
                                 <div className='icon'>
                                     <img src={FailImage} alt="fail" />
                                 </div>
                                 <div className='inform'>
-                                    Action failed
+                                    
                                 </div>
                                 <div className='subInform'>
-                                    Ops! something went wrong! Try again.
+                                    
                                 </div>
                             </div>
                         </div>

@@ -103,7 +103,7 @@ export default function TokenSelectModal({
     }, []);
 
     const [createChargeForPresale] = useMutation(
-        Mutation.CRYPTO_CHARGE_FOR_PRESALE,
+        Mutation.CREATE_CHARGE_FOR_PRESALE,
         {
             onCompleted: async (data) => {
                 if (data.createChargeForPresale) {
