@@ -103,7 +103,7 @@ export default function TokenSelectModal({
     }, []);
 
     const [createChargeForPresale] = useMutation(
-        Mutation.CRYPTO_CHARGE_FOR_PRESALE,
+        Mutation.CREATE_CHARGE_FOR_PRESALE,
         {
             onCompleted: async (data) => {
                 if (data.createChargeForPresale) {
@@ -196,11 +196,9 @@ export default function TokenSelectModal({
             const createdData = {
                 presaleId: currentRound,
                 orderId,
-                amount: bidAmount,
                 cryptoType: selectedCoin.value,
                 network: network.network,
                 coin: network.value,
-                cryptoAmount: coinQuantity
             }
             createChargeForPresale({
                 variables: {...createdData},
