@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "react-js-pagination";
 import Select from "react-select";
+import axios from 'axios';
 import {
     AccordionDownIcon,
     AccordionUpIcon,
@@ -14,9 +15,9 @@ import { GET_STATEMENTS } from "./queries";
 import { useQuery } from "@apollo/client";
 import CustomSpinner from "../../common/custom-spinner";
 import NumberFormat from "react-number-format";
-import { receiptTemplate } from "./receiptTemplate";
 import { useSelector } from "react-redux";
 import { Icons } from "../../../utilities/Icons";
+import { API_BASE_URL } from "../../../utilities/staticData3";
 
 const depositOptions = [
     { value: "deposit", label: "Deposit" },
@@ -122,6 +123,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.fiatAmount,
                         type: "Paypal Deposit",
+                        tx: 'DEPOSIT',
+                        payment: 'PAYPAL',
                         paymentId: item?.paypalOrderId,
                         asset: item?.fiatType,
                     };
@@ -137,6 +140,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.amount,
                         type: "Crypto Deposit",
+                        tx: 'DEPOSIT',
+                        payment: 'CRYPTO',
                         paymentId: "---",
                         asset: item?.coin,
                     };
@@ -153,6 +158,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.amount,
                         type: "Credit Card Deposit",
+                        tx: 'DEPOSIT',
+                        payment: 'CREDIT',
                         paymentId: item?.paymentMethodId,
                         asset: item?.fiatType,
                     };
@@ -170,6 +177,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.withdrawAmount,
                         type: "Crypto Withdraw",
+                        tx: 'WITHDRAW',
+                        payment: 'CRYPTO',
                         paymentId: "---",
                         asset: item?.sourceToken,
                     };
@@ -185,6 +194,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.withdrawAmount,
                         type: "Paypal Withdraw",
+                        tx: 'WITHDRAW',
+                        payment: 'PAYPAL',
                         paymentId: "---",
                         asset: item?.targetCurrency,
                     };
@@ -300,6 +311,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.amount,
                         type: "Bank Deposit",
+                        tx: 'DEPOSIT',
+                        payment: 'BANK',
                         paymentId: "---",
                         asset: item?.fiatType,
                     };
@@ -424,34 +437,55 @@ export default function StatementsTable() {
                 ...buyList,
             ]);
     };
-    const downloadContent = (
-        id,
-        date,
-        time,
-        amount,
-        asset,
-        fee,
-        status,
-        type,
-        paymentId
-    ) => {
-        const downloadable = window.open("", "", "");
-        downloadable.document.write(
-            receiptTemplate({
-                id,
-                date,
-                time,
-                amount,
-                asset,
-                fee,
-                status,
-                type,
-                paymentId,
-                user,
-            })
-        );
-        downloadable.print();
+    const downloadContent = async (_from, _to) => {
+        try {
+            const token = localStorage.getItem("ACCESS_TOKEN");
+            const response = await axios({
+                url: `${API_BASE_URL}/download/pdf/transactions`,
+                method: 'GET',
+                responseType: 'blob',
+                params: { from:_from, to:_to },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            const fromDate = new Date(_from).toISOString().split('T')[0];
+            const toDate = new Date(_to).toISOString().split('T')[0];
+            link.setAttribute('download', `transactions-${fromDate} ~ ${toDate}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.log(error);
+        }
     };
+
+    const downloadSingle = async (id, payment, tx) => {
+        try {
+            const token = localStorage.getItem("ACCESS_TOKEN");
+            const response = await axios({
+                url: `${API_BASE_URL}/download/pdf/${id}`,
+                method: 'GET',
+                responseType: 'blob',
+                params: { tx, payment },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${payment}-${tx}-${id}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            
+        }
+    }
 
     useEffect(() => {
         if (selectedDepositOption.value === "deposit") setList(depositList);
@@ -563,7 +597,15 @@ export default function StatementsTable() {
                                 />
                             )}
                         </div>
-                        <div className='mb-2'>
+                        <div className='mb-2' onClick={() => {
+                            const _from = from.getTime();
+                            const _to = new Date(
+                                to.getFullYear(),
+                                to.getMonth(),
+                                to.getDate() + 1
+                                ).getTime();
+                            downloadContent(_from, _to);
+                        }}>
                             <img src={DownloadIcon} alt="Download icon" />
                         </div>
                     </div>
@@ -626,6 +668,8 @@ export default function StatementsTable() {
                                     status,
                                     amount,
                                     type,
+                                    tx,
+                                    payment,
                                     paymentId,
                                     asset,
                                 }) => (
@@ -795,24 +839,16 @@ export default function StatementsTable() {
                                                         </div>
                                                     </div>
                                                     <div className="fs-12px">
+                                                        {tx != undefined && 
                                                         <button
-                                                            className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                            onClick={() =>
-                                                                downloadContent(
-                                                                    id,
-                                                                    date,
-                                                                    time,
-                                                                    amount,
-                                                                    asset,
-                                                                    fee,
-                                                                    status,
-                                                                    type,
-                                                                    paymentId
-                                                                )
+                                                            className={`btn fs-12px p-0 text-success text-decoration-success text-decoration-underline`}
+                                                            onClick={() => {
+                                                                    downloadSingle(id, payment, tx);
+                                                                }
                                                             }
                                                         >
                                                             Get PDF Receipt
-                                                        </button>
+                                                        </button>}
                                                         <div className="text-light text-underline">
                                                             Hide this activity
                                                         </div>

@@ -196,11 +196,9 @@ export default function TokenSelectModal({
             const createdData = {
                 presaleId: currentRound,
                 orderId,
-                amount: bidAmount,
                 cryptoType: selectedCoin.value,
                 network: network.network,
                 coin: network.value,
-                cryptoAmount: coinQuantity
             }
             createChargeForPresale({
                 variables: {...createdData},
