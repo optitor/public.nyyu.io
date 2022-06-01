@@ -2,22 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { client } from "../../../apollo/client";
 import Select from "react-select";
+import axios from "axios";
+
 import {
     AccordionDownIcon,
     AccordionUpIcon,
 } from "../../../utilities/imgImport";
-import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
 import _ from 'lodash';
 import { Icons } from "../../../utilities/Icons";
 import * as Mutation from "./mutations";
+import { API_BASE_URL } from "../../../utilities/staticData3";
 
 const depositOptions = [
-    { value: "paypal", label: "Paypal" },
-    { value: "crypto", label: "Crypto" },
-    { value: "credit_card", label: "Credit Card" },
-    { value: 'standard_bank_transfer', label: 'Bank Transfer' }
+    { value: "paypal", label: "Paypal", type: 'PAYPAL' },
+    { value: "crypto", label: "Crypto", type: "CRYPTO" },
+    { value: "credit_card", label: "Credit Card", type: 'CREDIT' },
+    { value: 'standard_bank_transfer', label: 'Bank Transfer', type: 'BANK' }
 ];
 
 export default function DepositTable() {
@@ -47,6 +49,7 @@ export default function DepositTable() {
     const [toggle, setToggle] = useState(null);
 
     const [pending, setPending] = useState(false);
+    const [currentRowOpen, setCurrentRowOpen] = useState(-1);
 
     // Methods
     const headerTitle = ({ title, up, down, end }) => (
@@ -86,34 +89,41 @@ export default function DepositTable() {
             </div>
         </th>
     );
-
-    const downloadContent = (
-        id,
-        date,
-        time,
-        amount,
-        asset,
-        fee,
-        status,
-        type,
-        paymentId
-    ) => {
-        const downloadable = window.open("", "", "");
-        downloadable.document.write(
-            receiptTemplate({
-                id,
-                date,
-                time,
-                amount,
-                asset,
-                fee,
-                status,
-                type,
-                paymentId,
-                user,
-            })
+    const toggleDetails = (index) => {
+        const previousItem = document.getElementById(
+            `transaction-details-${currentRowOpen}`
         );
-        downloadable.print();
+        if (previousItem) previousItem.classList.toggle("d-none");
+
+        setCurrentRowOpen(index);
+        const item = document.getElementById(`transaction-details-${index}`);
+        if (item) item.classList.toggle("d-none");
+    };
+    /**
+     * Download statement pdf
+     * @param {int} id transaction id
+     * @param {string} tx transaction type, DEPOSIT or WITHDRAW
+     * @param {string} payment payment type, PAYPAL, CREDIT, CRYPTO and BANK
+     * All string params must be UPPER case.
+     */
+    const downloadContent = async (id, tx, payment) => {
+        const token = localStorage.getItem("ACCESS_TOKEN");
+        const response = await axios({
+            url: `${API_BASE_URL}/download/pdf/${id}`,
+            method: 'GET',
+            responseType: 'blob',
+            params: { tx, payment },
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${payment}-${tx}-${id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const changeDepositType = (type) => {
@@ -456,25 +466,18 @@ export default function DepositTable() {
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <div className="d-flex flex-column">
-                                                        <button
-                                                            className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                            onClick={() =>
-                                                                downloadContent(
-                                                                    id,
-                                                                    date,
-                                                                    time,
-                                                                    amount,
-                                                                    asset,
-                                                                    fee,
-                                                                    status,
-                                                                    type,
-                                                                    paymentId
-                                                                )
-                                                            }
-                                                        >
-                                                            Get PDF Receipt
-                                                        </button>
+                                                    
+                                                <div className="fs-12px">
+                                                    <button
+                                                        className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
+                                                        onClick={() =>
+                                                            downloadContent(
+                                                                id, "DEPOSIT", currentDepositType.type
+                                                            )
+                                                        }
+                                                    >
+                                                        Get PDF Receipt
+                                                    </button>
 
                                                         <button className="btn btn-link text-light fs-12px"
                                                             onClick={() => handleHideActivity(id)}
