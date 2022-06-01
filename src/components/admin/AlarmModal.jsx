@@ -23,7 +23,7 @@ const AlarmModal = () => {
                                     <img src={SuccesImage} alt="success" />
                                 </div>
                                 <div className='inform'>
-                                    
+                                    NDB Token Auction and Sale: The NDB token is a tool for demonstrating the buyer’s interests in the partnership between companies inside our ecosystem
                                 </div>
                                 <div className='subInform'></div>
                             </div>

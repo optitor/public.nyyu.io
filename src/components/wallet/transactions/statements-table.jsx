@@ -839,7 +839,7 @@ export default function StatementsTable() {
                                                         </div>
                                                     </div>
                                                     <div className="fs-12px">
-                                                        {tx != undefined && 
+                                                        {tx !== undefined && 
                                                         <button
                                                             className={`btn fs-12px p-0 text-success text-decoration-success text-decoration-underline`}
                                                             onClick={() => {
