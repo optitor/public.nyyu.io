@@ -56,7 +56,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
 
     const auction = useAuction();
     const { isAuction } = auction;
-    
+
     const [copied, setCopied] = useState(false);
 
     const [fooCoins, setFooCoins] = useState([]);
