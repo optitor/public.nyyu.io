@@ -384,87 +384,87 @@ export default function DepositTable() {
                                         </td>
                                     </tr>
                                     {toggle === id && (
-                                        <tr
-                                            className="text-light px-5"
-                                        >
-                                            <td colSpan={tabs.length}>
-                                                <div className="d-flex align-items-start justify-content-between">
-                                                    <div className="text-capitalize fs-12px">
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                type:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {type}
-                                                            </span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                amount:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {currentDepositType.value === 'credit_card' && (amount / 100).toFixed(2) + ' ' + asset}
-                                                                {currentDepositType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
-                                                                {currentDepositType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
-                                                                {currentDepositType.value === 'standard_bank_transfer' && (amount).toFixed(2) + ' ' + (asset === null ? 'USD': asset)}
-                                                            </span>
-                                                        </div>
-                                                        {currentDepositType.value !== 'crypto' && <div>
-                                                            <span className="text-secondary pe-1">
-                                                                deposited:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {currentDepositType.value === 'credit_card' && (deposited).toFixed(2) + ' ' + asset}
-                                                                {currentDepositType.value === 'paypal' && Number(deposited).toFixed(2) + ' ' + (cryptoAsset === null ? 'USDT': cryptoAsset)}
-                                                                {currentDepositType.value === 'standard_bank_transfer' && (deposited).toFixed(2) + ' ' + (cryptoAsset === null ? 'USDT': cryptoAsset)}
-                                                            </span>
-                                                        </div>}
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                fee:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + "USDT"}
-                                                            </span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                date:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {date + " " + time}
-                                                            </span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                asset:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {asset}
-                                                            </span>
-                                                        </div>
+                                    <tr
+                                        className="text-light px-5"
+                                    >
+                                        <td colSpan={tabs.length}>
+                                            <div className="d-flex align-items-start justify-content-between">
+                                                <div className="text-capitalize fs-12px">
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            type:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {type}
+                                                        </span>
                                                     </div>
-                                                    <div className="text-capitalize fs-12px">
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                Payment-ID:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {paymentId}
-                                                            </span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                Status:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                {status
-                                                                    ? "Success"
-                                                                    : "Pending"}
-                                                            </span>
-                                                        </div>
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            amount:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {currentDepositType.value === 'credit_card' && (amount / 100).toFixed(2) + ' ' + asset}
+                                                            {currentDepositType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + asset}
+                                                            {currentDepositType.value === 'crypto' && (amount).toFixed(8) + ' ' + asset}
+                                                            {currentDepositType.value === 'standard_bank_transfer' && (amount).toFixed(2) + ' ' + (asset === null ? 'USD': asset)}
+                                                        </span>
                                                     </div>
-                                                    
+                                                    {currentDepositType.value !== 'crypto' &&
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            deposited:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {currentDepositType.value === 'credit_card' && (deposited).toFixed(2) + ' ' + asset}
+                                                            {currentDepositType.value === 'paypal' && Number(deposited).toFixed(2) + ' ' + (cryptoAsset === null ? 'USDT': cryptoAsset)}
+                                                            {currentDepositType.value === 'standard_bank_transfer' && (deposited).toFixed(2) + ' ' + (cryptoAsset === null ? 'USDT': cryptoAsset)}
+                                                        </span>
+                                                    </div>}
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            fee:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {currentDepositType.value === 'crypto'? Number(fee).toFixed(8) + " " + asset: Number(fee).toFixed(2) + ' ' + "USDT"}
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            date:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {date + " " + time}
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            asset:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {asset}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="text-capitalize fs-12px">
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            Payment-ID:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {paymentId}
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-secondary pe-1">
+                                                            Status:
+                                                        </span>
+                                                        <span className="fw-500">
+                                                            {status
+                                                                ? "Success"
+                                                                : "Pending"}
+                                                        </span>
+                                                    </div>
+                                                </div>                                                    
                                                 <div className="fs-12px d-flex flex-column">
                                                     <button
                                                         className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
@@ -476,16 +476,16 @@ export default function DepositTable() {
                                                     >
                                                         Get PDF Receipt
                                                     </button>
-                                                    <button className="btn btn-link text-light fs-12px"
+                                                    <button className="btn btn-link text-light fs-12px d-none"
                                                         onClick={() => handleHideActivity(id)}
                                                         disabled={pending}
                                                     >
                                                         {pending? 'Processing . . .' : 'Hide this activity'}
                                                     </button>
-                                                    </div>
                                                 </div>
-                                            </td>
-                                        </tr>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     )}
                                 </>
                             )

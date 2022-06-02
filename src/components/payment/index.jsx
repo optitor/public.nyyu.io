@@ -70,7 +70,7 @@ const Payment = () => {
     
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
-    const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
+    const [currentCap, setCurrentCap] = useState(12000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
 

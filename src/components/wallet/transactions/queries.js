@@ -403,3 +403,55 @@ export const GET_STATEMENTS = gql`
         }
     }
 `;
+
+export const GET_PRESALE_ORDER_TXNS_BY_ORDER_ID = gql`
+    query GetPresaleOrderTransactions(
+        $orderId: Int
+    ) {
+        getPresaleOrderTransactions(
+            orderId: $orderId
+        ) {
+            coinpaymentTxns {
+                id
+                amount
+                createdAt
+                depositAddress
+                depositStatus
+                cryptoType
+                network
+                cryptoAmount
+                confirmedAt
+                coin
+                orderId
+                orderType
+                txHash
+            }
+            stripeTxns {
+                id
+                orderId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paymentIntentId
+                paymentMethodId
+            }
+            paypalTxns {
+                id
+                userId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paypalOrderId
+                paypalOrderStatus
+                presaleId
+                orderId
+            }
+        }
+    }
+`;
