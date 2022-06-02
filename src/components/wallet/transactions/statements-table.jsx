@@ -130,7 +130,7 @@ export default function StatementsTable() {
                     };
                 });
             const coinPaymentDepositFooList =
-                data.getStatement.coinpaymentWalletTxns.map((item) => {
+                data.getStatement.coinpaymentDepositTxns.map((item) => {
                     const createdTime = new Date(item?.confirmedAt);
                     return {
                         id: item?.id,

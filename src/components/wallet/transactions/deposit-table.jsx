@@ -465,7 +465,7 @@ export default function DepositTable() {
                                                         </div>
                                                     </div>
                                                     
-                                                <div className="fs-12px">
+                                                <div className="fs-12px d-flex flex-column">
                                                     <button
                                                         className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
                                                         onClick={() =>
@@ -476,13 +476,12 @@ export default function DepositTable() {
                                                     >
                                                         Get PDF Receipt
                                                     </button>
-
-                                                        <button className="btn btn-link text-light fs-12px"
-                                                            onClick={() => handleHideActivity(id)}
-                                                            disabled={pending}
-                                                        >
-                                                            {pending? 'Processing . . .' : 'Hide this activity'}
-                                                        </button>
+                                                    <button className="btn btn-link text-light fs-12px"
+                                                        onClick={() => handleHideActivity(id)}
+                                                        disabled={pending}
+                                                    >
+                                                        {pending? 'Processing . . .' : 'Hide this activity'}
+                                                    </button>
                                                     </div>
                                                 </div>
                                             </td>
