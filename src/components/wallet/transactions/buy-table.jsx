@@ -39,6 +39,7 @@ export default function BuyTable() {
             </div>
         </th>
     );
+
     useEffect(() => {
         if (sortType === null) return setList(presaleList);
         if (sortType === "date_down")
@@ -57,7 +58,6 @@ export default function BuyTable() {
                         new Date(item1.date).getTime()
                 )
             );
-
         if (sortType === "amount_down")
             return setList(
                 presaleList.sort((item2, item1) => item1.amount - item2.amount)

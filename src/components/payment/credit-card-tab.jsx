@@ -558,7 +558,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                 className="ms-2 cursor-pointer text-light"
                             />
                         </div>
-                        <p className="payment-expire my-auto">
+                        <p className="payment-expire my-auto text-uppercase">
                             payment expires in{" "}
                             <span className="txt-green">10 minutes</span>
                         </p>
