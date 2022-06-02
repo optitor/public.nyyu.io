@@ -86,6 +86,7 @@ export const GET_PRESALE_ORDERS_BY_USER = gql`
         }
     }
 `;
+
 export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
     query GetCoinpaymentDepositTxByUser(
         $showStatus: Int
@@ -97,16 +98,19 @@ export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
             userId
             amount
             createdAt
-            status
             cryptoType
             network
             cryptoAmount
             confirmedAt
             depositAddress
+            orderId
+            orderType
+            txHash
             coin
         }
     }
 `;
+
 export const GET_CRYPTO_WITHDRAW_BY_USER = gql`
     query GetCryptoWithdrawByUser(
         $showStatus: Int
@@ -275,14 +279,16 @@ export const GET_STATEMENTS = gql`
                 amount
                 fee
                 createdAt
-                status
                 cryptoType
                 network
                 cryptoAmount
                 confirmedAt
                 coin
-                auctionId
-                bidId
+                depositStatus
+                txHash
+                orderId
+                orderType
+                isShow
             }
             stripePresaleTxns {
                 id
@@ -320,15 +326,17 @@ export const GET_STATEMENTS = gql`
                 amount
                 fee
                 createdAt
-                status
                 cryptoType
                 network
                 cryptoAmount
                 confirmedAt
                 depositAddress
                 coin
-                presaleId
+                depositStatus
+                txHash
                 orderId
+                orderType
+                isShow
             }
             paypalDepositTxns {
                 id
@@ -346,19 +354,23 @@ export const GET_STATEMENTS = gql`
                 fee
                 deposited
             }
-            coinpaymentWalletTxns {
+            coinpaymentDepositTxns {
                 id
                 userId
                 amount
                 fee
                 createdAt
-                status
                 cryptoType
                 network
                 cryptoAmount
                 confirmedAt
                 depositAddress
                 coin
+                depositStatus
+                txHash
+                orderId
+                orderType
+                isShow
             }
             stripeDepositTxns {
                 id

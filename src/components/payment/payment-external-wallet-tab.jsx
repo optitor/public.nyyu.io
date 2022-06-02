@@ -125,10 +125,10 @@ export default function PaymentExternalWalletTab() {
                 <FontAwesomeIcon
                     data-tip="React-tooltip"
                     icon={faQuestionCircle}
-                    className="fa-xl ms-2 cursor-pointer"
+                    className="fa-xl ms-2 cursor-pointer fs-30px"
                 />
             </div>
-            <p className="payment-expire my-auto">
+            <p className="payment-expire my-auto text-uppercase">
                 payment expires in{" "}
                 <span className="txt-green">
                     10 minutes
@@ -137,5 +137,4 @@ export default function PaymentExternalWalletTab() {
         </div>
         </div>
     )
-
 }
