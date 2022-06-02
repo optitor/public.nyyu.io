@@ -40,6 +40,7 @@ export default function StatementsTable() {
     // Containers
     const user = useSelector((state) => state.auth.user);
     const [loading, setLoading] = useState(true);
+    const [pending, setPending] = useState(false);
     const { itemsCountPerPage, createDateFromDate, createTimeFromDate } =
         useTransactions();
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
@@ -838,7 +839,7 @@ export default function StatementsTable() {
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <div className="fs-12px">
+                                                    <div className="fs-12px d-flex flex-column">
                                                         {tx !== undefined && 
                                                         <button
                                                             className={`btn fs-12px p-0 text-success text-decoration-success text-decoration-underline`}
@@ -849,9 +850,12 @@ export default function StatementsTable() {
                                                         >
                                                             Get PDF Receipt
                                                         </button>}
-                                                        <div className="text-light text-underline">
-                                                            Hide this activity
-                                                        </div>
+                                                        <button className="btn btn-link text-light fs-12px d-none"
+                                                            // onClick={() => handleHideActivity(id)}
+                                                            disabled={pending}
+                                                        >
+                                                            {pending? 'Processing . . .' : 'Hide this activity'}
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>

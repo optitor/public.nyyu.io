@@ -13,6 +13,7 @@ import {
     GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER
 } from "./queries";
 import { GET_CURRENT_ROUND } from "../../../apollo/graphqls/querys/Auction";
+import { createDateFromDate, createTimeFromDate } from '../../../utilities/string';
 
 export const TransactionsContext = React.createContext();
 export const useTransactions = () => useContext(TransactionsContext);
@@ -77,28 +78,6 @@ const TransactionsProvider = ({ children }) => {
         currentRound
     );
     const itemsCountPerPage = 5;
-
-    // Methods
-    const createDateFromDate = (createdTime) => {
-        let month = createdTime.getMonth() + 1;
-        if (month < 10) month = "0" + month;
-        let day = createdTime.getDate();
-        if (day < 10) day = "0" + day;
-
-        let year = createdTime.getFullYear();
-        return month + "/" + day + "/" + year;
-    };
-
-    const createTimeFromDate = (createdTime) => {
-        let hours = createdTime.getHours();
-        if (hours < 10) hours = "0" + hours;
-        let minutes = createdTime.getMinutes();
-        if (minutes < 10) minutes = "0" + minutes;
-        let seconds = createdTime.getSeconds();
-        if (seconds < 10) seconds = "0" + seconds;
-
-        return hours + ":" + minutes + ":" + seconds;
-    };
 
     // Webserver
     useQuery(GET_CURRENT_ROUND, {
@@ -324,9 +303,10 @@ const TransactionsProvider = ({ children }) => {
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
                     return {
-                        transaction: item.id,
+                        id: item.id,
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
+                        createdAt: item.createdAt,
                         amount: item.ndbAmount * item.ndbPrice,
                         payment: 1,
                         status: item.status,
