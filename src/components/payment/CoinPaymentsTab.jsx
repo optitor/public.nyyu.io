@@ -206,7 +206,6 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         if(isAuction) {
             const createData = {
                 roundId: currentRound,
-                amount: bidAmount,
                 cryptoType: coin.value,
                 network: network.network,
                 coin: network.value,

@@ -118,6 +118,8 @@ export default function TokenSelectModal({
         setCoinQuantity(quantity);
     }, [bidAmount, selectedCoin, BTCPrice]);
 
+    const [updateTransactionHash, {data, loading: updatingHash, error}] = useMutation(Mutation.UPDATE_TRANSACTION_HASH);
+
     const [createChargeForPresale] = useMutation(
         Mutation.CREATE_CHARGE_FOR_PRESALE,
         {
@@ -136,7 +138,14 @@ export default function TokenSelectModal({
                                 value: BigNumber.from(_.toInteger(payamount))
                             }
                         });
-                        console.log(result);
+                        
+                        // update tx hash
+                        const hash = result.hash;
+                        updateTransactionHash({variables: {
+                            id: resData.id,
+                            txHash: hash
+                        }});
+
                         await navigate(ROUTES.auction);
                     } catch (error) {
                         console.log(error);
@@ -168,7 +177,14 @@ export default function TokenSelectModal({
                                 value: BigNumber.from(_.toInteger(payamount))
                             }
                         });
-                        console.log(result);
+                        
+                        // update tx hash
+                        const hash = result.hash;
+                        updateTransactionHash({variables: {
+                            id: resData.id,
+                            txHash: hash
+                        }});
+                        
                         await navigate(ROUTES.auction); 
                     } catch (error) {
                         setPending(false);
@@ -199,7 +215,6 @@ export default function TokenSelectModal({
             // auction
             const createdData = {
                 roundId: currentRound,
-                amount: coinQuantity,
                 cryptoType: selectedCoin.value,
                 network: network.network,
                 coin: network.value
@@ -339,7 +354,7 @@ export default function TokenSelectModal({
                                                 {`Your balance is ${roundNumber(balance, 8)} ${selectedCoin.value}.`}
                                             </div>
                                         )}
-                                        {balance != 0 && (
+                                        {(balance != 0 && sufficient) && (
                                             <div className="py-2" style={{ color: "#65e83a" }}>
                                                 {`Your have enough ${roundNumber(balance, 8)} ${selectedCoin.value} to pay.`}
                                             </div>
