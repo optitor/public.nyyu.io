@@ -216,7 +216,7 @@ const TransactionsProvider = ({ children }) => {
                         id: item.id,
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
-                        fee: item.fee,
+                        fee: item.fee || 0,
                         status: item.depositStatus,
                         amount: item.cryptoAmount,
                         type: "Crypto Deposit",
