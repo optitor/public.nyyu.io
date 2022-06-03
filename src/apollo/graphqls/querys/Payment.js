@@ -35,7 +35,7 @@ export const GET_COINPAYMENT_DEPOSITTX_BYID = gql`
             id: $id
         ) {
             id
-            status
+            depositStatus
             cryptoAmount
             createdAt
         }

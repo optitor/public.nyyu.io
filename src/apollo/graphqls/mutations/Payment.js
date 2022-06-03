@@ -93,7 +93,6 @@ export const CREATE_CHARGE_FOR_DEPOSIT = gql`
             userId
             amount
             createdAt
-            status
             cryptoType
             network
             cryptoAmount
