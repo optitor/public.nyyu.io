@@ -103,6 +103,7 @@ export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
             cryptoAmount
             confirmedAt
             depositAddress
+            depositStatus
             orderId
             orderType
             txHash

@@ -216,11 +216,11 @@ const TransactionsProvider = ({ children }) => {
                         id: item.id,
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
-                        fee: 0.0,
-                        status: item.status,
-                        amount: item.amount,
+                        fee: item.fee,
+                        status: item.depositStatus,
+                        amount: item.cryptoAmount,
                         type: "Crypto Deposit",
-                        paymentId: "---",
+                        paymentId: item.depositAddress,
                         asset: item.cryptoType,
                     };
                 });
