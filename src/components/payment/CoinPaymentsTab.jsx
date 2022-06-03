@@ -52,7 +52,7 @@ const SelectOption = (props) => {
 };
 
 // Renderer callback with condition
-const renderer = ({ minutes, seconds, completed }) => {
+const countDownRenderer = ({ minutes, seconds, completed }) => {
   if (completed) {
     // Render a completed state
     navigate(ROUTES.auction);
@@ -103,6 +103,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const [coinQRCode, setCoinQRCode] = useState("");
     const [depositAddress, setDepositAddress] = useState("");
     const [paymentId, setPaymentId] = useState(null);
+    const [createdAt, setCreatedAt] = useState(null);
 
     const networks = useMemo(() => coin.networks, [coin]);
 
@@ -154,9 +155,10 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
             coinSymbol: coin.value,
             paymentId,
             transactionFee,
+            createdAt,
         };
         dispatch(set_Temp_Data(tempData));
-    }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, dispatch]);
+    }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, createdAt, dispatch]);
 
     useEffect(() => {
         (async function () {
@@ -175,6 +177,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
 
                     setDepositAddress(resData?.depositAddress);
                     setPaymentId(resData?.id);
+                    setCreatedAt(Date.now());
                 }
                 setPending(false);
             },
@@ -192,6 +195,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
 
                 setDepositAddress(resData?.depositAddress);
                 setPaymentId(resData?.id);
+                setCreatedAt(Date.now());
             }
             setPending(false);
         },
@@ -384,11 +388,11 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                             className="fa-2x ms-2 cursor-pointer text-light"
                         />
                     </div>
-                    {depositAddress && (
+                    {depositAddress && createdAt && (
                         <p className="payment-expire my-auto">
                             <Countdown
-                                date={Date.now() + SESSION_EXPIRE_TIME}
-                                renderer={renderer}
+                                date={createdAt + SESSION_EXPIRE_TIME}
+                                renderer={countDownRenderer}
                             />
                         </p>
                     )}
