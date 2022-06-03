@@ -52,7 +52,7 @@ export const SUPPORTED_COINS = [
         networks: [
             // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
             { label: "BNB Coin (BSC Chain)", value: "BNB.BSC", network: "BEP20", address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"},
-            { label: "BNB Coin (ERC-20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
+            { label: "BNB Coin (ERC20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
         ],
     },
     {

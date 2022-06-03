@@ -30,14 +30,19 @@ const rendererDetail = ({ hours, minutes, seconds, completed }) => {
         return <span>Payment Expired</span>;
     } else {
         return (
-            <>
+        <>
+            <div>
                 <span className="text-secondary pe-1">
                     Payment expires in
                 </span>
                 <span className="fw-500">
                     {hours}h: {minutes}m: {seconds}s
                 </span>
-            </>
+            </div>
+            <div>
+                <span>Waiting for your funds</span>
+            </div>
+        </>
         )
     };
 };
@@ -224,14 +229,14 @@ const TxnDataRow = ({ data }) => {
                                                         </span>
                                                         {
                                                             detail.network === 'ERC20'?
-                                                            <a target='_blank' href={`https://etherscan.io/tx/${detail.txHash}`}>{detail.txHash}</a>:
+                                                            <a target='_blank' href={`https://etherscan.io/tx/${detail.txHash}`} rel='noreferrer'>{detail.txHash}</a>:
                                                             detail.network === 'BEP20'?
-                                                            <a target='_blank' href={`https://bscscan.com/tx/${detail.txHash}`}>{detail.txHash}</a>:
+                                                            <a target='_blank' href={`https://bscscan.com/tx/${detail.txHash}`} rel='noreferrer'>{detail.txHash}</a>:
                                                             <span>{detail.txHash}</span>
                                                         }
                                                     </div>
                                                 }
-                                                {status === 0 && 
+                                                {status === 0 &&
                                                     <div>
                                                         <Countdown
                                                             date={createdAt + EXPIRE_TIME}
@@ -347,7 +352,7 @@ const TxnDataRow = ({ data }) => {
                                                         </span>
                                                     </div>
                                                 }
-                                                {status === 0 && 
+                                                {status === 0 &&
                                                     <div>
                                                         <Countdown
                                                             date={createdAt + EXPIRE_TIME}
@@ -389,6 +394,7 @@ export default function BuyTable() {
                         ? setSortType(down)
                         : setSortType(up)
                 }
+                
             >
                 <div>{title}</div>
                 <div
