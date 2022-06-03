@@ -503,7 +503,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="stats">
                                         <p className="topic">Status</p>
                                         <p className="content">
-                                            {!confirmById?.status? 'Waiting for your funds': 'Received'}
+                                            {!confirmById?.depositStatus? 'Waiting for your funds': 'Received'}
                                         </p>
                                     </div>
                                     <div className="stats">
@@ -518,7 +518,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                             Time left to confirm funds
                                         </p>
                                         <div className="content">
-                                            {!confirmById?.status?
+                                            {!confirmById?.depositStatus?
                                                 <CountDown deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
                                                 :
                                                 <span className='txt-green'>Confirmed</span>
