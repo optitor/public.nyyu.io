@@ -6,6 +6,7 @@ import {
     AccordionDownIcon,
     AccordionUpIcon,
     DownloadIcon,
+    SPINNER
 } from "../../../utilities/imgImport";
 import { createDateFromDateObject } from "../../../utilities/utility-methods";
 import { useTransactions } from "./transactions-context";
@@ -18,6 +19,8 @@ import NumberFormat from "react-number-format";
 import { useSelector } from "react-redux";
 import { Icons } from "../../../utilities/Icons";
 import { API_BASE_URL } from "../../../utilities/staticData3";
+
+import { downloadContent as downloadSingle } from "../../../utilities/utility-methods";
 
 const depositOptions = [
     { value: "deposit", label: "Deposit" },
@@ -59,6 +62,8 @@ export default function StatementsTable() {
     const [selectedDepositOption, setSelectedDepositOption] = useState(
         depositOptions[0]
     );
+
+    const [singleDownloading, setSingleDonwloading] = useState(false);
 
     // Utility variables.
     const now = new Date();
@@ -464,30 +469,6 @@ export default function StatementsTable() {
         }
     };
 
-    const downloadSingle = async (id, payment, tx) => {
-        try {
-            const token = localStorage.getItem("ACCESS_TOKEN");
-            const response = await axios({
-                url: `${API_BASE_URL}/download/pdf/${id}`,
-                method: 'GET',
-                responseType: 'blob',
-                params: { tx, payment },
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${payment}-${tx}-${id}.pdf`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        } catch (error) {
-            
-        }
-    }
-
     useEffect(() => {
         if (selectedDepositOption.value === "deposit") setList(depositList);
         if (selectedDepositOption.value === "withdraw") setList(withdrawList);
@@ -843,12 +824,22 @@ export default function StatementsTable() {
                                                         {tx !== undefined && 
                                                         <button
                                                             className={`btn fs-12px p-0 text-success text-decoration-success text-decoration-underline`}
-                                                            onClick={() => {
-                                                                    downloadSingle(id, payment, tx);
+                                                            onClick={async () => {
+                                                                    if(singleDownloading) return;
+                                                                    setSingleDonwloading(true);
+                                                                    try {
+                                                                        await downloadSingle(id, tx, payment);
+                                                                    } catch (error) {
+                                                                        console.log(error);
+                                                                    }
+                                                                    setSingleDonwloading(false);
                                                                 }
                                                             }
                                                         >
-                                                            Get PDF Receipt
+                                                            <span className={singleDownloading ? 'download-visible': "download-hidden"}>
+                                                                <img src={SPINNER} width="12" height="12" alt="loading spinner"/>
+                                                                &nbsp;&nbsp;
+                                                            </span>Get PDF Receipt
                                                         </button>}
                                                         <button className="btn btn-link text-light fs-12px d-none"
                                                             // onClick={() => handleHideActivity(id)}

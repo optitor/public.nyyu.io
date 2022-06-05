@@ -4,17 +4,18 @@ import Select from "react-select";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
+    SPINNER
 } from "../../../utilities/imgImport";
-import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
 import _ from 'lodash';
 import { Icons } from "../../../utilities/Icons";
+import { downloadContent } from "../../../utilities/utility-methods";
 
 const withdrawOptions = [
-    { value: "paypal", label: "Paypal" },
-    { value: "crypto", label: "Crypto" },
-    { value: "bank", label: "Bank Transfer" },
+    { value: "paypal", label: "Paypal", type: 'PAYPAL' },
+    { value: "crypto", label: "Crypto", type: 'CRYPTO' },
+    { value: "bank", label: "Bank Transfer", type: 'BANK' },
 ];
 
 export default function WithdrawTable() {
@@ -35,6 +36,8 @@ export default function WithdrawTable() {
     const [toggle, setToggle] = useState(null);
     const [activePage, setActivePage] = useState(1);
     const [pending, setPending] = useState(false);
+
+    const [downloading, setDownloading] = useState(false);
 
     // Methods
     const headerTitle = ({ title, up, down, end }) => (
@@ -74,35 +77,6 @@ export default function WithdrawTable() {
             </div>
         </th>
     );
-
-    const downloadContent = (
-        id,
-        date,
-        time,
-        amount,
-        asset,
-        fee,
-        status,
-        type,
-        paymentId
-    ) => {
-        const downloadable = window.open("", "", "");
-        downloadable.document.write(
-            receiptTemplate({
-                id,
-                date,
-                time,
-                amount,
-                asset,
-                fee,
-                status,
-                type,
-                paymentId,
-                user,
-            })
-        );
-        downloadable.print();
-    };
 
     const changeDepositType = (type) => {
         setActivePage(1);
@@ -361,21 +335,26 @@ export default function WithdrawTable() {
                                                     <div className="fs-12px d-flex flex-column">
                                                         <button
                                                             className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                            onClick={() =>
-                                                                downloadContent(
-                                                                    id,
-                                                                    date,
-                                                                    time,
-                                                                    amount,
-                                                                    asset,
-                                                                    fee,
-                                                                    status,
-                                                                    type,
-                                                                    paymentId
-                                                                )
+                                                            onClick={async () => {
+                                                                    if(downloading) return;
+                                                                    setDownloading(true);
+                                                                    try {
+                                                                        await downloadContent(
+                                                                            id,
+                                                                            "WITHDRAW",
+                                                                            currentWithdrawType.type
+                                                                        );
+                                                                    } catch (error) {
+                                                                        console.log(error);    
+                                                                    }
+                                                                    setDownloading(false);
+                                                                }   
                                                             }
                                                         >
-                                                            Get PDF Receipt
+                                                            <span className={downloading ? 'download-visible': "download-hidden"}>
+                                                                <img src={SPINNER} width="12" height="12" alt="loading spinner"/>
+                                                                &nbsp;&nbsp;
+                                                            </span>Get PDF Receipt
                                                         </button>
                                                         <button className="btn btn-link text-light fs-12px d-none"
                                                             // onClick={() => handleHideActivity(id)}
