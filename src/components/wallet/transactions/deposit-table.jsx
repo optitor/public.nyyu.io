@@ -87,18 +87,7 @@ export default function DepositTable() {
                 </div>
             </div>
         </th>
-    );
-    const toggleDetails = (index) => {
-        const previousItem = document.getElementById(
-            `transaction-details-${currentRowOpen}`
-        );
-        if (previousItem) previousItem.classList.toggle("d-none");
-
-        setCurrentRowOpen(index);
-        const item = document.getElementById(`transaction-details-${index}`);
-        if (item) item.classList.toggle("d-none");
-    };
-    
+    );  
 
     const changeDepositType = (type) => {
         setActivePage(1);

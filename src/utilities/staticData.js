@@ -19,10 +19,10 @@ export const OAUTH2_REDIRECT_URI = `https://dev.nyyu.io/oauth2/redirect`
 export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
 
 export const social_links = [
-    {
-        icon: Facebook,
-        to: API_BASE_URL + "/oauth2/authorize/facebook?redirect_uri=" + OAUTH2_REDIRECT_URI,
-    },
+    // {
+    //     icon: Facebook,
+    //     to: API_BASE_URL + "/oauth2/authorize/facebook?redirect_uri=" + OAUTH2_REDIRECT_URI,
+    // },
     {
         icon: Google,
         to: API_BASE_URL + "/oauth2/authorize/google?redirect_uri=" + OAUTH2_REDIRECT_URI,

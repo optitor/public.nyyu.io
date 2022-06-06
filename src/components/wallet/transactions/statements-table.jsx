@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import Pagination from "react-js-pagination";
 import Select from "react-select";
 import axios from 'axios';
+import { Icon } from '@iconify/react';
 import {
     AccordionDownIcon,
     AccordionUpIcon,
-    DownloadIcon,
     SPINNER
 } from "../../../utilities/imgImport";
 import { createDateFromDateObject } from "../../../utilities/utility-methods";
@@ -579,7 +579,7 @@ export default function StatementsTable() {
                                 />
                             )}
                         </div>
-                        <div className='mb-2' onClick={() => {
+                        <div className='mb-2 cursor-pointer' onClick={() => {
                             const _from = from.getTime();
                             const _to = new Date(
                                 to.getFullYear(),
@@ -588,7 +588,7 @@ export default function StatementsTable() {
                                 ).getTime();
                             downloadContent(_from, _to);
                         }}>
-                            <img src={DownloadIcon} alt="Download icon" />
+                            <Icon icon='bx:download' className="download_icon" />
                         </div>
                     </div>
                 </div>
