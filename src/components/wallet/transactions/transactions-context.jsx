@@ -26,7 +26,7 @@ const tabs = [
     },
     {
         index: 1,
-        label: "withdraw",
+        label: "withdrawal",
     },
     {
         index: 2,

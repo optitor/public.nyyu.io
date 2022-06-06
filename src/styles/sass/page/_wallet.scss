@@ -1227,6 +1227,17 @@ div.wallet_balances {
         justify-content: space-between;
         overflow-x: auto;
         @include custom-scroll(0vh);
+        button {
+            &:first-child {
+                border-left: none !important;
+            }
+            &:last-child {
+                border-right: none !important;
+            }
+            &.btn-outline-secondary {
+                border: 1px solid $dimgrey;
+            }
+        }
     }
     .date-title {
         color: #6d6d6d;
@@ -1301,6 +1312,12 @@ div.wallet_balances {
             @include mq('phone', max) {
                 width: 90%;
             }
+        }
+    }
+    .download_icon {
+        font-size: 30px;
+        &:hover {
+            color: $green;
         }
     }
 }
