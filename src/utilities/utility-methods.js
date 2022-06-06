@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_BASE_URL } from "./staticData3";
 
 export const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -177,4 +178,31 @@ export const getCurrentMarketCap = async () => {
     const { data } = await axios.get("https://api.dev.nyyu.io/marketcap");
     if (data) return data;
     return null;
+};
+
+/**
+     * Download statement pdf
+     * @param {int} id transaction id
+     * @param {string} tx transaction type, DEPOSIT or WITHDRAW
+     * @param {string} payment payment type, PAYPAL, CREDIT, CRYPTO and BANK
+     * All string params must be UPPER case.
+     */
+export const downloadContent = async (id, tx, payment) => {
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    const response = await axios({
+        url: `${API_BASE_URL}/download/pdf/${id}`,
+        method: 'GET',
+        responseType: 'blob',
+        params: { tx, payment },
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${payment}-${tx}-${id}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 };

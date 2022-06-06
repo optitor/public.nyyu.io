@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { client } from "../../../apollo/client";
 import Select from "react-select";
 import _ from 'lodash';
-import axios from "axios";
-
 import {
     AccordionDownIcon,
     AccordionUpIcon,
+    SPINNER
 } from "../../../utilities/imgImport";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
 import { Icons } from "../../../utilities/Icons";
 import * as Mutation from "./mutations";
-import { API_BASE_URL } from "../../../utilities/staticData3";
+import { downloadContent } from "../../../utilities/utility-methods";
+
 
 const depositOptions = [
     { value: "paypal", label: "Paypal", type: 'PAYPAL' },
@@ -48,6 +48,7 @@ export default function DepositTable() {
 
     const [pending, setPending] = useState(false);
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
+    const [downloading, setDownloading] = useState(false);
 
     // Methods
     const headerTitle = ({ title, up, down, end }) => (
@@ -86,34 +87,7 @@ export default function DepositTable() {
                 </div>
             </div>
         </th>
-    );
-
-    /**
-     * Download statement pdf
-     * @param {int} id transaction id
-     * @param {string} tx transaction type, DEPOSIT or WITHDRAW
-     * @param {string} payment payment type, PAYPAL, CREDIT, CRYPTO and BANK
-     * All string params must be UPPER case.
-     */
-    const downloadContent = async (id, tx, payment) => {
-        const token = localStorage.getItem("ACCESS_TOKEN");
-        const response = await axios({
-            url: `${API_BASE_URL}/download/pdf/${id}`,
-            method: 'GET',
-            responseType: 'blob',
-            params: { tx, payment },
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', `${payment}-${tx}-${id}.pdf`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
+    );  
 
     const changeDepositType = (type) => {
         setActivePage(1);
@@ -459,13 +433,25 @@ export default function DepositTable() {
                                                 <div className="fs-12px d-flex flex-column">
                                                     <button
                                                         className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                        onClick={() =>
-                                                            downloadContent(
-                                                                id, "DEPOSIT", currentDepositType.type
-                                                            )
+                                                        onClick={async () =>
+                                                            {
+                                                                if(downloading) return;
+                                                                setDownloading(true);
+                                                                try {
+                                                                    await downloadContent(
+                                                                        id, "DEPOSIT", currentDepositType.type
+                                                                    )
+                                                                } catch (error) {
+                                                                    console.log(error);
+                                                                }
+                                                                setDownloading(false);
+                                                            }
                                                         }
                                                     >
-                                                        Get PDF Receipt
+                                                        <span className={downloading ? 'download-visible': "download-hidden"}>
+                                                            <img src={SPINNER} width="12" height="12" alt="loading spinner"/>
+                                                            &nbsp;&nbsp;
+                                                        </span>Get PDF Receipt
                                                     </button>
                                                     <button className="btn btn-link text-light fs-12px d-none"
                                                         onClick={() => handleHideActivity(id)}

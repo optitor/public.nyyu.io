@@ -1383,3 +1383,17 @@ div.wallet_balances {
         }
     }
 }
+
+span.download-visible {
+    visibility: visible;
+    img {
+        margin-bottom: 4px;
+    }
+}
+
+span.download-hidden {
+    visibility: hidden;
+    img {
+        margin-bottom: 4px;
+    }
+}
