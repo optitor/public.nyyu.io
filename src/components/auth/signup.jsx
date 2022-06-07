@@ -6,8 +6,7 @@ import AuthLayout from "../common/AuthLayout";
 import { FormInput } from "../common/FormControl";
 import CustomSpinner from "../common/custom-spinner";
 import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import {
     passwordValidatorOptions,
     social_links,
@@ -140,13 +139,13 @@ const Singup = () => {
                         </div>
                         {pwdError && (
                             <span className="errorsapn">
-                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                <FaExclamationCircle />{" "}
                                 {pwdError}
                             </span>
                         )}
                         {!pwdError && pwdConfirmError && (
                             <span className="errorsapn">
-                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                <FaExclamationCircle />{" "}
                                 {pwdConfirmError}
                             </span>
                         )}
@@ -203,13 +202,13 @@ const Singup = () => {
                     <div className="mt-3">
                         {result.length > 0 && result !== "Success" && (
                             <span className="errorsapn">
-                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                <FaExclamationCircle />{" "}
                                 {result}
                             </span>
                         )}
                         {agreeError && (
                             <span className="errorsapn">
-                                <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                <FaExclamationCircle />{" "}
                                 {agreeError}
                             </span>
                         )}

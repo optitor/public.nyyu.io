@@ -2,8 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Modal from "react-modal";
 import { useMutation } from "@apollo/client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 
 import * as Mutation from '../../apollo/graphqls/mutations/Support';
 import { CONFIRM_GOOGLE_AUTH_RESET } from "../../apollo/graphqls/mutations/Auth";
@@ -157,9 +156,7 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen, secret, tok
                         <div className="my-3">
                             {error && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon
-                                        icon={faExclamationCircle}
-                                    />{" "}
+                                    <FaExclamationCircle />{" "}
                                     {error}
                                 </span>
                             )}

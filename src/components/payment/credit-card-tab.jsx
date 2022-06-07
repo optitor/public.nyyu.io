@@ -220,7 +220,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             }
                             return stripePaymentForPresale({
                                 variables: {
-                                    id: stripePaymentId,
+                                    id: paymentId,
                                     presaleId: Number(round),
                                     orderId: orderId,
                                     amount: amount * 100,

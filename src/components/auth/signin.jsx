@@ -5,8 +5,7 @@ import { passwordValidatorOptions, social_links } from "../../utilities/staticDa
 import { FormInput } from "../common/FormControl";
 import AuthLayout from "../common/AuthLayout";
 import CustomSpinner from "../common/custom-spinner";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import { ROUTES } from "../../utilities/routes";
 import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
 import { useMutation } from "@apollo/client";
@@ -172,12 +171,12 @@ const Signin = ({ error }) => {
                             </div>
                             {authError && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon icon={faExclamationCircle} /> {tempToken}
+                                    <FaExclamationCircle /> {tempToken}
                                 </span>
                             )}
                             {error && error.split(".")[0] === "InvalidProvider" && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon icon={faExclamationCircle} /> Your are already
+                                    <FaExclamationCircle /> Your are already
                                     signed up with{" "}
                                     <span className="text-uppercase errorsapn">
                                         {error.split(".")[1]}
@@ -187,7 +186,7 @@ const Signin = ({ error }) => {
                             )}
                             {error && error.split(".")[0] === "error" && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon icon={faExclamationCircle} /> {error.split(".")[1]}
+                                    <FaExclamationCircle /> {error.split(".")[1]}
                                 </span>
                             )}
                             <button

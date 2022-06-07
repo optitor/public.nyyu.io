@@ -20,7 +20,6 @@ const withdrawOptions = [
 
 export default function WithdrawTable() {
     // Containers
-    const user = useSelector((state) => state.auth.user);
     const {
         tabs,
         paypalWithdrawTransactions,

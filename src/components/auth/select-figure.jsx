@@ -3,9 +3,8 @@ import Modal from "react-modal"
 import { navigate } from "gatsby"
 import StarRatings from "react-star-ratings"
 import { useMutation, useQuery } from "@apollo/client"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import names from "random-names-generator"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import Seo from '../seo';
 import Header from "../header"
@@ -288,7 +287,7 @@ const SelectFigure = () => {
                                 <div className="mt-1">
                                     {error && (
                                         <span className="errorsapn">
-                                            <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                            <FaExclamationCircle /> {error}
                                         </span>
                                     )}
                                     {selected ? (
@@ -408,7 +407,7 @@ const SelectFigure = () => {
                                     <div className="mt-1">
                                         {error && (
                                             <span className="errorsapn">
-                                                <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                                <FaExclamationCircle /> {error}
                                             </span>
                                         )}
                                         <button

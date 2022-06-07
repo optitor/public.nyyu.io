@@ -14,8 +14,7 @@ import _ from "lodash";
 import Select, { components } from "react-select";
 import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import { FaQuestionCircle } from "@react-icons/all-files/fa/FaQuestionCircle";
 import CircularProgress from "@mui/material/CircularProgress";
 import Countdown from 'react-countdown';
 
@@ -360,7 +359,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                     </p>
                 )}
                 <div className="mt-3 d-flex justify-content-between">
-                    <div className="d-flex flex-row ">
+                    <div className="d-flex flex-row align-items-center">
                         <CheckBox
                             type="checkbox"
                             name="allow_fraction"
@@ -381,10 +380,9 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                 {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                             </div>
                         </ReactTooltip>
-                        <FontAwesomeIcon
+                        <FaQuestionCircle
                             data-tip="React-tooltip"
                             data-for='coinpayments-tooltip'
-                            icon={faQuestionCircle}
                             className="fa-2x ms-2 cursor-pointer text-light"
                         />
                     </div>

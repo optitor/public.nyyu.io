@@ -5,8 +5,7 @@ import { navigate } from "gatsby"
 import { isMobile } from "react-device-detect"
 import ReactTooltip from "react-tooltip"
 import _ from "lodash"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
+import { FaQuestionCircle } from "@react-icons/all-files/fa/FaQuestionCircle";
 
 import { CheckBox } from "../common/FormControl"
 import { TRUST_URL } from "./data"
@@ -122,9 +121,8 @@ export default function PaymentExternalWalletTab() {
                         }
                     </div>
                 </ReactTooltip>
-                <FontAwesomeIcon
+                <FaQuestionCircle
                     data-tip="React-tooltip"
-                    icon={faQuestionCircle}
                     className="fa-xl ms-2 cursor-pointer fs-30px"
                 />
             </div>

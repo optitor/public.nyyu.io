@@ -6,8 +6,7 @@ import _ from "lodash";
 import { Icon } from "@iconify/react";
 import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
+import { FaQuestionCircle } from "@react-icons/all-files/fa/FaQuestionCircle";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
@@ -241,10 +240,9 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                         {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                                     </div>
                                 </ReactTooltip>
-                                <FontAwesomeIcon
+                                <FaQuestionCircle
                                     data-tip="React-tooltip"
                                     data-for="question-mark-tooltip"
-                                    icon={faQuestionCircle}
                                     className="fa-2x ms-2 cursor-pointer text-light"
                                 />
                             </div>

@@ -114,7 +114,7 @@ export default function CreditCardSavedCards({
                                     const paymentIntentId = result.paymentIntent.id;
                                     return payStripeForPreSaleWithSavedCard({
                                         variables: {
-                                            id: stripePaymentId,
+                                            id: paymentId,
                                             presaleId: roundId,
                                             orderId: orderId,
                                             amount: amount * 100,
