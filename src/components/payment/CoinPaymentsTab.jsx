@@ -66,7 +66,7 @@ const countDownRenderer = ({ minutes, seconds, completed }) => {
   }
 };
 
-const SESSION_EXPIRE_TIME = 60 * 60 * 1000;
+const SESSION_EXPIRE_TIME = 10 * 60 * 1000;
 
 const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const dispatch = useDispatch();
