@@ -4,12 +4,11 @@ import Modal from "react-modal"
 import { FormInput } from "../common/FormControl"
 import { useChangePassword } from "../../apollo/model/auth"
 import CustomSpinner from "../common/custom-spinner"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { CloseIcon } from "../../utilities/imgImport"
 import { passwordValidatorOptions } from "../../utilities/staticData"
 import validator from "validator"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 
 export default function ProfileChangePasswordModal({
     isPasswordModalOpen,
@@ -120,13 +119,13 @@ export default function ProfileChangePasswordModal({
                 <div className="pwd-modal__footer mt-4">
                     {webserviceError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            <FaExclamationCircle />{" "}
                             Something went wrong, Please try again!
                         </span>
                     )}
                     {successfullRequest && (
                         <div className="txt-green text-left">
-                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            <FaExclamationCircle />{" "}
                             Password changed successfully!
                         </div>
                     )}

@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { navigate } from "gatsby"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useMutation } from "@apollo/client"
 import { Icon } from '@iconify/react'
 import ReactTooltip from "react-tooltip"
@@ -9,7 +8,8 @@ import ReactTooltip from "react-tooltip"
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 import { PLACE_PRESALE_ORDER } from "../../apollo/graphqls/mutations/Bid"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
+
 import CustomSpinner from "../common/custom-spinner"
 import { CheckBox } from "../common/FormControl"
 import { wallets, NDB_WALLET_TOOLTIP_CONTENT, EXTERNAL_WALLET_TOOLTIP_CONTENT } from "../../utilities/staticData"
@@ -77,10 +77,9 @@ export default function PresalePlaceOrderWalletSelect() {
             <div className="w-100 d-flex justify-content-center align-items-center position-relative text-white fw-700 title">
                 SELECT DESTINATION WALLET
                 <div className="position-absolute top-0px left-0px fs-30px">
-                    <FontAwesomeIcon
-                        icon={faArrowLeft}
-                        className="left-arrow cursor-pointer text-light"
-                        size="xs"
+                    <FaArrowLeft
+                        className="left-arrow cursor-pointer text-light mb-1"
+                        size="1.5rem"
                         onClick={handlePrevious}
                     />
                 </div>

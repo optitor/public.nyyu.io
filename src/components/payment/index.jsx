@@ -6,8 +6,7 @@ import { navigate } from "gatsby";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import _ from "lodash";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 
 import Header from "../header";
 import Loading from "../common/Loading";
@@ -182,10 +181,9 @@ const Payment = () => {
                             <div className="payment-type__tab">
                                 <div className="payment-type__tab-name">
                                     {tabIndex !== 0 && (
-                                        <FontAwesomeIcon
-                                            icon={faArrowLeft}
+                                        <FaArrowLeft
                                             className="left-arrow cursor-pointer text-light"
-                                            size="lg"
+                                            size="1.3rem"
                                             onClick={() => setTabIndex(0)}
                                         />
                                     )}

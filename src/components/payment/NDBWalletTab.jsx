@@ -6,8 +6,6 @@ import _ from "lodash";
 import { Icon } from "@iconify/react";
 import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
