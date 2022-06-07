@@ -55,24 +55,32 @@ const IndexPage = () => {
     // Methods
     const placeABidButtonClick = () =>
         auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
+    
+    const handleActionAfterDeadline = (status = 1) => {
+        if(status === 1) {
+            navigate(ROUTES.auction);
+        } else {
+            setCurrentRound(null);
+        }
+    };
 
     const auctionStartedContent = (
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <h3 className="home-title d-sm-block d-none">
                 <div>
-                    <span className="txt-green">round {auctionRound}</span> ends
-                    in
+                    <span className="txt-green">round {auctionRound}</span> ends in
                 </div>
-                <CountDown
-                    deadline={auctionStatus === 2 ? auctionEnd : auctionStart}
+                <CountDown deadline={auctionStatus === 2 ? auctionEnd : auctionStart}
+                    actionAfterDeadline={() => handleActionAfterDeadline(auctionStatus)}
                 />
             </h3>
             <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
                 <div className="mb-3">
-                    <span className="txt-green">round {auctionRound}</span> ends
-                    in
+                    <span className="txt-green">round {auctionRound}</span> ends in
                 </div>
-                <CountDown deadline={auctionEnd} />
+                <CountDown deadline={auctionStatus === 2 ? auctionEnd : auctionStart}
+                    actionAfterDeadline={() => handleActionAfterDeadline(auctionStatus)}
+                />
             </h3>
             <div className="tokens-lower-part mt-5 mt-sm-0">
                 <p className="token-left text-uppercase token-left-mobile d-sm-none d-block">
@@ -124,7 +132,7 @@ const IndexPage = () => {
                     </div>
                     <div>next round starts</div>
                 </div>
-                <CountDownPending deadline={auctionStart} />
+                <CountDownPending deadline={auctionStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
             <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
                 <div className="mb-3 fs-36px">
@@ -136,7 +144,7 @@ const IndexPage = () => {
                     </div>
                     <div>next round starts</div>
                 </div>
-                <CountDownPending deadline={auctionStart} />
+                <CountDownPending deadline={auctionStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
             <div className="tokens-lower-part mt-sm-0">
                 <div className="cta mt-sm-0 px-1 px-sm-0">
@@ -168,20 +176,20 @@ const IndexPage = () => {
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <h3 className="home-title d-sm-block d-none">
                 <div>
-                    <span className="txt-green">round {presaleRound}</span>{" "}
-                    {presaleStatus === 2 ? "ends" : "begins"} in
+                    <span className="txt-green">round {presaleRound}</span>{" "} ends in
                 </div>
                 <CountDown
                     deadline={presaleStatus === 2 ? presaleEnd : presaleStart}
+                    actionAfterDeadline={() => handleActionAfterDeadline(presaleStatus)}
                 />
             </h3>
             <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
                 <div className="mb-3">
-                    <span className="txt-green">round {presaleRound}</span>{" "}
-                    {presaleStatus === 2 ? "ends" : "begins"} in
+                    <span className="txt-green">round {presaleRound}</span>{" "} ends in
                 </div>
                 <CountDown
                     deadline={presaleStatus === 2 ? presaleEnd : presaleStart}
+                    actionAfterDeadline={() => handleActionAfterDeadline(presaleStatus)}
                 />
             </h3>
             <div className="tokens-lower-part mt-5 mt-sm-0">
@@ -234,7 +242,7 @@ const IndexPage = () => {
                     </div>
                     <div>next round starts</div>
                 </div>
-                <CountDownPending deadline={presaleStart} />
+                <CountDownPending deadline={presaleStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
             <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
                 <div className="mb-3 fs-36px">
@@ -246,7 +254,7 @@ const IndexPage = () => {
                     </div>
                     <div>next round starts</div>
                 </div>
-                <CountDownPending deadline={presaleStart} />
+                <CountDownPending deadline={presaleStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
             <div className="tokens-lower-part mt-sm-0">
                 <div className="cta mt-sm-0 px-1 px-sm-0">
