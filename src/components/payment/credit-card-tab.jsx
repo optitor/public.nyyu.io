@@ -10,6 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import ReactTooltip from "react-tooltip";
+import { Icon } from '@iconify/react';
 import { CheckBox } from "../common/FormControl";
 import {
     DELETE_CARD,
@@ -23,7 +24,6 @@ import CustomSpinner from "../common/custom-spinner";
 import { navigate } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
 import useCountDown from "react-countdown-hook";
-import { Qmark } from "../../utilities/imgImport";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 import CreditCardSavedCards from "./CreditCardSavedCards";
@@ -533,6 +533,12 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             ></CheckBox>
                             <div className="allow-text text-light">
                                 Do you allow fraction of order compleation?
+                                <span className="ms-2 fs-20px"
+                                    data-tip="React-tooltip"
+                                    data-for='question-mark-tooltip'
+                                >
+                                    <Icon icon='bi:question-circle' />
+                                </span>
                             </div>
                             <ReactTooltip
                                 id="question-mark-tooltip"
@@ -549,14 +555,6 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                     {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                                 </div>
                             </ReactTooltip>
-
-                            <img
-                                src={Qmark}
-                                alt="Question mark"
-                                data-tip
-                                data-for="question-mark-tooltip"
-                                className="ms-2 cursor-pointer text-light"
-                            />
                         </div>
                         <p className="payment-expire my-auto text-uppercase">
                             payment expires in{" "}

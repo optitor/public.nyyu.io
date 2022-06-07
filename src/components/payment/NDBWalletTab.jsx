@@ -30,12 +30,8 @@ import { roundNumber } from "../../utilities/number";
 const { Option } = components;
 
 const setAmountWithPrecision = (tokenType, amount) => {
-    let precision = 0;
-    if (tokenType === "BTC") {
-        precision = 8;
-    } else {
-        precision = 4;
-    }
+    let precision = 8;
+    
     return (
         Math.round(amount * Math.pow(10, precision)) / Math.pow(10, precision)
     );
@@ -225,9 +221,15 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                 />
                                 <div className="allow-text text-light">
                                     Do you allow fraction of order compleation?
+                                    <span className="ms-2 fs-20px"
+                                        data-tip="React-tooltip"
+                                        data-for='ndb-wallet-question-mark-tooltip'
+                                    >
+                                        <Icon icon='bi:question-circle' />
+                                    </span>
                                 </div>
                                 <ReactTooltip
-                                    id="question-mark-tooltip"
+                                    id="ndb-wallet-question-mark-tooltip"
                                     place="right"
                                     type="light"
                                     effect="solid"
@@ -241,12 +243,6 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                         {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                                     </div>
                                 </ReactTooltip>
-                                <FontAwesomeIcon
-                                    data-tip="React-tooltip"
-                                    data-for="question-mark-tooltip"
-                                    icon={faQuestionCircle}
-                                    className="fa-2x ms-2 cursor-pointer text-light"
-                                />
                             </div>
                             <p className="payment-expire my-auto text-uppercase">
                                 payment expires in{" "}
