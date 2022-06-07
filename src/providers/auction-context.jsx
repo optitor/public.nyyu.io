@@ -27,7 +27,7 @@ const AuctionProvider = ({ children }) => {
     const [presaleNdbAmount, setPresaleNdbAmount] = useState(1)
 
     const loading = !(auctions && presales && currentRound)
-
+    
     // Webservices
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
