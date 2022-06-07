@@ -103,6 +103,10 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
 
+    /// stripe payment id
+    const [stripePaymentId, setStripePaymentId] = useState(0);
+
+
     // Countdown
     const initialTime = 5 * 1000;
     const interval = 1000;
@@ -198,14 +202,15 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                     setRequestPending(false);
                     return setError(data.payStripeForPreSale.error);
                 }
-                const { clientSecret, requiresAction } =
+                const { clientSecret, requiresAction, paymentId } =
                     data.payStripeForPreSale;
                 if (requiresAction === false || requiresAction === null) {
                     startTimer();
                     setRequestPending(false);
                     return setSuccessfulPayment(true);
                 }
-                if (clientSecret)
+                if (clientSecret) {
+                    setStripePaymentId(paymentId);
                     return stripe
                         .handleCardAction(clientSecret)
                         .then((result) => {
@@ -215,6 +220,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             }
                             return stripePaymentForPresale({
                                 variables: {
+                                    id: stripePaymentId,
                                     presaleId: Number(round),
                                     orderId: orderId,
                                     amount: amount * 100,
@@ -226,6 +232,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                 },
                             });
                         });
+                }
                 return setError("Invalid payment");
             } else if (stripePaymentSecondCall === true) {
                 if (
@@ -294,6 +301,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
             else if (type === NDB_Presale)
                 return stripePaymentForPresale({
                     variables: {
+                        id: 0,
                         presaleId: Number(round),
                         orderId: orderId,
                         amount: amount * 100,
