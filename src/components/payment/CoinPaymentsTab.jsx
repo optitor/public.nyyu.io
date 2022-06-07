@@ -24,7 +24,6 @@ import { CheckBox } from "../common/FormControl";
 import { set_Temp_Data } from "../../redux/actions/tempAction";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import { Copy } from "../../utilities/imgImport";
 import * as Query from "./../../apollo/graphqls/querys/Payment";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import { QUOTE, TICKER_24hr } from "./data"
@@ -78,7 +77,10 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const auction = useAuction();
     const { isAuction } = auction;
 
-    const [copied, setCopied] = useState(false);
+    const [copied, setCopied] = useState({
+        coinQuantity: false,
+        depositAddress: false
+    });
 
     const [fooCoins, setFooCoins] = useState([]);
     const [BTCPrice, setBTCPrice] = useState(null);
@@ -89,7 +91,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const [network, setNetwork] = useState(null);
     const [pending, setPending] = useState(false);
 
-    const [coinQuantity, setCoinQuantity] = useState(0);
+    const [coinQuantity, setCoinQuantity] = useState('');
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
@@ -240,6 +242,13 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         [allow_fraction]
     );
 
+    const handleCopyToClipboard = item => {
+        setCopied({ ...copied, [item]: true });
+        setTimeout(() => {
+            setCopied({ ...copied, [item]: false });
+        }, 1000);
+    };
+
     return loadingData ? (
         <div className="text-center">
             <CustomSpinner />
@@ -267,27 +276,44 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                 styles={customSelectWithIconStyles}
                             />
                             <div className="w-75">
-                                <div className="show_value">
-                                    <NumberFormat
-                                        className="coin_value"
-                                        displayType={"text"}
-                                        value={coinQuantity}
-                                        thousandSeparator={true}
-                                        renderText={(value, props) => (
-                                            <p {...props}>{value}</p>
-                                        )}
-                                    />
-                                    <NumberFormat
-                                        className="order_value"
-                                        displayType={"text"}
-                                        value={roundNumber(bidAmount, 2)}
-                                        suffix={` USD`}
-                                        thousandSeparator={true}
-                                        renderText={(value, props) => (
-                                            <p {...props}>~ {value}</p>
-                                        )}
-                                    />
-                                </div>
+                                <CopyToClipboard
+                                    onCopy={() => handleCopyToClipboard('coinQuantity')}
+                                    text={coinQuantity}
+                                    options={{ message: "copied" }}
+                                >
+                                    <div className="show_value cursor-pointer">
+                                        <NumberFormat
+                                            className="coin_value"
+                                            displayType={"text"}
+                                            value={coinQuantity}
+                                            thousandSeparator={true}
+                                            renderText={(value, props) => (
+                                                <p {...props}>{value}</p>
+                                            )}
+                                        />
+                                        <div className="d-flex">
+                                            <NumberFormat
+                                                className="order_value"
+                                                displayType={"text"}
+                                                value={roundNumber(bidAmount, 2)}
+                                                suffix={` USD`}
+                                                thousandSeparator={true}
+                                                renderText={(value, props) => (
+                                                    <p {...props}>~ {value}</p>
+                                                )}
+                                            />
+                                            <span className="cursor-pointer me-2"
+                                                onClick={() => handleCopyToClipboard('coinQuantity')}
+                                                onKeyDown={() => handleCopyToClipboard('coinQuantity')}
+                                            >
+                                                {copied.coinQuantity?
+                                                    <Icon icon='fluent:copy-24-filled' className="fs-22px" />
+                                                    : <Icon icon='fluent:copy-24-regular' className="fs-22px" />
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                </CopyToClipboard>
                             </div>
                         </div>
                         {!depositAddress ? (
@@ -324,18 +350,21 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         ) : (
                             <>
                                 <CopyToClipboard
-                                    onCopy={() => setCopied(true)}
+                                    onCopy={() => handleCopyToClipboard('depositAddress')}
                                     text={depositAddress}
                                     options={{ message: "copied" }}
                                 >
                                     <p
                                         className="clipboard"
-                                        onClick={() => setCopied(true)}
-                                        onKeyDown={() => setCopied(true)}
+                                        onClick={() => handleCopyToClipboard('depositAddress')}
+                                        onKeyDown={() => handleCopyToClipboard('depositAddress')}
                                         role="presentation"
                                     >
                                         <code>{depositAddress}</code>
-                                        <img src={Copy} alt="copy" />
+                                        {copied.depositAddress?
+                                            <Icon icon='fluent:copy-24-filled' className="fs-22px text-black" />
+                                            : <Icon icon='fluent:copy-24-regular' className="fs-22px text-black" />
+                                        }                                        
                                     </p>
                                 </CopyToClipboard>
                             </>
@@ -369,7 +398,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         />
                         <div className="allow-text text-light">
                             Do you allow fraction of order completion?
-                            <span className="ms-2 fs-22px"
+                            <span className="ms-2 fs-20px"
                                 data-tip="React-tooltip"
                                 data-for='coinpayments-tooltip'
                             >

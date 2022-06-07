@@ -221,7 +221,7 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                 />
                                 <div className="allow-text text-light">
                                     Do you allow fraction of order compleation?
-                                    <span className="ms-2 fs-22px"
+                                    <span className="ms-2 fs-20px"
                                         data-tip="React-tooltip"
                                         data-for='ndb-wallet-question-mark-tooltip'
                                     >

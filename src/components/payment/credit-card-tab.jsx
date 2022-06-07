@@ -533,7 +533,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             ></CheckBox>
                             <div className="allow-text text-light">
                                 Do you allow fraction of order compleation?
-                                <span className="ms-2 fs-22px"
+                                <span className="ms-2 fs-20px"
                                     data-tip="React-tooltip"
                                     data-for='question-mark-tooltip'
                                 >

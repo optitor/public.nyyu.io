@@ -103,7 +103,7 @@ export default function PaymentExternalWalletTab() {
                 />
                 <div className="allow-text">
                     Do you allow fraction of order completion?
-                    <span className="ms-2 fs-22px"
+                    <span className="ms-2 fs-20px"
                         data-tip="React-tooltip"
                         data-for='external-wallet-question-mark-tooltip'
                     >
