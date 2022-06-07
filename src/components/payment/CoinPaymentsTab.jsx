@@ -9,13 +9,12 @@ import { navigate } from "gatsby";
 import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useQuery, useMutation } from "@apollo/client";
+import { Icon } from "@iconify/react";
 import axios from "axios";
 import _ from "lodash";
 import Select, { components } from "react-select";
 import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import CircularProgress from "@mui/material/CircularProgress";
 import Countdown from 'react-countdown';
 
@@ -68,7 +67,7 @@ const countDownRenderer = ({ minutes, seconds, completed }) => {
   }
 };
 
-const SESSION_EXPIRE_TIME = 10 * 60 * 1000;
+const SESSION_EXPIRE_TIME = 60 * 60 * 1000;
 
 const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const dispatch = useDispatch();
@@ -360,7 +359,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                     </p>
                 )}
                 <div className="mt-3 d-flex justify-content-between">
-                    <div className="d-flex flex-row ">
+                    <div className="d-flex flex-row align-items-center">
                         <CheckBox
                             type="checkbox"
                             name="allow_fraction"
@@ -370,6 +369,12 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         />
                         <div className="allow-text text-light">
                             Do you allow fraction of order completion?
+                            <span className="ms-2 fs-22px"
+                                data-tip="React-tooltip"
+                                data-for='coinpayments-tooltip'
+                            >
+                                <Icon icon='bi:question-circle' />
+                            </span>
                         </div>
                         <ReactTooltip place="right" type="light" effect="solid" id='coinpayments-tooltip'>
                             <div
@@ -381,12 +386,6 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                 {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                             </div>
                         </ReactTooltip>
-                        <FontAwesomeIcon
-                            data-tip="React-tooltip"
-                            data-for='coinpayments-tooltip'
-                            icon={faQuestionCircle}
-                            className="fa-2x ms-2 cursor-pointer text-light"
-                        />
                     </div>
                     {depositAddress && createdAt && (
                         <p className="payment-expire my-auto">

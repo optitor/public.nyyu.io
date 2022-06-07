@@ -47,7 +47,6 @@ export default function DepositTable() {
     const [toggle, setToggle] = useState(null);
 
     const [pending, setPending] = useState(false);
-    const [currentRowOpen, setCurrentRowOpen] = useState(-1);
     const [downloading, setDownloading] = useState(false);
 
     // Methods

@@ -558,6 +558,9 @@
     text-transform: uppercase;
     margin-top: auto;
     margin-bottom: auto;
+    @include mq('phone', max) {
+        font-size: 10px !important;
+    }
 }
 
 .css-4ljt47-MenuList {
