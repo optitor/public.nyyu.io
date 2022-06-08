@@ -47,24 +47,25 @@ const DEPOSIT_COINS = SUPPORTED_COINS.filter(item => item.value !== 'NDB');
 
 const BankTransferData = {
     EUR: {
-        "Account holder": "Voltamond",
-        BIC: "TRWIBEB1XXX",
-        IBAN: "BE36 9672 2651 6281",
-        Address: "Avenue Louise 54, Room S52, Brussels, 1050, Belgium",
+        "Account holder": "NYYU UAB",
+        BIC: "REVOLT21",
+        IBAN: "LT89 3250 0581 6682 8541",
+        Address: "Kalvarijų gatvė 125, 08221, Vilnius, Lithuania",
     },
     GBP: {
-        "Account holder": "Voltamond",
-        "Sort code": "23-14-70",
-        "Account number": "22063784",
-        IBAN: "GB29 TRWI 2314 7022 0637 84",
-        Address: "56 Shoreditch High Street, London, E1 6JJ, United Kingdom",
+        "Account holder": "NYYU UAB",
+        "Sort code": "04-00-75",
+        "Account number": "76232735",
+        BIC: "REVOLT21",
+        IBAN: "LT89 3250 0581 6682 8541",
+        "Intermediary BIC": "CHASGB2L",
+        Address: "Kalvarijų gatvė 125, 08221, Vilnius, Lithuania",
     },
     USD: {
-        "Account holder": "Voltamond",
-        "Routing number": "084009519",
-        "Account number": "9600001149793466",
-        "Account type": "Checking",
-        Address: "19 W 24th Street, New York NY 10010, United States",
+        "Account holder": "NYYU UAB",
+        BIC: "REVOLT21",
+        IBAN: "LT89 3250 0581 6682 8541",
+        Address: "Kalvarijų gatvė 125, 08221, Vilnius, Lithuania",
     },
 };
 
