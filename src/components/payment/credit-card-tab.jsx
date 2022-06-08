@@ -203,7 +203,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForPreSale.error) {
                     setRequestPending(false);
-                    const error = data.payStripeForPresale.error;
+                    const error = data.payStripeForPreSale.error;
                     error = error.split(';')[0];
                     return setError(error);
                 }
