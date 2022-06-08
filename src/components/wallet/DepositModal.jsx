@@ -106,6 +106,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [tabIndex, setTabIndex] = useState(1);
     const [copied, setCopied] = useState(false);
     const [pending, setPending] = useState(false);
+    const [error, setError] = useState('');
 
     const [coinQRCode, setCoinQRCode] = useState("");
 
@@ -156,9 +157,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                     setPending(false);
                     setCurrentStep(2);
                 }
+                setError('');
             },
             onError: (err) => {
-                console.log("get deposit address: ", err);
+                // console.log("get deposit address: ", err);
+                setError(err.message);
                 setPending(false);
             },
         }
@@ -173,6 +176,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     };
 
     const create_Charge_For_Deposit = () => {
+        setError('');
         setPending(true);
         setDepositType(CRYPTOCURRENCY);
         const createData = {
@@ -390,6 +394,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         "GET DEPOSIT ADDRESS"
                                     )}
                                 </button>
+                                <p className="mt-2">{error}</p>
                             </div>
                         )}
                         {tabIndex === 2 && (
