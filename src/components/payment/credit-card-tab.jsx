@@ -147,7 +147,9 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForAuction.error) {
                     setRequestPending(false);
-                    return setError(data.payStripeForAuction.error);
+                    const error = data.payStripeForPresale.error;
+                    error = error.split(';')[0];
+                    return setError(error);
                 }
                 const { clientSecret, requiresAction } =
                     data.payStripeForAuction;
@@ -192,6 +194,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
         onError: (error) => {
             console.log(error);
             setRequestPending(false);
+            return setError("Invalid payment");
         },
     });
     const [stripePaymentForPresale] = useMutation(PAY_STRIPE_FOR_PRESALE, {
@@ -200,7 +203,9 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForPreSale.error) {
                     setRequestPending(false);
-                    return setError(data.payStripeForPreSale.error);
+                    const error = data.payStripeForPresale.error;
+                    error = error.split(';')[0];
+                    return setError(error);
                 }
                 const { clientSecret, requiresAction, paymentId } =
                     data.payStripeForPreSale;
@@ -250,6 +255,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
         onError: (error) => {
             console.log(error);
             setRequestPending(false);
+            return setError("Invalid payment");
         },
     });
 
