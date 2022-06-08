@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { Link } from "gatsby"
 import Modal from "react-modal"
 import { Icon } from "@iconify/react"
+import PrivacyPolicyContent from "./PrivacyPolicyContent";
+
 
 export default function PrivacyPolicy({ agree, setAgree, lang }) {
     const [open, setOpen] = useState(false)
@@ -27,10 +29,10 @@ export default function PrivacyPolicy({ agree, setAgree, lang }) {
                 className="privacy-policy-modal"
                 overlayClassName="privacy-policy-modal__overlay"
             >
-                {/* <InnerHTML html={PrivacyHTML} className="privacy-policy-modal__content" /> */}
+                <PrivacyPolicyContent />
                 <div className="privacy-policy-modal__footer">
                     <button
-                        className="btn-decline me-2"
+                        className="btn-decline me-2 mb-2"
                         onClick={() => {
                             setAgree(false)
                             setOpen(false)
@@ -39,7 +41,7 @@ export default function PrivacyPolicy({ agree, setAgree, lang }) {
                         Decline
                     </button>
                     <button
-                        className="btn-accept me-2"
+                        className="btn-accept me-2 mb-2"
                         onClick={() => {
                             setAgree(true)
                             setOpen(false)
