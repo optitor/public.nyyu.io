@@ -158,6 +158,7 @@ import sadFace from '../images/sadFace.svg'
 import letter_N from '../images/loading/N.svg';
 import letter_Y from '../images/loading/Y.svg';
 import letter_U from '../images/loading/U.svg';
+import spinner from '../images/spinner.gif';
 
 
 export const Logo = logo
@@ -313,3 +314,5 @@ export const SadFace = sadFace
 export const Letter_N = letter_N
 export const Letter_Y = letter_Y
 export const Letter_U = letter_U
+
+export const SPINNER = spinner;

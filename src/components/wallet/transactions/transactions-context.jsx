@@ -13,6 +13,7 @@ import {
     GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER
 } from "./queries";
 import { GET_CURRENT_ROUND } from "../../../apollo/graphqls/querys/Auction";
+import { createDateFromDate, createTimeFromDate } from '../../../utilities/string';
 
 export const TransactionsContext = React.createContext();
 export const useTransactions = () => useContext(TransactionsContext);
@@ -25,7 +26,7 @@ const tabs = [
     },
     {
         index: 1,
-        label: "withdraw",
+        label: "withdrawal",
     },
     {
         index: 2,
@@ -44,6 +45,10 @@ const tabs = [
 const TransactionsProvider = ({ children }) => {
     // Containers
     const [currentTab, setCurrentTab] = useState(0);
+    const [showStatus, setShowStatus] = useState({
+        deposit: 0,
+        withdraw: 0,
+    });
 
     const [currentRound, setCurrentRound] = useState(null);
 
@@ -74,28 +79,6 @@ const TransactionsProvider = ({ children }) => {
     );
     const itemsCountPerPage = 5;
 
-    // Methods
-    const createDateFromDate = (createdTime) => {
-        let month = createdTime.getMonth() + 1;
-        if (month < 10) month = "0" + month;
-        let day = createdTime.getDate();
-        if (day < 10) day = "0" + day;
-
-        let year = createdTime.getFullYear();
-        return month + "/" + day + "/" + year;
-    };
-
-    const createTimeFromDate = (createdTime) => {
-        let hours = createdTime.getHours();
-        if (hours < 10) hours = "0" + hours;
-        let minutes = createdTime.getMinutes();
-        if (minutes < 10) minutes = "0" + minutes;
-        let seconds = createdTime.getSeconds();
-        if (seconds < 10) seconds = "0" + seconds;
-
-        return hours + ":" + minutes + ":" + seconds;
-    };
-
     // Webserver
     useQuery(GET_CURRENT_ROUND, {
         onCompleted: data => {
@@ -109,6 +92,9 @@ const TransactionsProvider = ({ children }) => {
     });
     
     useQuery(GET_PAPAL_DEPOSIT_TRANSACTIONS, {
+        variables: {
+            showStatus: showStatus.deposit
+        },
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getPaypalDepositTxnsByUser, ['createdAt'], ['desc'])
                 .map((item) => {
@@ -134,6 +120,9 @@ const TransactionsProvider = ({ children }) => {
     });
 
     useQuery(GET_PAYPAL_WITHDRAW_TRANSACTIONS, {
+        variables: {
+            showStatus: showStatus.withdraw
+        },
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getPaypalWithdrawByUser, ['confirmedAt'], ['desc'])
                 .map((item) => {
@@ -159,6 +148,9 @@ const TransactionsProvider = ({ children }) => {
     });
 
     useQuery(GET_STRIPE_DEPOSIT_TX_BY_USER, {
+        variables: {
+            showStatus: showStatus.deposit
+        },
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getStripeDepositTxByUser, ['createdAt'], ['desc'])
                 .map((item) => {
@@ -184,6 +176,9 @@ const TransactionsProvider = ({ children }) => {
     });
 
     useQuery(GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER, {
+        variables: {
+            showStatus: showStatus.deposit
+        },
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getBankDepositTxnsByUser, ['createdAt'], ['desc'])
                 .map((item) => {
@@ -209,6 +204,9 @@ const TransactionsProvider = ({ children }) => {
     });
 
     useQuery(GET_COINPAYMENT_DEPOSIT_TX_BY_USER, {
+        variables: {
+            showStatus: showStatus.deposit
+        },
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getCoinpaymentDepositTxByUser, ['createdAt'], ['desc'])
                 .map((item) => {
@@ -218,11 +216,11 @@ const TransactionsProvider = ({ children }) => {
                         id: item.id,
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
-                        fee: 0.0,
-                        status: item.status,
-                        amount: item.amount,
+                        fee: item.fee || 0,
+                        status: item.depositStatus,
+                        amount: item.cryptoAmount,
                         type: "Crypto Deposit",
-                        paymentId: "---",
+                        paymentId: item.depositAddress,
                         asset: item.cryptoType,
                     };
                 });
@@ -232,6 +230,9 @@ const TransactionsProvider = ({ children }) => {
     });
 
     useQuery(GET_CRYPTO_WITHDRAW_BY_USER, {
+        variables: {
+            showStatus: showStatus.withdraw
+        },
         onCompleted: (data) => {
             const fooList = _.orderBy(data.getCryptoWithdrawByUser, ['confirmedAt'], ['desc'])
                 .map((item) => {
@@ -254,8 +255,10 @@ const TransactionsProvider = ({ children }) => {
     });
 
     useQuery(GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER, {
+        variables: {
+            showStatus: showStatus.withdraw
+        },
         onCompleted: (data) => {
-            console.log(data.getBankWithdrawRequestsByUser)
             const list = _.orderBy(data.getBankWithdrawRequestsByUser, ['confirmedAt'], ['desc'])
                 .map(item => {
                     const createdTime = new Date(item.requestedAt);
@@ -300,9 +303,10 @@ const TransactionsProvider = ({ children }) => {
                 .map((item) => {
                     const createdTime = new Date(item.createdAt);
                     return {
-                        transaction: item.id,
+                        id: item.id,
                         date: createDateFromDate(createdTime),
                         time: createTimeFromDate(createdTime),
+                        createdAt: item.createdAt,
                         amount: item.ndbAmount * item.ndbPrice,
                         payment: 1,
                         status: item.status,
@@ -329,10 +333,16 @@ const TransactionsProvider = ({ children }) => {
         presaleList,
         itemsCountPerPage,
         currentRound,
+        showStatus,
 
         // Methods
         createDateFromDate,
         createTimeFromDate,
+        setPaypalDepositTransactions,
+        setCoinDepositTransactions,
+        setStripeDepositTransactions,
+        setBankDepositTransactions,
+        setShowStatus,
 
         // Utilities
         currentTab,

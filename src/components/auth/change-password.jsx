@@ -7,10 +7,8 @@ import { FormInput } from "../common/FormControl"
 import React, { useState, useEffect } from "react"
 import CustomSpinner from "../common/custom-spinner"
 import { useResetPassword } from "../../apollo/model/auth"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import { passwordValidatorOptions } from "../../utilities/staticData"
-import PasswordEyeIcon from "../common/password-eye-icon"
 import Seo from '../seo';
 
 const ForgetPassword = () => {
@@ -22,7 +20,6 @@ const ForgetPassword = () => {
     const [loading, setLoading] = useState(true)
     const [confirmPassword, setConfirmPassword] = useState("")
     const [passwordVisible, setPasswordVisible] = useState(false)
-    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
     const [resetPasswordMutation, resetPasswordResults] = useResetPassword()
     // Methods
     const changePasswordMethod = (e) => {
@@ -99,12 +96,12 @@ const ForgetPassword = () => {
                 <div className="mb-3 mt-5">
                     {error && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                            <FaExclamationCircle /> {error}
                         </span>
                     )}
                     {webserviceError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> Invalid or expired sent
+                            <FaExclamationCircle /> Invalid or expired sent
                             code!
                         </span>
                     )}

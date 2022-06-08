@@ -1,6 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import { navigate } from "gatsby";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -121,8 +120,7 @@ export default function ChangeEmailModal({ isOpen, setIsOpen }) {
                                     <span className="errorsapn">
                                         <div className="d-flex align-items-center gap-1">
                                             <div className="mt-1px">
-                                                <FontAwesomeIcon
-                                                    icon={faExclamationCircle}
+                                                <FaExclamationCircle
                                                     className="align-middle"
                                                 />{" "}
                                             </div>

@@ -1,10 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useQuery } from "@apollo/client";
 import { roundNumber } from "../../utilities/number";
 import NumberFormat from "react-number-format";
+import Countdown from 'react-countdown';
+import { useAuction } from "../../providers/auction-context";
+import { GET_CRYPTO_AUCTOIN_TX_BYID, GET_CRYPTO_PRESALE_TX_BYID } from '../../apollo/graphqls/querys/Payment';
+
+const Completionist = () => <span>Payment expired!</span>;
+
+// Renderer callback with condition
+const renderer = ({ hours, minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a completed state
+    return <Completionist />;
+  } else {
+    // Render a countdown
+    return <span>{hours}h: {minutes}m: {seconds}s</span>;
+  }
+};
+
+const EXPIRE_TIME = 8 * 3600 * 1000;
+const POLL_INTERVAL_TIME = 10 * 1000;
+
 
 export default function OrderSummary({ bidAmount }) {
     const { temp: coinData } = useSelector((state) => state);
+    const auction = useAuction();
+    const { isAuction } = auction;
+
+    const [isSuccess, setIsSucess] = useState(false);
+
+    const { startPolling, stopPolling } = useQuery(isAuction ? GET_CRYPTO_AUCTOIN_TX_BYID : GET_CRYPTO_PRESALE_TX_BYID, {
+        variables: {
+            id: coinData.paymentId
+        },
+        onCompleted: (data) => {
+            const resData = isAuction? data.getCryptoAuctionTxById: data.getCryptoPresaleTxById;
+            if(resData?.depositStatus === 1) setIsSucess(true);
+        },
+        onError: (error) => console.log(error),
+        fetchPolicy: "no-cache",
+        errorPolicy: "ignore",
+        pollInterval: POLL_INTERVAL_TIME,
+        notifyOnNetworkStatusChange: true
+    })
+
+    useEffect(() => {
+        if (coinData.paymentId) return startPolling(POLL_INTERVAL_TIME)
+        if (isSuccess) return stopPolling()
+    }, [coinData.paymentId, isSuccess, startPolling, stopPolling])
 
     return (
         <div className="col-lg-4 d-flex flex-column justify-content-between">
@@ -15,7 +60,7 @@ export default function OrderSummary({ bidAmount }) {
                     <div className="d-flex justify-content-between">
                         <p className="order-list__label">Status</p>
                         <p className="order-list__detail">
-                            Waiting for your funds
+                            {isSuccess? <span className="txt-green fw-bold">Success</span>: 'Waiting for your funds'}
                         </p>
                     </div>
                     <div className="d-flex justify-content-between my-3">
@@ -47,7 +92,17 @@ export default function OrderSummary({ bidAmount }) {
                         <p className="order-list__label">
                             Time left to confirm funds
                         </p>
-                        <p className="order-list__detail">8h 0m 0s</p>
+                        <p className="order-list__detail">
+                            {(coinData?.paymentId && coinData?.createdAt)? (
+                                <Countdown
+                                    zeroPadTime={2}
+                                    date={coinData?.createdAt + EXPIRE_TIME}
+                                    renderer={renderer}
+                                />
+                            ): (
+                                <span>8h: 0m: 0s</span>
+                            )}
+                        </p>
                     </div>
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Payment ID</p>

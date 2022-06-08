@@ -4,21 +4,22 @@ import Select from "react-select";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
+    SPINNER
 } from "../../../utilities/imgImport";
-import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
+import _ from 'lodash';
 import { Icons } from "../../../utilities/Icons";
+import { downloadContent } from "../../../utilities/utility-methods";
 
 const withdrawOptions = [
-    { value: "paypal", label: "Paypal" },
-    { value: "crypto", label: "Crypto" },
-    { value: "bank", label: "Bank Transfer" },
+    { value: "paypal", label: "Paypal", type: 'PAYPAL' },
+    { value: "crypto", label: "Crypto", type: 'CRYPTO' },
+    { value: "bank", label: "Bank Transfer", type: 'BANK' },
 ];
 
 export default function WithdrawTable() {
     // Containers
-    const user = useSelector((state) => state.auth.user);
     const {
         tabs,
         paypalWithdrawTransactions,
@@ -28,11 +29,14 @@ export default function WithdrawTable() {
     } = useTransactions();
     const [list, setList] = useState(paypalWithdrawTransactions);
     const [sortType, setSortType] = useState(null);
-    const [currentRowOpen, setCurrentRowOpen] = useState(-1);
     const [currentWithdrawType, setCurrentWithdrawType] = useState(
         withdrawOptions[0]
     );
+    const [toggle, setToggle] = useState(null);
     const [activePage, setActivePage] = useState(1);
+    const [pending, setPending] = useState(false);
+
+    const [downloading, setDownloading] = useState(false);
 
     // Methods
     const headerTitle = ({ title, up, down, end }) => (
@@ -73,49 +77,8 @@ export default function WithdrawTable() {
         </th>
     );
 
-    const toggleDetails = (index) => {
-        const previousItem = document.getElementById(
-            `transaction-details-${currentRowOpen}`
-        );
-        if (previousItem) previousItem.classList.toggle("d-none");
-
-        setCurrentRowOpen(index);
-        const item = document.getElementById(`transaction-details-${index}`);
-        if (item) item.classList.toggle("d-none");
-    };
-
-    const downloadContent = (
-        id,
-        date,
-        time,
-        amount,
-        asset,
-        fee,
-        status,
-        type,
-        paymentId
-    ) => {
-        const downloadable = window.open("", "", "");
-        downloadable.document.write(
-            receiptTemplate({
-                id,
-                date,
-                time,
-                amount,
-                asset,
-                fee,
-                status,
-                type,
-                paymentId,
-                user,
-            })
-        );
-        downloadable.print();
-    };
-
     const changeDepositType = (type) => {
         setActivePage(1);
-        toggleDetails(-1);
         setCurrentWithdrawType(type);
         if (type.value === "paypal") setList(paypalWithdrawTransactions);
         if (type.value === "crypto") setList(coinWithdrawTransactions);
@@ -171,7 +134,7 @@ export default function WithdrawTable() {
             </div>
             <div className="px-sm-4 px-3 table-responsive transaction-section-tables mb-5 mb-sm-0">
                 <table className="wallet-transaction-table w-100">
-                    {list?.length === 0 && (
+                    {_.isEmpty(list) && (
                         <tr className="py-4 text-center">
                             <td
                                 colSpan={4}
@@ -181,7 +144,7 @@ export default function WithdrawTable() {
                             </td>
                         </tr>
                     )}
-                    {list?.length && (
+                    {!_.isEmpty(list) && (
                         <tr className="border-bottom-2-dark-gray pb-3 pt-1">
                             {headerTitle({
                                 title: "Date",
@@ -205,7 +168,7 @@ export default function WithdrawTable() {
                             </th>
                         </tr>
                     )}
-                    {list
+                    {!_.isEmpty(list) && list
                         ?.slice(
                             (activePage - 1) * itemsCountPerPage,
                             activePage * itemsCountPerPage
@@ -226,11 +189,13 @@ export default function WithdrawTable() {
                                 <>
                                     <tr
                                         className="border-bottom-2-dark-gray cursor-pointer"
-                                        onClick={() =>
-                                            toggleDetails(
-                                                id === currentRowOpen ? -1 : id
-                                            )
-                                        }
+                                        onClick={() => {
+                                            if(toggle === id) {
+                                                setToggle(null);
+                                            } else {
+                                                setToggle(id);
+                                            }
+                                        }}
                                     >
                                         <td className="text-light pe-5 pe-sm-0 fw-light">
                                             <div className="fs-16px">
@@ -266,7 +231,7 @@ export default function WithdrawTable() {
                                                 {status === 2 && "Denied"}
                                             </div>
                                             <button className="btn text-light border-0">
-                                                {id === currentRowOpen ? (
+                                                {toggle === id ? (
                                                     <img
                                                         src={AccordionUpIcon}
                                                         className="icon-sm ms-2 cursor-pointer"
@@ -282,116 +247,125 @@ export default function WithdrawTable() {
                                             </button>
                                         </td>
                                     </tr>
-                                    <tr
-                                        className="text-light d-none px-5"
-                                        id={`transaction-details-${id}`}
-                                    >
-                                        <td colSpan={tabs.length}>
-                                            <div className="d-flex align-items-start justify-content-between">
-                                                <div className="text-capitalize fs-12px">
-                                                    <div>
-                                                        <span className="text-secondary pe-1">
-                                                            type:
-                                                        </span>
-                                                        <span className="fw-500">
-                                                            {type}
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-secondary pe-1">
-                                                            amount:
-                                                        </span>
-                                                        <span className="fw-500">                                                    
-                                                            {currentWithdrawType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + currency}
-                                                            {currentWithdrawType.value === 'crypto' && Number(amount).toFixed(8) + ' ' + asset}
-                                                            {currentWithdrawType.value === 'bank' && Number(amount).toFixed(2) + ' ' + currency}
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-secondary pe-1">
-                                                            fee:
-                                                        </span>
-                                                        <span className="fw-500">
-                                                            {currentWithdrawType.value === 'paypal' && Number(fee).toFixed(2) + ' ' + currency}
-                                                            {currentWithdrawType.value === 'crypto' && Number(fee).toFixed(8) + ' ' + asset}
-                                                            {currentWithdrawType.value === 'bank' && Number(fee).toFixed(2) + ' ' + currency}
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-secondary pe-1">
-                                                            date:
-                                                        </span>
-                                                        <span className="fw-500">
-                                                            {date + " " + time}
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-secondary pe-1">
-                                                            asset:
-                                                        </span>
-                                                        <span className="fw-500">
-                                                            {asset}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="text-capitalize fs-12px">
-                                                    <div>
-                                                        <span className="text-secondary pe-1">
-                                                            Payment-ID:
-                                                        </span>
-                                                        <span className="fw-500">
-                                                            {paymentId}
-                                                        </span>
-                                                    </div>
-                                                    {type ===
-                                                        "Crypto Deposit" && (
+                                    {toggle === id && (
+                                        <tr
+                                            className="text-light px-5"
+                                            id={`transaction-details-${id}`}
+                                        >
+                                            <td colSpan={tabs.length}>
+                                                <div className="d-flex align-items-start justify-content-between">
+                                                    <div className="text-capitalize fs-12px">
                                                         <div>
                                                             <span className="text-secondary pe-1">
-                                                                Address:
+                                                                type:
                                                             </span>
                                                             <span className="fw-500">
-                                                                12hfi6sh...l6shi
+                                                                {type}
                                                             </span>
                                                         </div>
-                                                    )}
-                                                    <div>
-                                                        <span className="text-secondary pe-1">
-                                                            Status:
-                                                        </span>
-                                                        <span className="fw-500">
-                                                            {status === 0 && "Pending"}
-                                                            {status === 1 && "Success"}
-                                                            {status === 2 && "Denied"}
-                                                        </span>
+                                                        <div>
+                                                            <span className="text-secondary pe-1">
+                                                                amount:
+                                                            </span>
+                                                            <span className="fw-500">                                                    
+                                                                {currentWithdrawType.value === 'paypal' && Number(amount).toFixed(2) + ' ' + currency}
+                                                                {currentWithdrawType.value === 'crypto' && Number(amount).toFixed(8) + ' ' + asset}
+                                                                {currentWithdrawType.value === 'bank' && Number(amount).toFixed(2) + ' ' + currency}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-secondary pe-1">
+                                                                fee:
+                                                            </span>
+                                                            <span className="fw-500">
+                                                                {currentWithdrawType.value === 'paypal' && Number(fee).toFixed(2) + ' ' + currency}
+                                                                {currentWithdrawType.value === 'crypto' && Number(fee).toFixed(8) + ' ' + asset}
+                                                                {currentWithdrawType.value === 'bank' && Number(fee).toFixed(2) + ' ' + currency}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-secondary pe-1">
+                                                                date:
+                                                            </span>
+                                                            <span className="fw-500">
+                                                                {date + " " + time}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-secondary pe-1">
+                                                                asset:
+                                                            </span>
+                                                            <span className="fw-500">
+                                                                {asset}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-capitalize fs-12px">
+                                                        <div>
+                                                            <span className="text-secondary pe-1">
+                                                                Payment-ID:
+                                                            </span>
+                                                            <span className="fw-500">
+                                                                {paymentId}
+                                                            </span>
+                                                        </div>
+                                                        {type ===
+                                                            "Crypto Deposit" && (
+                                                            <div>
+                                                                <span className="text-secondary pe-1">
+                                                                    Address:
+                                                                </span>
+                                                                <span className="fw-500">
+                                                                    12hfi6sh...l6shi
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                        <div>
+                                                            <span className="text-secondary pe-1">
+                                                                Status:
+                                                            </span>
+                                                            <span className="fw-500">
+                                                                {status === 0 && "Pending"}
+                                                                {status === 1 && "Success"}
+                                                                {status === 2 && "Denied"}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="fs-12px d-flex flex-column">
+                                                        <button
+                                                            className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
+                                                            onClick={async () => {
+                                                                    if(downloading) return;
+                                                                    setDownloading(true);
+                                                                    try {
+                                                                        await downloadContent(
+                                                                            id,
+                                                                            "WITHDRAW",
+                                                                            currentWithdrawType.type
+                                                                        );
+                                                                    } catch (error) {
+                                                                        console.log(error);    
+                                                                    }
+                                                                    setDownloading(false);
+                                                                }   
+                                                            }
+                                                        >
+                                                            <span className={downloading ? 'download-visible': "download-hidden"}>
+                                                                <img src={SPINNER} width="12" height="12" alt="loading spinner"/>
+                                                                &nbsp;&nbsp;
+                                                            </span>Get PDF Receipt
+                                                        </button>
+                                                        <button className="btn btn-link text-light fs-12px d-none"
+                                                            // onClick={() => handleHideActivity(id)}
+                                                            disabled={pending}
+                                                        >
+                                                            {pending? 'Processing . . .' : 'Hide this activity'}
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="fs-12px">
-                                                    <button
-                                                        className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                        onClick={() =>
-                                                            downloadContent(
-                                                                id,
-                                                                date,
-                                                                time,
-                                                                amount,
-                                                                asset,
-                                                                fee,
-                                                                status,
-                                                                type,
-                                                                paymentId
-                                                            )
-                                                        }
-                                                    >
-                                                        Get PDF Receipt
-                                                    </button>
-
-                                                    <div className="text-light text-underline">
-                                                        Hide this activity
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    )}
                                 </>
                             )
                         )}
@@ -405,7 +379,6 @@ export default function WithdrawTable() {
                         totalItemsCount={list.length}
                         pageRangeDisplayed={5}
                         onChange={(pageNumber) => {
-                            toggleDetails(-1);
                             setActivePage(pageNumber);
                         }}
                     />

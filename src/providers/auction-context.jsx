@@ -27,7 +27,7 @@ const AuctionProvider = ({ children }) => {
     const [presaleNdbAmount, setPresaleNdbAmount] = useState(1)
 
     const loading = !(auctions && presales && currentRound)
-
+    
     // Webservices
     useQuery(GET_AUCTION, {
         onCompleted: (data) => {
@@ -53,8 +53,10 @@ const AuctionProvider = ({ children }) => {
                 setCurrentRound(data.getCurrentRound)
                 if(data.getCurrentRound?.auction) {
                     setCookie(NDB_Paypal_TrxType, NDB_Auction);
+                    setIsAuction(true);
                 } else if(data.getCurrentRound?.presale) {
                     setCookie(NDB_Paypal_TrxType, NDB_Presale);
+                    setIsAuction(false);
                 } else {
                     setCookie(NDB_Paypal_TrxType, '');
                 }

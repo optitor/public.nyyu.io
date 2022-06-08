@@ -32,6 +32,21 @@ const bscChain = {
 };
 chains.push(bscChain);
 
+const bscTestChain = {
+  id: 97,
+  name: 'Smart Chain - Testnet',
+  nativeCurrency: {
+    name: 'Binance', symbol: 'BNB', decimals: 12
+  },
+  rpcUrls: {
+    default: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
+  },
+  blockExplorers: {
+    default: {name: 'Bsctestscan', url: 'https://testnet.bscscan.com'}
+  }
+}
+chains.push(bscTestChain);
+
 // Set up connectors
 const defaultChain = chain.mainnet;
 if(typeof window !== `undefined`) {

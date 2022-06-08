@@ -77,7 +77,6 @@
         font-weight: bold;
         font-size: 11px !important;
         line-height: 13px !important;
-        text-transform: uppercase;
         display: none;
     }
     .payment-type__tab {
@@ -302,7 +301,7 @@
                 align-items: center;
                 justify-content: space-between;
                 background-color: white;
-                padding: 13px;
+                padding: 13px 8px;
                 margin-top: 8px;
                 cursor: pointer;
                 code {
@@ -559,6 +558,9 @@
     text-transform: uppercase;
     margin-top: auto;
     margin-bottom: auto;
+    @include mq('phone', max) {
+        font-size: 10px !important;
+    }
 }
 
 .css-4ljt47-MenuList {

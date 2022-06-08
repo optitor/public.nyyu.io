@@ -63,11 +63,13 @@ const airdrops = [
         winners: 20,
     },
 ];
+
 const coins = [
     { value: "eth", label: "Ethereum", icon: ETH },
     { value: "btc", label: "Bitcoin", icon: BTC },
     { value: "doge", label: "Dogecoin", icon: DOGE },
 ];
+
 const joins = [
     {
         label: "Connect your MetaMask wallet",
@@ -89,6 +91,7 @@ const joins = [
 
 // Select option customization
 const { Option, SingleValue } = components;
+
 const IconOption = (props) => (
     <Option {...props}>
         <img
@@ -99,6 +102,7 @@ const IconOption = (props) => (
         {props.data.label}
     </Option>
 );
+
 const SelectedValue = (props) => {
     return (
         <SingleValue {...props}>

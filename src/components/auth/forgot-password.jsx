@@ -7,8 +7,7 @@ import { useForgotPassword } from "../../apollo/model/auth"
 import { useAuth } from "../../hooks/useAuth"
 import CustomSpinner from "../common/custom-spinner"
 import { useState } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import Seo from '../seo';
 
 const ForgetPassword = () => {
@@ -54,12 +53,12 @@ const ForgetPassword = () => {
                 <div className="mt-5">
                     {emailError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> {emailError}
+                            <FaExclamationCircle /> {emailError}
                         </span>
                     )}
                     {forgotPwdMutationResults?.data === null && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} /> We were unable to find
+                            <FaExclamationCircle /> We were unable to find
                             the user.
                         </span>
                     )}

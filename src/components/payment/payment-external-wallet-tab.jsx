@@ -5,8 +5,7 @@ import { navigate } from "gatsby"
 import { isMobile } from "react-device-detect"
 import ReactTooltip from "react-tooltip"
 import _ from "lodash"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular"
+import { Icon } from "@iconify/react";
 
 import { CheckBox } from "../common/FormControl"
 import { TRUST_URL } from "./data"
@@ -92,7 +91,7 @@ export default function PaymentExternalWalletTab() {
             {}
         </div>
         <div className="mt-1 d-flex justify-content-between">
-            <div className="d-flex flex-row text-white">
+            <div className="d-flex flex-row text-white align-items-center">
                 <CheckBox
                     type="checkbox"
                     name="allow_fraction"
@@ -103,10 +102,16 @@ export default function PaymentExternalWalletTab() {
                     className="text-uppercase"
                 />
                 <div className="allow-text">
-                    Do you allow fraction of
-                    order completion?
+                    Do you allow fraction of order completion?
+                    <span className="ms-2 fs-20px"
+                        data-tip="React-tooltip"
+                        data-for='external-wallet-question-mark-tooltip'
+                    >
+                        <Icon icon='bi:question-circle' />
+                    </span>
                 </div>
                 <ReactTooltip
+                    id="external-wallet-question-mark-tooltip"
                     place="right"
                     type="light"
                     effect="solid"
@@ -122,13 +127,8 @@ export default function PaymentExternalWalletTab() {
                         }
                     </div>
                 </ReactTooltip>
-                <FontAwesomeIcon
-                    data-tip="React-tooltip"
-                    icon={faQuestionCircle}
-                    className="fa-xl ms-2 cursor-pointer"
-                />
             </div>
-            <p className="payment-expire my-auto">
+            <p className="payment-expire my-auto text-uppercase">
                 payment expires in{" "}
                 <span className="txt-green">
                     10 minutes
@@ -137,5 +137,4 @@ export default function PaymentExternalWalletTab() {
         </div>
         </div>
     )
-
 }

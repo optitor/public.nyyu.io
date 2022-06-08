@@ -35,7 +35,6 @@
                     display: block;
                 }
             }
-
             table {
                 width: 100%;
                 thead,
@@ -726,7 +725,6 @@
                 }
             }
         }
-        
         div.stats_div {
             margin-top: 50px;
             div.stats {
@@ -1228,6 +1226,17 @@ div.wallet_balances {
         justify-content: space-between;
         overflow-x: auto;
         @include custom-scroll(0vh);
+        button {
+            &:first-child {
+                border-left: none !important;
+            }
+            &:last-child {
+                border-right: none !important;
+            }
+            &.btn-outline-secondary {
+                border: 1px solid $dimgrey;
+            }
+        }
     }
     .date-title {
         color: #6d6d6d;
@@ -1304,6 +1313,12 @@ div.wallet_balances {
             }
         }
     }
+    .download_icon {
+        font-size: 30px;
+        &:hover {
+            color: $green;
+        }
+    }
 }
 
 .DayPicker {
@@ -1365,5 +1380,19 @@ div.wallet_balances {
         &::-ms-input-placeholder {
             color: #fff;
         }
+    }
+}
+
+span.download-visible {
+    visibility: visible;
+    img {
+        margin-bottom: 4px;
+    }
+}
+
+span.download-hidden {
+    visibility: hidden;
+    img {
+        margin-bottom: 4px;
     }
 }

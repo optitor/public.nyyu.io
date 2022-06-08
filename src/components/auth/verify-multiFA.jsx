@@ -3,8 +3,7 @@ import { Link } from "gatsby";
 import { Input } from "../common/FormControl";
 import { useSignIn2FA } from "../../apollo/model/auth";
 import CustomSpinner from "../common/custom-spinner";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 
 const VerifyMutliFA = ({
     twoStep,
@@ -76,9 +75,7 @@ const VerifyMutliFA = ({
                                         />
                                         {codeError && (
                                             <span className="errorsapn">
-                                                <FontAwesomeIcon
-                                                    icon={faExclamationCircle}
-                                                />{" "}
+                                                <FaExclamationCircle />{" "}
                                                 {codeError}
                                             </span>
                                         )}
@@ -112,7 +109,7 @@ const VerifyMutliFA = ({
                 <div className="mt-5 mb-2">
                     {webserviceError && (
                         <span className="errorsapn">
-                            <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                            <FaExclamationCircle />{" "}
                             {signin2faMutationResults?.data?.confirm2FA?.token}
                         </span>
                     )}

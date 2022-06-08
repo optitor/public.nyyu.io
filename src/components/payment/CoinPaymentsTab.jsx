@@ -5,18 +5,18 @@ import React, {
     useReducer,
     useMemo,
 } from "react";
+import { navigate } from "gatsby";
 import { useDispatch, useSelector } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
+import { Icon } from "@iconify/react";
 import axios from "axios";
 import _ from "lodash";
 import Select, { components } from "react-select";
 import ReactTooltip from "react-tooltip";
 import NumberFormat from "react-number-format";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/fontawesome-free-regular";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useMutation } from "@apollo/client";
+import Countdown from 'react-countdown';
 
 import CustomSpinner from "../common/custom-spinner";
 import { generateQR } from "../../utilities/string";
@@ -24,11 +24,12 @@ import { CheckBox } from "../common/FormControl";
 import { set_Temp_Data } from "../../redux/actions/tempAction";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import { Copy } from "../../utilities/imgImport";
 import * as Query from "./../../apollo/graphqls/querys/Payment";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import { QUOTE, TICKER_24hr } from "./data"
 import { roundNumber } from "../../utilities/number";
+import { useAuction } from "../../providers/auction-context";
+import { ROUTES } from '../../utilities/routes';
 
 const { Option } = components;
 
@@ -48,12 +49,38 @@ const SelectOption = (props) => {
     );
 };
 
+// Renderer callback with condition
+const countDownRenderer = ({ minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a completed state
+    navigate(ROUTES.auction);
+    return <></>;
+  } else {
+    // Render a countdown
+    return (
+        <>
+            <span className="me-2">PAYMENT EXPIRES IN</span>
+            <span className="txt-green">{minutes}m: {seconds}s</span>
+        </>
+    );
+  }
+};
+
+const SESSION_EXPIRE_TIME = 10 * 60 * 1000;
+
 const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
+    const { order_id } = useSelector(state => state.placeBid);
     const { allFees } = useSelector(state => state);
-    
-    const [copied, setCopied] = useState(false);
+
+    const auction = useAuction();
+    const { isAuction } = auction;
+
+    const [copied, setCopied] = useState({
+        coinQuantity: false,
+        depositAddress: false
+    });
 
     const [fooCoins, setFooCoins] = useState([]);
     const [BTCPrice, setBTCPrice] = useState(null);
@@ -64,7 +91,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const [network, setNetwork] = useState(null);
     const [pending, setPending] = useState(false);
 
-    const [coinQuantity, setCoinQuantity] = useState(0);
+    const [coinQuantity, setCoinQuantity] = useState('');
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
@@ -77,6 +104,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
     const [coinQRCode, setCoinQRCode] = useState("");
     const [depositAddress, setDepositAddress] = useState("");
     const [paymentId, setPaymentId] = useState(null);
+    const [createdAt, setCreatedAt] = useState(null);
 
     const networks = useMemo(() => coin.networks, [coin]);
 
@@ -91,7 +119,8 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         onCompleted: (data) => {
             if (data.getExchangeRate) {
                 const temp = JSON.parse(data.getExchangeRate);
-                const coins = SUPPORTED_COINS?.map((item) => {
+                const coins = SUPPORTED_COINS?.filter(item => item.value !== 'NDB')
+                .map((item) => {
                     return { ...item, detail: temp?.result[item.value] };
                 });
                 setFooCoins(coins);
@@ -115,9 +144,8 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
 
     useEffect(() => {
         let coinPrice = BTCPrice * coin?.detail?.rate_btc;
-
-        let precision = 4;
-        if (coin.value === "BTC") precision = 8;
+        if(coin.label === 'USDT') coinPrice = 1;
+        let precision = 8;
 
         let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
         if (quantity === Infinity) quantity = null;
@@ -128,9 +156,10 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
             coinSymbol: coin.value,
             paymentId,
             transactionFee,
+            createdAt,
         };
         dispatch(set_Temp_Data(tempData));
-    }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, dispatch]);
+    }, [bidAmount, coin, BTCPrice, paymentId, transactionFee, createdAt, dispatch]);
 
     useEffect(() => {
         (async function () {
@@ -142,17 +171,16 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         })();
     }, [depositAddress]);
 
-    const [createCryptoPaymentMutation] = useMutation(
-        Mutation.CREATE_CRYPTO_PAYMENT,
-        {
+    const [createCryptoPaymentMutation] = useMutation(Mutation.CREATE_CRYPTO_PAYMENT, {
             onCompleted: (data) => {
                 if (data.createCryptoPaymentForAuction) {
                     const resData = data.createCryptoPaymentForAuction;
 
                     setDepositAddress(resData?.depositAddress);
                     setPaymentId(resData?.id);
-                    setPending(false);
+                    setCreatedAt(Date.now());
                 }
+                setPending(false);
             },
             onError: (err) => {
                 console.log("get deposit address: ", err);
@@ -161,19 +189,49 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         }
     );
 
+    const [createChargeForPresaleMutation] = useMutation(Mutation.CREATE_CHARGE_FOR_PRESALE, {
+        onCompleted: data => {
+            if(data.createChargeForPresale) {
+                const resData = data.createChargeForPresale;
+
+                setDepositAddress(resData?.depositAddress);
+                setPaymentId(resData?.id);
+                setCreatedAt(Date.now());
+            }
+            setPending(false);
+        },
+        onError: err => {
+            console.log('get deposit address for presale', err);
+            setPending(false);
+        },
+    })
+
     const create_Crypto_Payment = () => {
         setPending(true);
-        const createData = {
-            roundId: currentRound,
-            amount: bidAmount,
-            cryptoType: coin.value,
-            network: network.network,
-            coin: network.value,
-        };
+        if(isAuction) {
+            const createData = {
+                roundId: currentRound,
+                cryptoType: coin.value,
+                network: network.network,
+                coin: network.value,
+            };
+    
+            createCryptoPaymentMutation({
+                variables: { ...createData },
+            });
+        } else {
+            const createData = {
+                presaleId: currentRound,
+                orderId: order_id,
+                coin: network.value,
+                network: network.network,
+                cryptoType: coin.value,
+            };
 
-        createCryptoPaymentMutation({
-            variables: { ...createData },
-        });
+            createChargeForPresaleMutation({
+                variables: { ...createData },
+            });
+        }
     };
 
     const handleAllowFraction = useCallback(
@@ -183,6 +241,13 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         },
         [allow_fraction]
     );
+
+    const handleCopyToClipboard = item => {
+        setCopied({ ...copied, [item]: true });
+        setTimeout(() => {
+            setCopied({ ...copied, [item]: false });
+        }, 1000);
+    };
 
     return loadingData ? (
         <div className="text-center">
@@ -211,27 +276,44 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                 styles={customSelectWithIconStyles}
                             />
                             <div className="w-75">
-                                <div className="show_value">
-                                    <NumberFormat
-                                        className="coin_value"
-                                        displayType={"text"}
-                                        value={coinQuantity}
-                                        thousandSeparator={true}
-                                        renderText={(value, props) => (
-                                            <p {...props}>{value}</p>
-                                        )}
-                                    />
-                                    <NumberFormat
-                                        className="order_value"
-                                        displayType={"text"}
-                                        value={roundNumber(bidAmount, 2)}
-                                        suffix={` USD`}
-                                        thousandSeparator={true}
-                                        renderText={(value, props) => (
-                                            <p {...props}>~ {value}</p>
-                                        )}
-                                    />
-                                </div>
+                                <CopyToClipboard
+                                    onCopy={() => handleCopyToClipboard('coinQuantity')}
+                                    text={coinQuantity}
+                                    options={{ message: "copied" }}
+                                >
+                                    <div className="show_value cursor-pointer">
+                                        <NumberFormat
+                                            className="coin_value"
+                                            displayType={"text"}
+                                            value={coinQuantity}
+                                            thousandSeparator={true}
+                                            renderText={(value, props) => (
+                                                <p {...props}>{value}</p>
+                                            )}
+                                        />
+                                        <div className="d-flex">
+                                            <NumberFormat
+                                                className="order_value"
+                                                displayType={"text"}
+                                                value={roundNumber(bidAmount, 2)}
+                                                suffix={` USD`}
+                                                thousandSeparator={true}
+                                                renderText={(value, props) => (
+                                                    <p {...props}>~ {value}</p>
+                                                )}
+                                            />
+                                            <span className="cursor-pointer me-2"
+                                                onClick={() => handleCopyToClipboard('coinQuantity')}
+                                                onKeyDown={() => handleCopyToClipboard('coinQuantity')}
+                                            >
+                                                {copied.coinQuantity?
+                                                    <Icon icon='fluent:copy-24-filled' className="fs-22px" />
+                                                    : <Icon icon='fluent:copy-24-regular' className="fs-22px" />
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                </CopyToClipboard>
                             </div>
                         </div>
                         {!depositAddress ? (
@@ -268,18 +350,21 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         ) : (
                             <>
                                 <CopyToClipboard
-                                    onCopy={() => setCopied(true)}
+                                    onCopy={() => handleCopyToClipboard('depositAddress')}
                                     text={depositAddress}
                                     options={{ message: "copied" }}
                                 >
                                     <p
                                         className="clipboard"
-                                        onClick={() => setCopied(true)}
-                                        onKeyDown={() => setCopied(true)}
+                                        onClick={() => handleCopyToClipboard('depositAddress')}
+                                        onKeyDown={() => handleCopyToClipboard('depositAddress')}
                                         role="presentation"
                                     >
                                         <code>{depositAddress}</code>
-                                        <img src={Copy} alt="copy" />
+                                        {copied.depositAddress?
+                                            <Icon icon='fluent:copy-24-filled' className="fs-22px text-black" />
+                                            : <Icon icon='fluent:copy-24-regular' className="fs-22px text-black" />
+                                        }                                        
                                     </p>
                                 </CopyToClipboard>
                             </>
@@ -303,7 +388,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                     </p>
                 )}
                 <div className="mt-3 d-flex justify-content-between">
-                    <div className="d-flex flex-row ">
+                    <div className="d-flex flex-row align-items-center">
                         <CheckBox
                             type="checkbox"
                             name="allow_fraction"
@@ -313,6 +398,12 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         />
                         <div className="allow-text text-light">
                             Do you allow fraction of order completion?
+                            <span className="ms-2 fs-20px"
+                                data-tip="React-tooltip"
+                                data-for='coinpayments-tooltip'
+                            >
+                                <Icon icon='bi:question-circle' />
+                            </span>
                         </div>
                         <ReactTooltip place="right" type="light" effect="solid" id='coinpayments-tooltip'>
                             <div
@@ -324,17 +415,13 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                 {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                             </div>
                         </ReactTooltip>
-                        <FontAwesomeIcon
-                            data-tip="React-tooltip"
-                            data-for='coinpayments-tooltip'
-                            icon={faQuestionCircle}
-                            className="fa-2x ms-2 cursor-pointer text-light"
-                        />
                     </div>
-                    {depositAddress && (
+                    {depositAddress && createdAt && (
                         <p className="payment-expire my-auto">
-                            payment expires in{" "}
-                            <span className="txt-green">10 minutes</span>
+                            <Countdown
+                                date={createdAt + SESSION_EXPIRE_TIME}
+                                renderer={countDownRenderer}
+                            />
                         </p>
                     )}
                 </div>

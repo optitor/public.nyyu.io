@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { navigate } from 'gatsby';
 import Modal from "react-modal";
 import Select, { components } from "react-select";
 import { useQuery, useMutation } from '@apollo/client';
@@ -18,7 +19,7 @@ import { CloseIcon } from '../../utilities/imgImport';
 import * as Query from './../../apollo/graphqls/querys/Payment';
 import * as Mutation from './../../apollo/graphqls/mutations/Payment';
 import { ROUTES } from '../../utilities/routes';
-import { navigate } from 'gatsby';
+import CustomSpinner from "../common/custom-spinner";
 
 const BSC_JSON_RPC = "https://bsc-dataseed.binance.org/";
 const ETH_JSON_RPC = "https://mainnet.infura.io/v3/03021c5a727a40eb8d086a4d46d32ec7";
@@ -59,6 +60,7 @@ export default function TokenSelectModal({
     const [ balance, setBalance ] = useState(0);
     const [ coinQuantity, setCoinQuantity ] = useState(0);
     const [ pending, setPending ] = useState(true);
+    const [ loading, setLoading ] = useState(true);
     const [ BTCPrice, setBTCPrice ] = useState(null);
     const networks = useMemo(() => selectedCoin?.networks, [selectedCoin]);
     
@@ -78,17 +80,21 @@ export default function TokenSelectModal({
                     item.networks = nets;
                     return { ...item, detail: temp?.result[item.value] };
                 });
+                
                 setSupportedCoins(coins);
                 setSelectedCoin(coins[0]);
 
                 setNetwork(null);
                 setBalance(0);
                 setSufficient(true);
-                setPending(false);
             }
+            setLoading(false);
+            setPending(false);
         },
         onError: (err) => {
             console.log("get exchange rate: ", err);
+            setLoading(false);
+            setPending(false);
         },
     });
     
@@ -102,8 +108,20 @@ export default function TokenSelectModal({
         })();
     }, []);
 
+    useEffect(() => {
+        let coinPrice = BTCPrice * selectedCoin?.detail?.rate_btc;
+        if(selectedCoin.label === 'USDT') coinPrice = 1;
+        let precision = 8;
+        
+        let quantity = parseFloat((bidAmount / coinPrice).toFixed(precision));
+        if (quantity === Infinity) quantity = null;
+        setCoinQuantity(quantity);
+    }, [bidAmount, selectedCoin, BTCPrice]);
+
+    const [updateTransactionHash, {data, loading: updatingHash, error}] = useMutation(Mutation.UPDATE_TRANSACTION_HASH);
+
     const [createChargeForPresale] = useMutation(
-        Mutation.CRYPTO_CHARGE_FOR_PRESALE,
+        Mutation.CREATE_CHARGE_FOR_PRESALE,
         {
             onCompleted: async (data) => {
                 if (data.createChargeForPresale) {
@@ -120,13 +138,19 @@ export default function TokenSelectModal({
                                 value: BigNumber.from(_.toInteger(payamount))
                             }
                         });
-                        console.log(result);
+                        
+                        // update tx hash
+                        const hash = result.hash;
+                        updateTransactionHash({variables: {
+                            id: resData.id,
+                            txHash: hash
+                        }});
+
                         await navigate(ROUTES.auction);
                     } catch (error) {
                         console.log(error);
                         setPending(false);
                     }
-                    
                 }
             },
             onError: (err) => {
@@ -153,7 +177,14 @@ export default function TokenSelectModal({
                                 value: BigNumber.from(_.toInteger(payamount))
                             }
                         });
-                        console.log(result);
+                        
+                        // update tx hash
+                        const hash = result.hash;
+                        updateTransactionHash({variables: {
+                            id: resData.id,
+                            txHash: hash
+                        }});
+                        
                         await navigate(ROUTES.auction); 
                     } catch (error) {
                         setPending(false);
@@ -164,7 +195,7 @@ export default function TokenSelectModal({
 
             }
         }
-    )
+    );
 
     const confirmToPay = async () => {
         // check chainId with selected network
@@ -184,7 +215,6 @@ export default function TokenSelectModal({
             // auction
             const createdData = {
                 roundId: currentRound,
-                amount: coinQuantity,
                 cryptoType: selectedCoin.value,
                 network: network.network,
                 coin: network.value
@@ -196,18 +226,15 @@ export default function TokenSelectModal({
             const createdData = {
                 presaleId: currentRound,
                 orderId,
-                amount: bidAmount,
                 cryptoType: selectedCoin.value,
                 network: network.network,
                 coin: network.value,
-                cryptoAmount: coinQuantity
             }
             createChargeForPresale({
                 variables: {...createdData},
             });
-        }
-        
-    }
+        }        
+    };
     
     const onChangeNetwork = async (v) => {
         setPending(true);
@@ -231,18 +258,14 @@ export default function TokenSelectModal({
         if(_balance > coinQuantity) setSufficient(true);
         else setSufficient(false);
         setPending(false);
-    }
+    };
 
     const onChangeCoin = (v) => {
         setSelectedCoin(v);
         setNetwork(null);
         setBalance(0);
         setSufficient(true);
-        // get pay amount
-        const amountToPay = bidAmount / (v.detail.rate_btc * BTCPrice);
-        setCoinQuantity(amountToPay);
-    }
-    
+    };
 
     return (
         <Modal
@@ -272,6 +295,11 @@ export default function TokenSelectModal({
                                 }</>}
                             </div>
                             <div className="payment-content">
+                                {loading? (
+                                    <div className='text-center my-3'>
+                                        <CustomSpinner />
+                                    </div>
+                                ) : (
                                 <div className="set-cryptocoin">
                                     <div className="d-flex flex-column justify-content-between coin-address">
                                         <div className="d-flex justify-content-between w-100">
@@ -326,7 +354,7 @@ export default function TokenSelectModal({
                                                 {`Your balance is ${roundNumber(balance, 8)} ${selectedCoin.value}.`}
                                             </div>
                                         )}
-                                        {balance != 0 && (
+                                        {(balance != 0 && sufficient) && (
                                             <div className="py-2" style={{ color: "#65e83a" }}>
                                                 {`Your have enough ${roundNumber(balance, 8)} ${selectedCoin.value} to pay.`}
                                             </div>
@@ -347,6 +375,7 @@ export default function TokenSelectModal({
                                         </button>
                                     </div>
                                 </div>
+                                )}
                             </div>
                         </div>
                     </div>

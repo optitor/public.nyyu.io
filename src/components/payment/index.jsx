@@ -6,8 +6,7 @@ import { navigate } from "gatsby";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import _ from "lodash";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 
 import Header from "../header";
 import Loading from "../common/Loading";
@@ -47,6 +46,7 @@ import {
 } from "../../utilities/cookies";
 import { ROUTES } from "../../utilities/routes";
 import { getCurrentMarketCap } from "../../utilities/utility-methods";
+import AuctionProvider from "../../providers/auction-context";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -69,7 +69,7 @@ const Payment = () => {
     
     const [totalRounds, setTotalRounds] = useState(null);
     const [barProgress, setBarProgress] = useState(null);
-    const [currentCap, setCurrentCap] = useState(120000000000); // Hardcoded value
+    const [currentCap, setCurrentCap] = useState(12000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
 
@@ -171,7 +171,7 @@ const Payment = () => {
 
     if (loading) return <Loading />;
     return (
-        <>
+        <AuctionProvider>
             <Seo title="Payment" />
             <main className="payment-page">
                 <Header />
@@ -181,10 +181,9 @@ const Payment = () => {
                             <div className="payment-type__tab">
                                 <div className="payment-type__tab-name">
                                     {tabIndex !== 0 && (
-                                        <FontAwesomeIcon
-                                            icon={faArrowLeft}
+                                        <FaArrowLeft
                                             className="left-arrow cursor-pointer text-light"
-                                            size="lg"
+                                            size="1.3rem"
                                             onClick={() => setTabIndex(0)}
                                         />
                                     )}
@@ -323,7 +322,7 @@ const Payment = () => {
                     </div>
                 </section>
             </main>
-        </>
+        </AuctionProvider>
     );
 };
 

@@ -1,9 +1,11 @@
 import { gql } from "@apollo/client";
 
 export const GET_PAPAL_DEPOSIT_TRANSACTIONS = gql`
-    query {
+    query GetPaypalDepositTxnsByUser(
+        $showStatus: Int
+    ) {
         getPaypalDepositTxnsByUser(
-            showStatus: 0
+            showStatus: $showStatus
         ) {
             id
             userId
@@ -21,10 +23,13 @@ export const GET_PAPAL_DEPOSIT_TRANSACTIONS = gql`
         }
     }
 `;
+
 export const GET_PAYPAL_WITHDRAW_TRANSACTIONS = gql`
-    query {
+    query GetPaypalWithdrawByUser(
+        $showStatus: Int
+    ) {
         getPaypalWithdrawByUser(
-            showStatus: 0
+            showStatus: $showStatus
         ) {
             id
             userId
@@ -81,29 +86,38 @@ export const GET_PRESALE_ORDERS_BY_USER = gql`
         }
     }
 `;
+
 export const GET_COINPAYMENT_DEPOSIT_TX_BY_USER = gql`
-    query {
+    query GetCoinpaymentDepositTxByUser(
+        $showStatus: Int
+    ) {
         getCoinpaymentDepositTxByUser(
-            showStatus: 0
+            showStatus: $showStatus
         ) {
             id
             userId
             amount
             createdAt
-            status
             cryptoType
             network
             cryptoAmount
             confirmedAt
             depositAddress
+            depositStatus
+            orderId
+            orderType
+            txHash
             coin
         }
     }
 `;
+
 export const GET_CRYPTO_WITHDRAW_BY_USER = gql`
-    query {
+    query GetCryptoWithdrawByUser(
+        $showStatus: Int
+    ) {
         getCryptoWithdrawByUser(
-            showStatus: 0
+            showStatus: $showStatus
         ) {
             id
             userId
@@ -123,9 +137,11 @@ export const GET_CRYPTO_WITHDRAW_BY_USER = gql`
 `;
 
 export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
-    query {
+    query GetStripeDepositTxByUser(
+        $showStatus: Int
+    ) {
         getStripeDepositTxByUser(
-            showStatus: 0
+            showStatus: $showStatus
         ) {
             id
             userId
@@ -146,9 +162,11 @@ export const GET_STRIPE_DEPOSIT_TX_BY_USER = gql`
 `;
 
 export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
-    query {
+    query GetBankDepositTxnsByUser(
+        $showStatus: Int
+    ) {
         getBankDepositTxnsByUser(
-            showStatus: 0
+            showStatus: $showStatus
         ) {
             id
             userId
@@ -168,9 +186,11 @@ export const GET_BANK_DEPOSIT_TRANSACTIONS_BY_USER = gql`
 `;
 
 export const GET_BANK_WITHDRAW_TRANSACTIONS_BY_USER = gql`
-    query {
+    query GetBankWithdrawRequestsByUser(
+        $showStatus: Int
+    ) {
         getBankWithdrawRequestsByUser(
-            showStatus: 0
+            showStatus: $showStatus
         ) {
             id
             userId
@@ -260,14 +280,16 @@ export const GET_STATEMENTS = gql`
                 amount
                 fee
                 createdAt
-                status
                 cryptoType
                 network
                 cryptoAmount
                 confirmedAt
                 coin
-                auctionId
-                bidId
+                depositStatus
+                txHash
+                orderId
+                orderType
+                isShow
             }
             stripePresaleTxns {
                 id
@@ -305,15 +327,17 @@ export const GET_STATEMENTS = gql`
                 amount
                 fee
                 createdAt
-                status
                 cryptoType
                 network
                 cryptoAmount
                 confirmedAt
                 depositAddress
                 coin
-                presaleId
+                depositStatus
+                txHash
                 orderId
+                orderType
+                isShow
             }
             paypalDepositTxns {
                 id
@@ -331,19 +355,23 @@ export const GET_STATEMENTS = gql`
                 fee
                 deposited
             }
-            coinpaymentWalletTxns {
+            coinpaymentDepositTxns {
                 id
                 userId
                 amount
                 fee
                 createdAt
-                status
                 cryptoType
                 network
                 cryptoAmount
                 confirmedAt
                 depositAddress
                 coin
+                depositStatus
+                txHash
+                orderId
+                orderType
+                isShow
             }
             stripeDepositTxns {
                 id
@@ -372,6 +400,58 @@ export const GET_STATEMENTS = gql`
                 cryptoPrice
                 fee
                 deposited
+            }
+        }
+    }
+`;
+
+export const GET_PRESALE_ORDER_TXNS_BY_ORDER_ID = gql`
+    query GetPresaleOrderTransactions(
+        $orderId: Int
+    ) {
+        getPresaleOrderTransactions(
+            orderId: $orderId
+        ) {
+            coinpaymentTxns {
+                id
+                amount
+                createdAt
+                depositAddress
+                depositStatus
+                cryptoType
+                network
+                cryptoAmount
+                confirmedAt
+                coin
+                orderId
+                orderType
+                txHash
+            }
+            stripeTxns {
+                id
+                orderId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paymentIntentId
+                paymentMethodId
+            }
+            paypalTxns {
+                id
+                userId
+                amount
+                createdAt
+                confirmedAt
+                status
+                fiatType
+                fiatAmount
+                paypalOrderId
+                paypalOrderStatus
+                presaleId
+                orderId
             }
         }
     }

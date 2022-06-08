@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import validator from "validator";
 import Modal from "react-modal";
 
@@ -196,7 +195,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                 <div className="mb-5 mt-4">
                                     {error && (
                                         <span className="errorsapn">
-                                            <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                                            <FaExclamationCircle /> {error}
                                         </span>
                                     )}
                                     <button

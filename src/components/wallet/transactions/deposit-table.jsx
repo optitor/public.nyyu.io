@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { client } from "../../../apollo/client";
 import Select from "react-select";
+import _ from 'lodash';
 import {
     AccordionDownIcon,
     AccordionUpIcon,
+    SPINNER
 } from "../../../utilities/imgImport";
-import { receiptTemplate } from "./receiptTemplate";
 import { useTransactions } from "./transactions-context";
 import Pagination from "react-js-pagination";
 import { Icons } from "../../../utilities/Icons";
+import * as Mutation from "./mutations";
+import { downloadContent } from "../../../utilities/utility-methods";
+
 
 const depositOptions = [
-    { value: "paypal", label: "Paypal" },
-    { value: "crypto", label: "Crypto" },
-    { value: "credit_card", label: "Credit Card" },
-    { value: 'standard_bank_transfer', label: 'Bank Transfer' }
+    { value: "paypal", label: "Paypal", type: 'PAYPAL' },
+    { value: "crypto", label: "Crypto", type: "CRYPTO" },
+    { value: "credit_card", label: "Credit Card", type: 'CREDIT' },
+    { value: 'standard_bank_transfer', label: 'Bank Transfer', type: 'BANK' }
 ];
 
 export default function DepositTable() {
     // Containers
-    const user = useSelector((state) => state.auth.user);
     const {
         tabs,
         paypalDepositTransactions,
@@ -27,15 +30,24 @@ export default function DepositTable() {
         stripeDepositTransactions,
         bankDepositTransactions,
         itemsCountPerPage,
+        // showStatus,
+        // setShowStatus,
+        setPaypalDepositTransactions,
+        setCoinDepositTransactions,
+        setStripeDepositTransactions,
+        setBankDepositTransactions,
     } = useTransactions();
 
     const [list, setList] = useState(paypalDepositTransactions);
     const [sortType, setSortType] = useState(null);
-    const [currentRowOpen, setCurrentRowOpen] = useState(-1);
     const [currentDepositType, setCurrentDepositType] = useState(
         depositOptions[0]
     );
     const [activePage, setActivePage] = useState(1);
+    const [toggle, setToggle] = useState(null);
+
+    const [pending, setPending] = useState(false);
+    const [downloading, setDownloading] = useState(false);
 
     // Methods
     const headerTitle = ({ title, up, down, end }) => (
@@ -74,50 +86,10 @@ export default function DepositTable() {
                 </div>
             </div>
         </th>
-    );
-    const toggleDetails = (index) => {
-        const previousItem = document.getElementById(
-            `transaction-details-${currentRowOpen}`
-        );
-        if (previousItem) previousItem.classList.toggle("d-none");
-
-        setCurrentRowOpen(index);
-        const item = document.getElementById(`transaction-details-${index}`);
-        if (item) item.classList.toggle("d-none");
-    };
-
-    const downloadContent = (
-        id,
-        date,
-        time,
-        amount,
-        asset,
-        fee,
-        status,
-        type,
-        paymentId
-    ) => {
-        const downloadable = window.open("", "", "");
-        downloadable.document.write(
-            receiptTemplate({
-                id,
-                date,
-                time,
-                amount,
-                asset,
-                fee,
-                status,
-                type,
-                paymentId,
-                user,
-            })
-        );
-        downloadable.print();
-    };
+    );  
 
     const changeDepositType = (type) => {
         setActivePage(1);
-        toggleDetails(-1);
         setCurrentDepositType(type);
         if (type.value === "paypal") setList(paypalDepositTransactions);
         if (type.value === "crypto") setList(coinDepositTransactions);
@@ -125,6 +97,7 @@ export default function DepositTable() {
         if (type.value === "standard_bank_transfer")
             setList(bankDepositTransactions);
     };
+
     useEffect(() => {
         if (sortType === null) return changeDepositType(currentDepositType);
         if (sortType === "date_down")
@@ -160,6 +133,93 @@ export default function DepositTable() {
             return setList(list.sort((item2, item1) => item2.fee - item1.fee));
     }, [sortType, currentDepositType, list]);
 
+    // ------- Functions for handling hide activity ----------------
+    const change_Paypal_Deposit_ShowStatus = async updateData => {
+        try {
+            const { data } = await client.mutate({
+                mutation: Mutation.CHANGE_PAYPAL_DEPOSIT_SHOW_STATUS,
+                variables: { ...updateData }
+            })
+            if(data.changePayPalDepositShowStatus) {
+                let trxList = [ ...paypalDepositTransactions ];
+                _.remove(trxList, item => item.id === updateData.id);
+                setPaypalDepositTransactions(trxList);
+                setList([ ...trxList ]);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    };
+
+    const change_Crypto_Deposit_ShowStatus = async updateData => {
+        try {
+            const { data } = await client.mutate({
+                mutation: Mutation.CHANGE_COINPAYMENT_DEPOSIT_SHOW_STATUS,
+                variables: { ...updateData }
+            })
+            if(data.changeCoinpaymentDepositShowStatus) {
+                let trxList = [ ...coinDepositTransactions ];
+                _.remove(trxList, item => item.id === updateData.id);
+                setCoinDepositTransactions(trxList);
+                setList(trxList);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    };
+
+    const change_Stripe_Deposit_ShowStatus = async updateData => {
+        try {
+            const { data } = await client.mutate({
+                mutation: Mutation.CHANGE_STRIPE_DEPOSIT_SHOW_STATUS,
+                variables: { ...updateData }
+            })
+            if(data.changeStripeDepositShowStatus) {
+                let trxList = [ ...stripeDepositTransactions ];
+                _.remove(trxList, item => item.id === updateData.id);
+                setStripeDepositTransactions(trxList);
+                setList(trxList);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    };
+
+    const change_Bank_Deposit_ShowStatus = async updateData => {
+        try {
+            const { data } = await client.mutate({
+                mutation: Mutation.CHANGE_BANK_DEPOSIT_SHOW_STATUS,
+                variables: { ...updateData }
+            })
+            if(data.changeBankDepositShowStatus) {
+                let trxList = [ ...bankDepositTransactions ];
+                _.remove(trxList, item => item.id === updateData.id);
+                setBankDepositTransactions(trxList);
+                setList(trxList);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    };
+
+    const handleHideActivity = async (id) => {
+        setPending(true);
+        const updateData = {
+            id,
+            showStatus: 0
+        };
+        if(currentDepositType.value === 'paypal') {
+            await change_Paypal_Deposit_ShowStatus(updateData);
+        } else if(currentDepositType.value === 'crypto') {
+            await change_Crypto_Deposit_ShowStatus(updateData);
+        } else if(currentDepositType.value === 'credit_card') {
+            await change_Stripe_Deposit_ShowStatus(updateData);
+        } else if(currentDepositType.value === 'standard_bank_transfer') {
+            await change_Bank_Deposit_ShowStatus(updateData);
+        }
+        setPending(false);
+    };
+
     // Render
     return (
         <>
@@ -174,7 +234,7 @@ export default function DepositTable() {
             </div>
             <div className="px-sm-4 px-3 table-responsive transaction-section-tables mb-5 mb-sm-0">
                 <table className="wallet-transaction-table w-100">
-                    {list?.length === 0 && (
+                    {_.isEmpty(list) && (
                         <tr className="py-4 text-center">
                             <td
                                 colSpan={4}
@@ -184,7 +244,7 @@ export default function DepositTable() {
                             </td>
                         </tr>
                     )}
-                    {list?.length && (
+                    {!_.isEmpty(list) && (
                         <tr className="border-bottom-2-dark-gray pb-3 pt-1">
                             {headerTitle({
                                 title: "Date",
@@ -208,7 +268,7 @@ export default function DepositTable() {
                             </th>
                         </tr>
                     )}
-                    {list
+                    {!_.isEmpty(list) && list
                         ?.slice(
                             (activePage - 1) * itemsCountPerPage,
                             activePage * itemsCountPerPage
@@ -230,11 +290,13 @@ export default function DepositTable() {
                                 <>
                                     <tr
                                         className="border-bottom-2-dark-gray cursor-pointer"
-                                        onClick={() =>
-                                            toggleDetails(
-                                                id === currentRowOpen ? -1 : id
-                                            )
-                                        }
+                                        onClick={() => {
+                                            if(toggle === id) {
+                                                setToggle(null);
+                                            } else {
+                                                setToggle(id);
+                                            }
+                                        }}
                                     >
                                         <td className="text-light pe-5 pe-sm-0 fw-light">
                                             <div className="fs-16px">
@@ -269,11 +331,11 @@ export default function DepositTable() {
                                                     : "Pending"}
                                             </div>
                                             <button className="btn text-light border-0">
-                                                {id === currentRowOpen ? (
+                                                {id === toggle ? (
                                                     <img
                                                         src={AccordionUpIcon}
                                                         className="icon-sm ms-2 cursor-pointer"
-                                                        alt="Down arrow icon"
+                                                        alt="Up arrow icon"
                                                     />
                                                 ) : (
                                                     <img
@@ -285,9 +347,9 @@ export default function DepositTable() {
                                             </button>
                                         </td>
                                     </tr>
+                                    {toggle === id && (
                                     <tr
-                                        className="text-light d-none px-5"
-                                        id={`transaction-details-${id}`}
+                                        className="text-light px-5"
                                     >
                                         <td colSpan={tabs.length}>
                                             <div className="d-flex align-items-start justify-content-between">
@@ -311,7 +373,8 @@ export default function DepositTable() {
                                                             {currentDepositType.value === 'standard_bank_transfer' && (amount).toFixed(2) + ' ' + (asset === null ? 'USD': asset)}
                                                         </span>
                                                     </div>
-                                                    {currentDepositType.value !== 'crypto' && <div>
+                                                    {currentDepositType.value !== 'crypto' &&
+                                                    <div>
                                                         <span className="text-secondary pe-1">
                                                             deposited:
                                                         </span>
@@ -355,17 +418,6 @@ export default function DepositTable() {
                                                             {paymentId}
                                                         </span>
                                                     </div>
-                                                    {type ===
-                                                        "Crypto Deposit" && (
-                                                        <div>
-                                                            <span className="text-secondary pe-1">
-                                                                Address:
-                                                            </span>
-                                                            <span className="fw-500">
-                                                                12hfi6sh...l6shi
-                                                            </span>
-                                                        </div>
-                                                    )}
                                                     <div>
                                                         <span className="text-secondary pe-1">
                                                             Status:
@@ -376,34 +428,41 @@ export default function DepositTable() {
                                                                 : "Pending"}
                                                         </span>
                                                     </div>
-                                                </div>
-                                                <div className="fs-12px">
+                                                </div>                                                    
+                                                <div className="fs-12px d-flex flex-column">
                                                     <button
                                                         className="btn fs-12px p-0 text-success text-decoration-success text-decoration-underline"
-                                                        onClick={() =>
-                                                            downloadContent(
-                                                                id,
-                                                                date,
-                                                                time,
-                                                                amount,
-                                                                asset,
-                                                                fee,
-                                                                status,
-                                                                type,
-                                                                paymentId
-                                                            )
+                                                        onClick={async () =>
+                                                            {
+                                                                if(downloading) return;
+                                                                setDownloading(true);
+                                                                try {
+                                                                    await downloadContent(
+                                                                        id, "DEPOSIT", currentDepositType.type
+                                                                    )
+                                                                } catch (error) {
+                                                                    console.log(error);
+                                                                }
+                                                                setDownloading(false);
+                                                            }
                                                         }
                                                     >
-                                                        Get PDF Receipt
+                                                        <span className={downloading ? 'download-visible': "download-hidden"}>
+                                                            <img src={SPINNER} width="12" height="12" alt="loading spinner"/>
+                                                            &nbsp;&nbsp;
+                                                        </span>Get PDF Receipt
                                                     </button>
-
-                                                    <div className="text-light text-underline">
-                                                        Hide this activity
-                                                    </div>
+                                                    <button className="btn btn-link text-light fs-12px d-none"
+                                                        onClick={() => handleHideActivity(id)}
+                                                        disabled={pending}
+                                                    >
+                                                        {pending? 'Processing . . .' : 'Hide this activity'}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
+                                    )}
                                 </>
                             )
                         )}
@@ -417,7 +476,6 @@ export default function DepositTable() {
                         totalItemsCount={list.length}
                         pageRangeDisplayed={5}
                         onChange={(pageNumber) => {
-                            toggleDetails(-1);
                             setActivePage(pageNumber);
                         }}
                     />

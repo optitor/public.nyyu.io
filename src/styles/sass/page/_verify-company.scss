@@ -1,6 +1,8 @@
 .privacy-policy-modal {
     max-width: 950px;
-    background-color: white;
+    height: 90vh;
+    overflow-y: auto;
+    background-color: #1e1e1e;
     &__content {
         height: calc(80vh - 100px);
         padding: 10px 20px;
@@ -29,6 +31,15 @@
         }
         .btn-decline {
             background-color: white;
+        }
+    }
+    .privacy_policy_content {
+        margin-bottom: 20px;
+        p {
+            font-size: 14px;
+            text-indent: 20px;
+            text-align: justify;
+            color: lightgray;
         }
     }
 }
