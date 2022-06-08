@@ -27,7 +27,7 @@ const censorWord = (str) => {
     const repeatLength = str.length >= 5? 3: str.length - 2;
     return str[0] + "*".repeat(repeatLength) + str.slice(-1);
 };
- 
+
 export const censorEmail = (email) => {
     if(!email) return '';
     var arr = email.split("@");

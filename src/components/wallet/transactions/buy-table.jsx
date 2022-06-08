@@ -65,9 +65,9 @@ const TxnDataRow = ({ data }) => {
                 if(Object.values(resData).every(x => !x.length)) {
                     setError('No payment created');
                 } else {
-                    const coinpaymentTxns = { ...resData.coinpaymentTxns[0], paymentType: 'crypto' };
-                    const paypalTxns = { ...resData.paypalTxns[0], paymentType: 'paypal' };
-                    const stripeTxns = { ...resData.stripeTxns[0], paymentType: 'stripe' };
+                    const coinpaymentTxns = { ..._.last(resData.coinpaymentTxns), paymentType: 'crypto' };
+                    const paypalTxns = { ..._.last(resData.paypalTxns), paymentType: 'paypal' };
+                    const stripeTxns = { ..._.last(resData.stripeTxns), paymentType: 'stripe' };
 
                     const sortedByCreatedAt = _.orderBy([coinpaymentTxns, paypalTxns, stripeTxns], ['createdAt'], ['asc']);
                     const latest = sortedByCreatedAt[0];

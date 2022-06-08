@@ -23,6 +23,7 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
 const EXPIRE_TIME = 8 * 3600 * 1000;
 const POLL_INTERVAL_TIME = 10 * 1000;
 
+
 export default function OrderSummary({ bidAmount }) {
     const { temp: coinData } = useSelector((state) => state);
     const auction = useAuction();
