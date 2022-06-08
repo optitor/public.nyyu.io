@@ -103,6 +103,10 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
 
+    /// stripe payment id
+    const [stripePaymentId, setStripePaymentId] = useState(0);
+
+
     // Countdown
     const initialTime = 5 * 1000;
     const interval = 1000;
@@ -143,7 +147,9 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForAuction.error) {
                     setRequestPending(false);
-                    return setError(data.payStripeForAuction.error);
+                    const error = data.payStripeForPresale.error;
+                    error = error.split(';')[0];
+                    return setError(error);
                 }
                 const { clientSecret, requiresAction } =
                     data.payStripeForAuction;
@@ -188,6 +194,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
         onError: (error) => {
             console.log(error);
             setRequestPending(false);
+            return setError("Invalid payment");
         },
     });
     const [stripePaymentForPresale] = useMutation(PAY_STRIPE_FOR_PRESALE, {
@@ -196,16 +203,19 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForPreSale.error) {
                     setRequestPending(false);
-                    return setError(data.payStripeForPreSale.error);
+                    const error = data.payStripeForPresale.error;
+                    error = error.split(';')[0];
+                    return setError(error);
                 }
-                const { clientSecret, requiresAction } =
+                const { clientSecret, requiresAction, paymentId } =
                     data.payStripeForPreSale;
                 if (requiresAction === false || requiresAction === null) {
                     startTimer();
                     setRequestPending(false);
                     return setSuccessfulPayment(true);
                 }
-                if (clientSecret)
+                if (clientSecret) {
+                    setStripePaymentId(paymentId);
                     return stripe
                         .handleCardAction(clientSecret)
                         .then((result) => {
@@ -215,6 +225,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             }
                             return stripePaymentForPresale({
                                 variables: {
+                                    id: paymentId,
                                     presaleId: Number(round),
                                     orderId: orderId,
                                     amount: amount * 100,
@@ -226,6 +237,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                 },
                             });
                         });
+                }
                 return setError("Invalid payment");
             } else if (stripePaymentSecondCall === true) {
                 if (
@@ -243,6 +255,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
         onError: (error) => {
             console.log(error);
             setRequestPending(false);
+            return setError("Invalid payment");
         },
     });
 
@@ -294,6 +307,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
             else if (type === NDB_Presale)
                 return stripePaymentForPresale({
                     variables: {
+                        id: 0,
                         presaleId: Number(round),
                         orderId: orderId,
                         amount: amount * 100,

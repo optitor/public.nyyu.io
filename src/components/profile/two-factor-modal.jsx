@@ -10,8 +10,7 @@ import {
     CONFIRM_REQUEST_2FA,
 } from "../../apollo/graphqls/mutations/Auth";
 import CustomSpinner from "../common/custom-spinner";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import "react-phone-number-input/style.css";
 import ConnectMobile from "./connect-mobile";
 
@@ -320,7 +319,7 @@ export default function TwoFactorModal({
                             <div className="result_code_error">
                                 {error && (
                                     <span className="errorsapn">
-                                        <FontAwesomeIcon icon={faExclamationCircle} />{" "}
+                                        <FaExclamationCircle />{" "}
                                         {"Please input confirm code"}
                                     </span>
                                 )}

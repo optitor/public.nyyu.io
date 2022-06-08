@@ -2,10 +2,9 @@ import React from "react";
 import { useState } from "react";
 import Modal from "react-modal";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import { useSelector } from "react-redux";
 import { Icon } from '@iconify/react';
 import { getCountryCallingCode } from 'react-phone-number-input/input';
@@ -259,9 +258,7 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
                         <div className="my-5">
                             {error && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon
-                                        icon={faExclamationCircle}
-                                    />{" "}
+                                    <FaExclamationCircle />{" "}
                                     {error}
                                 </span>
                             )}
