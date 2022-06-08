@@ -107,7 +107,7 @@ export default function InternalWallet() {
                 if (
                     !item.tokenSymbol ||
                     item.tokenSymbol === "NDB" ||
-                    item.tokenSymbol === "VOLT"
+                    item.tokenSymbol === "WATT"
                 ) {
                     price = 0;
                 } else if(item.tokenSymbol === 'USDT') {
