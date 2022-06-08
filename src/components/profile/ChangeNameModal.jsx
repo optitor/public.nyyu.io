@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import React from "react";
 import { useState } from "react";
 import { isBrowser } from "react-device-detect";
@@ -160,9 +159,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                             <div className="mb-3 mt-4">
                                 {error && (
                                     <span className="errorsapn">
-                                        <FontAwesomeIcon
-                                            icon={faExclamationCircle}
-                                        />{" "}
+                                        <FaExclamationCircle />{" "}
                                         {error}
                                     </span>
                                 )}

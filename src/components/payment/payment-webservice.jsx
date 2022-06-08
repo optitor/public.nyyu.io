@@ -35,6 +35,7 @@ export const STRIPE_PAYMENT = gql`
 
 export const PAY_STRIPE_FOR_PRESALE = gql`
     mutation (
+        $id: Int
         $presaleId: Int
         $orderId: Int
         $amount: Float
@@ -45,6 +46,7 @@ export const PAY_STRIPE_FOR_PRESALE = gql`
         $isSaveCard: Boolean
     ) {
         payStripeForPreSale(
+            id: $id
             presaleId: $presaleId
             orderId: $orderId
             amount: $amount
@@ -54,6 +56,7 @@ export const PAY_STRIPE_FOR_PRESALE = gql`
             paymentMethodId: $paymentMethodId
             isSaveCard: $isSaveCard
         ) {
+            paymentId
             clientSecret
             paymentIntentId
             requiresAction
@@ -178,6 +181,7 @@ export const PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD = gql`
 
 export const PAY_STRIPE_FOR_PRESALE_WITH_SAVED_CARD = gql`
     mutation payStripeForPreSaleWithSavedCard(
+        $id: Int
         $presaleId: Int
         $orderId: Int
         $amount: Float
@@ -187,6 +191,7 @@ export const PAY_STRIPE_FOR_PRESALE_WITH_SAVED_CARD = gql`
         $paymentIntentId: String
     ) {
         payStripeForPreSaleWithSavedCard(
+            id: $id
             presaleId: $presaleId
             orderId: $orderId
             amount: $amount
@@ -195,6 +200,7 @@ export const PAY_STRIPE_FOR_PRESALE_WITH_SAVED_CARD = gql`
             cardId: $cardId
             paymentIntentId: $paymentIntentId
         ) {
+            paymentId
             clientSecret
             paymentIntentId
             requiresAction

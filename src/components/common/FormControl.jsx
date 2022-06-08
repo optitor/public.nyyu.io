@@ -1,6 +1,5 @@
 import React from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 
 export const FormInput = (props) => {
     const { error, label, ...others } = props
@@ -11,7 +10,7 @@ export const FormInput = (props) => {
             <input className={cls} {...others} />
             {error && (
                 <span className="errorsapn">
-                    <FontAwesomeIcon icon={faExclamationCircle} /> {error}
+                    <FaExclamationCircle /> {error}
                 </span>
             )}
         </div>

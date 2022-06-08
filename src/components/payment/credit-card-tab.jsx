@@ -10,6 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import ReactTooltip from "react-tooltip";
+import { Icon } from '@iconify/react';
 import { CheckBox } from "../common/FormControl";
 import {
     DELETE_CARD,
@@ -23,7 +24,6 @@ import CustomSpinner from "../common/custom-spinner";
 import { navigate } from "gatsby";
 import { ROUTES } from "../../utilities/routes";
 import useCountDown from "react-countdown-hook";
-import { Qmark } from "../../utilities/imgImport";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 import CreditCardSavedCards from "./CreditCardSavedCards";
@@ -103,6 +103,10 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     const [stripePaymentSecondCall, setStripePaymentSecondCall] =
         useState(false);
 
+    /// stripe payment id
+    const [stripePaymentId, setStripePaymentId] = useState(0);
+
+
     // Countdown
     const initialTime = 5 * 1000;
     const interval = 1000;
@@ -143,7 +147,9 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForAuction.error) {
                     setRequestPending(false);
-                    return setError(data.payStripeForAuction.error);
+                    const error = data.payStripeForPresale.error;
+                    error = error.split(';')[0];
+                    return setError(error);
                 }
                 const { clientSecret, requiresAction } =
                     data.payStripeForAuction;
@@ -188,6 +194,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
         onError: (error) => {
             console.log(error);
             setRequestPending(false);
+            return setError("Invalid payment");
         },
     });
     const [stripePaymentForPresale] = useMutation(PAY_STRIPE_FOR_PRESALE, {
@@ -196,16 +203,19 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForPreSale.error) {
                     setRequestPending(false);
-                    return setError(data.payStripeForPreSale.error);
+                    const error = data.payStripeForPresale.error;
+                    error = error.split(';')[0];
+                    return setError(error);
                 }
-                const { clientSecret, requiresAction } =
+                const { clientSecret, requiresAction, paymentId } =
                     data.payStripeForPreSale;
                 if (requiresAction === false || requiresAction === null) {
                     startTimer();
                     setRequestPending(false);
                     return setSuccessfulPayment(true);
                 }
-                if (clientSecret)
+                if (clientSecret) {
+                    setStripePaymentId(paymentId);
                     return stripe
                         .handleCardAction(clientSecret)
                         .then((result) => {
@@ -215,6 +225,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             }
                             return stripePaymentForPresale({
                                 variables: {
+                                    id: paymentId,
                                     presaleId: Number(round),
                                     orderId: orderId,
                                     amount: amount * 100,
@@ -226,6 +237,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                 },
                             });
                         });
+                }
                 return setError("Invalid payment");
             } else if (stripePaymentSecondCall === true) {
                 if (
@@ -243,6 +255,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
         onError: (error) => {
             console.log(error);
             setRequestPending(false);
+            return setError("Invalid payment");
         },
     });
 
@@ -294,6 +307,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
             else if (type === NDB_Presale)
                 return stripePaymentForPresale({
                     variables: {
+                        id: 0,
                         presaleId: Number(round),
                         orderId: orderId,
                         amount: amount * 100,
@@ -533,6 +547,12 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             ></CheckBox>
                             <div className="allow-text text-light">
                                 Do you allow fraction of order compleation?
+                                <span className="ms-2 fs-20px"
+                                    data-tip="React-tooltip"
+                                    data-for='question-mark-tooltip'
+                                >
+                                    <Icon icon='bi:question-circle' />
+                                </span>
                             </div>
                             <ReactTooltip
                                 id="question-mark-tooltip"
@@ -549,14 +569,6 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                     {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                                 </div>
                             </ReactTooltip>
-
-                            <img
-                                src={Qmark}
-                                alt="Question mark"
-                                data-tip
-                                data-for="question-mark-tooltip"
-                                className="ms-2 cursor-pointer text-light"
-                            />
                         </div>
                         <p className="payment-expire my-auto text-uppercase">
                             payment expires in{" "}

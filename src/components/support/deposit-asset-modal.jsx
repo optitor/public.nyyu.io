@@ -2,10 +2,9 @@ import React from "react";
 import { useState } from "react";
 import Modal from "react-modal";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import { CloseIcon } from "../../utilities/imgImport";
 import { useMutation } from "@apollo/client";
 import * as Mutation from '../../apollo/graphqls/mutations/Support';
@@ -127,9 +126,7 @@ export default function DepositAssetModal({ isOpen, setIsOpen }) {
                         <div className="mt-4 mb-3">
                             {error && (
                                 <span className="errorsapn">
-                                    <FontAwesomeIcon
-                                        icon={faExclamationCircle}
-                                    />{" "}
+                                    <FaExclamationCircle />{" "}
                                     {error}
                                 </span>
                             )}

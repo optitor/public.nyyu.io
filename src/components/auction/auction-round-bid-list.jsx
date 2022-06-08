@@ -16,7 +16,7 @@ import { setCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../u
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
     const auction = useAuction()
-    const { optCurrentRound, currentRoundNumber, isAuction, entireRounds } = auction
+    const { optCurrentRound, currentRoundNumber, isAuction, setCurrentRound } = auction
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
     const [displayedBidList, setDisplayedBidList] = useState(null)
     const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
@@ -74,14 +74,10 @@ export default function AuctionRoundBidList() {
         onCompleted: (data) => {
             if(data.getCurrentRound) {
                 if(data.getCurrentRound.auction) {
-                    auction.setOptCurrentRound(data.getCurrentRound.auction);
-                } else if (data.getCurrentRound.presale) {
-                    auction.setOptCurrentRound(data.getCurrentRound.presale);
-                }
-
-                if(data.getCurrentRound?.auction) {
+                    setCurrentRound(data.getCurrentRound.auction);
                     setCookie(NDB_Paypal_TrxType, NDB_Auction);
-                } else if(data.getCurrentRound?.presale) {
+                } else if (data.getCurrentRound.presale) {
+                    setCurrentRound(data.getCurrentRound.presale);
                     setCookie(NDB_Paypal_TrxType, NDB_Presale);
                 } else {
                     setCookie(NDB_Paypal_TrxType, '');

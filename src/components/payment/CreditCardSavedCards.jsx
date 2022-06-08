@@ -32,6 +32,8 @@ export default function CreditCardSavedCards({
         useState(false);
     const [successfulPayment, setSuccessfulPayment] = useState(null);
 
+    const [stripePaymentId, setStripePaymentId] = useState(0);
+
     // Webserver
     const [payStripeForAuctionWithSavedCard] = useMutation(
         PAY_STRIPE_FOR_AUCTION_WITH_SAVED_CARD,
@@ -93,33 +95,36 @@ export default function CreditCardSavedCards({
                         setRequestPending(false);
                         return setSuccessfulPayment(false);
                     }
-                    const { clientSecret, requiresAction } =
+                    const { clientSecret, requiresAction, paymentId } =
                         data.payStripeForPreSaleWithSavedCard;
                     if (requiresAction === false || requiresAction === null) {
                         setRequestPending(false);
                         return setSuccessfulPayment(true);
                     }
-                    if (clientSecret)
-                        return stripe
-                            .handleCardAction(clientSecret)
-                            .then((result) => {
-                                setStripePaymentSecondCall(true);
-                                if (result.error) {
-                                    setRequestPending(false);
-                                    return setSuccessfulPayment(false);
-                                }
-                                const paymentIntentId = result.paymentIntent.id;
-                                return payStripeForPreSaleWithSavedCard({
-                                    variables: {
-                                        presaleId: roundId,
-                                        orderId: orderId,
-                                        amount: amount * 100,
-                                        cardId: savedCards[selectedSavedCard]
-                                            .id,
-                                        paymentIntentId,
-                                    },
+                    if (clientSecret) {
+                        setStripePaymentId(paymentId);
+                            return stripe
+                                .handleCardAction(clientSecret)
+                                .then((result) => {
+                                    setStripePaymentSecondCall(true);
+                                    if (result.error) {
+                                        setRequestPending(false);
+                                        return setSuccessfulPayment(false);
+                                    }
+                                    const paymentIntentId = result.paymentIntent.id;
+                                    return payStripeForPreSaleWithSavedCard({
+                                        variables: {
+                                            id: paymentId,
+                                            presaleId: roundId,
+                                            orderId: orderId,
+                                            amount: amount * 100,
+                                            cardId: savedCards[selectedSavedCard]
+                                                .id,
+                                            paymentIntentId,
+                                        },
+                                    });
                                 });
-                            });
+                    }
                     return setSuccessfulPayment(false);
                 } else if (stripePaymentSecondCall === true) {
                     if (
@@ -153,6 +158,7 @@ export default function CreditCardSavedCards({
         else if (type === NDB_Presale) {
             payStripeForPreSaleWithSavedCard({
                 variables: {
+                    id: 0,
                     presaleId: roundId,
                     orderId: orderId,
                     amount: amount * 100,

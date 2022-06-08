@@ -302,7 +302,7 @@ export default function StatementsTable() {
                         amount: item?.amount,
                         type: "Crypto PreSale",
                         paymentId: "---",
-                        asset: item?.coin,
+                        asset: item?.cryptoType,
                     };
                 });
 
