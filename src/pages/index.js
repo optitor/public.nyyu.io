@@ -51,7 +51,7 @@ const IndexPage = () => {
     const presaleSold = currentRound?.presale?.sold
     const presaleStart = currentRound?.presale?.startedAt
     const presaleEnd = currentRound?.presale?.endedAt
-
+    
     // Methods
     const placeABidButtonClick = () =>
         auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
@@ -100,14 +100,14 @@ const IndexPage = () => {
                         place a bid
                     </button>
                     <br />
-                    <div
+                    {/* <div
                         className="learn-more mt-3 mt-sm-0"
                         onClick={() => setIsModalOpen(true)}
                         onKeyDown={() => setIsModalOpen(true)}
                         role="presentation"
                     >
                         Refer to friends
-                    </div>
+                    </div> */}
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
@@ -124,13 +124,14 @@ const IndexPage = () => {
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <h3 className="home-title d-sm-block d-none text-center pe-0">
                 <div className="mb-4">
+                    {auctionRound > 1 &&
                     <div>
                         <span className="txt-green">
                             round {auctionRound - 1}
                         </span>{" "}
                         ended
-                    </div>
-                    <div>next round starts</div>
+                    </div>}
+                    <div>next round starts in</div>
                 </div>
                 <CountDownPending deadline={auctionStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
@@ -142,7 +143,7 @@ const IndexPage = () => {
                         </span>{" "}
                         ended
                     </div>
-                    <div>next round starts</div>
+                    <div>next round starts in</div>
                 </div>
                 <CountDownPending deadline={auctionStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
@@ -152,14 +153,14 @@ const IndexPage = () => {
                         get notify
                     </button>
                     <br />
-                    <div
+                    {/* <div
                         className="learn-more mt-3 mt-sm-0"
                         onClick={() => setIsModalOpen(true)}
                         onKeyDown={() => setIsModalOpen(true)}
                         role="presentation"
                     >
                         Refer to friends
-                    </div>
+                    </div> */}
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
@@ -210,14 +211,14 @@ const IndexPage = () => {
                         place a bid
                     </button>
                     <br />
-                    <div
+                    {/* <div
                         className="learn-more mt-3 mt-sm-0"
                         onClick={() => setIsModalOpen(true)}
                         onKeyDown={() => setIsModalOpen(true)}
                         role="presentation"
                     >
                         Refer to friends
-                    </div>
+                    </div> */}
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
@@ -234,13 +235,14 @@ const IndexPage = () => {
         <div className="left-part col-md-6 px-0 pe-sm-auto">
             <h3 className="home-title d-sm-block d-none text-center pe-0">
                 <div className="mb-4">
+                    {presaleRound > 1 &&
                     <div>
                         <span className="txt-green">
                             round {presaleRound - 1}
                         </span>{" "}
                         ended
-                    </div>
-                    <div>next round starts</div>
+                    </div>}
+                    <div>next round starts in</div>
                 </div>
                 <CountDownPending deadline={presaleStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
@@ -252,7 +254,7 @@ const IndexPage = () => {
                         </span>{" "}
                         ended
                     </div>
-                    <div>next round starts</div>
+                    <div>next round starts in</div>
                 </div>
                 <CountDownPending deadline={presaleStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
@@ -262,14 +264,14 @@ const IndexPage = () => {
                         Be notified
                     </button>
                     <br />
-                    <div
+                    {/* <div
                         className="learn-more mt-3 mt-sm-0"
                         onClick={() => setIsModalOpen(true)}
                         onKeyDown={() => setIsModalOpen(true)}
                         role="presentation"
                     >
                         Refer to friends
-                    </div>
+                    </div> */}
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">

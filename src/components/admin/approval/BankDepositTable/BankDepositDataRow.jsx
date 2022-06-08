@@ -6,7 +6,6 @@ import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import ApproveBankDepositModal from './ApproveBankDepositModal';
 
-
 const RoundDataRow = ({ datum }) => {
     const [show, setShow] = useState(false);
     const [isApproveOpen, setIsApproveOpen] = useState(false);
@@ -141,7 +140,6 @@ const DataRow = styled.div`
     svg {
         cursor: pointer;
     }
-
 
     &>div.reference {width: ${width.reference}; padding-left: 16px;}
     &>div.email {width: ${width.email};}

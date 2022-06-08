@@ -4,7 +4,6 @@ import Modal from "react-modal"
 import { Icon } from "@iconify/react"
 import PrivacyPolicyContent from "./PrivacyPolicyContent";
 
-
 export default function PrivacyPolicy({ agree, setAgree, lang }) {
     const [open, setOpen] = useState(false)
     return (

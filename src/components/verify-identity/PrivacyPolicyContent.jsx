@@ -1,5 +1,5 @@
 import React from 'react';
-import parse from "html-react-parser"
+import parse from "html-react-parser";
 
 const SECTION_2 = [
     `In this Policy, the Personal Data means any information relating to an identified or identifiable natural person as may be collected or processed by us in connection with the Services on our Website.`,
@@ -90,11 +90,11 @@ const SECTION_4 = [
     and for the purposes described in this Policy. If you would like to delete your Personal Data or permanently delete your account, you can do so by contacting us.`,
     
     `You have the right to inform us not to process your personal information for marketing purposes. You can exercise your right and prevent us from processing such information by checking or unchecking certain boxes on the forms we use to collect your data. 
-    You can also exercise the right at any time by contacting us by email at <span className='text-info'>info@ndb.technology</span>`,
+    You can also exercise the right at any time by contacting us by email at <span className='text-info'>support@nyyu.io</span>`,
 
-    `We will not contact you for marketing purposes unless you have given your prior consent. You can change your marketing preferences at any time by contacting us by email at <span className='text-info'>info@ndb.technology</span>`,
+    `We will not contact you for marketing purposes unless you have given your prior consent. You can change your marketing preferences at any time by contacting us by email at <span className='text-info'>support@nyyu.io</span>`,
 
-    `If you change your email address, or any of the other information we hold is inaccurate or out of date, please email us at <span className='text-info'>info@ndb.technology</span>`,
+    `If you change your email address, or any of the other information we hold is inaccurate or out of date, please email us at <span className='text-info'>support@nyyu.io</span>`,
     
     `You have the right to ask for a copy of the information Voltamond SA holds about you at any time. We may charge a fee for our costs of retrieving and supplying the information to you.`,
     
@@ -182,7 +182,7 @@ const SECTION_9 = [
 ];
 
 const SECTION_10 = [
-    `Any requests to exercise your rights can be directed to us through the CONTACT US section provided on <a href='https://ndb.money' target='_blank' className='text-info'>https://ndb.money</a>. 
+    `Any requests to exercise your rights can be directed to us through the CONTACT US section provided on <a href='https://nyyu.io' target='_blank' className='text-info'>https://nyyu.io</a>. 
     Please note that we may ask you to verify your identity before responding to such a request. 
     Your request must provide sufficient information that allows us to verify that you are the person you are claiming to be or 
     that you are the authorized representative of such person. You must include sufficient details to allow us to properly understand the request and respond to it. 
@@ -261,7 +261,7 @@ const SECTION_16 = [
 
     `You may not assign or transfer your rights or obligations under this Privacy Policy to any third party.`,
 
-    `This Policy came into existence on 25 January 2022.`
+    `This Policy came into existence on 28 March 2022.`
 ];
 
 const SECTION_17 = [
@@ -270,7 +270,7 @@ const SECTION_17 = [
 ];
 
 const SECTION_18 = [
-    `If you would like to contact us to understand more about this Policy or wish to contact us concerning any matter relating to individual rights and your Personal Data, you may do so on <a href='https://ndb.money' target='_blank' className='text-info'>https://ndb.money</a>.`
+    `If you would like to contact us to understand more about this Policy or wish to contact us concerning any matter relating to individual rights and your Personal Data, you may do so by emailing us at <span className='text-info'>support@nyyu.io</span>.`
 ];
 
 export default () => (
@@ -279,14 +279,14 @@ export default () => (
         <div>
             <h5>1. INTRODUCTION</h5>
             <p className='px-3 py-2'>
-                The following privacy policy (the <span className="fw-bold">Policy</span>) governs how Voltamond SA{' '}
-                (the <span className="fw-bold">Company</span>, <span className="fw-bold">we</span>, <span className="fw-bold">us</span>, or <span className="fw-bold">our</span>) treats personally identifiable information{' '}
+                The following privacy policy (the <span className="fw-bold">Policy</span>) governs how Nyyu UAB{' '}
+                (<span className="fw-bold">we</span>, <span className="fw-bold">us</span>, or <span className="fw-bold">our</span>) treats personally identifiable information{' '}
                 (<span className="fw-bold">Personal Data</span>) users (<span className="fw-bold">User</span>, <span className="fw-bold">you</span>, or <span className="fw-bold">your</span>){' '}
                 may provide us when using our application or website (the <span className='fw-bold'>Website</span>), and any of its related products and services (the <span className='fw-bold'>Services</span>).
             </p>
             <p className='px-3 py-2'>
                 This Policy is a legally binding agreement between you and the Company, which outlines our practices with respect to{' '}
-                the Personal Data collected from users who access the Website at <a href='https://ndb.money' target='_blank' className='text-info'>https://ndb.money</a>, register an account, or participate in our Token Sale.{' '}
+                the Personal Data collected from users who access the Website at <a href='https://nyyu.io' target='_blank' className='text-info'>https://nyyu.io</a>, register an account, or participate in our Token Sale.{' '}
                 By accessing and using the Website and Services, you acknowledge that you have read, understood, and agree to be bound by the terms of this Policy.
             </p>
             <p className='px-3 py-2'>
