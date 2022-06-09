@@ -139,6 +139,10 @@ export default function DepositModal({ showModal, setShowModal }) {
         })();
     }, [depositData]);
 
+    useEffect(() => {
+        setError('');
+    }, [tabIndex, currentStep])
+
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
             setAllFees( _.mapKeys(data.getAllFees, "tierLevel"));
@@ -240,10 +244,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                 }
             }
             setLoading(false);
+            setError('');
         },
         onError: (err) => {
-            console.log(err);
-            alert("Error in PayPal checkout");
+            // console.log('paypal deposit error',err);
+            setError(err.message);
             setLoading(false);
         },
     });
@@ -267,10 +272,12 @@ export default function DepositModal({ showModal, setShowModal }) {
                 setReferenceNumber(data.bankForDeposit);
                 setCurrentStep(3);
             }
+            setError('');
             setPending(false);
         },
         onError: (err) => {
-            console.log(err.message);
+            // console.log('bank deposit error', err);
+            setError(err.message);
             setPending(false);
         },
     });
@@ -394,7 +401,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         "GET DEPOSIT ADDRESS"
                                     )}
                                 </button>
-                                <p className="mt-2">{error}</p>
+                                <p className="mt-2 text-warning">{error}</p>
                             </div>
                         )}
                         {tabIndex === 2 && (
@@ -745,7 +752,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-50px mb-5 fw-bold"
+                            className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
                             onClick={() => {
                                 initPaypalCheckout();
                             }}
@@ -753,6 +760,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         >
                             CONTINUE
                         </button>
+                        <p className="mt-2 text-warning">{error}</p>
                     </div>
                 )}
                 {currentStep === 3 && (depositType === STRIP) && (
