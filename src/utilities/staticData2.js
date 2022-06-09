@@ -79,15 +79,15 @@ export const SUPPORTED_COINS = [
             // { label: "TetherUSD (Waves Token)", value: "USDT.Waves", network: "Waves", address: ""},
         ],
     },
-    {
-        value: "DAI",
-        label: "DAI",
-        icon: DAI,
-        networks: [
-            { label: "Dai (ERC20)", value: "DAI", network: "ERC20", address: "0x6b175474e89094c44da98b954eedeac495271d0f" },
-            { label: "Dai Token (BSC Chain)", value: "DAI.BEP20", network: "BEP20", address: "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3" },
-        ],
-    },
+    // {
+    //     value: "DAI",
+    //     label: "DAI",
+    //     icon: DAI,
+    //     networks: [
+    //         { label: "Dai (ERC20)", value: "DAI", network: "ERC20", address: "0x6b175474e89094c44da98b954eedeac495271d0f" },
+    //         { label: "Dai Token (BSC Chain)", value: "DAI.BEP20", network: "BEP20", address: "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3" },
+    //     ],
+    // },
     {
         value: "DOGE",
         label: "DOGE",

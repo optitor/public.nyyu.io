@@ -18,7 +18,7 @@ export default function PresalePlaceOrderHome() {
         setPresalePlaceOrderStage(1)
         setPresaleNdbAmount(amount)
     }
-
+    // console.log(optCurrentRound)
     // Render
     return (
         <>
@@ -35,7 +35,7 @@ export default function PresalePlaceOrderHome() {
                     value={amount}
                     onChange={(value) => setAmount(value)}
                     min={1}
-                    max={optCurrentRound?.totalToken}
+                    max={100000}
                     step={1}
                 />
             </div>
