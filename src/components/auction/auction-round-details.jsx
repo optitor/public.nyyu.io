@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
+import useDeepCompareEffect from "use-deep-compare-effect"
 
 import { useAuction } from "../../providers/auction-context"
 import { numberWithLength, renderNumberFormat } from "../../utilities/number"
@@ -12,7 +13,7 @@ export default function AuctionRoundDetails() {
 
     // Container
     const auction = useAuction()
-    const { optCurrentRound, currentRoundBidList, isAuction } = auction
+    const { optCurrentRound, setOptCurrentRound, currentRound, currentRoundBidList, isAuction } = auction
     const [restTime, setRestTime] = useState({
         hours: 0,
         minutes: 0,
@@ -28,6 +29,12 @@ export default function AuctionRoundDetails() {
             seconds: seconds < 10 ? "0" + seconds : seconds
         })
     }
+    
+    useDeepCompareEffect(() => {
+        if(currentRound?.id === optCurrentRound?.id) {
+            setOptCurrentRound(currentRound);
+        }
+    }, [currentRound, optCurrentRound]);
 
     const soldTokensPercentage = (optCurrentRound?.sold / (isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)) * 100
 
