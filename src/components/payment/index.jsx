@@ -74,7 +74,7 @@ const Payment = () => {
     const [payPalLoading, setPayPalLoading] = useState(false);
 
     const dispatch = useDispatch();
-    const loading = !(totalRounds && barProgress && allFees && !payPalLoading);
+    const loading = !(barProgress && allFees && !payPalLoading);
     const targetCap = 1000000000000;
     const isSSR = typeof window === "undefined";
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);

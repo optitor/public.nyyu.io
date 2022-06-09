@@ -42,6 +42,7 @@
     "gatsby-plugin-sharp": "^4.1.0",
     "gatsby-plugin-styled-components": "^5.4.0",
     "gatsby-plugin-use-query-params": "^1.0.1",
+    "gatsby-plugin-webfonts": "^2.2.2",
     "gatsby-source-filesystem": "^4.16.0",
     "gatsby-theme-material-ui": "^5.2.0",
     "gatsby-transformer-sharp": "^4.16.0",
