@@ -272,7 +272,7 @@ export default function StepSeven() {
                                 <br />
                             </div>
                             Contact our Data Compliance Officer at{" "}
-                            <span className="text-success">info@ndb.money</span>
+                            <span className="text-success">info@nyyu.io</span>
                         </p>
                     </div>
                     <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">

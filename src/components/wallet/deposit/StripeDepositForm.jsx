@@ -72,6 +72,11 @@ const StripeDepositForm = ({ amount, closeModal }) => {
                 return setPaymentSuccessful(true);
             }
         },
+        onError: err => {
+            // console.log('stripe deposit error', err);
+            setError(err.message);
+            setRequestPending(false);
+        }
     });
 
     // Methods
