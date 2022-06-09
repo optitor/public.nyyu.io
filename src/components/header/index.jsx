@@ -17,7 +17,7 @@ import UserTier from "./user-tier"
 import InformBannedModal from "./InformBannedModal"
 import { navigationLinks, profile_tabs } from "../../utilities/staticData"
 import { GET_USER } from "../../apollo/graphqls/querys/Auth"
-import { ROUTES } from "../../utilities/routes"
+import { ROUTES, navLinks } from "../../utilities/routes"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
 import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
 import { fetch_Favor_Assets } from '../../redux/actions/settingAction';
@@ -104,6 +104,10 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     useEffect(() => {
         dispatch(fetch_Favor_Assets());
     }, [dispatch])
+
+    const isActive = (paths) => {
+        return paths.filter(item => item === window.location.pathname).length > 0;
+    }
     
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
@@ -114,42 +118,15 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     </Link>
                     {auth?.isLoggedIn() && isShowNavLinks && (
                         <div className="d-none d-md-flex justify-content-between gap-5">
-                            <Link
-                                to={ROUTES.wallet}
-                                className={`${
-                                    (window.location.pathname === ROUTES.wallet ||
-                                        window.location.pathname === ROUTES.creditDeposit) &&
-                                    "txt-green"
-                                }`}
-                            >
-                                wallet
-                            </Link>
-                            <Link
-                                to={ROUTES.auction}
-                                className={`${
-                                    (window.location.pathname === ROUTES.auction ||
-                                        window.location.pathname === ROUTES.payment) &&
-                                    "txt-green"
-                                }`}
-                            >
-                                sale
-                            </Link>
-                            <Link
-                                to={ROUTES.profile}
-                                className={`${
-                                    window.location.pathname === ROUTES.profile && "txt-green"
-                                }`}
-                            >
-                                profile
-                            </Link>
-                            <Link
-                                to={ROUTES.faq}
-                                className={`${
-                                    window.location.pathname === ROUTES.faq && "txt-green"
-                                }`}
-                            >
-                                support
-                            </Link>
+                            {navLinks.map((link, key) => {
+                                return <Link
+                                    key={key}
+                                    to={link.to}
+                                    className={`${(isActive(link.active)) && "txt-green"}`}
+                                >
+                                    {link.title}
+                                </Link>
+                            })}                            
                             {user?.role && user?.role?.includes("ROLE_ADMIN") ? (
                                 <Link
                                     to={ROUTES.admin}
@@ -180,6 +157,20 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                 <li className="scale-75 cursor-pointer">
                                     <Link to={ROUTES.profile}>
                                         <img
+                                            role='button'
+                                            tabIndex={0}
+                                            onKeyDown={isBrowser &&
+                                                window.location.pathname === ROUTES.profile
+                                                    ? () => {
+                                                        setTabIndex(1)
+                                                        setCurrentProfileTab(profile_tabs[1])
+                                                        setTab(1)
+                                                    }
+                                                    : () => {
+                                                        dispatch({
+                                                            type: "CREATE_NOTIFICATION_ROUTE"
+                                                        })
+                                                    }}
                                             onClick={
                                                 isBrowser &&
                                                 window.location.pathname === ROUTES.profile

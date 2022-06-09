@@ -1,9 +1,9 @@
 import React from 'react';
-import BidsChart1 from './BidsChart1';
-import BidsChart2 from './BidsChart2'
-import ChanceChart from './ChanceChart'
-import RoundsChart1 from './RoundsChart1'
-import RoundsChart2 from './RoundsChart2'
+// import BidsChart1 from './BidsChart1';
+// import BidsChart2 from './BidsChart2'
+// import ChanceChart from './ChanceChart'
+// import RoundsChart1 from './RoundsChart1'
+// import RoundsChart2 from './RoundsChart2'
 
 const AuctionChart = () => {
     return (
