@@ -41,9 +41,9 @@ const periodOptions = [
 
 export default function StatementsTable() {
     // Containers
-    const user = useSelector((state) => state.auth.user);
+    // const user = useSelector((state) => state.auth.user);
     const [loading, setLoading] = useState(true);
-    const [pending, setPending] = useState(false);
+    const [pending] = useState(false);
     const { itemsCountPerPage, createDateFromDate, createTimeFromDate } =
         useTransactions();
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
@@ -509,7 +509,7 @@ export default function StatementsTable() {
 
         if (sortType === "fee_up")
             return setList(list.sort((item2, item1) => item2.fee - item1.fee));
-    }, [sortType]);
+    }, [sortType, list]);
 
     // Render
     return (

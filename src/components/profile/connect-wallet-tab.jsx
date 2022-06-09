@@ -9,7 +9,7 @@ const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${SITE_U
 
 export default function ConnectWalletTab() {
     const { data: accountData } = useAccount();
-    const { connect, connectors, error, isConnecting, pendingConnector } = useConnect();
+    const { connect, connectors, error } = useConnect();
     
     const { disconnect } = useDisconnect();
 

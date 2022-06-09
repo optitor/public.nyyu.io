@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react"
 import CustomSpinner from "../common/custom-spinner"
 import { useVerification } from "./verification-context"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
-import { downloadFileFromShufti } from "../../utilities/utility-methods"
 
 export default function StepSix() {
     // Containers

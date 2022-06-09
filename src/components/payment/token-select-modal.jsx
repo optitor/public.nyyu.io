@@ -72,10 +72,12 @@ export default function TokenSelectModal({
                 const temp = JSON.parse(data.getExchangeRate);
                 const coins = SUPPORTED_COINS?.filter((item) => {
                     if(item.label !== 'BTC' && item.label !== 'NDB' && item.label !== 'SOL')
-                    return item;
+                        return item;    
+                    return null;
                 }).map((item) => {
                     const nets = item.networks.filter(i => {
                         if(i.network === 'ERC20' || i.network === 'BEP20') return i;
+                        return null;
                     })
                     item.networks = nets;
                     return { ...item, detail: temp?.result[item.value] };
@@ -118,7 +120,7 @@ export default function TokenSelectModal({
         setCoinQuantity(quantity);
     }, [bidAmount, selectedCoin, BTCPrice]);
 
-    const [updateTransactionHash, {data, loading: updatingHash, error}] = useMutation(Mutation.UPDATE_TRANSACTION_HASH);
+    const [updateTransactionHash] = useMutation(Mutation.UPDATE_TRANSACTION_HASH);
 
     const [createChargeForPresale] = useMutation(
         Mutation.CREATE_CHARGE_FOR_PRESALE,
@@ -354,7 +356,7 @@ export default function TokenSelectModal({
                                                 {`Your balance is ${roundNumber(balance, 8)} ${selectedCoin.value}.`}
                                             </div>
                                         )}
-                                        {(balance != 0 && sufficient) && (
+                                        {(balance !== 0 && sufficient) && (
                                             <div className="py-2" style={{ color: "#65e83a" }}>
                                                 {`Your have enough ${roundNumber(balance, 8)} ${selectedCoin.value} to pay.`}
                                             </div>

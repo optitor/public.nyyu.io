@@ -23,7 +23,7 @@ export default function VerificationSwitch({
         verification.setShuftReferencePayload(shuftReferencePayload);
         verification.setUserEmail(userEmail);
         setLoading(false);
-    }, [verification, shuftReferencePayload]);
+    }, [verification, shuftReferencePayload, userEmail]);
 
     // Render
     if (loading) return <Loading />;

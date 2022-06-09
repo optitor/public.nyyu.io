@@ -9,12 +9,12 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 import { client } from "../apollo/client"
 import store from '../redux/store';
-import { INFURA_ID } from "../utilities/staticData"
+// import { INFURA_ID } from "../utilities/staticData"
 
 // API key for Ethereum node
 // Two popular services are Infura (infura.io) and Alchemy (alchemy.com)
 // const infuraId = process.env.INFURA_ID
-const infuraId = INFURA_ID
+// const infuraId = INFURA_ID
 // Chains for connectors to support
 const chains = defaultChains
 const bscChain = {

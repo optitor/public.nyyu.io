@@ -1,6 +1,6 @@
 import React from "react"
 import {
-    Facebook,
+    // Facebook,
     Amazon,
     Google,
     Linkedin,

@@ -34,7 +34,7 @@ export default function StepThree() {
     useEffect(() => {
         // filter already used document 
         const filteredDocTypes = VerificationStepThreeDocumentTypes.filter((elem) => {
-            return elem.value != verification.usedDocType;
+            return elem.value !== verification.usedDocType;
         });
         setDocTypes(filteredDocTypes);
         setDocType(filteredDocTypes[0])
