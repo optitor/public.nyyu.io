@@ -249,12 +249,13 @@ const IndexPage = () => {
             </h3>
             <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
                 <div className="mb-3 fs-36px">
+                    {presaleRound > 1 && 
                     <div className="mb-3">
                         <span className="txt-green">
                             round {presaleRound - 1}
                         </span>{" "}
                         ended
-                    </div>
+                    </div>}
                     <div>next round starts in</div>
                 </div>
                 <CountDownPending deadline={presaleStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
