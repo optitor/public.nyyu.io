@@ -4,7 +4,7 @@ import {
     BNB,
     USDC,
     USDT,
-    DAI,
+    // DAI,
     SOL,
     DOGE,
     SHIB,
