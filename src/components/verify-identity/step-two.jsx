@@ -5,9 +5,9 @@ import { VerifyIdStep2 } from "../../utilities/imgImport";
 import Loading from "../common/Loading";
 import { useVerification } from "./verification-context";
 import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { MobileDatePicker } from "@mui/lab";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 const GENDER_LIST = [
     {label: "Female", value: "F"},

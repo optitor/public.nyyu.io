@@ -13,9 +13,9 @@ import { secondsToDhms } from "../../../utilities/number";
 
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { MobileDateTimePicker   } from '@mui/lab';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import * as Query from "../../../apollo/graphqls/querys/Auction";
 import { create_New_Presale } from "../../../redux/actions/auctionAction";
 
