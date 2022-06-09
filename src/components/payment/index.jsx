@@ -87,7 +87,7 @@ const Payment = () => {
             if(currentRound === 0) {
                 navigate(ROUTES.auction)
             }
-            setTotalRounds(data.getAuctions?.length);
+            // setTotalRounds(data.getAuctions?.length);
             setBarProgress((currentCap * 100) / targetCap);
         },
         onError: (error) => console.log(error),
