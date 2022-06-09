@@ -115,16 +115,15 @@
         text-align: center;
         .time {
             font-weight: bold;
-            font-weight: bold;
             font-size: 36px;
             line-height: 44px;
             letter-spacing: 0.05em;
             @include mq("tablet", max) {
-                font-size: 37.8092px;
+                font-size: 38px;
                 line-height: 46px;
             }
             @include mq("phone", max) {
-                font-size: 64px;
+                font-size: 45px;
                 line-height: 78px;
                 letter-spacing: -0.02em;
             }
@@ -154,12 +153,11 @@
         text-align: center;
         .time {
             font-weight: bold;
-            font-weight: bold;
-            font-size: 72px;
+            font-size: 55px;
             line-height: 92px;
             letter-spacing: 0.05em;
             @include mq("phone", max) {
-                font-size: 58px;
+                font-size: 45px;
                 line-height: 64px;
                 letter-spacing: -0.02em;
             }
