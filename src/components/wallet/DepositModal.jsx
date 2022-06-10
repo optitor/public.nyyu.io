@@ -27,7 +27,7 @@ import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import * as Query from "../../apollo/graphqls/querys/Payment";
 import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cookies';
 import { roundNumber } from "../../utilities/number";
-import CountDown from "../../components/common/countdown";
+import CountDownDeposit from "../../components/common/CountdownDeposit";
 
 const IntervalTime = 5 * 1000;
 
@@ -532,7 +532,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </p>
                                         <div className="content">
                                             {!confirmById?.depositStatus?
-                                                <CountDown deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
+                                                <CountDownDeposit deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
                                                 :
                                                 <span className='txt-green'>Confirmed</span>
                                             }
