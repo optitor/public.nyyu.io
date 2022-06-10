@@ -4,7 +4,6 @@ import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
 
-
 export default function PresalePlaceOrderHome() {
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
