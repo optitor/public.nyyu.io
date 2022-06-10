@@ -5,7 +5,7 @@ require("dotenv").config({
 module.exports = {
     siteMetadata: {
         title: `NDB`,
-        description: `NDB Token Auction and Sale: The NDB token is a tool for demonstrating the buyer’s interests in the partnership between companies inside our ecosystem`,
+        description: `The NDB token pre-sale: NDB token will help you gain access to the NDB Ecosystem and allows the acquisition of some of its utilities, such as NFTs.`,
         author: `@gatsbyjs`,
         siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
     },

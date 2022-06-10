@@ -304,6 +304,7 @@ const IndexPage = () => {
             <PaypalRedirect />
         </>
     );
+    
     return (
         <div>
             <Seo title="Home" />
