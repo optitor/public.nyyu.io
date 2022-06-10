@@ -112,7 +112,9 @@ const IndexPage = () => {
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
                         <div className="my-3">
-                            <img src={Certik} alt="audited by certik" />
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -166,7 +168,9 @@ const IndexPage = () => {
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
                         <div className="my-3">
-                            <img src={Certik} alt="audited by certik" />
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -224,7 +228,9 @@ const IndexPage = () => {
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
                         <div className="my-3">
-                            <img src={Certik} alt="audited by certik" />
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -278,7 +284,9 @@ const IndexPage = () => {
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
                         <div className="my-3">
-                            <img src={Certik} alt="audited by certik" />
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>

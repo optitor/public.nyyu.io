@@ -71,6 +71,7 @@ const Profile = () => {
         },
         fetchPolicy: "network-only",
     });
+    
     useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
