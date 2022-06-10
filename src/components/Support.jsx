@@ -23,7 +23,6 @@ import DepositAssetModal from "./support/deposit-asset-modal";
 import DepositMissingModal from "./support/deposit-missing-modal";
 import ResetAuthenticatorModal from "./support/reset-authenticator-modal";
 import DeleteAccountModal from "./profile/delete-account-modal";
-import { ZENDESK_KEY } from "../utilities/staticData3";
 import { ZendeskURLWithJWT } from "../utilities/staticData";
 import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';
 import AlarmModal from "./admin/AlarmModal";
@@ -317,7 +316,7 @@ const FAQ = () => {
                         setIsOpen={setIsDepositMissingModalOpen}
                     />}
                 </section>
-                <Zendesk defer zendeskKey={ZENDESK_KEY} {...setting} />
+                <Zendesk defer zendeskKey={process.env.ZENDESK_KEY} {...setting} />
                 <AlarmModal />
             </main>
         </>

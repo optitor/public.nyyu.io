@@ -6,15 +6,14 @@ import ReferralLink from './ReferralLink';
 const ReferralBody = () => {
     
     // Referral status, 
-    //0 - inactive, 1 - wallet is not connected, 2 - activated
-    const [referrerStatus, setReferrerStatus] = useState(0);
+    //1 - wallet is not connected, 2 - activated
+    const [referrerStatus, setReferrerStatus] = useState(1);
     
-    return <div className='col-1 col-md-8'>
-        <div>
+    return <div className='col-12 col-md-8 p-5'>
+        <div className='d-flex align-items-center flex-column my-5'>
             <h3>INVITE FRIENDS</h3>
             <h6>Earn commission when your friends purchase NDB</h6>
         </div>
-        {referrerStatus === 0 && <CommissionWallet changeStatus={setReferrerStatus}/>}
         {referrerStatus === 1 && <ReferralWalletConnector changeStatus={setReferrerStatus} />}
         {referrerStatus === 2 && <ReferralLink />}
     </div>

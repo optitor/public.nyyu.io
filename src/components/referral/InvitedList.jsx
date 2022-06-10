@@ -12,10 +12,10 @@ const InvitedList = ({loading, invitedList}) => {
         </div>
     }
     
-    return <div>
-        <div className='d-flex justify-content-between'>
-            <span>INVITED</span>
-            <span className='text-green'>YOU EARNED</span>
+    return <div className='mt-4'>
+        <div className='d-flex justify-content-between align-items-center mt-5'>
+            <span className='fw-bold fs-22px'>INVITED</span>
+            <span className='txt-green fs-14px'>YOU EARNED</span>
         </div>
         <div className='overflow-auto'>
             {invitedList.map((user, key) => {

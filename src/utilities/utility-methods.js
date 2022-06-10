@@ -1,5 +1,4 @@
 import axios from "axios";
-import { API_BASE_URL } from "./staticData3";
 
 export const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -190,7 +189,7 @@ export const getCurrentMarketCap = async () => {
 export const downloadContent = async (id, tx, payment) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     const response = await axios({
-        url: `${API_BASE_URL}/download/pdf/${id}`,
+        url: `${process.env.API_BASE_URL}/download/pdf/${id}`,
         method: 'GET',
         responseType: 'blob',
         params: { tx, payment },

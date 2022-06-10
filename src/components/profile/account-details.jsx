@@ -5,7 +5,6 @@ import { ROUTES } from "../../utilities/routes";
 import ChangeEmailModal from "./ChangeEmailModal";
 import ChangeNameModal from "./ChangeNameModal";
 import SelectCurrencyModal from "./SelectCurrencyModal";
-import { CurrencyIconEndpoint } from "../../utilities/staticData3";
 import { EuropeanFlag } from '../../utilities/imgImport';
 
 export default function AccountDetails({
@@ -147,7 +146,7 @@ export default function AccountDetails({
                             <div className="d-flex align-items-center">
                                 <div className='flag_div' style={{width: 14, height: 14}}>
                                     <img
-                                        src={savedCurrency.value !=='EUR'? `${CurrencyIconEndpoint}/${String(savedCurrency.value).toLowerCase()}.png`: EuropeanFlag}
+                                        src={savedCurrency.value !=='EUR'? `${process.env.CurrencyIconEndpoint}/${String(savedCurrency.value).toLowerCase()}.png`: EuropeanFlag}
                                         alt={savedCurrency.value}
                                     />
                                 </div>

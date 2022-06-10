@@ -8,11 +8,11 @@ const CommissionHistory = () => {
     // invited user list
     const [ invitedList, setInvitedList ] = useState([]);
     // total earned
-    const [ totalEarned, setTotalEarned ] = useState(0);
+    const [ totalEarned, setTotalEarned ] = useState(12345678);
 
     // getting invited list - user name/earned
 
-    return <div className='col-1 col-md-4'>
+    return <div className='col-12 col-md-4  px-lg-1 px-xl-5 py-5'>
         <CommissionBalance loading={loading} totalEarned={totalEarned} />
         <InvitedList invitedList={invitedList} />
     </div>
