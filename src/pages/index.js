@@ -111,7 +111,7 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
+                        <div className="my-3">
                             <img src={Certik} alt="audited by certik" />
                         </div>
                     </div>
@@ -165,7 +165,7 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
+                        <div className="my-3">
                             <img src={Certik} alt="audited by certik" />
                         </div>
                     </div>
@@ -223,7 +223,7 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
+                        <div className="my-3">
                             <img src={Certik} alt="audited by certik" />
                         </div>
                     </div>
@@ -277,7 +277,7 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
+                        <div className="my-3">
                             <img src={Certik} alt="audited by certik" />
                         </div>
                     </div>

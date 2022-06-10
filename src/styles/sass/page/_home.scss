@@ -1,8 +1,5 @@
 .home-page {
     overflow-y: auto;
-    @include mq("phone", max) {
-        overflow-y: hidden;
-    }
     .menu {
         background-color: transparent;
     }
