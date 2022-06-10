@@ -12,6 +12,7 @@ import Seo from '../seo';
 const VerifyEmail = ({ email }) => {
     const [code, setCode] = useState("")
     const [tfaOpen, setTfaOpen] = useState(false)
+    const [error, setError] = useState('');
 
     const [verifyAccount, { loading }] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
@@ -20,6 +21,9 @@ const VerifyEmail = ({ email }) => {
                 setTfaOpen(true)
             }
         },
+        onError: err => {
+            setError(err.message);
+        }
     })
 
     const [resendVerifyCode, { loading: resending }] = useMutation(RESEND_VERIFY_CODE, {
@@ -28,6 +32,9 @@ const VerifyEmail = ({ email }) => {
                 navigate(ROUTES.signIn + "error.Already verified")
             }
         },
+        onError: err => {
+            setError(err.message);
+        }
     })
 
     return (
@@ -89,15 +96,16 @@ const VerifyEmail = ({ email }) => {
                     </div>
                     <button
                         type="submit"
-                        className="btn-primary w-100 text-uppercase my-5 d-flex align-items-center justify-content-center"
+                        className="btn-primary w-100 text-uppercase mt-5 d-flex align-items-center justify-content-center"
                     >
                         <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
                             <CustomSpinner />
                         </div>
                         <div className={`${loading ? "ms-3" : "pe-4"}`}>Confirm Code</div>
                     </button>
+                    <p className="text-warning mt-2">{error}</p>
                 </form>
-                <p className="text-white text-center">
+                <p className="text-white text-center mt-5">
                     Return to{" "}
                     <Link to="/app/signup" className="signup-link">
                         Sign up
