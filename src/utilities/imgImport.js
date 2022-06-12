@@ -159,6 +159,7 @@ import letter_N from '../images/loading/N.svg';
 import letter_Y from '../images/loading/Y.svg';
 import letter_U from '../images/loading/U.svg';
 import spinner from '../images/spinner.gif';
+import refer_avatar from '../images/refer-avatar.svg';
 
 
 export const Logo = logo
@@ -316,3 +317,4 @@ export const Letter_Y = letter_Y
 export const Letter_U = letter_U
 
 export const SPINNER = spinner;
+export const REFER_AVATAR = refer_avatar;

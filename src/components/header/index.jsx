@@ -250,8 +250,8 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                                     <li className="mb-3" key={index}>                                                        
                                                         <Link
                                                             to={subLink.url}
-                                                            className="fw-500 fs-20px d-block text-light"
-                                                            activeClassName="first-letter:txt-green"
+                                                            className="fw-500 fs-20px d-block text-light header-item"
+                                                            activeClassName="first-letter:txt-green header-item"
                                                         >
                                                             {subLink.label}
                                                         </Link>

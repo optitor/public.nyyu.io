@@ -215,6 +215,21 @@ ul {
         line-height: #{$size}px !important;
     }
 }
+
+@for $size from 0 to 72 {
+    .ls-#{$size}px {
+        letter-spacing: #{$size}px !important;
+    }
+}
+
+@for $size from 3 through 7 {
+    $size: $size * 100;
+    .fw-#{$size} {
+        font-weight: #{$size} !important;
+    }
+}
+
+
 .scale-75 {
     transform: scale(0.75, 0.75);
     @include mq("phone", min) {
@@ -402,6 +417,9 @@ ul {
 }
 .txt-cinnabar {
     color: $cinnabar;
+}
+.txt-baseprice {
+    color: $priceGray;
 }
 .txt-mountainMeadow {
     color: $mountainMeadow;

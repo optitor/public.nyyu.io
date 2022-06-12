@@ -20,7 +20,7 @@ const ReferralWalletConnector = ({changeStatus}) => {
     
     return <div className='text-white'>
         <div>
-            <div>STEP <span className='text-green'>2</span></div>
+            {/* <div>STEP <span className='text-green'>2</span></div> */}
             <div>
                 {selectedWallet === 'external' && 
                     <><FaArrowLeft onClick={() => setSelectedWallet('internal')}/>&nbsp;</>
@@ -35,7 +35,7 @@ const ReferralWalletConnector = ({changeStatus}) => {
             />
         </div>
         <div>
-            <button>ACTIVATE INVITE & EARN</button>
+            <button className='w-100 py-2 bg-transparent text-white fw-bold border border-white fs-22px'>ACTIVATE INVITE & EARN</button>
         </div>
     </div>
 }

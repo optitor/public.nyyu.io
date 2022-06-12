@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SPINNER } from '../../utilities/imgImport';
 
 const CommissionBalance = ({loading, totalEarned}) => {
     
@@ -21,8 +22,8 @@ const CommissionBalance = ({loading, totalEarned}) => {
                 <span onClick={() => onChangeEquity('USD')} onKeyDown={() => onChangeEquity('USD')}>USD</span>
             </div>
         </div>
-        <div className='mt-2'>{loading ? <>spinner</> : <span className='fs-24px'>{totalEarned}</span>} <span className="fs-13px">NDB</span></div>
-        <div className='fs-14px text-[#959595] mt-4 mb-2'>{loading ? <>spinner</> : <span className='text-[#959595]'>~ {equityBalance}</span>} {currentEquity.toUpperCase()}</div>
+        <div className='mt-2'>{loading ? <img src={SPINNER} width='17px' height='17px' /> : <span className='fs-24px fw-600'>{totalEarned}</span>} <span className="fs-13px">NDB</span></div>
+        <div className='fs-14px text-[#959595] mt-4 mb-2'>{loading ? <img src={SPINNER} width='17px' height='17px' /> : <span className='text-[#959595]'>~ {equityBalance}</span>} {currentEquity.toUpperCase()}</div>
     </div>
 }
 
