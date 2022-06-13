@@ -130,7 +130,6 @@ export default function AuctionRoundBidList() {
                 setDisplayedBidList(currentRoundBidList)
             }
         }
-
     }, [currentRoundBidList, currentUser.id, isAuction])
 
     useEffect(() => {

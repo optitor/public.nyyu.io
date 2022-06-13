@@ -15,8 +15,6 @@ import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData";
 import  { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context";
 
 export default function StepThree() {
-    
-    
     // Containers
     const verification = useVerification();
     const [loading, setLoading] = useState(true);
@@ -34,11 +32,11 @@ export default function StepThree() {
     useEffect(() => {
         // filter already used document 
         const filteredDocTypes = VerificationStepThreeDocumentTypes.filter((elem) => {
-            return elem.value != verification.usedDocType;
+            return elem.value !== verification.usedDocType;
         });
         setDocTypes(filteredDocTypes);
         setDocType(filteredDocTypes[0])
-    }, []);
+    }, [verification.usedDocType]);
 
     useDeepCompareEffect(() => {
         const file = verification.addressProof.files[0]
