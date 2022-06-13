@@ -106,7 +106,7 @@ export default function NotificationRecent() {
                         ))}
                     {!NTList.length && (
                         <div className="text-light fw-500 text-center text-uppercase py-3">
-                            no notification yet
+                            no notifications yet
                         </div>
                     )}
                 </div>
