@@ -163,6 +163,7 @@ export default function AuctionRoundBidList() {
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
                     tokenPrice={isAuction ? currentUserBidData.tokenPrice : currentUserBidData.ndbPrice}
                     mainAmount={isAuction ? currentUserBidData.tokenAmount * currentUserBidData.tokenPrice : currentUserBidData.ndbAmount * currentUserBidData.ndbPrice}
+                    ndbAmount={isAuction ? currentUserBidData.tokenAmount: currentUserBidData.ndbAmount}
                     winningResult={currentUserBidData.status !== 0 && currentUserBidData.status === 1}
                     isCurrentUser={true}
                 />
@@ -175,6 +176,7 @@ export default function AuctionRoundBidList() {
                         fullName={item.prefix + "." + item.name}
                         tokenPrice={isAuction ? item.tokenPrice : item.ndbPrice}
                         mainAmount={isAuction ? item.tokenAmount * item.tokenPrice : item.ndbAmount * item.ndbPrice}
+                        ndbAmount={isAuction ? item.tokenAmount: item.ndbAmount}
                         paidAmount={item.paidAmount}
                         winningResult={item.status !== 0 && item.status === 1}
                         isCurrentUser={item.userId === currentUser.id}
