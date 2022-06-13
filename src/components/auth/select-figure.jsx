@@ -46,11 +46,17 @@ const SelectFigure = () => {
     
     const { data: userData } = useQuery(GET_USER, {
         onCompleted: () => {
-            if (userData.getUser?.avatar) return navigate(ROUTES.verifyId)
+            if (userData.getUser?.avatar) {
+                const { prefix, name } = userData.getUser.avatar;
+                if (prefix && name) {
+                    return navigate(ROUTES.verifyId);
+                }
+            }
             return setUserDataLoading(false)
         },
         fetchPolicy: "network-only",
     })
+    
     // const [randomName, setRandomName] = useState(figuresArray[selectedId]?.lastname)
     const [randomName, setRandomName] = useState('');
 

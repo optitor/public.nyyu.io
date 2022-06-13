@@ -3,13 +3,16 @@ import { useSelector } from "react-redux"
 import { useAuction } from "../../providers/auction-context"
 import { renderNumberFormat } from "../../utilities/number"
 
-const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult, isCurrentUser }) => {
+const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, paidAmount, ndbAmount, winningResult, isCurrentUser }) => {
     const currency = useSelector(state => state.favAssets.currency)
     const currencyRates = useSelector(state => state.currencyRates)
     const { isAuction } = useAuction()
 
     const currencyRate = currencyRates[currency.value] ?? 1
-    const totalBidAmount = renderNumberFormat((Number(mainAmount * currencyRate).toFixed(4)))
+    const totalPaidAmount = renderNumberFormat((paidAmount * currencyRate), '', 2);
+    const totalBidAmount = renderNumberFormat((mainAmount * currencyRate), '', 2, 'dimgrey');
+    const totalNdbAmount = renderNumberFormat(ndbAmount, '', 0, 'dimgrey');
+
     return (
         <div className="w-100 row border-bottom-scorpion p-2 bid-list-item px-12px">
             <div className="col-2 d-flex align-items-center justify-content-start">
@@ -31,7 +34,10 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, winningResult,
                             <div className="text-white align-self-end fw-500">{tokenPrice}</div>
                             <div className="text-secondary align-self-end fs-12px">{totalBidAmount}</div>
                         </div> :
-                        <div className="text-white align-self-end fw-500">{totalBidAmount}</div>
+                        <div className="d-flex flex-column">
+                            <div className="align-self-end fw-500">{totalPaidAmount}</div>
+                            <div className="align-self-end fs-12px">{totalNdbAmount}</div>
+                        </div>
                     }
                 </div>
             </div>

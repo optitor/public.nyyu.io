@@ -12,6 +12,7 @@ export const GET_PRESALE_LIST_BY_ROUND = gql`
             extAddr
             ndbAmount
             ndbPrice
+            paidAmount
             status
             createdAt
             updatedAt
