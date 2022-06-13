@@ -91,7 +91,6 @@ export default function AuctionRoundBidList() {
         notifyOnNetworkStatusChange: true
     })
 
-
     useQuery(GET_BID, {
         variables: {
             roundId: optCurrentRound?.id
@@ -131,7 +130,6 @@ export default function AuctionRoundBidList() {
                 setDisplayedBidList(currentRoundBidList)
             }
         }
-
     }, [currentRoundBidList, currentUser.id, isAuction])
 
     useEffect(() => {
