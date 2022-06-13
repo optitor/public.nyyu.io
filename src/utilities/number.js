@@ -5,6 +5,7 @@ import NumberFormat from "react-number-format";
 export const numberWithLength = (num, len=2) => {
     return `${num}`.padStart(len, "0")
 }
+
 export const getSecTomorrow = () => {
     let now = new Date()
     let tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
@@ -54,6 +55,7 @@ export const getDiffOverall = (start, end) => {
 export const numberSign = (num) => {
     return Math.sign(num) >= 0 ? "+" : ""
 }
+
 export const numberWithCommas = (x, ch = ",") => {
     const n = Number(x)
     if (n > 10) return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ch)

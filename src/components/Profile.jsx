@@ -175,7 +175,6 @@ const Profile = () => {
             </>
         );
     };
-    
 
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user]);
 

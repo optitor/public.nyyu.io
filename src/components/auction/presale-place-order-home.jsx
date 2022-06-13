@@ -32,6 +32,7 @@ export default function PresalePlaceOrderHome() {
                     onValueChange={values => setAmount(values.value)}
                     isAllowed={({ floatValue }) => (floatValue >= 1 && floatValue <= leftAmount)}
                     thousandSeparator={true}
+                    decimalScale={0}
                     allowNegative={false}
                 />
                 <Slider
