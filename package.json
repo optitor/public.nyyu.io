@@ -27,7 +27,7 @@
     "crypto-symbol": "^3.2.0",
     "dangerously-set-html-content": "^1.0.9",
     "dotenv": "^16.0.0",
-    "echarts": "^5.2.2",
+    "echarts": "^5.3.2",
     "echarts-for-react": "^3.0.2",
     "ethers": "^5.6.1",
     "fs": "^0.0.1-security",
@@ -124,7 +124,7 @@
     "build": "set NODE_OPTIONS=--max-old-space-size=8192 && gatsby build",
     "develop": "gatsby develop --port 4000",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "set NODE_OPTIONS=--max-old-space-size=8192 && gatsby develop",
+    "start": "set NODE_OPTIONS=--max-old-space-size=8192 NODE_ENV=development && gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"

@@ -2,7 +2,6 @@ import useFileUpload from "react-use-file-upload";
 import React, { useContext, useState } from "react";
 import { VerificationCountriesList } from "../../utilities/countries-list";
 import { getCurrentDate } from "../../utilities/utility-methods";
-import { API_BASE_URL, SITE_URL } from "../../utilities/staticData3";
 
 export const ACCEPTED_IMAGE_FORMAT = [
     'image/jpeg', 'image/jpg', 'image/png', 'application/pdf'
@@ -53,8 +52,8 @@ const VerificationProvider = ({ children }) => {
     const secret = process.env.GATSBY_SHUFTI_SECRET;
     const shuftiProBaseUrl = "https://api.shuftipro.com";
 
-    const callbackUrl = `${API_BASE_URL}/shufti`;
-    const redirectUrl = `${SITE_URL}/app/profile`;
+    const callbackUrl = `${process.env.API_BASE_URL}/shufti`;
+    const redirectUrl = `${process.env.SITE_URL}/app/profile`;
 
     // Methods
     const nextStep = () => {

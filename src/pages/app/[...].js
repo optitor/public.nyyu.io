@@ -20,6 +20,7 @@ const Wallet = lazy(() => import("../../components/wallet"))
 const AuctionWrapper = lazy(() => import("../../components/auction/auction-wrapper"))
 const Payment = lazy(() => import("../../components/payment"))
 const Support = lazy(() => import("../../components/Support"))
+const Referral = lazy(() => import("../../components/referral"));
 
 const NotFound = lazy(() => import("./../404"))
 
@@ -58,6 +59,7 @@ const App = () => {
                         <PrivateRoute path="auction" component={AuctionWrapper} />
                         <PrivateRoute path="payment" component={Payment} />
                         <PrivateRoute path="support" component={Support} />
+                        <PrivateRoute path="referral" component={Referral} />
 
                         <NotFound default />
                     </Router>
