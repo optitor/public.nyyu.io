@@ -107,7 +107,6 @@ export default function WithdrawTable() {
             return setList(
                 list.sort((item2, item1) => item1.amount - item2.amount)
             );
-
         if (sortType === "amount_up")
             return setList(
                 list.sort((item2, item1) => item2.amount - item1.amount)
@@ -117,7 +116,7 @@ export default function WithdrawTable() {
 
         if (sortType === "fee_up")
             return setList(list.sort((item2, item1) => item2.fee - item1.fee));
-    }, [sortType, currentWithdrawType, list, changeDepositType]);
+    }, [sortType, currentWithdrawType, list]);
 
     // Render
     return (
@@ -184,6 +183,7 @@ export default function WithdrawTable() {
                                 currency,
                                 type,
                                 paymentId,
+                                deniedReason,
                             }) => (
                                 <>
                                     <tr
@@ -329,6 +329,16 @@ export default function WithdrawTable() {
                                                                 {status === 2 && "Denied"}
                                                             </span>
                                                         </div>
+                                                        {status === 2 &&
+                                                            <div>
+                                                                <span className="text-secondary pe-1">
+                                                                    Denied Reason:
+                                                                </span>
+                                                                <span className="fw-500 d-block text-justify overflow-auto" style={{width: 320, maxHeight: 100}}>
+                                                                    {deniedReason}
+                                                                </span>
+                                                            </div>
+                                                        }
                                                     </div>
                                                     <div className="fs-12px d-flex flex-column">
                                                         <button
@@ -343,10 +353,10 @@ export default function WithdrawTable() {
                                                                             currentWithdrawType.type
                                                                         );
                                                                     } catch (error) {
-                                                                        console.log(error);    
+                                                                        console.log(error);
                                                                     }
                                                                     setDownloading(false);
-                                                                }   
+                                                                }
                                                             }
                                                         >
                                                             <span className={downloading ? 'download-visible': "download-hidden"}>
