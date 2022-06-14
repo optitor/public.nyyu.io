@@ -268,7 +268,7 @@ export default function InternalWallet() {
                         <WithdrawModal
                             showModal={isWithdrawOpen}
                             setShowModal={setIsWithdrawOpen}
-                            assets = {myAssets}
+                            assets = {myAssetsWithBalance}
                         />
                     )}
                     {isDepositOpen && (
