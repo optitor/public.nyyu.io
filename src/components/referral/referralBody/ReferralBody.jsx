@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import CommissionWallet from './CommissionWallet';
 import ReferralWalletConnector from './ReferralWalletConnector';
 import ReferralLink from './ReferralLink';
 

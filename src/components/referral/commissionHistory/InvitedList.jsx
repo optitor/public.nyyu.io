@@ -1,5 +1,5 @@
 import React from 'react';
-import { REFER_AVATAR, SPINNER } from '../../utilities/imgImport';
+import { REFER_AVATAR, SPINNER } from '../../../utilities/imgImport';
 
 const InvitedList = ({loading, invitedList}) => {
     

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import Seo from '../seo';
 import Header from './../header';
-import CommissionHistory from './CommissionHistory';
-import ReferralBody from './ReferralBody';
+import CommissionHistory from './commissionHistory/CommissionHistory';
+import ReferralBody from './referralBody/ReferralBody';
 
 const Referral = () => {
     

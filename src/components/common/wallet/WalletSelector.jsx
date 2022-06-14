@@ -33,7 +33,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                         <div className="col-lg-6 mb-10px" key={idx}>
                             <div className="presale-connected external_wallet">
                                 <img src={wallets[accountInfo.connector.id]?.icon} alt="wallet icon" className="wallet-icon"/>
-                                <p>{shortFormatAddr(accountInfo.address)}</p>
+                                <p className="txt-green">{shortFormatAddr(accountInfo.address)}</p>
                             </div>
                         </div>
                     ) : ( 

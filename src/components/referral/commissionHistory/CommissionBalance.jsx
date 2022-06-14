@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SPINNER } from '../../utilities/imgImport';
+import { SPINNER } from '../../../utilities/imgImport';
+
 
 const CommissionBalance = ({loading, totalEarned}) => {
     

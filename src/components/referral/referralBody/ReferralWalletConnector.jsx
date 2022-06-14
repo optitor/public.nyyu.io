@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaArrowLeft } from '@react-icons/all-files/fa/FaArrowLeft';
-import WalletSelector from '../common/wallet/WalletSelector';
+import WalletSelector from '../../common/wallet/WalletSelector';
 
 const ReferralWalletConnector = ({changeStatus}) => {
     

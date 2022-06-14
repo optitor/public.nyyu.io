@@ -50,9 +50,9 @@ const CommissionHistory = () => {
 
     // getting invited list - user name/earned
 
-    return <div className='col-12 col-md-4  px-lg-1 px-xl-5 py-5'>
+    return <div className='col-12 col-md-4  px-lg-1 px-xl-5 py-5 vh-md-100 border-response'>
         <CommissionBalance loading={loading} totalEarned={totalEarned} />
-        <InvitedList loading={loading} invitedList={[]} />
+        <InvitedList loading={loading} invitedList={temp} />
     </div>
 }
 
