@@ -10,8 +10,8 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, paidAmount, nd
 
     const currencyRate = currencyRates[currency.value] ?? 1
     const totalPaidAmount = renderNumberFormat((paidAmount * currencyRate), '', 2, true);
-    const totalBidAmount = renderNumberFormat((mainAmount * currencyRate), '', 2, 'dimgrey');
-    const totalNdbAmount = renderNumberFormat(ndbAmount, '', 0, 'dimgrey');
+    const totalBidAmount = renderNumberFormat((mainAmount * currencyRate), '', 2, false, 'dimgrey');
+    const totalNdbAmount = renderNumberFormat(ndbAmount, '', 0, false, 'dimgrey');
 
     return (
         <div className="w-100 row border-bottom-scorpion p-2 bid-list-item px-12px">
