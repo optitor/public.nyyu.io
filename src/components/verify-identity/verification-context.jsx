@@ -52,8 +52,8 @@ const VerificationProvider = ({ children }) => {
     const secret = process.env.GATSBY_SHUFTI_SECRET;
     const shuftiProBaseUrl = "https://api.shuftipro.com";
 
-    const callbackUrl = `${process.env.API_BASE_URL}/shufti`;
-    const redirectUrl = `${process.env.SITE_URL}/app/profile`;
+    const callbackUrl = `${process.env.GATSBY_API_BASE_URL}/shufti`;
+    const redirectUrl = `${process.env.GATSBY_SITE_URL}/app/profile`;
 
     // Methods
     const nextStep = () => {

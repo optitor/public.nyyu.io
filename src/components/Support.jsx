@@ -316,7 +316,7 @@ const FAQ = () => {
                         setIsOpen={setIsDepositMissingModalOpen}
                     />}
                 </section>
-                <Zendesk defer zendeskKey={process.env.ZENDESK_KEY} {...setting} />
+                <Zendesk defer zendeskKey={process.env.GATSBY_ZENDESK_KEY} {...setting} />
                 <AlarmModal />
             </main>
         </>

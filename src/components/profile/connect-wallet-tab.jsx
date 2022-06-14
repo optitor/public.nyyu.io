@@ -4,7 +4,7 @@ import { wallets } from "../../utilities/staticData"
 import { useConnect, useAccount, useDisconnect } from "wagmi"
 import { isMobile } from "react-device-detect"
 
-const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${process.env.SITE_URL}`;
+const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${process.env.GATSBY_SITE_URL}`;
 
 export default function ConnectWalletTab() {
     const { data: accountData } = useAccount();

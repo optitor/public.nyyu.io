@@ -446,7 +446,7 @@ export default function StatementsTable() {
         try {
             const token = localStorage.getItem("ACCESS_TOKEN");
             const response = await axios({
-                url: `${process.env.API_BASE_URL}/download/pdf/transactions`,
+                url: `${process.env.GATSBY_API_BASE_URL}/download/pdf/transactions`,
                 method: 'GET',
                 responseType: 'blob',
                 params: { from:_from, to:_to },

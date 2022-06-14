@@ -189,7 +189,7 @@ export const getCurrentMarketCap = async () => {
 export const downloadContent = async (id, tx, payment) => {
     const token = localStorage.getItem("ACCESS_TOKEN");
     const response = await axios({
-        url: `${process.env.API_BASE_URL}/download/pdf/${id}`,
+        url: `${process.env.GATSBY_API_BASE_URL}/download/pdf/${id}`,
         method: 'GET',
         responseType: 'blob',
         params: { tx, payment },

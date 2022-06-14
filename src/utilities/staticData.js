@@ -13,7 +13,7 @@ import { ROUTES } from "./routes"
 export const OAUTH2_REDIRECT_URI = `https://www.nyyu.io/oauth2/redirect`
 
 export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
-const API_BASE_URL = process.env.API_BASE_URL;
+const API_BASE_URL = process.env.GATSBY_API_BASE_URL;
 export const social_links = [
     // {
     //     icon: Facebook,
