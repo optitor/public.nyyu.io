@@ -3,17 +3,14 @@ import { navigate } from "gatsby"
 import { wallets } from "../../utilities/staticData"
 import { useConnect, useAccount, useDisconnect } from "wagmi"
 import { isMobile } from "react-device-detect"
-import { SITE_URL } from "../../utilities/staticData3"
 
-const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${SITE_URL}`;
+const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${process.env.SITE_URL}`;
 
 export default function ConnectWalletTab() {
     const { data: accountData } = useAccount();
     const { connect, connectors, error } = useConnect();
-    
     const { disconnect } = useDisconnect();
 
-    console.log(accountData);
     return (
         <div className="row">
             {accountData?.connector ? (

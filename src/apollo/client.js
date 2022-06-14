@@ -9,42 +9,12 @@ import { createUploadLink } from "apollo-upload-client";
 import { setContext } from '@apollo/client/link/context';
 import {
     getInMemoryAuthToken,
-    // isBrowser 
 } from "../utilities/auth"
-import { API_BASE_URL } from "../utilities/staticData3";
-// import { WebSocketLink } from '@apollo/client/link/ws';
-// import { getMainDefinition } from '@apollo/client/utilities';
 
 const httpLink = createUploadLink({
-    uri: API_BASE_URL + "/graphql",
+    uri: process.env.API_BASE_URL + "/graphql",
 });
 
-// const wsLink = isBrowser ? new WebSocketLink({
-//     uri: SUBSCRIPTION_BASE_URL,
-//     options: {
-//         reconnect: true,
-//         connectionParams: {
-//             Authorization: `Bearer ${getInMemoryAuthToken()}`,
-//         },
-//     }
-// }) : undefined;
-
-// The split function takes three parameters:
-//
-// * A function that's called for each operation to execute
-// * The Link to use for an operation if the function returns a "truthy" value
-// * The Link to use for an operation if the function returns a "falsy" value
-// const splitLink = isBrowser ? split(
-//     ({ query }) => {
-//         const definition = getMainDefinition(query);
-//         return (
-//             definition.kind === 'OperationDefinition' &&
-//             definition.operation === 'subscription'
-//         );
-//     },
-//     wsLink,
-//     httpLink,
-// ) : httpLink;
 const splitLink = httpLink
 
 const authLink = setContext((_, { headers }) => {

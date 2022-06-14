@@ -13,7 +13,6 @@ import { Icons } from "../../../utilities/Icons";
 import * as Mutation from "./mutations";
 import { downloadContent } from "../../../utilities/utility-methods";
 
-
 const depositOptions = [
     { value: "paypal", label: "Paypal", type: 'PAYPAL' },
     { value: "crypto", label: "Crypto", type: "CRYPTO" },
@@ -285,7 +284,8 @@ export default function DepositTable() {
                                 status,
                                 type,
                                 paymentId,
-                                cryptoAsset
+                                cryptoAsset,
+                                network
                             }) => (
                                 <>
                                     <tr
@@ -408,6 +408,16 @@ export default function DepositTable() {
                                                             {asset}
                                                         </span>
                                                     </div>
+                                                    {currentDepositType.value === 'crypto' &&
+                                                        <div>
+                                                            <span className="text-secondary pe-1">
+                                                                network:
+                                                            </span>
+                                                            <span className="fw-500">
+                                                                {network}
+                                                            </span>
+                                                        </div>
+                                                    }
                                                 </div>
                                                 <div className="text-capitalize fs-12px">
                                                     <div>

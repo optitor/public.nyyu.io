@@ -20,10 +20,10 @@ const AlarmModal = () => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" style={{display: 'none'}}></button>
                             <div className="modal-body">
                                 <div className='icon'>
-                                    <img src={SuccesImage} alt="success" />
+                                    <img src={SuccesImage} alt="" />
                                 </div>
                                 <div className='inform'>
-                                    NDB Token Auction and Sale: The NDB token is a tool for demonstrating the buyer’s interests in the partnership between companies inside our ecosystem
+                                    The NDB token pre-sale: NDB token will help you gain access to the NDB Ecosystem and allows the acquisition of some of its utilities, such as NFTs.
                                 </div>
                                 <div className='subInform'></div>
                             </div>

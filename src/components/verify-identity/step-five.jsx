@@ -152,7 +152,7 @@ export default function StepOne() {
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
                             className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => verification.previousStep()}
+                            onClick={() => window.history.back()}
                         >
                             back
                         </button>

@@ -52,6 +52,7 @@ const Auction = () => {
     }, [optCurrentRound])
 
     if (loading) return <Loading/>
+    
     return (
         <>
             <Seo title="Sale"/>

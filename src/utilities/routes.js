@@ -20,6 +20,35 @@ export const ROUTES = {
     admin: "/admin",
     presale_auction: "/pre-sale/auction/",
     presale_home: "/pre-sale/home/",
+    referral: '/app/referral'
 }
 
 export const isRedirectUrl = isBrowser && window.location.href.includes("token=");
+
+export const navLinks = [
+    {
+        to: ROUTES.wallet,
+        active: [ROUTES.wallet, ROUTES.creditDeposit],
+        title: 'wallet'
+    },
+    {
+        to: ROUTES.auction,
+        active: [ROUTES.auction, ROUTES.payment],
+        title: 'sale'
+    },
+    {
+        to: ROUTES.profile,
+        active: [ROUTES.profile],
+        title: 'profile'
+    },
+    {
+        to: ROUTES.faq,
+        active: [ROUTES.faq],
+        title: 'support'
+    },
+    {
+        to: ROUTES.referral,
+        active: [ROUTES.referral],
+        title: 'invite & earn'
+    }
+]

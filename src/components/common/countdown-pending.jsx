@@ -3,6 +3,7 @@ import { numberWithLength } from "../../utilities/number"
 
 const CountDownPending = ({ deadline, actionAfterDeadline }) => {
     const [curTime, setCurTime] = useState({
+        days: 0,
         hours: 0,
         minutes: 0,
         seconds: 0,
@@ -12,7 +13,9 @@ const CountDownPending = ({ deadline, actionAfterDeadline }) => {
         const seconds = Math.floor((difference / 1000) % 60)
         const minutes = Math.floor((difference / (1000 * 60)) % 60)
         const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
+        const days = Math.floor((difference / (1000 * 60 * 60 * 24)));
         setCurTime({
+            days: days < 10 ? "0" + days : days,
             hours: hours < 10 ? "0" + hours : hours,
             minutes: minutes < 10 ? "0" + minutes : minutes,
             seconds: seconds < 10 ? "0" + seconds : seconds,
@@ -35,7 +38,14 @@ const CountDownPending = ({ deadline, actionAfterDeadline }) => {
     }, [deadline])
 
     return (
-        <div className="countdown-pending-wrapper d-flex justify-content-center">
+        <div className="countdown-pending-wrapper d-flex justify-content-center justify-content-sm-end">
+            <div className="time-section">
+                <p className="time">{numberWithLength(curTime.days, 2)}</p>
+                <small className="time-text">day</small>
+            </div>
+            <div className="time-section">
+                <p className="time">&nbsp;:&nbsp;</p>
+            </div>
             <div className="time-section">
                 <p className="time">{numberWithLength(curTime.hours, 2)}</p>
                 <small className="time-text">hrs</small>

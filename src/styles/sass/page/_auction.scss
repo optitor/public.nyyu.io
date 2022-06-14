@@ -346,7 +346,7 @@
         margin-right: 18px;
         background: #1e1e1e;
         border: 1px solid #ffffff;
-        width: 87px;
+        width: 130px;
         font-weight: bold;
         font-size: 16px;
         line-height: 20px;
@@ -444,7 +444,7 @@
 }
 
 .destination_wallet {
-    height: 250px;
+    height: 200px;
     padding: 20px;
     border: 1px solid white;
     color: white;
@@ -458,7 +458,7 @@
         }
     }
     .img_div {
-        height: 140px;
+        height: 90px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -491,7 +491,7 @@
 }
 
 .wallet_content {
-    min-height: 250px;
+    min-height: 220px;
     .col-lg-6 {
         @include mq('tablet', max) {
             width: 50%;
@@ -501,7 +501,7 @@
         }
     }
     .external_wallet {
-        height: 112px;
+        height: 90px;
         display: flex;
         flex-direction: column;
         justify-content: center;

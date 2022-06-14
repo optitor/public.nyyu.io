@@ -5,6 +5,7 @@ import StarRatings from "react-star-ratings"
 import { useMutation, useQuery } from "@apollo/client"
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import names from "random-names-generator"
+import validator from 'validator';
 
 import Seo from '../seo';
 import Header from "../header"
@@ -45,11 +46,17 @@ const SelectFigure = () => {
     
     const { data: userData } = useQuery(GET_USER, {
         onCompleted: () => {
-            if (userData.getUser?.avatar) return navigate(ROUTES.verifyId)
+            if (userData.getUser?.avatar) {
+                const { prefix, name } = userData.getUser.avatar;
+                if (prefix && name) {
+                    return navigate(ROUTES.verifyId);
+                }
+            }
             return setUserDataLoading(false)
         },
         fetchPolicy: "network-only",
     })
+    
     // const [randomName, setRandomName] = useState(figuresArray[selectedId]?.lastname)
     const [randomName, setRandomName] = useState('');
 
@@ -92,6 +99,10 @@ const SelectFigure = () => {
             if (data?.setAvatar === "Success") navigate(ROUTES.verifyId)
             else setError(`${figuresArray[selectedId].lastname}.${randomName} Already Exists`)
         },
+        onError: err => {
+            setError(err.message)
+            setPending(false)
+        }
     })
 
     const loadingPage = avatarsLoading || userDataLoading
@@ -109,6 +120,16 @@ const SelectFigure = () => {
     }
     const handleOnConfirmButtonClick = (e) => {
         e.preventDefault()
+        if(!randomName) {
+            setError('Display name is required');
+            return;
+        }
+        
+        if(!validator.isAlphanumeric(randomName)) {
+            setError('Display name can contain only letters and numbers');
+            return;
+        }
+        
         setPending(true)
         setError("")
         setAvatar({
@@ -118,7 +139,6 @@ const SelectFigure = () => {
             },
         })
     }
-
 
     if (loadingPage) return <Loading />
     else
@@ -284,7 +304,7 @@ const SelectFigure = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="mt-1">
+                                <div className="mt-2">
                                     {error && (
                                         <span className="errorsapn">
                                             <FaExclamationCircle /> {error}
@@ -404,7 +424,7 @@ const SelectFigure = () => {
                                             Random generate
                                         </p>
                                     </div>
-                                    <div className="mt-1">
+                                    <div className="mt-2">
                                         {error && (
                                             <span className="errorsapn">
                                                 <FaExclamationCircle /> {error}

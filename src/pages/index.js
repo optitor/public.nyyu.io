@@ -111,8 +111,10 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
-                            <img src={Certik} alt="audited by certik" />
+                        <div className="my-3">
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -165,8 +167,10 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
-                            <img src={Certik} alt="audited by certik" />
+                        <div className="my-3">
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -223,8 +227,10 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
-                            <img src={Certik} alt="audited by certik" />
+                        <div className="my-3">
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -277,8 +283,10 @@ const IndexPage = () => {
                 </div>
                 <div className="mx-auto col-lg-8 mt-5 col-10">
                     <div className="d-flex align-items-center justify-content-center">
-                        <div className="mt-9px">
-                            <img src={Certik} alt="audited by certik" />
+                        <div className="my-3">
+                            <Link to='https://www.certik.com/projects/ndb' target='_blank'>
+                                <img src={Certik} alt="audited by certik" />
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -304,6 +312,7 @@ const IndexPage = () => {
             <PaypalRedirect />
         </>
     );
+    
     return (
         <div>
             <Seo title="Home" />
