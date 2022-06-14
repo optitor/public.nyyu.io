@@ -137,6 +137,7 @@ const TransactionsProvider = ({ children }) => {
                         amount: item.withdrawAmount,
                         type: "Paypal Withdraw",
                         paymentId: item.senderBatchId,
+                        deniedReason: item.deniedReason,
                         currency: item.targetCurrency,
                         asset: item.sourceToken,
                     };
@@ -247,6 +248,7 @@ const TransactionsProvider = ({ children }) => {
                         amount: item.withdrawAmount,
                         type: "Crypto Withdraw",
                         paymentId: "---",
+                        deniedReason: item.deniedReason,
                         asset: item.sourceToken,
                     };
                 });
@@ -271,6 +273,7 @@ const TransactionsProvider = ({ children }) => {
                         status: item.status,
                         asset: item.sourceToken,
                         currency: item.targetCurrency,
+                        deniedReason: item.deniedReason,
                         amount: item.withdrawAmount,
                         type: 'Bank Withdraw',
                     }
