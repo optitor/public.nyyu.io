@@ -4,7 +4,6 @@ import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
 
-
 export default function PresalePlaceOrderHome() {
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
@@ -33,6 +32,7 @@ export default function PresalePlaceOrderHome() {
                     onValueChange={values => setAmount(values.value)}
                     isAllowed={({ floatValue }) => (floatValue >= 1 && floatValue <= leftAmount)}
                     thousandSeparator={true}
+                    decimalScale={0}
                     allowNegative={false}
                 />
                 <Slider

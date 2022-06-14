@@ -8,7 +8,7 @@ import apart from "../images/apart.svg"
 import trees from "../images/trees.svg"
 import landingTokens from "../images/signup-bg.svg"
 
-import facebook from "../images/facebook.svg"
+// import facebook from "../images/facebook.svg"
 import google from "../images/google.svg"
 import twitter from "../images/twitter.svg"
 import linkedin from "../images/linkedin.svg"
@@ -159,6 +159,7 @@ import letter_N from '../images/loading/N.svg';
 import letter_Y from '../images/loading/Y.svg';
 import letter_U from '../images/loading/U.svg';
 import spinner from '../images/spinner.gif';
+import refer_avatar from '../images/refer-avatar.svg';
 
 
 export const Logo = logo
@@ -174,7 +175,7 @@ export const Apart = apart
 export const Trees = trees
 export const LandingTokens = landingTokens
 
-export const Facebook = facebook
+// export const Facebook = facebook
 export const Google = google
 export const Twitter = twitter
 export const Linkedin = linkedin
@@ -316,3 +317,4 @@ export const Letter_Y = letter_Y
 export const Letter_U = letter_U
 
 export const SPINNER = spinner;
+export const REFER_AVATAR = refer_avatar;

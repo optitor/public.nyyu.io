@@ -8,7 +8,6 @@ import Select, { components } from 'react-select';
 import { update_Favor_Assets } from '../../redux/actions/settingAction';
 import { EuropeanFlag } from "../../utilities/imgImport";
 import { Currencies } from "../../utilities/staticData2";
-import { CurrencyIconEndpoint } from "../../utilities/staticData3";
 import CustomSpinner from "../common/custom-spinner";
 
 const { Option } = components;
@@ -20,7 +19,7 @@ const SelectOption = (props) => {
             <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
                 <div className='flag_div'>
                     <img
-                        src={data.value !=='EUR'? `${CurrencyIconEndpoint}/${String(data.value).toLowerCase()}.png`: EuropeanFlag}
+                        src={data.value !=='EUR'? `${process.env.GATSBY_CurrencyIconEndpoint}/${String(data.value).toLowerCase()}.png`: EuropeanFlag}
                         alt={data.value}
                     />
                 </div>

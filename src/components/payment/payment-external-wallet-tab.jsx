@@ -4,7 +4,6 @@ import { useConnect, useAccount, useDisconnect, } from "wagmi"
 import { navigate } from "gatsby"
 import { isMobile } from "react-device-detect"
 import ReactTooltip from "react-tooltip"
-import _ from "lodash"
 import { Icon } from "@iconify/react";
 
 import { CheckBox } from "../common/FormControl"
@@ -14,7 +13,7 @@ import TokenSelectModal from './token-select-modal';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 
 export default function PaymentExternalWalletTab() {
-    const { round_id: currentRound, bid_amount: bidAmount, order_id: orderId } = useSelector((state) => state?.placeBid);
+    const { round_id: currentRound, bid_amount: bidAmount } = useSelector((state) => state?.placeBid);
 
     // wagmi hook
     const { data: accountInfo } = useAccount();

@@ -1,0 +1,25 @@
+div.bg-gray-50 {
+    background-color: rgba(43, 43, 43, 0.5);
+}
+
+.txt-disable-gray {
+    color: $disableGray;
+}
+
+.vh-50 {
+    height: 50vh;
+}
+
+.share {
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    padding: 17px;
+}
+
+.border-response {
+    border-right: 2px solid #464646;
+    @include mq("tablet", max) {
+        border-right: unset;
+    }
+}

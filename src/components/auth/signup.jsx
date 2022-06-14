@@ -1,19 +1,21 @@
 import React, { useReducer } from "react";
 import { Link, navigate } from "gatsby";
+import { useMutation } from "@apollo/client";
 import Select from "react-select";
 import validator from "validator";
-import AuthLayout from "../common/AuthLayout";
-import { FormInput } from "../common/FormControl";
-import CustomSpinner from "../common/custom-spinner";
-import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
+import { StringParam, useQueryParam } from "use-query-params";
+
 import {
     passwordValidatorOptions,
     social_links,
 } from "../../utilities/staticData";
+import AuthLayout from "../common/AuthLayout";
+import { FormInput } from "../common/FormControl";
+import CustomSpinner from "../common/custom-spinner";
+import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
 import { countryList } from "../../utilities/countryAlpha2";
 import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf";
-import { useMutation } from "@apollo/client";
 import { ROUTES } from "../../utilities/routes";
 import Seo from '../seo';
 
@@ -22,6 +24,10 @@ const countries = countryList.map(item => {
 });
 
 const Singup = () => {
+
+    const [referralCode] = useQueryParam("referralCode", StringParam);
+    console.log("Referral Code: ", referralCode);
+
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
         {
@@ -30,9 +36,7 @@ const Singup = () => {
             pwdConfirm: "",
             agree: "",
             country: countries[0],
-
             pwdVisible: false,
-
             emailError: "",
             pwdError: "",
             pwdConfirmError: "",

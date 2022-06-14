@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react"
 import CustomSpinner from "../common/custom-spinner"
 import { useVerification } from "./verification-context"
 import { SelfieImg, VerifyIdStep6 } from "../../utilities/imgImport"
-import { downloadFileFromShufti } from "../../utilities/utility-methods"
 
 export default function StepSix() {
     // Containers
@@ -78,7 +77,7 @@ export default function StepSix() {
                         {!verification.faceProof.selfieImage && (
                             <button
                                 className="btn btn-outline-light rounded-0 px-3 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                                onClick={() => verification.previousStep()}
+                                onClick={() => window.history.back()}
                             >
                                 back
                             </button>

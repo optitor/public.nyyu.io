@@ -13,7 +13,6 @@ import { Icons } from "../../../utilities/Icons";
 import * as Mutation from "./mutations";
 import { downloadContent } from "../../../utilities/utility-methods";
 
-
 const depositOptions = [
     { value: "paypal", label: "Paypal", type: 'PAYPAL' },
     { value: "crypto", label: "Crypto", type: "CRYPTO" },

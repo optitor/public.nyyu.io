@@ -79,7 +79,7 @@ export default function BidTable() {
                         new Date(item2.date).getTime()
                 )
             );
-    }, [sortType]);
+    }, [sortType, bidListForIncreaseBid]);
 
     // Render
     return (

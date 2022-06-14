@@ -1,6 +1,6 @@
 import React from "react"
 import {
-    Facebook,
+    // Facebook,
     Amazon,
     Google,
     Linkedin,
@@ -9,15 +9,11 @@ import {
     TrustWallet,
     WalletConnect,
 } from "./imgImport"
-import { API_BASE_URL } from "./staticData3"
 import { ROUTES } from "./routes"
-
-
-// export const OAUTH2_REDIRECT_URI = "http://localhost:4000/oauth2/redirect"
 export const OAUTH2_REDIRECT_URI = `https://www.nyyu.io/oauth2/redirect`
 
 export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
-
+const API_BASE_URL = process.env.GATSBY_API_BASE_URL;
 export const social_links = [
     // {
     //     icon: Facebook,

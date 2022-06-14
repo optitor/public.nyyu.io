@@ -15,8 +15,6 @@ import { VerificationStepThreeDocumentTypes } from "../../utilities/staticData";
 import  { ACCEPTED_IMAGE_FORMAT, useVerification } from "./verification-context";
 
 export default function StepThree() {
-    
-    
     // Containers
     const verification = useVerification();
     const [loading, setLoading] = useState(true);
@@ -34,11 +32,11 @@ export default function StepThree() {
     useEffect(() => {
         // filter already used document 
         const filteredDocTypes = VerificationStepThreeDocumentTypes.filter((elem) => {
-            return elem.value != verification.usedDocType;
+            return elem.value !== verification.usedDocType;
         });
         setDocTypes(filteredDocTypes);
         setDocType(filteredDocTypes[0])
-    }, []);
+    }, [verification.usedDocType]);
 
     useDeepCompareEffect(() => {
         const file = verification.addressProof.files[0]
@@ -212,7 +210,7 @@ export default function StepThree() {
                     <div className="d-flex justify-content-center gap-3 my-5 col-md-12">
                         <button
                             className="btn btn-outline-light rounded-0 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => verification.previousStep()}
+                            onClick={() => window.history.back()}
                         >
                             back
                         </button>

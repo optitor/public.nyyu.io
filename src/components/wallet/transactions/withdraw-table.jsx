@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import Select from "react-select";
 import {
     AccordionDownIcon,
@@ -34,7 +33,7 @@ export default function WithdrawTable() {
     );
     const [toggle, setToggle] = useState(null);
     const [activePage, setActivePage] = useState(1);
-    const [pending, setPending] = useState(false);
+    const [pending] = useState(false);
 
     const [downloading, setDownloading] = useState(false);
 
@@ -118,7 +117,7 @@ export default function WithdrawTable() {
 
         if (sortType === "fee_up")
             return setList(list.sort((item2, item1) => item2.fee - item1.fee));
-    }, [sortType, currentWithdrawType, list]);
+    }, [sortType, currentWithdrawType, list, changeDepositType]);
 
     // Render
     return (

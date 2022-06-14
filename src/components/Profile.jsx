@@ -71,6 +71,7 @@ const Profile = () => {
         },
         fetchPolicy: "network-only",
     });
+    
     useQuery(GET_USER_TIERS, {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
@@ -174,7 +175,6 @@ const Profile = () => {
             </>
         );
     };
-    
 
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user]);
 
