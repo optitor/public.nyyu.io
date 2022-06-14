@@ -222,6 +222,7 @@ const TransactionsProvider = ({ children }) => {
                         type: "Crypto Deposit",
                         paymentId: item.depositAddress,
                         asset: item.cryptoType,
+                        network: item.network,
                     };
                 });
             setCoinDepositTransactions(fooList);

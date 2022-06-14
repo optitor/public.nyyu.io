@@ -27,7 +27,7 @@ import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import * as Query from "../../apollo/graphqls/querys/Payment";
 import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cookies';
 import { roundNumber } from "../../utilities/number";
-import CountDown from "../../components/common/countdown";
+import CountDownDeposit from "../../components/common/CountdownDeposit";
 
 const IntervalTime = 5 * 1000;
 
@@ -47,24 +47,25 @@ const DEPOSIT_COINS = SUPPORTED_COINS.filter(item => item.value !== 'NDB');
 
 const BankTransferData = {
     EUR: {
-        "Account holder": "Voltamond",
-        BIC: "TRWIBEB1XXX",
-        IBAN: "BE36 9672 2651 6281",
-        Address: "Avenue Louise 54, Room S52, Brussels, 1050, Belgium",
+        "Account holder": "NYYU UAB",
+        BIC: "REVOLT21",
+        IBAN: "LT89 3250 0581 6682 8541",
+        Address: "Kalvarijų gatvė 125, 08221, Vilnius, Lithuania",
     },
     GBP: {
-        "Account holder": "Voltamond",
-        "Sort code": "23-14-70",
-        "Account number": "22063784",
-        IBAN: "GB29 TRWI 2314 7022 0637 84",
-        Address: "56 Shoreditch High Street, London, E1 6JJ, United Kingdom",
+        "Account holder": "NYYU UAB",
+        "Sort code": "04-00-75",
+        "Account number": "76232735",
+        BIC: "REVOLT21",
+        IBAN: "LT89 3250 0581 6682 8541",
+        "Intermediary BIC": "CHASGB2L",
+        Address: "Kalvarijų gatvė 125, 08221, Vilnius, Lithuania",
     },
     USD: {
-        "Account holder": "Voltamond",
-        "Routing number": "084009519",
-        "Account number": "9600001149793466",
-        "Account type": "Checking",
-        Address: "19 W 24th Street, New York NY 10010, United States",
+        "Account holder": "NYYU UAB",
+        BIC: "REVOLT21",
+        IBAN: "LT89 3250 0581 6682 8541",
+        Address: "Kalvarijų gatvė 125, 08221, Vilnius, Lithuania",
     },
 };
 
@@ -105,6 +106,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [tabIndex, setTabIndex] = useState(1);
     const [copied, setCopied] = useState(false);
     const [pending, setPending] = useState(false);
+    const [error, setError] = useState('');
 
     const [coinQRCode, setCoinQRCode] = useState("");
 
@@ -137,6 +139,10 @@ export default function DepositModal({ showModal, setShowModal }) {
         })();
     }, [depositData]);
 
+    useEffect(() => {
+        setError('');
+    }, [tabIndex, currentStep])
+
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
             setAllFees( _.mapKeys(data.getAllFees, "tierLevel"));
@@ -155,9 +161,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                     setPending(false);
                     setCurrentStep(2);
                 }
+                setError('');
             },
             onError: (err) => {
-                console.log("get deposit address: ", err);
+                // console.log("get deposit address: ", err);
+                setError(err.message);
                 setPending(false);
             },
         }
@@ -172,6 +180,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     };
 
     const create_Charge_For_Deposit = () => {
+        setError('');
         setPending(true);
         setDepositType(CRYPTOCURRENCY);
         const createData = {
@@ -235,10 +244,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                 }
             }
             setLoading(false);
+            setError('');
         },
         onError: (err) => {
-            console.log(err);
-            alert("Error in PayPal checkout");
+            // console.log('paypal deposit error',err);
+            setError(err.message);
             setLoading(false);
         },
     });
@@ -262,10 +272,12 @@ export default function DepositModal({ showModal, setShowModal }) {
                 setReferenceNumber(data.bankForDeposit);
                 setCurrentStep(3);
             }
+            setError('');
             setPending(false);
         },
         onError: (err) => {
-            console.log(err.message);
+            // console.log('bank deposit error', err);
+            setError(err.message);
             setPending(false);
         },
     });
@@ -389,6 +401,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         "GET DEPOSIT ADDRESS"
                                     )}
                                 </button>
+                                <p className="mt-2 text-warning">{error}</p>
                             </div>
                         )}
                         {tabIndex === 2 && (
@@ -519,7 +532,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         </p>
                                         <div className="content">
                                             {!confirmById?.depositStatus?
-                                                <CountDown deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
+                                                <CountDownDeposit deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
                                                 :
                                                 <span className='txt-green'>Confirmed</span>
                                             }
@@ -739,7 +752,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                         <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-50px mb-5 fw-bold"
+                            className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
                             onClick={() => {
                                 initPaypalCheckout();
                             }}
@@ -747,6 +760,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         >
                             CONTINUE
                         </button>
+                        <p className="mt-2 text-warning">{error}</p>
                     </div>
                 )}
                 {currentStep === 3 && (depositType === STRIP) && (

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { useSelector } from 'react-redux'
 import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
@@ -19,6 +19,10 @@ export default function PresalePlaceOrderHome() {
         setPresaleNdbAmount(amount)
     }
 
+    const leftAmount = useMemo(() => {
+        return optCurrentRound.tokenAmount - optCurrentRound.sold;
+    }, [optCurrentRound.tokenAmount, optCurrentRound.sold])
+    // console.log(optCurrentRound)
     // Render
     return (
         <>
@@ -27,7 +31,7 @@ export default function PresalePlaceOrderHome() {
                 <NumberFormat className="range-input"
                     value={amount}
                     onValueChange={values => setAmount(values.value)}
-                    isAllowed={({ floatValue }) => floatValue >= 1}
+                    isAllowed={({ floatValue }) => (floatValue >= 1 && floatValue <= leftAmount)}
                     thousandSeparator={true}
                     allowNegative={false}
                 />
@@ -35,7 +39,7 @@ export default function PresalePlaceOrderHome() {
                     value={amount}
                     onChange={(value) => setAmount(value)}
                     min={1}
-                    max={optCurrentRound?.totalToken}
+                    max={leftAmount}
                     step={1}
                 />
             </div>

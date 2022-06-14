@@ -1,9 +1,9 @@
 import { Link, navigate } from "gatsby"
 import React, { useReducer, useCallback, useState } from "react"
-import { MobileDatePicker } from "@mui/lab"
 import { Icon } from "@iconify/react"
-import AdapterDateFns from "@mui/lab/AdapterDateFns"
-import LocalizationProvider from "@mui/lab/LocalizationProvider"
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import SimpleHeader from "../header/simple-header"
 import { Input } from "../common/FormControl"
 import TextField from "@mui/material/TextField"

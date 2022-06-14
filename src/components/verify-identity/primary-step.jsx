@@ -6,6 +6,7 @@ import languages from "../../assets/lang/languages.json"
 import SelectLang from "./select-lang"
 import { useVerification } from "./verification-context"
 
+
 export default function PrimaryStep() {
     // Containers
     const verification = useVerification()

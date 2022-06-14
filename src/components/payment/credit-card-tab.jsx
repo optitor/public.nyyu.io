@@ -200,21 +200,21 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     const [stripePaymentForPresale] = useMutation(PAY_STRIPE_FOR_PRESALE, {
         onCompleted: async (data) => {
             if (stripePaymentSecondCall === false) {
-                setStripePaymentSecondCall(true);
                 if (data.payStripeForPreSale.error) {
                     setRequestPending(false);
-                    const error = data.payStripeForPresale.error;
-                    error = error.split(';')[0];
+                    console.log(data.payStripeForPreSale.error);
+                    const error = data.payStripeForPreSale.error.split(';')[0];
                     return setError(error);
                 }
                 const { clientSecret, requiresAction, paymentId } =
-                    data.payStripeForPreSale;
+                data.payStripeForPreSale;
                 if (requiresAction === false || requiresAction === null) {
                     startTimer();
                     setRequestPending(false);
                     return setSuccessfulPayment(true);
                 }
                 if (clientSecret) {
+                    setStripePaymentSecondCall(true);
                     setStripePaymentId(paymentId);
                     return stripe
                         .handleCardAction(clientSecret)
