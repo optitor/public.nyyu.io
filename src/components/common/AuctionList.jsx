@@ -9,7 +9,7 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, paidAmount, nd
     const { isAuction } = useAuction()
 
     const currencyRate = currencyRates[currency.value] ?? 1
-    const totalPaidAmount = renderNumberFormat((paidAmount * currencyRate), '', 2);
+    const totalPaidAmount = renderNumberFormat((paidAmount * currencyRate), '', 2, true);
     const totalBidAmount = renderNumberFormat((mainAmount * currencyRate), '', 2, 'dimgrey');
     const totalNdbAmount = renderNumberFormat(ndbAmount, '', 0, 'dimgrey');
 
