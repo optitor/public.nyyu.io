@@ -52,7 +52,7 @@ export default function TwoFactorModal({
     }, [twoStep]);
 
     // for redirecting 
-    const [signup2faMutation, signup2faMuationResults] = useSignUp2FA();
+    const [signup2faMutation] = useSignUp2FA();
 
     const [request2FA] = useMutation(REQUEST_2FA, {
         onCompleted: (data) => {

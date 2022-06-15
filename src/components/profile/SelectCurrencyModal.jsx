@@ -19,7 +19,7 @@ const SelectOption = (props) => {
             <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
                 <div className='flag_div'>
                     <img
-                        src={data.value !=='EUR'? `${process.env.CurrencyIconEndpoint}/${String(data.value).toLowerCase()}.png`: EuropeanFlag}
+                        src={data.value !=='EUR'? `${process.env.GATSBY_CurrencyIconEndpoint}/${String(data.value).toLowerCase()}.png`: EuropeanFlag}
                         alt={data.value}
                     />
                 </div>

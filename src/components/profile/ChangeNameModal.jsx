@@ -48,7 +48,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
 
     // Methods
     const containsSpecialCharacter = (text) => {
-        const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        const format = /[ `!@#$%^&*()_+\-=\]{};':"\\|,.<>?~]/;
         return format.test(text);
     };
 

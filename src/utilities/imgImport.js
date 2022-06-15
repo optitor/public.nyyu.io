@@ -8,7 +8,7 @@ import apart from "../images/apart.svg"
 import trees from "../images/trees.svg"
 import landingTokens from "../images/signup-bg.svg"
 
-import facebook from "../images/facebook.svg"
+// import facebook from "../images/facebook.svg"
 import google from "../images/google.svg"
 import twitter from "../images/twitter.svg"
 import linkedin from "../images/linkedin.svg"
@@ -175,7 +175,7 @@ export const Apart = apart
 export const Trees = trees
 export const LandingTokens = landingTokens
 
-export const Facebook = facebook
+// export const Facebook = facebook
 export const Google = google
 export const Twitter = twitter
 export const Linkedin = linkedin

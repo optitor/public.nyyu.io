@@ -202,12 +202,13 @@ export const roundNumber = (number, decimals) => {
     return Math.floor(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };
 
-export const renderNumberFormat = (value, unit = '', decimalScale = 8, color='white') => (
+export const renderNumberFormat = (value, unit = '', decimalScale = 8, fixedDecimalScale = false, color='white') => (
     <NumberFormat
         value={value}
         displayType={'text'}
         thousandSeparator={true}
         decimalScale={decimalScale}
+        fixedDecimalScale={fixedDecimalScale}
         renderText={(value, props) => <span {...props} style={{color}}>{value} <b style={{color: '#23c865'}}>{unit}</b></span>}
     />
 )

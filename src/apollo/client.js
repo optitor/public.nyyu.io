@@ -12,7 +12,7 @@ import {
 } from "../utilities/auth"
 
 const httpLink = createUploadLink({
-    uri: process.env.API_BASE_URL + "/graphql",
+    uri: process.env.GATSBY_API_BASE_URL + "/graphql",
 });
 
 const splitLink = httpLink

@@ -146,7 +146,7 @@ export default function AccountDetails({
                             <div className="d-flex align-items-center">
                                 <div className='flag_div' style={{width: 14, height: 14}}>
                                     <img
-                                        src={savedCurrency.value !=='EUR'? `${process.env.CurrencyIconEndpoint}/${String(savedCurrency.value).toLowerCase()}.png`: EuropeanFlag}
+                                        src={savedCurrency.value !=='EUR'? `${process.env.GATSBY_CurrencyIconEndpoint}/${String(savedCurrency.value).toLowerCase()}.png`: EuropeanFlag}
                                         alt={savedCurrency.value}
                                     />
                                 </div>
