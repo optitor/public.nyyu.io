@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { FaArrowLeft } from '@react-icons/all-files/fa/FaArrowLeft';
+import { useMutation } from '@apollo/client';
+
 import WalletSelector from '../../common/wallet/WalletSelector';
+import { ACTIVATE_REFERRER, CHANGE_COMMISSION_WALLET } from '../api/mutation';
 
 const ReferralWalletConnector = ({changeStatus}) => {
     
     // getting activate code
-
-    // activate invite
+    const [activateReferrer, {data, loading, error}] = useMutation(ACTIVATE_REFERRER);
 
     // go to next step
 
