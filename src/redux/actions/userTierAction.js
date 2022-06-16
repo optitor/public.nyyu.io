@@ -89,3 +89,16 @@ export const delete_User_Tier = level => async dispatch => {
         showFailAlarm('Action failed', 'Ops! Something went wrong. Try again!');
     }
 };
+
+export const fillUserTiers = tiers => dispatch => {
+    dispatch({
+        type: types.FILL_USER_TIERS,
+        payload: tiers
+    });
+}
+
+export const fetchUserTiers = () => dispacth => {
+    dispacth({
+        type: types.FETCH_USER_TIERS,
+    })
+}

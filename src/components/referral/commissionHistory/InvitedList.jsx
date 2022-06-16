@@ -8,7 +8,7 @@ const InvitedList = ({loading, invitedList}) => {
             <span className='fs-12px'><img src={REFER_AVATAR} width='24' height='24'/> &nbsp;&nbsp;{user.name}</span>
             <div className='text-end'>
                 <div className='fs-15px text-white fw-bold ls-1px'>{user.ndb} NDB</div>
-                <div className='fs-11px txt-baseprice'>{user.ndb * 0.01} USD</div>
+                <div className='fs-11px txt-baseprice'>{user.amount * 0.01} USD</div>
             </div>
         </div>
     }
