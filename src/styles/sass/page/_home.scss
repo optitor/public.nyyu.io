@@ -1,36 +1,21 @@
 .home-page {
     overflow-y: auto;
-    .menu {
-        background-color: transparent;
-    }
     .hero-image {
         width: 90%;
     }
     .home-section {
-        background: #1e1e1e;
-        // @extend %set-height2;
-        height: calc(100vh - 100px);
-        display: flex;
-        align-items: center;
         text-align: center;
+        background: #1e1e1e;
+        height: calc(100vh - 100px);
         @include mq("tablet", max) {
             height: calc(100vh - 75px);
         }
         .left-part {
             .tokens-lower-part {
-                // width: max-content;
                 .token-left {
                     font-weight: bold;
                     font-size: 28px;
                     line-height: 39px;
-                    color: white;
-                    font-variant: small-caps;
-                    text-align: center;
-                }
-                .token-value {
-                    // letter-spacing: 0.03em;
-                    font-variant: small-caps;
-                    text-align: center;
                 }
                 @include mq("tablet", max) {
                     .token-value {
@@ -75,23 +60,13 @@
             font-weight: bold;
             font-size: 48px;
             line-height: 59px;
-            text-align: right;
-            // width: max-content;
             font-variant: small-caps;
             margin-bottom: 30px;
-            padding-right: 13%;
-            @include mq("tablet", max) {
-                font-size: 48px;
-                line-height: 59px;
-                text-align: center;
-                padding-right: 0;
-            }
         }
         .home-title-mobile {
             font-weight: bold;
             font-size: 24px;
             line-height: 29px;
-            text-align: center;
             font-variant: small-caps;
         }
         .btn-green {
@@ -106,7 +81,7 @@
     }
 }
 
-.countdown-wrapper {
+.countdown-wrapper,.countdown-pending-wrapper {
     line-height: 6px;
     .time-section {
         text-align: center;
@@ -132,40 +107,9 @@
                 text-transform: uppercase;
                 color: #8f8f8f;
                 @include mq("tablet", max) {
-                    font-size: 14x;
                     line-height: 15px;
                 }
                 @include mq("mobile", max) {
-                    font-size: 17x;
-                    line-height: 15px;
-                }
-            }
-        }
-    }
-}
-
-.countdown-pending-wrapper {
-    line-height: 6px;
-    .time-section {
-        text-align: center;
-        .time {
-            font-weight: bold;
-            font-size: 55px;
-            line-height: 92px;
-            letter-spacing: 0.05em;
-            @include mq("phone", max) {
-                font-size: 45px;
-                line-height: 64px;
-                letter-spacing: -0.02em;
-            }
-            &-text {
-                font-weight: 500;
-                font-size: 24px;
-                line-height: 36px;
-                letter-spacing: -0.02em;
-                text-transform: uppercase;
-                color: #8f8f8f;
-                @include mq("phone", max) {
                     font-size: 17px;
                     line-height: 15px;
                 }

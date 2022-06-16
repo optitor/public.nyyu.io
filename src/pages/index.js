@@ -124,7 +124,7 @@ const IndexPage = () => {
 
     const auctionPendingContent = (
         <div className="left-part col-md-6 px-0 pe-sm-auto">
-            <h3 className="home-title d-sm-block d-none text-center pe-0">
+            <h3 className="home-title d-sm-block d-none text-center">
                 <div className="mb-4">
                     {auctionRound > 1 &&
                     <div>
@@ -137,7 +137,7 @@ const IndexPage = () => {
                 </div>
                 <CountDownPending deadline={auctionStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
-            <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
+            <h3 className="home-title-mobile text-center d-sm-none d-block mb-5 mb-sm-0">
                 <div className="mb-3 fs-36px">
                    {auctionRound > 1 &&
                    <div className="mb-3">

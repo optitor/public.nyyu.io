@@ -41,9 +41,9 @@ module.exports = {
                 fonts: [`Montserrat\:300,400,500,700,800`],
             },
         },
-        {
-            resolve: "gatsby-plugin-no-sourcemaps",
-        },
+        // {
+        //     resolve: "gatsby-plugin-no-sourcemaps",
+        // },
         "gatsby-plugin-use-query-params"
     ],
     flags: {
