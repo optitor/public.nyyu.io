@@ -1,18 +1,24 @@
 import { useQuery } from "@apollo/client"
 import React from "react"
 import { useState } from "react"
+import { useDispatch } from "react-redux";
 import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { GET_USER_TIERS } from "../profile/profile-queries"
+import { fillUserTiers } from "../../redux/actions/userTierAction";
 
 export default function UserTier() {
     // Containers
     const [userTiersData, setUserTiersData] = useState(null)
     const [userData, setUserData] = useState(null)
     // Methods
+    const dispatch = useDispatch();
     
     // Webservice
     const { loading: userTiersLoading } = useQuery(GET_USER_TIERS, {
-        onCompleted: (data) => setUserTiersData(data?.getUserTiers),
+        onCompleted: (data) => {
+            setUserTiersData(data?.getUserTiers)
+            dispatch(fillUserTiers(data?.getUserTiers));
+        },
     })
     const { loading: userLoading } = useQuery(GET_USER, {
         onCompleted: (data) => setUserData(data?.getUser),

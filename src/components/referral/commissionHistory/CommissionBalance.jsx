@@ -6,13 +6,14 @@ const CommissionBalance = ({loading, totalEarned}) => {
     
     // USD vs. BTC(BNB)??
     const [ currentEquity, setCurrentEquity ] = useState('USD');
-    const [equityBalance, setEquityBalance] = useState(123456);
+    const [equityBalance, setEquityBalance] = useState(0);
     
     const onChangeEquity = (equity) => {
         if(equity === currentEquity) return;
         // change equity
         setCurrentEquity(equity);
         // change equity balance
+        setEquityBalance(currentEquity * 0.01);
     }
 
     return <div className='text-white bg-gray-50 px-2 py-2'>

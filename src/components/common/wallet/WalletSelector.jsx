@@ -13,12 +13,16 @@ const shortFormatAddr = (addr) => {
 
 const WalletSelector = ({selectedWallet, walletChanged}) => {
     // wagmi connectors
-    const { connect, connectors } = useConnect();
-    const { data: accountInfo } = useAccount({
-        onSuccess(data) {
-            walletChanged({selectedWallet, address: data?.address})
-        }
-    });
+    const { connect, connectors, isConnected } = useConnect();
+    const { data: accountInfo } = useAccount();
+
+    if(!isConnected) {
+        walletChanged({selectedWallet, address: null});
+    }
+
+    if(isConnected) {
+        walletChanged({selectedWallet, address: accountInfo?.address});
+    }
 
     // selected wallet type, Nyyu or external
     const onChangeWallet = (wallet) => {
