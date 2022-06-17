@@ -4,9 +4,19 @@ import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 import { IoMdArrowDropdown } from '@react-icons/all-files/io/IoMdArrowDropdown';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useSelector } from 'react-redux';
-import svgToDataURL from "svg-to-dataurl";
 import { AiFillCaretDown } from '@react-icons/all-files/ai/AiFillCaretDown';
 import { isBrowser } from '../../../utilities/auth';
+
+import BASIC from '../../../images/tier_png/basic.png';
+import BRONZE from '../../../images/tier_png/bronze.png';
+import SILVER from '../../../images/tier_png/silver.png';
+import GOLD from '../../../images/tier_png/gold.png';
+import PLAT from '../../../images/tier_png/plat.png';
+import DIA from '../../../images/tier_png/diamond.png';
+
+const tierImages = [
+    BASIC, BRONZE, SILVER, GOLD, PLAT, DIA
+]
 
 const shortReferralCode = code => {
     if(!code) return '';
@@ -25,12 +35,12 @@ const shortInviteUrl = url => {
 
 const inviteText = 'Hey, I use Nyyu.io to buy NDB tokens. It has great potential! Give it a try and get an extra 10% reward on your purchase.';
 const sendingLinks = [
-    {
-        name: 'Copy link',
-        action: async (url) => {
-            await navigator.clipboard.writeText(url);
-        }
-    },
+    // {
+    //     name: 'Copy link',
+    //     action: async (url) => {
+    //         await navigator.clipboard.writeText(url);
+    //     }
+    // },
     {
         name: 'Send with Whatsapp',
         link: (url) => {
@@ -131,9 +141,9 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                     </div>
                     {tiers.length > 0 && tiers.map(tier => {
                         return (
-                            <div className={`border-end border-secondary p-2 d-flex align-items-center fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'referral-tier-rate'}`} key={tier.level}>
-                                <img src={svgToDataURL(tier.svg)} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-50'}`}/>
-                                {commissionRate[tier.level]}%
+                            <div className={`border-end border-secondary p-2 d-flex align-items-center justify-content-around`} key={tier.level}>
+                                <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-50'}`}/>
+                                <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'referral-tier-rate'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
                             </div>
                         )
                     })}
