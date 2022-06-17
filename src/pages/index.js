@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { Link, navigate } from "gatsby"
+import { useQuery } from "@apollo/client"
+import { useQueryParam, StringParam } from "use-query-params";
+
 import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
@@ -10,16 +13,20 @@ import { useAuth } from "../hooks/useAuth"
 import { ROUTES, isRedirectUrl } from "../utilities/routes"
 import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 import Loading from "../components/common/FadeLoading"
-import { useQuery } from "@apollo/client"
 import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
+import { isBrowser } from "../utilities/auth";
 
 const IndexPage = () => {
+
+    
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [loading, setLoading] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
+    
+    const [referralCode] = useQueryParam("referralCode", StringParam);
 
     // For catching the redirect Url from Paypal.
     useEffect(() => {
@@ -52,6 +59,19 @@ const IndexPage = () => {
     const presaleStart = currentRound?.presale?.startedAt
     const presaleEnd = currentRound?.presale?.endedAt
     
+    if(!isBrowser) return null;
+    // checking 
+    if(referralCode !== undefined) {
+        // store referral code
+        localStorage.setItem("referralCode", referralCode);
+
+        // redirect to signup page
+        navigate(ROUTES.signUp);
+    } else {
+        // debugging
+        localStorage.removeItem("referralCode");
+    }
+
     // Methods
     const placeABidButtonClick = () =>
         auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)

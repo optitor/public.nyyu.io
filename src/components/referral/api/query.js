@@ -5,13 +5,15 @@ export const GET_REFERRAL = gql`
         getReferral {
             referralCode
             rate
+            walletConnect
+            commissionRate
         }
     }
 `
 
 export const GET_EARNING = gql`
-    query GetEarning {
-        getEarning {
+    query GetReferredUsers {
+        getReferredUsers {
             name
             amount
         }

@@ -1,7 +1,7 @@
 import * as GraphQL from "../graphqls/mutations/Auth"
 import { useMutation } from "@apollo/client"
 import { navigate } from "gatsby"
-import { setAuthToken } from "../../utilities/auth"
+import { isBrowser, setAuthToken } from "../../utilities/auth"
 import { ROUTES } from "../../utilities/routes"
 
 // Signin with 2FA
@@ -64,6 +64,7 @@ export const useForgotPassword = () => {
     })
 
     const forgotPassword = (email) => {
+        if(!isBrowser) return;
         localStorage.setItem("FORGOT_PASSWORD_EMAIL", email)
         return mutation({
             variables: {
