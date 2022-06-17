@@ -6,6 +6,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { useSelector } from 'react-redux';
 import svgToDataURL from "svg-to-dataurl";
 import { AiFillCaretDown } from '@react-icons/all-files/ai/AiFillCaretDown';
+import { isBrowser } from '../../../utilities/auth';
 
 const shortReferralCode = code => {
     if(!code) return '';
@@ -46,6 +47,10 @@ const sendingLinks = [
 
 const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     
+    if(!isBrowser) {
+        return null;
+    }
+
     const tierDiv = useRef(null);
     const tiers = useSelector(state => state.tiers);
 
