@@ -24,9 +24,7 @@ const countries = countryList.map(item => {
 });
 
 const Singup = () => {
-
-    if(!isBrowser) return null;
-
+    
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
         {
@@ -68,6 +66,7 @@ const Singup = () => {
     });
 
     const signUserUp = (e) => {
+        if(!isBrowser) return null;
         e.preventDefault();
         setState({
             emailError: "",

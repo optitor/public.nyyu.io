@@ -19,28 +19,14 @@ import { isBrowser } from "../utilities/auth";
 
 const IndexPage = () => {
 
-    if(!isBrowser) return null;
-
+    
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [loading, setLoading] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
-
-    const [referralCode] = useQueryParam("referralCode", StringParam);
-    console.log(referralCode);
     
-    // checking 
-    if(referralCode !== undefined) {
-        // store referral code
-        localStorage.setItem("referralCode", referralCode);
-
-        // redirect to signup page
-        navigate(ROUTES.signUp);
-    } else {
-        // debugging
-        localStorage.removeItem("referralCode");
-    }
+    const [referralCode] = useQueryParam("referralCode", StringParam);
 
     // For catching the redirect Url from Paypal.
     useEffect(() => {
@@ -73,6 +59,19 @@ const IndexPage = () => {
     const presaleStart = currentRound?.presale?.startedAt
     const presaleEnd = currentRound?.presale?.endedAt
     
+    if(!isBrowser) return null;
+    // checking 
+    if(referralCode !== undefined) {
+        // store referral code
+        localStorage.setItem("referralCode", referralCode);
+
+        // redirect to signup page
+        navigate(ROUTES.signUp);
+    } else {
+        // debugging
+        localStorage.removeItem("referralCode");
+    }
+
     // Methods
     const placeABidButtonClick = () =>
         auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
