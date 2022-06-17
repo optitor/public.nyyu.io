@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isBrowser } from "./auth";
 
 export const getBase64 = (file) => {
     return new Promise((resolve, reject) => {

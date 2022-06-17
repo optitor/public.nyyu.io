@@ -30,16 +30,18 @@ div.bg-gray-50 {
 
 .referral-history {
     height: 100vh;
-    overflow: hidden;
     @include mq("tablet", max) {
-        height: 40vh;
+        height: 70vh;
     }
 }
 
 .referral-history-list {
     height: 100vh;
-    overflow: hidden;
     @include mq("tablet", max) {
         height: 80vh;
     }
+}
+
+.referral-tier-rate {
+    color: #7C7C7C;
 }

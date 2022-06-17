@@ -43,13 +43,22 @@ const sendingLinks = [
             return `https://telegram.me/share/url?url=${encodeURIComponent(url)}&text=${inviteText}`;
         }
     },
+    {
+        name: 'Post to Facebook',
+        link: (url) => {
+            return `https://www.facebook.com/sharer.php?u=${encodeURIComponent(url)}`;
+        }
+    },
+    {
+        name: 'Twitter',
+        link: (url) => {
+            return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${inviteText}`;
+        }
+    },
+
 ]
 
 const ReferralLink = ({referrerInfo, onChangeWallet}) => {
-    
-    if(!isBrowser) {
-        return null;
-    }
 
     const tierDiv = useRef(null);
     const tiers = useSelector(state => state.tiers);
@@ -91,10 +100,16 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
         setCaretStyle({top: '-28px', left: `${_offset}px`})
     }
 
+    const generateEmailLink = () => {
+        const inviteLink = `${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`;
+        return encodeURIComponent(inviteText + ' ' + inviteLink);
+    }
+
     useEffect(() => {
-      getDivWidth();
-      window.addEventListener('click', hideLinkModal);
-      return () => window.removeEventListener('click', hideLinkModal);
+        getDivWidth();
+        if(!isBrowser) { return null; }
+        window.addEventListener('click', hideLinkModal);
+        return () => window.removeEventListener('click', hideLinkModal);
     }, []);
 
     return <div className='mx-auto px-1 mx-1 px-md-2 mx-md-2 px-lg-4 mx-lg-4'>
@@ -107,11 +122,17 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                         className="txt-green fs-13px text-center position-absolute">
                         <div style={{lineHeight: '8px'}}>YOU GET</div>
                         <div><AiFillCaretDown color='#23C865'/></div>
+                        <span 
+                            className='text-decoration-underline position-absolute' 
+                            style={{top: '-3px', right: '-88%', fontSize: '10px', color: '#626161'}}
+                        >
+                            Level up
+                        </span>
                     </div>
                     {tiers.length > 0 && tiers.map(tier => {
                         return (
-                            <div className={`border-end border-secondary p-2 d-flex align-items-center fs-16px ${commissionRate[tier.level] === rate ? 'text-white':''}`} key={tier.level}>
-                                <img src={svgToDataURL(tier.svg)} alt={tier.name} width='12px' height='12px'/>
+                            <div className={`border-end border-secondary p-2 d-flex align-items-center fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'referral-tier-rate'}`} key={tier.level}>
+                                <img src={svgToDataURL(tier.svg)} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-50'}`}/>
                                 {commissionRate[tier.level]}%
                             </div>
                         )
@@ -195,7 +216,11 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             </div>
         </div>
         <div className='text-center pt-3'>
-            <button className='text-white bg-transparent border border-white py-2 px-5 fw-bold fs-20px'>INVITE VIA EMAIL</button>
+            <button className='text-white bg-transparent border border-white py-2 px-5 fw-bold fs-20px'><a 
+                href={`https://mail.google.com/mail/u/0/?fs=1&su=${encodeURIComponent('NDB Invitation')}&body=${generateEmailLink()}&tf=cm`}
+                target='_blank'
+                rel="noopener noreferrer"
+                >INVITE VIA EMAIL</a></button>
         </div>
     </div>
 }

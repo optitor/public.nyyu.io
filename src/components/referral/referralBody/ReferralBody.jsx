@@ -19,7 +19,6 @@ const ReferralBody = () => {
     const {loading} = useQuery(GET_REFERRAL, {
         onCompleted: data => {
             if(data.getReferral) {
-                console.log(data.getReferral);
                 setReferrer(data.getReferral);
             } else {
                 /// has no referral code yet
