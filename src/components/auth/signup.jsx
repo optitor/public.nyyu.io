@@ -4,7 +4,6 @@ import { useMutation } from "@apollo/client";
 import Select from "react-select";
 import validator from "validator";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
-import { StringParam, useQueryParam } from "use-query-params";
 
 import {
     passwordValidatorOptions,
@@ -24,9 +23,6 @@ const countries = countryList.map(item => {
 });
 
 const Singup = () => {
-
-    const [referralCode] = useQueryParam("referralCode", StringParam);
-    console.log("Referral Code: ", referralCode);
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
@@ -99,8 +95,12 @@ const Singup = () => {
             setState({
                 pwdConfirmError: "Password doest not match it's repeat!",
             });
+
+        // checking referral code
+        const referralCode = localStorage.getItem("referralCode");
+        console.log('referral code in sign up: ', referralCode);
         if (!error)
-            signupMutation({ variables: { email, password: pwd, country: country.value } });
+            signupMutation({ variables: { email, password: pwd, country: country.value, referredByCode:referralCode } });
     };
 
     return (

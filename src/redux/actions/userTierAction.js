@@ -96,9 +96,3 @@ export const fillUserTiers = tiers => dispatch => {
         payload: tiers
     });
 }
-
-export const fetchUserTiers = () => dispacth => {
-    dispacth({
-        type: types.FETCH_USER_TIERS,
-    })
-}
