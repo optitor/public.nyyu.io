@@ -17,12 +17,15 @@ import { countryList } from "../../utilities/countryAlpha2";
 import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf";
 import { ROUTES } from "../../utilities/routes";
 import Seo from '../seo';
+import { isBrowser } from "../../utilities/auth";
 
 const countries = countryList.map(item => {
     return {label: item.name, value: item['alpha-2']};
 });
 
 const Singup = () => {
+
+    if(!isBrowser) return null;
 
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),

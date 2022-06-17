@@ -15,8 +15,12 @@ import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 import Loading from "../components/common/FadeLoading"
 import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
+import { isBrowser } from "../utilities/auth";
 
 const IndexPage = () => {
+
+    if(!isBrowser) return null;
+
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)

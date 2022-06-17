@@ -187,6 +187,7 @@ export const getCurrentMarketCap = async () => {
      * All string params must be UPPER case.
      */
 export const downloadContent = async (id, tx, payment) => {
+    if (!isBrowser) return
     const token = localStorage.getItem("ACCESS_TOKEN");
     const response = await axios({
         url: `${process.env.GATSBY_API_BASE_URL}/download/pdf/${id}`,
