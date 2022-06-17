@@ -27,3 +27,19 @@ div.bg-gray-50 {
 .text-transparent {
     color: $transparent;
 }
+
+.referral-history {
+    height: 100vh;
+    overflow: hidden;
+    @include mq("tablet", max) {
+        height: 40vh;
+    }
+}
+
+.referral-history-list {
+    height: 100vh;
+    overflow: hidden;
+    @include mq("tablet", max) {
+        height: 80vh;
+    }
+}
