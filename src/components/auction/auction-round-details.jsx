@@ -29,12 +29,6 @@ export default function AuctionRoundDetails() {
             seconds: seconds < 10 ? "0" + seconds : seconds
         })
     }
-    
-    useDeepCompareEffect(() => {
-        if(currentRound?.id === optCurrentRound?.id) {
-            setOptCurrentRound(currentRound);
-        }
-    }, [currentRound, optCurrentRound]);
 
     const soldTokensPercentage = (optCurrentRound?.sold / (isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)) * 100
 

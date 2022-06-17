@@ -72,10 +72,6 @@ export default function PresalePlaceOrderWalletSelect() {
         setPresalePlaceOrderStage(0);
     }
 
-    const shortFormatAddr = (addr) => {
-        return addr.substring(0, 6) + "..." + addr.substring(addr.length - 4);
-    }
-
     return (
         <div className="my-30px mx-40px">
             <div className="w-100 d-flex justify-content-center align-items-center position-relative text-white fw-700 title">

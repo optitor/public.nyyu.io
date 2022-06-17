@@ -6,6 +6,7 @@ import { ROUTES } from "../../../utilities/routes";
 import Pagination from "react-js-pagination";
 import { Icons } from "../../../utilities/Icons";
 
+
 export default function BidTable() {
     // Containers
     const { bidList, itemsCountPerPage, currentRound } = useTransactions();

@@ -23,3 +23,25 @@ div.bg-gray-50 {
         border-right: unset;
     }
 }
+
+.text-transparent {
+    color: $transparent;
+}
+
+.referral-history {
+    height: 100vh;
+    @include mq("tablet", max) {
+        height: 70vh;
+    }
+}
+
+.referral-history-list {
+    height: 100vh;
+    @include mq("tablet", max) {
+        height: 80vh;
+    }
+}
+
+.referral-tier-rate {
+    color: #7C7C7C;
+}

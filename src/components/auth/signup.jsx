@@ -4,7 +4,6 @@ import { useMutation } from "@apollo/client";
 import Select from "react-select";
 import validator from "validator";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
-import { StringParam, useQueryParam } from "use-query-params";
 
 import {
     passwordValidatorOptions,
@@ -18,16 +17,14 @@ import { countryList } from "../../utilities/countryAlpha2";
 import termsAndConditionsFile from "../../assets/files/NDB Coin Auction - Terms and Conditions.pdf";
 import { ROUTES } from "../../utilities/routes";
 import Seo from '../seo';
+import { isBrowser } from "../../utilities/auth";
 
 const countries = countryList.map(item => {
     return {label: item.name, value: item['alpha-2']};
 });
 
 const Singup = () => {
-
-    const [referralCode] = useQueryParam("referralCode", StringParam);
-    console.log("Referral Code: ", referralCode);
-
+    
     const [state, setState] = useReducer(
         (old, action) => ({ ...old, ...action }),
         {
@@ -69,6 +66,7 @@ const Singup = () => {
     });
 
     const signUserUp = (e) => {
+        if(!isBrowser) return null;
         e.preventDefault();
         setState({
             emailError: "",
@@ -99,8 +97,12 @@ const Singup = () => {
             setState({
                 pwdConfirmError: "Password doest not match it's repeat!",
             });
+
+        // checking referral code
+        const referralCode = localStorage.getItem("referralCode");
+        console.log('referral code in sign up: ', referralCode);
         if (!error)
-            signupMutation({ variables: { email, password: pwd, country: country.value } });
+            signupMutation({ variables: { email, password: pwd, country: country.value, referredByCode:referralCode } });
     };
 
     return (
