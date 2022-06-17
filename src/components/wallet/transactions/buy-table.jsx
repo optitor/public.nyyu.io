@@ -156,6 +156,7 @@ const TxnDataRow = ({ data }) => {
                 </button>
             </td>
         </tr>
+        
         {showDetail && (
             <tr>
                 <td colSpan={6}>

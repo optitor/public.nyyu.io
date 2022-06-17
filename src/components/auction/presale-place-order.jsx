@@ -1,7 +1,6 @@
 import React from "react"
 
 import { useAuction } from "../../providers/auction-context"
-
 import PresalePlaceOrderHome from "./presale-place-order-home"
 import PresalePlaceOrderWalletSelect from "./presale-place-order-wallet-select"
 
