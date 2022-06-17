@@ -35,12 +35,12 @@ const shortInviteUrl = url => {
 
 const inviteText = 'Hey, I use Nyyu.io to buy NDB tokens. It has great potential! Give it a try and get an extra 10% reward on your purchase.';
 const sendingLinks = [
-    {
-        name: 'Copy link',
-        action: async (url) => {
-            await navigator.clipboard.writeText(url);
-        }
-    },
+    // {
+    //     name: 'Copy link',
+    //     action: async (url) => {
+    //         await navigator.clipboard.writeText(url);
+    //     }
+    // },
     {
         name: 'Send with Whatsapp',
         link: (url) => {
