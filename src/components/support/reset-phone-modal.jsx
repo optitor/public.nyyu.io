@@ -5,7 +5,6 @@ import Modal from "react-modal";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
-import { useSelector } from "react-redux";
 import { Icon } from '@iconify/react';
 import { getCountryCallingCode } from 'react-phone-number-input/input';
 import Select from "react-select"
@@ -184,6 +183,7 @@ export default function ResetPhoneModal({ isOpen, setIsOpen }) {
                                 label="Email verification code"
                                 value={verifyCode}
                                 onChange={(e) => setVerifyCode(e.target.value)}
+                                autoComplete='off'
                                 placeholder="Enter code"
                             />
                         </div>

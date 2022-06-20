@@ -18,8 +18,7 @@ import CountDownPending from "../components/common/countdown-pending"
 import { isBrowser } from "../utilities/auth";
 
 const IndexPage = () => {
-
-    
+   
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
