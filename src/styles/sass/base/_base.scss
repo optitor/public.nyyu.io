@@ -1,3 +1,4 @@
+@use "sass:math";
 *,
 *::before,
 *::after {
@@ -226,6 +227,12 @@ ul {
     $size: $size * 100;
     .fw-#{$size} {
         font-weight: #{$size} !important;
+    }
+}
+
+@for $value from 0 through 100 {
+    .opacity-#{$value} {
+        opacity: #{math.div($value, 100)} !important;
     }
 }
 
