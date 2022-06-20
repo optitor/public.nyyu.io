@@ -66,7 +66,7 @@ const sendingLinks = [
     {
         name: 'Twitter',
         link: (url) => {
-            return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${inviteText}`;
+            return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(inviteText)}`;
         }
     },
 
