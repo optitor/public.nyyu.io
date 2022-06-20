@@ -40,9 +40,10 @@ const IndexPage = () => {
             setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },
-        onError: (error) => console.log(error),
-        errorPolicy: "ignore",
-        fetchPolicy: "network-only",
+        onError: (err) => {
+            console.log(err.message);
+            setLoading(false);
+        },
     })
 
     const auctionRound = currentRound?.auction?.round
