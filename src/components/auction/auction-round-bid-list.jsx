@@ -155,7 +155,7 @@ export default function AuctionRoundBidList() {
             <AuctionListHeader totalCount={currentRoundBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
                                auctionTitle={isAuction ? "Bid" : "Order"}/>
             {currentAuctionUserExist && isAuction ?
-            <div className="auction-bid-list-content-final">
+            <div className="list-part auction-bid-list-content-final">
                 <AuctionList
                     ranking={currentUserBidData.ranking}
                     fullName={currentUserBidData.prefix + "." + currentUserBidData.name}
@@ -166,7 +166,7 @@ export default function AuctionRoundBidList() {
                     isCurrentUser={true}
                 />
             </div> : ""}
-            <div className="auction-bid-list-content-group">
+            <div className="list-part auction-bid-list-content-group">
                 {displayedBidList && displayedBidList.map((item, index) =>
                     <AuctionList
                         key={index}

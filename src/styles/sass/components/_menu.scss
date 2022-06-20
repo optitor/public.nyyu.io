@@ -1,6 +1,6 @@
 .menu {
-    width: 100%;
     position: sticky;
+    height: 100px;
     top: 0;
     padding: 28px 0 !important;
     z-index: 100;
@@ -11,6 +11,9 @@
     }
     @include mq("phone", max) {
         padding: 15px 0;
+    }
+    .image_div {
+        width: 50px
     }
     .logo {
         width: 92px;
