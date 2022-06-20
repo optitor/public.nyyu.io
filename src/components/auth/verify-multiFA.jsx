@@ -71,6 +71,7 @@ const VerifyMutliFA = ({
                                                     [step]: e.target.value,
                                                 })
                                             }
+                                            autoComplete='off'
                                             placeholder="Enter code"
                                         />
                                         {codeError && (

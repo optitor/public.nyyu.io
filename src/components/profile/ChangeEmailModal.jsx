@@ -111,6 +111,7 @@ export default function ChangeEmailModal({ isOpen, setIsOpen }) {
                                     type="text"
                                     label="Enter code"
                                     placeholder="Enter code"
+                                    autoComplete='off'
                                     value={code}
                                     onChange={(e) => setCode(e.target.value)}
                                 />
