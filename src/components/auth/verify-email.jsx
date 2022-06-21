@@ -75,6 +75,7 @@ const VerifyEmail = ({ email }) => {
                             name="code"
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
+                            autoComplete='off'
                             placeholder="Enter code"
                         />
                     </div>

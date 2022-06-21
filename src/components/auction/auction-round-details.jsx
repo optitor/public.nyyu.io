@@ -13,7 +13,7 @@ export default function AuctionRoundDetails() {
 
     // Container
     const auction = useAuction()
-    const { optCurrentRound, setOptCurrentRound, currentRound, currentRoundBidList, isAuction } = auction
+    const { optCurrentRound, currentRoundBidList, isAuction } = auction
     const [restTime, setRestTime] = useState({
         hours: 0,
         minutes: 0,
@@ -29,12 +29,6 @@ export default function AuctionRoundDetails() {
             seconds: seconds < 10 ? "0" + seconds : seconds
         })
     }
-    
-    useDeepCompareEffect(() => {
-        if(currentRound?.id === optCurrentRound?.id) {
-            setOptCurrentRound(currentRound);
-        }
-    }, [currentRound, optCurrentRound]);
 
     const soldTokensPercentage = (optCurrentRound?.sold / (isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)) * 100
 

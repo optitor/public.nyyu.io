@@ -79,7 +79,9 @@ export default function AuctionPlaceBid() {
 
     useEffect(() => {
         if (price === maxPrice) {
-            setTimeout(() => setMaxPrice(2 * maxPrice), 200)
+            setTimeout(() => setMaxPrice(2 * maxPrice), 300)
+        } else if(price === optCurrentRound?.minPrice) {
+            setTimeout(() => setMaxPrice(100), 300)
         }
     }, [price, maxPrice])
 
@@ -113,8 +115,9 @@ export default function AuctionPlaceBid() {
                         <NumberFormat className="range-input"
                             value={amount}
                             onValueChange={values => setAmount(values.value)}
-                            isAllowed={({ floatValue }) => floatValue >= 1}
+                            isAllowed={({ floatValue }) => floatValue >= 1 && floatValue <= optCurrentRound?.totalToken}
                             thousandSeparator={true}
+                            decimalScale={0}
                             allowNegative={false}
                         />
                         <Slider
@@ -132,6 +135,7 @@ export default function AuctionPlaceBid() {
                             onValueChange={values => setPrice(values.value? values.value: optCurrentRound?.minPrice)}
                             isAllowed={({ floatValue }) => floatValue >= optCurrentRound?.minPrice}
                             thousandSeparator={true}
+                            decimalScale={4}
                             allowNegative={false}
                         />
                         <Slider

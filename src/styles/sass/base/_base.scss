@@ -4,6 +4,7 @@
 *::after {
     box-sizing: border-box;
 }
+
 *:focus {
     outline: none;
 }
@@ -27,21 +28,12 @@ a:hover {
     text-decoration: none;
 }
 
-.font-montserrat {
-    font-family: "Montserrat" !important;
-}
-
 ul {
     margin: 0;
     padding-left: 0;
     list-style: none;
 }
 
-// input[type="number"]::-webkit-inner-spin-button,
-// input[type="number"]::-webkit-outer-spin-button {
-//     -webkit-appearance: none;
-//     margin: 0;
-// }
 .z-999 {
     z-index: 999 !important;
 }
@@ -99,13 +91,6 @@ ul {
     &:hover {
         color: $black;
     }
-}
-.gap-10 {
-    gap: 6rem !important;
-}
-
-.width-max-content {
-    width: max-content !important;
 }
 
 .placeholder\:text-light {
@@ -173,7 +158,6 @@ ul {
     }
 }
 
-//padding left
 @for $size from 0 to 96 {
     .pl-#{$size}px {
         padding-left: #{$size}px !important;
@@ -236,7 +220,6 @@ ul {
     }
 }
 
-
 .scale-75 {
     transform: scale(0.75, 0.75);
     @include mq("phone", min) {
@@ -266,13 +249,6 @@ ul {
     border: 1px solid $white;
 }
 
-.border-dimgray {
-    border: 1px solid $dimgrey;
-}
-
-.fv-small-caps {
-    font-variant: small-caps !important;
-}
 .fw-500 {
     font-weight: 500 !important;
 }
@@ -314,10 +290,6 @@ ul {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.ms-40px {
-    margin-left: 40px;
-}
-
 .first-letter\:txt-green {
     color: white !important;
     &::first-letter {
@@ -325,9 +297,6 @@ ul {
     }
 }
 
-.w-max-content {
-    width: max-content !important;
-}
 .w-sm-100 {
     @include mq("phone") {
         width: 100% !important;
@@ -351,13 +320,6 @@ ul {
     }
 }
 
-.bottom-20px {
-    bottom: 20px !important;
-}
-.end-20px {
-    right: 20px !important;
-}
-
 .text-underline {
     text-decoration: underline !important;
 }
@@ -365,20 +327,6 @@ ul {
 .icon-23px {
     width: 23px;
     height: 23px;
-}
-
-.icon-25px {
-    width: 25px;
-    height: 25px;
-}
-
-.icon-30px {
-    height: 30px;
-    width: 30px;
-}
-
-.ps-6px {
-    padding-left: 6px !important;
 }
 
 .pe-sm-10px {
@@ -443,10 +391,6 @@ ul {
     color: #8f8f8f;
 }
 
-.txt-underline {
-    text-decoration: underline;
-}
-
 .top-0px {
     top: 0 !important;
 }
@@ -458,10 +402,6 @@ ul {
 .icon-sm {
     width: 15px;
     height: 15px;
-}
-
-.mt-auto {
-    margin-top: auto !important;
 }
 
 .form-check-input {
