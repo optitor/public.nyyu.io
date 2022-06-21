@@ -26,7 +26,6 @@ $enable-negative-margins: true;
         width: 0;
         cursor: pointer;
         line-height: 12px;
-        box-sizing: border-box;
     }
 }
 * {
@@ -52,7 +51,7 @@ input::-webkit-contacts-auto-fill-button {
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px white
+    box-shadow: inset 0 0 6px white
 }
 
 ::-webkit-scrollbar-thumb {

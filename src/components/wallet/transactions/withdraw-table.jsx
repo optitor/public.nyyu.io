@@ -17,6 +17,7 @@ const withdrawOptions = [
     { value: "bank", label: "Bank Transfer", type: 'BANK' },
 ];
 
+
 export default function WithdrawTable() {
     // Containers
     const {
