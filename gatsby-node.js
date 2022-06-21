@@ -73,29 +73,30 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
                     'electron'
                 ];
                 return function (context, request, callback) {
-                if (IGNORES.indexOf(request) >= 0) {
-                    return callback(null, "require('" + request + "')");
-                }
-                return callback();
+                    if (IGNORES.indexOf(request) >= 0) {
+                        return callback(null, "require('" + request + "')");
+                    }
+                    return callback();
                 };
             })()
-            ]
+        ],
+        devtool: "cheap-module-source-map"
     });
 
-    if(stage === 'build-javascript' || stage === 'develop') {
+    if (stage === 'build-javascript' || stage === 'develop') {
         const config = getConfig();
         const miniCssExtractPlugin = config.plugins.find(
             plugin => plugin.constructor.name === 'MiniCssExtractPlugin'
-          )
-          if (miniCssExtractPlugin) {
+        )
+        if (miniCssExtractPlugin) {
             miniCssExtractPlugin.options.ignoreOrder = true
-          }
-          actions.replaceWebpackConfig(config)
+        }
+        actions.replaceWebpackConfig(config)
     }
 
     if (getConfig().mode === 'production') {
         actions.setWebpackConfig({
-          devtool: false
+            devtool: false
         });
     }
 };
