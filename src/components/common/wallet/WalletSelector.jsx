@@ -70,7 +70,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                                 <div
                                     className="text-justify"
                                     style={{
-                                        width: "200px",
+                                        width: "220px",
                                     }}
                                 >
                                     {NDB_WALLET_TOOLTIP_CONTENT}
@@ -99,7 +99,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                                 <div
                                     className="text-justify"
                                     style={{
-                                        width: "200px",
+                                        width: "220px",
                                     }}
                                 >
                                     {EXTERNAL_WALLET_TOOLTIP_CONTENT}

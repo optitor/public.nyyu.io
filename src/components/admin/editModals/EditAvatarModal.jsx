@@ -10,7 +10,7 @@ import Stepper from "../../../components/admin/Stepper"
 import { Alert, Rating } from "@mui/material"
 import { capitalizeFirstLetter } from "../../../utilities/string"
 import DressupModal from "../../../components/dress-up/dressup-modal"
-import { EmptyAvatar } from "../../../utilities/imgImport";
+import { EmptyAvatar, EmptyBlackAvatar } from "../../../utilities/imgImport";
 import { update_Avatar_Profile } from './../../../redux/actions/avatarAction';
 
 const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => {
@@ -29,6 +29,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
     const InitialAvatarItems = {
         hairStyle: avatarSet['hairStyle']?.compId,
         hairColor: avatar.hairColor,
+        skinColor: avatar.skinColor,
         facialStyle: avatarSet['facialStyle']?.compId,
         expression: avatarSet['expression']?.compId,
         hat: avatarSet['hat']?.compId,
@@ -114,7 +115,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
             return { name: item.title, rate: item.stars };
         });
         const avatarSet = Object.keys(avatarItems).filter(item => {
-            return item !== 'hairColor';
+            return item !== 'hairColor' && item !== 'skinColor';
         }).map(item => {
             return {groupId: item, compId: avatarItems[item]};
         });
@@ -129,7 +130,8 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
             avatarSet,
             factsSet,
             details: factsDetail.details,
-            hairColor: avatarItems.hairColor
+            hairColor: avatarItems.hairColor,
+            skinColor: avatarItems.skinColor,
         }));
         setPending(false);
     }
@@ -182,7 +184,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
                             <div className="preview_mobile mb-3">
                                 <div className="profile">
                                     <div className="image_div">
-                                        <img src={EmptyAvatar} alt="back" />
+                                        <img src={avatarItems.skinColor === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                         {avatarItems.hairColor && (<>
                                             <Hair hairColor={avatarItems.hairColor} style={{top: `${hairStyles[avatarItems.hairStyle]?.top}%`, left: `${hairStyles[avatarItems.hairStyle]?.left}%`, width: `${hairStyles[avatarItems.hairStyle]?.width}%`}}>
                                                 {parse(hairStyles[avatarItems.hairStyle]? hairStyles[avatarItems.hairStyle].svg: '')}
@@ -224,7 +226,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
                             <div className="preview">
                                 <div className="profile">
                                     <div className="image_div">
-                                        <img src={EmptyAvatar} alt="back" />
+                                        <img src={avatarItems.skinColor === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                         {avatarItems.hairColor && (<>
                                             <Hair hairColor={avatarItems.hairColor} style={{top: `${hairStyles[avatarItems.hairStyle]?.top}%`, left: `${hairStyles[avatarItems.hairStyle]?.left}%`, width: `${hairStyles[avatarItems.hairStyle]?.width}%`}}>
                                                 {parse(hairStyles[avatarItems.hairStyle]? hairStyles[avatarItems.hairStyle].svg: '')}
@@ -255,7 +257,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
                             Next
                         </button>
                     </div>
-                    <DressupModal isModalOpen={isDressUpModalOpen} setIsModalOpen={setIsDressUpModalOpen} setDressUpAvatarItems={setAvatarItems} />
+                    {isDressUpModalOpen && <DressupModal isModalOpen={isDressUpModalOpen} setIsModalOpen={setIsDressUpModalOpen} setDressUpAvatarItems={setAvatarItems} />}
                 </>
             )}
             {currentStep === 2 && (
@@ -427,7 +429,7 @@ const EditAvatarModal = ({isEditModalOpen, setIsEditModalOpen, avatar = {}}) => 
                                 <div className="col-sm-5">
                                     <div className="profile">
                                         <div className="image_div">
-                                            <img src={EmptyAvatar} alt="back" />
+                                            <img src={avatarItems.skinColor === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                             {avatarItems.hairColor && (<>
                                                 <Hair hairColor={avatarItems.hairColor} style={{top: `${hairStyles[avatarItems.hairStyle]?.top}%`, left: `${hairStyles[avatarItems.hairStyle]?.left}%`, width: `${hairStyles[avatarItems.hairStyle]?.width}%`}}>
                                                     {parse(hairStyles[avatarItems.hairStyle]? hairStyles[avatarItems.hairStyle].svg: '')}
