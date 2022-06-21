@@ -50,12 +50,12 @@ const ReferralBody = () => {
                         <h3 className='fw-bold'>INVITE FRIENDS</h3>
                         <h6 className='fs-16px'>Earn commission when your friends purchase NDB</h6>
                     </div>
-                    {(referrer === null || action === UPDATE_ACTION) && 
+                    {(referrer === null || referrer.walletConnect === null || action === UPDATE_ACTION) && 
                         <ReferralWalletConnector 
                             referrerInfo={referrer} 
                             setReferrer={onChangeReferrer} 
                             action={action} />}
-                    {(referrer && action === ACTIVE_ACTION) && <ReferralLink referrerInfo={referrer} onChangeWallet={onChangeWallet}/>}</>
+                    {(referrer && referrer.walletConnect && action === ACTIVE_ACTION) && <ReferralLink referrerInfo={referrer} onChangeWallet={onChangeWallet}/>}</>
                 }
             </div>
         </>
