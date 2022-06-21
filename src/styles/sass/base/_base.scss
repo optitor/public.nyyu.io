@@ -1,3 +1,10 @@
+@use "sass:math";
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 *:focus {
     outline: none;
 }
@@ -204,6 +211,12 @@ ul {
     $size: $size * 100;
     .fw-#{$size} {
         font-weight: #{$size} !important;
+    }
+}
+
+@for $value from 0 through 100 {
+    .opacity-#{$value} {
+        opacity: #{math.div($value, 100)} !important;
     }
 }
 

@@ -1,18 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'gatsby';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
 import { RiFileCopyLine } from '@react-icons/all-files/ri/RiFileCopyLine';
 import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 import { IoMdArrowDropdown } from '@react-icons/all-files/io/IoMdArrowDropdown';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { useSelector } from 'react-redux';
 import { AiFillCaretDown } from '@react-icons/all-files/ai/AiFillCaretDown';
-import { isBrowser } from '../../../utilities/auth';
 
-import BASIC from '../../../images/tier_png/basic.png';
-import BRONZE from '../../../images/tier_png/bronze.png';
-import SILVER from '../../../images/tier_png/silver.png';
-import GOLD from '../../../images/tier_png/gold.png';
-import PLAT from '../../../images/tier_png/plat.png';
-import DIA from '../../../images/tier_png/diamond.png';
+import { isBrowser } from '../../../utilities/auth';
+import { ROUTES } from '../../../utilities/routes';
+
+import BASIC from '../../../images/tier_png/basic.svg';
+import BRONZE from '../../../images/tier_png/bronze.svg';
+import SILVER from '../../../images/tier_png/silver.svg';
+import GOLD from '../../../images/tier_png/gold.svg';
+import PLAT from '../../../images/tier_png/plat.svg';
+import DIA from '../../../images/tier_png/diamond.svg';
 
 const tierImages = [
     BASIC, BRONZE, SILVER, GOLD, PLAT, DIA
@@ -62,7 +66,7 @@ const sendingLinks = [
     {
         name: 'Twitter',
         link: (url) => {
-            return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${inviteText}`;
+            return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(inviteText)}`;
         }
     },
 
@@ -132,17 +136,18 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                         className="txt-green fs-13px text-center position-absolute">
                         <div style={{lineHeight: '8px'}}>YOU GET</div>
                         <div><AiFillCaretDown color='#23C865'/></div>
-                        <span 
-                            className='text-decoration-underline position-absolute' 
+                        <Link 
+                            to={ROUTES.profile} 
+                            className='text-decoration-underline position-absolute cursor-pointer' 
                             style={{top: '-3px', right: '-88%', fontSize: '10px', color: '#626161'}}
                         >
                             Level up
-                        </span>
+                        </Link>
                     </div>
                     {tiers.length > 0 && tiers.map(tier => {
                         return (
                             <div className={`border-end border-secondary p-2 d-flex align-items-center justify-content-around`} key={tier.level}>
-                                <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-50'}`}/>
+                                <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-30'}`}/>
                                 <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'referral-tier-rate'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
                             </div>
                         )
