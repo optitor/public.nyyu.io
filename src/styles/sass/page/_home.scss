@@ -8,7 +8,7 @@
         background: #1e1e1e;
         height: calc(100vh - 100px);
         @include mq("tablet", max) {
-            height: calc(100vh - 75px);
+            height: calc(100vh - 175px);
         }
         .left-part {
             .tokens-lower-part {

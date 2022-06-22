@@ -2,14 +2,14 @@ import React from "react"
 import { useSelector } from "react-redux"
 import parse from "html-react-parser"
 import styled from "styled-components"
-import { EmptyAvatar } from "../../../utilities/imgImport"
+import { EmptyAvatar, EmptyBlackAvatar } from "../../../utilities/imgImport"
 
 const AvatarImage = ({ avatar = {} }) => {
     const { avatarComponents } = useSelector((state) => state)
 
     return (
         <ImageDiv className="image_div">
-            <img src={EmptyAvatar} alt="back" />
+            <img src={avatar.skinColor === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
             {avatar.avatarSet &&
                 avatar.avatarSet.map((item, index) => {
                     if (item.groupId === "hairStyle") {

@@ -28,6 +28,7 @@ export const GET_AVATARS = gql`
                 compId
             }
             hairColor
+            skinColor
             skillSet {
                 name
                 rate

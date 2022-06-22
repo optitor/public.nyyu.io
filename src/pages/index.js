@@ -7,6 +7,7 @@ import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
 import Header from "../components/header"
+import Footer from "../components/footer"
 import PaypalRedirect from '../components/payment/PaypalRedirect'
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
@@ -365,6 +366,7 @@ const IndexPage = () => {
                         </div>
                     </div>
                 </section>
+                <Footer />
             </main>
         </div>
     )

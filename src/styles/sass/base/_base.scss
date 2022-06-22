@@ -348,6 +348,12 @@ ul {
     color: lightgrey !important;
 }
 
+.text-hover-green {
+    &:hover {
+        color: $green !important;
+    }
+}
+
 .vh-85 {
     height: 85vh !important;
 }
