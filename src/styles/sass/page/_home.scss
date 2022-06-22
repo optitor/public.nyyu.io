@@ -10,6 +10,9 @@
         @include mq("tablet", max) {
             height: calc(100vh - 175px);
         }
+        @include mq("phone", max) {
+            height: auto;
+        }
         .left-part {
             .tokens-lower-part {
                 .token-left {

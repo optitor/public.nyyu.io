@@ -113,7 +113,7 @@ const IndexPage = () => {
                 <p className="token-left text-uppercase d-sm-block d-none">
                     tokens left in this round
                 </p>
-                <div className="cta mt-2 mt-sm-0 px-1 px-sm-0">
+                <div className="cta mt-2 mt-sm-0 px-3 px-sm-0">
                     <button
                         className="btn btn-green white-space-nowrap"
                         onClick={placeABidButtonClick}
@@ -229,7 +229,7 @@ const IndexPage = () => {
                 <p className="token-left text-uppercase d-sm-block d-none">
                     tokens left in this round
                 </p>
-                <div className="cta mt-2 mt-sm-0 px-1 px-sm-0">
+                <div className="cta mt-2 mt-sm-0 px-3 px-sm-0">
                     <button
                         className="btn btn-green white-space-nowrap"
                         onClick={placeABidButtonClick}
