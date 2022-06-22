@@ -6,23 +6,24 @@ export default function Footer() {
 
     return (
         <div className="footer-bar">
-            <div className="px-4 d-flex justify-content-between align-items-center">
-                <div className="footer-nav">
-                    <div className="d-flex align-items-center gap-5 text-gray">
+            <div className="row">
+                <div className="col-xl-4 text-center">
+                    <div className="text-lightgrey py-1">
+                        © 2022 NYYU UAB, Lithuania. Authorised by the FCIU, Reg. 305951620.
+                    </div>
+                </div>
+                <div className="col-xl-8">
+                    <div className="d-flex flex-column flex-md-row align-items-center justify-content-center text-lightgrey py-1">
                         {footerLinks.map((item, index) => (
                             <Link
                                 key={index}
                                 to={item.url}
-                                className="text-gray"
+                                className="text-lightgrey text-hover-green mx-3 mb-1"
+                                target='_blank'
                             >
                                 {item.label}
                             </Link>
                         ))}
-                    </div>
-                </div>
-                <div className="footer-copyright">
-                    <div className="text-gray">
-                        @ 2022 NYYU UAB, Lithuania. All Rights reserved.
                     </div>
                 </div>
             </div>

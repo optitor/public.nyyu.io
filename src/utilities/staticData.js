@@ -507,39 +507,39 @@ export const navigationLinks = [
 export const footerLinks = [
     {
         label: "Fee",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702148482973-Fee",
     },
     {
         label: "Bug bounty",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4701682263965-Nyyu-Bug-Bounty",
     },
     {
         label: "Apply for listings",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702050460701-Apply-for-Listing",
     },
     {
-        label: "API",
-        url: "/",
+        label: "Launchpad",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4701834986653-Apply-for-Launchpad",
     },
     {
         label: "About us",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4701986663709-About-us",
     },
     {
         label: "Terms of use",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702478722973-Terms-of-Use",
     },
     {
         label: "Privacy policy",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702279624605-Privacy-Policy",
     },
     {
         label: "AML policy",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702344288925-AML-Policy",
     },
     {
         label: "Contacts",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4729648541213-How-do-I-contact-nyyu-support-",
     }
 ]
 

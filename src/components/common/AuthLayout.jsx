@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../header";
-import { Apart, Trees } from "../../utilities/imgImport";
+import Footer from "../footer";
+import { Trees } from "../../utilities/imgImport";
 
 const AuthLayout = ({ children }) => {
     return (
@@ -16,6 +17,7 @@ const AuthLayout = ({ children }) => {
                     className="trees-img w-100 z-n999"
                 />
             </section>
+            <Footer />
         </main>
     );
 };

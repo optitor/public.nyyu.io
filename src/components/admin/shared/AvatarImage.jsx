@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 import parse from "html-react-parser"
 import styled from "styled-components"
 import { EmptyAvatar, EmptyBlackAvatar } from "../../../utilities/imgImport"
+
 const AvatarImage = ({ avatar = {} }) => {
     const { avatarComponents } = useSelector((state) => state)
 
