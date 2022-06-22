@@ -522,10 +522,6 @@ export const footerLinks = [
         url: "https://help.nyyu.io/hc/en-gb/articles/4701834986653-Apply-for-Launchpad",
     },
     {
-        label: "About us",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4701986663709-About-us",
-    },
-    {
         label: "Terms of use",
         url: "https://help.nyyu.io/hc/en-gb/articles/4702478722973-Terms-of-Use",
     },
@@ -536,6 +532,10 @@ export const footerLinks = [
     {
         label: "AML policy",
         url: "https://help.nyyu.io/hc/en-gb/articles/4702344288925-AML-Policy",
+    },
+    {
+        label: "About us",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4701986663709-About-us",
     },
     {
         label: "Contacts",
