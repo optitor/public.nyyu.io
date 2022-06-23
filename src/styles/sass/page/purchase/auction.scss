@@ -33,7 +33,6 @@ main.purchaseAuction-page {
             }
             @media screen and (max-width: 575px) {
                 width: 100%;
-                margin: auto;
             }
         }
         p.title-sale-ends {
@@ -46,11 +45,9 @@ main.purchaseAuction-page {
             }
             @media screen and (max-width: 768px) {
                 font-size: 48px;
-                // display: none;
             }
             @media screen and (max-width: 575px) {
                 font-size: 14px;
-                // display: none;
             }
         }
         p.title {
@@ -74,7 +71,6 @@ main.purchaseAuction-page {
             padding: 1vw 0;
             @media screen and (max-width: 768px) {
                 border: none;
-                // height: auto;
             }
             div.table-container {
                 width: 100%; 
@@ -92,7 +88,6 @@ main.purchaseAuction-page {
             align-items: center;
             padding: 1vw 3vw;
             margin-bottom: 20px;
-
             & > div.tokenDiv {
                 width: 683px;
                 min-height: 460px;
@@ -109,7 +104,6 @@ main.purchaseAuction-page {
                             top: 50%;
                             transform: translateY(-50%);
                             @include mq("tablet", max) {
-                                // display: none;
                                 font-size: 14px;
                                 left: 0;
                             }
@@ -124,7 +118,6 @@ main.purchaseAuction-page {
                         p.title {
                             width: 45%;
                             margin: 0;
-                            // margin-right: 10%;
                         }
                         & > div.price {
                             background: #1e1e1e;
@@ -151,11 +144,6 @@ main.purchaseAuction-page {
                                display: none;
                             }
                         }
-                        // @media screen and (max-width: 768px) {
-                        //     & > div.price {
-                        //         width: 60%;
-                        //     }
-                        // }
                         @media screen and (max-width: 768px) {
                             flex-direction: column;
                             margin-top: 30px;
@@ -173,16 +161,10 @@ main.purchaseAuction-page {
                             }
                         }
                         @media screen and (max-width: 575px) {
-                            flex-direction: column;
-                            margin-top: 30px;
                             p.title {
-                                width: 100%;
-                                margin: 0;
                                 margin-bottom: 5%;
-                                font-size: 24px;
                             }
                             & > div.price {
-                                width: 100%;
                                 color: white;
                             }
                         }
@@ -200,7 +182,6 @@ main.purchaseAuction-page {
                             top: 50%;
                             transform: translateY(-50%);
                             @include mq("tablet", max) {
-                                // display: none;
                                 font-size: 14px;
                                 left: 0;
                             }
@@ -315,12 +296,7 @@ main.purchaseAuction-page {
             @media screen and (max-width: 768px) {
                 height: auto;
                 & > div.tokenDiv {
-                    padding: 0 10px;
                     height: auto;
-                }
-            }
-            @media screen and (max-width: 768px) {
-                & > div.tokenDiv {
                     position: absolute;
                     width: 95%;
                     left: 50%;
@@ -350,8 +326,6 @@ main.purchaseAuction-page {
                             @media screen and (max-width: 575px) {
                                 font-size: 22px;
                                 text-align: center;
-                                line-height: 1;
-                                height: auto;
                             }
                         }
                         p.title {
@@ -363,9 +337,6 @@ main.purchaseAuction-page {
                             }
                             @media screen and (max-width: 575px) {
                                 font-size: 18px;
-                                text-align: left;
-                                line-height: 1;
-                                height: auto;
                             }
                         }
                     }
@@ -426,7 +397,6 @@ div.slider-container {
         width: 100%;
         border-radius: 6px;
         touch-action: none;
-        box-sizing: border-box;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
     & div.rc-slider-rail {
@@ -450,17 +420,6 @@ div.slider-container {
         margin-top: -10px;
     }
     @media screen and (max-width: 768px) {
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 15px;
-        & > input {
-            width: 100%;
-            margin: 0 !important;
-            line-height: 32px;
-            font-size: 18px;
-        }
-    }
-    @media screen and (max-width: 575px) {
         flex-direction: column;
         gap: 10px;
         margin-top: 15px;

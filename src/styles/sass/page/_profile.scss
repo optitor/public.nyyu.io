@@ -757,9 +757,9 @@
         margin: auto;
         border: none;
         @include mq("phone", max) {
-            height: 100px;
+            height: 130px;
             div.image_div {
-                width: 80px;
+                width: 100px;
             }
         }
     }

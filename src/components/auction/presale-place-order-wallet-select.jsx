@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux"
 import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
 import { Icon } from '@iconify/react'
-import ReactTooltip from "react-tooltip"
 
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
@@ -12,11 +11,8 @@ import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 
 import CustomSpinner from "../common/custom-spinner"
 import { CheckBox } from "../common/FormControl"
-import { wallets, NDB_WALLET_TOOLTIP_CONTENT, EXTERNAL_WALLET_TOOLTIP_CONTENT } from "../../utilities/staticData"
 import { ROUTES } from "../../utilities/routes"
 import { setPresaleOrderId } from '../../redux/actions/bidAction' 
-import { NyyuWallet, NyyuWalletSelected } from "../../utilities/imgImport";
-import { useAccount, useConnect } from "wagmi"
 import WalletSelector from "../common/wallet/WalletSelector"
 
 export default function PresalePlaceOrderWalletSelect() {
@@ -85,7 +81,7 @@ export default function PresalePlaceOrderWalletSelect() {
                 </div>
             </div>
             <div>
-                <WalletSelector 
+                <WalletSelector
                     walletChanged={onWalletChanged} 
                     selectedWallet={selectedWallet}
                 />

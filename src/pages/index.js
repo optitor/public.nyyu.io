@@ -7,6 +7,7 @@ import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
 import Header from "../components/header"
+import Footer from "../components/footer"
 import PaypalRedirect from '../components/payment/PaypalRedirect'
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
@@ -18,8 +19,7 @@ import CountDownPending from "../components/common/countdown-pending"
 import { isBrowser } from "../utilities/auth";
 
 const IndexPage = () => {
-
-    
+   
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -40,9 +40,10 @@ const IndexPage = () => {
             setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },
-        onError: (error) => console.log(error),
-        errorPolicy: "ignore",
-        fetchPolicy: "network-only",
+        onError: (err) => {
+            console.log(err.message);
+            setLoading(false);
+        },
     })
 
     const auctionRound = currentRound?.auction?.round
@@ -112,7 +113,7 @@ const IndexPage = () => {
                 <p className="token-left text-uppercase d-sm-block d-none">
                     tokens left in this round
                 </p>
-                <div className="cta mt-2 mt-sm-0 px-1 px-sm-0">
+                <div className="cta mt-2 mt-sm-0 px-3 px-sm-0">
                     <button
                         className="btn btn-green white-space-nowrap"
                         onClick={placeABidButtonClick}
@@ -144,7 +145,7 @@ const IndexPage = () => {
 
     const auctionPendingContent = (
         <div className="left-part col-md-6 px-0 pe-sm-auto">
-            <h3 className="home-title d-sm-block d-none text-center pe-0">
+            <h3 className="home-title d-sm-block d-none text-center">
                 <div className="mb-4">
                     {auctionRound > 1 &&
                     <div>
@@ -157,7 +158,7 @@ const IndexPage = () => {
                 </div>
                 <CountDownPending deadline={auctionStart} actionAfterDeadline={() => handleActionAfterDeadline()} />
             </h3>
-            <h3 className="home-title-mobile d-sm-none d-block mb-5 mb-sm-0">
+            <h3 className="home-title-mobile text-center d-sm-none d-block mb-5 mb-sm-0">
                 <div className="mb-3 fs-36px">
                    {auctionRound > 1 &&
                    <div className="mb-3">
@@ -228,7 +229,7 @@ const IndexPage = () => {
                 <p className="token-left text-uppercase d-sm-block d-none">
                     tokens left in this round
                 </p>
-                <div className="cta mt-2 mt-sm-0 px-1 px-sm-0">
+                <div className="cta mt-2 mt-sm-0 px-3 px-sm-0">
                     <button
                         className="btn btn-green white-space-nowrap"
                         onClick={placeABidButtonClick}
@@ -365,6 +366,7 @@ const IndexPage = () => {
                         </div>
                     </div>
                 </section>
+                <Footer />
             </main>
         </div>
     )

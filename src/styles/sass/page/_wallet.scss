@@ -1,5 +1,4 @@
 .history-page {
-    background-color: $black;
     .menu {
         border-bottom: 2px solid #464646;
     }
@@ -8,15 +7,123 @@
         @include mq("tablet", max) {
             height: auto;
         }
-        .verify-link {
-            font-weight: 500;
-            font-size: 16px;
-            line-height: 20px;
-            text-decoration: underline;
-            color: white;
-            flex-shrink: 0;
-            &:hover {
+        table {
+            width: 100%;
+            thead,
+            tbody tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+            thead {
+                border-bottom: 2px solid #464646;
+                width: 100%;
+                th {
+                    padding: 16px 0;
+                }
+            }
+            th {
+                font-size: 16px;
+                line-height: 20px;
+                letter-spacing: 0.04em;
+                color: #8f8f8f;
+                font-weight: normal;
+            }
+            td {
+                font-size: 18px;
+                line-height: 22px;
+                color: white;
+            }
+            tbody {
+                @include mq("tablet", max) {
+                    max-height: 350px;
+                }
+                display: block;
+                tr {
+                    border-bottom: 2px solid #464646;
+                    &:hover {
+                        background-color: #242424;
+                    }
+                }
+            }
+            .mobile-not {
+                @include mq("phone", max) {
+                    display: none;
+                }
+            }
+            .laptop-not {
+                @include mq("laptop", max) {
+                    display: none;
+                }
+            }
+        }
+        .coin {
+            &-abbr {
+                font-weight: 500;
+                font-size: 18px;
+                line-height: 22px;
+                letter-spacing: 0.04em;
+            }
+            &-name {
+                font-weight: 500;
+                font-size: 15px;
+                line-height: 18px;
+                letter-spacing: 0.04em;
+                color: #959595;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 100%;
+            }
+            &-price {
+                font-size: 18px;
+                line-height: 22px;
+                color: #ffffff;
+                text-align: right;
+            }
+            &-percent {
+                font-size: 13px;
+                line-height: 18px;
+                text-align: right;
+                margin-top: 3px;
+            }
+            &-status {
+                position: relative;
+                text-indent: 16px;
+                &::before {
+                    content: "";
+                    position: absolute;
+                    width: 9px;
+                    height: 9px;
+                    border-radius: 50%;
+                    top: 50%;
+                    left: 0;
+                    transform: translateY(-50%);
+                }
+                &.active {
+                    &::before {
+                        background-color: $green;
+                    }
+                }
+                &.deactive {
+                    &::before {
+                        background-color: $red;
+                    }
+                }
+            }
+            &-reward {
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 20px;
+                letter-spacing: 0.04em;
                 color: $green;
+            }
+            &-operations {
+                display: flex;
+                justify-content: flex-end;
+                @include mq("laptop", max) {
+                    flex-direction: column;
+                    align-items: flex-end;
+                }
             }
         }
         &__left {
@@ -29,141 +136,22 @@
             @include mq("phone") {
                 padding-right: 20px;
             }
-            .verify-link {
-                display: none;
-                @include mq("laptop", max) {
-                    display: block;
-                }
-            }
             table {
-                width: 100%;
-                thead,
-                tbody tr {
-                    display: table;
-                    width: 100%;
-                    table-layout: fixed;
-                }
-                thead {
-                    border-bottom: 2px solid #464646;
-                    width: calc(100% - 26px);
-                    th {
-                        padding: 16px 0;
-                    }
-                }
-                th {
-                    font-size: 16px;
-                    line-height: 20px;
-                    letter-spacing: 0.04em;
-                    color: #8f8f8f;
-                    font-weight: normal;
-                }
-                td {
-                    font-size: 18px;
-                    line-height: 22px;
-                    color: white;
-                }
                 tbody {
                     @include custom-scroll(250px);
-                    @include mq("tablet", max) {
-                        max-height: 350px;
-                    }
-                    display: block;
-                    padding-right: 0;
                     min-height: 50px;
                     tr {
-                        // margin-bottom: 23px;
-                        border-bottom: 2px solid #464646;
                         td {
                             padding: 16px 0;
                         }
-                        &:hover {
-                            background-color: #242424;
-                        }
-                    }
-                }
-                .mobile-not {
-                    @include mq("phone", max) {
-                        display: none;
-                    }
-                }
-                .laptop-not {
-                    @include mq("laptop", max) {
-                        display: none;
                     }
                 }
             }
             .coin {
-                &-abbr {
-                    font-weight: 500;
-                    font-size: 18px;
-                    line-height: 22px;
-                    letter-spacing: 0.04em;
-                    color: white;
-                }
-                &-name {
-                    font-weight: 500;
-                    font-size: 15px;
-                    line-height: 18px;
-                    letter-spacing: 0.04em;
-                    color: #959595;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    width: 100%;
-                }
-                &-price {
-                    font-size: 18px;
-                    line-height: 22px;
-                    color: #ffffff;
-                    text-align: right;
-                }
                 &-percent {
-                    font-size: 13px;
-                    line-height: 18px;
-                    text-align: right;
                     color: #959595;
-                    margin-top: 3px;
-                }
-                &-status {
-                    position: relative;
-                    text-indent: 16px;
-                    &::before {
-                        content: "";
-                        position: absolute;
-                        width: 9px;
-                        height: 9px;
-                        border-radius: 50%;
-                        top: 50%;
-                        left: 0;
-                        transform: translateY(-50%);
-                    }
-                    &.active {
-                        &::before {
-                            background-color: $green;
-                        }
-                    }
-                    &.deactive {
-                        &::before {
-                            background-color: $red;
-                        }
-                    }
-                }
-                &-reward {
-                    font-weight: 600;
-                    font-size: 16px;
-                    line-height: 20px;
-                    letter-spacing: 0.04em;
-                    color: $green;
-                }
-                &-operations {
-                    display: flex;
-                    justify-content: flex-end;
-                    @include mq("laptop", max) {
-                        flex-direction: column;
-                        align-items: flex-end;
-                    }
                 }
             }
-
             .react-tabs {
                 &__tab-list {
                     border-bottom: 2px solid #464646;
@@ -328,7 +316,6 @@
                 }
             }
             table {
-                width: 100%;
                 .search {
                     display: flex;
                     justify-content: flex-start;
@@ -345,17 +332,8 @@
                         border: none;
                     }
                 }
-                thead,
-                tbody tr {
-                    display: table;
-                    width: 100%;
-                    table-layout: fixed;
-                }
                 thead {
-                    border-bottom: 2px solid #464646;
-                    width: 100%;
                     th {
-                        padding: 16px 0;
                         svg {
                             cursor: pointer;
                             margin-left: 4px;
@@ -365,17 +343,7 @@
                         }
                     }
                 }
-                th {
-                    font-size: 16px;
-                    line-height: 20px;
-                    letter-spacing: 0.04em;
-                    color: #8f8f8f;
-                    font-weight: normal;
-                }
                 td {
-                    font-size: 18px;
-                    line-height: 22px;
-                    color: white;
                     .loading {
                         display: flex;
                         justify-content: flex-end;
@@ -383,13 +351,7 @@
                 }
                 tbody {
                     min-height: 100px;
-                    @include mq("tablet", max) {
-                        max-height: 350px;
-                    }
-                    display: block;
                     tr {
-                        border-bottom: 2px solid #464646;
-                        // cursor: pointer;
                         div.star_selected {
                             cursor: pointer;
                         }
@@ -402,93 +364,14 @@
                             padding-top: 24px;
                             padding-bottom: 16px;
                         }
-                        &:hover {
-                            background-color: #242424;
-                        }
-                    }
-                }
-                .mobile-not {
-                    @include mq("phone", max) {
-                        display: none;
-                    }
-                }
-                .laptop-not {
-                    @include mq("laptop", max) {
-                        display: none;
                     }
                 }
             }
             .coin {
-                &-abbr {
-                    font-weight: 500;
-                    font-size: 18px;
-                    line-height: 22px;
-                    letter-spacing: 0.04em;
-                    color: white;
-                }
                 &-name {
-                    font-weight: 500;
-                    font-size: 15px;
-                    line-height: 18px;
-                    letter-spacing: 0.04em;
-                    color: #959595;
-                    text-overflow: ellipsis;
                     overflow: hidden;
-                    white-space: nowrap;
-                    width: 100%;
                     &:hover {
                         overflow: visible;
-                    }
-                }
-                &-price {
-                    font-size: 18px;
-                    line-height: 22px;
-                    color: #ffffff;
-                    text-align: right;
-                }
-                &-percent {
-                    font-size: 13px;
-                    line-height: 18px;
-                    text-align: right;
-                    margin-top: 3px;
-                }
-                &-status {
-                    position: relative;
-                    text-indent: 16px;
-                    &::before {
-                        content: "";
-                        position: absolute;
-                        width: 9px;
-                        height: 9px;
-                        border-radius: 50%;
-                        top: 50%;
-                        left: 0;
-                        transform: translateY(-50%);
-                    }
-                    &.active {
-                        &::before {
-                            background-color: $green;
-                        }
-                    }
-                    &.deactive {
-                        &::before {
-                            background-color: $red;
-                        }
-                    }
-                }
-                &-reward {
-                    font-weight: 600;
-                    font-size: 16px;
-                    line-height: 20px;
-                    letter-spacing: 0.04em;
-                    color: $green;
-                }
-                &-operations {
-                    display: flex;
-                    justify-content: flex-end;
-                    @include mq("laptop", max) {
-                        flex-direction: column;
-                        align-items: flex-end;
                     }
                 }
             }
@@ -1281,7 +1164,6 @@ div.wallet_balances {
     .start-date-picker {
         border-radius: 10px;
         padding: 5px 10px;
-        box-sizing: border-box;
         background-color: $black !important;
         color: white;
         font-size: 12px;
@@ -1357,7 +1239,6 @@ div.wallet_balances {
     input {
         border-radius: 10px;
         padding: 5px 10px;
-        box-sizing: border-box;
         background-color: $black !important;
         color: white !important;
         font-size: 12px;

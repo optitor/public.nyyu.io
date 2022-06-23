@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Modal from "react-modal"
+import Select from 'react-select';
 import parse from 'html-react-parser'
 import styled from "styled-components"
 import { DressupData } from "../../utilities/dressup-data"
-import { CloseIcon, EmptyAvatar } from "../../utilities/imgImport"
+import { CloseIcon, EmptyAvatar, EmptyBlackAvatar } from "../../utilities/imgImport"
 import DressupHorizontalList from "./dressup-horizontal-list"
-import { hairColors } from './dressup-data';
+import { hairColors, SkinColors } from './dressup-data';
 import { TabList, Tab } from 'react-tabs';
 
 export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAvatarItems}) {
@@ -21,6 +22,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
 
     const [selectedHairStyle, setSelectedHairStyle] = useState(0)
     const [selectedHairColor, setSelectedHairColor] = useState(0)
+    const [selectedSkinColor, setSelectedSkinColor] = useState(SkinColors[0]);
     const [selectedFacialStyle, setSelectedFacialStyle] = useState(0)
     const [selectedExpression, setSelectedExpression] = useState(0)
     const [selectedHat, setSelectedHat] = useState(0)
@@ -35,19 +37,13 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
             expression: expressions[selectedExpression]?.compId,
             hat: hats[selectedHat]?.compId,
             other: others[selectedOther]?.compId,
-            hairColor: hairColors[selectedHairColor]
+            hairColor: hairColors[selectedHairColor],
+            skinColor: selectedSkinColor.value
         });
         setIsModalOpen(false);
-    }
+    };
 
     const closeModal = () => {
-        setSelectedHairStyle(0);
-        setSelectedHairColor(0);
-        setSelectedFacialStyle(0);
-        setSelectedExpression(0);
-        setSelectedHat(0);
-        setSelectedOther(0);
-
         setIsModalOpen(false);
     };
     
@@ -81,7 +77,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                     <div className="row">
                         <div className="profile">
                             <div className="image_div">
-                                <img src={EmptyAvatar} alt="back" />
+                                <img src={selectedSkinColor.value === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                 {loaded && (<>
                                     <Hair
                                         hairColor={hairColors[selectedHairColor]}
@@ -120,6 +116,17 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                                     </div>
                                 </>)}
                             </div>
+                        </div>
+                        <div>
+                            <p className="w-50 m-auto mb-1 fw-bold">SKIN COLOR</p>
+                            <Select
+                                className='black_input w-50 m-auto'
+                                value={selectedSkinColor}
+                                onChange={selected => setSelectedSkinColor(selected)}
+                                options={SkinColors}
+                                styles={customSelectStyles}
+                                isSearchable={false}
+                            />
                         </div>
                         <div className="d-none d-sm-block">
                             <div className="dress-up-modal-sections-list">
@@ -239,3 +246,50 @@ const Hair = styled.div`
         }}
     }
 `;
+
+const customSelectStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: "white",
+        backgroundColor: state.isSelected ? "#23c865" : undefined,
+        fontSize: 14,
+        borderBottom: "1px solid dimgrey",
+        cursor: "pointer",
+        ":hover": {
+            backgroundColor: "inherit",
+        },
+    }),
+    control: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "none",
+        borderRadius: 0,
+        height: 40,
+        cursor: "pointer",
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+        borderRadius: 0,
+    }),
+    menuList: (provided) => ({
+        ...provided,
+        margin: 0,
+        padding: 0,
+        borderRadius: 0,
+    }),
+    valueContainer: (provided) => ({
+        ...provided,
+        padding: 0,
+    }),
+    singleValue: (provided) => ({
+        ...provided,
+        color: "white",
+        marginLeft: 10,
+    }),
+    placeholder: (provided) => ({
+        ...provided,
+        color: "dimgrey",
+    }),
+};

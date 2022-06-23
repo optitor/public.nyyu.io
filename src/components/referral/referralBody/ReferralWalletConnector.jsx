@@ -82,18 +82,45 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
             setError('Unknown error.')
         }
     }
+
+    const onPrevious = () => {
+        if(selectedWallet === 'external') {
+            // go back to select wallet
+            setSelectedWallet('internal');
+        } else if(action === UPDATE_ACTION) {
+            // go back to link
+            setReferrer({...referrerInfo});
+        }
+    }
     
-    return <div className='text-white'>
-        <div>
-            {/* <div>STEP <span className='text-green'>2</span></div> */}
-            <div>
-                {selectedWallet === 'external' && 
-                    <><FaArrowLeft onClick={() => setSelectedWallet('internal')}/>&nbsp;</>
-                }
-                Connect your wallet
-            </div>
+    return <div className='text-white mx-1 mx-md-5'>
+        <div className='d-none d-md-flex justify-content-start'>
+            <button 
+                className='bg-transparent border-0' 
+                onClick={onPrevious}
+            >
+                <div className='d-flex align-items-center'>
+                    {(selectedWallet === 'external' || action === UPDATE_ACTION) && 
+                        <><FaArrowLeft />&nbsp;</>
+                    }
+                    <span>Connect your wallet</span>
+                </div>
+            </button>
         </div>
-        <div>
+        <div className='d-flex d-md-none justify-content-center border-bottom pb-2 mb-4 position-relative'>
+            {(selectedWallet === 'external' || action === UPDATE_ACTION) && 
+                <span className='position-absolute' style={{top: '0', left: '8px'}}><FaArrowLeft />&nbsp;</span>
+            }
+            <button 
+                className='bg-transparent border-0' 
+                onClick={onPrevious}
+            >
+                <div className='d-flex align-items-center'>
+                    <span>CONNECT YOUR WALLET</span>
+                </div>
+            </button>
+        </div>
+        <div className='mb-4'>
             <WalletSelector 
                 walletChanged={onWalletChanged} 
                 selectedWallet={selectedWallet}
@@ -103,22 +130,14 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
             {error && <div className='text-danger'>{error}</div>}
             <button 
                 onClick={onActivateClicked}
-                className='d-flex align-items-center justify-content-center w-100 py-2 bg-transparent text-white fw-bold border border-white fs-22px'
+                className='d-flex align-items-center justify-content-center referral-button py-2 bg-transparent text-white fw-bold border border-white fs-22px mx-auto'
             >
                 <div className={`${(activateLoading || updateLoading) ? "opacity-1": "opacity-0"}`}><CustomSpinner /></div>
                 <div className={`fs-20px ${(activateLoading || updateLoading) ? 'ms-3' : 'pe-4'}`}>
                     {action === ACTIVE_ACTION && 'ACTIVATE INVITE & EARN'}
-                    {action === UPDATE_ACTION && 'UPDATE REFERRAL WALLET'}
+                    {action === UPDATE_ACTION && 'UPDATE'}
                 </div>
             </button>
-            {action === UPDATE_ACTION && 
-                <button
-                    onClick={() => setReferrer({...referrerInfo})}
-                    className='d-flex align-items-center justify-content-center w-100 py-2 mt-3 bg-transparent text-white fw-bold border border-white fs-22px'
-                >
-                    CANCEL UPDATE
-                </button>
-            }
         </div>
     </div>
 }

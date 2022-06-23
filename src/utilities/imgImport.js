@@ -82,6 +82,7 @@ import platinum from "../images/tiers/platinum.svg"
 import diamond from "../images/tiers/diamond.svg"
 
 import emptyAvatar from "./../images/dressup/customizeAvatar/empty.svg"
+import emptyBlackAvatar from "./../images/dressup/customizeAvatar/empty-black.svg"
 import baseExpression from "./../images/dressup/customizeAvatar/expression.svg"
 import baseHair from "./../images/dressup/customizeAvatar/hair.svg"
 
@@ -240,6 +241,7 @@ export const Platinum = platinum
 export const Diamond = diamond
 
 export const EmptyAvatar = emptyAvatar
+export const EmptyBlackAvatar = emptyBlackAvatar
 export const BaseExpression = baseExpression
 export const BaseHair = baseHair
 

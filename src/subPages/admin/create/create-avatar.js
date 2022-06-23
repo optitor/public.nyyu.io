@@ -11,7 +11,7 @@ import LayoutForCreate from "../../../components/admin/LayoutForCreate"
 import { Alert, Rating } from "@mui/material"
 import { capitalizeFirstLetter } from "../../../utilities/string"
 import DressupModal from "../../../components/dress-up/dressup-modal"
-import { EmptyAvatar } from "../../../utilities/imgImport";
+import { EmptyAvatar, EmptyBlackAvatar } from "../../../utilities/imgImport";
 import { create_New_Avatar } from './../../../redux/actions/avatarAction';
 
 const CreateAvatar = () => {
@@ -28,13 +28,14 @@ const CreateAvatar = () => {
     const [avatarItems, setAvatarItems] = useState({
         hairStyle: '',
         hairColor: '',
+        skinColor: '',
         facialStyle: '',
         expression: '',
         hat: '',
         other: ''
     });
     const [avatarName, setAvatarName] = useState({fname: '', surname: ''});
-
+    
     const avatarDataError = useMemo(() => {
         if(!avatarName.fname) return 'First Name is required';
         if(!avatarName.surname) return 'Surname is required';
@@ -114,7 +115,7 @@ const CreateAvatar = () => {
             return { name: item.title, rate: item.stars };
         });
         const avatarSet = Object.keys(avatarItems).filter(item => {
-            return item !== 'hairColor';
+            return item !== 'hairColor' && item !== 'skinColor';
         }).map(item => {
             return {groupId: item, compId: avatarItems[item]};
         });
@@ -128,7 +129,8 @@ const CreateAvatar = () => {
             avatarSet,
             factsSet,
             details: factsDetail.details,
-            hairColor: avatarItems.hairColor
+            hairColor: avatarItems.hairColor,
+            skinColor: avatarItems.skinColor,
         }));
         setPending(false);
     }
@@ -161,7 +163,7 @@ const CreateAvatar = () => {
                                     <div className="preview_mobile mb-3">
                                         <div className="profile">
                                             <div className="image_div">
-                                                <img src={EmptyAvatar} alt="back" />
+                                                <img src={avatarItems.skinColor === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                                 {avatarItems.hairColor && (<>
                                                     <Hair hairColor={avatarItems.hairColor} style={{top: `${hairStyles[avatarItems.hairStyle].top}%`, left: `${hairStyles[avatarItems.hairStyle].left}%`, width: `${hairStyles[avatarItems.hairStyle].width}%`}}>
                                                         {parse(hairStyles[avatarItems.hairStyle].svg)}
@@ -203,7 +205,7 @@ const CreateAvatar = () => {
                                     <div className="preview">
                                         <div className="profile">
                                             <div className="image_div">
-                                                <img src={EmptyAvatar} alt="back" />
+                                                <img src={avatarItems.skinColor === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                                 {avatarItems.hairColor && (<>
                                                     <Hair hairColor={avatarItems.hairColor} style={{top: `${hairStyles[avatarItems.hairStyle].top}%`, left: `${hairStyles[avatarItems.hairStyle].left}%`, width: `${hairStyles[avatarItems.hairStyle].width}%`}}>
                                                         {parse(hairStyles[avatarItems.hairStyle].svg)}
@@ -234,7 +236,7 @@ const CreateAvatar = () => {
                                     Next
                                 </button>
                             </div>
-                            <DressupModal isModalOpen={isDressUpModalOpen} setIsModalOpen={setIsDressUpModalOpen} setDressUpAvatarItems={setAvatarItems} />
+                            {isDressUpModalOpen && <DressupModal isModalOpen={isDressUpModalOpen} setIsModalOpen={setIsDressUpModalOpen} setDressUpAvatarItems={setAvatarItems} />}
                         </>
                     )}
                     {currentStep === 2 && (
@@ -406,7 +408,7 @@ const CreateAvatar = () => {
                                         <div className="col-sm-5">
                                             <div className="profile">
                                                 <div className="image_div">
-                                                    <img src={EmptyAvatar} alt="back" />
+                                                    <img src={avatarItems.skinColor === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                                     {avatarItems.hairColor && (<>
                                                         <Hair hairColor={avatarItems.hairColor} style={{top: `${hairStyles[avatarItems.hairStyle].top}%`, left: `${hairStyles[avatarItems.hairStyle].left}%`, width: `${hairStyles[avatarItems.hairStyle].width}%`}}>
                                                             {parse(hairStyles[avatarItems.hairStyle].svg)}

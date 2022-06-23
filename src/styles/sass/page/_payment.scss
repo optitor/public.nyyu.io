@@ -249,6 +249,7 @@
                 height: 46px;
             }
             .cryptocoin-select {
+                height: 49px;
                 margin-bottom: 8px;
                 margin-right: 8px;
                 width: 33.33%;
@@ -258,43 +259,7 @@
                 @include mq("phone", max) {
                     width: 30%;
                 }
-                .css-1s2u09g-control,
-                .css-1pahdxg-control {
-                    padding: 0 0 !important;
-                    .css-1d8n9bt {
-                        padding-top: 0;
-                        padding-bottom: 0;
-                    }
-                    .css-ackcql {
-                        display: none !important;
-                        input {
-                            caret-color: transparent;
-                        }
-                    }
-                    .coin-label {
-                        @include mq("phone", max) {
-                            display: none;
-                        }
-                    }
-                }
-                .css-26l3qy-menu {
-                    background-color: $black;
-                    border: 1px solid #ffffff;
-                    border-radius: unset;
-                    & > div {
-                        max-height: unset !important;
-                    }
-                    .coin-label {
-                        font-weight: bold !important;
-                        font-size: 18px !important;
-                        line-height: 22px !important;
-                        text-transform: uppercase !important;
-                        color: white;
-                        @include mq("phone", max) {
-                            display: none;
-                        }
-                    }
-                }
+                
             }
             .clipboard {
                 display: flex;

@@ -13,7 +13,7 @@ export default function AuctionRoundDetails() {
 
     // Container
     const auction = useAuction()
-    const { optCurrentRound, setOptCurrentRound, currentRound, currentRoundBidList, isAuction } = auction
+    const { optCurrentRound, currentRoundBidList, isAuction } = auction
     const [restTime, setRestTime] = useState({
         hours: 0,
         minutes: 0,

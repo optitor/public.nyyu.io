@@ -4,7 +4,7 @@ import { GET_EARNING } from '../api/query';
 import CommissionBalance from './CommissionBalance';
 import InvitedList from './InvitedList';
 
-const CommissionHistory = () => {
+const CommissionHistory = ({shown}) => {
     
     // invited user list
     const [ invitedList, setInvitedList ] = useState([]);
@@ -29,7 +29,9 @@ const CommissionHistory = () => {
         }
     });
     
-    return <div className={`col-12 col-md-4 py-5 px-md-2 px-lg-3 px-xl-5 border-response ${invitedList.length === 0 ? 'referral-history':'referral-history-list'}`}>
+    return <div className={`col-12 col-md-5 col-lg-4 py-4 px-md-2 px-lg-3 px-xl-5 border-response 
+                                ${invitedList.length === 0 ? 'referral-history':'referral-history-list'}
+                                ${shown ? 'd-block':'d-none'}`}>
         <CommissionBalance loading={loading} totalEarned={totalEarned} />
         <InvitedList loading={loading} invitedList={invitedList} />
     </div>

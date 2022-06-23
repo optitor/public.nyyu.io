@@ -127,6 +127,7 @@ export default function ResetAuthenticatorModal({ isOpen, setIsOpen, secret, tok
                                 label="Auth code"
                                 value={sentCode}
                                 onChange={(e) => setSentCode(e.target.value)}
+                                autoComplete='off'
                                 placeholder="Enter code"
                             />
                         </div>
