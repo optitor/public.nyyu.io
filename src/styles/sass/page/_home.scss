@@ -12,6 +12,7 @@
         }
         @include mq("phone", max) {
             height: auto;
+            min-height: calc(100vh - 175px);
         }
         .left-part {
             .tokens-lower-part {

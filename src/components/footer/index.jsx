@@ -28,7 +28,7 @@ export default function Footer() {
                         </div>
                     </div>
                     <div className="d-block d-md-none">
-                        <div className="row mt-5 mx-2">
+                        <div className="row mx-2">
                             {footerLinks.map((item, index) => (
                                 <div className="col-4" key={index}>
                                     <Link

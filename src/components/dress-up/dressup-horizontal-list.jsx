@@ -113,7 +113,7 @@ export default function DressupHorizontalList({
             </div>
         </div>
     )
-}
+};
 
 const Hair = styled.div`
     svg>path {
