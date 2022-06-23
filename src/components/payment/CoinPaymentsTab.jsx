@@ -257,8 +257,8 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         <div className="cryptocoin-tab">
             <div className="payment-content">
                 <div className="set-cryptocoin">
-                    <div className="d-flex flex-column justify-content-between coin-address">
-                        <div className="d-flex justify-content-between w-100">
+                    <div className="d-flex flex-column coin-address">
+                        <div className="d-flex justify-content-between cryptocoin-select-amount">
                             <Select
                                 className="cryptocoin-select"
                                 options={fooCoins}
@@ -275,7 +275,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                 }}
                                 styles={customSelectWithIconStyles}
                             />
-                            <div className="w-75">
+                            <div className="cryptocoin-amount">
                                 <CopyToClipboard
                                     onCopy={() => handleCopyToClipboard('coinQuantity')}
                                     text={coinQuantity}

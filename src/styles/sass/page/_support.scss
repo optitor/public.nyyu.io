@@ -124,6 +124,12 @@
         border-bottom: 1px solid white;
         width: 62px;
     }
+    .pe-lg-10px {
+        padding-right: 0px !important;
+        @include mq("laptop") {
+            padding-right: 10px !important;
+        }
+    }
 }
 
 .support-self-security-item {

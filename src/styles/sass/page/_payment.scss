@@ -248,52 +248,33 @@
                 width: 300px;
                 height: 46px;
             }
-            .cryptocoin-select {
-                margin-bottom: 8px;
-                margin-right: 8px;
-                width: 33.33%;
-                @include mq("tablet", max) {
-                    width: 40%;
-                }
+            .cryptocoin-select-amount{
+                flex-wrap: nowrap;
                 @include mq("phone", max) {
-                    width: 30%;
+                    flex-wrap: wrap;
                 }
-                .css-1s2u09g-control,
-                .css-1pahdxg-control {
-                    padding: 0 0 !important;
-                    .css-1d8n9bt {
-                        padding-top: 0;
-                        padding-bottom: 0;
+                .cryptocoin-select {
+                    height: 49px;
+                    margin-bottom: 8px;
+                    margin-right: 8px;
+                    width: 33.33%;
+                    @include mq("tablet", max) {
+                        width: 40%;
                     }
-                    .css-ackcql {
-                        display: none !important;
-                        input {
-                            caret-color: transparent;
-                        }
-                    }
-                    .coin-label {
-                        @include mq("phone", max) {
-                            display: none;
-                        }
+                    @include mq("phone", max) {
+                        width: 100%;
+                        margin-right: 0;
                     }
                 }
-                .css-26l3qy-menu {
-                    background-color: $black;
-                    border: 1px solid #ffffff;
-                    border-radius: unset;
-                    & > div {
-                        max-height: unset !important;
+                .cryptocoin-amount{
+                    width: 66.67%;
+                    @include mq("tablet", max) {
+                        width: 60%;
                     }
-                    .coin-label {
-                        font-weight: bold !important;
-                        font-size: 18px !important;
-                        line-height: 22px !important;
-                        text-transform: uppercase !important;
-                        color: white;
-                        @include mq("phone", max) {
-                            display: none;
-                        }
-                    }
+                    @include mq("phone", max) {
+                        width: 100%;
+                        margin-bottom: 8px;
+                    } 
                 }
             }
             .clipboard {
@@ -327,7 +308,6 @@
                 }
             }
             .qr-code {
-                text-align: center;
                 width: 120px;
                 height: 120px;
                 margin-left: 18px;
@@ -520,7 +500,7 @@
         margin-top: 80px;
         margin-bottom: 80px;
         @include mq("tablet", max) {
-            padding: 0 0;
+            padding: 0 30px;
         }
         .current-value,
         .end-value {
@@ -538,13 +518,13 @@
                 position: relative;
                 &__value {
                     position: absolute;
-                    bottom: -33px;
-                    right: 0;
+                    bottom: -22px;
+                    right: -36px;
                     color: white;
                     font-weight: bold;
                     font-size: 11px;
                     line-height: 13px;
-                    white-space: pre-line;
+                    white-space: nowrap;
                     text-transform: uppercase;
                 }
             }
@@ -637,7 +617,7 @@
             border: 1px solid #959595;
             @include mq("phone") {
                 height: 84px;
-                padding: 15px 21px;
+                padding: 15px 18px;
             }
         }
         &-details {

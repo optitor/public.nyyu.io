@@ -316,13 +316,6 @@ ul {
     height: 23px;
 }
 
-.pe-sm-10px {
-    padding-right: 0px !important;
-    @include mq("phone") {
-        padding-right: 10px !important;
-    }
-}
-
 .text-\[\#959595\] {
     color: #959595;
 }
@@ -333,6 +326,10 @@ ul {
 
 .text-lightgrey {
     color: lightgrey !important;
+}
+
+.vh-50 {
+    height: 50vh;
 }
 
 .vh-85 {
