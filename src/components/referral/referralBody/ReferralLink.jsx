@@ -8,6 +8,7 @@ import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 import { IoMdArrowDropdown } from '@react-icons/all-files/io/IoMdArrowDropdown';
 import { AiFillCaretDown } from '@react-icons/all-files/ai/AiFillCaretDown';
 
+import InviteModal from './inviteModal';
 import { isBrowser } from '../../../utilities/auth';
 import { ROUTES } from '../../../utilities/routes';
 
@@ -38,7 +39,7 @@ const shortInviteUrl = url => {
 }
 
 const inviteText = 'Hey, I use Nyyu.io to buy NDB tokens. It has great potential! Give it a try and get an extra 10% reward on your purchase.';
-const sendingLinks = [
+export const sendingLinks = [
     // {
     //     name: 'Copy link',
     //     action: async (url) => {
@@ -81,6 +82,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     const [linkCopied, setLinkCopied] = useState(false);
     const [caretStyle, setCaretStyle] = useState({});
     const [linkModalShow, setLinkModalShow] = useState(false);
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
     const {rate, referralCode, walletConnect, commissionRate} = referrerInfo;
     
@@ -127,7 +129,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     }, []);
 
     return <div className='mx-auto px-1 mx-1 px-md-2 mx-md-2 px-lg-4 mx-lg-4'>
-        <div className='bg-gray-50 d-flex justify-content-around pb-3 pt-4'>
+        <div className='d-none d-md-flex bg-gray-50 justify-content-around pb-3 pt-4'>
             <div className='text-center'>
                 <div className="text-transparent fs-13px user-select-none">FRIEND GETS</div>
                 <div ref={tierDiv} className='text-gray fs-18px fw-600 d-flex justify-content-center border border-end-0 border-secondary position-relative'>
@@ -147,8 +149,8 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                     {tiers.length > 0 && tiers.map(tier => {
                         return (
                             <div className={`border-end border-secondary p-2 d-flex align-items-center justify-content-around`} key={tier.level}>
-                                <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-30'}`}/>
-                                <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'referral-tier-rate'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
+                                <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-20'}`}/>
+                                <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
                             </div>
                         )
                     })}
@@ -160,6 +162,32 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                     <div className="txt-baseprice fs-13px position-absolute" style={{top: '-34px', right: '-16px', width: '120px'}}>FRIEND GETS</div>
                     10%
                 </div>
+            </div>
+        </div>
+        <div className='d-block d-md-none text-white text-center'>
+            <div className="d-flex justify-content-around bg-gray-50 py-3 mb-2">
+                <div className='me-4'>
+                    <div className='opacity-40'>You get</div>
+                    <div className='fw-600 fs-24px'>{rate}%</div>
+                </div>
+                <div className='ms-4'>
+                    <div className='opacity-40'>Friend gets</div>
+                    <div className='fw-600 fs-24px'>10%</div>
+                </div>
+            </div>
+            <div className="bg-gray-50 row border border-end-0 border-secondary mx-0">
+                {tiers.length > 0 && tiers.map(tier => {
+                    return (
+                        <div className={`col-2 border-end border-secondary p-2 d-flex align-items-center justify-content-center`} key={tier.level}>
+                            <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`me-1 ${commissionRate[tier.level] === rate ? '':'opacity-20'}`}/>
+                            <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
+                        </div>
+                    )
+                })}
+            </div>
+            <div className='d-flex justify-content-between mt-2'>
+                <div></div>
+                <Link to={ROUTES.profile} className='fs-14px txt-green cursor-pointer'>Level up</Link>
             </div>
         </div>
         <div className='row text-white'>
@@ -188,55 +216,70 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
         </div>
         <div className="row text-white pt-3 mb-3">
             <div className='pb-1 fw-13px fw-400'>Referral link</div>
-            <div className='col-12'>
-                <div className='bg-white text-black p-3 position-relative'>
+            <div className='col-12 d-flex'>
+                <div className='bg-white text-black p-3 position-relative flex-fill'>
                     {shortInviteUrl(`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`)}
                     <CopyToClipboard 
                         text={`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`}
                         onCopy={handleLinkCopy}
                     >
-                        <RiFileCopyLine className='position-absolute' size='1.4em' style={{top: '16px', right: '116px'}} color={linkCopied ? 'green' : 'black'}/>
+                        <RiFileCopyLine className='position-absolute' size='1.4em' style={{top: '16px', right: '16px'}} color={linkCopied ? 'green' : 'black'}/>
                     </CopyToClipboard>
-                    <div className='bg-green position-absolute share position-relative cursor-pointer' onClick={onChangeModalShow}>
-                        <span className='text-white fs-16px fw-600' >Share</span>&nbsp;<IoMdArrowDropdown color='white'/>
-                        <div className={`bg-white px-3 py-1 position-absolute ${linkModalShow ? 'd-block':'d-none'}`} style={{top: '110%', right: '0px', width: '200px'}}>
-                            {sendingLinks.map((item, key) => {
-                                return (
-                                    <div key={key}>
-                                        {item.action === undefined ? 
-                                        <a 
-                                            href={item.link(`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`)}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={`py-2 text-black fs-14px fw-400 cursor-pointer d-block
-                                                ${key === (sendingLinks.length - 1) ? '':'border-bottom'}`}
-                                        >
-                                            {item.name}
-                                        </a> : 
-                                        <span
-                                            className={`py-2 text-black fs-14px fw-400 cursor-pointer d-block
+                </div>
+                <div className='d-none d-md-block bg-green share position-relative cursor-pointer' onClick={onChangeModalShow}>
+                    <span className='text-white fs-16px fw-600' >Share</span>&nbsp;<IoMdArrowDropdown color='white'/>
+                    <div className={`bg-white px-3 py-1 position-absolute ${linkModalShow ? 'd-block':'d-none'}`} style={{top: '110%', right: '0px', width: '200px'}}>
+                        {sendingLinks.map((item, key) => {
+                            return (
+                                <div key={key}>
+                                    {item.action === undefined ? 
+                                    <a 
+                                        href={item.link(`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`py-2 text-black fs-14px fw-400 cursor-pointer d-block
                                             ${key === (sendingLinks.length - 1) ? '':'border-bottom'}`}
-                                            onClick={() => {
-                                            setLinkModalShow(false); 
-                                            item.action(`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`)
-                                        }}>
-                                            {item.name}
-                                        </span>}
-                                    </div>
-                                )
-                            })}
-                        </div>
+                                    >
+                                        {item.name}
+                                    </a> : 
+                                    <span
+                                        className={`py-2 text-black fs-14px fw-400 cursor-pointer d-block
+                                        ${key === (sendingLinks.length - 1) ? '':'border-bottom'}`}
+                                        onClick={() => {
+                                        setLinkModalShow(false); 
+                                        item.action(`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`)
+                                    }}>
+                                        {item.name}
+                                    </span>}
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
         </div>
-        <div className='text-center pt-3'>
-            <button className='text-white bg-transparent border border-white py-2 px-5 fw-bold fs-20px'><a 
+        <div className='d-none d-md-block text-center pt-3'>
+            <button className='text-white bg-transparent border border-white referral-button py-2 fw-bold fs-20px'><a 
                 href={`https://mail.google.com/mail/u/0/?fs=1&su=${encodeURIComponent('NDB Invitation')}&body=${generateEmailLink()}&tf=cm`}
                 target='_blank'
                 rel="noopener noreferrer"
                 >INVITE VIA EMAIL</a></button>
         </div>
+        <div className='d-block d-md-none text-center pt-3'>
+            <button 
+                onClick={() => setIsInviteModalOpen(true)}
+                className='text-white bg-transparent border border-white referral-button py-2 fw-bold fs-20px'
+            >INVITE FRIENDS
+            </button>
+        </div>
+        {isInviteModalOpen && 
+            <InviteModal 
+                isOpen={isInviteModalOpen} 
+                setIsOpen={setIsInviteModalOpen} 
+                ariaHideApp={false}
+                referralCode={referralCode}
+                inviteText={inviteText}
+            />}
     </div>
 }
 

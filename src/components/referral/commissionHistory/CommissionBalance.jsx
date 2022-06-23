@@ -40,14 +40,14 @@ const CommissionBalance = ({loading, totalEarned}) => {
     }, []);
 
     return <div className='text-white bg-gray-50 px-3 py-3'>
-        <div className='d-flex justify-content-between'>
-            <div className='fs-12px txt-disable-gray'>Total Earned From Friends (NDB) &nbsp;&nbsp;
+        <div className='d-flex justify-content-between fs-17px'>
+            <div className='txt-disable-gray'>Total Earned&nbsp;&nbsp;
                 {visible ? 
                     <AiFillEye className='cursor-pointer' size='1.6em' onClick={() => setVisible(false)}/> : 
                     <AiFillEyeInvisible className='cursor-pointer' size='1.6em' onClick={() => setVisible(true)}/> 
                 }
             </div>
-            <div className='ms-auto fs-13px'>
+            <div className='ms-auto'>
                 <span className={`me-1 cursor-pointer ${currentEquity === 'BTC' ? 'text-white':'txt-disable-gray'}`} onClick={() => onChangeEquity('BTC')} onKeyDown={() => onChangeEquity('BTC')}>BTC</span>
                 <span className='txt-disable-gray'>|</span>
                 <span className={`ms-1 cursor-pointer ${currentEquity === 'USD' ? 'text-white':'txt-disable-gray'}`} onClick={() => onChangeEquity('USD')} onKeyDown={() => onChangeEquity('USD')}>USD</span>
@@ -55,13 +55,13 @@ const CommissionBalance = ({loading, totalEarned}) => {
         </div>
         <div className='mt-2'>
             {visible ? 
-                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <span className='fs-24px fw-600'>{totalEarned}</span>} <span className="fs-13px">NDB</span></> : 
+                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <span className='fs-30px fw-600'>{totalEarned}</span>} <span className="fs-22px">NDB</span></> : 
                 <span className='fs-24px text-white'>********</span>
             }
         </div>
         <div className='fs-14px text-[#959595] mt-4 mb-2'>
             {visible ? 
-                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <span className='text-[#959595]'>~ {equityBalance}</span>} {currentEquity.toUpperCase()}</> : 
+                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <span className='text-[#959595] fs-15px'>~ {equityBalance}</span>} {currentEquity.toUpperCase()}</> : 
                 <span className='fs-14px txt-disable-gray'>********</span>
             }
             
