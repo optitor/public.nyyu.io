@@ -224,7 +224,7 @@ const Singup = () => {
                             disabled={loading}
                         >
                             <div
-                                className={`${loading ? "opacity-1" : "opacity-0"}`}
+                                className={`${loading ? "opacity-100" : "opacity-0"}`}
                             >
                                 <CustomSpinner />
                             </div>

@@ -6,8 +6,9 @@ export default function Avatar() {
     const { avatar } = useSelector(state => state.auth?.user?? {});
     const selected = avatar?.selected;
     const hairColor = avatar?.hairColor;
+    const skinColor = avatar?.skinColor;
 
     const avatarSet = JSON.parse(selected ?? "[]")
 
-    return <AvatarImage avatar={{ avatarSet, hairColor }} />
+    return <AvatarImage avatar={{ avatarSet, hairColor, skinColor }} />
 }

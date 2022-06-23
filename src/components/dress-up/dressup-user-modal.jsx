@@ -2,12 +2,13 @@ import React, { useState, useEffect, useReducer } from "react"
 import { useSelector } from "react-redux"
 import _ from "lodash"
 import Modal from "react-modal"
+import Select from "react-select"
 import parse from "html-react-parser"
 import styled from "styled-components"
 import { DressupData } from "../../utilities/dressup-data"
-import { CloseIcon, EmptyAvatar } from "../../utilities/imgImport"
+import { CloseIcon, EmptyAvatar, EmptyBlackAvatar } from "../../utilities/imgImport"
 import DressupHorizontalList from "./dressup-user-horizontal-list"
-import { hairColors } from "./dressup-data"
+import { hairColors, SkinColors } from "./dressup-data"
 import { Tab, TabList } from "react-tabs";
 
 const init = {
@@ -23,6 +24,8 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const avatarComponents = useSelector((state) => state.avatarComponents)
     const selected = useSelector((state) => state.auth?.user?.avatar?.selected)
     const hairColor = useSelector((state) => state.auth?.user?.avatar?.hairColor)
+    const skinColor = useSelector((state) => state.auth?.user?.avatar?.skinColor)
+
 
     let { loaded, hairStyles, facialStyles, expressions, hats, others } = avatarComponents
     // Convert the mapKey Object to the array.
@@ -87,6 +90,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
     const selectedHat = state.hats?.index ?? 0
     const selectedExpression = state.expressions?.index ?? 0
     const selectedOther = state.others?.index ?? 0
+    const [selectedSkinColor, setSelectedSkinColor] = useState(skinColor === 'black'? SkinColors[1]: SkinColors[0]);
 
     const saveButtonActive =
         state.hairStyles?.updatable &&
@@ -126,7 +130,7 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                     <div className="row">
                         <div className="profile">
                             <div className="image_div">
-                                <img src={EmptyAvatar} alt="back" />
+                                <img src={selectedSkinColor.value === 'black' ? EmptyBlackAvatar: EmptyAvatar} alt="back" />
                                 {loaded && (
                                     <>
                                         <Hair
@@ -178,6 +182,17 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
                                     </>
                                 )}
                             </div>
+                        </div>
+                        <div>
+                            <p className="w-50 m-auto mb-1 fw-bold">SKIN COLOR</p>
+                            <Select
+                                className='black_input w-50 m-auto'
+                                value={selectedSkinColor}
+                                onChange={selected => setSelectedSkinColor(selected)}
+                                options={SkinColors}
+                                styles={customSelectStyles}
+                                isSearchable={false}
+                            />
                         </div>
                         <div className="d-none d-sm-block">
                             <div className="dress-up-modal-sections-list">
@@ -310,3 +325,50 @@ const Hair = styled.div`
         }};
     }
 `
+
+const customSelectStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: "white",
+        backgroundColor: state.isSelected ? "#23c865" : undefined,
+        fontSize: 14,
+        borderBottom: "1px solid dimgrey",
+        cursor: "pointer",
+        ":hover": {
+            backgroundColor: "inherit",
+        },
+    }),
+    control: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "none",
+        borderRadius: 0,
+        height: 40,
+        cursor: "pointer",
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+        borderRadius: 0,
+    }),
+    menuList: (provided) => ({
+        ...provided,
+        margin: 0,
+        padding: 0,
+        borderRadius: 0,
+    }),
+    valueContainer: (provided) => ({
+        ...provided,
+        padding: 0,
+    }),
+    singleValue: (provided) => ({
+        ...provided,
+        color: "white",
+        marginLeft: 10,
+    }),
+    placeholder: (provided) => ({
+        ...provided,
+        color: "dimgrey",
+    }),
+};

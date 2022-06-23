@@ -133,7 +133,7 @@ export default function DepositMissingModal({ isOpen, setIsOpen }) {
                             >
                                 <div
                                     className={`${
-                                        loading ? "opacity-1" : "opacity-0"
+                                        loading ? "opacity-100" : "opacity-0"
                                     }`}
                                 >
                                     <CustomSpinner />

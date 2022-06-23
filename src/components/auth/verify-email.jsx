@@ -99,7 +99,7 @@ const VerifyEmail = ({ email }) => {
                         type="submit"
                         className="btn-primary w-100 text-uppercase mt-5 d-flex align-items-center justify-content-center"
                     >
-                        <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                        <div className={`${loading ? "opacity-100" : "opacity-0"}`}>
                             <CustomSpinner />
                         </div>
                         <div className={`${loading ? "ms-3" : "pe-4"}`}>Confirm Code</div>

@@ -121,7 +121,7 @@ const VerifyMutliFA = ({
                         onClick={confirmCodeClick}
                     >
                         <div
-                            className={`${pending ? "opacity-1" : "opacity-0"}`}
+                            className={`${pending ? "opacity-100" : "opacity-0"}`}
                         >
                             <CustomSpinner />
                         </div>

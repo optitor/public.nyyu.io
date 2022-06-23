@@ -172,7 +172,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                                     <div
                                         className={`${
                                             confirmationLoading
-                                                ? "opacity-1"
+                                                ? "opacity-100"
                                                 : "opacity-0"
                                         }`}
                                     >

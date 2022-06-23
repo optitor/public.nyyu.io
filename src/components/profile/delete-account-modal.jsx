@@ -91,7 +91,7 @@ export default function DeleteAccountModal({
                                 className="btn-primary d-flex align-items-center justify-content-center"
                                 onClick={deleteAccount}
                             >
-                                <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
+                                <div className={`${pending ? "opacity-100" : "opacity-0"}`}>
                                     <CustomSpinner />
                                 </div>
                                 <div className={`${pending ? "ms-3" : "pe-4"}`}>Confirm</div>

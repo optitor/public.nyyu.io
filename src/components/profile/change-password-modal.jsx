@@ -135,7 +135,7 @@ export default function ProfileChangePasswordModal({
                         onClick={changeUserPassword}
                     >
                         <div
-                            className={`${pending ? "opacity-1" : "opacity-0"}`}
+                            className={`${pending ? "opacity-100" : "opacity-0"}`}
                         >
                             <CustomSpinner />
                         </div>

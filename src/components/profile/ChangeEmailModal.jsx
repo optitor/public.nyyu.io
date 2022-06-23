@@ -138,7 +138,7 @@ export default function ChangeEmailModal({ isOpen, setIsOpen }) {
                                     <div
                                         className={`mt-auto ${
                                             loadingConfirmation
-                                                ? "opacity-1"
+                                                ? "opacity-100"
                                                 : "opacity-0"
                                         }`}
                                     >

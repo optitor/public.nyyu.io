@@ -706,7 +706,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                 onClick={() => setCurrentStep(3)}
                                 disabled={!transferAmount || Number(transferAmountToFiat) < MIN_VALUE}
                             >
-                                <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                <div className={`${pending ? "opacity-100" : "opacity-0"} d-flex`}>
                                     <CustomSpinner />
                                 </div>
                                 <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
@@ -733,7 +733,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     onClick={generate_Withdraw_Code}
                                     disabled={pending}
                                 >
-                                    <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                    <div className={`${pending ? "opacity-100" : "opacity-0"} d-flex`}>
                                         <CustomSpinner />
                                     </div>
                                     <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
@@ -852,7 +852,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     onClick={generate_Withdraw_Code}
                                     disabled={pending}
                                 >
-                                    <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                    <div className={`${pending ? "opacity-100" : "opacity-0"} d-flex`}>
                                         <CustomSpinner />
                                     </div>
                                     <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
@@ -892,7 +892,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     onClick={handleWithdrawRequest}
                                     disabled={pending || confirmCode.length < 6}
                                 >
-                                    <div className={`${pending ? "opacity-1" : "opacity-0"} d-flex`}>
+                                    <div className={`${pending ? "opacity-100" : "opacity-0"} d-flex`}>
                                         <CustomSpinner />
                                     </div>
                                     <div className={`${pending ? "ms-3" : "pe-4"}`}>CONFIRM</div>
