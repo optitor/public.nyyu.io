@@ -69,6 +69,8 @@ const SelectFigure = () => {
                         id: index,
                         avatar: {
                             avatarSet: item.avatarSet,
+                            hairColor: item.hairColor,
+                            skinColor: item.skinColor,
                         },
                         firstname: item?.fname,
                         lastname: item?.surname,

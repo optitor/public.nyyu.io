@@ -65,6 +65,7 @@ export default function ProfileChangePasswordModal({
             onRequestClose={() => setIsPasswordModalOpen(false)}
             className="pwd-modal"
             overlayClassName="pwd-modal__overlay"
+            ariaHideApp={false}
         >
             <div className="pwd-modal__header">
                 change your password

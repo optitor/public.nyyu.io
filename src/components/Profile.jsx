@@ -464,16 +464,19 @@ const Profile = () => {
                             </div>
                         </div>
                     </section>
+                    {isPasswordModalOpen &&
                     <ProfileChangePasswordModal
                         isPasswordModalOpen={isPasswordModalOpen}
                         setIsPasswordModalOpen={setIsPasswordModalOpen}
-                    />
+                    />}
+                    {isDeleteAccountModalOpen &&
                     <DeleteAccountModal
                         isDeleteAccountModalOpen={isDeleteAccountModalOpen}
                         setIsDeleteAccountModalOpen={
                             setIsDeleteAccountModalOpen
                         }
-                    />
+                    />}
+                    {isDressUpModalOpen && 
                     <DressupModal
                         setIsModalOpen={setIsDressUpModalOpen}
                         isModalOpen={isDressUpModalOpen}
@@ -482,7 +485,7 @@ const Profile = () => {
                                 variables: { ...res }
                             })
                         }}
-                    />
+                    />}
                 </main>
             </>
         );
