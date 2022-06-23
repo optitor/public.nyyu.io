@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 
+import ReferralResponse from './response';
+import CommissionHistory from '../commissionHistory/CommissionHistory';
 import ReferralWalletConnector from './ReferralWalletConnector';
 import ReferralLink from './ReferralLink';
 
@@ -10,6 +12,9 @@ import { SPINNER } from '../../../utilities/imgImport';
 
 const ReferralBody = () => {
     
+    // responsive status
+    const [view, setView] = useState('balance');
+
     // Referral status, 
     //1 - wallet is not connected, 2 - activated
     const [referrer, setReferrer] = useState(null);
@@ -40,25 +45,29 @@ const ReferralBody = () => {
     }
 
     return (
-        <>     
-            <div className='col-12 col-md-8 p-1 p-lg-5'>
-                {loading ? 
-                    <div className='text-center pt-5'>
-                        <img src={SPINNER} width='34px' height='34px' />
-                    </div>: 
-                    <><div className='d-flex align-items-center flex-column my-5'>
-                        <h3 className='fw-bold'>INVITE FRIENDS</h3>
-                        <h6 className='fs-16px'>Earn commission when your friends purchase NDB</h6>
-                    </div>
-                    {(referrer === null || referrer.walletConnect === null || action === UPDATE_ACTION) && 
-                        <ReferralWalletConnector 
-                            referrerInfo={referrer} 
-                            setReferrer={onChangeReferrer} 
-                            action={action} />}
-                    {(referrer && referrer.walletConnect && action === ACTIVE_ACTION) && <ReferralLink referrerInfo={referrer} onChangeWallet={onChangeWallet}/>}</>
-                }
-            </div>
-        </>
+        <div className='row'>     
+            <ReferralResponse onChangeScreen={setView}/> 
+            <CommissionHistory shown={(view === 'all' || view === 'balance')}/>
+            {(view === 'all' || view === 'setting') && 
+                <div className='col-12 col-md-7 col-lg-8 px-1 p-lg-5 py-4'>
+                    {loading ? 
+                        <div className='text-center pt-5'>
+                            <img src={SPINNER} width='34px' height='34px' />
+                        </div>: 
+                        <><div className='d-none d-md-flex align-items-center flex-column my-4 my-md-5'>
+                            <h3 className='fw-bold'>INVITE FRIENDS</h3>
+                            <h6 className='fs-16px'>Earn commission when your friends purchase NDB</h6>
+                        </div>
+                        {(referrer === null || referrer.walletConnect === null || action === UPDATE_ACTION) && 
+                            <ReferralWalletConnector 
+                                referrerInfo={referrer} 
+                                setReferrer={onChangeReferrer} 
+                                action={action} />}
+                        {(referrer && referrer.walletConnect && action === ACTIVE_ACTION) && <ReferralLink referrerInfo={referrer} onChangeWallet={onChangeWallet}/>}</>
+                    }
+                </div>
+            }
+        </div>
     )
 }
 
