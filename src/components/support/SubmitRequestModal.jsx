@@ -3,7 +3,6 @@ import { useState } from "react";
 import Modal from "react-modal";
 
 import CustomSpinner from "../common/custom-spinner";
-import { FormInput } from "../common/FormControl";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import { CloseIcon } from "../../utilities/imgImport";
 

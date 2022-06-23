@@ -31,17 +31,20 @@ div.bg-gray-50 {
 .referral-history {
     height: 100vh;
     @include mq("tablet", max) {
-        height: 70vh;
+        height: auto;
     }
 }
 
 .referral-history-list {
     height: 100vh;
     @include mq("tablet", max) {
-        height: 80vh;
+        height: auto;
     }
 }
 
-.referral-tier-rate {
-    color: #7C7C7C;
+.referral-button {
+    width: 100%;
+    @include mq("tablet") {
+        width: 50%;
+    }
 }
