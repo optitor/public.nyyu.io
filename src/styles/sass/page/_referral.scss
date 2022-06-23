@@ -11,6 +11,10 @@ div.bg-gray-50 {
     right: 0px;
     height: 100%;
     padding: 17px;
+    transition: background-color .15s ease-in-out;
+    &:hover {
+        background-color: #2ad76f;
+    }
 }
 
 .border-response {
@@ -40,7 +44,8 @@ div.bg-gray-50 {
 
 .referral-button {
     width: 100%;
-    @include mq("tablet") {
-        width: 50%;
+    @include mq("laptop") {
+        width: 360px;
+        height: 56px;
     }
 }

@@ -33,14 +33,12 @@
             &__name {
                 display: flex;
                 align-items: center;
+                justify-content: center;
                 margin-top: 24px;
                 font-weight: 600;
                 font-size: 18px;
                 line-height: 23px;
                 color: white;
-                @include mq("phone", max) {
-                    justify-content: center;
-                }
             }
             .silver-cnt {
                 font-weight: 600;
@@ -95,7 +93,7 @@
         }
     }
     &__right {
-        padding: 0 32px;
+        padding: 0 32px 20px;
         @include mq("tablet", max) {
             padding: 0;
         }
