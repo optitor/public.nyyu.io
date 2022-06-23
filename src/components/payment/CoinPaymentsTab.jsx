@@ -436,6 +436,7 @@ const customSelectWithIconStyles = {
     input: (provided) => ({
         ...provided,
         position: "absolute",
+        color: "transparent",
     }),
     option: (provided, state) => ({
         ...provided,

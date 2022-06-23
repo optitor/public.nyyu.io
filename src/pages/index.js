@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from "react"
 import { Link, navigate } from "gatsby"
+import { useQuery } from "@apollo/client"
+import { useQueryParam, StringParam } from "use-query-params";
+
 import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
 import Header from "../components/header"
+import Footer from "../components/footer"
 import PaypalRedirect from '../components/payment/PaypalRedirect'
 import { numberWithCommas } from "../utilities/number"
 import { useAuth } from "../hooks/useAuth"
 import { ROUTES, isRedirectUrl } from "../utilities/routes"
 import ReferToFriendsModal from "../components/home/refer-to-friends-modal"
 import Loading from "../components/common/FadeLoading"
-import { useQuery } from "@apollo/client"
 import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
+import { isBrowser } from "../utilities/auth";
 
 const IndexPage = () => {
+   
     // Containers
     const auth = useAuth()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [loading, setLoading] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
+    
+    const [referralCode] = useQueryParam("referralCode", StringParam);
 
     // For catching the redirect Url from Paypal.
     useEffect(() => {
@@ -33,9 +40,10 @@ const IndexPage = () => {
             setCurrentRound(data?.getCurrentRound)
             return setLoading(false)
         },
-        onError: (error) => console.log(error),
-        errorPolicy: "ignore",
-        fetchPolicy: "network-only",
+        onError: (err) => {
+            console.log(err.message);
+            setLoading(false);
+        },
     })
 
     const auctionRound = currentRound?.auction?.round
@@ -52,6 +60,19 @@ const IndexPage = () => {
     const presaleStart = currentRound?.presale?.startedAt
     const presaleEnd = currentRound?.presale?.endedAt
     
+    if(!isBrowser) return null;
+    // checking 
+    if(referralCode !== undefined) {
+        // store referral code
+        localStorage.setItem("referralCode", referralCode);
+
+        // redirect to signup page
+        navigate(ROUTES.signUp);
+    } else {
+        // debugging
+        localStorage.removeItem("referralCode");
+    }
+
     // Methods
     const placeABidButtonClick = () =>
         auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn)
@@ -92,7 +113,7 @@ const IndexPage = () => {
                 <p className="token-left text-uppercase d-sm-block d-none">
                     tokens left in this round
                 </p>
-                <div className="cta mt-2 mt-sm-0 px-1 px-sm-0">
+                <div className="cta mt-2 mt-sm-0 px-3 px-sm-0">
                     <button
                         className="btn btn-green white-space-nowrap"
                         onClick={placeABidButtonClick}
@@ -208,7 +229,7 @@ const IndexPage = () => {
                 <p className="token-left text-uppercase d-sm-block d-none">
                     tokens left in this round
                 </p>
-                <div className="cta mt-2 mt-sm-0 px-1 px-sm-0">
+                <div className="cta mt-2 mt-sm-0 px-3 px-sm-0">
                     <button
                         className="btn btn-green white-space-nowrap"
                         onClick={placeABidButtonClick}
@@ -345,6 +366,7 @@ const IndexPage = () => {
                         </div>
                     </div>
                 </section>
+                <Footer />
             </main>
         </div>
     )

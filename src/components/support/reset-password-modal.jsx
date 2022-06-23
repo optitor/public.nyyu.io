@@ -148,6 +148,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                         label="Email verification code"
                                         value={verifyCode}
                                         onChange={(e) => setVerifyCode(e.target.value)}
+                                        autoComplete='off'
                                         placeholder="Enter code"
                                     />
                                 </div>

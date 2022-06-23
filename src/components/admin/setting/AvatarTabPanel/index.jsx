@@ -5,7 +5,6 @@ import Loading from './../../shared/Loading';
 import PaginationBar from './../../PaginationBar';
 import { fetch_Avatars } from './../../../../redux/actions/avatarAction';
 
-
 const AvatarTabPanel = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);

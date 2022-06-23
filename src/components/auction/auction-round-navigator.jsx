@@ -46,6 +46,7 @@ export default function AuctionRoundNavigator() {
                         <button
                             className="btn text-light cursor-pointer"
                             onClick={goBack}
+                            disabled={!canGoBack}
                         >
                             <Icon icon='ooui:previous-ltr' />
                         </button>
@@ -58,6 +59,7 @@ export default function AuctionRoundNavigator() {
                         <button
                             className="btn text-light cursor-pointer"
                             onClick={goNext}
+                            disabled={!canGoNext}
                         >
                             <Icon icon='ooui:previous-rtl'/>
                         </button>

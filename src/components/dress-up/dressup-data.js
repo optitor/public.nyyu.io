@@ -6,6 +6,11 @@ export const hairColors = [
     '#333333'
 ];
 
+export const SkinColors = [
+    { label: 'White', value: 'white' },    
+    { label: 'Black', value: 'black' },
+];
+
 export const defaultComponents = {
     hairStyle: {
         groupId: 'hairStyle',

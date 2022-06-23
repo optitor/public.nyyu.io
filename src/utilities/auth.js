@@ -57,6 +57,7 @@ export const setLoggedOutTime = () => {
 }
 
 const checkInMemoryAuthToken = () => {
+  if (!isBrowser) return
   if (inMemoryAuthToken === inMemoryAuthTokenDefault) {
     const authToken = localStorage.getItem(ACCESS_TOKEN)
     if (!authToken) return

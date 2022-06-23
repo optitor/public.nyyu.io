@@ -8,7 +8,10 @@
         background: #1e1e1e;
         height: calc(100vh - 100px);
         @include mq("tablet", max) {
-            height: calc(100vh - 75px);
+            height: calc(100vh - 175px);
+        }
+        @include mq("phone", max) {
+            height: auto;
         }
         .left-part {
             .tokens-lower-part {
@@ -199,6 +202,7 @@
 .ReactModal__Overlay--before-close {
     opacity: 0;
 }
+
 .token {
     &-left {
         font-size: 24px;

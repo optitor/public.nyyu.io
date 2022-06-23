@@ -18,7 +18,7 @@ const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
 const REFRESH_TIME = 30 * 1000;
 const obscureValueString = "******";
 
-const Asset = ({ item, hideAsset }) => {
+const Asset = ({ item, isHideAsset }) => {
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
@@ -38,14 +38,14 @@ const Asset = ({ item, hideAsset }) => {
                     className="coin-price fw-bold"
                     displayType={"text"}
                     thousandSeparator={true}
-                    renderText={(value, props) => <p {...props}>{hideAsset? obscureValueString: value + ' ' + item.tokenSymbol}</p>}
+                    renderText={(value, props) => <p {...props}>{isHideAsset? obscureValueString: value + ' ' + item.tokenSymbol}</p>}
                 />
                 <NumberFormat
                     value={Number(item.balance  * currencyRate).toFixed(2)}
                     className="coin-percent"
                     displayType={"text"}
                     thousandSeparator={true}
-                    renderText={(value, props) => <p {...props}>{hideAsset? obscureValueString: value + ' ' + currency.value}</p>}
+                    renderText={(value, props) => <p {...props}>{isHideAsset? obscureValueString: value + ' ' + currency.value}</p>}
                 />
             </td>
         </tr>
@@ -268,7 +268,7 @@ export default function InternalWallet() {
                         <WithdrawModal
                             showModal={isWithdrawOpen}
                             setShowModal={setIsWithdrawOpen}
-                            assets = {myAssets}
+                            assets = {myAssetsWithBalance}
                         />
                     )}
                     {isDepositOpen && (
@@ -289,7 +289,7 @@ export default function InternalWallet() {
                             </div>
                         )}
                         {initLoaded.current && _.map(_.orderBy(myAssetsWithBalance, ["balance", "tokenSymbol"], ["desc", "asc"]), (item) => (
-                            <Asset item={item} hideAsset={hideValues} key={item.tokenName} />
+                            <Asset item={item} isHideAsset={hideValues} key={item.tokenName} />
                         ))}
                         {initLoaded.current && Object.values(myAssetsWithBalance).length === 0 && (
                             <div className="text-center fw-500 text-uppercase text-light">

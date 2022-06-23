@@ -85,6 +85,7 @@ export const CREATE_NEW_AVATAR = gql`
         $avatarSet: [AvatarSetInput]
         $factsSet: [FactsInput]
         $hairColor: String
+        $skinColor: String
         $details: String
     ) {
         createNewAvatar(
@@ -94,6 +95,7 @@ export const CREATE_NEW_AVATAR = gql`
             avatarSet: $avatarSet
             factsSet: $factsSet
             hairColor: $hairColor
+            skinColor: $skinColor
             details: $details
         ) {
             id
@@ -110,6 +112,7 @@ export const UPDATE_AVATAR_PROFILE = gql`
         $avatarSet: [AvatarSetInput]
         $factsSet: [FactsInput]
         $hairColor: String
+        $skinColor: String
         $details: String
     ) {
         updateAvatarProfile(
@@ -120,6 +123,7 @@ export const UPDATE_AVATAR_PROFILE = gql`
             avatarSet: $avatarSet
             factsSet: $factsSet
             hairColor: $hairColor
+            skinColor: $skinColor
             details: $details
         ) 
     }

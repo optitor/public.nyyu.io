@@ -419,7 +419,10 @@ const Profile = () => {
                                             </TabPanel>
                                             <TabPanel>
                                                 <>
-                                                    <div className="user-info_avatar" style={{opacity: loading? 0.5: 1}}>
+                                                    <div className="user-info_avatar cursor-pointer" style={{opacity: loading? 0.5: 1}}
+                                                        onClick={() => setIsDressUpModalOpen(true)}
+                                                        onKeyDown={() => setIsDressUpModalOpen(true)}
+                                                    >
                                                         <Avatar />
                                                     </div>
                                                 </>

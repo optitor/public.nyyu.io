@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Zendesk from "react-zendesk";
 import { useMutation } from '@apollo/client';
 import Header from "./header";
 import {
@@ -316,7 +315,6 @@ const FAQ = () => {
                         setIsOpen={setIsDepositMissingModalOpen}
                     />}
                 </section>
-                <Zendesk defer zendeskKey={process.env.GATSBY_ZENDESK_KEY} {...setting} />
                 <AlarmModal />
             </main>
         </>

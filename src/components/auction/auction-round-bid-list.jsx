@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { useSelector } from "react-redux"
 import _ from "lodash"
 import { useQuery } from "@apollo/client"
@@ -10,7 +10,7 @@ import AuctionList from "../common/AuctionList"
 
 import { GET_BID, GET_CURRENT_ROUND} from "../../apollo/graphqls/querys/Auction"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graphqls/querys/Bid"
-import { GET_PRESALE_LIST_BY_ROUND } from "../../apollo/graphqls/querys/Presale"
+import { GET_PRESALE_LIST_BY_ROUND, GET_NEW_PRESALE_ORDERS } from "../../apollo/graphqls/querys/Presale"
 import { setCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
 
 export default function AuctionRoundBidList() {
@@ -29,8 +29,13 @@ export default function AuctionRoundBidList() {
         auction.getBid
     )
 
+    const lastOrderId = useMemo(() => {
+        const sortListById = _.orderBy(currentRoundBidList, ['id'], ['desc']);
+        return sortListById[0]?.id;
+    }, [currentRoundBidList]);
+
     // Webservices
-    const { startPolling, stopPolling } = useQuery(isAuction ? GET_BIDLIST_BY_ROUND : GET_PRESALE_LIST_BY_ROUND, {
+    useQuery(isAuction ? GET_BIDLIST_BY_ROUND : GET_PRESALE_LIST_BY_ROUND, {
         variables: isAuction ? {
             round: currentRoundNumber
         } : {
@@ -50,27 +55,16 @@ export default function AuctionRoundBidList() {
             setDisplayedBidList([])
             setCurrentAuctionUserExist(false)
             setCurrentUserBidData([])
-            if (!isAuction) {
-                const sortList = list.sort((a, b) => b.ndbAmount - a.ndbAmount)
-                const tempList = sortList.map(({ranking, ...item}, key) => ({
-                    ...item,
-                    ranking: key + 1
-                }))
-                setCurrentRoundBidList(tempList)
-                auction.setCurrentRoundBidList(tempList)
-            } else {
-                setCurrentRoundBidList(list)
-                auction.setCurrentRoundBidList(list)
-            }
+
+            setCurrentRoundBidList(list)
+            auction.setCurrentRoundBidList(list)
         },
         onError: (error) => console.log(error),
         fetchPolicy: "no-cache",
         errorPolicy: "ignore",
-        pollInterval: pollIntervalValue,
-        notifyOnNetworkStatusChange: true
     })
 
-    const pollingCurrentRound = useQuery(GET_CURRENT_ROUND, {
+    useQuery(GET_CURRENT_ROUND, {
         onCompleted: (data) => {
             if(data.getCurrentRound) {
                 if(data.getCurrentRound.auction) {
@@ -87,9 +81,24 @@ export default function AuctionRoundBidList() {
         onError: (error) => console.log(error),
         fetchPolicy: "no-cache",
         errorPolicy: "ignore",
+    })
+
+    const pollingBidList = useQuery(GET_NEW_PRESALE_ORDERS, {
+        variables: {
+            presaleId: optCurrentRound?.id,
+            lastOrderId
+        },
+        onCompleted: data => {
+            if (data.getNewPresaleOrders) {
+                currentRoundBidList &&  setCurrentRoundBidList([ ...currentRoundBidList, ...data.getNewPresaleOrders ]);
+            }
+        },
+        onError: (error) => console.log(error),
+        fetchPolicy: "no-cache",
+        errorPolicy: "ignore",
         pollInterval: pollIntervalValue,
         notifyOnNetworkStatusChange: true
-    })
+    });
 
     useQuery(GET_BID, {
         variables: {
@@ -114,33 +123,31 @@ export default function AuctionRoundBidList() {
             const currentUserBidInfo = currentRoundBidList?.filter(
                 (auction) => auction.userId === currentUser.id
             )[0]
-            if (currentUserBidInfo) {
-                setCurrentUserBidData(currentUserBidInfo)
-                setCurrentAuctionUserExist(true)
-                
-                if(isAuction) {
-                    const restList = currentRoundBidList?.filter(
-                        (auction) => auction.userId !== currentUser.id
-                    )
-                    setDisplayedBidList(restList)
-                } else {
-                    setDisplayedBidList(currentRoundBidList);
+            
+            if(isAuction) {
+                if (currentUserBidInfo) {
+                    setCurrentUserBidData(currentUserBidInfo)
+                    setCurrentAuctionUserExist(true)
                 }
+                const restList = currentRoundBidList?.filter(
+                    (auction) => auction.userId !== currentUser.id
+                )
+                setDisplayedBidList(restList)
             } else {
-                setDisplayedBidList(currentRoundBidList)
+                const sortList = _.orderBy(currentRoundBidList, ['ndbAmount'], ['desc']);
+                const tempList = sortList.map(({ranking, ...item}, key) => ({
+                    ...item,
+                    ranking: key + 1
+                }))
+                setDisplayedBidList(tempList);
             }
         }
     }, [currentRoundBidList, currentUser.id, isAuction])
 
     useEffect(() => {
-        if (optCurrentRound && optCurrentRound.status === 2) return startPolling(pollIntervalValue)
-        return stopPolling()
-    }, [optCurrentRound, startPolling, stopPolling])
-
-    useEffect(() => {
-        if (optCurrentRound && optCurrentRound.status === 2) return pollingCurrentRound.startPolling(pollIntervalValue)
-        return pollingCurrentRound.stopPolling()
-    }, [optCurrentRound, pollingCurrentRound]);
+        if (optCurrentRound && optCurrentRound.status === 2 && currentRoundBidList) return pollingBidList.startPolling(pollIntervalValue)
+        return pollingBidList.stopPolling()
+    }, [optCurrentRound, pollingBidList, currentRoundBidList]);
 
     // Render
     if (loadingData)

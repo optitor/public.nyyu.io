@@ -1,3 +1,10 @@
+@use "sass:math";
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 *:focus {
     outline: none;
 }
@@ -207,6 +214,12 @@ ul {
     }
 }
 
+@for $value from 0 through 100 {
+    .opacity-#{$value} {
+        opacity: #{math.div($value, 100)} !important;
+    }
+}
+
 .scale-75 {
     transform: scale(0.75, 0.75);
     @include mq("phone", min) {
@@ -326,6 +339,12 @@ ul {
 
 .text-lightgrey {
     color: lightgrey !important;
+}
+
+.text-hover-green {
+    &:hover {
+        color: $green !important;
+    }
 }
 
 .vh-50 {

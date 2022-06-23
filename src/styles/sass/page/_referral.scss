@@ -19,3 +19,28 @@ div.bg-gray-50 {
         border-right: unset;
     }
 }
+
+.text-transparent {
+    color: $transparent;
+}
+
+.referral-history {
+    height: 100vh;
+    @include mq("tablet", max) {
+        height: auto;
+    }
+}
+
+.referral-history-list {
+    height: 100vh;
+    @include mq("tablet", max) {
+        height: auto;
+    }
+}
+
+.referral-button {
+    width: 100%;
+    @include mq("tablet") {
+        width: 50%;
+    }
+}

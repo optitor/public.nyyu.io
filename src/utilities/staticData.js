@@ -10,7 +10,7 @@ import {
     WalletConnect,
 } from "./imgImport"
 import { ROUTES } from "./routes"
-export const OAUTH2_REDIRECT_URI = `https://www.nyyu.io/oauth2/redirect`
+export const OAUTH2_REDIRECT_URI = `${process.env.GATSBY_SITE_URL}/oauth2/redirect`
 
 export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
 const API_BASE_URL = process.env.GATSBY_API_BASE_URL;
@@ -507,39 +507,39 @@ export const navigationLinks = [
 export const footerLinks = [
     {
         label: "Fee",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702148482973-Fee",
     },
     {
         label: "Bug bounty",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4701682263965-Nyyu-Bug-Bounty",
     },
     {
         label: "Apply for listings",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702050460701-Apply-for-Listing",
     },
     {
-        label: "API",
-        url: "/",
-    },
-    {
-        label: "About us",
-        url: "/",
+        label: "Launchpad",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4701834986653-Apply-for-Launchpad",
     },
     {
         label: "Terms of use",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702478722973-Terms-of-Use",
     },
     {
         label: "Privacy policy",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702279624605-Privacy-Policy",
     },
     {
         label: "AML policy",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4702344288925-AML-Policy",
+    },
+    {
+        label: "About us",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4701986663709-About-us",
     },
     {
         label: "Contacts",
-        url: "/",
+        url: "https://help.nyyu.io/hc/en-gb/articles/4729648541213-How-do-I-contact-nyyu-support-",
     }
 ]
 
