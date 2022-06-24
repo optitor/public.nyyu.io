@@ -29,7 +29,7 @@ const CommissionHistory = ({shown}) => {
         }
     });
     
-    return <div className={`col-12 col-md-5 col-lg-4 py-4 px-md-2 px-lg-3 px-xl-5 border-response 
+    return <div className={`col-12 col-md-4 py-4 px-3 border-response 
                                 ${invitedList.length === 0 ? 'referral-history':'referral-history-list'}
                                 ${shown ? 'd-block':'d-none'}`}>
         <CommissionBalance loading={loading} totalEarned={totalEarned} />

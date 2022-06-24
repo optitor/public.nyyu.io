@@ -28,6 +28,10 @@ div.bg-gray-50 {
     color: $transparent;
 }
 
+.level-up {
+    color: #626161;
+}
+
 .referral-history {
     height: 100vh;
     @include mq("tablet", max) {

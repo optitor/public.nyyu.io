@@ -144,7 +144,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                             style={{top: '-3px', right: '-88%', fontSize: '10px', color: '#626161'}}
                         >
                             <button 
-                                className='bg-transparent border-0 text-decoration-underline text-[#626161]'
+                                className='bg-transparent border-0 text-decoration-underline level-up'
                                 onClick={() => dispatch({type: 'TIER_TAB'})}
                             > 
                                 Level up
@@ -153,9 +153,9 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                     </div>
                     {tiers.length > 0 && tiers.map(tier => {
                         return (
-                            <div className={`border-end border-secondary p-2 d-flex align-items-center justify-content-around`} key={tier.level}>
+                            <div className={`border-end border-secondary p-md-2 px-xl-3 py-xl-2 d-flex align-items-center justify-content-around`} key={tier.level}>
                                 <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-20'}`}/>
-                                <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
+                                <span className={`fs-16px ps-md-1 ps-xl-2 ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`}>{commissionRate[tier.level]}%</span>
                             </div>
                         )
                     })}
@@ -163,7 +163,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             </div>
             <div className='text-center'>
                 <div className="text-transparent fs-13px">FRIEND</div>
-                <div className='text-white fs-16px fw-600 border py-2 px-3 position-relative'>
+                <div className='text-white fs-16px fw-600 border py-2 px-3 px-xl-4 position-relative'>
                     <div className="txt-baseprice fs-13px position-absolute" style={{top: '-34px', right: '-16px', width: '120px'}}>FRIEND GETS</div>
                     10%
                 </div>
@@ -194,7 +194,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                 <div></div>
                 <Link to={ROUTES.profile} className='fs-14px txt-green cursor-pointer'>
                     <button 
-                        className='bg-transparent border-0 text-decoration-underline text-[#626161]'
+                        className='bg-transparent border-0 text-decoration-underline level-up'
                         onClick={() => dispatch({type: 'TIER_TAB'})}
                     > 
                         Level up
