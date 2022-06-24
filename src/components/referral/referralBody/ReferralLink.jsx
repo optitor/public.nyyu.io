@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'gatsby';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -74,7 +74,7 @@ export const sendingLinks = [
 ]
 
 const ReferralLink = ({referrerInfo, onChangeWallet}) => {
-
+    const dispatch = useDispatch();
     const tierDiv = useRef(null);
     const tiers = useSelector(state => state.tiers);
 
@@ -143,7 +143,12 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                             className='text-decoration-underline position-absolute cursor-pointer' 
                             style={{top: '-3px', right: '-88%', fontSize: '10px', color: '#626161'}}
                         >
-                            Level up
+                            <button 
+                                className='bg-transparent border-0 text-decoration-underline text-[#626161]'
+                                onClick={() => dispatch({type: 'TIER_TAB'})}
+                            > 
+                                Level up
+                            </button>
                         </Link>
                     </div>
                     {tiers.length > 0 && tiers.map(tier => {
@@ -187,7 +192,14 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             </div>
             <div className='d-flex justify-content-between mt-2'>
                 <div></div>
-                <Link to={ROUTES.profile} className='fs-14px txt-green cursor-pointer'>Level up</Link>
+                <Link to={ROUTES.profile} className='fs-14px txt-green cursor-pointer'>
+                    <button 
+                        className='bg-transparent border-0 text-decoration-underline text-[#626161]'
+                        onClick={() => dispatch({type: 'TIER_TAB'})}
+                    > 
+                        Level up
+                    </button>
+                </Link>
             </div>
         </div>
         <div className='row text-white'>
