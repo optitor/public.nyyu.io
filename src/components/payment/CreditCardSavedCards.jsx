@@ -183,8 +183,8 @@ export default function CreditCardSavedCards({
                             key={index}
                             className={`credit-card-save-cards-item mb-3 mb-sm-2 col-lg-6 col-12 ${
                                 index % 2 === 0
-                                    ? "pe-sm-2 px-0"
-                                    : "ps-sm-2 px-0"
+                                    ? "pe-lg-2 px-0"
+                                    : "ps-lg-2 px-0"
                             }`}
                         >
                             <button

@@ -120,7 +120,7 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
                 </div>
             </button>
         </div>
-        <div className='mb-4'>
+        <div className='mb-5'>
             <WalletSelector 
                 walletChanged={onWalletChanged} 
                 selectedWallet={selectedWallet}

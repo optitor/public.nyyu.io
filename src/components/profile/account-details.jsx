@@ -74,7 +74,8 @@ export default function AccountDetails({
                 </div>
                 <div className="row w-100 mx-auto change-password">
                     <div className="detail_item col-sm-4 col-md-6 br">password</div>
-                    <div className="detail_item col-sm-8 col-md-6 d-flex align-items-center justify-content-end">
+                    <div className="detail_item col-sm-8 col-md-6 d-flex align-items-center justify-content-between">
+                        <span className="d-none d-md-block">********</span>
                         <button
                             className="btn-primary change-pwd"
                             onClick={() => setIsPasswordModalOpen(true)}

@@ -117,7 +117,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                         <img src={Logo} alt="NDB Brand Logo"/>
                     </Link>
                     {auth?.isLoggedIn() && isShowNavLinks && (
-                        <div className="d-none d-md-flex justify-content-between gap-5">
+                        <div className="d-none d-lg-flex justify-content-between gap-5">
                             {navLinks.map((link, key) => {
                                 return <Link
                                     key={key}
