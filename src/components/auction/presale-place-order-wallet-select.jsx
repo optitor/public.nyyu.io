@@ -111,6 +111,7 @@ export default function PresalePlaceOrderWalletSelect() {
                 className="btn btn-outline-light rounded-0 text-uppercase w-100 fw-bold py-12px fs-20px"
                 onClick={handlePresale}
                 disabled={reqPending || !selectedWallet}
+                style={{height: 58}}
             >
                 <div className="d-flex align-items-center justify-content-center gap-3">
                     {reqPending && <CustomSpinner />}

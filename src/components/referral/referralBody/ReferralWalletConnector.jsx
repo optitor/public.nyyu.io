@@ -120,7 +120,7 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
                 </div>
             </button>
         </div>
-        <div className='mb-4'>
+        <div className='mb-5'>
             <WalletSelector 
                 walletChanged={onWalletChanged} 
                 selectedWallet={selectedWallet}
@@ -132,7 +132,7 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
                 onClick={onActivateClicked}
                 className='d-flex align-items-center justify-content-center referral-button py-2 bg-transparent text-white fw-bold border border-white fs-22px mx-auto'
             >
-                <div className={`${(activateLoading || updateLoading) ? "opacity-100": "opacity-0"}`}><CustomSpinner /></div>
+                {(activateLoading || updateLoading) ? <CustomSpinner sm={{width: '10px', height: '10px'}} />:<></>}
                 <div className={`fs-20px ${(activateLoading || updateLoading) ? 'ms-3' : 'pe-4'}`}>
                     {action === ACTIVE_ACTION && 'ACTIVATE INVITE & EARN'}
                     {action === UPDATE_ACTION && 'UPDATE'}

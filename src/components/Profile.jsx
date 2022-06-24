@@ -37,7 +37,8 @@ import { getAuthInfo } from "../redux/actions/authAction";
 import { UPDATE_AVATARSET } from "../apollo/graphqls/mutations/AvatarComponent";
 
 const Profile = () => {
-    const [tab, setTab] = useState(useSelector((state) => state.profileTab));
+    const targetTabIndex = useSelector(state => state.profileTab);
+    const [tab, setTab] = useState(targetTabIndex !== 2 ? targetTabIndex : 0);
     const dispatch = useDispatch();
     const [tabIndex, setTabIndex] = useState(tab);
     const [displayName, setDisplayName] = useState("");
@@ -212,7 +213,7 @@ const Profile = () => {
                         setCurrentProfileTab={setCurrentProfileTab}
                         setTab={setTab}
                     />
-                    <section className="container position-relative h-100">
+                    <section className="container position-relative">
                         <div className="row">
                             <div className="col-lg-3 profile-page__left border-light border-0 border-end">
                                 <div className="user-info">
@@ -286,7 +287,7 @@ const Profile = () => {
                             <div className="col-lg-9 profile-page__right">
                                 {tabIndex === 0 && (
                                     <>
-                                        <Tabs className="detail-tab">
+                                        <Tabs defaultIndex={targetTabIndex === 2 ? 1 : 0} className="detail-tab">
                                             <TabList>
                                                 <Tab>
                                                     <div className="pt-3">

@@ -136,6 +136,11 @@
             @include mq("phone") {
                 padding-right: 20px;
             }
+            .profile-value button{
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
             table {
                 tbody {
                     @include custom-scroll(250px);
@@ -274,7 +279,6 @@
                 }
                 &__tab-panel {
                     &--selected {
-                        height: 100%;
                         border-top: 2px solid #464646;
                     }
                     .airdrop-link {
