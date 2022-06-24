@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { isBrowser } from '../../../utilities/auth';
+import { useReferral } from '../ReferralContext';
 
-const ReferralResponse = ({onChangeScreen}) => {
+const ReferralResponse = () => {
     
-    const [view, setView] = useState('');
-
+    const {view, setView, setXl} = useReferral();
     const onViewClick = (viewMode) => {
         setView(viewMode);
-        onChangeScreen(viewMode);
     }
 
     useEffect(() => {
@@ -15,13 +14,19 @@ const ReferralResponse = ({onChangeScreen}) => {
         if(!isBrowser) return;
         
         const handleResize = () => {
-            if(window.innerWidth <= 769) {
+            if(window.innerWidth <= 769 && window.wide === 'all') {
                 setView('balance');
-                onChangeScreen('balance');
+                window.wide = 'balance';
             }
-            if(window.innerWidth > 769) {
+            if(window.innerWidth > 769 && window.wide !== 'all') {
                 setView('all');
-                onChangeScreen('all');
+                window.wide = 'all';
+            }
+
+            if(window.innerWidth > 1200) {
+                setXl(true);
+            } else {
+                setXl(false);
             }
         }
         handleResize();
