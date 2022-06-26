@@ -128,7 +128,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
         return () => window.removeEventListener('click', hideLinkModal);
     }, []);
 
-    return <div className='mx-auto px-1 mx-1 px-md-2 mx-md-2 px-lg-4 mx-lg-4'>
+    return <div>
         <div className='d-none d-md-flex bg-gray-50 justify-content-around pb-3 pt-4'>
             <div className='text-center'>
                 <div className="text-transparent fs-13px user-select-none">FRIEND GETS</div>
@@ -235,7 +235,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                         text={`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`}
                         onCopy={handleLinkCopy}
                     >
-                        <RiFileCopyLine className='position-absolute' size='1.4em' style={{top: '16px', right: '16px'}} color={linkCopied ? 'green' : 'black'}/>
+                        <RiFileCopyLine className='position-absolute cursor-pointer' size='1.4em' style={{top: '16px', right: '16px'}} color={linkCopied ? 'green' : 'black'}/>
                     </CopyToClipboard>
                 </div>
                 <div className='d-none d-md-block bg-green share position-relative cursor-pointer' onClick={onChangeModalShow}>

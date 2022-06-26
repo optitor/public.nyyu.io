@@ -14,11 +14,11 @@ const ReferralResponse = () => {
         if(!isBrowser) return;
         
         const handleResize = () => {
-            if(window.innerWidth <= 769 && window.wide === 'all') {
+            if(window.innerWidth <= 1024 && window.wide === 'all') {
                 setView('balance');
                 window.wide = 'balance';
             }
-            if(window.innerWidth > 769 && window.wide !== 'all') {
+            if(window.innerWidth > 1024 && window.wide !== 'all') {
                 setView('all');
                 window.wide = 'all';
             }
@@ -37,7 +37,7 @@ const ReferralResponse = () => {
     }, []);
     
     return (
-        <div className="d-flex d-md-none justify-content-between">
+        <div className="d-flex d-lg-none justify-content-between">
             <button 
                 onClick={() => onViewClick('balance')}
                 className={`w-100 me-2 py-2 text-white fw-700 fs-14px border border-white ${view === 'balance' ? 'bg-green':'bg-transparent'}`}
