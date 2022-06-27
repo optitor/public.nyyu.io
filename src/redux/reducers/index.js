@@ -7,7 +7,7 @@ import { tasksReducer, userTierReducer } from "./settingReducer";
 import { dataReducer } from './dataReducer';
 import { kycSettingsReducer } from "./settingReducer";
 import { allFeesReducer } from "./allFeesReducer";
-import { tempReducer, profileTabReducer } from './tempReducer';
+import { tempReducer, profileTabReducer, balanceReducer } from './tempReducer';
 import { favorAssetsReducer } from "./settingReducer";
 import { tierReducer } from "./tierReducer";
 
@@ -25,7 +25,8 @@ const rootReducer = combineReducers({
     profileTab: profileTabReducer,
     currencyRates: currencyRatesReducer,
     favAssets: favorAssetsReducer,
-    tiers: tierReducer
+    tiers: tierReducer,
+    balance: balanceReducer,
 });
 
 export default rootReducer;

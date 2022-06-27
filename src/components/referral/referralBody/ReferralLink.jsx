@@ -110,23 +110,23 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
         }, 2000);
     }
 
-    const getDivWidth = () => {
-        const idx = commissionRate.findIndex(e => e === rate);
-        const _offset = idx * (tierDiv.current.clientWidth / tiers.length);
-        setCaretStyle({top: '-28px', left: `${_offset}px`})
-    }
-
     const generateEmailLink = () => {
         const inviteLink = `${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`;
         return encodeURIComponent(inviteText + ' ' + inviteLink);
     }
 
     useEffect(() => {
-        getDivWidth();
         if(!isBrowser) { return null; }
+
+        tiers.forEach(tier => {
+            if(commissionRate[tier.level] === rate) {
+                const leftMove = 100 / tiers.length * tier.level + 100 / tiers.length / 2;
+                setCaretStyle({top: '-28px', transform: 'translateX(-50%)', left: `${leftMove}%`});
+            }
+        })
         window.addEventListener('click', hideLinkModal);
         return () => window.removeEventListener('click', hideLinkModal);
-    }, []);
+    }, [tiers, commissionRate, rate]);
 
     return <div className='mx-auto px-1 mx-1 px-md-2 mx-md-2 px-lg-4 mx-lg-4'>
         <div className='d-none d-md-flex bg-gray-50 justify-content-around pb-3 pt-4'>
