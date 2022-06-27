@@ -9,6 +9,7 @@ import { update_Favor_Assets } from '../../redux/actions/settingAction';
 import { EuropeanFlag } from "../../utilities/imgImport";
 import { Currencies } from "../../utilities/staticData2";
 import CustomSpinner from "../common/custom-spinner";
+import { changeEquity } from "../../redux/actions/tempAction";
 
 const { Option } = components;
 
@@ -30,11 +31,11 @@ const SelectOption = (props) => {
 };
 
 const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
+    const dispatch = useDispatch();
     const favAssets = useSelector(state => state.favAssets);
     const savedCurrency = favAssets.currency;
     const assets = favAssets.assets;
     const { currencyRates } = useSelector(state => state); 
-    const dispatch = useDispatch();
     const [pending, setPending] = useState(false);
 
     const [selectedCurrency, setSelectedCurrency] = useState(savedCurrency);
@@ -48,12 +49,13 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
         );
     };
 
-    const selectCurrency = async () => {
+    const selectCurrency = () => {
         setPending(true);
         const updateData = {
             assets: selectedCurrency.value + ',' + assets.join(',')
         };
-        await dispatch(update_Favor_Assets(updateData));
+        dispatch(update_Favor_Assets(updateData));
+        dispatch(changeEquity(selectedCurrency.value));
         setPending(false);
         setIsOpen(false);
     };

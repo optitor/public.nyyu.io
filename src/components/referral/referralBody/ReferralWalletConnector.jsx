@@ -96,7 +96,7 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     return <div className='text-white mx-1 mx-md-5'>
         <div className='d-none d-md-flex justify-content-start'>
             <button 
-                className='bg-transparent border-0' 
+                className='bg-transparent border-0 ps-0' 
                 onClick={onPrevious}
             >
                 <div className='d-flex align-items-center'>
