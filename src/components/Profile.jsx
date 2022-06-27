@@ -213,7 +213,7 @@ const Profile = () => {
                         setCurrentProfileTab={setCurrentProfileTab}
                         setTab={setTab}
                     />
-                    <section className="container position-relative">
+                    <section className="container">
                         <div className="row">
                             <div className="col-lg-3 profile-page__left border-light border-0 border-end">
                                 <div className="user-info">

@@ -205,7 +205,7 @@ const FAQ = () => {
             <Seo title="Support" />
             <main className="faq-page">
                 <Header />
-                <section className="px-sm-4 px-2 pb-5 pb-sm-0 w-100">
+                <section className="container">
                     <div className="row m-0 mt-4 mt-sm-0">
                         <div className="col-lg-3 col-6 ps-0 mb-2">
                             <button
