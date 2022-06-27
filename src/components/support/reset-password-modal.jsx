@@ -207,7 +207,7 @@ export default function ResetPasswordModal({ isOpen, setIsOpen }) {
                                     >
                                         <div
                                             className={`${
-                                                pendingRequest ? "opacity-1" : "opacity-0"
+                                                pendingRequest ? "opacity-100" : "opacity-0"
                                             }`}
                                         >
                                             <CustomSpinner />
