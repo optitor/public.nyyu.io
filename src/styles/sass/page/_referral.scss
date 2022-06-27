@@ -19,7 +19,7 @@ div.bg-gray-50 {
 
 .border-response {
     border-right: 2px solid #464646;
-    @include mq("tablet", max) {
+    @include mq("laptop", max) {
         border-right: unset;
     }
 }
