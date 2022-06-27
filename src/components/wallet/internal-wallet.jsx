@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import _ from "lodash";
 import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
@@ -12,6 +12,8 @@ import { useQuery } from "@apollo/client";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { Icon } from "@iconify/react";
 import { roundNumber } from "../../utilities/number"; 
+
+import { updateHiddenStatus, changeEquity } from "../../redux/actions/tempAction";
 
 const QUOTE = "USDT";
 const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
@@ -53,9 +55,13 @@ const Asset = ({ item, isHideAsset }) => {
 };
 
 export default function InternalWallet() {
+    const dispatch = useDispatch();
+
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
+
+    const { hidden, equity } = useSelector(state => state.balance);
 
     const InitialAssets = {};
     const [myAssets, setMyAssets] = useState(InitialAssets);
@@ -64,10 +70,8 @@ export default function InternalWallet() {
 
     const initLoaded = useRef(false);
 
-    const [hideValues, setHideValues] = useState(false);
     const [isDepositOpen, setIsDepositOpen] = useState(false);
     const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
-    const [isShowBTC, setIsShowBTC] = useState(true);
 
     const totalBalance = useMemo(() => {
         if (!Object.values(myAssetsWithBalance)) return 0
@@ -152,19 +156,19 @@ export default function InternalWallet() {
                 <div className="value-box">
                     <div className="value-label d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
-                            Equity Value ({isShowBTC? 'BTC': currency.value})
-                            {!hideValues && (
+                            Equity Value ({equity})
+                            {!hidden && (
                                 <Icon
                                     className="value-label-eye-icon"
                                     icon="bi:eye-slash"
-                                    onClick={() => setHideValues(true)}
+                                    onClick={() => dispatch(updateHiddenStatus(true))}
                                 />
                             )}
-                            {hideValues && (
+                            {hidden && (
                                 <Icon
                                     className="value-label-eye-icon"
                                     icon="bi:eye"
-                                    onClick={() => setHideValues(false)}
+                                    onClick={() => dispatch(updateHiddenStatus(false))}
                                 />
                             )}
                         </div>
@@ -172,10 +176,10 @@ export default function InternalWallet() {
                         <div className="d-flex gap-2">
                             <div
                                 className={`cursor-pointer ${
-                                    isShowBTC === true? "fw-bold text-white": ''
+                                    equity === 'BTC' ? "fw-bold text-white": ''
                                 }`}
-                                onClick={() => setIsShowBTC(true)}
-                                onKeyDown={() => setIsShowBTC(true)}
+                                onClick={() => dispatch(changeEquity('BTC'))}
+                                onKeyDown={() => dispatch(changeEquity('BTC'))}
                                 role="presentation"
                             >
                                 BTC
@@ -183,17 +187,17 @@ export default function InternalWallet() {
                             <div>|</div>
                             <div
                                 className={`cursor-pointer ${
-                                    isShowBTC === false? "fw-bold text-white": ''
+                                    equity !== 'BTC'? "fw-bold text-white": ''
                                 }`}
-                                onClick={() => setIsShowBTC(false)}
-                                onKeyDown={() => setIsShowBTC(false)}
+                                onClick={() => dispatch(changeEquity(currency.value))}
+                                onKeyDown={() => dispatch(changeEquity(currency.value))}
                                 role="presentation"
                             >
                                 {currency.value}
                             </div>
                         </div>
                     </div>
-                    {hideValues ? (
+                    {hidden ? (
                         <>
                             <p className="value">{obscureValueString}</p>
                             <p className="max-value mt-3">{obscureValueString}</p>
@@ -202,7 +206,7 @@ export default function InternalWallet() {
                         <>
                             <NumberFormat
                                 value={
-                                    isShowBTC === false
+                                    equity !== 'BTC'
                                         ? totalBalance === 0
                                             ? 0
                                             : Number(totalBalance * currencyRate).toFixed(2)
@@ -215,13 +219,13 @@ export default function InternalWallet() {
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
                                     <p {...props}>
-                                        {value} {isShowBTC === false ? currency.value : "BTC"}
+                                        {value} {equity !== 'BTC' ? currency.value : "BTC"}
                                     </p>
                                 )}
                             />
                             <NumberFormat
                                 value={
-                                    isShowBTC === false
+                                    equity !== 'BTC'
                                         ? totalBalance === 0
                                             ? 0
                                             : (totalBalance / BTCPrice).toFixed(8)
@@ -234,7 +238,7 @@ export default function InternalWallet() {
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
                                     <p {...props}>
-                                        ~ {value} {isShowBTC === false ? "BTC" : currency.value}
+                                        ~ {value} {equity !== 'BTC' ? "BTC" : currency.value}
                                     </p>
                                 )}
                             />
@@ -289,7 +293,7 @@ export default function InternalWallet() {
                             </div>
                         )}
                         {initLoaded.current && _.map(_.orderBy(myAssetsWithBalance, ["balance", "tokenSymbol"], ["desc", "asc"]), (item) => (
-                            <Asset item={item} isHideAsset={hideValues} key={item.tokenName} />
+                            <Asset item={item} isHideAsset={hidden} key={item.tokenName} />
                         ))}
                         {initLoaded.current && Object.values(myAssetsWithBalance).length === 0 && (
                             <div className="text-center fw-500 text-uppercase text-light">

@@ -50,7 +50,7 @@ const ReferralBody = () => {
             <ReferralResponse /> 
             <CommissionHistory shown={(view === 'all' || view === 'balance')}/>
             {(view === 'all' || view === 'setting') && 
-                <div className='col-12 col-md-8 ps-4 py-4'>
+                <div className='col-12 col-lg-8 p-1 p-md-5 py-4'>
                     {loading ? 
                         <div className='text-center pt-5'>
                             <img src={SPINNER} width='34px' height='34px' />

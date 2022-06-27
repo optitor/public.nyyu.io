@@ -4,13 +4,10 @@ import { REFER_AVATAR, SPINNER } from '../../../utilities/imgImport';
 import { useReferral } from '../ReferralContext';
 
 const InvitedList = ({loading, invitedList}) => {
-    const { 
-        hidden, currentEquity,
-        btcPrice, ndbPrice    
-    } = useReferral();
-
+    const { btcPrice, ndbPrice } = useReferral();
+    const { hidden, equity } = useSelector(state => state.balance);
     const { currencyRates } = useSelector(state => state);
-    const priceFactor = currentEquity === "BTC" ? btcPrice * ndbPrice : ndbPrice / (currencyRates[currentEquity]);
+    const priceFactor = equity === "BTC" ? btcPrice * ndbPrice : ndbPrice / (currencyRates[equity]);
     
     return <div className='mt-4'>
         <div className='d-flex justify-content-between align-items-center mt-5 pe-4'>
@@ -29,7 +26,7 @@ const InvitedList = ({loading, invitedList}) => {
                             <div className='fs-15px text-white fw-bold ls-1px'>{user.amount} NDB</div>}
                         {hidden ? 
                             <div className='fs-11px txt-baseprice'>********</div>:
-                            <div className='fs-11px txt-baseprice'>{user.amount / priceFactor} {currentEquity}</div>}
+                            <div className='fs-11px txt-baseprice'>{user.amount / priceFactor} {equity}</div>}
                     </div>
                 </div>
                 })}</>}
