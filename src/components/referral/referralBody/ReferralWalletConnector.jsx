@@ -127,7 +127,7 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
             />
         </div>
         <div>
-            {error && <div className='text-danger'>{error}</div>}
+            {error && <div className='text-danger mb-3'>{error}</div>}
             <button 
                 onClick={onActivateClicked}
                 className='d-flex align-items-center justify-content-center referral-button py-2 bg-transparent text-white fw-bold border border-white fs-22px mx-auto'

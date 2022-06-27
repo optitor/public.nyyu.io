@@ -8,7 +8,7 @@
         border-bottom: 2px solid #464646;
     }
     &__left {
-        padding: 0 32px;
+        padding-right: 32px;
         display: flex;
         flex-direction: column;
         justify-content: start;
@@ -94,7 +94,7 @@
     }
     &__right {
         padding: 0 32px 20px;
-        @include mq("tablet", max) {
+        @include mq("laptop", max) {
             padding: 0;
         }
         @include mq("phone", max) {
