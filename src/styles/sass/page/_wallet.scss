@@ -222,10 +222,12 @@
             }
         }
         &__right {
-            position: relative;
             height: 100%;
-            overflow-y: auto;
-            padding: 0;
+            padding-left: 0;
+            &__scroll{
+                max-height: 100%;
+                overflow-y: auto;
+            }
             .verify-link {
                 @include mq("laptop", max) {
                     display: none;
@@ -390,6 +392,11 @@
                     font-weight: 500 !important;
                 }
             }
+        }
+    }
+    .invite-friends-body{
+        @include mq('laptop-md', min) {
+            padding-right: .75rem !important;
         }
     }
 }
