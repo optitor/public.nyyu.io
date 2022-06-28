@@ -129,12 +129,8 @@
         &__left {
             border-right: 2px solid #464646;
             height: 100%;
-            padding-right: 17px;
             @include mq("tablet", max) {
                 border-right: unset;
-            }
-            @include mq("phone") {
-                padding-right: 20px;
             }
             .profile-value button{
                 text-overflow: ellipsis;
@@ -1023,9 +1019,7 @@
 
 .profile-value {
     .value-box {
-        margin-top: 20px;
         background: rgba(43, 43, 43, 0.5);
-        padding: 16px 12px;
     }
     .value-label {
         font-size: 17px;

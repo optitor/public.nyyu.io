@@ -93,8 +93,8 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         }
     }
     
-    return <div className='text-white mx-1 mx-md-5'>
-        <div className='d-none d-md-flex justify-content-start'>
+    return <div className='text-white'>
+        <div className='d-none d-md-flex justify-content-start mb-3'>
             <button 
                 className='bg-transparent border-0 ps-0' 
                 onClick={onPrevious}
@@ -121,13 +121,13 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
             </button>
         </div>
         <div className='mb-5'>
+            {error && <div className='text-danger'>{error}</div>}
             <WalletSelector 
                 walletChanged={onWalletChanged} 
                 selectedWallet={selectedWallet}
             />
         </div>
         <div>
-            {error && <div className='text-danger mb-3'>{error}</div>}
             <button 
                 onClick={onActivateClicked}
                 className='d-flex align-items-center justify-content-center referral-button py-2 bg-transparent text-white fw-bold border border-white fs-22px mx-auto'
