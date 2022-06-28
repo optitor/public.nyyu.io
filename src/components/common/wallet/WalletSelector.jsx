@@ -29,7 +29,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
         walletChanged({ selectedWallet: wallet, address: accountInfo?.address });
     }
     
-    return <div className="my-3 wallet_content">
+    return <div className="mb-3 wallet_content">
         {selectedWallet === 'external'?
             <>
                 <div className="row">
