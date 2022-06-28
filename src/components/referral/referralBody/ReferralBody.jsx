@@ -9,11 +9,12 @@ import ReferralLink from './ReferralLink';
 import { GET_REFERRAL } from '../api/query';
 import { ACTIVE_ACTION, UPDATE_ACTION } from '../constants';
 import { SPINNER } from '../../../utilities/imgImport';
+import { useReferral } from '../ReferralContext';
 
 const ReferralBody = () => {
     
     // responsive status
-    const [view, setView] = useState('balance');
+    const {view } = useReferral();
 
     // Referral status, 
     //1 - wallet is not connected, 2 - activated
@@ -46,10 +47,10 @@ const ReferralBody = () => {
 
     return (
         <div className='row'>     
-            <ReferralResponse onChangeScreen={setView}/> 
+            <ReferralResponse /> 
             <CommissionHistory shown={(view === 'all' || view === 'balance')}/>
             {(view === 'all' || view === 'setting') && 
-                <div className='col-12 col-md-7 col-lg-8 px-1 p-lg-5 py-4'>
+                <div className='col-12 col-lg-8 p-1 p-md-5 py-4'>
                     {loading ? 
                         <div className='text-center pt-5'>
                             <img src={SPINNER} width='34px' height='34px' />

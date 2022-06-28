@@ -6,26 +6,30 @@ div.bg-gray-50 {
     color: $disableGray;
 }
 
-.vh-50 {
-    height: 50vh;
-}
-
 .share {
     top: 0px;
     right: 0px;
     height: 100%;
     padding: 17px;
+    transition: background-color .15s ease-in-out;
+    &:hover {
+        background-color: #2ad76f;
+    }
 }
 
 .border-response {
     border-right: 2px solid #464646;
-    @include mq("tablet", max) {
+    @include mq("laptop", max) {
         border-right: unset;
     }
 }
 
 .text-transparent {
     color: $transparent;
+}
+
+.level-up {
+    color: #626161;
 }
 
 .referral-history {
@@ -44,7 +48,8 @@ div.bg-gray-50 {
 
 .referral-button {
     width: 100%;
-    @include mq("tablet") {
-        width: 50%;
+    @include mq("laptop") {
+        width: 360px;
+        height: 56px;
     }
 }

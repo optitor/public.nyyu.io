@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'gatsby';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -74,7 +74,7 @@ export const sendingLinks = [
 ]
 
 const ReferralLink = ({referrerInfo, onChangeWallet}) => {
-
+    const dispatch = useDispatch();
     const tierDiv = useRef(null);
     const tiers = useSelector(state => state.tiers);
 
@@ -110,25 +110,25 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
         }, 2000);
     }
 
-    const getDivWidth = () => {
-        const idx = commissionRate.findIndex(e => e === rate);
-        const _offset = idx * (tierDiv.current.clientWidth / tiers.length);
-        setCaretStyle({top: '-28px', left: `${_offset}px`})
-    }
-
     const generateEmailLink = () => {
         const inviteLink = `${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`;
         return encodeURIComponent(inviteText + ' ' + inviteLink);
     }
 
     useEffect(() => {
-        getDivWidth();
         if(!isBrowser) { return null; }
+
+        tiers.forEach(tier => {
+            if(commissionRate[tier.level] === rate) {
+                const leftMove = 100 / tiers.length * tier.level + 100 / tiers.length / 2;
+                setCaretStyle({top: '-28px', transform: 'translateX(-50%)', left: `${leftMove}%`});
+            }
+        })
         window.addEventListener('click', hideLinkModal);
         return () => window.removeEventListener('click', hideLinkModal);
-    }, []);
+    }, [tiers, commissionRate, rate]);
 
-    return <div className='mx-auto px-1 mx-1 px-md-2 mx-md-2 px-lg-4 mx-lg-4'>
+    return <div>
         <div className='d-none d-md-flex bg-gray-50 justify-content-around pb-3 pt-4'>
             <div className='text-center'>
                 <div className="text-transparent fs-13px user-select-none">FRIEND GETS</div>
@@ -143,14 +143,19 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                             className='text-decoration-underline position-absolute cursor-pointer' 
                             style={{top: '-3px', right: '-88%', fontSize: '10px', color: '#626161'}}
                         >
-                            Level up
+                            <button 
+                                className='bg-transparent border-0 text-decoration-underline level-up'
+                                onClick={() => dispatch({type: 'TIER_TAB'})}
+                            > 
+                                Level up
+                            </button>
                         </Link>
                     </div>
                     {tiers.length > 0 && tiers.map(tier => {
                         return (
-                            <div className={`border-end border-secondary p-2 d-flex align-items-center justify-content-around`} key={tier.level}>
+                            <div className={`border-end border-secondary p-md-2 px-xl-3 py-xl-2 d-flex align-items-center justify-content-around`} key={tier.level}>
                                 <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-20'}`}/>
-                                <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
+                                <span className={`fs-16px ps-md-1 ps-xl-2 ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`}>{commissionRate[tier.level]}%</span>
                             </div>
                         )
                     })}
@@ -158,7 +163,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             </div>
             <div className='text-center'>
                 <div className="text-transparent fs-13px">FRIEND</div>
-                <div className='text-white fs-16px fw-600 border py-2 px-3 position-relative'>
+                <div className='text-white fs-16px fw-600 border py-2 px-3 px-xl-4 position-relative'>
                     <div className="txt-baseprice fs-13px position-absolute" style={{top: '-34px', right: '-16px', width: '120px'}}>FRIEND GETS</div>
                     10%
                 </div>
@@ -187,7 +192,14 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             </div>
             <div className='d-flex justify-content-between mt-2'>
                 <div></div>
-                <Link to={ROUTES.profile} className='fs-14px txt-green cursor-pointer'>Level up</Link>
+                <Link to={ROUTES.profile} className='fs-14px txt-green cursor-pointer'>
+                    <button 
+                        className='bg-transparent border-0 text-decoration-underline level-up'
+                        onClick={() => dispatch({type: 'TIER_TAB'})}
+                    > 
+                        Level up
+                    </button>
+                </Link>
             </div>
         </div>
         <div className='row text-white'>
@@ -223,7 +235,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                         text={`${process.env.GATSBY_SITE_URL}?referralCode=${referralCode}`}
                         onCopy={handleLinkCopy}
                     >
-                        <RiFileCopyLine className='position-absolute' size='1.4em' style={{top: '16px', right: '16px'}} color={linkCopied ? 'green' : 'black'}/>
+                        <RiFileCopyLine className='position-absolute cursor-pointer' size='1.4em' style={{top: '16px', right: '16px'}} color={linkCopied ? 'green' : 'black'}/>
                     </CopyToClipboard>
                 </div>
                 <div className='d-none d-md-block bg-green share position-relative cursor-pointer' onClick={onChangeModalShow}>

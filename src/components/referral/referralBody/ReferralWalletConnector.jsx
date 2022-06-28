@@ -93,10 +93,10 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         }
     }
     
-    return <div className='text-white mx-1 mx-md-5'>
-        <div className='d-none d-md-flex justify-content-start'>
+    return <div className='text-white'>
+        <div className='d-none d-md-flex justify-content-start mb-3'>
             <button 
-                className='bg-transparent border-0' 
+                className='bg-transparent border-0 ps-0' 
                 onClick={onPrevious}
             >
                 <div className='d-flex align-items-center'>
@@ -120,19 +120,19 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
                 </div>
             </button>
         </div>
-        <div className='mb-4'>
+        <div className='mb-5'>
+            {error && <div className='text-danger'>{error}</div>}
             <WalletSelector 
                 walletChanged={onWalletChanged} 
                 selectedWallet={selectedWallet}
             />
         </div>
         <div>
-            {error && <div className='text-danger'>{error}</div>}
             <button 
                 onClick={onActivateClicked}
                 className='d-flex align-items-center justify-content-center referral-button py-2 bg-transparent text-white fw-bold border border-white fs-22px mx-auto'
             >
-                <div className={`${(activateLoading || updateLoading) ? "opacity-1": "opacity-0"}`}><CustomSpinner /></div>
+                {(activateLoading || updateLoading) ? <CustomSpinner sm={{width: '10px', height: '10px'}} />:<></>}
                 <div className={`fs-20px ${(activateLoading || updateLoading) ? 'ms-3' : 'pe-4'}`}>
                     {action === ACTIVE_ACTION && 'ACTIVATE INVITE & EARN'}
                     {action === UPDATE_ACTION && 'UPDATE'}

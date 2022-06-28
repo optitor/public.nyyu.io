@@ -195,7 +195,7 @@ const Signin = ({ error }) => {
                                 disabled={loading}
                                 onClick={signUserIn}
                             >
-                                <div className={`${loading ? "opacity-1" : "opacity-0"}`}>
+                                <div className={`${loading ? "opacity-100" : "opacity-0"}`}>
                                     <CustomSpinner />
                                 </div>
                                 <div className={`${loading ? "ms-3" : "pe-4"}`}>sign in</div>

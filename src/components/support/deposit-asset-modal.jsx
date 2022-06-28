@@ -138,7 +138,7 @@ export default function DepositAssetModal({ isOpen, setIsOpen }) {
                             >
                                 <div
                                     className={`${
-                                        loading ? "opacity-1" : "opacity-0"
+                                        loading ? "opacity-100" : "opacity-0"
                                     }`}
                                 >
                                     <CustomSpinner />

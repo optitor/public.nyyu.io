@@ -69,6 +69,8 @@ const SelectFigure = () => {
                         id: index,
                         avatar: {
                             avatarSet: item.avatarSet,
+                            hairColor: item.hairColor,
+                            skinColor: item.skinColor,
                         },
                         firstname: item?.fname,
                         lastname: item?.surname,
@@ -317,7 +319,7 @@ const SelectFigure = () => {
                                             onClick={handleOnConfirmButtonClick}
                                         >
                                             <div
-                                                className={`${pending ? "opacity-1" : "opacity-0"}`}
+                                                className={`${pending ? "opacity-100" : "opacity-0"}`}
                                             >
                                                 <CustomSpinner />
                                             </div>
@@ -436,7 +438,7 @@ const SelectFigure = () => {
                                             onClick={handleOnConfirmButtonClick}
                                         >
                                             <div
-                                                className={`${pending ? "opacity-1" : "opacity-0"}`}
+                                                className={`${pending ? "opacity-100" : "opacity-0"}`}
                                             >
                                                 <CustomSpinner />
                                             </div>

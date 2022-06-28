@@ -68,7 +68,7 @@ const ForgetPassword = () => {
                         disabled={pending}
                         onClick={sendForgotPasswordCode}
                     >
-                        <div className={`${pending ? "opacity-1" : "opacity-0"}`}>
+                        <div className={`${pending ? "opacity-100" : "opacity-0"}`}>
                             <CustomSpinner />
                         </div>
                         <div className={`${pending ? "ms-3" : "pe-4"}`}>submit</div>

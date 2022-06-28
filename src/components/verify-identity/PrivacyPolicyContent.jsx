@@ -296,104 +296,104 @@ export default () => (
         </div>
         <div>
             <h5>2. COLLECTION OF INFORMATION</h5>
-            {SECTION_2.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_2.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>3. USE AND PROCESSING OF COLLECTED INFORMATION</h5>
-            {SECTION_3.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_3.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>4. MANAGING INFORMATION</h5>
-            {SECTION_4.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_4.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>5. CONTROL OVER YOUR INFORMATION</h5>
-            {SECTION_5.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_5.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>6. DISCLOSURE OF INFORMATION WITH THIRD PARTIES</h5>
-            {SECTION_6.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_6.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>7. RETENTION OF INFORMATION</h5>
-            {SECTION_7.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_7.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>8. TRANSFER OF INFORMATION</h5>
-            {SECTION_8.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_8.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>9. THE RIGHTS OF USERS</h5>
-            {SECTION_9.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_9.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>10. HOW TO EXERCISE THESE RIGHTS</h5>
-            {SECTION_10.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_10.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>11. COOKIES</h5>
-            {SECTION_11.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_11.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>12. PRIVACY OF CHILDREN</h5>
-            {SECTION_12.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_12.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>13. LINKS TO OTHER RESOURCES</h5>
-            {SECTION_13.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_13.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>14. INFORMATION SECURITY</h5>
-            {SECTION_14.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_14.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>15. DATA BREACH</h5>
-            {SECTION_15.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_15.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>16. CHANGES AND AMENDMENTS</h5>
-            {SECTION_16.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_16.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>17. ACCEPTANCE OF THIS POLICY</h5>
-            {SECTION_17.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_17.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
         <div>
             <h5>18. CONTACTING US</h5>
-            {SECTION_18.map(item => (
-                <p className='px-3 py-2'>{parse(item)}</p>
+            {SECTION_18.map((item, index) => (
+                <p key={index} className='px-3 py-2'>{parse(item)}</p>
             ))}
         </div>
     </div>

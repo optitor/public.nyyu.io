@@ -15,8 +15,26 @@ export const profileTabReducer = (state = 0, action) => {
         return 1;
       case types.DISABLE_NOTIFICATION_ROUTE:
         return 0;
+      case types.TIER_TAB:
+        return 2;
       default:
         return state;
     }
-
 }
+
+const initialState = {
+  hidden: false,
+  equity: 'BTC',
+}
+
+export const balanceReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case types.UPDATE_HIDDEN_STATUS:
+      return {...state, hidden: action.payload}
+    case types.CHANGE_EQUITY:
+      return {...state, equity: action.payload}
+    default:
+      return state;
+  }
+}
+

@@ -146,9 +146,6 @@
             @include mq("tablet", max) {
                 display: block;
             }
-            @include mq("phone", max) {
-                display: none;
-            }
         }
         @include mq("phone", max) {
             font-size: 16px;

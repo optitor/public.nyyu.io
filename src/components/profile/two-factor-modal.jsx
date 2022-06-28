@@ -190,7 +190,7 @@ export default function TwoFactorModal({
                                                             <div
                                                                 className={`${
                                                                     selected === idx && loading
-                                                                        ? "opacity-1"
+                                                                        ? "opacity-100"
                                                                         : "opacity-0"
                                                                 }`}
                                                             >
@@ -235,7 +235,7 @@ export default function TwoFactorModal({
                                                         <div
                                                             className={`${
                                                                 selected === idx && loading
-                                                                    ? "opacity-1"
+                                                                    ? "opacity-100"
                                                                     : "opacity-0"
                                                             }`}
                                                         >
@@ -345,7 +345,7 @@ export default function TwoFactorModal({
                                     }
                                 }}
                             >
-                                <div className={`${confirmLoading ? "opacity-1" : "opacity-0"}`}>
+                                <div className={`${confirmLoading ? "opacity-100" : "opacity-0"}`}>
                                     <CustomSpinner />
                                 </div>
                                 <div className={`${confirmLoading ? "ms-3" : "pe-4"}`}>Confirm</div>

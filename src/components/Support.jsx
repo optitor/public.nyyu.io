@@ -205,9 +205,9 @@ const FAQ = () => {
             <Seo title="Support" />
             <main className="faq-page">
                 <Header />
-                <section className="px-sm-4 px-2 pb-5 pb-sm-0 w-100">
+                <section className="container">
                     <div className="row m-0 mt-4 mt-sm-0">
-                        <div className="col-lg-3 col-6 ps-0 my-2 my-sm-0">
+                        <div className="col-lg-3 col-6 ps-0 mb-2">
                             <button
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 onClick={handleHelpCenter}
@@ -232,7 +232,7 @@ const FAQ = () => {
                             </button>
                         </div>
 
-                        <div className="col-lg-3 col-6 ps-0 pe-0 pe-sm-10px my-2 my-sm-0">
+                        <div className="col-lg-3 col-6 ps-0 mb-2 pe-lg-10px">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 href='https://help.nyyu.io/hc/en-gb/community/topics'
@@ -254,19 +254,19 @@ const FAQ = () => {
                         <div className="row col-lg-6 col-12 p-0 m-0">
                             {selfServiceData.map((item, index) => {
                                 return (
-                                    <button
-                                        key={index}
-                                        className={`btn col-12 col-lg-6 py-0 ${index % 2 === 0
-                                            ? "ps-lg-0 pe-lg-1 px-0"
-                                            : "pe-lg-0 ps-lg-1 px-0"
-                                            }`}
-                                        onClick={item?.clickEvent}
-                                        disabled={item?.disabled? true: false}
+                                    <div
+                                        className={`support-self-security-item col-12 col-lg-6`}
                                     >
-                                        <div
-                                            className={`text-light border border-1 border-light text-center support-self-security-item col-12 ${item.id <= 5 && "mb-2"
+                                        <button
+                                            key={index}
+                                            className={`btn text-light border border-light text-center p-0 ${index % 2 === 0
+                                                ? "ps-lg-0 pe-lg-1"
+                                                : "pe-lg-0 ps-lg-1"
                                                 }`}
+                                            onClick={item?.clickEvent}
+                                            disabled={item?.disabled? true: false}
                                         >
+                                       
                                             {item?.pending ? <CustomSpinner /> : 
                                             <><img
                                                 src={item?.icon}
@@ -274,8 +274,8 @@ const FAQ = () => {
                                             />
                                             <div>{item.label}</div>
                                             {item?.hasError && <div className="error-message">{item?.error}</div>}</>}
-                                        </div>
-                                    </button>
+                                        </button>
+                                    </div>
                                 );
                             })}
                         </div>

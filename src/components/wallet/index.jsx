@@ -200,7 +200,7 @@ const Wallet = () => {
                 <Header />
                 <section className="container">
                     <div className="section-history row">
-                        <div className="section-history__left col-lg-4 col-md-5">
+                        <div className="section-history__left col-lg-4 col-md-5 pe-4">
                             <InternalWallet />
                         </div>
                         <div className="section-history__right col-lg-8 col-md-7">
