@@ -4,7 +4,7 @@
     }
     .section-history {
         height: calc(100vh - 97px);
-        @include mq("tablet", max) {
+        @include mq("laptop", max) {
             height: auto;
         }
         table {
@@ -127,10 +127,10 @@
             }
         }
         &__left {
-            border-right: 2px solid #464646;
-            height: 100%;
-            @include mq("tablet", max) {
-                border-right: unset;
+            @include mq("laptop", min) {
+                height: 100%;
+                padding-right: 1.5rem;
+                border-right: 2px solid #464646;
             }
             .profile-value button{
                 text-overflow: ellipsis;
@@ -222,8 +222,10 @@
             }
         }
         &__right {
-            height: 100%;
-            padding-left: 0;
+            @include mq("laptop", min) {
+                height: 100%;
+                padding-left: 0;
+            }
             &__scroll{
                 max-height: 100%;
                 overflow-y: auto;
