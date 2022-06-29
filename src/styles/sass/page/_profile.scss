@@ -8,7 +8,7 @@
         border-bottom: 2px solid #464646;
     }
     &__left {
-        padding-right: 32px;
+        padding-right: 1.5rem;
         display: flex;
         flex-direction: column;
         justify-content: start;
@@ -93,7 +93,8 @@
         }
     }
     &__right {
-        padding: 0 32px 20px;
+        padding-left: 1.5rem;
+        padding-bottom: 1.5rem;
         @include mq("laptop", max) {
             padding: 0;
         }
