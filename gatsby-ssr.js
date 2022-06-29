@@ -1,34 +1,45 @@
 import React from 'react';
+import { Helmet } from "react-helmet";
 export { wrapRootElement } from './src/providers/wrap-with-provider';
 
 
 export const onRenderBody = (
-    {setPostBodyComponents}, pluginOptions
+    {setHeadComponents, setHtmlAttributes, setBodyAttributes, setPostBodyComponents},
+    pluginOptions
 ) => {
     const GOOGLE_PLACE_API_KEY = process.env.GOOGLE_PLACE_API_KEY;
     setPostBodyComponents([
         <script key="placeapi" src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_PLACE_API_KEY}&libraries=places`} async></script>
+    ]);
+
+    const helmet = Helmet.renderStatic()
+    setHtmlAttributes(helmet.htmlAttributes.toComponent())
+    setBodyAttributes(helmet.bodyAttributes.toComponent())
+    setHeadComponents([
+      helmet.title.toComponent(),
+      helmet.link.toComponent(),
+      helmet.meta.toComponent(),
+      helmet.noscript.toComponent(),
+      helmet.script.toComponent(),
+      helmet.style.toComponent(),
     ])
 }
 
-export const onPreRenderHTML = ({
-    getHeadComponents,
-    replaceHeadComponents,
-}) => {
+export const onPreRenderHTML = ({ getHeadComponents, replaceHeadComponents }) => {
+  /**
+     * @type {any[]} headComponents
+     */
     const headComponents = getHeadComponents();
-    headComponents.sort((a, b) => {
-      if (a.type === b.type || (a.type !== 'style' && b.type !== 'style')) {
-        return 0;
-      }
 
-      if (a.type === 'style') {
-        return 1;
-      } else if (b.type === 'style') {
-        return -1;
-      }
-  
-      return 0;
+    headComponents.sort((a, b) => {
+        if (a.props && a.props["data-react-helmet"]) {
+            return -1;
+        }
+        if (b.props && b.props["data-react-helmet"]) {
+            return 1;
+        }
+        return 0;
     });
-  
+    
     replaceHeadComponents(headComponents);
-};
+}

@@ -336,7 +336,7 @@ const IndexPage = () => {
     
     return (
         <div>
-            <Seo title="Home" />
+            <Seo title="NYYU" />
             <main className="home-page">
                 <Header />
                 <ReferToFriendsModal
