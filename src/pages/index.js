@@ -336,8 +336,8 @@ const IndexPage = () => {
     
     return (
         <div>
-            <Seo title="NYYU" />
-            <main className="home-page">
+            <Seo title="Home" />
+            <div className="home-page">
                 <Header />
                 <ReferToFriendsModal
                     isModalOpen={isModalOpen}
@@ -367,7 +367,7 @@ const IndexPage = () => {
                     </div>
                 </section>
                 <Footer />
-            </main>
+            </div>
         </div>
     )
 }
