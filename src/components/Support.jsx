@@ -206,8 +206,8 @@ const FAQ = () => {
             <main className="faq-page">
                 <Header />
                 <section className="container">
-                    <div className="row m-0 mt-4 mt-sm-0">
-                        <div className="col-lg-3 col-6 ps-0 mb-2">
+                    <div className="row mt-4 mt-sm-0 row-x">
+                        <div className="col-lg-3 col-6 mb-2">
                             <button
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 onClick={handleHelpCenter}
@@ -232,7 +232,7 @@ const FAQ = () => {
                             </button>
                         </div>
 
-                        <div className="col-lg-3 col-6 ps-0 mb-2 pe-lg-10px">
+                        <div className="col-lg-3 col-6 mb-2 pe-lg-10px">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
                                 href='https://help.nyyu.io/hc/en-gb/community/topics'
@@ -250,34 +250,33 @@ const FAQ = () => {
                                 </div>
                             </a>
                         </div>
-
-                        <div className="row col-lg-6 col-12 p-0 m-0">
-                            {selfServiceData.map((item, index) => {
-                                return (
-                                    <div
-                                        className={`support-self-security-item col-12 col-lg-6`}
-                                    >
-                                        <button
-                                            key={index}
-                                            className={`btn text-light border border-light text-center p-0 ${index % 2 === 0
-                                                ? "ps-lg-0 pe-lg-1"
-                                                : "pe-lg-0 ps-lg-1"
-                                                }`}
-                                            onClick={item?.clickEvent}
-                                            disabled={item?.disabled? true: false}
+                        
+                        <div className="col-lg-6 col-12">
+                            <div className="row row-x">
+                                {selfServiceData.map((item, index) => {
+                                    return (
+                                        <div
+                                            className={`support-self-security-item col-12 col-lg-6`}
                                         >
-                                       
-                                            {item?.pending ? <CustomSpinner /> : 
-                                            <><img
-                                                src={item?.icon}
-                                                alt="item figure"
-                                            />
-                                            <div>{item.label}</div>
-                                            {item?.hasError && <div className="error-message">{item?.error}</div>}</>}
-                                        </button>
-                                    </div>
-                                );
-                            })}
+                                            <button
+                                                key={index}
+                                                className={`btn text-light border border-light text-center p-1`}
+                                                onClick={item?.clickEvent}
+                                                disabled={item?.disabled? true: false}
+                                            >
+                                        
+                                                {item?.pending ? <CustomSpinner /> : 
+                                                <><img
+                                                    src={item?.icon}
+                                                    alt="item figure"
+                                                />
+                                                <div>{item.label}</div>
+                                                {item?.hasError && <div className="error-message">{item?.error}</div>}</>}
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                         <DeleteAccountModal
                             isDeleteAccountModalOpen={isDeleteAccountModalOpen}

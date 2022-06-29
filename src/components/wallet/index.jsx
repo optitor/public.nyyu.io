@@ -200,121 +200,123 @@ const Wallet = () => {
                 <Header />
                 <section className="container">
                     <div className="section-history row">
-                        <div className="section-history__left col-lg-4 col-md-5">
+                        <div className="section-history__left col-lg-4 col-md-5 pe-4">
                             <InternalWallet />
                         </div>
                         <div className="section-history__right col-lg-8 col-md-7">
-                            <Tabs
-                                onSelect={() =>
-                                    setState({ detail_show: false })
-                                }
-                            >
-                                <div className="tab-top">
-                                    <TabList>
-                                        <Tab>market</Tab>
-                                        <Tab disabled={true}>stake</Tab>
-                                        <Tab disabled={true}>referral</Tab>
-                                        <Tab disabled={true}>airdrops</Tab>
-                                        <Tab>transaction</Tab>
-                                    </TabList>
-                                </div>
-                                <TabPanel>
-                                    <MarketTab />
-                                </TabPanel>
-                                <TabPanel className="px-0">
-                                    <StakeTab />
-                                </TabPanel>
-                                <TabPanel>
-                                    <ReferralTab />
-                                </TabPanel>
-                                <TabPanel>
-                                    <table
-                                        className={`${
-                                            detail_show &&
-                                            (size.width > 1024 ||
-                                                size.width <= 576) &&
-                                            "d-none"
-                                        }`}
-                                    >
-                                        <thead>
-                                            <tr>
-                                                <th className="w-50">
-                                                    Airdrop
-                                                </th>
-                                                <th>Status</th>
-                                                <th className="laptop-not">
-                                                    End
-                                                </th>
-                                                <th>Reward</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {airdrops.map((item, idx) => (
-                                                <tr
-                                                    key={idx}
-                                                    className="airdrop-link"
-                                                    onClick={() => {
-                                                        handleClick(idx);
-                                                        setState({
-                                                            airdropModal: true,
-                                                        });
-                                                    }}
-                                                >
-                                                    <td className="w-50">
-                                                        <div className="d-flex align-items-start ps-2">
-                                                            <img
-                                                                src={item.icon}
-                                                                alt="coin icon"
-                                                                className="me-2"
-                                                            />
-                                                            <div>
-                                                                <p className="coin-abbr">
-                                                                    {item.name}
-                                                                </p>
-                                                                <p className="coin-name mobile-not">
-                                                                    {item.desc}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td
-                                                        className={
-                                                            item.status ===
-                                                            "Active"
-                                                                ? "coin-status active"
-                                                                : "coin-status deactive"
-                                                        }
-                                                    >
-                                                        {item.status}
-                                                    </td>
-                                                    <td className="laptop-not">
-                                                        {item.end}
-                                                    </td>
-                                                    <td className="coin-reward">
-                                                        ={item.reward} USD
-                                                    </td>
+                            <div className="section-history__right__scroll">
+                                <Tabs
+                                    onSelect={() =>
+                                        setState({ detail_show: false })
+                                    }
+                                >
+                                    <div className="tab-top">
+                                        <TabList>
+                                            <Tab>market</Tab>
+                                            <Tab disabled={true}>stake</Tab>
+                                            <Tab disabled={true}>referral</Tab>
+                                            <Tab disabled={true}>airdrops</Tab>
+                                            <Tab>transaction</Tab>
+                                        </TabList>
+                                    </div>
+                                    <TabPanel>
+                                        <MarketTab />
+                                    </TabPanel>
+                                    <TabPanel className="px-0">
+                                        <StakeTab />
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <ReferralTab />
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <table
+                                            className={`${
+                                                detail_show &&
+                                                (size.width > 1024 ||
+                                                    size.width <= 576) &&
+                                                "d-none"
+                                            }`}
+                                        >
+                                            <thead>
+                                                <tr>
+                                                    <th className="w-50">
+                                                        Airdrop
+                                                    </th>
+                                                    <th>Status</th>
+                                                    <th className="laptop-not">
+                                                        End
+                                                    </th>
+                                                    <th>Reward</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    <AirdropDetail
-                                        clsName={
-                                            (size.width > 1024 ||
-                                                size.width <= 576) &&
-                                            detail_show
-                                                ? "d-block"
-                                                : "d-none"
-                                        }
-                                        airdrop={airdrops[index]}
-                                        onJoinClick={handleJoinAirdrop}
-                                    />
-                                </TabPanel>
-                                <TabPanel className="border-0">
-                                    <TransactionsProvider>
-                                        <Transactions />
-                                    </TransactionsProvider>
-                                </TabPanel>
-                            </Tabs>
+                                            </thead>
+                                            <tbody>
+                                                {airdrops.map((item, idx) => (
+                                                    <tr
+                                                        key={idx}
+                                                        className="airdrop-link"
+                                                        onClick={() => {
+                                                            handleClick(idx);
+                                                            setState({
+                                                                airdropModal: true,
+                                                            });
+                                                        }}
+                                                    >
+                                                        <td className="w-50">
+                                                            <div className="d-flex align-items-start ps-2">
+                                                                <img
+                                                                    src={item.icon}
+                                                                    alt="coin icon"
+                                                                    className="me-2"
+                                                                />
+                                                                <div>
+                                                                    <p className="coin-abbr">
+                                                                        {item.name}
+                                                                    </p>
+                                                                    <p className="coin-name mobile-not">
+                                                                        {item.desc}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            className={
+                                                                item.status ===
+                                                                "Active"
+                                                                    ? "coin-status active"
+                                                                    : "coin-status deactive"
+                                                            }
+                                                        >
+                                                            {item.status}
+                                                        </td>
+                                                        <td className="laptop-not">
+                                                            {item.end}
+                                                        </td>
+                                                        <td className="coin-reward">
+                                                            ={item.reward} USD
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        <AirdropDetail
+                                            clsName={
+                                                (size.width > 1024 ||
+                                                    size.width <= 576) &&
+                                                detail_show
+                                                    ? "d-block"
+                                                    : "d-none"
+                                            }
+                                            airdrop={airdrops[index]}
+                                            onJoinClick={handleJoinAirdrop}
+                                        />
+                                    </TabPanel>
+                                    <TabPanel className="border-0">
+                                        <TransactionsProvider>
+                                            <Transactions />
+                                        </TransactionsProvider>
+                                    </TabPanel>
+                                </Tabs>
+                            </div>
                         </div>
                     </div>
                 </section>

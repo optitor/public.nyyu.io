@@ -52,27 +52,27 @@ const CommissionBalance = ({loading, totalEarned}) => {
         <div className='d-flex justify-content-between fs-17px'>
             <div className='txt-disable-gray'>Total Earned&nbsp;&nbsp;
                 {!hidden ? 
-                    <AiFillEye className='cursor-pointer' size='1.6em' onClick={() => dispatch(updateHiddenStatus(true))}/> : 
-                    <AiFillEyeInvisible className='cursor-pointer' size='1.6em' onClick={() => dispatch(updateHiddenStatus(false))}/> 
+                    <AiFillEye className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(true))}/> : 
+                    <AiFillEyeInvisible className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(false))}/> 
                 }
             </div>
             <div className='ms-auto'>
                 <span 
-                    className={`me-1 cursor-pointer ${equity === 'BTC' ? 'text-white':'txt-disable-gray'}`} 
+                    className={`me-1 cursor-pointer ${equity === 'BTC' ? 'text-white fw-bold':'txt-disable-gray'}`} 
                     onClick={() => onChangeEquity('BTC')} onKeyDown={() => onChangeEquity('BTC')}>BTC</span>
                 <span className='txt-disable-gray'>|</span>
-                <span className={`ms-1 cursor-pointer ${equity === currency ? 'text-white':'txt-disable-gray'}`} onClick={() => onChangeEquity(currency)} onKeyDown={() => onChangeEquity(currency)}>{currency}</span>
+                <span className={`ms-1 cursor-pointer ${equity === currency ? 'text-white fw-bold':'txt-disable-gray'}`} onClick={() => onChangeEquity(currency)} onKeyDown={() => onChangeEquity(currency)}>{currency}</span>
             </div>
         </div>
-        <div className='mt-2'>
+        <div className='lh-54px'>
             {!hidden ? 
-                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <span className='fs-30px fw-600'>{totalEarned}</span>} <span className="fs-22px">NDB</span></> : 
+                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <p className='fs-30px fw-400 lh-54px'>{totalEarned} NDB</p>}</> : 
                 <span className='fs-30px text-white'>********</span>
             }
         </div>
-        <div className='fs-14px text-[#959595] mt-4 mb-2'>
+        <div className='fs-14px text-[#959595] mt-3 lh-18px'>
             {!hidden ? 
-                <>{loading ? <img src={SPINNER} width='15px' height='15px' alt='spinner'/> : <span className='text-[#959595] fs-15px'>~ {equityBalance}</span>} {equity}</> : 
+                <>{loading ? <img src={SPINNER} width='15px' height='15px' alt='spinner'/> : <p className='text-[#959595] fs-15px'>~ {equityBalance} {equity}</p>}</> : 
                 <span className='fs-15px txt-disable-gray'>********</span>
             }
             

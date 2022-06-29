@@ -432,3 +432,12 @@ ul {
 .font-14px {
     font-size:  14px!important;
 }
+
+.container{
+    width: initial;
+    max-width: initial;
+    @include mq("laptop-md", min) {
+        margin-left: 102px;
+        margin-right: 102px;
+    }
+}

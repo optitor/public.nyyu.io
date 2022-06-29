@@ -153,7 +153,7 @@ export default function InternalWallet() {
     return (
         <div>
             <div className="profile-value">
-                <div className="value-box">
+                <div className="value-box mt-4 p-3">
                     <div className="value-label d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
                             Equity Value ({equity})
@@ -173,9 +173,9 @@ export default function InternalWallet() {
                             )}
                         </div>
 
-                        <div className="d-flex gap-2">
+                        <div className="d-flex">
                             <div
-                                className={`cursor-pointer ${
+                                className={`cursor-pointer me-1 ${
                                     equity === 'BTC' ? "fw-bold text-white": ''
                                 }`}
                                 onClick={() => dispatch(changeEquity('BTC'))}
@@ -186,7 +186,7 @@ export default function InternalWallet() {
                             </div>
                             <div>|</div>
                             <div
-                                className={`cursor-pointer ${
+                                className={`cursor-pointer ms-1 ${
                                     equity !== 'BTC'? "fw-bold text-white": ''
                                 }`}
                                 onClick={() => dispatch(changeEquity(currency.value))}

@@ -10,7 +10,7 @@ const InvitedList = ({loading, invitedList}) => {
     const priceFactor = equity === "BTC" ? btcPrice * ndbPrice : ndbPrice / (currencyRates[equity]);
     
     return <div className='mt-4'>
-        <div className='d-flex justify-content-between align-items-center mt-5 pe-4'>
+        <div className='d-flex justify-content-between align-items-center mt-5 pe-3'>
             <span className='fw-bold fs-22px'>INVITED</span>
             <span className='txt-green fs-14px'>YOU EARNED</span>
         </div>
