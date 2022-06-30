@@ -234,7 +234,11 @@ ul {
     border-bottom: 1px solid $scorpion !important;
 }
 
-.border-bottom-2-dark-gray {
+.border-bottom-2-dark-gray:not(:first-of-type) {
+    border-top: 2px solid $dimgrey;
+}
+
+.border-bottom-2-dark-gray:last-of-type {
     border-bottom: 2px solid $dimgrey;
 }
 
@@ -436,7 +440,11 @@ ul {
 .container{
     width: initial;
     max-width: initial;
-    @include mq("laptop-md", min) {
+    @include mq("laptop", min) {
+        margin-left: .75rem;
+        margin-right: .75rem;
+    }
+    @include mq("laptop-wide", min) {
         margin-left: 102px;
         margin-right: 102px;
     }
