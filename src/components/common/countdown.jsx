@@ -39,7 +39,7 @@ const CountDown = ({ deadline, pending, actionAfterDeadline }) => {
     return (
         <div
             className={`countdown-wrapper d-flex ${
-                !pending && " justify-content-md-end"
+                !pending && " justify-content-center"
             } justify-content-center`}
         >
             <div className="time-section">
