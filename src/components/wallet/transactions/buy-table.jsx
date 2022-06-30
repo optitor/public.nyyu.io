@@ -213,16 +213,6 @@ const TxnDataRow = ({ data }) => {
                                                         {detail.depositAddress}
                                                     </span>
                                                 </div>
-                                                <div>
-                                                    <span className="text-secondary pe-1">
-                                                        Created At:
-                                                    </span>
-                                                    <span className="fw-500">
-                                                        {new Date(detail.createdAt).toLocaleDateString()} {new Date(detail.createdAt).toLocaleTimeString()}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="text-capitalize fs-12px">
                                                 {detail.txHash && 
                                                     <div>
                                                         <span className="text-secondary pe-1">
@@ -237,6 +227,16 @@ const TxnDataRow = ({ data }) => {
                                                         }
                                                     </div>
                                                 }
+                                                <div>
+                                                    <span className="text-secondary pe-1">
+                                                        Created At:
+                                                    </span>
+                                                    <span className="fw-500">
+                                                        {new Date(detail.createdAt).toLocaleDateString()} {new Date(detail.createdAt).toLocaleTimeString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="text-capitalize fs-12px">
                                                 {status === 0 &&
                                                     <div>
                                                         <Countdown
