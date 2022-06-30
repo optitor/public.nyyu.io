@@ -3,7 +3,6 @@
         border-bottom: 2px solid #464646;
     }
     .section-auction {
-        width: 100%;
         height: calc(100vh - 100px);
         &__tooltip {
             margin-top: 2em;
@@ -166,12 +165,15 @@
                 border-left: none;
             }
             .place-bid {
-                margin: 58px 50px;
+                margin: 58px 2px 58px 12px;
                 @include mq('laptop', max) {
                     margin: 58px 0;
                 }
                 @include mq('tablet', max) {
                     margin: 20px 0;
+                }
+                @include mq('laptop-wide', min) {
+                    margin-left: 100px;
                 }
             }
             .chart-area {
