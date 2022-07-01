@@ -20,7 +20,6 @@ import { useWindowSize } from "../../utilities/customHook";
 import AirdropDetail from "../AirdropDetail";
 import MarketTab from "../wallet/market-tab";
 import Transactions from "./transactions";
-import ReferralTab from "../wallet/referral-tab";
 import StakeTab from "../wallet/stake-tab";
 import { GET_BID_LIST_BY_USER } from "../../apollo/graphqls/querys/Bid";
 import InternalWallet from "../wallet/internal-wallet";
@@ -199,10 +198,10 @@ const Wallet = () => {
                 <Header />
                 <section className="container">
                     <div className="section-history row">
-                        <div className="section-history__left col-lg-4 col-md-5 pe-4">
+                        <div className="section-history__left col-lg-4">
                             <InternalWallet />
                         </div>
-                        <div className="section-history__right col-lg-8 col-md-7">
+                        <div className="section-history__right col-lg-8">
                             <div className="section-history__right__scroll">
                                 <Tabs
                                     onSelect={() =>
@@ -213,7 +212,6 @@ const Wallet = () => {
                                         <TabList>
                                             <Tab>market</Tab>
                                             <Tab disabled={true}>stake</Tab>
-                                            <Tab disabled={true}>referral</Tab>
                                             <Tab disabled={true}>airdrops</Tab>
                                             <Tab>transaction</Tab>
                                         </TabList>
@@ -223,9 +221,6 @@ const Wallet = () => {
                                     </TabPanel>
                                     <TabPanel className="px-0">
                                         <StakeTab />
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <ReferralTab />
                                     </TabPanel>
                                     <TabPanel>
                                         <table
