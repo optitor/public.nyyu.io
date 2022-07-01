@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useReducer, useCallback } from "react";
 import { useQuery } from "@apollo/client";
 import Header from "./../header";

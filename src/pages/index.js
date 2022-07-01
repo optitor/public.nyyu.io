@@ -362,6 +362,9 @@ const IndexPage = () => {
                                     alt="home hero"
                                     className="hero-image img-fluid"
                                 />
+                                <strong className="title" style={{display: 'none'}}>
+                                    The NDB token pre-sale: NDB token will help you gain access to the NDB Ecosystem and allows the acquisition of some of its utilities, such as NFTs.
+                                </strong>
                             </div>
                         </div>
                     </div>

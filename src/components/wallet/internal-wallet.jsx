@@ -160,14 +160,14 @@ export default function InternalWallet() {
                             {!hidden && (
                                 <Icon
                                     className="value-label-eye-icon"
-                                    icon="bi:eye-slash"
+                                    icon="bi:eye"
                                     onClick={() => dispatch(updateHiddenStatus(true))}
                                 />
                             )}
                             {hidden && (
                                 <Icon
                                     className="value-label-eye-icon"
-                                    icon="bi:eye"
+                                    icon="bi:eye-slash"
                                     onClick={() => dispatch(updateHiddenStatus(false))}
                                 />
                             )}
