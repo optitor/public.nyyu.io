@@ -28,7 +28,6 @@ import TransactionsProvider from "./transactions/transactions-context";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { useMutation } from '@apollo/client';
 
-
 const airdrops = [
     {
         icon: Airdrop,
@@ -211,7 +210,7 @@ const Wallet = () => {
                                     <div className="tab-top">
                                         <TabList>
                                             <Tab>market</Tab>
-                                            <Tab disabled={true}>stake</Tab>
+                                            <Tab disabled={false}>stake</Tab>
                                             <Tab disabled={true}>airdrops</Tab>
                                             <Tab>transaction</Tab>
                                         </TabList>
