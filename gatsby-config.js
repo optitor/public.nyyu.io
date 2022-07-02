@@ -10,6 +10,7 @@ module.exports = {
         siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
     },
     plugins: [
+        `gatsby-plugin-webfonts`,
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-styled-components`,
         `gatsby-theme-material-ui`,

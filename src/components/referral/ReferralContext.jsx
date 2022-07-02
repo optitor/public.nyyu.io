@@ -5,7 +5,6 @@ export const useReferral = () => useContext(ReferralContext);
 const ReferralProvider = ({children}) => {
     const [hidden, setHidden] = useState(false);
     const [currentEquity, setCurrentEquity] = useState('USD');
-    const [ndbPrice] = useState(0.01);
     const [btcPrice, setBtcPrice] = useState(1);
     const [view, setView] = useState('all');
     const [xl, setXl] = useState(false);
@@ -15,7 +14,6 @@ const ReferralProvider = ({children}) => {
         setHidden,
         currentEquity,
         setCurrentEquity,
-        ndbPrice,
         btcPrice,
         setBtcPrice,
         view,

@@ -17,11 +17,10 @@ const CommissionBalance = ({loading, totalEarned}) => {
 
     const currency = useSelector(state => state.favAssets?.currency.value);
     const currencyRate = useSelector(state => state.currencyRates);
-    const { equity, hidden } = useSelector(state => state.balance);
+    const { equity, hidden, ndbPrice } = useSelector(state => state.balance);
     
     const {
-        btcPrice, setBtcPrice,
-        ndbPrice
+        btcPrice, setBtcPrice
     } = useReferral();
     
     // USD vs. BTC(BNB)??

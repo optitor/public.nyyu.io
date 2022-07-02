@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useReducer, useCallback } from "react";
 import { useQuery } from "@apollo/client";
 import Header from "./../header";
@@ -28,7 +27,6 @@ import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { useMutation } from '@apollo/client';
-
 
 const airdrops = [
     {
