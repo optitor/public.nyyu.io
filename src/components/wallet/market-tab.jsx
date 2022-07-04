@@ -10,7 +10,7 @@ import { Icon } from "@iconify/react";
 import ReactECharts from "echarts-for-react";
 import { cryptoSymbol } from 'crypto-symbol';
 import _ from 'lodash';
-import {NickToken} from "../../utilities/imgImport";
+import { NickToken, NDB } from "../../utilities/imgImport";
 import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
 import { setCookie, getCookie, NDB_FavAssets } from '../../utilities/cookies';
@@ -30,6 +30,13 @@ const { get } = cryptoSymbol({})
 const cryptoSymbolList = get().SNPair;
 const REFRESH_TIME = 30;
 
+const fetch_Ticker_From_Binance = async (tokenSymbol) => {
+    const res = await axios.get(TICKER_24hr, { params: { symbol: tokenSymbol + QUOTE } });
+    const price = Number(res.data.lastPrice);
+    const percent = Number(res.data.priceChangePercent);
+    const volume = Number(res.data.quoteVolume);
+    return { price, percent, volume };
+};
 
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const currency = useSelector(state => state.favAssets.currency);
@@ -48,7 +55,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
     useEffect(() => {
         const getChartData = async () => {
-            if(!data.symbol) return;
+            if(!data.symbol || data.symbol === 'NDB') return;
             const res = await axios.get(KLINE_ENDPOINT, {
                     params: {
                         symbol: data.symbol + QUOTE,
@@ -56,7 +63,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                         startTime: new Date().getTime() - 24 * 3600 * 1000,
                     },
                 });
-            const chartData = res.data.map((c) => c[1]);
+            const chartData = res.data.map((c) => c[4]);
 
             setState({
                 min: Math.min(chartData),
@@ -67,12 +74,16 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
         const getTicker24hr = async () => {
             if(!data.symbol) return;
-            const res = await axios.get(TICKER_24hr, { params: { symbol: data.symbol + QUOTE } });
-            setState({
-                price: res.data.lastPrice,
-                percent: res.data.priceChangePercent,
-                volume: res.data.quoteVolume,
-            });
+            if(data.symbol === 'NDB') {
+
+            } else {
+                const { price, percent, volume } = await fetch_Ticker_From_Binance(data.symbol);
+                setState({
+                    price,
+                    percent,
+                    volume
+                });
+            }
         };
 
         getTicker24hr();
@@ -85,6 +96,13 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
         return () => clearInterval(interval_crypto);
     }, [])
+
+    let tokenImage;
+    if(data.symbol === 'NDB') {
+        tokenImage = NDB;
+    } else {
+        tokenImage = icons[data.symbol]?.icon?? NickToken;
+    }
     
     return (
         <tr>
@@ -95,7 +113,9 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                         className={`star-checkbox ${favours[data.symbol]? "txt-green" : "txt-grey"}`}
                     />
                 </div>
-                <img src={icons[data.symbol]?.icon?? NickToken} alt="coin" className="me-2" width="30" />
+                <div>
+                    <img src={tokenImage} alt="coin" className="me-2 full-width" width="30" />
+                </div>
                 <div style={{width: '100%', paddingRight: 20}}>
                     <p className="coin-abbr">{data.symbol}</p>
                     <p className="coin-name">{data.name}</p>
@@ -170,6 +190,12 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 }
 
 const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
+    let tokenImage;
+    if(data.symbol === 'NDB') {
+        tokenImage = NDB;
+    } else {
+        tokenImage = icons[data.symbol]?.icon?? NickToken;
+    }
     return (
         <tr>
             <td className="d-flex align-items-start ps-2">
@@ -179,7 +205,7 @@ const CryptoRowForSearch = ({ data = {}, favours = {}, doAction }) => {
                         className={`star-checkbox ${favours[data.symbol]? "txt-green" : "txt-grey"}`}
                     />
                 </div>
-                <img src={icons[data.symbol]?.icon?? NickToken} alt="coin" className="me-2" width="30" />
+                <img src={tokenImage} alt="coin" className="me-2" width="30" />
                 <div>
                     <p className="coin-abbr">{data.symbol}</p>
                     <p className="coin-name">{data.name}</p>
@@ -238,6 +264,9 @@ export default function MarketTab() {
             const allprices = res.data;
             let cryptos = allprices?.filter(el => el.symbol.match(/USDT$/))
                 .map(item => ({symbol: item.symbol?.replace('USDT', '')}));
+            // Added NDB to search list
+            cryptos = [ { symbol: 'NDB' }, ...cryptos ];
+
             cryptos = cryptos.map(item => ({ symbol: item.symbol, name: cryptoSymbolList[item.symbol]?? item.symbol + 'Coin' }))
             setCryptoList(_.mapKeys(cryptos, 'symbol'));
         });
@@ -246,14 +275,14 @@ export default function MarketTab() {
     useDeepCompareEffect(() => {
         (async function() {
             let assets = { ...favours };
-            let price = 0, percent = 0, volume = 0;
             
             for(const favour of Object.values(favours)) {
-                const res = await axios.get(TICKER_24hr, { params: { symbol: favour.symbol + QUOTE } });
-                price = Number(res.data.lastPrice);
-                percent = Number(res.data.priceChangePercent);
-                volume = Number(res.data.quoteVolume);
-                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
+                if(favour.symbol === 'NDB') {
+
+                } else {
+                    const { price, percent, volume } = await fetch_Ticker_From_Binance(favour.symbol);
+                    assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
+                }
             }
             setFavoursData({ ...assets })
         })()
