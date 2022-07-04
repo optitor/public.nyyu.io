@@ -15,6 +15,7 @@ import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
 import { setCookie, getCookie, NDB_FavAssets } from '../../utilities/cookies';
 import { update_Favor_Assets } from "../../redux/actions/settingAction";
+import { TICKER_24hr_FOR_NDB, KLINE_ENDPOINT_FOR_NDB } from '../../utilities/staticData3';
 
 const QUOTE = "USDT";
 
@@ -38,6 +39,14 @@ const fetch_Ticker_From_Binance = async (tokenSymbol) => {
     return { price, percent, volume };
 };
 
+const fetch_Ticker_Of_NDB = async (tokenSymbol) => {
+    const res = await axios.get(TICKER_24hr_FOR_NDB, { params: { symbol: tokenSymbol + QUOTE } });
+    const price = Number(res.data.result.last);
+    const percent = Number(res.data.result.change);
+    const volume = Number(res.data.result.volume) * Number(res.data.result.last);
+    return { price, percent, volume };
+};
+
 const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
@@ -55,15 +64,22 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
     useEffect(() => {
         const getChartData = async () => {
-            if(!data.symbol || data.symbol === 'NDB') return;
-            const res = await axios.get(KLINE_ENDPOINT, {
+            if(!data.symbol) return;
+            let chartData;
+
+            if(data.symbol === 'NDB') {
+                const res = await axios.get(KLINE_ENDPOINT_FOR_NDB);
+                chartData = res.data.result.map((c) => c[2]);
+            } else {
+                const res = await axios.get(KLINE_ENDPOINT, {
                     params: {
                         symbol: data.symbol + QUOTE,
                         interval: KLINE_INTERVAL,
                         startTime: new Date().getTime() - 24 * 3600 * 1000,
                     },
                 });
-            const chartData = res.data.map((c) => c[4]);
+                chartData = res.data.map((c) => c[4]);
+            }
 
             setState({
                 min: Math.min(chartData),
@@ -74,16 +90,20 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
         const getTicker24hr = async () => {
             if(!data.symbol) return;
-            if(data.symbol === 'NDB') {
+            let fetchData;
 
+            if(data.symbol === 'NDB') {
+                fetchData = await fetch_Ticker_Of_NDB(data.symbol);
             } else {
-                const { price, percent, volume } = await fetch_Ticker_From_Binance(data.symbol);
-                setState({
-                    price,
-                    percent,
-                    volume
-                });
+                fetchData = await fetch_Ticker_From_Binance(data.symbol);
             }
+
+            const { price, percent, volume } = fetchData;
+            setState({
+                price,
+                percent,
+                volume
+            });
         };
 
         getTicker24hr();
@@ -267,22 +287,24 @@ export default function MarketTab() {
             // Added NDB to search list
             cryptos = [ { symbol: 'NDB' }, ...cryptos ];
 
-            cryptos = cryptos.map(item => ({ symbol: item.symbol, name: cryptoSymbolList[item.symbol]?? item.symbol + 'Coin' }))
+            cryptos = cryptos.map(item => ({ symbol: item.symbol, name: cryptoSymbolList[item.symbol]?? item.symbol + ' Coin' }))
             setCryptoList(_.mapKeys(cryptos, 'symbol'));
         });
     }, []);
-
+    
     useDeepCompareEffect(() => {
         (async function() {
             let assets = { ...favours };
+            let tickerData;
             
             for(const favour of Object.values(favours)) {
                 if(favour.symbol === 'NDB') {
-
+                    tickerData = await fetch_Ticker_Of_NDB(favour.symbol);
                 } else {
-                    const { price, percent, volume } = await fetch_Ticker_From_Binance(favour.symbol);
-                    assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
+                    tickerData = await fetch_Ticker_From_Binance(favour.symbol);
                 }
+                const { price, percent, volume } = tickerData;
+                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
             }
             setFavoursData({ ...assets })
         })()
