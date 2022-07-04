@@ -337,7 +337,7 @@ const IndexPage = () => {
     return (
         <div>
             <Seo title="Home" />
-            <main className="home-page">
+            <div className="home-page">
                 <Header />
                 <ReferToFriendsModal
                     isModalOpen={isModalOpen}
@@ -362,12 +362,15 @@ const IndexPage = () => {
                                     alt="home hero"
                                     className="hero-image img-fluid"
                                 />
+                                <strong className="title" style={{display: 'none'}}>
+                                    The NDB token pre-sale: NDB token will help you gain access to the NDB Ecosystem and allows the acquisition of some of its utilities, such as NFTs.
+                                </strong>
                             </div>
                         </div>
                     </div>
                 </section>
                 <Footer />
-            </main>
+            </div>
         </div>
     )
 }

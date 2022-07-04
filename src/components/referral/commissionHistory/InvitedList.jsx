@@ -4,8 +4,8 @@ import { REFER_AVATAR, SPINNER } from '../../../utilities/imgImport';
 import { useReferral } from '../ReferralContext';
 
 const InvitedList = ({loading, invitedList}) => {
-    const { btcPrice, ndbPrice } = useReferral();
-    const { hidden, equity } = useSelector(state => state.balance);
+    const { btcPrice } = useReferral();
+    const { hidden, equity, ndbPrice } = useSelector(state => state.balance);
     const { currencyRates } = useSelector(state => state);
     const priceFactor = equity === "BTC" ? btcPrice * ndbPrice : ndbPrice / (currencyRates[equity]);
     
