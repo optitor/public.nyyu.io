@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React from "react";
 import { useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -40,7 +39,7 @@ export default function StakeTab() {
         setLockedStakingAssets([...fooArray]);
         // console.log("clicking")
     };
-    
+
     return (
         <Tabs className="text-light stake-react-list__tab">
             <TabList className="py-3 px-0 px-sm-4 overflow-auto d-flex align-items-center justify-content-start white-space-nowrap">
