@@ -58,7 +58,9 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         setError(null);
         // internal wallet is not supported now
         if(selectedWallet === 'internal') {
-            setError('Nyyu wallet is not supported now.')
+            activateReferrer({variables: {
+                wallet: "0x0000000000000000000000000000000000000000"
+            }});
             return;
         }
         // check wallet address is exists
