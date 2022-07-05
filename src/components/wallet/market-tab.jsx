@@ -69,7 +69,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
             if(data.symbol === 'NDB') {
                 const res = await axios.get(KLINE_ENDPOINT_FOR_NDB);
-                chartData = res.data.result.slice(-24).map((c) => c[2]);
+                chartData = res.data.result.slice(-25).map((c) => c[2]);
             } else {
                 const res = await axios.get(KLINE_ENDPOINT, {
                     params: {

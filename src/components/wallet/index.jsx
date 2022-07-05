@@ -18,11 +18,11 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Input } from "../common/FormControl";
 import { useWindowSize } from "../../utilities/customHook";
 import AirdropDetail from "../AirdropDetail";
-import MarketTab from "../wallet/market-tab";
+import MarketTab from "./market-tab";
 import Transactions from "./transactions";
-import StakeTab from "../wallet/stake-tab";
+import StakeTab from "./stake-tab";
 import { GET_BID_LIST_BY_USER } from "../../apollo/graphqls/querys/Bid";
-import InternalWallet from "../wallet/internal-wallet";
+import InternalWallet from "./internal-wallet";
 import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
@@ -210,7 +210,7 @@ const Wallet = () => {
                                     <div className="tab-top">
                                         <TabList>
                                             <Tab>market</Tab>
-                                            <Tab disabled={true}>stake</Tab>
+                                            <Tab disabled={false}>stake</Tab>
                                             <Tab disabled={true}>airdrops</Tab>
                                             <Tab>transaction</Tab>
                                         </TabList>
