@@ -5,6 +5,7 @@ import NumberFormat from 'react-number-format';
 import { Checkbox } from '@mui/material';
 import { renderNumberFormat, roundNumber } from '../../../utilities/number';
 import { NDB } from '../../../utilities/imgImport';
+import CustomSpinner from '../../common/custom-spinner';
 
 const label = { inputProps: { 'aria-label': 'Checkbox for agreement' } };
 
@@ -106,7 +107,7 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
                     <button className="btn btn-outline-light w-100 rounded-0 fw-bold text-uppercase my-4" style={{height: 47}}
                         onClick={handleSubmit} disabled={pending || !agreed}
                     >
-                        {pending? 'Staking. . .': 'Stake'}
+                        {pending? <CustomSpinner />: 'Stake'}
                     </button>
                 </div>
             </form>
