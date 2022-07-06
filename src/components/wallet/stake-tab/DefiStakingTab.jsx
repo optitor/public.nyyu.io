@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
 import { Icon } from "@iconify/react";
 import NDBStakingModal from './NDBStakingModal';
+import RedeemModal from './RedeemModal';
 
 const DataRow = ({ asset }) => {
     const [isStakingModalOpen, setIsStakingModalOpen] = useState(false);
+    const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false);
+    // const [staked, setStaked] = useState(true);
+
+    const handleClick = () => {
+        if(asset.staked) {
+            setIsRedeemModalOpen(true);
+        } else {
+            setIsStakingModalOpen(true);
+        }
+    };
 
     return (
         <>
@@ -33,20 +44,19 @@ const DataRow = ({ asset }) => {
                 </td>
                 <td>
                     <button className="btn btn-outline-light rounded-0 fw-bold text-uppercase w-100 py-1"
-                        onClick={() => setIsStakingModalOpen(true)}
+                        onClick={handleClick}
                     >
-                        stake
+                        {asset.staked? 'Redeem': 'Stake'}
                     </button>
                 </td>
             </tr>
             {isStakingModalOpen && <NDBStakingModal isModalOpen={isStakingModalOpen} setIsModalOpen={setIsStakingModalOpen} data={asset} />}
+            {isRedeemModalOpen && <RedeemModal isModalOpen={isRedeemModalOpen} setIsModalOpen={setIsRedeemModalOpen} data={asset} />}
         </>
     );
 };
 
 export default function DefiStakingTab() {
-    const [isStakingModalOpen, setIsStakingModalOpen] = useState(false);
-
     return (
         <div className="d-flex py-3">
             <table>
@@ -67,6 +77,15 @@ export default function DefiStakingTab() {
                             minAmount: "1 btc",
                             apy: "30.77%",
                             duration: 0,
+                            staked: true
+                        },
+                        {
+                            id: 1,
+                            label: "ndb",
+                            minAmount: "3 btc",
+                            apy: "30.77%",
+                            duration: 0,
+                            staked: false
                         },
                     ].map((asset, index) => (
                         <DataRow key={index} asset={asset} />
