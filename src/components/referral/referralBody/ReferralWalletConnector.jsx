@@ -39,7 +39,6 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     const [changeReferrerWallet, { loading: updateLoading }] = useMutation(CHANGE_COMMISSION_WALLET, {
         onCompleted: data => {
             if(data.changeReferralCommissionWallet) {
-                console.log(data.changeReferralCommissionWallet);
                 setReferrer({...referrerInfo, walletConnect: walletAddress});
             } else {
                 setError('Cannot update referral wallet.');

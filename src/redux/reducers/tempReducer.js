@@ -25,7 +25,7 @@ export const profileTabReducer = (state = 0, action) => {
 const initialState = {
   hidden: false,
   equity: 'BTC',
-  ndbPrice: 0,
+  ndbPrice: 0.1,
 }
 
 export const balanceReducer = (state = initialState, action) => {
