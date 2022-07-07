@@ -69,7 +69,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
             if(data.symbol === 'NDB') {
                 const res = await axios.get(KLINE_ENDPOINT_FOR_NDB);
-                chartData = res.data.result.slice(-24).map((c) => c[2]);
+                chartData = res.data.result.slice(-25).map((c) => c[2]);
             } else {
                 const res = await axios.get(KLINE_ENDPOINT, {
                     params: {
@@ -304,7 +304,7 @@ export default function MarketTab() {
                     tickerData = await fetch_Ticker_From_Binance(favour.symbol);
                 }
                 const { price, percent, volume } = tickerData;
-                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
+                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + ' Coin', price, percent, volume };
             }
             setFavoursData({ ...assets })
         })()
