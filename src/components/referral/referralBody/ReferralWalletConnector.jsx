@@ -65,9 +65,17 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         setError(null);
         // internal wallet is not supported now
         if(selectedWallet === 'internal') {
-            activateReferrer({variables: {
-                wallet: "0x0000000000000000000000000000000000000000"
-            }});
+            if(action === ACTIVE_ACTION) {
+                activateReferrer({variables: {
+                    wallet: "0x0000000000000000000000000000000000000000"
+                }});
+            } else if(action === UPDATE_ACTION) {
+                changeReferrerWallet({variables: {
+                    wallet: "0x0000000000000000000000000000000000000000"
+                }})
+            } else {
+                setError('Unknown error.')
+            }
             return;
         }
         // check wallet address is exists
