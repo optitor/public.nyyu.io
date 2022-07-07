@@ -40,12 +40,6 @@ const shortInviteUrl = url => {
 
 const inviteText = 'Hey, I use Nyyu.io to buy NDB tokens. It has great potential! Give it a try and get an extra 10% reward on your purchase.';
 export const sendingLinks = [
-    // {
-    //     name: 'Copy link',
-    //     action: async (url) => {
-    //         await navigator.clipboard.writeText(url);
-    //     }
-    // },
     {
         name: 'Send with Whatsapp',
         link: (url) => {
@@ -77,6 +71,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     const dispatch = useDispatch();
     const tierDiv = useRef(null);
     const tiers = useSelector(state => state.tiers);
+    const user = useSelector(state => state.auth?.user);
 
     const [codeCopied, setCodeCopied] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
@@ -84,7 +79,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     const [linkModalShow, setLinkModalShow] = useState(false);
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-    const {rate, referralCode, walletConnect, commissionRate} = referrerInfo;
+    const {referralCode, walletConnect, commissionRate} = referrerInfo;
     
     const onChangeModalShow = e => {
         e.stopPropagation();
@@ -119,14 +114,14 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
         if(!isBrowser) { return null; }
 
         tiers.forEach(tier => {
-            if(commissionRate[tier.level] === rate) {
+            if(tier.level === user.tierLevel) {
                 const leftMove = 100 / tiers.length * tier.level + 100 / tiers.length / 2;
                 setCaretStyle({top: '-28px', transform: 'translateX(-50%)', left: `${leftMove}%`});
             }
         })
         window.addEventListener('click', hideLinkModal);
         return () => window.removeEventListener('click', hideLinkModal);
-    }, [tiers, commissionRate, rate]);
+    }, [tiers, commissionRate]);
 
     return <div>
         <div className='d-none d-md-flex bg-gray-50 justify-content-around pb-3 pt-4'>
@@ -154,8 +149,8 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                     {tiers.length > 0 && tiers.map(tier => {
                         return (
                             <div className={`border-end border-secondary p-md-2 px-xl-3 py-xl-2 d-flex align-items-center justify-content-around`} key={tier.level}>
-                                <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${commissionRate[tier.level] === rate ? '':'opacity-20'}`}/>
-                                <span className={`fs-16px ps-md-1 ps-xl-2 ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`}>{commissionRate[tier.level]}%</span>
+                                <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`${tier.level === user.tierLevel ? '':'opacity-20'}`}/>
+                                <span className={`fs-16px ps-md-1 ps-xl-2 ${tier.level === user.tierLevel ? 'text-white':'text-[#7C7C7C] opacity-20'}`}>{commissionRate[tier.level]}%</span>
                             </div>
                         )
                     })}
@@ -173,7 +168,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             <div className="d-flex justify-content-around bg-gray-50 py-3 mb-2">
                 <div className='me-4'>
                     <div className='opacity-40'>You get</div>
-                    <div className='fw-600 fs-24px'>{rate}%</div>
+                    <div className='fw-600 fs-24px'>{commissionRate[user.tierLevel]}%</div>
                 </div>
                 <div className='ms-4'>
                     <div className='opacity-40'>Friend gets</div>
@@ -184,8 +179,8 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                 {tiers.length > 0 && tiers.map(tier => {
                     return (
                         <div className={`col-2 border-end border-secondary p-2 d-flex align-items-center justify-content-center`} key={tier.level}>
-                            <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`me-1 ${commissionRate[tier.level] === rate ? '':'opacity-20'}`}/>
-                            <span className={`fs-16px ${commissionRate[tier.level] === rate ? 'text-white':'text-[#7C7C7C] opacity-20'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
+                            <img src={tierImages[tier.level]} alt={tier.name} width='12px' height='12px' className={`me-1 ${tier.level === user.tierLevel ? '':'opacity-20'}`}/>
+                            <span className={`fs-16px ${tier.level === user.tierLevel ? 'text-white':'text-[#7C7C7C] opacity-20'}`} style={{paddingLeft: '3px'}}>{commissionRate[tier.level]}%</span>
                         </div>
                     )
                 })}

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { FaArrowLeft } from '@react-icons/all-files/fa/FaArrowLeft';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import WalletSelector from '../../common/wallet/WalletSelector';
 import { ACTIVATE_REFERRER, CHANGE_COMMISSION_WALLET } from '../api/mutation';
 import CustomSpinner from '../../common/custom-spinner';
 import { ACTIVE_ACTION, UPDATE_ACTION } from '../constants';
+import { GET_REFERRAL } from '../api/query';
 
 const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     
@@ -24,8 +25,10 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         onCompleted: data => {
             if(data.activateReferralCode) {
                 /// referral code 
-                const {referralCode, rate} = data.activateReferralCode;
-                setReferrer({referralCode, rate, walletConnect: walletAddress});
+                const { code, referralWallet, rate, commissionRate } = data.activateReferralCode;
+                setReferrer({
+                    referralCode: code, walletConnect: referralWallet, rate, commissionRate
+                });
             } else {
                 // cannot get code
                 setError('Cannot get referral code.');
@@ -39,7 +42,12 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     const [changeReferrerWallet, { loading: updateLoading }] = useMutation(CHANGE_COMMISSION_WALLET, {
         onCompleted: data => {
             if(data.changeReferralCommissionWallet) {
-                setReferrer({...referrerInfo, walletConnect: walletAddress});
+                const { status, referralWallet } = data.changeReferralCommissionWallet;
+                if(status) {
+                    setReferrer({...referrerInfo, walletConnect: referralWallet});
+                } else {
+                    setError('Cannot update referral wallet.');    
+                }
             } else {
                 setError('Cannot update referral wallet.');
             }

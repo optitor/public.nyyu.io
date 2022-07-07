@@ -1,11 +1,11 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { GET_TASK_SETTING, GET_USER_TIERS, GET_USER_TIER_TASK } from "./profile-queries";
+import { GET_TASK_SETTING, GET_USER_TIER_TASK } from "./profile-queries";
 import { useState } from "react";
 import CustomSpinner from "../common/custom-spinner";
-import { GET_USER } from "../../apollo/graphqls/querys/Auth";
 import { Qmark } from "../../utilities/imgImport";
 import ReactTooltip from "react-tooltip";
+import { useSelector } from "react-redux";
 
 export default function TierDetailsTab({ shuftiStatus }) {
     // Webserivce
@@ -30,22 +30,15 @@ export default function TierDetailsTab({ shuftiStatus }) {
         },
     });
 
-    useQuery(GET_USER_TIERS, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => setUserTiersData(data.getUserTiers),
-    });
-
-    useQuery(GET_USER, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => setUserData(data.getUser),
-    });
-
     // Containers
+    const userTiersData = useSelector(state => state.tiers);
+    const userData = useSelector(state => state.auth?.user);
+
     const [gainPointsData, setGainPointsData] = useState(null);
     const [taskSettingData, setTaskSettingData] = useState(null);
-    const [userTiersData, setUserTiersData] = useState(null);
     const [walletPoint, setWalletPoint] = useState(0);
-    const [userData, setUserData] = useState(null);
+    
+
     const loadingSection = !(gainPointsData && taskSettingData && userTiersData && userData);
     const currentTier = userTiersData?.filter((item) => item?.level === userData?.tierLevel);
     const nextTier = userTiersData?.filter((item) => item?.level === userData?.tierLevel + 1);

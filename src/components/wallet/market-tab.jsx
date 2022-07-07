@@ -15,13 +15,12 @@ import Skeleton from '@mui/material/Skeleton';
 import CustomSpinner from './../common/custom-spinner';
 import { setCookie, getCookie, NDB_FavAssets } from '../../utilities/cookies';
 import { update_Favor_Assets } from "../../redux/actions/settingAction";
-import { TICKER_24hr_FOR_NDB, KLINE_ENDPOINT_FOR_NDB } from '../../utilities/staticData3';
 
 const QUOTE = "USDT";
 
-const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines";
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
-const ALLPRICES = "https://api.binance.com/api/v3/ticker/price";
+const KLINE_ENDPOINT = `${process.env.GATSBY_BINANCE_BASE_API}/v3/klines`;
+const TICKER_24hr = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/24hr`;
+const ALLPRICES = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
 
 const KLINE_INTERVAL = "30m"
 const GREEN = "#23C865"
@@ -40,7 +39,7 @@ const fetch_Ticker_From_Binance = async (tokenSymbol) => {
 };
 
 const fetch_Ticker_Of_NDB = async (tokenSymbol) => {
-    const res = await axios.get(TICKER_24hr_FOR_NDB, { params: { symbol: tokenSymbol + QUOTE } });
+    const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/price`, { params: { symbol: tokenSymbol + QUOTE } });
     const price = Number(res.data.result.last);
     const percent = Number(res.data.result.change);
     const volume = Number(res.data.result.volume) * Number(res.data.result.last);
@@ -68,8 +67,8 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             let chartData;
 
             if(data.symbol === 'NDB') {
-                const res = await axios.get(KLINE_ENDPOINT_FOR_NDB);
-                chartData = res.data.result.slice(-25).map((c) => c[2]);
+                const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/kline`);
+                chartData = res.data.result.slice(-24).map((c) => c[2]);
             } else {
                 const res = await axios.get(KLINE_ENDPOINT, {
                     params: {

@@ -16,7 +16,7 @@ import { roundNumber } from "../../utilities/number";
 import { updateHiddenStatus, changeEquity, fetchNDBPrice } from "../../redux/actions/tempAction";
 
 const QUOTE = "USDT";
-const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
+const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
 const REFRESH_TIME = 30 * 1000;
 const obscureValueString = "******";
 
