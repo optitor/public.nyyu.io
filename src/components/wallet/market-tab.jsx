@@ -18,9 +18,9 @@ import { update_Favor_Assets } from "../../redux/actions/settingAction";
 
 const QUOTE = "USDT";
 
-const KLINE_ENDPOINT = "https://api.binance.com/api/v3/klines";
-const TICKER_24hr = "https://api.binance.com/api/v3/ticker/24hr";
-const ALLPRICES = "https://api.binance.com/api/v3/ticker/price";
+const KLINE_ENDPOINT = `${process.env.GATSBY_BINANCE_BASE_API}/v3/klines`;
+const TICKER_24hr = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/24hr`;
+const ALLPRICES = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
 
 const KLINE_INTERVAL = "30m"
 const GREEN = "#23C865"

@@ -24,8 +24,8 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         onCompleted: data => {
             if(data.activateReferralCode) {
                 /// referral code 
-                const {referralCode, rate} = data.activateReferralCode;
-                setReferrer({referralCode, rate, walletConnect: walletAddress});
+                const { code, referralWallet } = data.activateReferralCode;
+                setReferrer({referralCode: code, walletConnect: referralWallet});
             } else {
                 // cannot get code
                 setError('Cannot get referral code.');
