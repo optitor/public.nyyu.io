@@ -303,7 +303,7 @@ export default function MarketTab() {
                     tickerData = await fetch_Ticker_From_Binance(favour.symbol);
                 }
                 const { price, percent, volume } = tickerData;
-                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + 'Coin', price, percent, volume };
+                assets[favour.symbol] = { ...favour, name: cryptoSymbolList[favour.symbol]?? favour.symbol + ' Coin', price, percent, volume };
             }
             setFavoursData({ ...assets })
         })()
