@@ -10,6 +10,8 @@ export const ACTIVATE_REFERRER = gql`
         ) {
             code
             referralWallet
+            rate
+            commissionRate
         }
     }
 `
@@ -23,6 +25,8 @@ export const CHANGE_COMMISSION_WALLET = gql`
         ) {
             status
             referralWallet
+            rate
+            commissionRate
         }
     }
 `
