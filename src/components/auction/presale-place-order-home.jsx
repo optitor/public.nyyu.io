@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
+import { renderNumberFormat } from "../../utilities/number"
 
 export default function PresalePlaceOrderHome() {
     const currency = useSelector(state => state.favAssets.currency);
@@ -12,6 +13,8 @@ export default function PresalePlaceOrderHome() {
     const auction = useAuction()
     const { optCurrentRound, setPresalePlaceOrderStage, setPresaleNdbAmount } = auction
     const [amount, setAmount] = useState(1)
+
+    const isFirstPurchase = false;
 
     const handleOrder = () => {
         setPresalePlaceOrderStage(1)
@@ -73,6 +76,16 @@ export default function PresalePlaceOrderHome() {
                     />: ''
                 }
             </div>
+            {isFirstPurchase && (
+                <div className="row">
+                    <div className="col-lg-8">
+                        <p className="txt-green">This is a referred account. You will get an extra 10% of NDB Tokens with your first purchase. Make it count!</p>
+                    </div>
+                    <div className="col-lg-4 d-flex align-items-center justify-content-center">
+                        <p className="my-2 fs-18px">Extra: {renderNumberFormat(Number(amount * 0.1).toFixed(1), 'NDB')}</p>
+                    </div>
+                </div>
+            )}
             <div className="mt-3 mb-1">
                 <p className="text-secondary fw-500 text-[#959595]">
                     Audited by CertiK
