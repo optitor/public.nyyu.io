@@ -98,6 +98,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
     const handleSubmit = async () => {
         if(error) {
             setShowError(true);
+            return;
         }
         setPending(true);
         const confirmData = {

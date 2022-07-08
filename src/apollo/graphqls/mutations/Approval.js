@@ -65,9 +65,11 @@ export const CONFIRM_PAYPAL_WITHDRAW = gql`
 export const APPROVE_BANK_WITHDRAW_REQUEST = gql`
     mutation ApproveBankWithdrawRequest(
         $id: Int
+        $code: String
     ) {
         approveBankWithdrawRequest(
             id: $id
+            code: $code
         )
     }
 `;
