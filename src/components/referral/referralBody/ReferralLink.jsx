@@ -88,7 +88,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     const [linkModalShow, setLinkModalShow] = useState(false);
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-    const {referralCode, walletConnect, commissionRate} = referrerInfo;
+    const {referralCode, walletConnect, commissionRate, rate} = referrerInfo;
     
     useQuery(CHECK_TIMELOCK, {
         onCompleted: data => {
@@ -139,9 +139,9 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             if(timelock > 0) timelock--;
         }, 1000)
 
-        tiers.forEach(tier => {
-            if(tier.level === user.tierLevel) {
-                const leftMove = 100 / tiers.length * tier.level + 100 / tiers.length / 2;
+        commissionRate.forEach((_rate, index) => {
+            if(_rate === rate) {
+                const leftMove = 100 / commissionRate.length * index + 100 / commissionRate.length / 2;
                 setCaretStyle({top: '-28px', transform: 'translateX(-50%)', left: `${leftMove}%`});
             }
         })
@@ -150,7 +150,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             window.removeEventListener('click', hideLinkModal);
             clearInterval(countDown);
         }
-    }, [tiers, commissionRate]);
+    }, [commissionRate]);
 
     return <div>
         <div className='d-none d-md-flex bg-gray-50 justify-content-around pb-3 pt-4'>
