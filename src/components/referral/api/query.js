@@ -19,3 +19,9 @@ export const GET_EARNING = gql`
         }
     }
 `
+
+export const CHECK_TIMELOCK = gql`
+    query CheckTimeLock {
+        checkTimeLock
+    }
+`

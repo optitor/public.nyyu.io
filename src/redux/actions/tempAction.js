@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as types from './../actionTypes';
-import { TICKER_24hr_FOR_NDB } from '../../utilities/staticData3';
 
 export const set_Temp_Data = data => dispatch => {
     dispatch({
@@ -25,7 +24,7 @@ export const changeEquity = equity => dispatch => {
 
 export const fetchNDBPrice = () => async dispatch => {
     try {
-        const { data } = await axios.get(TICKER_24hr_FOR_NDB);
+        const { data } = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/price`);
         const price = data.result.last;
         dispatch({
             type: types.FETCH_NDB_PRICE,

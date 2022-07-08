@@ -13,6 +13,9 @@ const VerifyEmail = ({ email }) => {
     const [code, setCode] = useState("")
     const [tfaOpen, setTfaOpen] = useState(false)
     const [error, setError] = useState('');
+    // checking referral code
+    const referredByCode = localStorage.getItem("referralCode");
+    console.log('#1 referral code in sign up: ', referredByCode);
 
     const [verifyAccount, { loading }] = useMutation(VERIFY_ACCOUNT, {
         onCompleted: (data) => {
@@ -36,6 +39,7 @@ const VerifyEmail = ({ email }) => {
             setError(err.message);
         }
     })
+    
 
     return (
         <>
@@ -65,6 +69,7 @@ const VerifyEmail = ({ email }) => {
                             variables: {
                                 email,
                                 code,
+                                referredByCode,
                             },
                         })
                     }}

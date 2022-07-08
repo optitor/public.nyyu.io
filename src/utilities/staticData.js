@@ -15,26 +15,14 @@ export const OAUTH2_REDIRECT_URI = `${process.env.GATSBY_SITE_URL}/oauth2/redire
 export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
 const API_BASE_URL = process.env.GATSBY_API_BASE_URL;
 export const social_links = [
-    // {
-    //     icon: Facebook,
-    //     to: API_BASE_URL + "/oauth2/authorize/facebook?redirect_uri=" + OAUTH2_REDIRECT_URI,
-    // },
     {
         icon: Google,
         to: API_BASE_URL + "/oauth2/authorize/google?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
-    // {
-    //     icon: Twitter,
-    //     to: API_BASE_URL + "/oauth2/authorize/twitter?redirect_uri=" + OAUTH2_REDIRECT_URI,
-    // },
     {
         icon: Linkedin,
         to: API_BASE_URL + "/oauth2/authorize/linkedin?redirect_uri=" + OAUTH2_REDIRECT_URI,
     },
-    // {
-    //     icon: Apple,
-    //     to: API_BASE_URL + "/oauth2/authorize/apple?redirect_uri=" + OAUTH2_REDIRECT_URI,
-    // },
     {
         icon: Amazon,
         to: API_BASE_URL + "/oauth2/authorize/amazon?redirect_uri=" + OAUTH2_REDIRECT_URI,

@@ -24,7 +24,6 @@ import NotificationSetting from "./profile/notification-setting-switch";
 import ProfileChangePasswordModal from "./profile/change-password-modal";
 import TierDetailsTab from "./profile/TierDetailsTab";
 import Avatar from "../components/dress-up/avatar";
-import { GET_USER_TIERS } from "./profile/profile-queries";
 import { QuestionMark } from "../utilities/imgImport";
 import AccountDetails from "./profile/account-details";
 import ReactTooltip from "react-tooltip";
@@ -35,14 +34,16 @@ import TierProgressBar from "./profile/TierProgressBar";
 import DressupModal from "./dress-up/dressup-user-modal";
 import { getAuthInfo } from "../redux/actions/authAction";
 import { UPDATE_AVATARSET } from "../apollo/graphqls/mutations/AvatarComponent";
+import { GET_USER_TIERS } from "../apollo/graphqls/querys/UserTier";
 
 const Profile = () => {
-    const targetTabIndex = useSelector(state => state.profileTab);
-    const [tab, setTab] = useState(targetTabIndex !== 2 ? targetTabIndex : 0);
     const dispatch = useDispatch();
+    const targetTabIndex = useSelector(state => state.profileTab);
+    
+    const [tab, setTab] = useState(targetTabIndex !== 2 ? targetTabIndex : 0);
+    const [userTiersData, setUserTiersData] = useState(null)
     const [tabIndex, setTabIndex] = useState(tab);
     const [displayName, setDisplayName] = useState("");
-    const [userTiersData, setUserTiersData] = useState(null);
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false);
     const [isDressUpModalOpen, setIsDressUpModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -53,6 +54,12 @@ const Profile = () => {
     const [shuftiStatus, setShuftiStatus] = useState(null);
     const [shuftReference, setShuftiReference] = useState(null);
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
+
+    useQuery(GET_USER_TIERS, {
+        onCompleted: (data) => {
+            setUserTiersData(data?.getUserTiers)
+        },
+    })
 
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
@@ -71,13 +78,6 @@ const Profile = () => {
             return navigate(ROUTES.selectFigure);
         },
         fetchPolicy: "network-only",
-    });
-    
-    useQuery(GET_USER_TIERS, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => {
-            return setUserTiersData(data?.getUserTiers);
-        },
     });
     
     useQuery(GET_SHUFT_REFERENCE, {

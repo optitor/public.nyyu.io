@@ -64,7 +64,8 @@ const ReferralBody = () => {
                                 referrerInfo={referrer} 
                                 setReferrer={onChangeReferrer} 
                                 action={action} />}
-                        {(referrer && referrer.walletConnect && action === ACTIVE_ACTION) && <ReferralLink referrerInfo={referrer} onChangeWallet={onChangeWallet}/>}</>
+                        {(referrer && referrer.walletConnect && action === ACTIVE_ACTION) && 
+                            <ReferralLink referrerInfo={referrer} onChangeWallet={onChangeWallet}/>}</>
                     }
                 </div>
             }

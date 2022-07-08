@@ -7,8 +7,8 @@ export const SIGNUP = gql`
 `
 
 export const VERIFY_ACCOUNT = gql`
-    mutation verifyAccount($email: String!, $code: String!) {
-        verifyAccount(email: $email, code: $code)
+    mutation verifyAccount($email: String!, $code: String!, $referredByCode: String!) {
+        verifyAccount(email: $email, code: $code,referredByCode: $referredByCode)
     }
 `
 

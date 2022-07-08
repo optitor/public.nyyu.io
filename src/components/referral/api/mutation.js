@@ -7,17 +7,27 @@ export const ACTIVATE_REFERRER = gql`
     ) {
         activateReferralCode(
             wallet: $wallet
-        ) 
+        ) {
+            code
+            referralWallet
+            rate
+            commissionRate
+        }
     }
 `
 
 export const CHANGE_COMMISSION_WALLET = gql`
-    mutation ChangeReferralCommissionWallet(
+    mutation changeReferralCommissionWallet(
         $wallet: String!
     ) {
         changeReferralCommissionWallet(
             wallet: $wallet
-        )
+        ) {
+            status
+            referralWallet
+            rate
+            commissionRate
+        }
     }
 `
 

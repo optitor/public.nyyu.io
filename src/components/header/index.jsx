@@ -21,6 +21,8 @@ import { ROUTES, navLinks } from "../../utilities/routes"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
 import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
 import { fetch_Favor_Assets } from '../../redux/actions/settingAction';
+import TWITTER from '../../images/icons/twitter.svg';
+import DISCORD from '../../images/icons/discord.svg';
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
@@ -154,7 +156,17 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                 <Link className="header-btn sale" to="/app/auction">
                                     Sale
                                 </Link>
-                                <li className="scale-75 cursor-pointer">
+                                <li className="scale-75 cursor-pointer pe-3">
+                                    <a href="https://twitter.com/ndbtechnology" target="_blank" rel="noopener noreferrer">
+                                        <img src={TWITTER} alt="twitter social link" className="social-link"/>
+                                    </a>
+                                </li>
+                                <li className="scale-75 cursor-pointer pe-3">
+                                    <a href="https://discord.gg/38tFxghPdz" target="_blank" rel="noopener noreferrer">
+                                        <img src={DISCORD} alt="discord social link" className="social-link"/>
+                                    </a>
+                                </li>
+                                <li className="scale-75 cursor-pointer pe-3">
                                     <Link to={ROUTES.profile}>
                                         <img
                                             role='button'
@@ -203,7 +215,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                         </div>
                                     </ReactTooltip>
                                 </li>
-                                <li className="px-sm-3 px-0 scale-75">
+                                <li className="pe-sm-3 px-0 scale-75">
                                     <Link to={ROUTES.profile}>
                                         <Avatar
                                             onClick={() => {
