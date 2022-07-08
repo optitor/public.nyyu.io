@@ -35,11 +35,13 @@ export const CONFIRM_CRYPTO_WITHDRAW = gql`
         $id: Int
         $status: Int
         $deniedReason: String
+        $code: String
     ) {
         confirmCryptoWithdraw(
             id: $id
             status: $status
             deniedReason: $deniedReason
+            code: $code
         )
     }
 `;
@@ -49,11 +51,13 @@ export const CONFIRM_PAYPAL_WITHDRAW = gql`
         $id: Int
         $status: Int
         $deniedReason: String
+        $code: String
     ) {
         confirmPaypalWithdraw(
             id: $id
             status: $status
             deniedReason: $deniedReason
+            code: $code
         )
     }
 `;
