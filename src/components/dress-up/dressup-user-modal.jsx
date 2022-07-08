@@ -73,7 +73,8 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
         if (!!avatarSets.length) {
             onSave({
                 components: avatarSets,
-                hairColor: hairColors[selectedHairColor]
+                hairColor: hairColors[selectedHairColor],
+                skinColor: selectedSkinColor.value
             });
         }
         setIsModalOpen(false)
