@@ -27,7 +27,6 @@ const DropdownIndicator = props => {
 const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
     const bankDeposit = useBankDeposit();
 
-    const [currentStep, setCurrentStep] = useState(1);
     const [currencyCode, setCurrencyCode] = useState(CURRENCIES[0]);
     const [confirmCode, setConfirmCode] = useState('');
     const [depositAmount, setDepositAmount] = useState('');
@@ -37,8 +36,9 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
 
     const error = useMemo(() => {
         if(!depositAmount || Number(depositAmount) === 0) return 'Amount is required';
+        if(!confirmCode) return 'Confirmation code is required';
         return '';
-    }, [depositAmount]);
+    }, [depositAmount, confirmCode]);
 
     const [sendWithdrawConfirmCodeMutation] = useMutation(Mutation.SEND_WITHDRAW_CONFIRM_CODE, {
         onCompleted: data => {
@@ -47,8 +47,8 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             }
         },
         onError: err => {
+            showFailAlarm('Sending confirmation code failed', err.message);
             setIsOpen(false);
-            showFailAlarm('Sending confirm code failed', err.message);
         }
     });
 
@@ -129,32 +129,10 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         <span className="text-muted me-2">User's email:</span> {datum.email}
                     </p>
                 </div>
-                {currentStep === 1 && (
-                    <>
-                        {loading? 
-                            <div className="text-center my-4">
-                                <CustomSpinner />
-                            </div>
-                            : (
-                            <div>
-                                <p className="txt-green text-center">Confirmation code sent to ADMIN</p>
-                                <p className="text-muted mt-2">Code</p>
-                                <input className="black_input" value={confirmCode} onChange={e => setConfirmCode(e.target.value)} />
-                                <p className="text-danger">
-                                    {showError && error}
-                                </p>
-                                <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
-                                    disabled={!confirmCode}
-                                    onClick={() => setCurrentStep(2)}
-                                >
-                                    NEXT
-                                </button>
-                            </div>
-                        )}
-                    </>
-                )
-                }
-                {currentStep === 2 && 
+                {loading? 
+                    <div className="text-center my-4">
+                        <CustomSpinner />
+                    </div>:
                     <div>
                         <p className="text-muted">Select currency</p>
                         <Select
@@ -182,7 +160,10 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                             }
                             decimalScale={2}
                         />
-                        <p className="text-danger">
+                        <p className="text-muted mt-2">Code</p>
+                        <input className="black_input" value={confirmCode} onChange={e => setConfirmCode(e.target.value)} />
+                        <p className="txt-green fs-12px">Confirmation code sent to ADMIN</p>
+                        <p className="text-danger mt-3">
                             {showError && error}
                         </p>
                         <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
