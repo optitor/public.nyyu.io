@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import NumberFormat from "react-number-format";
 import Modal from 'react-modal';
@@ -16,26 +16,46 @@ const CURRENCIES = [
     { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
+const DropdownIndicator = props => {
+    return (
+      <components.DropdownIndicator {...props}>
+        <Icon icon='ant-design:caret-down-filled' />
+      </components.DropdownIndicator>
+    );
+};
+
 const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
     const bankDeposit = useBankDeposit();
 
+    const [currentStep, setCurrentStep] = useState(1);
     const [currencyCode, setCurrencyCode] = useState(CURRENCIES[0]);
+    const [confirmCode, setConfirmCode] = useState('');
     const [depositAmount, setDepositAmount] = useState('');
     const [showError, setShowError] = useState(false);
     const [pending, setPending] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const error = useMemo(() => {
         if(!depositAmount || Number(depositAmount) === 0) return 'Amount is required';
         return '';
     }, [depositAmount]);
 
-    const DropdownIndicator = props => {
-        return (
-          <components.DropdownIndicator {...props}>
-            <Icon icon='ant-design:caret-down-filled' />
-          </components.DropdownIndicator>
-        );
-    };
+    const [sendWithdrawConfirmCodeMutation] = useMutation(Mutation.SEND_WITHDRAW_CONFIRM_CODE, {
+        onCompleted: data => {
+            if(data.sendWithdrawConfirmCode) {
+                setLoading(false);
+            }
+        },
+        onError: err => {
+            setIsOpen(false);
+            showFailAlarm('Sending confirm code failed', err.message);
+        }
+    });
+
+    useEffect(() => {
+        setLoading(true)
+        sendWithdrawConfirmCodeMutation();
+    }, [sendWithdrawConfirmCodeMutation]);
 
     const [confirmBankDepositMutation] = useMutation(Mutation.CONFIRM_BANK_DEPOSIT, {
         onCompleted: data => {
@@ -64,7 +84,8 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             id: datum.id,
             currencyCode: currencyCode.value,
             amount: Number(depositAmount),
-            cryptoType: 'USDT'
+            cryptoType: 'USDT',
+            code: confirmCode
         };
         confirmBankDepositMutation({
             variables: { ...confirmData }
@@ -99,7 +120,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                 </div>
             </div>
             <div className='width1'>
-                <div className="text-center">
+                <div className="text-center mb-3">
                     <h4 className='mt-3'>Approve Bank Deposit</h4>
                     <p>
                         <span className="text-muted me-2">Reference:</span> {datum.uid}
@@ -108,42 +129,69 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                         <span className="text-muted me-2">User's email:</span> {datum.email}
                     </p>
                 </div>
-                <div className='mt-3'>
-                    <p className="text-muted">Select currency</p>
-                    <Select
-                        className='black_input'
-                        options={CURRENCIES}
-                        value={currencyCode}
-                        onChange={selected => {
-                            setCurrencyCode(selected);
-                        }}
-                        styles={customSelectStyles}
-                        components={{
-                            IndicatorSeparator: null,
-                            DropdownIndicator,
-                        }}
-                    />
-                    <p className="text-muted mt-2">Amount</p>
-                    <NumberFormat
-                        className='black_input'
-                        thousandSeparator={true}
-                        prefix={currencyCode.symbol + ' '}
-                        allowNegative={false}
-                        value={depositAmount}
-                        onValueChange={(values) =>
-                            setDepositAmount(values.value)
-                        }
-                        decimalScale={2}
-                    />
-                    <p className="text-danger">
-                        {showError && error}
-                    </p>
-                    <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
-                        onClick={handleSubmit}
-                    >
-                        {pending? <CustomSpinner />: 'CONFIRM'}
-                    </button>
-                </div>
+                {currentStep === 1 && (
+                    <>
+                        {loading? 
+                            <div className="text-center my-4">
+                                <CustomSpinner />
+                            </div>
+                            : (
+                            <div>
+                                <p className="txt-green text-center">Confirmation code sent to ADMIN</p>
+                                <p className="text-muted mt-2">Code</p>
+                                <input className="black_input" value={confirmCode} onChange={e => setConfirmCode(e.target.value)} />
+                                <p className="text-danger">
+                                    {showError && error}
+                                </p>
+                                <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
+                                    disabled={!confirmCode}
+                                    onClick={() => setCurrentStep(2)}
+                                >
+                                    NEXT
+                                </button>
+                            </div>
+                        )}
+                    </>
+                )
+                }
+                {currentStep === 2 && 
+                    <div>
+                        <p className="text-muted">Select currency</p>
+                        <Select
+                            className='black_input'
+                            options={CURRENCIES}
+                            value={currencyCode}
+                            onChange={selected => {
+                                setCurrencyCode(selected);
+                            }}
+                            styles={customSelectStyles}
+                            components={{
+                                IndicatorSeparator: null,
+                                DropdownIndicator,
+                            }}
+                        />
+                        <p className="text-muted mt-2">Amount</p>
+                        <NumberFormat
+                            className='black_input'
+                            thousandSeparator={true}
+                            prefix={currencyCode.symbol + ' '}
+                            allowNegative={false}
+                            value={depositAmount}
+                            onValueChange={(values) =>
+                                setDepositAmount(values.value)
+                            }
+                            decimalScale={2}
+                        />
+                        <p className="text-danger">
+                            {showError && error}
+                        </p>
+                        <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
+                            onClick={handleSubmit}
+                        >
+                            {pending? <CustomSpinner />: 'CONFIRM'}
+                        </button>
+                    </div>
+                }
             </div>
         </Modal>
     );

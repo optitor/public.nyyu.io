@@ -6,12 +6,14 @@ export const CONFIRM_BANK_DEPOSIT = gql`
         $currencyCode: String
         $amount: Float
         $cryptoType: String
+        $code: String
     ) {
         confirmBankDeposit(
             id: $id
             currencyCode: $currencyCode
             amount: $amount
             cryptoType: $cryptoType
+            code: $code
         ) {
             id
             userId
@@ -75,5 +77,11 @@ export const DENY_BANK_WITHDRAW_REQUEST = gql`
             id: $id
             reason: $reason
         )
+    }
+`;
+
+export const SEND_WITHDRAW_CONFIRM_CODE = gql`
+    mutation {
+        sendWithdrawConfirmCode
     }
 `;

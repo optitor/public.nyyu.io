@@ -118,5 +118,3 @@ const TableBody = styled.div`
     border-left: 1px solid #464646;
     border-right: 1px solid #464646;
 `;
-
-
