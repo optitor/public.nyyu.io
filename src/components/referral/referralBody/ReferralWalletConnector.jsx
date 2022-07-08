@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { FaArrowLeft } from '@react-icons/all-files/fa/FaArrowLeft';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
 import WalletSelector from '../../common/wallet/WalletSelector';
 import { ACTIVATE_REFERRER, CHANGE_COMMISSION_WALLET } from '../api/mutation';
 import CustomSpinner from '../../common/custom-spinner';
 import { ACTIVE_ACTION, UPDATE_ACTION } from '../constants';
-import { GET_REFERRAL } from '../api/query';
 
 const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     
@@ -111,7 +110,7 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     }
     
     return <div className='text-white'>
-        <div className='d-none d-md-flex justify-content-start mb-3'>
+        <div className='d-none d-md-flex justify-content-start mb-4'>
             <button 
                 className='bg-transparent border-0 ps-0' 
                 onClick={onPrevious}
@@ -137,14 +136,14 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
                 </div>
             </button>
         </div>
-        <div className='mb-5'>
+        <div className=''>
             {error && <div className='text-danger'>{error}</div>}
             <WalletSelector 
                 walletChanged={onWalletChanged} 
                 selectedWallet={selectedWallet}
             />
         </div>
-        <div>
+        <div className='pt-4'>
             <button 
                 onClick={onActivateClicked}
                 className='d-flex align-items-center justify-content-center referral-button py-2 bg-transparent text-white fw-bold border border-white fs-22px mx-auto'
