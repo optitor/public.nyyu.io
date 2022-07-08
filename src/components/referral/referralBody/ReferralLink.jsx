@@ -8,6 +8,7 @@ import { FaEdit } from '@react-icons/all-files/fa/FaEdit';
 import { IoMdArrowDropdown } from '@react-icons/all-files/io/IoMdArrowDropdown';
 import { AiFillCaretDown } from '@react-icons/all-files/ai/AiFillCaretDown';
 
+import { CHECK_TIMELOCK } from '../api/query';
 import InviteModal from './inviteModal';
 import { isBrowser } from '../../../utilities/auth';
 import { ROUTES } from '../../../utilities/routes';
@@ -18,6 +19,8 @@ import SILVER from '../../../images/tier_png/silver.svg';
 import GOLD from '../../../images/tier_png/gold.svg';
 import PLAT from '../../../images/tier_png/plat.svg';
 import DIA from '../../../images/tier_png/diamond.svg';
+import { useQuery } from '@apollo/client';
+import ReactTooltip from 'react-tooltip';
 
 const tierImages = [
     BASIC, BRONZE, SILVER, GOLD, PLAT, DIA
@@ -37,8 +40,9 @@ const shortInviteUrl = url => {
     if(!url) return '';
     return url.substring(0, 20) + "..." + url.substring(url.length - 6);
 }
-
+const timeLockTemplate = 'sorry the wallet can only be changed once every 24hrs you can change in ';
 const inviteText = 'Hey, I use Nyyu.io to buy NDB tokens. It has great potential! Give it a try and get an extra 10% reward on your purchase.';
+
 export const sendingLinks = [
     {
         name: 'Send with Whatsapp',
@@ -67,12 +71,17 @@ export const sendingLinks = [
 
 ]
 
+// default
+let timelock = 100;
+
 const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     const dispatch = useDispatch();
     const tierDiv = useRef(null);
     const tiers = useSelector(state => state.tiers);
     const user = useSelector(state => state.auth?.user);
 
+    // const [timelock, setTimelock] = useState(100);
+    const [timelockHover, setTimelockHover] = useState('');
     const [codeCopied, setCodeCopied] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
     const [caretStyle, setCaretStyle] = useState({});
@@ -81,6 +90,15 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
 
     const {referralCode, walletConnect, commissionRate} = referrerInfo;
     
+    useQuery(CHECK_TIMELOCK, {
+        onCompleted: data => {
+            timelock = data.checkTimeLock;
+        },
+        onError: err => {
+            console.log(err);
+        }
+    })
+
     const onChangeModalShow = e => {
         e.stopPropagation();
         setLinkModalShow(!linkModalShow);
@@ -113,6 +131,14 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
     useEffect(() => {
         if(!isBrowser) { return null; }
 
+        const countDown = setInterval(() => {
+            const hours = Math.floor(timelock / 3600);
+            const minutes = Math.floor((timelock % 3600) / 60);
+            const _hoverText = `${timeLockTemplate}${hours}hr ${minutes}m`;
+            setTimelockHover(_hoverText);
+            if(timelock > 0) timelock--;
+        }, 1000)
+
         tiers.forEach(tier => {
             if(tier.level === user.tierLevel) {
                 const leftMove = 100 / tiers.length * tier.level + 100 / tiers.length / 2;
@@ -120,7 +146,10 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
             }
         })
         window.addEventListener('click', hideLinkModal);
-        return () => window.removeEventListener('click', hideLinkModal);
+        return () => {
+            window.removeEventListener('click', hideLinkModal);
+            clearInterval(countDown);
+        }
     }, [tiers, commissionRate]);
 
     return <div>
@@ -214,10 +243,25 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                         {shortFormatAddr(walletConnect)}
                     </span>
                     <FaEdit 
-                        onClick={onChangeWallet}
-                        className='position-absolute' 
+                        onClick={() => {
+                            if(timelock === 0) 
+                                onChangeWallet();
+                        }}
+                        data-tip='tooltip' data-for='timelock-tooltip'
+                        className={`position-absolute ${timelock > 0 ? 'opacity-30' : ''}`}
                         size='1.4em' 
                         style={{top:'16px', right:'14px'}}/>
+                    {(timelock > 0) && 
+                    <ReactTooltip place="left" type="light" effect="solid" id='timelock-tooltip'>
+                        <div
+                            className="text-justify"
+                            style={{
+                                width: "220px",
+                            }}
+                        >
+                            {timelockHover}
+                        </div>
+                    </ReactTooltip>}
                 </div>
             </div>
         </div>
@@ -265,14 +309,14 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                 </div>
             </div>
         </div>
-        <div className='d-none d-md-block text-center pt-3'>
+        <div className='d-none d-md-block text-center pt-4'>
             <button className='text-white bg-transparent border border-white referral-button py-2 fw-bold fs-20px'><a 
                 href={`https://mail.google.com/mail/u/0/?fs=1&su=${encodeURIComponent('NDB Invitation')}&body=${generateEmailLink()}&tf=cm`}
                 target='_blank'
                 rel="noopener noreferrer"
                 >INVITE VIA EMAIL</a></button>
         </div>
-        <div className='d-block d-md-none text-center pt-3'>
+        <div className='d-block d-md-none text-center pt-4'>
             <button 
                 onClick={() => setIsInviteModalOpen(true)}
                 className='text-white bg-transparent border border-white referral-button py-2 fw-bold fs-20px'
