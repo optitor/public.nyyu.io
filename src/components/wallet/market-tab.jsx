@@ -59,6 +59,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
         price: "",
         volume: "",
     });
+    
     const { chart, min, price, percent, volume } = state;
 
     useEffect(() => {

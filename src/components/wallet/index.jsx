@@ -123,7 +123,7 @@ const Wallet = () => {
                                     <div className="tab-top">
                                         <TabList>
                                             <Tab>market</Tab>
-                                            <Tab disabled={true}>stake</Tab>
+                                            <Tab disabled={false}>stake</Tab>
                                             <Tab disabled={true}>airdrops</Tab>
                                             <Tab>transaction</Tab>
                                         </TabList>

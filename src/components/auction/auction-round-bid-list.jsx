@@ -17,6 +17,7 @@ export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
     const auction = useAuction()
     const { optCurrentRound, currentRoundNumber, isAuction, setCurrentRound } = auction
+    
     const [currentRoundBidList, setCurrentRoundBidList] = useState(null)
     const [displayedBidList, setDisplayedBidList] = useState(null)
     const [currentAuctionUserExist, setCurrentAuctionUserExist] = useState(false)
