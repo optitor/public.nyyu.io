@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { Link } from "gatsby"
 import { useDispatch, useSelector } from "react-redux"
 import Slider from "rc-slider"
 import { navigate } from "gatsby"
@@ -178,7 +179,7 @@ export default function AuctionPlaceBid() {
                     </div>
                     <div className="mt-3 mb-1">
                         <p className="text-secondary fw-500 text-[#959595]">
-                            Audited by CertiK
+                            Audited by <Link to="https://www.certik.com/projects/ndb" target="_blank" className="hover\:txt-green">CertiK</Link>
                         </p>
                     </div>
                     {error && (

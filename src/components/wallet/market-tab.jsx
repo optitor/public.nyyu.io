@@ -38,8 +38,8 @@ const fetch_Ticker_From_Binance = async (tokenSymbol) => {
     return { price, percent, volume };
 };
 
-const fetch_Ticker_Of_NDB = async (tokenSymbol) => {
-    const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/price`, { params: { symbol: tokenSymbol + QUOTE } });
+const fetch_Ticker_Of_NDB = async () => {
+    const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/price`);
     const price = Number(res.data.result.last);
     const percent = Number(res.data.result.change);
     const volume = Number(res.data.result.volume) * Number(res.data.result.last);
@@ -92,7 +92,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             let fetchData;
 
             if(data.symbol === 'NDB') {
-                fetchData = await fetch_Ticker_Of_NDB(data.symbol);
+                fetchData = await fetch_Ticker_Of_NDB();
             } else {
                 fetchData = await fetch_Ticker_From_Binance(data.symbol);
             }
