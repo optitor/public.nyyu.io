@@ -13,7 +13,7 @@ import VerifyMutliFA from "./verify-multiFA";
 import TwoFactorModal from "../profile/two-factor-modal";
 import Seo from '../seo';
 
-const Signin = ({ error }) => {
+const Signin = () => {
     const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
         email: "",
         pwd: "",
@@ -172,21 +172,6 @@ const Signin = ({ error }) => {
                             {authError && (
                                 <span className="errorsapn">
                                     <FaExclamationCircle /> {tempToken}
-                                </span>
-                            )}
-                            {error && error.split(".")[0] === "InvalidProvider" && (
-                                <span className="errorsapn">
-                                    <FaExclamationCircle /> Your are already
-                                    signed up with{" "}
-                                    <span className="text-uppercase errorsapn">
-                                        {error.split(".")[1]}
-                                    </span>
-                                    . Please use it.
-                                </span>
-                            )}
-                            {error && error.split(".")[0] === "error" && (
-                                <span className="errorsapn">
-                                    <FaExclamationCircle /> {error.split(".")[1]}
                                 </span>
                             )}
                             <button
