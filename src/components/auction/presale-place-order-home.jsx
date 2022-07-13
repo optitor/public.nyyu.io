@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect, useRef } from "react"
 import { useSelector } from 'react-redux'
 import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
@@ -13,6 +13,13 @@ export default function PresalePlaceOrderHome() {
     const auction = useAuction()
     const { optCurrentRound, setPresalePlaceOrderStage, setPresaleNdbAmount } = auction
     const [amount, setAmount] = useState(1)
+    const [totalPrice, setTotalPrice] = useState(1);
+
+    const isPriceInput = useRef(null);
+
+    useEffect(() => {
+        setTotalPrice(1* optCurrentRound.tokenPrice * currencyRate);
+    }, [currencyRate]);
 
     const isFirstPurchase = false;
 
@@ -24,7 +31,7 @@ export default function PresalePlaceOrderHome() {
     const leftAmount = useMemo(() => {
         return optCurrentRound.tokenAmount - optCurrentRound.sold;
     }, [optCurrentRound.tokenAmount, optCurrentRound.sold])
-    // console.log(optCurrentRound)
+    console.log(isPriceInput.current == document.activeElement)
     
     // Render
     return (
@@ -33,7 +40,10 @@ export default function PresalePlaceOrderHome() {
             <div className="d-flex align-items-center mb-4">
                 <NumberFormat className="range-input"
                     value={amount}
-                    onValueChange={values => setAmount(values.value)}
+                    onValueChange={values => {
+                        setAmount(values.value);
+                        if(isPriceInput.current !== document.activeElement) setTotalPrice(Number(values.value * optCurrentRound?.tokenPrice * currencyRate));
+                    }}
                     isAllowed={({ floatValue }) => (floatValue >= 1 && floatValue <= leftAmount)}
                     thousandSeparator={true}
                     decimalScale={0}
@@ -54,12 +64,16 @@ export default function PresalePlaceOrderHome() {
                         <div className="w-100 d-flex flex-column justify-content-center align-items-end">
                             <NumberFormat
                                 className="presale-total-input"
-                                value={(Number(optCurrentRound?.tokenPrice * amount * currencyRate))}
-                                onValueChange={values => setAmount(values.value / optCurrentRound?.tokenPrice / currencyRate)}
-                                isAllowed={({ floatValue }) => (floatValue >= 0 && floatValue <= optCurrentRound?.tokenPrice * leftAmount * currencyRate )}
+                                value={totalPrice}
+                                onValueChange={values => {
+                                    setTotalPrice(values.value);
+                                    setAmount(Number(values.value / optCurrentRound?.tokenPrice / currencyRate));
+                                }}
+                                isAllowed={({ floatValue }) => (floatValue >= 0.01 && floatValue <= optCurrentRound?.tokenPrice * leftAmount * currencyRate )}
                                 decimalScale={2}
                                 thousandSeparator={true}
                                 allowNegative={false}
+                                ref={isPriceInput}
                             />
                         </div>
                         <h3 className="symbol-label mt-10px ml-7px">{currency.label}</h3>

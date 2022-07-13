@@ -57,10 +57,9 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
             :
             <div className="row">
                 <div className="col-lg-6 mt-2">
-                    <div className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
+                    <button className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
                         role="button"
                         onClick={() => onChangeWallet("internal")}
-                        onKeyDown={() => onChangeWallet("internal")}
                     >
                         <div className="d-flex justify-content-end wallet_header">
                             <span data-tip='tooltip' data-for='ndb_wallet_tooltip'>
@@ -83,13 +82,13 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                         <h4 className="text-center">
                             NYYU WALLET
                         </h4>
-                    </div>
+                    </button>
                 </div>
                 <div className="col-lg-6 mt-2">
-                    <div className={`destination_wallet`}
+                    <button className={`destination_wallet`}
                         role="button"
-                        onKeyDown={() => onChangeWallet("external")}
                         onClick={() => onChangeWallet("external")}
+                        disabled={true}
                     >
                         <div className="d-flex justify-content-end wallet_header">
                             <span data-tip='tooltip' data-for='external_wallet_tooltip'>
@@ -112,7 +111,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                         <h4 className="text-center">
                             EXTERNAL WALLET
                         </h4>
-                    </div>
+                    </button>
                 </div>
             </div>
         }
