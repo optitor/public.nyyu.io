@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import { Checkbox } from '@mui/material';
-import { renderNumberFormat, roundNumber } from '../../../utilities/number';
+import { renderNumberFormat } from '../../../utilities/number';
 import { NDB } from '../../../utilities/imgImport';
 import CustomSpinner from '../../common/custom-spinner';
 
