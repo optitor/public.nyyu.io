@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
-import useDeepCompareEffect from "use-deep-compare-effect"
 
 import { useAuction } from "../../providers/auction-context"
 import { numberWithLength, renderNumberFormat } from "../../utilities/number"

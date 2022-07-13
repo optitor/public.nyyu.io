@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react"
-import { Link } from "gatsby"
 import { useSelector } from 'react-redux'
 import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
@@ -26,6 +25,7 @@ export default function PresalePlaceOrderHome() {
         return optCurrentRound.tokenAmount - optCurrentRound.sold;
     }, [optCurrentRound.tokenAmount, optCurrentRound.sold])
     // console.log(optCurrentRound)
+    
     // Render
     return (
         <>
@@ -54,11 +54,12 @@ export default function PresalePlaceOrderHome() {
                         <div className="w-100 d-flex flex-column justify-content-center align-items-end">
                             <NumberFormat
                                 className="presale-total-input"
-                                value={Math.round(Number(optCurrentRound?.tokenPrice * amount * currencyRate).toFixed(2) * 10**2) / 10**2}
+                                value={(Number(optCurrentRound?.tokenPrice * amount * currencyRate))}
+                                onValueChange={values => setAmount(values.value / optCurrentRound?.tokenPrice / currencyRate)}
+                                isAllowed={({ floatValue }) => (floatValue >= 0 && floatValue <= optCurrentRound?.tokenPrice * leftAmount * currencyRate )}
+                                decimalScale={2}
                                 thousandSeparator={true}
-                                displayType='text'
                                 allowNegative={false}
-                                renderText={(value, props) => <span {...props}>{value}</span>}
                             />
                         </div>
                         <h3 className="symbol-label mt-10px ml-7px">{currency.label}</h3>
@@ -89,7 +90,7 @@ export default function PresalePlaceOrderHome() {
             )}
             <div className="mt-3 mb-1">
                 <p className="text-secondary fw-500 text-[#959595]">
-                    Audited by <Link to="https://www.certik.com/projects/ndb" target="_blank" className="hover\:txt-green">CertiK</Link>
+                    Audited by <a href="https://www.certik.com/projects/ndb" target="_blank" className="hover\:txt-green">CertiK</a>
                 </p>
             </div>
             <button
