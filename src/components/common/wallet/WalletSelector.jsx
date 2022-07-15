@@ -88,7 +88,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                     <button className={`destination_wallet`}
                         role="button"
                         onClick={() => onChangeWallet("external")}
-                        disabled={true}
+                        // disabled={true}
                     >
                         <div className="d-flex justify-content-end wallet_header">
                             <span data-tip='tooltip' data-for='external_wallet_tooltip'>
