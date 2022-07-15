@@ -178,7 +178,7 @@ export default function AuctionPlaceBid() {
                         }
                     </div>
                     <div className="mt-3 mb-1">
-                        <p className="text-secondary fw-500 text-[#959595]">
+                        <p className="text-secondary fw-500 text-[#332e2e]">
                             Audited by <Link to="https://www.certik.com/projects/ndb" target="_blank" className="hover\:txt-green">CertiK</Link>
                         </p>
                     </div>

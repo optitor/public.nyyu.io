@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import { useSelector } from 'react-redux'
 import Slider from "rc-slider"
 import NumberFormat from 'react-number-format'
@@ -9,13 +9,12 @@ export default function PresalePlaceOrderHome() {
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
+    const totalInput = document.querySelector('.presale-total-input');
 
     const auction = useAuction()
     const { optCurrentRound, setPresalePlaceOrderStage, setPresaleNdbAmount } = auction
     const [amount, setAmount] = useState(1)
     const [totalPrice, setTotalPrice] = useState(1);
-
-    const isPriceInput = useRef(null);
 
     useEffect(() => {
         setTotalPrice(1* optCurrentRound.tokenPrice * currencyRate);
@@ -31,7 +30,7 @@ export default function PresalePlaceOrderHome() {
     const leftAmount = useMemo(() => {
         return optCurrentRound.tokenAmount - optCurrentRound.sold;
     }, [optCurrentRound.tokenAmount, optCurrentRound.sold])
-    console.log(isPriceInput.current == document.activeElement)
+    
     
     // Render
     return (
@@ -42,7 +41,7 @@ export default function PresalePlaceOrderHome() {
                     value={amount}
                     onValueChange={values => {
                         setAmount(values.value);
-                        if(isPriceInput.current !== document.activeElement) setTotalPrice(Number(values.value * optCurrentRound?.tokenPrice * currencyRate));
+                        if(totalInput !== document.activeElement) setTotalPrice(Number(values.value * optCurrentRound?.tokenPrice * currencyRate));
                     }}
                     isAllowed={({ floatValue }) => (floatValue >= 1 && floatValue <= leftAmount)}
                     thousandSeparator={true}
@@ -73,7 +72,6 @@ export default function PresalePlaceOrderHome() {
                                 decimalScale={2}
                                 thousandSeparator={true}
                                 allowNegative={false}
-                                ref={isPriceInput}
                             />
                         </div>
                         <h3 className="symbol-label mt-10px ml-7px">{currency.label}</h3>
@@ -84,7 +82,7 @@ export default function PresalePlaceOrderHome() {
                 {currency.label !== 'USD'?
                     <NumberFormat
                         className="txt-green"
-                        value={Math.round(Number(Math.max(optCurrentRound?.tokenPrice * amount)).toFixed(2) * 10**2) / 10**2}
+                        value={Number(optCurrentRound?.tokenPrice * amount).toFixed(2)}
                         thousandSeparator={true}
                         displayType='text'
                         allowNegative={false}
