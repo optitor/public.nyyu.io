@@ -6,11 +6,11 @@ import { useQuery, useMutation } from "@apollo/client";
 import { COLOR_LOAD, COLOR_OFF, COLOR_ON } from "../../utilities/staticData";
 import { GET_NOTICATION_TYPES } from "../../apollo/graphqls/querys/Notification";
 import { USER_NOTIFICATION_SETTING } from "../../apollo/graphqls/mutations/Notification";
-import { GET_USER } from "../../apollo/graphqls/querys/Auth";
+import { useSelector } from "react-redux";
 
 export default function NotificationSetting() {
     // Containers
-    const [user, setUser] = useState(null);
+    const user = useSelector(state => state.auth?.user);
     const [pendingSwitch, setPendingSwitch] = useState(false);
     const [tempSetting, setTempSetting] = useState([]);
     const setting = user?.notifySetting;
@@ -19,12 +19,6 @@ export default function NotificationSetting() {
     const loadingSection = !(user && notificationTypeList);
 
     // Webservice
-    useQuery(GET_USER, {
-        fetchPolicy: "network-only",
-        onCompleted: (data) => {
-            setUser(data.getUser);
-        },
-    });
     useQuery(GET_NOTICATION_TYPES, {
         onCompleted: (data) => {
             setNotificationTypeList(

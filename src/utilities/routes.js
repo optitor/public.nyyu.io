@@ -20,7 +20,7 @@ export const ROUTES = {
     admin: "/admin",
     presale_auction: "/pre-sale/auction/",
     presale_home: "/pre-sale/home/",
-    // referral: '/app/referral'
+    referral: '/app/referral'
 }
 
 export const isRedirectUrl = isBrowser && window.location.href.includes("token=");
@@ -46,9 +46,9 @@ export const navLinks = [
         active: [ROUTES.faq],
         title: 'support'
     },
-    // {
-    //     to: ROUTES.referral,
-    //     active: [ROUTES.referral],
-    //     title: 'invite & earn'
-    // }
+    {
+        to: ROUTES.referral,
+        active: [ROUTES.referral],
+        title: 'invite & earn'
+    }
 ]

@@ -4,11 +4,13 @@ import { REFER_AVATAR, SPINNER } from '../../../utilities/imgImport';
 import { useReferral } from '../ReferralContext';
 
 const InvitedList = ({loading, invitedList}) => {
-    const { btcPrice, ndbPrice } = useReferral();
-    const { hidden, equity } = useSelector(state => state.balance);
+    const { btcPrice } = useReferral();
+    const { hidden, equity, ndbPrice } = useSelector(state => state.balance);
     const { currencyRates } = useSelector(state => state);
-    const priceFactor = equity === "BTC" ? btcPrice * ndbPrice : ndbPrice / (currencyRates[equity]);
     
+    const priceFactor = equity === "BTC" ? ndbPrice / btcPrice : ndbPrice * (currencyRates[equity]);
+    const decimals = equity === 'BTC' ? 8 : 2;
+
     return <div className='mt-4'>
         <div className='d-flex justify-content-between align-items-center mt-5 pe-3'>
             <span className='fw-bold fs-22px'>INVITED</span>
@@ -23,10 +25,10 @@ const InvitedList = ({loading, invitedList}) => {
                     <div className='text-end'>
                         {hidden ? 
                             <div className='fs-15px text-white fw-bold ls-1px'>********</div>: 
-                            <div className='fs-15px text-white fw-bold ls-1px'>{user.amount} NDB</div>}
+                            <div className='fs-15px text-white fw-bold ls-1px'>{(user.amount).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} NDB</div>}
                         {hidden ? 
                             <div className='fs-11px txt-baseprice'>********</div>:
-                            <div className='fs-11px txt-baseprice'>{user.amount / priceFactor} {equity}</div>}
+                            <div className='fs-11px txt-baseprice'>{(user.amount * priceFactor).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {equity}</div>}
                     </div>
                 </div>
                 })}</>}

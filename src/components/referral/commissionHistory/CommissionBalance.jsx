@@ -9,7 +9,7 @@ import { useReferral } from '../ReferralContext';
 import { changeEquity, updateHiddenStatus } from '../../../redux/actions/tempAction';
 
 const QUOTE = "USDT";
-const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
+const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
 const REFRESH_TIME = 30 * 1000;
 
 const CommissionBalance = ({loading, totalEarned}) => {
@@ -17,29 +17,32 @@ const CommissionBalance = ({loading, totalEarned}) => {
 
     const currency = useSelector(state => state.favAssets?.currency.value);
     const currencyRate = useSelector(state => state.currencyRates);
-    const { equity, hidden } = useSelector(state => state.balance);
+    const { equity, hidden, ndbPrice } = useSelector(state => state.balance);
     
     const {
-        btcPrice, setBtcPrice,
-        ndbPrice
+        btcPrice, setBtcPrice
     } = useReferral();
     
-    // USD vs. BTC(BNB)??
-    const [ equityBalance, setEquityBalance ] = useState(0);
+    const [price, setPrice] = useState(equity !== 'BTC' ? 1 / currencyRate[equity] : btcPrice);
+    const [decimals, setDecimals] = useState(equity !== 'BTC' ? 2 : 8);
+
     const onChangeEquity = (newEquity) => {
         if(equity === newEquity) return;
         // change equity
         dispatch(changeEquity(newEquity));
         
         // change equity balance
-        const price = equity === 'BTC' ? btcPrice : 1 / currencyRate[currency];
-        setEquityBalance((totalEarned / ndbPrice) / price );
+        setDecimals(newEquity === 'BTC' ? 8 : 2);
+        setPrice(newEquity === 'BTC' ? btcPrice : 1 / currencyRate[newEquity]);
     }
 
     useEffect(() => {
         const getBtcPrice = async () => {
             const { data } = await axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } });
             setBtcPrice(data.price);
+            if(equity === 'BTC') {
+                setPrice(data.price);
+            }
         };
         getBtcPrice();
         const interval = setInterval(() => {
@@ -66,14 +69,14 @@ const CommissionBalance = ({loading, totalEarned}) => {
         </div>
         <div className='lh-54px'>
             {!hidden ? 
-                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <p className='fs-30px fw-400 lh-54px'>{totalEarned} NDB</p>}</> : 
-                <span className='fs-30px text-white'>********</span>
+                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <p className='fs-30px fw-400 lh-54px'>{totalEarned.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} NDB</p>}</> : 
+                <p className='fs-30px fw-400 lh-54px'>********</p>
             }
         </div>
         <div className='fs-14px text-[#959595] mt-3 lh-18px'>
             {!hidden ? 
-                <>{loading ? <img src={SPINNER} width='15px' height='15px' alt='spinner'/> : <p className='text-[#959595] fs-15px'>~ {equityBalance} {equity}</p>}</> : 
-                <span className='fs-15px txt-disable-gray'>********</span>
+                <>{loading ? <img src={SPINNER} width='15px' height='15px' alt='spinner'/> : <p className='text-[#959595] fs-15px'>~ {((totalEarned * ndbPrice) / price).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {equity}</p>}</> : 
+                <p className='fs-15px txt-disable-gray'>********</p>
             }
             
         </div>

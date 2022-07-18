@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as types from './../actionTypes';
 
 export const set_Temp_Data = data => dispatch => {
@@ -19,4 +20,17 @@ export const changeEquity = equity => dispatch => {
         type: types.CHANGE_EQUITY,
         payload: equity
     })
+}
+
+export const fetchNDBPrice = () => async dispatch => {
+    try {
+        const { data } = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/price`);
+        const price = data.result.last;
+        dispatch({
+            type: types.FETCH_NDB_PRICE,
+            payload: price
+        });
+    } catch(err) {
+        console.log('fetching NDB price', err.message);
+    }
 }

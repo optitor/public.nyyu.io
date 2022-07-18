@@ -13,10 +13,10 @@ import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { Icon } from "@iconify/react";
 import { roundNumber } from "../../utilities/number"; 
 
-import { updateHiddenStatus, changeEquity } from "../../redux/actions/tempAction";
+import { updateHiddenStatus, changeEquity, fetchNDBPrice } from "../../redux/actions/tempAction";
 
 const QUOTE = "USDT";
-const TICKER_price = "https://api.binance.com/api/v3/ticker/price";
+const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
 const REFRESH_TIME = 30 * 1000;
 const obscureValueString = "******";
 
@@ -61,7 +61,7 @@ export default function InternalWallet() {
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
 
-    const { hidden, equity } = useSelector(state => state.balance);
+    const { hidden, equity, ndbPrice } = useSelector(state => state.balance);
 
     const InitialAssets = {};
     const [myAssets, setMyAssets] = useState(InitialAssets);
@@ -85,11 +85,15 @@ export default function InternalWallet() {
             })
         };
         get_BTCPrice();
+        dispatch(fetchNDBPrice());
+
         const interval = setInterval(() => {
-            get_BTCPrice()
+            get_BTCPrice();
+            dispatch(fetchNDBPrice());
         }, REFRESH_TIME);
+
         return () => clearInterval(interval);
-    }, []);
+    }, [dispatch]);
 
     const { startPolling, stopPolling } = useQuery(GET_BALANCES, {
         onCompleted: data => {
@@ -122,12 +126,13 @@ export default function InternalWallet() {
                 let price = 0;
                 if (
                     !item.tokenSymbol ||
-                    item.tokenSymbol === "NDB" ||
                     item.tokenSymbol === "WATT"
                 ) {
                     price = 0;
                 } else if(item.tokenSymbol === 'USDT') {
                     price = 1;
+                } else if(item.tokenSymbol === 'NDB') {
+                    price = ndbPrice;
                 } else {
                     const res = await axios.get(TICKER_price, {
                         params: { symbol: item.tokenSymbol + QUOTE },
@@ -160,14 +165,14 @@ export default function InternalWallet() {
                             {!hidden && (
                                 <Icon
                                     className="value-label-eye-icon"
-                                    icon="bi:eye-slash"
+                                    icon="bi:eye"
                                     onClick={() => dispatch(updateHiddenStatus(true))}
                                 />
                             )}
                             {hidden && (
                                 <Icon
                                     className="value-label-eye-icon"
-                                    icon="bi:eye"
+                                    icon="bi:eye-slash"
                                     onClick={() => dispatch(updateHiddenStatus(false))}
                                 />
                             )}

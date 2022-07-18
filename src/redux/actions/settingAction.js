@@ -14,7 +14,7 @@ export const set_All_Fees = data => dispatch => {
     })
 };
 
-const DEFAULT_ASSETS = 'USD,BTC,ETH,SOL,DOGE,SHIB,LTC,ADA,CAKE';
+const DEFAULT_ASSETS = 'USD,NDB,BTC,ETH,SOL,DOGE,SHIB,LTC,ADA,CAKE';
 
 export const fetch_Favor_Assets = () => async dispatch => {
     try {

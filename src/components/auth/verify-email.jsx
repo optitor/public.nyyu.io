@@ -36,6 +36,7 @@ const VerifyEmail = ({ email }) => {
             setError(err.message);
         }
     })
+    
 
     return (
         <>

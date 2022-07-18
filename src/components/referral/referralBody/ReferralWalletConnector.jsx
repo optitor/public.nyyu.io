@@ -24,8 +24,10 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         onCompleted: data => {
             if(data.activateReferralCode) {
                 /// referral code 
-                const {referralCode, rate} = data.activateReferralCode;
-                setReferrer({referralCode, rate, walletConnect: walletAddress});
+                const { code, referralWallet, rate, commissionRate } = data.activateReferralCode;
+                setReferrer({
+                    referralCode: code, walletConnect: referralWallet, rate, commissionRate
+                });
             } else {
                 // cannot get code
                 setError('Cannot get referral code.');
@@ -39,8 +41,12 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     const [changeReferrerWallet, { loading: updateLoading }] = useMutation(CHANGE_COMMISSION_WALLET, {
         onCompleted: data => {
             if(data.changeReferralCommissionWallet) {
-                console.log(data.changeReferralCommissionWallet);
-                setReferrer({...referrerInfo, walletConnect: walletAddress});
+                const { status, referralWallet } = data.changeReferralCommissionWallet;
+                if(status) {
+                    setReferrer({...referrerInfo, walletConnect: referralWallet});
+                } else {
+                    setError('Cannot update referral wallet.');    
+                }
             } else {
                 setError('Cannot update referral wallet.');
             }
@@ -58,7 +64,17 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
         setError(null);
         // internal wallet is not supported now
         if(selectedWallet === 'internal') {
-            setError('Nyyu wallet is not supported now.')
+            if(action === ACTIVE_ACTION) {
+                activateReferrer({variables: {
+                    wallet: "0x0000000000000000000000000000000000000000"
+                }});
+            } else if(action === UPDATE_ACTION) {
+                changeReferrerWallet({variables: {
+                    wallet: "0x0000000000000000000000000000000000000000"
+                }})
+            } else {
+                setError('Unknown error.')
+            }
             return;
         }
         // check wallet address is exists
@@ -94,7 +110,7 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
     }
     
     return <div className='text-white'>
-        <div className='d-none d-md-flex justify-content-start mb-3'>
+        <div className='d-none d-md-flex justify-content-start mb-4'>
             <button 
                 className='bg-transparent border-0 ps-0' 
                 onClick={onPrevious}
@@ -120,14 +136,14 @@ const ReferralWalletConnector = ({referrerInfo, setReferrer, action}) => {
                 </div>
             </button>
         </div>
-        <div className='mb-5'>
+        <div className=''>
             {error && <div className='text-danger'>{error}</div>}
             <WalletSelector 
                 walletChanged={onWalletChanged} 
                 selectedWallet={selectedWallet}
             />
         </div>
-        <div>
+        <div className='pt-4'>
             <button 
                 onClick={onActivateClicked}
                 className='d-flex align-items-center justify-content-center referral-button py-2 bg-transparent text-white fw-bold border border-white fs-22px mx-auto'
