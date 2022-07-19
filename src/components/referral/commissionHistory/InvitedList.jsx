@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { REFER_AVATAR, SPINNER } from '../../../utilities/imgImport';
 import { useReferral } from '../ReferralContext';
+import NumberFormat from 'react-number-format';
 
 const InvitedList = ({loading, invitedList}) => {
     const { btcPrice } = useReferral();
@@ -25,10 +26,34 @@ const InvitedList = ({loading, invitedList}) => {
                     <div className='text-end'>
                         {hidden ? 
                             <div className='fs-15px text-white fw-bold ls-1px'>********</div>: 
-                            <div className='fs-15px text-white fw-bold ls-1px'>{(user.amount).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} NDB</div>}
+                            <div className='fs-15px text-white fw-bold ls-1px'>
+                                <NumberFormat
+                                    value={user.amount}
+                                    displayType='text'
+                                    thousandSeparator={true}
+                                    renderText={(value) => (
+                                        <>
+                                            ~ {value} NDB
+                                        </>
+                                    )}
+                                >
+                                </NumberFormat>
+                            </div>}
                         {hidden ? 
                             <div className='fs-11px txt-baseprice'>********</div>:
-                            <div className='fs-11px txt-baseprice'>{(user.amount * priceFactor).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {equity}</div>}
+                            <div className='fs-11px txt-baseprice'>
+                                <NumberFormat
+                                    value={(user.amount * priceFactor).toFixed(decimals)}
+                                    displayType='text'
+                                    thousandSeparator={true}
+                                    renderText={(value) => (
+                                        <>
+                                            {value} {equity}
+                                        </>
+                                    )}
+                                >
+                                </NumberFormat>
+                            </div>}
                     </div>
                 </div>
                 })}</>}
