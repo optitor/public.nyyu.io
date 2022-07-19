@@ -30,6 +30,7 @@ const { get } = cryptoSymbol({})
 const cryptoSymbolList = get().SNPair;
 const REFRESH_TIME = 30;
 
+
 const fetch_Ticker_From_Binance = async (tokenSymbol) => {
     const res = await axios.get(TICKER_24hr, { params: { symbol: tokenSymbol + QUOTE } });
     const price = Number(res.data.lastPrice);

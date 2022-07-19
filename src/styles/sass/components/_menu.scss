@@ -179,6 +179,10 @@
         outline: none !important;
         background-color: transparent !important;
 
+        @include mq('phone', max) {
+            margin-left: 1rem;
+        }
+
         span {
             height: 3px;
             position: relative;

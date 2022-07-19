@@ -58,7 +58,6 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
             <div className="row">
                 <div className="col-lg-6 mt-2">
                     <button className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
-                        role="button"
                         onClick={() => onChangeWallet("internal")}
                     >
                         <div className="d-flex justify-content-end wallet_header">
@@ -86,7 +85,6 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                 </div>
                 <div className="col-lg-6 mt-2">
                     <button className={`destination_wallet`}
-                        role="button"
                         onClick={() => onChangeWallet("external")}
                         // disabled={true}
                     >

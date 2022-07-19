@@ -29,7 +29,7 @@ export default function Transactions() {
                 })}
             </div>
             {loading ? (
-                <div className="text-center mt-4">
+                <div className="text-center mt-4 mb-2">
                     <CustomSpinner />
                 </div>
             ) : (
