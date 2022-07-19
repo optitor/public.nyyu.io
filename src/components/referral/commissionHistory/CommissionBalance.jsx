@@ -7,6 +7,7 @@ import { AiFillEye } from '@react-icons/all-files/ai/AiFillEye';
 import { SPINNER } from '../../../utilities/imgImport';
 import { useReferral } from '../ReferralContext';
 import { changeEquity, updateHiddenStatus } from '../../../redux/actions/tempAction';
+import NumberFormat from 'react-number-format';
 
 const QUOTE = "USDT";
 const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
@@ -69,13 +70,40 @@ const CommissionBalance = ({loading, totalEarned}) => {
         </div>
         <div className='lh-54px'>
             {!hidden ? 
-                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : <p className='fs-30px fw-400 lh-54px'>{totalEarned.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} NDB</p>}</> : 
+                <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : 
+                    <NumberFormat
+                        value={totalEarned}
+                        className='fs-30px fw-400 lh-54px'
+                        displayType='text'
+                        thousandSeparator={true}
+                        renderText={(value, props) => (
+                            <p {...props}>
+                                {value} NDB
+                            </p>
+                        )}
+                    >
+                    </NumberFormat>
+                   }</> : 
                 <p className='fs-30px fw-400 lh-54px'>********</p>
             }
         </div>
         <div className='fs-14px text-[#959595] mt-3 lh-18px'>
             {!hidden ? 
-                <>{loading ? <img src={SPINNER} width='15px' height='15px' alt='spinner'/> : <p className='text-[#959595] fs-15px'>~ {((totalEarned * ndbPrice) / price).toFixed(decimals).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")} {equity}</p>}</> : 
+                <>{loading ? <img src={SPINNER} width='15px' height='15px' alt='spinner'/> : 
+                <NumberFormat
+                        value={((totalEarned * ndbPrice) / price).toFixed(decimals)}
+                        className='text-[#959595] fs-15px'
+                        displayType='text'
+                        thousandSeparator={true}
+                        renderText={(value, props) => (
+                            <p {...props}>
+                                ~ {value} {equity}
+                            </p>
+                        )}
+                    >
+                    </NumberFormat>
+                }
+                </> : 
                 <p className='fs-15px txt-disable-gray'>********</p>
             }
             
