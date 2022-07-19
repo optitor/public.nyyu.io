@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import Modal from 'react-modal';
 import { CloseIcon } from "../../../../utilities/imgImport";
 import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
+import _ from 'lodash';
 import * as Query from '../../../../apollo/graphqls/querys/Approval'
 import { renderNumberFormat } from '../../../../utilities/number';
 import CustomSpinner from "../../../common/custom-spinner";
@@ -30,10 +31,37 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
     const [withdrawData, setWithdrawData] = useState({});
     const [status, setStatus] = useState(STATUSES[0]);
     const [deniedReason, setDeniedReason] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [confirmCode, setConfirmCode] = useState({
+        sent: false,
+        value: ''
+    });
+    const [showError, setShowError] = useState(false);
     const [pending, setPending] = useState(false);
 
+    const loading = _.isEmpty(withdrawData) || !confirmCode.sent;
+
     const disabled = status.value === 2 && !deniedReason;
+
+    const error = useMemo(() => {
+        if(!confirmCode.value) return 'Confirmation code is required';
+        return '';
+    }, [confirmCode.value]);
+
+    const [sendWithdrawConfirmCodeMutation] = useMutation(Mutation.SEND_WITHDRAW_CONFIRM_CODE, {
+        onCompleted: data => {
+            if(data.sendWithdrawConfirmCode) {
+                setConfirmCode({ ...confirmCode, sent: true });
+            }
+        },
+        onError: err => {
+            showFailAlarm('Sending confirmation code failed', err.message);
+            setIsOpen(false);
+        }
+    });
+
+    useEffect(() => {
+        sendWithdrawConfirmCodeMutation();
+    }, [sendWithdrawConfirmCodeMutation]);
 
     useQuery(Query.GET_CRYPTO_WITHDRAW_BY_ID_BY_ADMIN, {
         variables: {
@@ -43,11 +71,10 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
             if(data.getCryptoWithdrawByIdByAdmin) {
                 setWithdrawData(data.getCryptoWithdrawByIdByAdmin);
             }
-            setLoading(false);
         },
         onError: err => {
             showFailAlarm('Action failed', err.message);
-            setLoading(false);
+            setIsOpen(false);
         }
     });
 
@@ -69,11 +96,16 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
     });
 
     const handleSubmit = async () => {
+        if(error) {
+            setShowError(true);
+            return;
+        }
         setPending(true);
         const confirmData = {
             id: datum.id,
             status: status.value,
             deniedReason: deniedReason,
+            code: confirmCode.value
         };
         confirmCryptoWithdrawMutation({
             variables: { ...confirmData }
@@ -188,6 +220,15 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                                         {!deniedReason && <p className="text-warning font-14px">Denied reason required</p>}
                                     </>
                                 }
+                                <p className="text-muted mt-2">Code</p>
+                                <input className="black_input"
+                                    value={confirmCode.value}
+                                    onChange={e => setConfirmCode({ ...confirmCode, value: e.target.value})}
+                                />
+                                <p className="txt-green fs-12px">Confirmation code sent to ADMIN</p>
+                                <p className="text-danger mt-3">
+                                    {showError && error}
+                                </p>
                                 <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
                                     onClick={handleSubmit}
                                     disabled={disabled}

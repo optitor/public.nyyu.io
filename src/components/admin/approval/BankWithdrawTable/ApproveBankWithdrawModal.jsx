@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import _ from 'lodash';
 import Modal from 'react-modal';
@@ -34,14 +34,42 @@ const ApproveBankWithdrawModal = ({ isOpen, setIsOpen, datum }) => {
     const [withdrawData, setWithdrawData] = useState({});
     const [status, setStatus] = useState(STATUSES[0]);
     const [deniedReason, setDeniedReason] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [confirmCode, setConfirmCode] = useState({
+        sent: false,
+        value: ''
+    });
+    const [showError, setShowError] = useState(false);
     const [pending, setPending] = useState(false);
+    
     const metaData = useMemo(() => {
         if(!withdrawData.metadata) return null;
         return JSON.parse(withdrawData?.metadata);
     }, [withdrawData]);
 
+    const error = useMemo(() => {
+        if(!confirmCode.value && status.value === 1) return 'Confirmation code is required';
+        return '';
+    }, [confirmCode.value, status.value]);
+
+    const loading = _.isEmpty(withdrawData) || !confirmCode.sent;
+
     const disabled = status.value === 2 && !deniedReason;
+
+    const [sendWithdrawConfirmCodeMutation] = useMutation(Mutation.SEND_WITHDRAW_CONFIRM_CODE, {
+        onCompleted: data => {
+            if(data.sendWithdrawConfirmCode) {
+                setConfirmCode({ ...confirmCode, sent: true });
+            }
+        },
+        onError: err => {
+            showFailAlarm('Sending confirmation code failed', err.message);
+            setIsOpen(false);
+        }
+    });
+
+    useEffect(() => {
+        sendWithdrawConfirmCodeMutation();
+    }, [sendWithdrawConfirmCodeMutation]);
 
     useQuery(Query.GET_BANK_WITHDRAW_REQUEST_BY_ID_BY_ADMIN, {
         variables: {
@@ -51,11 +79,10 @@ const ApproveBankWithdrawModal = ({ isOpen, setIsOpen, datum }) => {
             if(data.getBankWithdrawRequestByIdByAdmin) {
                 setWithdrawData(data.getBankWithdrawRequestByIdByAdmin);
             }
-            setLoading(false);
         },
         onError: err => {
             showFailAlarm('Action failed', err.message);
-            setLoading(false);
+            setIsOpen(false);
         }
     });
 
@@ -94,10 +121,17 @@ const ApproveBankWithdrawModal = ({ isOpen, setIsOpen, datum }) => {
     });
 
     const handleSubmit = async () => {
+        if(error) {
+            setShowError(true);
+            return;
+        }
         setPending(true);
         if(status.value === 1) {
             approveBankWithdrawRequestMutation({
-                variables: { id: datum.id}
+                variables: {
+                    id: datum.id,
+                    code: confirmCode.value
+                }
             });
         } else {
             denyBankWithdrawRequestMutation({
@@ -246,6 +280,18 @@ const ApproveBankWithdrawModal = ({ isOpen, setIsOpen, datum }) => {
                                         {!deniedReason && <p className="text-warning font-14px">Denied reason required</p>}
                                     </>
                                 }
+                                {status.value === 1 &&
+                                <>
+                                    <p className="text-muted mt-2">Code</p>
+                                    <input className="black_input"
+                                        value={confirmCode.value}
+                                        onChange={e => setConfirmCode({ ...confirmCode, value: e.target.value})}
+                                    />
+                                    <p className="txt-green fs-12px">Confirmation code sent to ADMIN</p>
+                                </>}
+                                <p className="text-danger mt-3">
+                                    {showError && error}
+                                </p>
                                 <button className="btn btn-outline-light rounded-0 my-5 fw-bold w-100" style={{height: 47}}
                                     onClick={handleSubmit}
                                     disabled={disabled}
