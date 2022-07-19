@@ -32,7 +32,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
     return <div className="mb-3 wallet_content">
         {selectedWallet === 'external'?
             <>
-                <div className="row">
+                <div className="row pt-2">
                     {connectors?.map((connector, idx) => (accountInfo && (accountInfo?.connector.name === connector.name)) ? (
                         <div className="col-lg-6 mb-10px" key={idx}>
                             <div className="presale-connected external_wallet">
@@ -58,7 +58,6 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
             <div className="row">
                 <div className="col-lg-6 mt-2">
                     <button className={`destination_wallet ${selectedWallet === 'internal'? 'selected_wallet': ''}`}
-                        role="button"
                         onClick={() => onChangeWallet("internal")}
                     >
                         <div className="d-flex justify-content-end wallet_header">
@@ -86,7 +85,6 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                 </div>
                 <div className="col-lg-6 mt-2">
                     <button className={`destination_wallet`}
-                        role="button"
                         onClick={() => onChangeWallet("external")}
                         // disabled={true}
                     >
