@@ -59,6 +59,7 @@ const Wallet = () => {
             index: 0,
         }
     );
+    
     const {
         detail_show,
         index,

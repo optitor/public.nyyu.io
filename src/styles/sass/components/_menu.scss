@@ -179,6 +179,10 @@
         outline: none !important;
         background-color: transparent !important;
 
+        @include mq('phone', max) {
+            margin-left: 1rem;
+        }
+
         span {
             height: 3px;
             position: relative;
@@ -323,6 +327,18 @@
                     left: 0;
                     opacity: 1;
                 }
+            }
+        }
+    }
+
+    .dropdown {
+        ul.dropdown-menu {
+            min-width: rem;
+            background-color: $black;
+            border: 1px solid white;
+            padding: 10px;
+            li {
+                line-height: 36px;
             }
         }
     }

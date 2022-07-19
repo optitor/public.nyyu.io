@@ -153,19 +153,33 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                             </Link> : "" : ""
                         ) : (
                             <ul className="d-flex align-items-center">
-                                <Link className="header-btn sale" to="/app/auction">
-                                    Sale
-                                </Link>
-                                <li className="scale-75 cursor-pointer pe-3">
+                                <li className="scale-75 cursor-pointer pe-3 d-none d-sm-block">
                                     <a href="https://twitter.com/ndbtechnology" target="_blank" rel="noopener noreferrer">
                                         <img src={TWITTER} alt="twitter social link" className="social-link"/>
                                     </a>
                                 </li>
-                                <li className="scale-75 cursor-pointer pe-3">
+                                <li className="scale-75 cursor-pointer pe-3 d-none d-sm-block">
                                     <a href="https://discord.gg/38tFxghPdz" target="_blank" rel="noopener noreferrer">
                                         <img src={DISCORD} alt="discord social link" className="social-link"/>
                                     </a>
                                 </li>
+                                <div class="dropdown me-2 d-block d-sm-none">
+                                    <button type="button" class="btn btn-primary dropdown-toggle fs-16px px-3 py-2" data-bs-toggle="dropdown">
+                                        Sale
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <Link className="fs-16px text-uppercase fw-bold" to={ROUTES.auction}>
+                                                Sale
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link className="fs-16px text-uppercase fw-bold" to={ROUTES.referral}>
+                                                Invite & Earn
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
                                 <li className="scale-75 cursor-pointer pe-3">
                                     <Link to={ROUTES.profile}>
                                         <img
@@ -256,7 +270,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                         {link.label}
                                     </a>
                                     {link.active && (
-                                        <ul className="my-4 d-block d-sm-none">
+                                        <ul className="my-4 d-block d-lg-none">
                                             {link.subMenu.map((subLink, index) => {
                                                 return (
                                                     <li className="mb-3" key={index}>                                                        

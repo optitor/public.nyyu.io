@@ -5,6 +5,7 @@
     height: 80px;
     background: transparent;
     font-size: 12px;
+    z-index: 1030;
     @include mq('laptop', max) {
         font-size: 10px;
     }

@@ -356,13 +356,13 @@ const IndexPage = () => {
                                         : presaleStartedContent
                                     : noContent}
                             <div className="col-md-1 d-none d-sm-block"></div>
-                            <div className="right-part col-md-5 d-none d-sm-block d-md-flex">
+                            <div className="right-part col-md-5 d-none d-md-block">
                                 <img
                                     src={Hero2}
                                     alt="home hero"
                                     className="hero-image img-fluid"
                                 />
-                                <strong className="title" style={{display: 'none'}}>
+                                <strong className="title d-none">
                                     The NDB token pre-sale: NDB token will help you gain access to the NDB Ecosystem and allows the acquisition of some of its utilities, such as NFTs.
                                 </strong>
                             </div>

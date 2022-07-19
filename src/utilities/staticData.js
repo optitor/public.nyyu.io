@@ -467,6 +467,10 @@ export const navigationLinks = [
             {
                 label: "Support",
                 url: ROUTES.faq
+            },
+            {
+                label: "Invite & Earn",
+                url: ROUTES.referral
             }
         ]
     },
