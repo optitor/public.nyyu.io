@@ -32,7 +32,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
     return <div className="mb-3 wallet_content">
         {selectedWallet === 'external'?
             <>
-                <div className="row">
+                <div className="row pt-2">
                     {connectors?.map((connector, idx) => (accountInfo && (accountInfo?.connector.name === connector.name)) ? (
                         <div className="col-lg-6 mb-10px" key={idx}>
                             <div className="presale-connected external_wallet">
