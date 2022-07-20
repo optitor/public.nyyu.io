@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_TASK_SETTING, GET_USER_TIER_TASK } from "./profile-queries";
 import { useState } from "react";
 import CustomSpinner from "../common/custom-spinner";
-import { Qmark } from "../../utilities/imgImport";
+import { QuestionMark } from "../../utilities/imgImport";
 import ReactTooltip from "react-tooltip";
 import { useSelector } from "react-redux";
 
@@ -135,10 +135,11 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                 <div>Wallet balance</div>
                                 <div className="cursor-pointer">
                                     <img
-                                        src={Qmark}
+                                        src={QuestionMark}
                                         alt="Question mark"
                                         data-tip
                                         data-for="qmark-icon-tooltip"
+                                        style={{width: 25}}
                                     />
                                 </div>
                             </div>

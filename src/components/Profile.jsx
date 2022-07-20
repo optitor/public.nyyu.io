@@ -235,9 +235,7 @@ const Profile = () => {
                                         ) : (
                                             <></>
                                         )}
-                                        {displayName.length > 17
-                                            ? displayName.slice(0, 16) + "..."
-                                            : displayName}
+                                        <p className="text-truncate fs-18px" title={displayName}>{displayName}</p>
                                     </div>
                                     <p className="silver-cnt">
                                         {nextTier?.length > 0 &&
