@@ -21,8 +21,7 @@ import { ROUTES, navLinks } from "../../utilities/routes"
 import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification"
 import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
 import { fetch_Favor_Assets } from '../../redux/actions/settingAction';
-import TWITTER from '../../images/icons/twitter.svg';
-import DISCORD from '../../images/icons/discord.svg';
+import { TWITTER, DISCORD } from '../../utilities/imgImport';
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()

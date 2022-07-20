@@ -1,9 +1,27 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useMemo } from "react";
 import { Link } from "gatsby";
 import { Input } from "../common/FormControl";
 import { useSignIn2FA } from "../../apollo/model/auth";
 import CustomSpinner from "../common/custom-spinner";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
+import Countdown from 'react-countdown';
+
+const SESSION_EXPIRE_TIME = 60 * 1000;
+
+// Renderer callback with condition
+const countDownRenderer = ({ seconds, completed }) => {
+    if (completed) {
+        // Render a completed state
+        return <span className="fs-14px">(2FA code Expired)</span>;
+    } else {
+        // Render a countdown
+        return (
+            <>
+                {seconds !==0 && <span className="fs-14px">({seconds} Sec)</span>}
+            </>
+        );
+    }
+};
 
 const VerifyMutliFA = ({
     twoStep,
@@ -24,6 +42,10 @@ const VerifyMutliFA = ({
     const [codeError, setCodeError] = useState("");
 
     const [signin2faMutation, signin2faMutationResults] = useSignIn2FA();
+
+    const createdAt = useMemo(() => {
+        if(!loading) return Date.now();
+    }, [loading]);
 
     const confirmCodeClick = (e) => {
         e.preventDefault();
@@ -60,7 +82,7 @@ const VerifyMutliFA = ({
                         (step) =>
                             step && (
                                 <div key={step}>
-                                    <p className="text-capitalize">{step}</p>
+                                    <p>Confirmation code (<span className="text-capitalize fw-bold">{step}</span>)</p>
                                     <div className="form-group">
                                         <Input
                                             name="code"
@@ -81,7 +103,12 @@ const VerifyMutliFA = ({
                                             </span>
                                         )}
                                     </div>
-                                    <div className="form-group text-white resend-2fa">
+                                    <div className="form-group text-white d-flex justify-content-end align-items-center" style={{minHeight: 32}}>
+                                        {!loading &&
+                                        <Countdown
+                                            date={createdAt + SESSION_EXPIRE_TIME}
+                                            renderer={countDownRenderer}
+                                        />}
                                         <button
                                             type="button"
                                             disabled={loading}
