@@ -12,12 +12,12 @@ const SESSION_EXPIRE_TIME = 60 * 1000;
 const countDownRenderer = ({ seconds, completed }) => {
     if (completed) {
         // Render a completed state
-        return <span className="fs-14px">(2FA code Expired)</span>;
+        return <span className="text-warning">(2FA code Expired)</span>;
     } else {
         // Render a countdown
         return (
             <>
-                {seconds !==0 && <span className="fs-14px">({seconds} Sec)</span>}
+                {seconds !==0 && <span className="text-success">({seconds} Sec)</span>}
             </>
         );
     }
@@ -104,15 +104,10 @@ const VerifyMutliFA = ({
                                         )}
                                     </div>
                                     <div className="form-group text-white d-flex justify-content-end align-items-center" style={{minHeight: 32}}>
-                                        {!loading &&
-                                        <Countdown
-                                            date={createdAt + SESSION_EXPIRE_TIME}
-                                            renderer={countDownRenderer}
-                                        />}
                                         <button
                                             type="button"
                                             disabled={loading}
-                                            className={`signup-link btn mt-0 pe-0 py-0 text-capitalize cursor-pointer ${
+                                            className={`signup-link btn mt-0 pe-0 me-1 py-0 text-capitalize cursor-pointer ${
                                                 loading
                                                     ? "text-secondary"
                                                     : "text-success text-underline"
@@ -130,6 +125,14 @@ const VerifyMutliFA = ({
                                                 <div>Resend</div>
                                             </div>
                                         </button>
+                                        {!loading &&
+                                        <p style={{minWidth: 70}}>
+                                            <Countdown
+                                                date={createdAt + SESSION_EXPIRE_TIME}
+                                                renderer={countDownRenderer}
+                                            />
+                                        </p>
+                                        }
                                     </div>
                                 </div>
                             )
