@@ -14,6 +14,7 @@ body {
     main {
         @extend %set-height;
         overflow-x: hidden !important;
+        overflow-y: auto;
     }
 }
 

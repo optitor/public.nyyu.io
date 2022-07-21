@@ -135,6 +135,8 @@ import glotbIcon from "../images/support/globe.svg"
 import attachmentIcon from "../images/support/attachment.svg"
 import menuIcon from "../images/support/menu.svg"
 import greenCup from "../images/icons/green-cup.svg"
+import twitter1 from '../images/icons/twitter.svg';
+import discord from '../images/icons/discord.svg';
 
 import plaid from "../images/plaid.svg"
 import paypalFiat from "../images/paypal-fiat.svg"
@@ -300,6 +302,8 @@ export const AmexDeposit = amexDeposit
 export const MasterCard = masterCard
 export const GreenCup = greenCup
 export const CreditCards = creditCards
+export const TWITTER = twitter1
+export const DISCORD = discord
 
 export const Certik = certik
 export const MunichRE = munichre
