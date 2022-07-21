@@ -34,6 +34,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
 
     // Webservice
     const { data: user_data } = useQuery(GET_USER)
+    
     useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         errorPolicy: "none",
@@ -162,11 +163,11 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                         <img src={DISCORD} alt="discord social link" className="social-link"/>
                                     </a>
                                 </li>
-                                <div class="dropdown me-2 d-block d-sm-none">
-                                    <button type="button" class="btn btn-primary dropdown-toggle fs-16px px-3 py-2" data-bs-toggle="dropdown">
+                                <div className="dropdown me-2 d-block d-sm-none">
+                                    <button type="button" className="btn btn-primary dropdown-toggle fs-16px px-3 py-2" data-bs-toggle="dropdown">
                                         Sale
                                     </button>
-                                    <ul class="dropdown-menu">
+                                    <ul className="dropdown-menu">
                                         <li>
                                             <Link className="fs-16px text-uppercase fw-bold" to={ROUTES.auction}>
                                                 Sale

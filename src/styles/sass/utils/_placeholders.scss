@@ -11,7 +11,8 @@
 }
 
 %set-height2 {
-    height: calc(100vh - 110px);
+    height: calc(100vh - 110px - $footerHeight);
+    min-height: 600px;
     @include mq("phone", max) {
         height: auto;
         min-height: calc(100vh - 175px);

@@ -6,18 +6,18 @@ import CustomSpinner from "../common/custom-spinner";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import Countdown from 'react-countdown';
 
-const SESSION_EXPIRE_TIME = 60 * 1000;
+const EXPIRE_TIME = 60 * 1000;
 
 // Renderer callback with condition
 const countDownRenderer = ({ seconds, completed }) => {
     if (completed) {
         // Render a completed state
-        return <span className="text-warning">(2FA code Expired)</span>;
+        return <span></span>;
     } else {
         // Render a countdown
         return (
             <>
-                {seconds !==0 && <span className="text-success">({seconds} Sec)</span>}
+                {seconds !==0 && <span className="text-success" style={{minWidth: 70}}>({seconds} Sec)</span>}
             </>
         );
     }
@@ -126,12 +126,10 @@ const VerifyMutliFA = ({
                                             </div>
                                         </button>
                                         {!loading &&
-                                        <p style={{minWidth: 70}}>
-                                            <Countdown
-                                                date={createdAt + SESSION_EXPIRE_TIME}
-                                                renderer={countDownRenderer}
-                                            />
-                                        </p>
+                                        <Countdown
+                                            date={createdAt + EXPIRE_TIME}
+                                            renderer={countDownRenderer}
+                                        />
                                         }
                                     </div>
                                 </div>
