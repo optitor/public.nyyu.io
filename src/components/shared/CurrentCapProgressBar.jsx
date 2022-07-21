@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from "@apollo/client";
 import { Skeleton } from '@mui/material';
-import { numberWithCommas } from "../../utilities/number";
+import { renderNumberFormat } from "../../utilities/number";
 import { getCurrentMarketCap, getCirculatingSupply } from "../../utilities/utility-methods";
 import { GET_CURRENT_ROUND } from "../../apollo/graphqls/querys/Auction";
 
@@ -33,7 +33,7 @@ export default function CurrentCapProgressBar() {
         let progress = Number(circulatingSupply / MaxSupply * 100).toFixed(1);
         if(progress < 1) progress = 1;
 
-        return 20;
+        return progress;
     }, [circulatingSupply, MaxSupply]);
 
     useEffect(async () => {
@@ -53,15 +53,13 @@ export default function CurrentCapProgressBar() {
             ): (
                 <>
                     <div className="d-flex justify-content-between">
-                        <p className="current-value">
-                            current cap&nbsp;
-                            <span className="txt-green">
-                                {numberWithCommas(currentCap)}
-                            </span>
+                        <p className="current-value d-flex flex-column flex-sm-row">
+                            <span className="me-2">current cap</span>
+                            {renderNumberFormat(currentCap, '', 2, false, '#23c865')}
                         </p>
-                        <p className="end-value">
-                            target cap&nbsp;
-                            <span className="txt-green">1 Trillion</span>
+                        <p className="end-value d-flex flex-column flex-sm-row align-items-end">
+                            <span>Max supply</span>
+                            <span className="ms-2 txt-green">1 Trillion</span>
                         </p>
                     </div>
                     <div className="timeframe-bar">
@@ -70,7 +68,7 @@ export default function CurrentCapProgressBar() {
                             style={{
                                 width: `${barProgress}%`,
                                 background:
-                                    "linear-gradient(270deg, #FFFFFF 0%, #171818 31.34%, #23C865 64.81%)",
+                                    "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)",
                             }}
                         >
                             <div className="timeleft__value">
