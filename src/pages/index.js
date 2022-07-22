@@ -201,7 +201,7 @@ const IndexPage = () => {
     )
 
     const presaleStartedContent = (
-        <div className="left-part col-md-6 px-0 pe-sm-auto">
+        <div className="left-part col-md-6 px-0 pe-sm-auto d-flex flex-column justify-content-center">
             <h3 className="home-title d-sm-block d-none">
                 <div>
                     <span className="txt-green">round {presaleRound}</span>{" "} ends in
@@ -357,7 +357,7 @@ const IndexPage = () => {
                                         : presaleStartedContent
                                     : noContent}
                             <div className="col-md-1 d-none d-sm-block"></div>
-                            <div className="right-part col-md-5 d-none d-md-block">
+                            <div className="right-part col-md-5 d-none d-md-flex">
                                 <img
                                     src={Hero2}
                                     alt="home hero"
