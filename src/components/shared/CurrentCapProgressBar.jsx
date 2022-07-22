@@ -53,7 +53,7 @@ export default function CurrentCapProgressBar() {
             ): (
                 <>
                     <div className="d-flex justify-content-between">
-                        <p className="current-value d-flex flex-column flex-sm-row">
+                        <p className="current-value d-flex flex-column flex-sm-row align-items-start">
                             <span className="me-2">current cap</span>
                             {renderNumberFormat(currentCap, '', 2, false, '#23c865')}
                         </p>
