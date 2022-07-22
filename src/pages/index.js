@@ -17,6 +17,7 @@ import Loading from "../components/common/FadeLoading"
 import { GET_CURRENT_ROUND } from "../apollo/graphqls/querys/Auction"
 import CountDownPending from "../components/common/countdown-pending"
 import { isBrowser } from "../utilities/auth";
+import CurrentCapProgressBar from "../components/shared/CurrentCapProgressBar";
 
 const IndexPage = () => {
    
@@ -343,8 +344,8 @@ const IndexPage = () => {
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                 />
-                <section className="home-section mt-5 mt-sm-0">
-                    <div className="container h-100 d-flex flex-column justify-content-xl-center justify-content-start mt-5 mt-md-0">
+                <section className="home-section mt-5 mt-sm-0 d-flex flex-column justify-content-center">
+                    <div className="container d-flex flex-column justify-content-xl-center justify-content-start mt-5 mt-md-0 mb-3">
                         <div className="row m-0">
                             {currentRound?.auction
                                 ? auctionStatus === 1
@@ -367,6 +368,9 @@ const IndexPage = () => {
                                 </strong>
                             </div>
                         </div>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <CurrentCapProgressBar />
                     </div>
                 </section>
                 <Footer />

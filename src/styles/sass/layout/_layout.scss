@@ -13,12 +13,14 @@
 }
 
 .remain-token__value {
-    padding: 0 60px;
-    margin-top: 80px;
-    margin-bottom: 80px;
-    @include mq("tablet", max) {
-        padding: 0 30px;
+    width: 90%;
+    margin-top: 20px;
+    margin-bottom: 60px;
+
+    @include mq('phone', max) {
+        width: 80%;
     }
+
     .current-value,
     .end-value {
         font-weight: bold;

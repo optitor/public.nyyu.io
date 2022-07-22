@@ -264,7 +264,9 @@ const Payment = () => {
                             <OrderSummary bidAmount={bidAmount} />
                         )}
                     </div>
-                    <CurrentCapProgressBar />
+                    <div className="mt-5 py-5">
+                        <CurrentCapProgressBar />
+                    </div>
                 </section>
             </main>
         </AuctionProvider>
