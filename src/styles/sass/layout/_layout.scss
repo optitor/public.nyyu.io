@@ -11,3 +11,39 @@
         height: auto;
     }
 }
+
+.remain-token__value {
+    padding: 0 60px;
+    margin-top: 80px;
+    margin-bottom: 80px;
+    @include mq("tablet", max) {
+        padding: 0 30px;
+    }
+    .current-value,
+    .end-value {
+        font-weight: bold;
+        font-size: 11px;
+        line-height: 13px;
+        text-transform: uppercase;
+    }
+    .timeframe-bar {
+        background-color: #263a2b;
+        height: 17px;
+        margin-top: 8px;
+        .timeleft {
+            border-radius: 0 8.5px 8.5px 0;
+            position: relative;
+            &__value {
+                position: absolute;
+                bottom: -22px;
+                right: -36px;
+                color: white;
+                font-weight: bold;
+                font-size: 11px;
+                line-height: 13px;
+                white-space: nowrap;
+                text-transform: uppercase;
+            }
+        }
+    }
+}
