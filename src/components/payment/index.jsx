@@ -10,7 +10,6 @@ import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
 
 import Header from "../header";
 import Loading from "../common/Loading";
-import { numberWithCommas } from "../../utilities/number";
 import {
     CryptoCoin,
     Paypal,
@@ -31,10 +30,6 @@ import NDBWalletTab from "./NDBWalletTab";
 import PaymentExternalWalletTab from "./payment-external-wallet-tab";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import {
-    GET_AUCTION,
-    GET_PRESALES,
-} from "../../apollo/graphqls/querys/Auction";
-import {
     PAYPAL_FOR_AUCTION,
     PAYPAL_FOR_PRESALE,
 } from "../../apollo/graphqls/mutations/Payment";
@@ -45,8 +40,8 @@ import {
     NDB_Presale,
 } from "../../utilities/cookies";
 import { ROUTES } from "../../utilities/routes";
-import { getCurrentMarketCap } from "../../utilities/utility-methods";
 import AuctionProvider from "../../providers/auction-context";
+import CurrentCapProgressBar from "../shared/CurrentCapProgressBar";
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -67,33 +62,22 @@ const Payment = () => {
         order_id: orderId,
     } = useSelector((state) => state?.placeBid);
     
-    const [totalRounds, setTotalRounds] = useState(null);
-    const [barProgress, setBarProgress] = useState(null);
-    const [currentCap, setCurrentCap] = useState(12000000); // Hardcoded value
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
 
     const dispatch = useDispatch();
-    const loading = !(barProgress && allFees && !payPalLoading);
-    const targetCap = 1000000000000;
+    const loading = !(allFees && !payPalLoading);
+    
     const isSSR = typeof window === "undefined";
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
+
+    useEffect(() => {
+        if(currentRound === 0) navigate(ROUTES.auction);
+    }, [currentRound]);
     
-    useQuery(GET_AUCTION, {
-        onCompleted: (data) => {
-            if(currentRound === 0) {
-                navigate(ROUTES.auction)
-            }
-            setTotalRounds(data.getAuctions?.length);
-            setBarProgress((currentCap * 100) / targetCap);
-        },
-        onError: (error) => console.log(error),
-        errorPolicy: "ignore",
-        fetchPolicy: "network-only",
-    });
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
             setAllFees(data.getAllFees);
@@ -105,15 +89,6 @@ const Payment = () => {
         },
         onError: (error) => console.log(error),
     });
-
-    useEffect(() => {
-        if (barProgress < 1) setBarProgress(1);
-    }, [barProgress]);
-
-    useEffect(async () => {
-        const response = await getCurrentMarketCap();
-        setCurrentCap(Number(response.marketcap));
-    }, []);
 
     const [paypalForAuctionMutation] = useMutation(PAYPAL_FOR_AUCTION, {
         onCompleted: (data) => {
@@ -289,37 +264,7 @@ const Payment = () => {
                             <OrderSummary bidAmount={bidAmount} />
                         )}
                     </div>
-                    <div className="remain-token__value col-md-12 mx-auto">
-                        <div className="d-flex justify-content-between">
-                            <p className="current-value">
-                                current cap&nbsp;
-                                <span className="txt-green">
-                                    {numberWithCommas(currentCap)}
-                                </span>
-                            </p>
-                            <p className="end-value">
-                                target cap&nbsp;
-                                <span className="txt-green">1 Trillion</span>
-                            </p>
-                        </div>
-                        <div className="timeframe-bar">
-                            <div
-                                className="timeleft"
-                                style={{
-                                    width: `${barProgress}%`,
-                                    background:
-                                        "linear-gradient(270deg, #FFFFFF 0%, #77DDA0 31.34%, #23C865 64.81%)",
-                                }}
-                            >
-                                <div className="timeleft__value">
-                                    Round &nbsp;
-                                    <span className="txt-green">
-                                        {totalRounds}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <CurrentCapProgressBar />
                 </section>
             </main>
         </AuctionProvider>

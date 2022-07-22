@@ -180,6 +180,12 @@ export const getCurrentMarketCap = async () => {
     return null;
 };
 
+export const getCirculatingSupply = async () => {
+    const { data } = await axios.get("https://api.dev.nyyu.io/circulatingsupply");
+    if (data) return data;
+    return null;
+};
+
 /**
      * Download statement pdf
      * @param {int} id transaction id
