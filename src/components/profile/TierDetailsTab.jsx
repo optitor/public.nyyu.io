@@ -146,7 +146,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                             <ReactTooltip
                                 id="qmark-icon-tooltip"
                                 place="bottom"
-                                type="dark"
+                                type="light"
                                 effect="solid"
                             >
                                 <div
