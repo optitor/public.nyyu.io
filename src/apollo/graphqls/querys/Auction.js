@@ -32,6 +32,13 @@ export const GET_PRESALES = gql`
         }
     }
 `
+
+export const GET_LAST_ROUND = gql`
+    query {
+        getLastRound
+    }
+`;
+
 export const GET_CURRENT_ROUND = gql`
     {
         getCurrentRound {

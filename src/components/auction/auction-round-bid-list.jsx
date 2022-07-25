@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { useSelector } from "react-redux"
-import _ from "lodash"
+import _, { orderBy } from "lodash"
 import { useQuery } from "@apollo/client"
 
 import { useAuction } from "../../providers/auction-context"
@@ -43,16 +43,40 @@ export default function AuctionRoundBidList() {
             presaleId: optCurrentRound?.id
         },
         onCompleted: (data) => {
-            let list = _.orderBy(
-                isAuction ? data?.getBidListByRound : data?.getPresaleOrders,
-                isAuction ? ["ranking", "tokenPrice"] : ["ndbAmount"],
-                ["asc", "desc"]
-            )
-            list = list.map((item) => ({
-                ...item,
-                totalAmount: isAuction ? item.tokenPrice * item.tokenAmount : item.ndbAmount * item.ndbPrice,
-                ranking: isAuction ? (item.ranking ? item.ranking : list.indexOf(item) + 1) : list.indexOf(item) + 1
-            }))
+            let list;
+            if(isAuction) {
+                list = _.orderBy(data?.getBidListByRound, ["ranking", "tokenPrice"], ["asc", "desc"]);
+                list = list.map((item) => ({
+                    ...item,
+                    totalAmount: item.tokenPrice * item.tokenAmount,
+                    ranking: (item.ranking ? item.ranking : list.indexOf(item) + 1)
+                }))
+            } else {
+                // list = _.orderBy(data?.getPresaleOrders, ["ndbAmount"], ["desc"])
+                // list = list.map((item) => ({
+                //     ...item,
+                //     totalAmount: item.ndbAmount * item.ndbPrice,
+                //     ranking: list.indexOf(item) + 1
+                // }))
+                let ordersObj = {};
+                for(let order of data?.getPresaleOrders) {
+                    if(ordersObj[order?.userId]) {
+                        const ndbAmount = ordersObj[order?.userId]?.ndbAmount + order?.ndbAmount;
+                        const paidAmount = ordersObj[order?.userId]?.paidAmount + order?.paidAmount;
+                        ordersObj[order?.userId] = { ...ordersObj[order?.userId], ndbAmount, paidAmount };
+                    } else {
+                        ordersObj[order?.userId] = order;
+                    }
+                }
+
+                list = _.orderBy(ordersObj, ['ndbAmount'], ['desc']);
+                list = list.map((item) => ({
+                    ...item,
+                    totalAmount: item.ndbAmount * item.ndbPrice,
+                    ranking: list.indexOf(item) + 1
+                }))
+            }
+
             setDisplayedBidList([])
             setCurrentAuctionUserExist(false)
             setCurrentUserBidData([])

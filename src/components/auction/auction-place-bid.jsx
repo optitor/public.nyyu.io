@@ -41,6 +41,7 @@ export default function AuctionPlaceBid() {
             setReqPending(false)
         },
     })
+    
     const [increaseBid] = useMutation(INCREASE_BID, {
         onCompleted: () => {
             navigate(ROUTES.payment)
