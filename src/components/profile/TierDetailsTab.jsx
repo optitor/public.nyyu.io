@@ -133,7 +133,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
 
                             <div className="d-flex align-items-center justify-content-between w-100">
                                 <div>Wallet balance</div>
-                                <div className="cursor-pointer">
+                                <div className="cursor-pointer ms-2">
                                     <img
                                         src={QuestionMark}
                                         alt="Question mark"

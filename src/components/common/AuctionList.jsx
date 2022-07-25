@@ -19,7 +19,7 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, paidAmount, nd
                 <div
                     className={`pl-4px ${(isCurrentUser && isAuction) ? (winningResult ? "txt-mountainMeadow fw-bold" : "txt-cinnabar fw-bold") : "text-white fw-500"}`}>{ranking}</div>
             </div>
-            <div className="col-10 d-flex justify-content-between align-items-center pr-4px">
+            <div className="col-10 d-flex justify-content-between align-items-center pr-4px text-truncate">
                 <div className="d-flex align-items-center justify-content-start">
                     <div className="d-flex justify-content-center align-items-center">
                         <div

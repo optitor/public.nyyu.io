@@ -24,6 +24,7 @@ const VerifyMutliFA = ({
             email: "",
         }
     );
+    
     const [codeError, setCodeError] = useState("");
     const [waitingCode, setWaitingCode] = useState(false);
 
