@@ -7,26 +7,29 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, paidAmount, nd
     const currency = useSelector(state => state.favAssets.currency)
     const currencyRates = useSelector(state => state.currencyRates)
     const { isAuction } = useAuction()
-
+    
     const currencyRate = currencyRates[currency.value] ?? 1
     const totalPaidAmount = renderNumberFormat((paidAmount * currencyRate), '', 2, true);
     const totalBidAmount = renderNumberFormat((mainAmount * currencyRate), '', 2, false, 'dimgrey');
     const totalNdbAmount = renderNumberFormat(ndbAmount, '', 0, false, 'dimgrey');
 
+    const winning = isAuction? winningResult: true;
+
     return (
         <div className="w-100 row border-bottom-scorpion p-2 bid-list-item px-12px">
             <div className="col-2 d-flex align-items-center justify-content-start">
-                <div
-                    className={`pl-4px ${(isCurrentUser && isAuction) ? (winningResult ? "txt-mountainMeadow fw-bold" : "txt-cinnabar fw-bold") : "text-white fw-500"}`}>{ranking}</div>
+                <div className={`pl-4px ${(isCurrentUser) ? (winning ? "txt-mountainMeadow fw-bold" : "txt-cinnabar fw-bold") : "text-white fw-500"}`}>
+                    {ranking}
+                </div>
             </div>
             <div className="col-10 d-flex justify-content-between align-items-center pr-4px text-truncate">
                 <div className="d-flex align-items-center justify-content-start">
                     <div className="d-flex justify-content-center align-items-center">
-                        <div className={(isCurrentUser && isAuction) ? winningResult ? "txt-mountainMeadow fw-bold" : "txt-cinnabar fw-bold" : "text-white"}>
+                        <div className={(isCurrentUser) ? winning ? "txt-mountainMeadow fw-bold" : "txt-cinnabar fw-bold" : "text-white"}>
                             {fullName}
                         </div>
                         {(isCurrentUser && isAuction) ?
-                            <span className={`w-50px text-center fs-8px ml-8px ${winningResult ? " border-mountainMeadow txt-mountainMeadow" : "border-cinnabar txt-cinnabar"}`}>{winningResult ? "WINNING" : "LOST"}</span> : ""
+                            <span className={`w-50px text-center fs-8px ml-8px ${winning ? " border-mountainMeadow txt-mountainMeadow" : "border-cinnabar txt-cinnabar"}`}>{winningResult ? "WINNING" : "LOST"}</span> : ""
                         }
                     </div>
                 </div>

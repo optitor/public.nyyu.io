@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { useSelector } from "react-redux"
-import _, { orderBy } from "lodash"
+import _ from "lodash"
 import { useQuery } from "@apollo/client"
 
 import { useAuction } from "../../providers/auction-context"
@@ -31,7 +31,8 @@ export default function AuctionRoundBidList() {
     )
 
     const lastOrderId = useMemo(() => {
-        const sortListById = _.orderBy(currentRoundBidList, ['id'], ['desc']);
+        if(!currentRoundBidList) return null;
+        const sortListById = _.orderBy(Object.values(currentRoundBidList), ['id'], ['desc']);
         return sortListById[0]?.id;
     }, [currentRoundBidList]);
 
@@ -52,29 +53,19 @@ export default function AuctionRoundBidList() {
                     ranking: (item.ranking ? item.ranking : list.indexOf(item) + 1)
                 }))
             } else {
-                // list = _.orderBy(data?.getPresaleOrders, ["ndbAmount"], ["desc"])
-                // list = list.map((item) => ({
-                //     ...item,
-                //     totalAmount: item.ndbAmount * item.ndbPrice,
-                //     ranking: list.indexOf(item) + 1
-                // }))
                 let ordersObj = {};
                 for(let order of data?.getPresaleOrders) {
                     if(ordersObj[order?.userId]) {
+                        const id = ordersObj[order?.userId]?.id >= order?.id ? ordersObj[order?.userId]?.id: order?.id;
                         const ndbAmount = ordersObj[order?.userId]?.ndbAmount + order?.ndbAmount;
                         const paidAmount = ordersObj[order?.userId]?.paidAmount + order?.paidAmount;
-                        ordersObj[order?.userId] = { ...ordersObj[order?.userId], ndbAmount, paidAmount };
+                        ordersObj[order?.userId] = { ...ordersObj[order?.userId], ndbAmount, paidAmount, id };
                     } else {
                         ordersObj[order?.userId] = order;
                     }
                 }
 
-                list = _.orderBy(ordersObj, ['ndbAmount'], ['desc']);
-                list = list.map((item) => ({
-                    ...item,
-                    totalAmount: item.ndbAmount * item.ndbPrice,
-                    ranking: list.indexOf(item) + 1
-                }))
+                list = ordersObj;
             }
 
             setDisplayedBidList([])
@@ -114,8 +105,18 @@ export default function AuctionRoundBidList() {
             lastOrderId
         },
         onCompleted: data => {
-            if (data.getNewPresaleOrders) {
-                currentRoundBidList &&  setCurrentRoundBidList([ ...currentRoundBidList, ...data.getNewPresaleOrders ]);
+            if (data?.getNewPresaleOrders) {
+                for(let order of data?.getNewPresaleOrders) {
+                    if(currentRoundBidList[order?.userId]) {
+                        if(currentRoundBidList[order?.userId]?.id >= order?.id) continue;
+                        const id = currentRoundBidList[order?.userId]?.id >= order?.id ? currentRoundBidList[order?.userId]?.id: order?.id;
+                        const ndbAmount = currentRoundBidList[order?.userId]?.ndbAmount + order?.ndbAmount;
+                        const paidAmount = currentRoundBidList[order?.userId]?.paidAmount + order?.paidAmount;
+                        currentRoundBidList[order?.userId] = { ...currentRoundBidList[order?.userId], ndbAmount, paidAmount, id };
+                    } else {
+                        currentRoundBidList[order?.userId] = order;
+                    }
+                }
             }
         },
         onError: (error) => console.log(error),
@@ -144,12 +145,11 @@ export default function AuctionRoundBidList() {
     })
 
     useEffect(() => {
-        if (currentRoundBidList && currentRoundBidList.length) {
-            const currentUserBidInfo = currentRoundBidList?.filter(
-                (auction) => auction.userId === currentUser.id
-            )[0]
-            
+        if (!_.isEmpty(currentRoundBidList)) {            
             if(isAuction) {
+                const currentUserBidInfo = currentRoundBidList?.filter(
+                    (auction) => auction.userId === currentUser.id
+                )[0]
                 if (currentUserBidInfo) {
                     setCurrentUserBidData(currentUserBidInfo)
                     setCurrentAuctionUserExist(true)
@@ -159,7 +159,7 @@ export default function AuctionRoundBidList() {
                 )
                 setDisplayedBidList(restList)
             } else {
-                const sortList = _.orderBy(currentRoundBidList, ['ndbAmount'], ['desc']);
+                let sortList = _.orderBy(Object.values(currentRoundBidList), ['ndbAmount'], ['desc']);
                 const tempList = sortList.map(({ranking, ...item}, key) => ({
                     ...item,
                     ranking: key + 1
@@ -184,7 +184,7 @@ export default function AuctionRoundBidList() {
 
     return (
         <div className="d-flex flex-column align-items-center pt-5 list-part">
-            <AuctionListHeader totalCount={currentRoundBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
+            <AuctionListHeader totalCount={displayedBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
                                auctionTitle={isAuction ? "Bid" : "Order"}/>
             {currentAuctionUserExist && isAuction ?
             <div className="list-part auction-bid-list-content-final">
