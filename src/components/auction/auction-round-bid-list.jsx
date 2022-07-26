@@ -12,6 +12,7 @@ import { GET_BID, GET_CURRENT_ROUND} from "../../apollo/graphqls/querys/Auction"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graphqls/querys/Bid"
 import { GET_PRESALE_LIST_BY_ROUND, GET_NEW_PRESALE_ORDERS } from "../../apollo/graphqls/querys/Presale"
 import { setCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
+import { indexOf } from "lodash"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
@@ -106,17 +107,21 @@ export default function AuctionRoundBidList() {
         },
         onCompleted: data => {
             if (data?.getNewPresaleOrders) {
+                if(_.isEmpty(data?.getNewPresaleOrders)) return;
+                
+                let orderObj = currentRoundBidList;
                 for(let order of data?.getNewPresaleOrders) {
-                    if(currentRoundBidList[order?.userId]) {
-                        if(currentRoundBidList[order?.userId]?.id >= order?.id) continue;
-                        const id = currentRoundBidList[order?.userId]?.id >= order?.id ? currentRoundBidList[order?.userId]?.id: order?.id;
-                        const ndbAmount = currentRoundBidList[order?.userId]?.ndbAmount + order?.ndbAmount;
-                        const paidAmount = currentRoundBidList[order?.userId]?.paidAmount + order?.paidAmount;
-                        currentRoundBidList[order?.userId] = { ...currentRoundBidList[order?.userId], ndbAmount, paidAmount, id };
+                    if(orderObj[order?.userId]) {
+                        if(orderObj[order?.userId]?.id >= order?.id) continue;
+                        const id = orderObj[order?.userId]?.id >= order?.id ? orderObj[order?.userId]?.id: order?.id;
+                        const ndbAmount = orderObj[order?.userId]?.ndbAmount + order?.ndbAmount;
+                        const paidAmount = orderObj[order?.userId]?.paidAmount + order?.paidAmount;
+                        orderObj[order?.userId] = { ...orderObj[order?.userId], ndbAmount, paidAmount, id };
                     } else {
-                        currentRoundBidList[order?.userId] = order;
+                        orderObj[order?.userId] = order;
                     }
                 }
+                setCurrentRoundBidList({ ...orderObj });
             }
         },
         onError: (error) => console.log(error),
