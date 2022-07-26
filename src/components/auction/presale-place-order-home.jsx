@@ -30,8 +30,7 @@ export default function PresalePlaceOrderHome() {
     const leftAmount = useMemo(() => {
         return optCurrentRound.tokenAmount - optCurrentRound.sold;
     }, [optCurrentRound.tokenAmount, optCurrentRound.sold])
-    
-    
+        
     // Render
     return (
         <>

@@ -107,8 +107,8 @@ export default function AuctionRoundBidList() {
         },
         onCompleted: data => {
             if (data?.getNewPresaleOrders) {
-                if(_.isEmpty(data?.getNewPresaleOrders)) return;
-                
+                if(_.isEmpty(data?.getNewPresaleOrders) || !currentRoundBidList) return;
+
                 let orderObj = currentRoundBidList;
                 for(let order of data?.getNewPresaleOrders) {
                     if(orderObj[order?.userId]) {
