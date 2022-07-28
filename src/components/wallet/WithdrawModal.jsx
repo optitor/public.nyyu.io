@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import jq from 'jquery';
-import { createHmac } from 'crypto';
+import Hashes from 'jshashes';
 import ReactCodeInput from 'react-code-input';
 import Modal from "react-modal";
 import validator from "validator";
@@ -295,11 +295,9 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     });
 
     const crypto_Withdraw_Request = () => {
-        const signature = createHmac('sha512', process.env.GATSBY_WITHDRAW_PRIVATE_KEY);
-        const plainText = ts + "." + selectedAsset.label + "." + network?.network + "." + walletAccountData?.address + "." + confirmCode;
-        signature.update(plainText);
-        const _hmac = signature.digest('hex');
         const ts = Math.floor(Date.now() / 1000);
+        const plainText = ts + "." + selectedAsset.label + "." + network?.network + "." + walletAccountData?.address + "." + confirmCode;
+        const _hmac = new Hashes.SHA512().hex_hmac(process.env.GATSBY_WITHDRAW_PRIVATE_KEY, plainText)
 
         setError('');
         setPending(true);
