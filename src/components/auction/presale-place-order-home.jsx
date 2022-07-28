@@ -11,7 +11,7 @@ export default function PresalePlaceOrderHome() {
     const currencyRate = currencyRates[currency.value]?? 1;
     const totalInput = document.querySelector('.presale-total-input');
 
-    const auction = useAuction()
+    const auction = useAuction();
     const { optCurrentRound, setPresalePlaceOrderStage, setPresaleNdbAmount } = auction
     const [amount, setAmount] = useState(1)
     const [totalPrice, setTotalPrice] = useState(1);
