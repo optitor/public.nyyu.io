@@ -175,13 +175,13 @@ export const getNDBWalletPaymentFee = (user, allFees, bidAmount) => {
 };
 
 export const getCurrentMarketCap = async () => {
-    const { data } = await axios.get("https://api.dev.nyyu.io/marketcap");
+    const { data } = await axios.get(`${process.env.GATSBY_API_BASE_URL}/marketcap`);
     if (data) return data;
     return null;
 };
 
 export const getCirculatingSupply = async () => {
-    const { data } = await axios.get("https://api.dev.nyyu.io/circulatingsupply");
+    const { data } = await axios.get(`${process.env.GATSBY_API_BASE_URL}/circulatigsupply`);
     if (data) return data;
     return null;
 };

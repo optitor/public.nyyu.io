@@ -18,10 +18,10 @@ export default function TierDetailsTab({ shuftiStatus }) {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
             setGainPointsData(data.getUserTierTask);
-            const walletBalance = data.getUserTierTask.wallet;
+            const walletBalance = data.getUserTierTask?.wallet;
 
             let _walletPoint = 0;
-            taskSettingData.wallet.forEach(elem => {
+            taskSettingData?.wallet.forEach(elem => {
                 if(walletBalance > elem.amount) {
                     _walletPoint += elem.point;
                 }
@@ -127,7 +127,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                         <div className="detail_item d-flex align-items-center br">
                             <div
                                 className={`status me-2 ${
-                                    gainPointsData.wallet === 0 ? "deactive" : "active"
+                                    gainPointsData?.wallet === 0 ? "deactive" : "active"
                                 }`}
                             />
 
@@ -167,7 +167,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                             </ReactTooltip>
                         </div>
                         <div className="detail_item text-end text-sm-start">
-                            {gainPointsData.wallet}/6000
+                            {gainPointsData?.wallet}/6000
                         </div>
                     </div>
 

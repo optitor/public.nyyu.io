@@ -17,7 +17,7 @@ export default function ConnectWalletTab() {
                 <div className="mb-10px">
                     <div className="connected">
                         <img src={wallets[accountData.connector.id]?.icon} alt="wallet icon" />
-                        <p>{accountData.address}</p>
+                        <p>{accountData?.address}</p>
                     </div>
                     <button className="btn-primary" onClick={disconnect}>
                         Disconnect

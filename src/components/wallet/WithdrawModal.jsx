@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useSelector } from 'react-redux';
 import jq from 'jquery';
+import Hashes from 'jshashes';
 import ReactCodeInput from 'react-code-input';
 import Modal from "react-modal";
 import validator from "validator";
@@ -10,6 +11,7 @@ import Select, { components } from "react-select";
 import NumberFormat from "react-number-format";
 import { Icon } from "@iconify/react";
 import { useQuery, useMutation } from '@apollo/client';
+import { useAccount } from "wagmi";
 import CustomSpinner from "../common/custom-spinner";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import { getPaypalPaymentFee, getBankTransferFee } from "../../utilities/utility-methods";
@@ -20,6 +22,8 @@ import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { censorEmail } from "../../utilities/string";
 import { countryList } from "../../utilities/countryAlpha2";
 import LocationSearchInput from "./LocationSearchInput";
+import ConnectWalletTab from "../profile/connect-wallet-tab";
+
 
 const DOMESTIC_BANK_PER_COUNTRY = {
     'GB': {
@@ -101,7 +105,7 @@ const SelectOption = (props) => {
     );
 };
 
-export default function WithdrawModal({ showModal, setShowModal, assets }) {
+export default function WithdrawModal({ showModal, setShowModal, assets }) {    
     const user = useSelector((state) => state.auth.user);
     const { currencyRates } = useSelector((state) => state);
     const myAssets = _.orderBy(Object.values(assets).filter(item => {
@@ -125,6 +129,8 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             icon: item.icon
         };
     });
+
+    const { data: walletAccountData } = useAccount();
     
     const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
     const [selectedAssetFiat, setSelectedAssetFiat] = useState(myAssetsFiat[0]);
@@ -135,10 +141,10 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
 
     const networks = useMemo(() => (selectedAsset?.networks?? []), [selectedAsset]);    
     const [network, setNetwork] = useState(networks[0]);
-    const [withdrawData, setWithdrawData] = useState({destAddress: '', amount: ''});
+    const [withdrawAmount, setWithdrawAmount] = useState('');
     const [confirmCode, setConfirmCode] = useState('');
     // const [returnValue, setReturnValue] = useState({});
-    const invalidForWithdraw= !withdrawData.destAddress || !withdrawData.amount || Number(withdrawData.amount) === 0 || Number(withdrawData.amount) > Number(selectedAsset.amount);
+    const invalidForWithdraw= !withdrawAmount || Number(withdrawAmount) === 0 || Number(withdrawAmount) > Number(selectedAsset.amount);
     
     // Variables for bank transfer
     const [currency, setCurrency] = useState(CURRENCIES[0]);
@@ -159,6 +165,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     });
     const [recipientAddress, setRecipientAddress] = useState('');
     const [bankSpecificData, setBankSpecificData] = useState({});
+
     // Initialize bank Specific data when changing the country.
     useEffect(() => {
         setBankSpecificData({});
@@ -208,7 +215,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     };
 
     const closeModal = () => {
-        setWithdrawData({});
+        setWithdrawAmount('');
         setShowModal(false);
     };
     
@@ -288,17 +295,28 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     });
 
     const crypto_Withdraw_Request = () => {
+        const ts = Math.floor(Date.now() / 1000);
+        const plainText = ts + "." + selectedAsset.label + "." + network?.network + "." + walletAccountData?.address + "." + confirmCode;
+        const _hmac = new Hashes.SHA512().hex_hmac(process.env.GATSBY_WITHDRAW_PRIVATE_KEY, plainText)
+
         setError('');
         setPending(true);
         const requestData = {
-            amount: Number(withdrawData.amount),
+            amount: Number(withdrawAmount),
             sourceToken: selectedAsset.label,
             network: network?.network,
-            des: withdrawData.destAddress,
+            des: walletAccountData?.address,
             code: confirmCode
         };
         cryptoWithdrawRequestMutation({
-            variables: { ...requestData }
+            variables: { ...requestData },
+            context: {
+                headers: {
+                    'X-Auth-Token': _hmac,
+                    'X-Auth-Key': process.env.GATSBY_WITHDRAW_PUBLIC_KEY,
+                    'X-Auth-Ts': ts
+                }
+            }
         });
     };
 
@@ -383,9 +401,9 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
     
     const confirmDataForCrypto = [
         {topic: 'User Email', content: censorEmail(user.email)},
-        {topic: 'Destination wallet address', content: withdrawData?.destAddress},
+        {topic: 'Destination wallet address', content: walletAccountData?.address},
         {topic: 'Source Token', content: selectedAsset?.value},
-        {topic: 'Withdraw Amount', content: withdrawData?.amount},
+        {topic: 'Withdraw Amount', content: withdrawAmount},
     ];
 
     return (
@@ -486,38 +504,32 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     />
                                 </div>
                                 <div className="select_div">
-                                    <p className="subtitle">Destination wallet address</p>
-                                    <input
-                                        className="black_input"
-                                        value={withdrawData.destAddress}
-                                        onChange = {e => setWithdrawData({ ...withdrawData, destAddress: e.target.value }) }
-                                    />
-                                </div>
-                                <div className="select_div">
                                     <p className="subtitle">Amount</p>
                                     <div className='black_input withdraw_amount ps-2'>
                                         <NumberFormat
-                                            value={withdrawData.amount}
+                                            value={withdrawAmount}
                                             thousandSeparator={true}
                                             onValueChange={(values) => {
-                                                setWithdrawData({ ...withdrawData, amount: values.value });
+                                                setWithdrawAmount( values.value);
                                             }}
                                             allowNegative={false}
                                             decimalScale={8}
                                         />
                                         <p className="btn" aria-hidden="true"
                                             onClick={() => {
-                                                setWithdrawData({ ...withdrawData, amount: roundNumber(selectedAsset.amount, 8) })
+                                                setWithdrawAmount(roundNumber(selectedAsset.amount, 8))
                                             }}
                                         ><span>MAX</span></p>
                                     </div>
                                 </div>
                                 <button
                                     className="btn btn-outline-light rounded-0 w-100 mt-40px fw-bold mb-3"
-                                    onClick={() => { setWithdrawType(CRYPTOCURRENCY); generate_Withdraw_Code(); }}
-                                    disabled={pending || invalidForWithdraw}
+                                    onClick={() => { 
+                                        setWithdrawType(CRYPTOCURRENCY); setCurrentStep(2); 
+                                    }}
+                                    disabled={invalidForWithdraw}
                                 >
-                                    {pending? <CustomSpinner />: 'NEXT'}
+                                    NEXT
                                 </button>
                             </div>)
                         )}
@@ -705,6 +717,24 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                 className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold d-flex align-items-center justify-content-center"
                                 onClick={() => setCurrentStep(3)}
                                 disabled={!transferAmount || Number(transferAmountToFiat) < MIN_VALUE}
+                            >
+                                <div className={`${pending ? "opacity-100" : "opacity-0"} d-flex`}>
+                                    <CustomSpinner />
+                                </div>
+                                <div className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}>Next</div>
+                            </button>
+                        </div>
+                    }
+                    {!_.isEmpty(selectedAssetFiat) && withdrawType === CRYPTOCURRENCY &&
+                        <div className="deposit width2">
+                            <div className="connect-wallet">
+                                <h5>Select wallet</h5>
+                                <ConnectWalletTab />
+                            </div>
+                            <button
+                                className="btn btn-outline-light rounded-0 w-100 mt-30px mb-5 fw-bold d-flex align-items-center justify-content-center"
+                                onClick={generate_Withdraw_Code}
+                                disabled={pending || !walletAccountData?.address}
                             >
                                 <div className={`${pending ? "opacity-100" : "opacity-0"} d-flex`}>
                                     <CustomSpinner />
