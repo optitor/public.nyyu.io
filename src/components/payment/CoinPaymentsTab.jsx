@@ -364,7 +364,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                                         {copied.depositAddress?
                                             <Icon icon='fluent:copy-24-filled' className="fs-22px text-black" />
                                             : <Icon icon='fluent:copy-24-regular' className="fs-22px text-black" />
-                                        }                                        
+                                        }
                                     </p>
                                 </CopyToClipboard>
                             </>
