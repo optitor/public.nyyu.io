@@ -12,6 +12,7 @@ import { GET_BID, GET_CURRENT_ROUND} from "../../apollo/graphqls/querys/Auction"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graphqls/querys/Bid"
 import { GET_PRESALE_LIST_BY_ROUND, GET_NEW_PRESALE_ORDERS } from "../../apollo/graphqls/querys/Presale"
 import { setCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
+import { indexOf } from "lodash"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)
@@ -31,7 +32,8 @@ export default function AuctionRoundBidList() {
     )
 
     const lastOrderId = useMemo(() => {
-        const sortListById = _.orderBy(currentRoundBidList, ['id'], ['desc']);
+        if(!currentRoundBidList) return null;
+        const sortListById = _.orderBy(Object.values(currentRoundBidList), ['id'], ['desc']);
         return sortListById[0]?.id;
     }, [currentRoundBidList]);
 
@@ -43,16 +45,30 @@ export default function AuctionRoundBidList() {
             presaleId: optCurrentRound?.id
         },
         onCompleted: (data) => {
-            let list = _.orderBy(
-                isAuction ? data?.getBidListByRound : data?.getPresaleOrders,
-                isAuction ? ["ranking", "tokenPrice"] : ["ndbAmount"],
-                ["asc", "desc"]
-            )
-            list = list.map((item) => ({
-                ...item,
-                totalAmount: isAuction ? item.tokenPrice * item.tokenAmount : item.ndbAmount * item.ndbPrice,
-                ranking: isAuction ? (item.ranking ? item.ranking : list.indexOf(item) + 1) : list.indexOf(item) + 1
-            }))
+            let list;
+            if(isAuction) {
+                list = _.orderBy(data?.getBidListByRound, ["ranking", "tokenPrice"], ["asc", "desc"]);
+                list = list.map((item) => ({
+                    ...item,
+                    totalAmount: item.tokenPrice * item.tokenAmount,
+                    ranking: (item.ranking ? item.ranking : list.indexOf(item) + 1)
+                }))
+            } else {
+                let ordersObj = {};
+                for(let order of data?.getPresaleOrders) {
+                    if(ordersObj[order?.userId]) {
+                        const id = ordersObj[order?.userId]?.id >= order?.id ? ordersObj[order?.userId]?.id: order?.id;
+                        const ndbAmount = ordersObj[order?.userId]?.ndbAmount + order?.ndbAmount;
+                        const paidAmount = ordersObj[order?.userId]?.paidAmount + order?.paidAmount;
+                        ordersObj[order?.userId] = { ...ordersObj[order?.userId], ndbAmount, paidAmount, id };
+                    } else {
+                        ordersObj[order?.userId] = order;
+                    }
+                }
+
+                list = ordersObj;
+            }
+
             setDisplayedBidList([])
             setCurrentAuctionUserExist(false)
             setCurrentUserBidData([])
@@ -90,8 +106,22 @@ export default function AuctionRoundBidList() {
             lastOrderId
         },
         onCompleted: data => {
-            if (data.getNewPresaleOrders) {
-                currentRoundBidList &&  setCurrentRoundBidList([ ...currentRoundBidList, ...data.getNewPresaleOrders ]);
+            if (data?.getNewPresaleOrders) {
+                if(_.isEmpty(data?.getNewPresaleOrders) || !currentRoundBidList) return;
+
+                let orderObj = currentRoundBidList;
+                for(let order of data?.getNewPresaleOrders) {
+                    if(orderObj[order?.userId]) {
+                        if(orderObj[order?.userId]?.id >= order?.id) continue;
+                        const id = orderObj[order?.userId]?.id >= order?.id ? orderObj[order?.userId]?.id: order?.id;
+                        const ndbAmount = orderObj[order?.userId]?.ndbAmount + order?.ndbAmount;
+                        const paidAmount = orderObj[order?.userId]?.paidAmount + order?.paidAmount;
+                        orderObj[order?.userId] = { ...orderObj[order?.userId], ndbAmount, paidAmount, id };
+                    } else {
+                        orderObj[order?.userId] = order;
+                    }
+                }
+                setCurrentRoundBidList({ ...orderObj });
             }
         },
         onError: (error) => console.log(error),
@@ -120,12 +150,11 @@ export default function AuctionRoundBidList() {
     })
 
     useEffect(() => {
-        if (currentRoundBidList && currentRoundBidList.length) {
-            const currentUserBidInfo = currentRoundBidList?.filter(
-                (auction) => auction.userId === currentUser.id
-            )[0]
-            
+        if (!_.isEmpty(currentRoundBidList)) {            
             if(isAuction) {
+                const currentUserBidInfo = currentRoundBidList?.filter(
+                    (auction) => auction.userId === currentUser.id
+                )[0]
                 if (currentUserBidInfo) {
                     setCurrentUserBidData(currentUserBidInfo)
                     setCurrentAuctionUserExist(true)
@@ -135,7 +164,7 @@ export default function AuctionRoundBidList() {
                 )
                 setDisplayedBidList(restList)
             } else {
-                const sortList = _.orderBy(currentRoundBidList, ['ndbAmount'], ['desc']);
+                let sortList = _.orderBy(Object.values(currentRoundBidList), ['ndbAmount'], ['desc']);
                 const tempList = sortList.map(({ranking, ...item}, key) => ({
                     ...item,
                     ranking: key + 1
@@ -160,7 +189,7 @@ export default function AuctionRoundBidList() {
 
     return (
         <div className="d-flex flex-column align-items-center pt-5 list-part">
-            <AuctionListHeader totalCount={currentRoundBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
+            <AuctionListHeader totalCount={displayedBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
                                auctionTitle={isAuction ? "Bid" : "Order"}/>
             {currentAuctionUserExist && isAuction ?
             <div className="list-part auction-bid-list-content-final">

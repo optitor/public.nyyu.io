@@ -3,25 +3,21 @@ import { useQuery } from "@apollo/client";
 import { Skeleton } from '@mui/material';
 import { renderNumberFormat } from "../../utilities/number";
 import { getCurrentMarketCap, getCirculatingSupply } from "../../utilities/utility-methods";
-import { GET_CURRENT_ROUND } from "../../apollo/graphqls/querys/Auction";
+import { GET_LAST_ROUND } from "../../apollo/graphqls/querys/Auction";
 
 export default function CurrentCapProgressBar() {
-    const [totalRounds, setTotalRounds] = useState(null);
     const [currentCap, setCurrentCap] = useState(null); // Hardcoded value
     const [circulatingSupply, setCirculatingSupply] = useState(null); // Hardcoded value
+    const [lastRound, setLastRound] = useState(null);
 
     const MaxSupply = 10**12;
 
-    const loading = !(circulatingSupply && currentCap && totalRounds);
+    const loading = !(circulatingSupply && currentCap && lastRound);
 
-    useQuery(GET_CURRENT_ROUND, {
+    useQuery(GET_LAST_ROUND, {
         onCompleted: (data) => {
-            const auction = data.getCurrentRound?.auction;
-            const presale = data.getCurrentRound?.presale;
-            if(auction) {
-                setTotalRounds(auction?.round);
-            } else if(presale) {
-                setTotalRounds(presale?.round);
+            if(data.getLastRound) {
+                setLastRound(data.getLastRound);
             }
         },
         onError: (error) => console.log(error),
@@ -53,7 +49,7 @@ export default function CurrentCapProgressBar() {
             ): (
                 <>
                     <div className="d-flex justify-content-between">
-                        <p className="current-value d-flex flex-column flex-sm-row">
+                        <p className="current-value d-flex flex-column flex-sm-row align-items-start">
                             <span className="me-2">current cap</span>
                             {renderNumberFormat(currentCap, '', 2, false, '#23c865')}
                         </p>
@@ -74,7 +70,7 @@ export default function CurrentCapProgressBar() {
                             <div className="timeleft__value">
                                 Round &nbsp;
                                 <span className="txt-green">
-                                    {totalRounds}
+                                    {lastRound}
                                 </span>
                             </div>
                         </div>

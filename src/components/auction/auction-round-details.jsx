@@ -18,6 +18,7 @@ export default function AuctionRoundDetails() {
         minutes: 0,
         seconds: 0
     })
+    
     const getRemainingRoundTime = (difference) => {
         const seconds = Math.floor((difference / 1000) % 60)
         const minutes = Math.floor((difference / (1000 * 60)) % 60)

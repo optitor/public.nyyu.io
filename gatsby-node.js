@@ -28,7 +28,7 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
     actions.setWebpackConfig({
         resolve: {
             fallback: {
-                "crypto": false,
+                "crypto": require.resolve('crypto-browserify'),
                 "stream": require.resolve("stream-browserify"),
                 "assert": false,
                 "util": false,
