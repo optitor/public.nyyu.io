@@ -70,7 +70,7 @@ export default function TokenSelectModal({
         onCompleted: (data) => {
             if (data.getExchangeRate) {
                 const temp = JSON.parse(data.getExchangeRate);
-                console.log(temp)
+                // console.log(temp)
                 const coins = SUPPORTED_COINS?.filter((item) => {
                     if(item.label !== 'BTC' && item.label !== 'NDB' && item.label !== 'SOL')
                         return item;    
@@ -101,7 +101,7 @@ export default function TokenSelectModal({
         },
     });
 
-    console.log(supportedCoins)
+    // console.log(supportedCoins)
     
     useEffect(() => {
         (async function () {
