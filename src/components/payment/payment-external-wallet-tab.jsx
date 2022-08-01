@@ -32,7 +32,8 @@ export default function PaymentExternalWalletTab() {
 
     return (
         <div className="row">
-            {activeConnector && isTokenModalOpen && <TokenSelectModal 
+            {activeConnector && isTokenModalOpen &&
+            <TokenSelectModal 
                 isTokenModalOpen={isTokenModalOpen}
                 closeModal={closeModal}
                 bidAmount={bidAmount}

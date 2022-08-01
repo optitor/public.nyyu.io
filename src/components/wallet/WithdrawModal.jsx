@@ -24,7 +24,6 @@ import { countryList } from "../../utilities/countryAlpha2";
 import LocationSearchInput from "./LocationSearchInput";
 import ConnectWalletTab from "../profile/connect-wallet-tab";
 
-
 const DOMESTIC_BANK_PER_COUNTRY = {
     'GB': {
         meta: ['Sort code']
