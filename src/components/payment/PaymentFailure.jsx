@@ -1,7 +1,7 @@
 import { navigate } from "gatsby";
 import React, { useEffect, useState } from "react";
 import useCountDown from "react-countdown-hook";
-import { FailImage } from "../../utilities/imgImport";
+import { Icon } from "@iconify/react";
 import { ROUTES } from "../../utilities/routes";
 
 export default function PaymentFailure({
@@ -26,10 +26,10 @@ export default function PaymentFailure({
     // Render
     return (
         <div className="text-center p-4">
-            <div className="text-danger mb-4">
-                <img src={FailImage} alt="Success image" />
+            <div className="mb-4">
+                <Icon icon="charm:circle-cross" className="text-white" style={{width: 100, height: 100}} />
             </div>
-            <div className="text-capitalize text-light fs-28px fw-bold text-success">
+            <div className="text-capitalize text-light fs-28px fw-bold">
                 payment failed
             </div>
             <div className="text-light fs-18px fw-500 mt-2">

@@ -248,6 +248,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
             setCopied({ ...copied, [item]: false });
         }, 1000);
     };
+    
 
     return loadingData ? (
         <div className="text-center">
