@@ -120,7 +120,8 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         };
     }), ['balance'], ['desc']);
 
-    const myAssetsFiat = myAssets.filter(item => (item.value !== 'NDB' && Number(item.value) !== 0)
+    const myAssetsCrypto = myAssets.filter(item => (Number(item.amount) !== 0));
+    const myAssetsFiat = myAssets.filter(item => (item.value !== 'NDB' && Number(item.amount) !== 0)
     ).map(item => {
         return {
             value: item.value,
@@ -131,7 +132,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
 
     const { data: walletAccountData } = useAccount();
     
-    const [selectedAsset, setSelectedAsset] = useState(myAssets[0]);
+    const [selectedAsset, setSelectedAsset] = useState(myAssetsCrypto[0]);
     const [selectedAssetFiat, setSelectedAssetFiat] = useState(myAssetsFiat[0]);
     const [currentStep, setCurrentStep] = useState(1);
     const [withdrawType, setWithdrawType] = useState(null);
@@ -464,7 +465,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                             </div>
                         </div>
                         {tabIndex === 1 &&
-                        (_.isEmpty(myAssets)?
+                        (_.isEmpty(myAssetsCrypto)?
                             <h5 className='text-center mt-5'>
                                 No Assets to withdraw
                             </h5>:
@@ -473,7 +474,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     <p className="subtitle">Select coin</p>
                                     <Select
                                         className="black_input"
-                                        options={myAssets}
+                                        options={myAssetsCrypto}
                                         value={selectedAsset}
                                         onChange={(selected) => {
                                             setSelectedAsset(selected)
@@ -560,7 +561,12 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                 )}
                 {currentStep === 2 &&
                 <>
-                    {_.isEmpty(selectedAssetFiat) && (
+                    {_.isEmpty(selectedAssetFiat) && (withdrawType === PAYPAL || withdrawType === BANKTRANSFER) && (
+                        <h5 className="text-center mt-5">
+                            No Assets to withdraw
+                        </h5>
+                    )}
+                    {_.isEmpty(selectedAsset) && (withdrawType === CRYPTOCURRENCY) && (
                         <h5 className="text-center mt-5">
                             No Assets to withdraw
                         </h5>
@@ -724,7 +730,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                             </button>
                         </div>
                     }
-                    {!_.isEmpty(selectedAssetFiat) && withdrawType === CRYPTOCURRENCY &&
+                    {!_.isEmpty(selectedAsset) && withdrawType === CRYPTOCURRENCY &&
                         <div className="deposit width2">
                             <div className="connect-wallet">
                                 <h5>Select wallet</h5>
