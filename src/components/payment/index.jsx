@@ -64,11 +64,11 @@ const Payment = () => {
     
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
+    const [paySuccess, setPaySuccess] = useState(false);
 
     const dispatch = useDispatch();
     const loading = !(allFees && !payPalLoading);
     
-    const isSSR = typeof window === "undefined";
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
@@ -204,6 +204,7 @@ const Payment = () => {
                                     <CoinPaymentsTab
                                         currentRound={currentRound}
                                         bidAmount={bidAmount}
+                                        paySuccess={paySuccess}
                                     />
                                 )}
                                 {tabIndex === 2 && (
@@ -252,7 +253,7 @@ const Payment = () => {
                             </div>
                         </div>
                         {tabIndex === 1 && (
-                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} />
+                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} setPaymentSuccess={setPaySuccess} />
                         )}
                         {tabIndex === 2 && (
                             <OrderSummaryOfCreditCard bidAmount={bidAmount} />

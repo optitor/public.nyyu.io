@@ -23,7 +23,7 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
 const EXPIRE_TIME = 8 * 3600 * 1000;
 const POLL_INTERVAL_TIME = 10 * 1000;
 
-export default function OrderSummary({ bidAmount }) {
+export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
     const { temp: coinData } = useSelector((state) => state);
     const auction = useAuction();
     const { isAuction } = auction;
@@ -36,7 +36,10 @@ export default function OrderSummary({ bidAmount }) {
         },
         onCompleted: (data) => {
             const resData = isAuction? data.getCryptoAuctionTxById: data.getCryptoPresaleTxById;
-            if(resData?.depositStatus === 1) setIsSucess(true);
+            if(resData?.depositStatus === 1) {
+                setPaymentSuccess(true);
+                setIsSucess(true);
+            }
         },
         onError: (error) => console.log(error),
         fetchPolicy: "no-cache",

@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import { ROUTES } from "../../utilities/routes";
 
 export default function PaymentSuccessful({
-    timeout = 3,
+    timeout = 5,
     callback = () => navigate(ROUTES.auction),
 }) {
     // Countdown
