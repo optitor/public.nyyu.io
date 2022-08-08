@@ -1,11 +1,11 @@
 import { navigate } from "gatsby";
 import React, { useEffect, useState } from "react";
 import useCountDown from "react-countdown-hook";
-import { SuccesImage } from "../../utilities/imgImport";
+import { Icon } from "@iconify/react";
 import { ROUTES } from "../../utilities/routes";
 
 export default function PaymentSuccessful({
-    timeout = 3,
+    timeout = 5,
     callback = () => navigate(ROUTES.auction),
 }) {
     // Countdown
@@ -26,10 +26,10 @@ export default function PaymentSuccessful({
     // Render
     return (
         <div className="text-center p-4">
-            <div className="text-danger mb-4">
-                <img src={SuccesImage} alt="Success image" />
+            <div className="mb-4">
+                <Icon icon="akar-icons:circle-check" className="text-success" style={{width: 100, height: 100}} />
             </div>
-            <div className="text-capitalize text-light fs-28px fw-bold text-success">
+            <div className="text-capitalize fs-28px fw-bold text-success">
                 payment successful
             </div>
             <div className="text-light fs-18px fw-500 mt-2">

@@ -30,7 +30,7 @@ const SelectOption = (props) => {
     const { data } = props;
     return (
         <Option {...props}>
-            <div className="d-flex justify-content-center justify-content-sm-start align-items-center ">
+            <div className="d-flex align-items-center ">
                 <img
                     src={data.icon}
                     style={{ width: "30px", height: "30px" }}
@@ -70,6 +70,7 @@ export default function TokenSelectModal({
         onCompleted: (data) => {
             if (data.getExchangeRate) {
                 const temp = JSON.parse(data.getExchangeRate);
+                // console.log(temp)
                 const coins = SUPPORTED_COINS?.filter((item) => {
                     if(item.label !== 'BTC' && item.label !== 'NDB' && item.label !== 'SOL')
                         return item;    
@@ -99,6 +100,8 @@ export default function TokenSelectModal({
             setPending(false);
         },
     });
+
+    // console.log(supportedCoins)
     
     useEffect(() => {
         (async function () {
@@ -304,7 +307,7 @@ export default function TokenSelectModal({
                                 ) : (
                                 <div className="set-cryptocoin">
                                     <div className="d-flex flex-column justify-content-between coin-address">
-                                        <div className="d-flex justify-content-between w-100">
+                                        <div className="d-flex justify-content-between cryptocoin-select-amount">
                                             <Select
                                                 className="cryptocoin-select"
                                                 options={supportedCoins}
@@ -316,7 +319,7 @@ export default function TokenSelectModal({
                                                 }}
                                                 styles={customSelectWithIconStyles}
                                             />
-                                            <div className="w-75">
+                                            <div className="cryptocoin-amount">
                                                 <div className="show_value">
                                                     <NumberFormat
                                                         className="coin_value"
@@ -392,6 +395,7 @@ const customSelectWithIconStyles = {
     input: (provided) => ({
         ...provided,
         position: "absolute",
+        color: "transparent",
     }),
     option: (provided, state) => ({
         ...provided,
@@ -401,6 +405,13 @@ const customSelectWithIconStyles = {
         ":hover": {
             backgroundColor: "inherit",
         },
+    }),
+    menu: (provided) => ({
+        ...provided,
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+        borderRadius: 0,
+        padding: 0,
     }),
     menuList: (provided) => ({
         ...provided,

@@ -30,6 +30,8 @@ import { QUOTE, TICKER_24hr } from "./data"
 import { roundNumber } from "../../utilities/number";
 import { useAuction } from "../../providers/auction-context";
 import { ROUTES } from '../../utilities/routes';
+import PaymentSuccessful from "./PaymentSuccessful";
+
 
 const { Option } = components;
 
@@ -68,7 +70,7 @@ const countDownRenderer = ({ minutes, seconds, completed }) => {
 
 const SESSION_EXPIRE_TIME = 10 * 60 * 1000;
 
-const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
+const CoinPaymentsTab = ({ currentRound, bidAmount, paySuccess }) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
     const { order_id } = useSelector(state => state.placeBid);
@@ -255,6 +257,9 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
         </div>
     ) : (
         <div className="cryptocoin-tab">
+            {paySuccess?
+            <PaymentSuccessful />
+            :
             <div className="payment-content">
                 <div className="set-cryptocoin">
                     <div className="d-flex flex-column coin-address">
@@ -425,7 +430,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount }) => {
                         </p>
                     )}
                 </div>
-            </div>
+            </div>}
         </div>
     );
 };
