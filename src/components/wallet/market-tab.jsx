@@ -40,10 +40,10 @@ const fetch_Ticker_From_Binance = async (tokenSymbol) => {
 };
 
 const fetch_Ticker_Of_NDB = async () => {
-    const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/price`);
-    const price = Number(res.data.result.last);
-    const percent = Number(res.data.result.change);
-    const volume = Number(res.data.result.volume) * Number(res.data.result.last);
+    const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/info`);
+    const price = Number(res.data.price);
+    const percent = Number(res.data.change);
+    const volume = Number(res.data.volume);
     return { price, percent, volume };
 };
 
@@ -70,7 +70,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
 
             if(data.symbol === 'NDB') {
                 const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/kline`);
-                chartData = res.data.result.slice(-24).map((c) => c[2]);
+                chartData = res.data;
             } else {
                 const res = await axios.get(KLINE_ENDPOINT, {
                     params: {
