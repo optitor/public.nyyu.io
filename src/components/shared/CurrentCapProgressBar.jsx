@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import axios from "axios";
 import { useQuery } from "@apollo/client";
 import { Skeleton } from '@mui/material';
 import { renderNumberFormat } from "../../utilities/number";
-import { getCurrentMarketCap, getCirculatingSupply } from "../../utilities/utility-methods";
 import { GET_LAST_ROUND } from "../../apollo/graphqls/querys/Auction";
 
 export default function CurrentCapProgressBar() {
@@ -33,13 +33,10 @@ export default function CurrentCapProgressBar() {
     }, [circulatingSupply, MaxSupply]);
 
     useEffect(async () => {
-        const response = await getCurrentMarketCap();
-        setCurrentCap(Number(response.marketcap));
-    }, []);
-
-    useEffect(async () => {
-        const response = await getCirculatingSupply();
-        setCirculatingSupply(Number(response.circulatingSupply));
+        const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/info`);
+        const { ciculatingSupply, marketCap } = res.data;
+        setCurrentCap(Number(marketCap));
+        setCirculatingSupply(Number(ciculatingSupply));
     }, []);
 
     return (

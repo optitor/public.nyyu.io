@@ -24,13 +24,17 @@ export const changeEquity = equity => dispatch => {
 
 export const fetchNDBPrice = () => async dispatch => {
     try {
-        const { data } = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/price`);
-        const price = data.result.last;
+        const { data } = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/info`);
+        const { price } = data;
         dispatch({
             type: types.FETCH_NDB_PRICE,
             payload: price
         });
     } catch(err) {
         console.log('fetching NDB price', err.message);
+        dispatch({
+            type: types.FETCH_NDB_PRICE,
+            payload: 0
+        });
     }
 }
