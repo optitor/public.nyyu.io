@@ -49,12 +49,12 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
         );
     };
 
-    const selectCurrency = () => {
+    const selectCurrency = async () => {
         setPending(true);
         const updateData = {
             assets: selectedCurrency.value + ',' + assets.join(',')
         };
-        dispatch(update_Favor_Assets(updateData));
+        await dispatch(update_Favor_Assets(updateData));
         dispatch(changeEquity(selectedCurrency.value));
         setPending(false);
         setIsOpen(false);
