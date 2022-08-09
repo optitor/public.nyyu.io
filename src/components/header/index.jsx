@@ -22,6 +22,7 @@ import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notif
 import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
 import { fetch_Favor_Assets } from '../../redux/actions/settingAction';
 import { TWITTER, DISCORD } from '../../utilities/imgImport';
+import { logout } from "../../utilities/auth";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
@@ -59,6 +60,15 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
+            } else if(err.graphQLErrors[0].isUnderMaintenance) {
+                setInformMessage({
+                    first: err.graphQLErrors[0].message,
+                    second: null
+                });
+                navigate("/")
+                setBanned(true)
+                setIsBannedOpen(true)
+                logout();
             }
         }
     })

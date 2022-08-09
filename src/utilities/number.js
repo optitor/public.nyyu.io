@@ -102,7 +102,7 @@ export const numFormatter = (value, fixed) => {
             : // Three Zeroes for Thousands
             Math.abs(Number(value)) >= 1.0e3
                 ? (Math.abs(Number(value)) / 1.0e3).toFixed(fixed) + "K"
-                : Math.abs(Number(value))
+                : Math.abs(Number(value).toFixed(fixed))
 }
 
 ////////////////////////////////////////////
