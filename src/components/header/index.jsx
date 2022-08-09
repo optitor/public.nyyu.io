@@ -15,6 +15,7 @@ import LoadCurrencyRates from "./LoadCurrencyRates"
 import Avatar from "../dress-up/avatar"
 import UserTier from "./user-tier"
 import InformBannedModal from "./InformBannedModal"
+import InformMaintenanceModal from "./InformMaintenanceModal"
 import { navigationLinks, profile_tabs } from "../../utilities/staticData"
 import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { ROUTES, navLinks } from "../../utilities/routes"
@@ -28,6 +29,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
     const [banned, setBanned] = useState(false)
     const [isBannedOpen, setIsBannedOpen] = useState(false)
+    const [isMaintenanceOpen, setIsMaintenanceOpen] = useState(false);
     const [informMessage, setInformMessage] = useState({
         first: 'It seems you are accessing nyyu via anonymous proxy, VPN or VPS.',
         second: 'we are unable to provide services to you.'
@@ -61,13 +63,9 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 setBanned(true)
                 setIsBannedOpen(true)
             } else if(err.graphQLErrors[0].isUnderMaintenance) {
-                setInformMessage({
-                    first: err.graphQLErrors[0].message,
-                    second: null
-                });
                 navigate("/")
                 setBanned(true)
-                setIsBannedOpen(true)
+                setIsMaintenanceOpen(true)
                 logout();
             }
         }
@@ -302,6 +300,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     </div>
                 </div>
                 {isBannedOpen && <InformBannedModal isModalOpen={isBannedOpen} setIsModalOpen={setIsBannedOpen} informMessage={informMessage} />}
+                {isMaintenanceOpen && <InformMaintenanceModal isModalOpen={isMaintenanceOpen} setIsModalOpen={setIsMaintenanceOpen} />}
             </div>
         </nav>
     )
