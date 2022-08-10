@@ -32,7 +32,10 @@ const InformMaintenanceModal = ({isModalOpen, setIsModalOpen }) => {
                 <div className='text-center mb-5 px-3'>
                     <h4>Welcome to NYYU</h4>
                     <p className='mt-5'>
-                        Our server is currently under maintenance. You will be able to access it soon.
+                        Our server is currently under maintenance.
+                    </p>
+                    <p className='mt-1'>
+                        You will be able to access it soon.
                     </p>
                     <p className='mt-3'>
                         We are sorry for any inconvenience you may have.
@@ -56,7 +59,7 @@ const InformMaintenance = styled.div`
         width: 150px;
     }
     p {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 500;
         &.description {
             font-size: 14px;
