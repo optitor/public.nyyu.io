@@ -760,7 +760,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     value={paypalEmail}
                                     onChange={e => setPaypalEmail(e.target.value)}
                                 />
-                                <p style={{height: 25, color: '#e16565'}}>
+                                <p style={{height: 25, color: '#3d3b3b'}}>
                                     {showError && paypalEmailError}
                                 </p>
                                 <button
