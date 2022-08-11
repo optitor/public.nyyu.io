@@ -60,7 +60,7 @@ const IndexPage = () => {
     const presaleSold = currentRound?.presale?.sold
     const presaleStart = currentRound?.presale?.startedAt
     const presaleEnd = currentRound?.presale?.endedAt
-    
+    console.log(currentRound)
     if(!isBrowser) return null;
     // checking 
     if(referralCode !== undefined) {
