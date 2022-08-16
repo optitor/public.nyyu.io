@@ -18,6 +18,37 @@ main.admin-rounds-page {
             .col-sm-10 {
                 div.rounds_table {
                     color: #ffffff;
+                    .react-tabs {
+                        .react-tabs__tab-list {
+                            width: 60%;
+                            border: none;
+                            @include mq('phone', max) {
+                                display: flex;
+                                justify-content: space-between;
+                            }
+                            .react-tabs__tab {
+                                color: $dimgrey;
+                                border: none;
+                                font-size: 18px;
+                                font-weight: 700;
+                                padding: 6px 0;
+                                margin-right: 4vw;
+                                text-transform: uppercase;
+                                transition: 0.3s;
+                                @include mq('tablet', max) {
+                                    font-size: 14px;
+                                }
+                                &:hover {
+                                    color: $green;
+                                }
+                                &--selected {
+                                    background: transparent;
+                                    border: none;
+                                    color: #ffffff;
+                                }                                
+                            }
+                        }
+                    }
                     p {
                         font-size: 16px;
                         padding: 3px 0;

@@ -12,7 +12,6 @@ import { GET_BID, GET_CURRENT_ROUND} from "../../apollo/graphqls/querys/Auction"
 import { GET_BIDLIST_BY_ROUND } from "../../apollo/graphqls/querys/Bid"
 import { GET_PRESALE_LIST_BY_ROUND, GET_NEW_PRESALE_ORDERS } from "../../apollo/graphqls/querys/Presale"
 import { setCookie, NDB_Paypal_TrxType, NDB_Auction, NDB_Presale } from '../../utilities/cookies';
-import { indexOf } from "lodash"
 
 export default function AuctionRoundBidList() {
     const currentUser = useSelector((state) => state.auth.user)

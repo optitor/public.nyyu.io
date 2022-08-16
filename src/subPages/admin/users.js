@@ -4,7 +4,7 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import Seo from "./../../components/seo";
 import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
 import UserTable from "../../components/admin/users/UserTable";
-import BidTable from "../../components/admin/users/BidTable";
+// import BidTable from "../../components/admin/users/BidTable";
 import WalletTable from "../../components/admin/users/WalletTable";
 import FiatTable from "../../components/admin/users/FiatTable";
 import KYBTable from "../../components/admin/users/KYBTable";
@@ -26,7 +26,6 @@ const fiats = [
 ];
 
 const IndexPage = () => {
-
     return (
         <>
             <Seo title="Admin Users" />
@@ -36,16 +35,12 @@ const IndexPage = () => {
                         <Tabs>
                             <TabList>
                                 <Tab>User</Tab>
-                                <Tab>Bid</Tab>
                                 <Tab>Wallet</Tab>
                                 <Tab>Fiat</Tab>
                                 <Tab>KYB</Tab>
                             </TabList>
                             <TabPanel>
                                 <UserTable/>
-                            </TabPanel>
-                            <TabPanel>
-                                <BidTable/>
                             </TabPanel>
                             <TabPanel>
                                 <WalletTable data={wallets} />
@@ -57,7 +52,7 @@ const IndexPage = () => {
                                 <KYBTable />
                             </TabPanel>
                         </Tabs>
-                    </div>                    
+                    </div>
                 </LayoutWithMenu>
             </main>
         </>

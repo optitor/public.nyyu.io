@@ -25,8 +25,12 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='time'>
                     <Main>
-                        <p>Start: {new Date(datum.startedAt).toISOString()}</p>
-                        <p>End: {new Date(datum.endedAt).toISOString()}</p>
+                        <p>Start: {new Date(datum.startedAt).toLocaleDateString()}
+                            <span className="ms-2">{new Date(datum.startedAt).toLocaleTimeString()}</span>
+                        </p>
+                        <p>End: {new Date(datum.endedAt).toLocaleDateString()}
+                            <span className="ms-2">{new Date(datum.endedAt).toLocaleTimeString()}</span>
+                        </p>
                     </Main>
                 </div>
                 <div className='token'>
@@ -95,7 +99,9 @@ const RoundDataRow = ({ datum }) => {
                             <p>Start Time</p>
                         </div>
                         <div className='right'>
-                            <p>{new Date(datum.startedAt).toISOString()}</p>
+                            <p>{new Date(datum.startedAt).toLocaleDateString()}
+                                <span className="ms-2">{new Date(datum.startedAt).toLocaleTimeString()}</span>
+                            </p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -103,7 +109,9 @@ const RoundDataRow = ({ datum }) => {
                             <p>End Time</p>
                         </div>
                         <div className='right'>
-                            <p>{new Date(datum.endedAt).toISOString()}</p>
+                            <p>{new Date(datum.endedAt).toLocaleDateString()}
+                                <span className="ms-2">{new Date(datum.endedAt).toLocaleTimeString()}</span>
+                            </p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -111,7 +119,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Total Token</p>
                         </div>
                         <div className='right'>
-                            <p>{datum.token}</p>
+                            <p>{datum.totalToken}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
