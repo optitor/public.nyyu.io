@@ -18,10 +18,9 @@ export const GET_AUCTION = gql`
 `
 
 export const GET_PRESALES = gql`
-    {
+    query {
         getPreSales {
             id
-            kind
             round
             startedAt
             endedAt
@@ -29,6 +28,7 @@ export const GET_PRESALES = gql`
             tokenPrice
             sold
             status
+            kind
         }
     }
 `

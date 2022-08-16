@@ -5,6 +5,7 @@ import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
 import { renderNumberFormat } from "../../utilities/number"
 
+
 export default function PresalePlaceOrderHome() {
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);

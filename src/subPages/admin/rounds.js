@@ -1,7 +1,10 @@
 import React from "react";
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+
 import Seo from "./../../components/seo"
 import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
-import RoundsTable from "../../components/admin/rounds/RoundsTable";
+import AuctionsTable from "../../components/admin/rounds/RoundsTable";
+import PresalesTable from "../../components/admin/rounds/PresalesTable";
 
 const IndexPage = () => {
     return (
@@ -9,9 +12,19 @@ const IndexPage = () => {
             <Seo title="Admin Rounds" />
             <main className="admin-rounds-page">
                 <LayoutWithMenu>
-                    <p className="title">Rounds</p>
                     <div className="rounds_table">
-                        <RoundsTable />
+                        <Tabs>
+                            <TabList>
+                                <Tab>Auctions</Tab>
+                                <Tab>Presales</Tab>
+                            </TabList>
+                            <TabPanel>
+                                <AuctionsTable />
+                            </TabPanel>
+                            <TabPanel>
+                                <PresalesTable />
+                            </TabPanel>
+                        </Tabs>
                     </div>
                 </LayoutWithMenu>
             </main>
