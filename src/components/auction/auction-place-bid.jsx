@@ -20,7 +20,7 @@ export default function AuctionPlaceBid() {
 
     // Containers
     const auction = useAuction();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const { optCurrentRound, getBid, isBid } = auction
     const [amount, setAmount] = useState(1)
     const [price, setPrice] = useState(optCurrentRound?.minPrice)
