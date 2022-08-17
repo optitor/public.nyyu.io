@@ -184,7 +184,7 @@ export default function AuctionRoundBidList() {
             <div className="text-center mt-4">
                 <CustomSpinner/>
             </div>
-        )
+        );
 
     return (
         <div className="d-flex flex-column align-items-center pt-5 list-part">
