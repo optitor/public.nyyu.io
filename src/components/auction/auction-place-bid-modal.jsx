@@ -1,24 +1,32 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import { useSelector } from "react-redux"
 import Modal from "react-modal"
 import { useDispatch } from "react-redux"
 import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
+import NumberFormat from "react-number-format"
 
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
 
-import { numberWithCommas } from "../../utilities/number"
 import { CloseIcon } from "../../utilities/imgImport"
 import { ROUTES } from "../../utilities/routes"
 import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid"
+import CustomSpinner from "../common/custom-spinner"
 
 export default function AuctionPlaceBidModal() {
+    const currency = useSelector(state => state.favAssets.currency);
+    const currencyRates = useSelector(state => state.currencyRates);
+    const currencyRate = currencyRates[currency.value]?? 1;
+
     // Containers
     const auction = useAuction()
     const dispatch = useDispatch()
-    const { optCurrentRound, isAuction } = auction
+    const { optCurrentRound, isBid, getBid } = auction
     const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(isAuction ? optCurrentRound?.minPrice : optCurrentRound?.tokenPrice)
+    const [price, setPrice] = useState(optCurrentRound?.minPrice)
+    const [preAmount, setPreAmount] = useState(1);
+    const [prePrice, setPrePrice] = useState(1);
     const [error, setError] = useState("")
     const [reqPending, setReqPending] = useState(false)
 
@@ -58,6 +66,7 @@ export default function AuctionPlaceBidModal() {
                     tokenPrice: price,
                 },
             })
+            dispatch(setBidInfo(Number(price * amount)))
         } else {
             increaseBid({
                 variables: {
@@ -66,10 +75,22 @@ export default function AuctionPlaceBidModal() {
                     tokenPrice: price,
                 },
             })
+            dispatch(setBidInfo(Number(price * amount - prePrice * preAmount)))
         }
-        dispatch(setBidInfo(Number(price * amount)))
         dispatch(setCurrentRound(optCurrentRound?.id))
     }
+
+    useEffect(() => {
+        if (getBid)
+            if (Object.keys(getBid).length !== 0) {
+                setPrice(isBid ? optCurrentRound?.placeBid : getBid.tokenPrice)
+                setAmount(isBid ? 1 : getBid.tokenAmount)
+                if(!isBid) {
+                    setPreAmount(getBid.tokenAmount)
+                    setPrePrice(getBid.tokenPrice)
+                }
+            }
+    }, [getBid, optCurrentRound?.placeBid, isBid])
 
     // Render
     return (
@@ -113,47 +134,61 @@ export default function AuctionPlaceBidModal() {
                                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                 />
                             </svg>
-                            <p className="text-danger text-capitalize fw-500 text-[#959595]">
+                            <p className="text-danger fw-500 text-[#959595]">
                                 {error}
                             </p>
                         </div>
                     </div>
                 )}
                 <h4 className="range-label text-start mb-0">amount of Token</h4>
-                <input
-                    type="number"
+                <NumberFormat className="range-input"
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Type the Token Amount Here"
-                    className="range-input"
+                    onValueChange={values => setAmount(values.value)}
+                    isAllowed={({ floatValue }) => floatValue >= 1 && floatValue <= optCurrentRound?.totalToken}
+                    thousandSeparator={true}
+                    decimalScale={0}
+                    allowNegative={false}
                 />
-                <h4 className="range-label text-start mb-0">Per token price</h4>
-                <input
-                    type="number"
+                <h4 className="range-label text-start mb-0">Per token price (USD)</h4>
+                <NumberFormat className="range-input"
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    onValueChange={values => setPrice(values.value? values.value: optCurrentRound?.minPrice)}
+                    isAllowed={({ floatValue }) => floatValue >= optCurrentRound?.minPrice}
+                    thousandSeparator={true}
+                    decimalScale={4}
+                    allowNegative={false}
                     placeholder="Type the price per Token Here"
-                    className="range-input"
                 />
-                <h4 className="range-label text-start mb-0">Total price</h4>
-                <input
+                <h4 className="range-label text-start mb-0">Total price <span className="txt-green">({currency.value})</span></h4>
+                <NumberFormat
                     className="total-input"
-                    type="text"
-                    value={numberWithCommas(
-                        Number(Math.max(optCurrentRound?.minPrice, price * amount), ",")
-                    )}
-                    readOnly
+                    value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount * currencyRate)).toFixed(3) * 10**3) / 10**3}
+                    thousandSeparator={true}
+                    displayType='text'
+                    allowNegative={false}
+                    renderText={(value, props) => <p {...props}>{value}</p>}
                 />
+                <div className="text-center mb-3" style={{height: 20, fontWeight: 600}}>
+                    {currency.label !== 'USD'?
+                        <NumberFormat
+                            className="txt-green"
+                            value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount)).toFixed(3) * 10**3) / 10**3}
+                            thousandSeparator={true}
+                            displayType='text'
+                            allowNegative={false}
+                            renderText={(value, props) => <span {...props}>{value} USD</span>}
+                        />: ''
+                    }
+                </div>
                 <button
                     className="btn btn-outline-light rounded-0 fw-bold w-100 fs-20px py-3 text-uppercase"
                     onClick={() => bidMutation()}
                     disabled={reqPending}
                 >
-                    {reqPending
-                        ? "processing..."
-                        : auction.isBid
-                        ? "Place Bid"
-                        : "Increase Bid"}
+                    <div className="d-flex align-items-center justify-content-center gap-3">
+                        {reqPending && <CustomSpinner />}
+                        {auction.isBid ? "Place Bid" : "Increase Bid"}
+                    </div>
                 </button>
             </div>
         </Modal>

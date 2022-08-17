@@ -62,7 +62,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
-            } else if(err.graphQLErrors[0].isUnderMaintenance) {
+            } else if(err.graphQLErrors[0]?.isUnderMaintenance) {
                 navigate("/")
                 setBanned(true)
                 setIsMaintenanceOpen(true)
