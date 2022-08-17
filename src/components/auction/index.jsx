@@ -11,7 +11,7 @@ import AuctionRoundNavigator from "./auction-round-navigator"
 import AuctionRoundBidList from "./auction-round-bid-list"
 import AuctionRoundDetails from "./auction-round-details"
 import AuctionPlaceBid from "./auction-place-bid"
-import AuctionPlaceBidModal from "./auction-place-bid-modal"
+// import AuctionPlaceBidModal from "./auction-place-bid-modal"
 import PresalePlaceOrder from "./presale-place-order"
 
 const Auction = () => {
@@ -74,19 +74,6 @@ const Auction = () => {
                             </div>
                             <AuctionRoundDetails/>
                             <div className="d-block d-sm-none">
-                                {isAuction && optCurrentRound?.status === 2 &&
-                                <>
-                                    <div
-                                        className="btn fw-bold text-uppercase btn-outline-light rounded-0 w-100 mt-3"
-                                        onClick={() =>
-                                            auction.setBidModal(true)
-                                        }
-                                    >
-                                        place bid
-                                    </div>
-                                    <AuctionPlaceBidModal/>
-                                </>
-                                }
                                 {optCurrentRound?.status === 1 &&
                                     <h3 className="mt-2 text-uppercase text-center fw-bold">
                                         Countdown
@@ -102,7 +89,7 @@ const Auction = () => {
 
                         <div className="auction-right col-lg-8 col-md-7">
                             {isAuction ?
-                                <div className="d-none d-sm-block"><AuctionPlaceBid/></div>
+                                <AuctionPlaceBid/>
                                 : <PresalePlaceOrder/>
                             }
                         </div>
