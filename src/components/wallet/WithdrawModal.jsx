@@ -760,7 +760,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     value={paypalEmail}
                                     onChange={e => setPaypalEmail(e.target.value)}
                                 />
-                                <p style={{height: 25, color: '#3d3b3b'}}>
+                                <p className="mt-1 text-warning">
                                     {showError && paypalEmailError}
                                 </p>
                                 <button
@@ -879,7 +879,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                 />
                             </div>
                             <div className="mt-2">
-                                <p style={{height: 25, color: '#e16565'}}>
+                                <p className="mt-1 text-warning">
                                     {showError && Object.values(bankWithDrawError)[0]}
                                 </p>
                                 <button
@@ -915,7 +915,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                         disabled={pending}
                                     ><strong>Resend</strong></span>
                                 </div>
-                                <p className="mt-2" style={{color: '#e16565'}}>
+                                <p className="mt-1 text-warning">
                                     {error}
                                 </p>
                             </div>

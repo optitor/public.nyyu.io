@@ -1,9 +1,43 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
+import { navigate } from "gatsby";
 import { useSelector } from "react-redux"
+import Countdown, { zeroPad } from 'react-countdown';
 
 import { useAuction } from "../../providers/auction-context"
-import { numberWithLength, renderNumberFormat } from "../../utilities/number"
+import { renderNumberFormat } from "../../utilities/number"
 import PercentageBar from "./percentage-bar"
+import { ROUTES } from "../../utilities/routes";
+import { isBrowser } from "../../utilities/auth";
+
+// Renderer callback with condition
+const startRoundRender = ({ days, hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      isBrowser && window.location.reload();
+      return <span>Started</span>;
+    } else {
+        // Render a countdown
+        return (
+            <span>
+                {zeroPad(days)}: {zeroPad(hours)}: {zeroPad(minutes)}: <span style={{width: 15, display: 'inline-block'}}>{zeroPad(seconds)}</span>
+            </span>
+        );
+    }
+};
+const endRoundRender = ({ days, hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      navigate(ROUTES.home);
+      return <span>Finished</span>;
+    } else {
+        // Render a countdown
+        return (
+            <span>
+                {zeroPad(days)}: {zeroPad(hours)}: {zeroPad(minutes)}: <span style={{width: 15, display: 'inline-block'}}>{zeroPad(seconds)}</span>
+            </span>
+        );
+    }
+};
 
 export default function AuctionRoundDetails() {
     const currency = useSelector(state => state.favAssets.currency)
@@ -13,40 +47,8 @@ export default function AuctionRoundDetails() {
     // Container
     const auction = useAuction()
     const { optCurrentRound, currentRoundBidList, isAuction } = auction
-    const [restTime, setRestTime] = useState({
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-    })
-    
-    const getRemainingRoundTime = (difference) => {
-        const seconds = Math.floor((difference / 1000) % 60)
-        const minutes = Math.floor((difference / (1000 * 60)) % 60)
-        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
-        setRestTime({
-            hours: hours < 10 ? "0" + hours : hours,
-            minutes: minutes < 10 ? "0" + minutes : minutes,
-            seconds: seconds < 10 ? "0" + seconds : seconds
-        })
-    }
 
     const soldTokensPercentage = (optCurrentRound?.sold / (isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount)) * 100
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            const currentTimeMilliSeconds = new Date().getTime()
-            if (optCurrentRound?.status === 2) {
-                const difference = Math.abs(optCurrentRound?.endedAt - currentTimeMilliSeconds)
-                getRemainingRoundTime(difference)
-            } else if (optCurrentRound?.status === 1) {
-                const difference = Math.abs(currentTimeMilliSeconds - optCurrentRound?.startedAt)
-                getRemainingRoundTime(difference)
-            }
-        }, 1000)
-        return () => {
-            clearInterval(timer)
-        }
-    }, [optCurrentRound])
 
     // Render
     if (!currentRoundBidList) return <></>
@@ -67,18 +69,35 @@ export default function AuctionRoundDetails() {
                     </p>
                 </div>
                 <div>
-                    {optCurrentRound?.status !== 3 ? (
+                    {optCurrentRound?.status === 1 && (
+                        <>
+                            <p className="caption text-end text-[#959595]">
+                                Time Remaining
+                            </p>
+                            <p className="value text-end">
+                                <Countdown
+                                    date={optCurrentRound?.startedAt}
+                                    renderer={startRoundRender}
+                                />
+                            </p>
+                        </>
+                    )}
+                    {optCurrentRound?.status === 2 && (
                         <>
                             <p className="caption text-end text-[#959595]">
                                 {isAuction ? "Time Remaining" : "Tokens Remaining"}
                             </p>
                             <p className="value text-end">
-                                {isAuction ? numberWithLength(restTime.hours, 2) + ":" + numberWithLength(restTime.minutes, 2) + ":" + numberWithLength(restTime.seconds, 2) : optCurrentRound?.tokenAmount - optCurrentRound?.sold}
+                                {isAuction ? 
+                                <Countdown
+                                    date={optCurrentRound?.endedAt}
+                                    renderer={endRoundRender}
+                                /> : 
+                                optCurrentRound?.tokenAmount - optCurrentRound?.sold}
                             </p>
                         </>
-                    ) : (
-                        <p className="value text-end">Finished</p>
                     )}
+                    {optCurrentRound?.status === 3 && <p className="value text-end">Finished</p>}
                 </div>
             </div>
         </div>

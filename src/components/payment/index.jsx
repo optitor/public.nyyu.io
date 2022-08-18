@@ -43,6 +43,7 @@ import { ROUTES } from "../../utilities/routes";
 import AuctionProvider from "../../providers/auction-context";
 import CurrentCapProgressBar from "../shared/CurrentCapProgressBar";
 
+
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
     { icon: Credit, value: "creditcard", label: "Credit / Debit Card" },
