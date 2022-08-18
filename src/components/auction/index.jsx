@@ -42,7 +42,7 @@ const Auction = () => {
     }, [auction.loading, currentRound, entireRounds])
 
     useEffect(() => {
-        setOptCurrentRound(entireRounds && entireRounds.filter(
+        setOptCurrentRound(entireRounds && entireRounds?.filter(
             (item) => item?.round === currentRoundNumber
         )[0])
     }, [currentRoundNumber])

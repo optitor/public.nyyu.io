@@ -99,7 +99,7 @@ export default function AuctionRoundBidList() {
         errorPolicy: "ignore",
     })
 
-    const pollingBidList = useQuery(GET_NEW_PRESALE_ORDERS, {
+    const pollingBidList = useQuery(GET_NEW_PRESALE_ORDERS, {skip: isAuction}, {
         variables: {
             presaleId: optCurrentRound?.id,
             lastOrderId
@@ -151,14 +151,14 @@ export default function AuctionRoundBidList() {
     useEffect(() => {
         if (!_.isEmpty(currentRoundBidList)) {            
             if(isAuction) {
-                const currentUserBidInfo = currentRoundBidList?.filter(
+                const currentUserBidInfo = Object.values(currentRoundBidList)?.filter(
                     (auction) => auction.userId === currentUser.id
                 )[0]
                 if (currentUserBidInfo) {
                     setCurrentUserBidData(currentUserBidInfo)
                     setCurrentAuctionUserExist(true)
                 }
-                const restList = currentRoundBidList?.filter(
+                const restList = Object.values(currentRoundBidList)?.filter(
                     (auction) => auction.userId !== currentUser.id
                 )
                 setDisplayedBidList(restList)
@@ -174,8 +174,10 @@ export default function AuctionRoundBidList() {
     }, [currentRoundBidList, currentUser.id, isAuction])
 
     useEffect(() => {
-        if (optCurrentRound && optCurrentRound.status === 2 && currentRoundBidList) return pollingBidList.startPolling(pollIntervalValue)
-        return pollingBidList.stopPolling()
+        if(!isAuction) {
+            if (optCurrentRound && optCurrentRound.status === 2 && currentRoundBidList) return pollingBidList.startPolling(pollIntervalValue)
+            return pollingBidList.stopPolling()
+        }
     }, [optCurrentRound, pollingBidList, currentRoundBidList]);
 
     // Render
