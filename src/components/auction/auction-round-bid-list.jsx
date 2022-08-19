@@ -47,10 +47,10 @@ export default function AuctionRoundBidList() {
             let list;
             if(isAuction) {
                 list = _.orderBy(data?.getBidListByRound, ["ranking", "tokenPrice"], ["asc", "desc"]);
-                list = list.map((item) => ({
+                list = list.map((item, index) => ({
                     ...item,
                     totalAmount: item.tokenPrice * item.tokenAmount,
-                    ranking: (item.ranking ? item.ranking : list.indexOf(item) + 1)
+                    ranking: index + 1
                 }))
             } else {
                 let ordersObj = {};
@@ -190,7 +190,7 @@ export default function AuctionRoundBidList() {
 
     return (
         <div className="d-flex flex-column align-items-center pt-5 list-part">
-            <AuctionListHeader totalCount={displayedBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
+            <AuctionListHeader totalCount={currentAuctionUserExist? displayedBidList.length + 1: displayedBidList.length} auctionType={isAuction ? "Bidder" : "Buyer"}
                                auctionTitle={isAuction ? "Bid" : "Order"}/>
             {currentAuctionUserExist && isAuction ?
             <div className="list-part auction-bid-list-content-final">
