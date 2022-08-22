@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useMemo } from "react";
+import React, { useState, useReducer, useMemo, useEffect } from "react";
 import { Link } from "gatsby";
 import { Input } from "../common/FormControl";
 import { useSignIn2FA } from "../../apollo/model/auth";
@@ -7,21 +7,6 @@ import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCirc
 import Countdown from 'react-countdown';
 
 const EXPIRE_TIME = 60 * 1000;
-
-// Renderer callback with condition
-const countDownRenderer = ({ seconds, completed }) => {
-    if (completed) {
-        // Render a completed state
-        return <span></span>;
-    } else {
-        // Render a countdown
-        return (
-            <>
-                {seconds !==0 && <span className="text-success" style={{minWidth: 70}}>({seconds} Sec)</span>}
-            </>
-        );
-    }
-};
 
 const VerifyMutliFA = ({
     twoStep,
@@ -39,13 +24,35 @@ const VerifyMutliFA = ({
             email: "",
         }
     );
+    
     const [codeError, setCodeError] = useState("");
+    const [waitingCode, setWaitingCode] = useState(false);
 
     const [signin2faMutation, signin2faMutationResults] = useSignIn2FA();
 
     const createdAt = useMemo(() => {
         if(!loading) return Date.now();
     }, [loading]);
+
+    useEffect(() => {
+        if(!loading) setWaitingCode(true);
+    }, [loading]);
+
+    // Renderer callback with condition
+    const countDownRenderer = ({ seconds, completed }) => {
+        if (completed) {
+            // Render a completed state
+            setWaitingCode(false);
+            return <span></span>;
+        } else {
+            // Render a countdown
+            return (
+                <>
+                    {seconds !==0 && <span className="text-success" style={{minWidth: 70}}>({seconds} Sec)</span>}
+                </>
+            );
+        }
+    };
 
     const confirmCodeClick = (e) => {
         e.preventDefault();
@@ -106,7 +113,7 @@ const VerifyMutliFA = ({
                                     <div className="form-group text-white d-flex justify-content-end align-items-center" style={{minHeight: 32}}>
                                         <button
                                             type="button"
-                                            disabled={loading}
+                                            disabled={loading || waitingCode}
                                             className={`signup-link btn mt-0 pe-0 me-1 py-0 text-capitalize cursor-pointer ${
                                                 loading
                                                     ? "text-secondary"

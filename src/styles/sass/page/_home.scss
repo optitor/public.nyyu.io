@@ -8,6 +8,7 @@
         text-align: center;
         background: #1e1e1e;
         height: calc(100vh - 100px - $footerHeight);
+        min-height: 680px;
         @include mq("tablet", max) {
             height: calc(100vh - 175px);
         }

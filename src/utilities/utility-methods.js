@@ -181,7 +181,7 @@ export const getCurrentMarketCap = async () => {
 };
 
 export const getCirculatingSupply = async () => {
-    const { data } = await axios.get("https://api.dev.nyyu.io/circulatingsupply");
+    const { data } = await axios.get(`${process.env.GATSBY_API_BASE_URL}/circulatingsupply`);
     if (data) return data;
     return null;
 };

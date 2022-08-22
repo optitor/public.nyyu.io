@@ -6,7 +6,7 @@ import { useAuth } from "../../hooks/useAuth"
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
     const auth = useAuth()
 
-    if (!auth.isLoggedIn() && isBrowser && window.location.pathname !== `/app/signin/`) {
+    if (!auth?.isLoggedIn() && isBrowser && window.location.pathname !== `/app/signin/`) {
         navigate(`/app/signin/`, { replace: true })
         return null
     }

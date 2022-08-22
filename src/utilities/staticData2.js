@@ -35,26 +35,26 @@ export const SUPPORTED_COINS = [
             // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN', network: 'LN' },
         ],
     },
-    {
-        value: "ETH",
-        label: "ETH",
-        icon: ETH,
-        networks: [
-            { label: "Ethereum", value: "ETH", network: "ERC20", address: "0x64ff637fb478863b7468bc97d30a5bf3a428a1fd"},
-            // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
-            { label: "Ethereum Token (BSC Chain)", value: "ETH.BEP20", network: "BEP20", address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8"},
-        ],
-    },
-    {
-        value: "BNB",
-        label: "BNB",
-        icon: BNB,
-        networks: [
-            // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
-            { label: "BNB Coin (BSC Chain)", value: "BNB.BSC", network: "BEP20", address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"},
-            { label: "BNB Coin (ERC20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
-        ],
-    },
+    // {
+    //     value: "ETH",
+    //     label: "ETH",
+    //     icon: ETH,
+    //     networks: [
+    //         { label: "Ethereum", value: "ETH", network: "ERC20", address: "0x64ff637fb478863b7468bc97d30a5bf3a428a1fd"},
+    //         // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
+    //         { label: "Ethereum Token (BSC Chain)", value: "ETH.BEP20", network: "BEP20", address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8"},
+    //     ],
+    // },
+    // {
+    //     value: "BNB",
+    //     label: "BNB",
+    //     icon: BNB,
+    //     networks: [
+    //         // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
+    //         { label: "BNB Coin (BSC Chain)", value: "BNB.BSC", network: "BEP20", address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"},
+    //         { label: "BNB Coin (ERC20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
+    //     ],
+    // },
     {
         value: "USDC",
         label: "USDC",

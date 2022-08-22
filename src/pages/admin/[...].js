@@ -29,7 +29,7 @@ const App = () => {
     const isAdmin = getCookie(NDB_Privilege) === NDB_Admin;
     const auth = useAuth();
 
-    if (!auth.isLoggedIn() && isBrowser && window.location.pathname !== ROUTES.signIn) {
+    if (!auth?.isLoggedIn() && isBrowser && window.location.pathname !== ROUTES.signIn) {
         navigate(ROUTES.signIn, { replace: true });
         return null;
     }

@@ -54,3 +54,19 @@ export const get_Auctions = () => async dispatch => {
         showFailAlarm('Action failed', err.message);
     }
 };
+
+export const get_Presales = () => async dispatch => {
+    try {
+        const { data } = await client.query({
+            query: Query.GET_PRESALES
+        });
+        const dataList = _.mapKeys(data.getPreSales, 'round');
+        dispatch({
+            type: types.FETCH_DATA,
+            payload: dataList
+        });
+    } catch(err) {
+        // console.log(err.message);
+        showFailAlarm('Action failed', err.message);
+    }
+}

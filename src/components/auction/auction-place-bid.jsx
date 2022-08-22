@@ -20,27 +20,28 @@ export default function AuctionPlaceBid() {
 
     // Containers
     const auction = useAuction();
-    const dispatch = useDispatch()
-    const { optCurrentRound, getBid, isBid } = auction
-    const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(optCurrentRound?.minPrice)
-    const [error, setError] = useState("")
-    const [reqPending, setReqPending] = useState(false)
-    const [preAmount, setPreAmount] = useState(1)
-    const [prePrice, setPrePrice] = useState(1)
-    const [maxPrice, setMaxPrice] = useState(initialMaxPrice)
+    const dispatch = useDispatch();
+    const { optCurrentRound, getBid, isBid } = auction;
+    const [amount, setAmount] = useState(1);
+    const [price, setPrice] = useState(optCurrentRound?.minPrice);
+    const [error, setError] = useState("");
+    const [reqPending, setReqPending] = useState(false);
+    const [preAmount, setPreAmount] = useState(1);
+    const [prePrice, setPrePrice] = useState(1);
+    const [maxPrice, setMaxPrice] = useState(initialMaxPrice);
 
     // Webservice
     const [placeBid] = useMutation(PLACE_BID, {
         onCompleted: () => {
-            navigate(ROUTES.payment)
-            setReqPending(false)
+            navigate(ROUTES.payment);
+            setReqPending(false);
         },
         onError: (err) => {
-            setError(err.message)
-            setReqPending(false)
+            setError(err.message);
+            setReqPending(false);
         },
     })
+    
     const [increaseBid] = useMutation(INCREASE_BID, {
         onCompleted: () => {
             navigate(ROUTES.payment)

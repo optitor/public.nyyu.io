@@ -525,25 +525,28 @@ export default function DepositModal({ showModal, setShowModal }) {
                                             {roundNumber(confirmById?.cryptoAmount, 8)} {selectedAsset.value}
                                         </p>
                                     </div>
-                                    <hr />
-                                    <div className="stats">
-                                        <p className="topic">
-                                            Time left to confirm funds
-                                        </p>
-                                        <div className="content">
-                                            {!confirmById?.depositStatus?
-                                                <CountDownDeposit deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
-                                                :
-                                                <span className='txt-green'>Confirmed</span>
-                                            }
+                                    {!(network.network === 'BEP20' || network.network === 'ERC20') && 
+                                    <>
+                                        <hr />
+                                        <div className="stats">
+                                            <p className="topic">
+                                                Time left to confirm funds
+                                            </p>
+                                            <div className="content">
+                                                {!confirmById?.depositStatus?
+                                                    <CountDownDeposit deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
+                                                    :
+                                                    <span className='txt-green'>Confirmed</span>
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="stats">
-                                        <p className="topic">Payment ID</p>
-                                        <p className="content">
-                                            {depositData?.id}
-                                        </p>
-                                    </div>
+                                        <div className="stats">
+                                            <p className="topic">Payment ID</p>
+                                            <p className="content">
+                                                {depositData?.id}
+                                            </p>
+                                        </div>
+                                    </>}
                                 </div>
                             </div>
                         </div>

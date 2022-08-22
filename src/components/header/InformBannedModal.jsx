@@ -35,11 +35,12 @@ const InformBannedModal = ({isModalOpen, setIsModalOpen, informMessage={} }) => 
                     <p className='mt-3'>
                         {informMessage.first}
                     </p>
+                    {informMessage.second &&
                     <p className='mt-3'>
                         As per our
                         <span className='ms-2 txt-green text-underline'>Terms of Use</span>
                         , {informMessage.second}
-                    </p>
+                    </p>}
                 </div>
             </InformBanned>
         </Modal>

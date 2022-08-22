@@ -147,7 +147,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 setStripePaymentSecondCall(true);
                 if (data.payStripeForAuction.error) {
                     setRequestPending(false);
-                    const error = data.payStripeForPresale.error;
+                    let error = data.payStripeForPresale.error;
                     error = error.split(';')[0];
                     return setError(error);
                 }
@@ -331,39 +331,10 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     // Render
     return successfulPayment === true ? (
         <div className="text-center p-4">
-            <div className="text-danger mb-4">
-                <svg
-                    className="text-success"
-                    width="126"
-                    height="126"
-                    viewBox="0 0 126 126"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <rect
-                        x="31"
-                        y="64.1067"
-                        width="14.2931"
-                        height="34.4792"
-                        transform="rotate(-45 31 64.1067)"
-                        fill="#F2F2F2"
-                    />
-                    <rect
-                        width="14.2931"
-                        height="57.0408"
-                        transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 95.6963 48.1067)"
-                        fill="#F2F2F2"
-                    />
-                    <circle
-                        cx="63"
-                        cy="63"
-                        r="56.5"
-                        stroke="#F2F2F2"
-                        strokeWidth="13"
-                    />
-                </svg>
+            <div className="mb-4">
+                <Icon icon="akar-icons:circle-check" className="text-success" style={{width: 100, height: 100}} />
             </div>
-            <div className="text-capitalize text-light fs-28px fw-bold text-success">
+            <div className="text-capitalize fs-28px fw-bold text-success">
                 payment successful
             </div>
             <div className="text-capitalize text-light fs-18px fw-500 mt-2">
@@ -372,36 +343,8 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
         </div>
     ) : successfulPayment === false ? (
         <div className="text-center p-4">
-            <div className="text-danger mb-4">
-                <svg
-                    width="126"
-                    height="126"
-                    viewBox="0 0 126 126"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <rect
-                        width="14.2931"
-                        height="63.0592"
-                        transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 90.6963 46.1069)"
-                        fill="white"
-                    />
-                    <rect
-                        x="36"
-                        y="46.1069"
-                        width="14.2931"
-                        height="63.0592"
-                        transform="rotate(-45 36 46.1069)"
-                        fill="white"
-                    />
-                    <circle
-                        cx="63"
-                        cy="63"
-                        r="56.5"
-                        stroke="white"
-                        strokeWidth="13"
-                    />
-                </svg>
+            <div className="mb-4">
+                <Icon icon="charm:circle-cross" className="text-white" style={{width: 100, height: 100}} />
             </div>
             <div className="text-capitalize text-light fs-28px fw-bold">
                 payment failed

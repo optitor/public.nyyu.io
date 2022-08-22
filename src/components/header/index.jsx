@@ -15,6 +15,7 @@ import LoadCurrencyRates from "./LoadCurrencyRates"
 import Avatar from "../dress-up/avatar"
 import UserTier from "./user-tier"
 import InformBannedModal from "./InformBannedModal"
+import InformMaintenanceModal from "./Inform_MaintenanceModal"
 import { navigationLinks, profile_tabs } from "../../utilities/staticData"
 import { GET_USER } from "../../apollo/graphqls/querys/Auth"
 import { ROUTES, navLinks } from "../../utilities/routes"
@@ -22,11 +23,13 @@ import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notif
 import { setCookie, removeCookie, NDB_Privilege, NDB_Admin } from "../../utilities/cookies"
 import { fetch_Favor_Assets } from '../../redux/actions/settingAction';
 import { TWITTER, DISCORD } from '../../utilities/imgImport';
+import { logout } from "../../utilities/auth";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch()
     const [banned, setBanned] = useState(false)
     const [isBannedOpen, setIsBannedOpen] = useState(false)
+    const [isMaintenanceOpen, setIsMaintenanceOpen] = useState(false);
     const [informMessage, setInformMessage] = useState({
         first: 'It seems you are accessing nyyu via anonymous proxy, VPN or VPS.',
         second: 'we are unable to provide services to you.'
@@ -59,6 +62,11 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 navigate("/")
                 setBanned(true)
                 setIsBannedOpen(true)
+            } else if(err.graphQLErrors[0]?.isUnderMaintenance) {
+                navigate("/")
+                setBanned(true)
+                setIsMaintenanceOpen(true)
+                logout();
             }
         }
     })
@@ -70,6 +78,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const { avatarComponents } = useSelector((state) => state)
     const [newNotification, setNewNotification] = useState(false)
     const { user, isAuthenticated } = useSelector((state) => state.auth)
+    const isAdmin = user?.role && user?.role?.includes("ROLE_ADMIN");
 
     const isShowNavLinks =
         isBrowser &&
@@ -129,7 +138,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                     {link.title}
                                 </Link>
                             })}                            
-                            {user?.role && user?.role?.includes("ROLE_ADMIN") ? (
+                            {isAdmin && (
                                 <Link
                                     to={ROUTES.admin}
                                     className={`${
@@ -139,8 +148,6 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                 >
                                     admin
                                 </Link>
-                            ) : (
-                                ""
                             )}
                         </div>
                     )}
@@ -269,11 +276,11 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                     >
                                         {link.label}
                                     </a>
-                                    {link.active && (
+                                    {isAuthenticated && link.active && (
                                         <ul className="my-4 d-block d-lg-none">
-                                            {link.subMenu.map((subLink, index) => {
-                                                return (
-                                                    <li className="mb-3" key={index}>                                                        
+                                            {link.subMenu.map((subLink, index) => 
+                                                (
+                                                    <li className="mb-3" key={index}>
                                                         <Link
                                                             to={subLink.url}
                                                             className="fw-500 fs-20px d-block text-light header-item"
@@ -283,7 +290,18 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                                         </Link>
                                                     </li>
                                                 )
-                                            })}
+                                            )}
+                                            {isAdmin && (
+                                                <li className="mb-3">                                                        
+                                                    <Link
+                                                        to={ROUTES.admin}
+                                                        className="fw-500 fs-20px d-block text-light header-item"
+                                                        activeClassName="first-letter:txt-green header-item"
+                                                    >
+                                                        ADMIN
+                                                    </Link>
+                                                </li>
+                                            )}
                                         </ul>
                                     )}
                                 </li>
@@ -292,6 +310,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     </div>
                 </div>
                 {isBannedOpen && <InformBannedModal isModalOpen={isBannedOpen} setIsModalOpen={setIsBannedOpen} informMessage={informMessage} />}
+                {isMaintenanceOpen && <InformMaintenanceModal isModalOpen={isMaintenanceOpen} setIsModalOpen={setIsMaintenanceOpen} />}
             </div>
         </nav>
     )

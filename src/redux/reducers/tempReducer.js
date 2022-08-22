@@ -40,4 +40,3 @@ export const balanceReducer = (state = initialState, action) => {
       return state;
   }
 }
-

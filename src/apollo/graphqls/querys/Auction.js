@@ -18,10 +18,9 @@ export const GET_AUCTION = gql`
 `
 
 export const GET_PRESALES = gql`
-    {
+    query {
         getPreSales {
             id
-            kind
             round
             startedAt
             endedAt
@@ -29,9 +28,17 @@ export const GET_PRESALES = gql`
             tokenPrice
             sold
             status
+            kind
         }
     }
 `
+
+export const GET_LAST_ROUND = gql`
+    query {
+        getLastRound
+    }
+`;
+
 export const GET_CURRENT_ROUND = gql`
     {
         getCurrentRound {

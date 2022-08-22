@@ -27,7 +27,7 @@ const NotFound = lazy(() => import("./../404"))
 const AuthRoute = ({ component: Component, location, ...rest }) => {
     const auth = useAuth()
 
-    if (auth.isLoggedIn()) {
+    if (auth?.isLoggedIn()) {
         navigate(`/app/profile/`, { replace: true })
         return null
     }

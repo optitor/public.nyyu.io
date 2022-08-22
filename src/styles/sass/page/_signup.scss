@@ -321,6 +321,36 @@
             }
         }
     }
+
+    .cryptocoin-select-amount{
+        flex-wrap: nowrap;
+        @include mq("phone", max) {
+            flex-wrap: wrap;
+        }
+        .cryptocoin-select {
+            height: 49px;
+            margin-bottom: 8px;
+            margin-right: 8px;
+            width: 33.33%;
+            @include mq("tablet", max) {
+                width: 40%;
+            }
+            @include mq("phone", max) {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+        .cryptocoin-amount{
+            width: 66.67%;
+            @include mq("tablet", max) {
+                width: 60%;
+            }
+            @include mq("phone", max) {
+                width: 100%;
+                margin-bottom: 8px;
+            } 
+        }
+    }
 }
 
 #signup-country-dropdown {

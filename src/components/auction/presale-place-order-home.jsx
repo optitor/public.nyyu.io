@@ -5,13 +5,14 @@ import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
 import { renderNumberFormat } from "../../utilities/number"
 
+
 export default function PresalePlaceOrderHome() {
     const currency = useSelector(state => state.favAssets.currency);
     const currencyRates = useSelector(state => state.currencyRates);
     const currencyRate = currencyRates[currency.value]?? 1;
     const totalInput = document.querySelector('.presale-total-input');
 
-    const auction = useAuction()
+    const auction = useAuction();
     const { optCurrentRound, setPresalePlaceOrderStage, setPresaleNdbAmount } = auction
     const [amount, setAmount] = useState(1)
     const [totalPrice, setTotalPrice] = useState(1);
@@ -30,8 +31,7 @@ export default function PresalePlaceOrderHome() {
     const leftAmount = useMemo(() => {
         return optCurrentRound.tokenAmount - optCurrentRound.sold;
     }, [optCurrentRound.tokenAmount, optCurrentRound.sold])
-    
-    
+        
     // Render
     return (
         <>

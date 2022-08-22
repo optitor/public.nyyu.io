@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import _ from 'lodash';
 import styled from 'styled-components';
 import { device } from '../../../../utilities/device';
 import RoundDataRow from './RoundDataRow';
@@ -42,10 +43,12 @@ const RoundsTable = () => {
                 <div className='round_status'>Status</div>
             </TableHead>
             <TableHeadForMobile>
-                <div className='name'>Rounds Data</div>
+                <div className='name'>Auctions Data</div>
             </TableHeadForMobile>
             {loading?
                 <Loading />:
+                _.isEmpty(data)?
+                <p className='text-center mt-2'>No Data</p>:
                 <>
                     <TableBody>
                         {pageData.map(datum => {

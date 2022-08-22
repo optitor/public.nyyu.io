@@ -43,6 +43,7 @@ import { ROUTES } from "../../utilities/routes";
 import AuctionProvider from "../../providers/auction-context";
 import CurrentCapProgressBar from "../shared/CurrentCapProgressBar";
 
+
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
     { icon: Credit, value: "creditcard", label: "Credit / Debit Card" },
@@ -64,11 +65,11 @@ const Payment = () => {
     
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
+    const [paySuccess, setPaySuccess] = useState(false);
 
     const dispatch = useDispatch();
     const loading = !(allFees && !payPalLoading);
     
-    const isSSR = typeof window === "undefined";
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
@@ -204,6 +205,7 @@ const Payment = () => {
                                     <CoinPaymentsTab
                                         currentRound={currentRound}
                                         bidAmount={bidAmount}
+                                        paySuccess={paySuccess}
                                     />
                                 )}
                                 {tabIndex === 2 && (
@@ -252,7 +254,7 @@ const Payment = () => {
                             </div>
                         </div>
                         {tabIndex === 1 && (
-                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} />
+                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} setPaymentSuccess={setPaySuccess} />
                         )}
                         {tabIndex === 2 && (
                             <OrderSummaryOfCreditCard bidAmount={bidAmount} />
@@ -264,7 +266,9 @@ const Payment = () => {
                             <OrderSummary bidAmount={bidAmount} />
                         )}
                     </div>
-                    <CurrentCapProgressBar />
+                    <div className="mt-5 py-5">
+                        <CurrentCapProgressBar />
+                    </div>
                 </section>
             </main>
         </AuctionProvider>
