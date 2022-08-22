@@ -162,7 +162,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                             : "coin-percent txt-red text-center"
                     }
                 >
-                    {percent? `${numberSign(percent)}${Number(percent).toFixed(3)}%`: ''}
+                    {percent? `${numberSign(percent)}${Number(percent).toFixed(2)}%`: ''}
                 </p>
             </td>
             <td className="laptop-not price-chart">
