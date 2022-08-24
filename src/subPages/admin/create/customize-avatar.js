@@ -127,7 +127,7 @@ const IndexPage = () => {
             <main className="customize-avatar-page">
                 <LayoutForCreate>
                     <Link className="close" to="/admin"><Icon icon="codicon:chrome-close" /></Link>
-                    <p className="subtitle">Avatar Customization</p>
+                    <p className="subtitle">Create Avatar Component</p>
                     <Stepper2 currentStep={currentStep} texts={['New Item', 'Price']}/>
                     {currentStep === 1 && (
                         <>
