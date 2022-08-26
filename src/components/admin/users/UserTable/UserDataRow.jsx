@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
 import Modal from "react-modal";
 import { device } from "../../../../utilities/device";
 import { width } from "./columnWidth";
-import DeleteConfirmModal from "../../DeleteConfirmModal";
+import ConfirmModal from "../../ConfirmModal";
 import EditUserRoleModal from '../../editModals/EditUserRoleModal';
 import * as Mutation from "../../../../apollo/graphqls/mutations/User";
 import { showFailAlarm, showSuccessAlarm } from "../../AlarmModal";
+import { suspend_User_By_Admin, release_User_By_Admin } from "../../../../redux/actions/userAction";
 
 const UserDataRow = ({ datum }) => {
+    const dispatch = useDispatch();
     const { userTiers } = useSelector(state => state);
 
     const [show, setShow] = useState(false);
@@ -47,8 +49,15 @@ const UserDataRow = ({ datum }) => {
         });
     };
 
-    const deleteUser = async () => {
-        setIsConfirmOpen(false)
+    const handleUser = async () => {
+        setPending(true);
+        if(!datum.isSuspended) {
+            await dispatch(suspend_User_By_Admin(datum));
+        } else {
+            await dispatch(release_User_By_Admin(datum));
+        }
+        setPending(false);
+        setIsConfirmOpen(false);
     };
 
     return (
@@ -60,7 +69,7 @@ const UserDataRow = ({ datum }) => {
                         <p style={{ fontSize: 14, color: "dimgrey" }}>{datum.avatar}</p>
                     </div>
                     <div className="contact">
-                        <p>{datum.email}</p>
+                        <p className={datum.isSuspended? 'text-danger' : ''}>{datum.email}</p>
                         <p>{datum.phone}</p>
                     </div>
                     <div className="password">
@@ -82,7 +91,7 @@ const UserDataRow = ({ datum }) => {
                     </div>
                     <div className="privilege">
                         <p className="privilege">
-                            {datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}
+                            {datum.isSuspended? <b className="text-danger">Suspended</b> : datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}
                             {!show && <Icon icon="whh:avatar" />}
                         </p>
                     </div>
@@ -101,9 +110,9 @@ const UserDataRow = ({ datum }) => {
                                     onClick={() => setShow(!show)}
                                 />
                             </span>
-                            <span className="trash">
+                            <span className={`trash ${datum.isSuspended? 'txt-green': 'text-danger'}`} title={datum.isSuspended? 'Release User': 'Suspend User'}>
                                 <Icon
-                                    icon="akar-icons:trash-can"
+                                    icon="tabler:ban"
                                     onClick={() => setIsConfirmOpen(true)}
                                 />
                             </span>
@@ -148,9 +157,9 @@ const UserDataRow = ({ datum }) => {
                                             }}
                                         />
                                     </span>
-                                    <span className="trash">
+                                    <span className={`trash ${datum.isSuspended? 'txt-green': 'text-danger'}`} title={datum.isSuspended? 'Release User': 'Suspend User'}>
                                         <Icon
-                                            icon="akar-icons:trash-can"
+                                            icon="tabler:ban"
                                             onClick={() => setIsConfirmOpen(true)}
                                         />
                                     </span>
@@ -221,7 +230,7 @@ const UserDataRow = ({ datum }) => {
                     <UnitRowForMobile>
                         <div className="left">
                             <p className="text-white" style={{ fontSize: 16, fontWeight: "700" }}>
-                                {datum.name}
+                                {datum.email}
                             </p>
                             <p style={{ color: "dimgrey" }}>{datum.avatar}</p>
                         </div>
@@ -299,6 +308,14 @@ const UserDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                 </div>
                 <div id={`id${datum.id}`} className="collapse">
+                    <UnitRowForMobile>
+                        <div className="left">
+                            <p style={{ color: "dimgrey" }}>Name</p>
+                        </div>
+                        <div className="right">
+                            <p>{datum.name}</p>
+                        </div>
+                    </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className="left">
                             <p style={{ color: "dimgrey" }}>Contact</p>
@@ -432,12 +449,15 @@ const UserDataRow = ({ datum }) => {
                 </form>
             </Modal>
             {isEditOpen && <EditUserRoleModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />}
-            <DeleteConfirmModal
+            {isConfirmOpen &&
+            <ConfirmModal
+                title={!datum.isSuspended? `Are you sure you want to suspend this user?`: 'Are you sure you want to release this user?'}
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}
                 confirmData={datum.email}
-                doAction={deleteUser}
-            />
+                doAction={handleUser}
+                pending={pending}
+            />}
         </>
     )
 }
@@ -523,9 +543,6 @@ const Main = styled.div`
         span.eye {
             color: #ffffff;
             border-right: 2px solid dimgrey;
-        }
-        span.trash {
-            color: #f32d2d;
         }
     }
 `
