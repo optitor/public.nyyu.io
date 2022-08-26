@@ -39,3 +39,23 @@ export const RESET_PASSWORD_BY_ADMIN = gql`
         )
     }
 `;
+
+export const SUSPEND_USER_BY_ADMIN = gql`
+    mutation SuspendUserByAdmin(
+        $email : String
+    ) {
+        suspendUserByAdmin(
+            email: $email
+        )
+    }
+`;
+
+export const RELEASE_USER_BY_ADMIN = gql`
+    mutation ReleaseUserByAdmin(
+        $email : String
+    ) {
+        releaseUserByAdmin(
+            email: $email
+        )
+    }
+`;

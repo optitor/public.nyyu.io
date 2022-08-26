@@ -5,7 +5,7 @@ import svgToDataURL from 'svg-to-dataurl';
 import { Icon } from '@iconify/react';
 import NumberFormat from 'react-number-format';
 import { device } from '../../../../utilities/device';
-import DeleteConfirmModal from '../../DeleteConfirmModal';
+import ConfirmModal from '../../ConfirmModal';
 import EditUserTierModal from './../../editModals/EditUserTierModal';
 import { delete_User_Tier } from '../../../../redux/actions/userTierAction';
 
@@ -51,7 +51,7 @@ const TierComponent = ({tier = {}}) => {
                 </div>
             </Container>
             <EditUserTierModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} tier={tier} />
-            <DeleteConfirmModal isModalOpen={isConfirmOpen} setIsModalOpen={setIsConfirmOpen} confirmData={tier.name} doAction={deleteUserTier} />
+            <ConfirmModal isModalOpen={isConfirmOpen} setIsModalOpen={setIsConfirmOpen} confirmData={tier.name} doAction={deleteUserTier} />
         </>
     );
 };

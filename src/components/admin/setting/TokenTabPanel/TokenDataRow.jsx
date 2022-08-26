@@ -5,7 +5,7 @@ import svgToDataURL  from 'svg-to-dataurl';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-import DeleteConfirmModal from '../../DeleteConfirmModal';
+import ConfirmModal from '../../ConfirmModal';
 import EditTokenModal from '../../editModals/EditTokenModal';
 import { delete_Token } from "../../../../redux/actions/tokenAction"
 
@@ -115,7 +115,7 @@ const TokenDataRow = ({ datum = {} }) => {
                 </div>
             </DataRowForMobile>
             <EditTokenModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />
-            <DeleteConfirmModal
+            <ConfirmModal
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}
                 confirmData={datum.tokenName}

@@ -63,3 +63,46 @@ export const change_User_Role = updateData => async dispatch => {
         showFailAlarm('Action failed', 'Ops! Something went wrong!');
     }
 };
+
+export const suspend_User_By_Admin = updateData => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+            mutation: Mutation.SUSPEND_USER_BY_ADMIN,
+            variables: { ...updateData }
+        })
+        if(data.suspendUserByAdmin) {
+            showSuccessAlarm(`User suspended successfully`);
+            dispatch({
+                type: types.UPDATE_DATUM,
+                payload: { ...updateData, isSuspended: true }
+            })
+        } else {
+            showFailAlarm('Action failed', 'Ops! Something went wrong!');
+        }
+    } catch(err) {
+        console.log(err.message);
+        showFailAlarm('Action failed', 'Ops! Something went wrong!');
+    }
+};
+
+export const release_User_By_Admin = updateData => async dispatch => {
+    try {
+        const { data } = await client.mutate({
+            mutation: Mutation.RELEASE_USER_BY_ADMIN,
+            variables: { ...updateData }
+        })
+        if(data.releaseUserByAdmin) {
+            showSuccessAlarm(`User released successfully`);
+            dispatch({
+                type: types.UPDATE_DATUM,
+                payload: { ...updateData, isSuspended: false }
+            })
+        } else {
+            showFailAlarm('Action failed', 'Ops! Something went wrong!');
+        }
+    } catch(err) {
+        console.log(err.message);
+        showFailAlarm('Action failed', 'Ops! Something went wrong!');
+    }
+};
+
