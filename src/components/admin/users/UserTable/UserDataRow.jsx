@@ -229,7 +229,7 @@ const UserDataRow = ({ datum }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className="left">
-                            <p className="text-white" style={{ fontSize: 16, fontWeight: "700" }}>
+                            <p className={datum.isSuspended? "text-danger": "text-white"} style={{ fontSize: 16, fontWeight: "700" }}>
                                 {datum.email}
                             </p>
                             <p style={{ color: "dimgrey" }}>{datum.avatar}</p>
@@ -262,9 +262,9 @@ const UserDataRow = ({ datum }) => {
                                                 }}
                                             />
                                         </span>
-                                        <span className="trash">
+                                        <span className={`trash ${datum.isSuspended? 'txt-green': 'text-danger'}`} title={datum.isSuspended? 'Release User': 'Suspend User'}>
                                             <Icon
-                                                icon="akar-icons:trash-can"
+                                                icon="tabler:ban"
                                                 onClick={() => setIsConfirmOpen(true)}
                                             />
                                         </span>
@@ -355,7 +355,7 @@ const UserDataRow = ({ datum }) => {
                         </div>
                         <div className="right" style={{ width: "50%" }}>
                             <p style={{ textTransform: "uppercase" }}>
-                                {datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}{" "}
+                                {datum.isSuspended? <b className="text-danger">Suspended</b> : datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}{" "}
                                 <span>
                                     <Icon icon="whh:avatar" />
                                 </span>
@@ -622,7 +622,7 @@ const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
     & > div.left {
-        width: 90%;
+        width: 75%;
     }
     & > div.right {
         p {

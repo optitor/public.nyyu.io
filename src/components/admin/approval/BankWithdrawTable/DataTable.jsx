@@ -57,13 +57,13 @@ const RoundsTable = () => {
     return (
         <>
             <SearchBar>
-                <button>
+                <button title="See All">
                     <Icon icon='bi:list-stars' onClick={() => {setSearchValue(''); setInputText('');}} />
                 </button>
                 <div className='d-flex align-items-center'>
                     <p>Email </p>
                     <input className='mx-2 px-1' type='text' value={inputText} onChange={e => setInputText(e.target.value)} onKeyDown={hanldeEnterKeyDown} />
-                    <button onClick={() => setSearchValue(inputText)} disabled={!inputText}>
+                    <button onClick={() => setSearchValue(inputText)} disabled={!inputText} title="Search">
                         <Icon icon='carbon:search' />
                     </button>
                 </div>

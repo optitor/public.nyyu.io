@@ -5,9 +5,9 @@ import Seo from "./../../components/seo";
 import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
 import UserTable from "../../components/admin/users/UserTable";
 // import BidTable from "../../components/admin/users/BidTable";
-import WalletTable from "../../components/admin/users/WalletTable";
-import FiatTable from "../../components/admin/users/FiatTable";
-import KYBTable from "../../components/admin/users/KYBTable";
+// import WalletTable from "../../components/admin/users/WalletTable";
+// import FiatTable from "../../components/admin/users/FiatTable";
+// import KYBTable from "../../components/admin/users/KYBTable";
 
 const wallets = [
     {name: 'Amy Matthews', avatar: 'Tesla.12' },
@@ -35,14 +35,14 @@ const IndexPage = () => {
                         <Tabs>
                             <TabList>
                                 <Tab>User</Tab>
-                                <Tab>Wallet</Tab>
+                                {/* <Tab>Wallet</Tab>
                                 <Tab>Fiat</Tab>
-                                <Tab>KYB</Tab>
+                                <Tab>KYB</Tab> */}
                             </TabList>
                             <TabPanel>
                                 <UserTable/>
                             </TabPanel>
-                            <TabPanel>
+                            {/* <TabPanel>
                                 <WalletTable data={wallets} />
                             </TabPanel>
                             <TabPanel>
@@ -50,7 +50,7 @@ const IndexPage = () => {
                             </TabPanel>
                             <TabPanel>
                                 <KYBTable />
-                            </TabPanel>
+                            </TabPanel> */}
                         </Tabs>
                     </div>
                 </LayoutWithMenu>
