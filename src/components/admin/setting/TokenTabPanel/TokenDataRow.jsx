@@ -5,7 +5,7 @@ import svgToDataURL  from 'svg-to-dataurl';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-import DeleteConfirmModal from '../../DeleteConfirmModal';
+import ConfirmModal from '../../ConfirmModal';
 import EditTokenModal from '../../editModals/EditTokenModal';
 import { delete_Token } from "../../../../redux/actions/tokenAction"
 
@@ -65,7 +65,7 @@ const TokenDataRow = ({ datum = {} }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className='left' style={{width: '10%'}}>
-                            <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" />
+                            <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" style={{width: 30}}/>
                         </div>
                         <div className='left' style={{width: '60%'}}>
                             <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.tokenName}</p>
@@ -115,7 +115,7 @@ const TokenDataRow = ({ datum = {} }) => {
                 </div>
             </DataRowForMobile>
             <EditTokenModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />
-            <DeleteConfirmModal
+            <ConfirmModal
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}
                 confirmData={datum.tokenName}

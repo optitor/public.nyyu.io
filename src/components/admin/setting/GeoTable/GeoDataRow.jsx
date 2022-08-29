@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { Icon } from "@iconify/react"
 import { device } from "../../../../utilities/device"
 import { width } from "./columnWidth"
-import DeleteConfirmModal from "../../DeleteConfirmModal"
+import ConfirmModal from "../../ConfirmModal"
 import { make_Allow_Country } from "../../../../redux/actions/geoLocationAction";
 
 const GeoDataRow = ({ datum }) => {
@@ -94,7 +94,7 @@ const GeoDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
-            <DeleteConfirmModal
+            <ConfirmModal
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}
                 confirmData={datum.country}

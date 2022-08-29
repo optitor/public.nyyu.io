@@ -36,7 +36,7 @@ const IndexPage = () => {
                         </Link> */}
                         <Link className="select-item" to="/admin/create/customize-avatar">
                             <Icon icon="clarity:avatar-outline-badged" />
-                            Avatar customization
+                            Avatar Component
                         </Link>
                         <Link className="select-item" to="/admin/create/avatar">
                             <Icon icon="bx:bxs-user-rectangle" />

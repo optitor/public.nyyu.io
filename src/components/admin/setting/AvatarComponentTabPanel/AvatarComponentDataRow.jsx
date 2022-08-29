@@ -5,7 +5,7 @@ import parse from 'html-react-parser';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-import DeleteConfirmModal from '../../DeleteConfirmModal';
+import ConfirmModal from '../../ConfirmModal';
 import EditAvatarComponentModal from '../../editModals/EditAvatarComponentModal';
 import { delete_Avatar_Component } from "../../../../redux/actions/avatarAction";
 import { EmptyAvatar, BaseHair, BaseExpression } from '../../../../utilities/imgImport';
@@ -176,7 +176,7 @@ const AvatarComponentDataRow = ({ datum = {} }) => {
                 </div>
             </DataRowForMobile>
             {isEditOpen && <EditAvatarComponentModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />}
-            <DeleteConfirmModal
+            <ConfirmModal
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}
                 confirmData={datum.groupId + datum.compId}

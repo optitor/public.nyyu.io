@@ -25,7 +25,7 @@ const AvatarImage = ({ avatar = {} }) => {
                             >
                                 {parse(
                                     avatarComponents.hairStyles[item.compId]
-                                        ? avatarComponents.hairStyles[item.compId].svg
+                                        ? avatarComponents.hairStyles[item.compId]?.svg
                                         : ""
                                 )}
                             </Hair>
@@ -48,7 +48,7 @@ const AvatarImage = ({ avatar = {} }) => {
                             >
                                 {parse(
                                     avatarComponents[`${item.groupId}s`][item.compId]
-                                        ? avatarComponents[`${item.groupId}s`][item.compId].svg
+                                        ? avatarComponents[`${item.groupId}s`][item.compId]?.svg
                                         : ""
                                 )}
                             </div>
