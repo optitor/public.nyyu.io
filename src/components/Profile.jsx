@@ -35,6 +35,7 @@ import DressupModal from "./dress-up/dressup-user-modal";
 import { getAuthInfo } from "../redux/actions/authAction";
 import { UPDATE_AVATARSET } from "../apollo/graphqls/mutations/AvatarComponent";
 import { GET_USER_TIERS } from "../apollo/graphqls/querys/UserTier";
+import { GET_DISCORD } from "./profile/profile-queries";
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const Profile = () => {
     const [userTiersData, setUserTiersData] = useState(null)
     const [tabIndex, setTabIndex] = useState(tab);
     const [displayName, setDisplayName] = useState("");
+    const [discordName, setDiscordName] = useState("");
     const [is2FAModalOpen, setIs2FAModalOpen] = useState(false);
     const [isDressUpModalOpen, setIsDressUpModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -79,6 +81,14 @@ const Profile = () => {
         },
         fetchPolicy: "network-only",
     });
+
+    const {loading: loadingDiscord} = useQuery(GET_DISCORD, {
+        onCompleted: data => {
+            if(data.getDiscord) {
+                setDiscordName(data.getDiscord);
+            }
+        },
+    });
     
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
@@ -98,7 +108,7 @@ const Profile = () => {
         }
     })
 
-    const loadingPage = !(displayName && userTiersData && shuftiStatus);
+    const loadingPage = !(displayName && userTiersData && shuftiStatus) || loadingDiscord;
     // Containers
     const user = userData?.getUser;
     const twoStep = user?.security
@@ -321,6 +331,9 @@ const Profile = () => {
                                                         }
                                                         shuftiStatus={
                                                             shuftiStatus
+                                                        }
+                                                        discordName={
+                                                            discordName
                                                         }
                                                     />
                                                     <div className="account-security">

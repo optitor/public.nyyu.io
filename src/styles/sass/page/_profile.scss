@@ -174,14 +174,14 @@
                     font-family: "Montserrat";
                     font-weight: bold;
                     font-size: 18px;
-                    line-height: 22px;
+                    line-height: 40px;
                     letter-spacing: 0.04em;
                     color: white;
                     text-transform: uppercase;
-                    padding: 25px 12px;
+                    padding: 18px 12px;
                     @include mq("phone", max) {
                         width: unset;
-                        font-size: 14px;
+                        font-size: 12px;
                         font-weight: normal;
                         line-height: 30px;
                         padding: 20px 10px;
@@ -195,9 +195,11 @@
                         text-transform: uppercase;
                         padding: 2px 26px;
                         background: #1e1e1e;
+                        width: 220px;
                         @include mq('phone', max) {
                             font-size: 12px;
                             padding: 3px 20px;
+                            width: auto;
                         }
                     }
                 }

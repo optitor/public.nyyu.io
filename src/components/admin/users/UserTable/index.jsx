@@ -11,7 +11,6 @@ import Loading from './../../shared/Loading';
 import { get_Users } from '../../../../redux/actions/userAction';
 import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
 
-
 const UserTable = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(state => state);
