@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { isBrowser } from "react-device-detect";
 import Modal from "react-modal";
 import { CloseIcon } from "../../utilities/imgImport";
@@ -20,7 +19,11 @@ export default function ChangeNameModal({ isOpen, setIsOpen, discordName = '' })
     // Webserver
     const [addDiscordMutation] = useMutation(ADD_DISCORD, {
         onCompleted: (data) => {
-            if (data.addDiscord) setSuccessful(true);
+            if (data.addDiscord) {
+                setSuccessful(true)
+            } else {
+                setError("Add_Discord_Failed");
+            };
             setConfirmationLoading(false);
         },
         onError: (error) => {
@@ -31,7 +34,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen, discordName = '' })
 
     // Methods
     const checkRegEx = (text) => {
-        const format = /^.{3,32}#[0-9]{4}$/gm;
+        const format = /^.{2,32}#[0-9]{4}$/gm;
         return format.test(text);
     };
 
@@ -44,7 +47,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen, discordName = '' })
         setError("");
         if (!newName) return setError("New name cannot be empty");
         if (!checkRegEx(newName))
-            return setError("Invalid discord username");
+            return setError("Please make sure you copy the full user name in the format \"Example#1234\"");
 
         setConfirmationLoading(true);
         addDiscordMutation({
@@ -113,7 +116,12 @@ export default function ChangeNameModal({ isOpen, setIsOpen, discordName = '' })
                                 {error && (
                                     <span className="errorsapn">
                                         <FaExclamationCircle />{" "}
-                                        {error}
+                                        {error !== "Add_Discord_Failed"? error: (
+                                            <span className="text-danger">
+                                                This username seems to already be linked to an account.{" "}
+                                                Please contact support on our <a className="text-underline" href="https://discord.gg/w8DvXCNbyU" target="_blank">Discord</a> to resolve the issue.
+                                            </span>
+                                        )}
                                     </span>
                                 )}
                                 <button
