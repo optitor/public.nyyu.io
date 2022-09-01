@@ -10,6 +10,7 @@ import AirdropDetail from "../AirdropDetail";
 import MarketTab from "./market-tab";
 import Transactions from "./transactions";
 import StakeTab from "./stake-tab";
+import LockupTab from "./LockupTab";
 import InternalWallet from "./internal-wallet";
 import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
@@ -124,6 +125,7 @@ const Wallet = () => {
                                     <div className="tab-top">
                                         <TabList>
                                             <Tab>market</Tab>
+                                            <Tab disabled={false}>lock-up</Tab>
                                             <Tab disabled={false}>stake</Tab>
                                             <Tab disabled={true}>airdrops</Tab>
                                             <Tab>transaction</Tab>
@@ -131,6 +133,9 @@ const Wallet = () => {
                                     </div>
                                     <TabPanel>
                                         <MarketTab />
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <LockupTab />
                                     </TabPanel>
                                     <TabPanel className="px-0">
                                         <StakeTab />
