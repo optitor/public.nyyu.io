@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import _ from 'lodash';
+import { Icon } from "@iconify/react";
 import { device } from '../../../../utilities/device';
 import UserDataRow from './UserDataRow';
 import PaginationBar from '../../PaginationBar';
@@ -9,7 +11,6 @@ import Loading from './../../shared/Loading';
 import { get_Users } from '../../../../redux/actions/userAction';
 import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
 
-
 const UserTable = () => {
     const dispatch = useDispatch();
     const { data } = useSelector(state => state);
@@ -17,6 +18,16 @@ const UserTable = () => {
     const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
     const { page, limit } = pageInfo;
     const [pageData, setPageData] = useState([]);
+
+    // Search Bar
+    const [inputText, setInputText] = useState('');
+    const [searchValue, setSearchValue] = useState('');
+
+    const hanldeEnterKeyDown = e => {
+        if(e.key === 'Enter') {
+            setSearchValue(inputText);
+        }
+    };
 
     useEffect(() => {
         (async function() {
@@ -27,12 +38,29 @@ const UserTable = () => {
         })();
     }, [dispatch]);
 
+    const showData = useMemo(() => {
+        const sortedData = _.orderBy(Object.values(data), ['regDate'], ['asc']);
+        return !searchValue? sortedData: sortedData.filter(item => String(item?.email).toLowerCase().includes(searchValue.toLowerCase())) ;
+    }, [data, searchValue]);
+
     useEffect(() => {
-        setPageData(Object.values(data).slice((page - 1) * limit, page * limit));
-    }, [dispatch, data, page, limit]);
+        setPageData(showData.slice((page - 1) * limit, page * limit));
+    }, [showData, page, limit]);
 
     return (
         <>
+            <SearchBar>
+                <button title="See All">
+                    <Icon icon='bi:list-stars' onClick={() => {setSearchValue(''); setInputText('');}} />
+                </button>
+                <div className='d-flex align-items-center'>
+                    <p>Email </p>
+                    <input className='mx-2 px-1' type='text' value={inputText} onChange={e => setInputText(e.target.value)} onKeyDown={hanldeEnterKeyDown} />
+                    <button onClick={() => setSearchValue(inputText)} disabled={!inputText} title="Search">
+                        <Icon icon='carbon:search' />
+                    </button>
+                </div>
+            </SearchBar>
             <TableHead>
                 <div className='name'>Name</div>
                 <div className='contact'>Contact</div>
@@ -54,7 +82,7 @@ const UserTable = () => {
                                 return <UserDataRow key={datum.id} datum={datum} index={datum.id} />
                             })}
                         </TableBody>
-                        <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={Object.values(data).length} />
+                        <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={showData.length} />
                     </>
                 )
             }
@@ -118,4 +146,29 @@ const TableHeadForMobile = styled.div`
 const TableBody = styled.div`
     border-left: 1px solid #464646;
     border-right: 1px solid #464646;
+`;
+
+const SearchBar = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    input {
+        background-color: #1e1e1e;
+        border: 1px solid white;
+        color: white;
+        font-size: 14px;
+        height: 32px;
+    }
+    button {
+        background: inherit;
+        border: none;
+        &:disabled {
+            opacity: 0.5;
+            cursor: unset;
+        }
+    }
+    svg {
+        font-size: 25px;
+    }
 `;

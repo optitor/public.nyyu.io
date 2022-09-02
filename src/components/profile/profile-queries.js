@@ -72,3 +72,19 @@ export const GET_ALL_BUY_NAME_PRICES = gql`
         }
     }
 `;
+
+export const GET_DISCORD = gql`
+    query {
+        getDiscord
+    }
+`;
+
+export const ADD_DISCORD = gql`
+    mutation AddDiscord(
+        $username: String!
+    ) {
+        addDiscord(
+            username: $username
+        )
+    }
+`;
