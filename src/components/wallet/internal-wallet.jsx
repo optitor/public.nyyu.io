@@ -10,7 +10,8 @@ import CustomSpinner from "../common/custom-spinner";
 import NumberFormat from "react-number-format";
 import { useQuery } from "@apollo/client";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
-import { Icon } from "@iconify/react";
+import { AiFillEyeInvisible } from '@react-icons/all-files/ai/AiFillEyeInvisible';
+import { AiFillEye } from '@react-icons/all-files/ai/AiFillEye';
 import { roundNumber } from "../../utilities/number"; 
 
 import { updateHiddenStatus, changeEquity, fetchNDBPrice } from "../../redux/actions/tempAction";
@@ -162,20 +163,10 @@ export default function InternalWallet() {
                     <div className="value-label d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
                             Equity Value ({equity})
-                            {!hidden && (
-                                <Icon
-                                    className="value-label-eye-icon"
-                                    icon="bi:eye"
-                                    onClick={() => dispatch(updateHiddenStatus(true))}
-                                />
-                            )}
-                            {hidden && (
-                                <Icon
-                                    className="value-label-eye-icon"
-                                    icon="bi:eye-slash"
-                                    onClick={() => dispatch(updateHiddenStatus(false))}
-                                />
-                            )}
+                            {!hidden ? 
+                                <AiFillEye className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(true))}/> : 
+                                <AiFillEyeInvisible className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(false))}/> 
+                            }
                         </div>
 
                         <div className="d-flex">

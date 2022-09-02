@@ -10,6 +10,15 @@ module.exports = {
         siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
     },
     plugins: [
+        {
+            resolve: `gatsby-plugin-google-analytics`,
+            options: {
+                trackingId: "UA-239898697-1",
+                // this option places the tracking script into the head of the DOM
+                head: true,
+                // other options
+            },
+        },
         `gatsby-plugin-webfonts`,
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-styled-components`,
