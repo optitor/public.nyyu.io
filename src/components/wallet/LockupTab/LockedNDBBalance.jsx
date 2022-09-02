@@ -50,11 +50,11 @@ const LockedNDBBalance = ({loading, totalLocked}) => {
     // }, []);
 
     return <div className='text-white bg-gray-50 px-3 py-3'>
-        <div className='d-flex justify-content-between fs-17px'>
-            <div className='txt-disable-gray'>
-                Total Locked(NDB)
-            </div>
-            <div>
+        <div className='d-flex justify-content-between'>
+            <p className="fs-24px fw-500">
+                Total Locked (NDB)
+            </p>
+            <div className="txt-disable-gray">
                 {!hidden ? 
                     <AiFillEye className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(true))}/> : 
                     <AiFillEyeInvisible className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(false))}/> 
@@ -65,16 +65,15 @@ const LockedNDBBalance = ({loading, totalLocked}) => {
             {!hidden ? 
                 <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : 
                     <NumberFormat
-                        value={totalLocked}
-                        className='fs-30px fw-400 lh-54px'
+                        value={Number(totalLocked).toFixed(2)}
+                        className='fs-24px fw-600 lh-54px txt-green'
                         displayType='text'
                         thousandSeparator={true}
                         renderText={(value, props) => (
                             <p {...props}>
-                                {value} NDB
+                                {value} <span className="txt-green">NDB</span>
                             </p>
                         )}
-                        decimalScale={2}
                     />
                    }</> : 
                 <p className='fs-30px fw-400 lh-54px'>{obscureValueString}</p>
