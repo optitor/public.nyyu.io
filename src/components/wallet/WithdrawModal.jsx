@@ -116,11 +116,12 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             amount: item.free,
             icon: item.symbol,
             balance: item.balance,
-            networks: SupportedCoins[item.tokenSymbol]?.networks
+            networks: SupportedCoins[item.tokenSymbol]?.networks,
+            isDisabled: item.tokenSymbol == "NDB" ? true : false
         };
     }), ['balance'], ['desc']);
 
-    const myAssetsCrypto = myAssets.filter(item => (item.value !== 'NDB' && Number(item.amount) !== 0));// remove NDB from withdraw ist .
+    const myAssetsCrypto = myAssets.filter(item => (Number(item.amount) !== 0));
     const myAssetsFiat = myAssets.filter(item => (item.value !== 'NDB' && Number(item.amount) !== 0)
     ).map(item => {
         return {
@@ -476,6 +477,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                         className="black_input"
                                         options={myAssetsCrypto}
                                         value={selectedAsset}
+                                        isOptionDisabled = {option => option.isDisabled}
                                         onChange={(selected) => {
                                             setSelectedAsset(selected)
                                             setNetwork(selected?.networks[0])
