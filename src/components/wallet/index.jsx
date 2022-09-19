@@ -10,7 +10,7 @@ import AirdropDetail from "../AirdropDetail";
 import MarketTab from "./market-tab";
 import Transactions from "./transactions";
 import StakeTab from "./stake-tab";
-import LockupTab from "./LockupTab";
+//import LockupTab from "./LockupTab";
 import InternalWallet from "./internal-wallet";
 import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
