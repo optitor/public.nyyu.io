@@ -120,7 +120,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         };
     }), ['balance'], ['desc']);
 
-    const myAssetsCrypto = myAssets.filter(item => (Number(item.amount) !== 0));
+    const myAssetsCrypto = myAssets.filter(item => (item.value !== 'NDB' && Number(item.amount) !== 0));
     const myAssetsFiat = myAssets.filter(item => (item.value !== 'NDB' && Number(item.amount) !== 0)
     ).map(item => {
         return {
