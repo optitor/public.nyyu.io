@@ -32,11 +32,15 @@ export default function CurrentCapProgressBar() {
         return progress;
     }, [circulatingSupply, MaxSupply]);
 
-    useEffect(async () => {
+    const ndbCoinInfoFn = async () => {
         const res = await axios.get(`${process.env.GATSBY_API_BASE_URL}/ndbcoin/info`);
         const { ciculatingSupply, marketCap } = res.data;
         setCurrentCap(Number(marketCap));
         setCirculatingSupply(Number(ciculatingSupply));
+    }
+
+    useEffect(() => {
+        ndbCoinInfoFn()
     }, []);
 
     return (
