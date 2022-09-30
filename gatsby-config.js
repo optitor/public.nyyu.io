@@ -19,27 +19,24 @@ module.exports = {
             },
         },
         {
-            resolve: `gatsby-plugin-google-gtag`,
+            resolve: `gatsby-plugin-gdpr-cookies`,
             options: {
-              trackingIds: [
-                "UA-239898697-1", // Google Analytics / GA
-              ],
-              pluginConfig: {
-                head: true        
+              googleAnalytics: {
+                trackingId: 'UA-239898697-1', // leave empty if you want to disable the tracker
+                cookieName: 'gatsby-gdpr-google-analytics', // default
+                anonymize: true, // default
+                allowAdFeatures: false // default
               },
-            }
-        },
-        {
-            resolve: "gatsby-plugin-google-tagmanager",
-            options: {
-                id: "GTM-T3PBD6T",
-                includeInDevelopment: false,
-           
-                // GTM environment details.
-                gtmAuth: "null",
-                gtmPreview: "null",
+              googleTagManager: {
+                trackingId: 'GTM-T3PBD6T', // leave empty if you want to disable the tracker
+                cookieName: 'gatsby-gdpr-google-tagmanager', // default
+                dataLayerName: 'dataLayer', // default
               },
-        },
+              // defines the environments where the tracking should be available  - default is ["production"]
+              environments: ['production']
+            },
+          },
+
         `gatsby-plugin-webfonts`,
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-styled-components`,
