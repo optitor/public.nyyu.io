@@ -1,7 +1,7 @@
 require("dotenv").config({
     path: `.env.${process.env.NODE_ENV}`,
 })
-
+const GATSBY_ANALYTIC_KEY = "UA-239898697-1"
 module.exports = {
     siteMetadata: {
         title: `NYYU`,
@@ -16,6 +16,19 @@ module.exports = {
               trackingCode: "7628932",
               respectDNT: false,
               productionOnly: true,
+            },
+          },
+          {
+            resolve: `gatsby-plugin-google-gtag`,
+            options: {
+                trackingIds: [GATSBY_ANALYTIC_KEY],
+                gtagConfig: {
+                    anonymize_ip: true,
+                    cookie_expires: 0,
+                },
+                pluginConfig: {
+                    head: true,
+                },
             },
         },
         {

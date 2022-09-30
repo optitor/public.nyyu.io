@@ -125,7 +125,7 @@ const Wallet = () => {
                                     <div className="tab-top">
                                         <TabList>
                                             <Tab>market</Tab>
-                                            <Tab disabled={true}>lock-up</Tab>
+                                            {/* <Tab disabled={false}>lock-up</Tab> */}
                                             <Tab disabled={true}>stake</Tab>
                                             <Tab disabled={true}>airdrops</Tab>
                                             <Tab>transaction</Tab>
@@ -134,9 +134,9 @@ const Wallet = () => {
                                     <TabPanel>
                                         <MarketTab />
                                     </TabPanel>
-                                    <TabPanel>
+                                    {/* <TabPanel>
                                         <LockupTab />
-                                    </TabPanel>
+                                    </TabPanel> */}
                                     <TabPanel className="px-0">
                                         <StakeTab />
                                     </TabPanel>
