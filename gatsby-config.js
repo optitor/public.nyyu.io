@@ -17,19 +17,6 @@ module.exports = {
               respectDNT: false,
               productionOnly: true,
             },
-          },
-          {
-            resolve: `gatsby-plugin-google-gtag`,
-            options: {
-                trackingIds: [GATSBY_ANALYTIC_KEY],
-                gtagConfig: {
-                    anonymize_ip: true,
-                    cookie_expires: 0,
-                },
-                pluginConfig: {
-                    head: true,
-                },
-            },
         },
         {
             resolve: `gatsby-plugin-google-gtag`,
