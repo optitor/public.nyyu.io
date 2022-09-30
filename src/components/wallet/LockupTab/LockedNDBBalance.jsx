@@ -5,13 +5,12 @@ import { AiFillEyeInvisible } from '@react-icons/all-files/ai/AiFillEyeInvisible
 import { AiFillEye } from '@react-icons/all-files/ai/AiFillEye';
 
 import { SPINNER } from '../../../utilities/imgImport';
-import { changeEquity, updateHiddenStatus } from '../../../redux/actions/tempAction';
+import { updateHiddenStatus } from '../../../redux/actions/tempAction';
 import NumberFormat from 'react-number-format';
 
 const QUOTE = "USDT";
 const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
 const REFRESH_TIME = 30 * 1000;
-
 const obscureValueString = "********"
 
 const LockedNDBBalance = ({loading, totalLocked}) => {
@@ -23,31 +22,6 @@ const LockedNDBBalance = ({loading, totalLocked}) => {
     
     const [price, setPrice] = useState(1 / currencyRate[equity]);
     const [decimals, setDecimals] = useState(equity !== 'BTC' ? 2 : 8);
-
-    // const onChangeEquity = (newEquity) => {
-    //     if(equity === newEquity) return;
-    //     // change equity
-    //     dispatch(changeEquity(newEquity));
-        
-    //     // change equity balance
-    //     setDecimals(newEquity === 'BTC' ? 8 : 2);
-    //     setPrice(newEquity === 'BTC' ? btcPrice : 1 / currencyRate[newEquity]);
-    // }
-
-    // useEffect(() => {
-    //     const getBtcPrice = async () => {
-    //         const { data } = await axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } });
-    //         setBtcPrice(data.price);
-    //         if(equity === 'BTC') {
-    //             setPrice(data.price);
-    //         }
-    //     };
-    //     getBtcPrice();
-    //     const interval = setInterval(() => {
-    //         getBtcPrice()
-    //     }, REFRESH_TIME);
-    //     return () => clearInterval(interval);
-    // }, []);
 
     return <div className='text-white bg-gray-50 px-3 py-3'>
         <div className='d-flex justify-content-between'>

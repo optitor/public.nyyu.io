@@ -45,9 +45,9 @@ const SelectFigure = () => {
     });    
     
     const { data: userData } = useQuery(GET_USER, {
-        onCompleted: () => {
-            if (userData.getUser?.avatar) {
-                const { prefix, name } = userData.getUser.avatar;
+        onCompleted: async (res) => {
+            if (res.getUser?.avatar) {
+                const { prefix, name } = res.getUser.avatar;
                 if (prefix && name) {
                     return navigate(ROUTES.verifyId);
                 }

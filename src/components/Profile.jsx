@@ -66,13 +66,13 @@ const Profile = () => {
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
         onCompleted: (res) => {
-            if (!userData?.getUser) {
+            if (!res?.getUser) {
                 return logout(() => {
                     navigate(ROUTES.home);
                 });
             }
-            if (userData?.getUser?.avatar) {
-                const { prefix, name } = userData.getUser.avatar;
+            if (res?.getUser?.avatar) {
+                const { prefix, name } = res.getUser.avatar;
                 if (prefix && name) {
                     return setDisplayName(prefix + "." + name);
                 } else return navigate(ROUTES.selectFigure);
@@ -189,13 +189,16 @@ const Profile = () => {
 
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user]);
 
-    useEffect(async () => {
+    const getShuftiStatusByReferenceFn = async() => {
         if (!shuftiReferenceLoading) {
             const response = await getShuftiStatusByReference(
                 shuftReference?.reference
             );
             return setShuftiStatus(response);
         }
+    }
+    useEffect(() => {
+        getShuftiStatusByReferenceFn()
     }, [shuftiReferenceLoading]);
 
     if (loadingPage) return <Loading />;

@@ -31,6 +31,28 @@ module.exports = {
                 },
             },
         },
+        {
+            resolve: `gatsby-plugin-google-gtag`,
+            options: {
+              trackingIds: [
+                "UA-239898697-1", // Google Analytics / GA
+              ],
+              pluginConfig: {
+                head: true        
+              },
+            }
+        },
+        {
+            resolve: "gatsby-plugin-google-tagmanager",
+            options: {
+                id: "GTM-T3PBD6T",
+                includeInDevelopment: false,
+           
+                // GTM environment details.
+                gtmAuth: "null",
+                gtmPreview: "null",
+              },
+        },
         `gatsby-plugin-webfonts`,
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-styled-components`,
