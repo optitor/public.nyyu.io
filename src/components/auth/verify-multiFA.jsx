@@ -117,7 +117,7 @@ const VerifyMutliFA = ({
                                             className={`signup-link btn mt-0 pe-0 me-1 py-0 text-capitalize cursor-pointer ${
                                                 loading
                                                     ? "text-secondary"
-                                                    : "text-success text-underline"
+                                                    : "text-success text-underline noBorder"
                                             }`}
                                             onClick={(e) => resend(e)}
                                         >
