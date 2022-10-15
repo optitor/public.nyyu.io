@@ -9,7 +9,8 @@ export const onRenderBody = (
 ) => {
     const GOOGLE_PLACE_API_KEY = process.env.GOOGLE_PLACE_API_KEY;
     setPostBodyComponents([
-        <script key="placeapi" src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_PLACE_API_KEY}&libraries=places`} async></script>
+        <script key="placeapi" src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_PLACE_API_KEY}&libraries=places`} async></script>,
+        <script async src="https://tag.simpli.fi/sifitag/59353100-2dfc-013b-5b3d-Occ47a8ffaac"></script>
     ]);
 
     const helmet = Helmet.renderStatic()
