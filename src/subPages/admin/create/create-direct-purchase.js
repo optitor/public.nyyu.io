@@ -33,11 +33,11 @@ const IndexPage = () => {
     const initialRoundData = { roundNumber: '', startTime:  Date.now(), endTime:  Date.now() };
     const [roundData, setRoundData] = useState(initialRoundData);
 
-    const { data: newRound } = useQuery(Query.GET_NEW_ROUND, {
+    useQuery(Query.GET_NEW_ROUND, {
         fetchPolicy: "network-only",
-        onCompleted: () => {
-            if(newRound.getNewRound) {
-                setRoundData({ ...roundData, roundNumber: newRound.getNewRound });
+        onCompleted: data => {
+            if(data.getNewRound) {
+                setRoundData({ ...roundData, roundNumber: data.getNewRound });
             }
         },
     });
