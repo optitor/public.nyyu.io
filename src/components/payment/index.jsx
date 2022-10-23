@@ -179,14 +179,22 @@ const Payment = () => {
                                                     setTabIndex(idx + 1)
                                                 }
                                                 style={{
-                                                    width:
-                                                        idx === 0
-                                                            ? "100%"
-                                                            : "calc(50% - 6px)",
+                                                    display : 
+                                                        idx === 2 && "none",
+                                                            
+                                                    width: "calc(50% - 6px)",
+                                                        // idx === 0
+                                                        //     ? "100%"
+                                                        //     : "calc(50% - 6px)",
                                                     marginRight:
-                                                        idx % 2 === 0
-                                                            ? "0"
-                                                            : "12px",
+                                                        idx === 0 || idx === 3
+                                                         ? "12px" 
+                                                         : "0",
+                                                        // idx % 2 === 0 || idx === 0
+                                                        //     ? "0"
+                                                        //     : "12px",
+
+                                                           
                                                 }}
                                             >
                                                 <img
