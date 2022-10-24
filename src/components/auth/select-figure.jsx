@@ -62,9 +62,9 @@ const SelectFigure = () => {
 
     // Queries and Mutations
     const { data: avatars } = useQuery(GET_AVATARS, {
-        onCompleted: () => {
+        onCompleted: (res) => {
             setFiguresArray(
-                avatars.getAvatars?.map((item, index) => {
+                res.getAvatars?.map((item, index) => {
                     return {
                         id: index,
                         avatar: {
