@@ -61,7 +61,7 @@ const SelectFigure = () => {
     const [randomName, setRandomName] = useState('');
 
     // Queries and Mutations
-    const { data: avatars } = useQuery(GET_AVATARS, {
+    useQuery(GET_AVATARS, {
         onCompleted: (res) => {
             setFiguresArray(
                 res.getAvatars?.map((item, index) => {
