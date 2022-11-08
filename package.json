@@ -122,7 +122,6 @@
     "web3": "^1.7.3"
   },
   "devDependencies": {
-    "electron": "^19.0.3",
     "prettier": "^2.4.1",
     "webpack": "^5.72.0"
   },
