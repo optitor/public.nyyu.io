@@ -38,7 +38,7 @@ const CountDownPending = ({ deadline, actionAfterDeadline }) => {
     }, [deadline])
 
     return (
-        <div className="countdown-pending-wrapper d-flex justify-content-center justify-content-sm-end">
+        <div className="countdown-pending-wrapper d-flex justify-content-center">
             <div className="time-section">
                 <p className="time">{numberWithLength(curTime.days, 2)}</p>
                 <small className="time-text">day</small>
