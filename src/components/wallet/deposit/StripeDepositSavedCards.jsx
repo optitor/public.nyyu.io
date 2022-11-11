@@ -12,6 +12,7 @@ export default function StripeDepositSavedCards({
     savedCards,
     deleteCardMethod,
     amount,
+    currency,
     closeModal,
 }) {
     // Containers
@@ -48,7 +49,7 @@ export default function StripeDepositSavedCards({
                                 const paymentIntentId = result.paymentIntent.id;
                                 return stripePaymentWithSavedCard({
                                     variables: {
-                                        cryptoType: "USDT",
+                                        fiatType: currency.value,
                                         amount: amount * 100,
                                         cardId: savedCards[selectedSavedCard]
                                             .id,
@@ -78,7 +79,7 @@ export default function StripeDepositSavedCards({
         await stripePaymentWithSavedCard({
             variables: {
                 cryptoType: "USDT",
-                amount: amount * 100,
+                fiatType: currency.value,
                 cardId: savedCards[selectedSavedCard].id,
                 paymentIntentId: null,
             },

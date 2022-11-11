@@ -105,18 +105,14 @@ export const DELETE_CARD = gql`
 export const STRIPE_FOR_DEPOSIT = gql`
     mutation stripeForDeposit(
         $amount: Float
-        $fiatAmount: Float
         $fiatType: String
-        $cryptoType: String
         $paymentMethodId: String
         $paymentIntentId: String
         $isSaveCard: Boolean
     ) {
         stripeForDeposit(
             amount: $amount
-            fiatAmount: $fiatAmount
             fiatType: $fiatType
-            cryptoType: $cryptoType
             paymentMethodId: $paymentMethodId
             paymentIntentId: $paymentIntentId
             isSaveCard: $isSaveCard
@@ -132,17 +128,13 @@ export const STRIPE_FOR_DEPOSIT = gql`
 export const STRIPE_FOR_DEPOSIT_WITH_SAVED_CARD = gql`
     mutation stripeForDepositWithSavedCard(
         $amount: Float
-        $fiatAmount: Float
         $fiatType: String
-        $cryptoType: String
         $cardId: Int
         $paymentIntentId: String
     ) {
         stripeForDepositWithSavedCard(
             amount: $amount
-            fiatAmount: $fiatAmount
             fiatType: $fiatType
-            cryptoType: $cryptoType
             cardId: $cardId
             paymentIntentId: $paymentIntentId
         ) {
