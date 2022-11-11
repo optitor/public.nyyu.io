@@ -12,7 +12,9 @@ import { STRIPE_FOR_DEPOSIT } from "../../payment/payment-webservice";
 import PaymentSuccessful from "../../payment/PaymentSuccessful";
 import PaymentFailure from "../../payment/PaymentFailure";
 import { isBrowser } from "../../../utilities/auth";
-const StripeDepositForm = ({ amount, closeModal }) => {
+
+
+const StripeDepositForm = ({ amount, currency, closeModal }) => {
     // Containers
     const stripe = useStripe();
     const elements = useElements();
@@ -52,7 +54,7 @@ const StripeDepositForm = ({ amount, closeModal }) => {
                             return stripeForDeposit({
                                 variables: {
                                     amount: amount * 100,
-                                    cryptoType: "USDT",
+                                    fiatType: currency.value,
                                     paymentMethodId: null,
                                     paymentIntentId,
                                     isSaveCard,
@@ -106,7 +108,7 @@ const StripeDepositForm = ({ amount, closeModal }) => {
             return stripeForDeposit({
                 variables: {
                     amount: amount * 100,
-                    cryptoType: "USDT",
+                    fiatType: currency.value,
                     paymentMethodId,
                     paymentIntentId: null,
                     isSaveCard,

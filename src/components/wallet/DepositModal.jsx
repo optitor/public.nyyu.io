@@ -872,6 +872,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         amount={
                             Number(transferAmount)
                         }
+                        currency={currency}
                     />
                 )}
             </>

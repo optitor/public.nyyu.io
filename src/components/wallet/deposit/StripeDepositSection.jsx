@@ -11,7 +11,7 @@ import {
 import StripeDepositForm from "./StripeDepositForm";
 import StripeDepositSavedCards from "./StripeDepositSavedCards";
 
-const StripeDepositSection = ({ amount, closeModal }) => {
+const StripeDepositSection = ({ amount, closeModal, currency }) => {
     // Containers
     const [isNewCard, setIsNewCard] = useState(true);
     const [savedCards, setSavedCards] = useState(null);
@@ -90,6 +90,7 @@ const StripeDepositSection = ({ amount, closeModal }) => {
                     <StripeDepositForm
                         amount={Number(amount)}
                         closeModal={closeModal}
+                        currency={currency}
                     />
                 </Elements>
             ) : (
@@ -108,6 +109,7 @@ const StripeDepositSection = ({ amount, closeModal }) => {
                         savedCards={savedCards}
                         deleteCardMethod={deleteCardMethod}
                         amount={Number(amount)}
+                        currency={currency}
                     />
                 </Elements>
             )}
