@@ -69,7 +69,7 @@ export default function PresalePlaceOrderHome() {
                                     setAmount(Number(values.value / optCurrentRound?.tokenPrice / currencyRate));
                                 }}
                                 isAllowed={({ floatValue }) => (floatValue >= 0.01 && floatValue <= optCurrentRound?.tokenPrice * leftAmount * currencyRate )}
-                                decimalScale={2}
+                                decimalScale={3}
                                 thousandSeparator={true}
                                 allowNegative={false}
                             />
