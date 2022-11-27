@@ -62,7 +62,7 @@ export const SUPPORTED_COINS = [
         networks: [
             { label: "USD Coin (ERC20)", value: "USDC", network: "ERC20", address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"},
             { label: "USD Coin (BSC Chain)", value: "USDC.BEP20", network: "BEP20", address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"},
-            { label: "USD Coin (Tron/TRC20)", value: "USDC.TRC20", network: "TRC20", address: ""},
+            // { label: "USD Coin (Tron/TRC20)", value: "USDC.TRC20", network: "TRC20", address: ""},
         ],
     },
     {
@@ -70,7 +70,7 @@ export const SUPPORTED_COINS = [
         label: "USDT",
         icon: USDT,
         networks: [
-            { label: "Tether USD (Tron/TRC20)", value: "USDT.TRC20", network: "TRC20", address: ""},
+            // { label: "Tether USD (Tron/TRC20)", value: "USDT.TRC20", network: "TRC20", address: ""},
             { label: "Tether USD (ERC20)", value: "USDT.ERC20", network: "ERC20", address: "0xdac17f958d2ee523a2206206994597c13d831ec7"},
             // { label: "Tether USD (Omni Layer)", value: "USDT", network: "USDT", address: ""},
             // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
@@ -88,24 +88,24 @@ export const SUPPORTED_COINS = [
     //         { label: "Dai Token (BSC Chain)", value: "DAI.BEP20", network: "BEP20", address: "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3" },
     //     ],
     // },
-    {
-        value: "DOGE",
-        label: "DOGE",
-        icon: DOGE,
-        networks: [
-            { label: "Dogecoin", value: "DOGE", network: "DOGE" },
-            { label: "Dogecoin (BSC Chain)", value: "DOGE.BEP20", network: "BEP20", address: "0xba2ae424d960c26247dd6c32edc70b295c744c43"},
-        ],
-    },
-    {
-        value: "SHIB",
-        label: "SHIB",
-        icon: SHIB,
-        networks: [
-            { label: "SHIBA INU (ERC20)", value: "SHIB", network: "ERC20", address: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"},
-            { label: "SHIBA INU (BSC Chain)", value: "SHIB.BEP20", network: "BEP20", address: "0x2859e4544c4bb03966803b044a93563bd2d0dd4d"},
-        ],
-    },
+    // {
+    //     value: "DOGE",
+    //     label: "DOGE",
+    //     icon: DOGE,
+    //     networks: [
+    //         { label: "Dogecoin", value: "DOGE", network: "DOGE" },
+    //         { label: "Dogecoin (BSC Chain)", value: "DOGE.BEP20", network: "BEP20", address: "0xba2ae424d960c26247dd6c32edc70b295c744c43"},
+    //     ],
+    // },
+    // {
+    //     value: "SHIB",
+    //     label: "SHIB",
+    //     icon: SHIB,
+    //     networks: [
+    //         { label: "SHIBA INU (ERC20)", value: "SHIB", network: "ERC20", address: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"},
+    //         { label: "SHIBA INU (BSC Chain)", value: "SHIB.BEP20", network: "BEP20", address: "0x2859e4544c4bb03966803b044a93563bd2d0dd4d"},
+    //     ],
+    // },
     {
         value: "SOL",
         label: "SOL",
