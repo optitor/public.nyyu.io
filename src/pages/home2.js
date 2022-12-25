@@ -18,7 +18,7 @@ const IndexPage = () => (
                                 <span className="txt-green">P</span>resale will start soon!
                             </h2>
                             <p className="home-text mt-5 pt-5">
-                                <Link to="https://share.hsforms.com/1uASSxWOlQsWUX3inkpWpTQ4jiis" className="text-underline">
+                                <Link to="https://api.ndb.technology/widget/form/rSkVvg3fKgsWSbckbyhM" className="text-underline">
                                     SUBSCRIBE
                                 </Link>{" "}
                                 TO OUR WAITING LIST.
