@@ -417,10 +417,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="col-sm-6">
                                         <FiatButton
                                             className="inactive"
-                                            onClick={() => {
-                                                setDepositType(PAYPAL)
-                                                setCurrentStep(3);
-                                            }}
+                                            disabled={true}
+//                                            onClick={() => {
+//                                                setDepositType(PAYPAL)
+//                                                setCurrentStep(3);
+//                                            }}
                                         >
                                             <img
                                                 src={PaypalFiat}
@@ -447,11 +448,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="col-sm-6">
                                         <FiatButton
                                             className="inactive"
-                                            onClick={() => {
-                                                setDepositType(BANKTRANSER)
-                                                handleBankForDeposit()
-                                            }}
-                                            disabled={pending}
+//                                            onClick={() => {
+//                                               setDepositType(BANKTRANSER)
+//                                                handleBankForDeposit()
+//                                            }}
+                                            disabled={true}
                                         >
                                             {pending?
                                                 <CustomSpinner />:
