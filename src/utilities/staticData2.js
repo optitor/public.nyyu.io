@@ -52,7 +52,7 @@ export const SUPPORTED_COINS = [
         networks: [
             // { label: 'BNB Coin (Mainnet)', value: 'BNB', network: 'BNB' },
             { label: "BNB Coin (BSC Chain)", value: "BNB.BSC", network: "BEP20", address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"},
-            { label: "BNB Coin (ERC20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
+    //        { label: "BNB Coin (ERC20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
         ],
     },
     // {
@@ -75,7 +75,7 @@ export const SUPPORTED_COINS = [
             // { label: "Tether USD (Omni Layer)", value: "USDT", network: "USDT", address: ""},
             // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
             { label: "Tether USD (BSC Chain)", value: "USDT.BEP20", network: "BEP20", address: "0x55d398326f99059ff775485246999027b3197955" },
-            { label: "Tether USD (Solana)", value: "USDT.SOL", network: "SOL" , address: ""},
+    //        { label: "Tether USD (Solana)", value: "USDT.SOL", network: "SOL" , address: ""},
             // { label: "TetherUSD (Waves Token)", value: "USDT.Waves", network: "Waves", address: ""},
         ],
     },
@@ -127,7 +127,7 @@ export const SUPPORTED_COINS = [
         label: "BUSD",
         icon: BUSD,
         networks: [
-            { label: "Binance USD (ERC20)", value: "BUSD", network: "ERC20", address: "0x4Fabb145d64652a948d72533023f6E7A623C7C53" },
+    //        { label: "Binance USD (ERC20)", value: "BUSD", network: "ERC20", address: "0x4Fabb145d64652a948d72533023f6E7A623C7C53" },
             { label: "BUSD Token (BSC Chain)", value: "BUSD.BEP20", network: "BEP20", address: "0xe9e7cea3dedca5984780bafc599bd69add087d56" }
         ],
     },
