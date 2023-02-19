@@ -460,9 +460,9 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                 <button className={`btn ${tabIndex === 1? 'selected': ''}`}
                                     onClick={() => setTabIndex(1)}
                                 >Cryptocurrency</button>
-                                <button className={`btn ${tabIndex === 2? 'selected': ''}`}
+                                {/* <button className={`btn ${tabIndex === 2? 'selected': ''}`}
                                     onClick={() => setTabIndex(2)}
-                                >Fiat</button>
+                                >Fiat</button> */}
                             </div>
                         </div>
                         {tabIndex === 1 &&
