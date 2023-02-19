@@ -416,7 +416,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                     <div className="col-sm-6">
                                         <FiatButton
-                                            className="active"
+                                            className="inactive"
                                             onClick={() => {
                                                 setDepositType(PAYPAL)
                                                 setCurrentStep(3);
@@ -446,7 +446,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                     <div className="col-sm-6">
                                         <FiatButton
-                                            className="active"
+                                            className="inactive"
                                             onClick={() => {
                                                 setDepositType(BANKTRANSER)
                                                 handleBankForDeposit()
