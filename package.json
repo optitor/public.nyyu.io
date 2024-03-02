@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "nyyu-frontend-production",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "description": "Modern investment banking platform",
+  "version": "1.0.0",
+  "author": "NYYU UAB",
   "dependencies": {
     "@apollo/client": "^3.0.0",
     "@emotion/react": "^11.10.4",
