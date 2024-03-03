@@ -56,7 +56,7 @@ const connectors = createClient({
     autoConnect: false,
     connectors({chainId}) {
         const chain = defaultChain;
-        const rpcUrl = "https://mainnet.infura.io/v3/03021c5a727a40eb8d086a4d46d32ec7";
+        const rpcUrl = "https://mainnet.infura.io/v3/b3926273acc243d1ab72dfe9f2be8539";
         return [
             new MetaMaskConnector({chains}),
             new CoinbaseWalletConnector({
