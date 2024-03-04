@@ -14,7 +14,7 @@ COPY package*.json ./
 RUN npm cache clean --force
 
 # Install production dependencies.
-RUN npm install --production
+RUN npm install --unsafe-perm --production
 
 # Copy local code to the container image.
 COPY . ./
