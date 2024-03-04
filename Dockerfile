@@ -13,6 +13,9 @@ COPY package*.json ./
 # Clean npm cache forcefully before installing dependencies
 RUN npm cache clean --force
 
+# Update dependencies
+RUN npm update
+
 # Install production dependencies.
 RUN npm install --unsafe-perm --production
 
