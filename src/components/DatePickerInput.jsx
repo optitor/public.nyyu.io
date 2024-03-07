@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DayPicker } from 'react-day-picker';
+import { DatePicker } from '@mui/x-date-picker';
 
 function DatePickerInput() {
   const [selectedDay, setSelectedDay] = useState(null);
@@ -11,7 +11,7 @@ function DatePickerInput() {
         value={selectedDay ? selectedDay.toLocaleDateString() : ''} 
         readOnly 
       />
-      <DayPicker selected={selectedDay} onDayClick={setSelectedDay} />
+      <DatePicker selected={selectedDay} onDayClick={setSelectedDay} />
     </div>
   );
 }
