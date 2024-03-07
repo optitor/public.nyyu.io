@@ -1,6 +1,6 @@
-# Use the official Node.js 18.13.0 image.
+# Use the official Node.js 16.20.0 image.
 # https://hub.docker.com/_/node
-FROM node:20.7.0
+FROM node:16.20.0
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
@@ -13,20 +13,26 @@ COPY package*.json ./
 # Clean npm cache forcefully before installing dependencies
 RUN npm cache clean --force
 
-# Update dependencies
-RUN npm update
-
 # Install production dependencies.
-RUN npm install --unsafe-perm --production
+RUN npm install --production
+
+# Declare build arguments for environment variables
+ARG GATSBY_ENV_VAR
+
+# Set environment variables
+ENV GATSBY_ANALYTIC_KEY="UA-239898697-1"
+ENV GATSBY_API_BASE_URL="https://api.nyyu.io"
+ENV GATSBY_BINANCE_BASE_API="https://api.binance.com/api"
+ENV GATSBY_CurrencyIconEndpoint="https://currencyfreaks.com/photos/flags"
+ENV GATSBY_SHUFTI_CLIENT="wiKW623AK8inO2Uq7w1Hg2j3vOxGdEFDgigTByjxzA4Xl47pLJ1641498266"
+ENV GATSBY_SHUFTI_SECRET="bp5p6IBmrtRMyuddhcn1Npkf5bqRdb3f"
+ENV GATSBY_SITE_URL="http://www.nyyu.io"
+ENV GATSBY_WITHDRAW_PRIVATE_KEY="withdraw_private_key_alskdjfeiblskeHdek"
+ENV GATSBY_WITHDRAW_PUBLIC_KEY="public_VdkegiehdJgehiE"
+ENV GATSBY_ZENDESK_KEY="18a2747f-28bb-4d78-b0c9-f3bd5047dd31"
 
 # Copy local code to the container image.
 COPY . ./
-
-# Set Node.js options (optional)
-ENV NODE_OPTIONS="--max-old-space-size=8192"
-
-# Set Node environment to production
-ENV NODE_ENV=production
 
 # Build the Gatsby site
 RUN npm run build
