@@ -3,9 +3,9 @@ import { AuthProvider } from "../hooks/useAuth"
 import { ApolloProvider } from "@apollo/client"
 import { Provider as ReduxProvider } from "react-redux";
 import { Provider as WalletProvider, chain, defaultChains, createClient } from 'wagmi'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { WalletConnectConnector } from '@wagmi/connectors'
+import { CoinbaseWalletConnector } from '@wagmi/connectors'
+import { MetaMaskConnector } from '@wagmi/connectors'
 
 import { client } from "../apollo/client"
 import store from '../redux/store';
