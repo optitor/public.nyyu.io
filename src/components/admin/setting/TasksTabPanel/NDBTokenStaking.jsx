@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 import { Alert } from '@mui/material';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import { update_Task_Setting } from '../../../../redux/actions/tasksAction';
 
 const WalletBalance = () => {
@@ -168,7 +168,7 @@ const WalletBalance = () => {
                         return (
                             <div key={index} className='input'>
                                 <div className='input_div'>
-                                    <NumberFormat className={`black_input ${showError && error.index === index && error.item === 'expiredTime'? 'error': ''}`}
+                                    <NumericFormat className={`black_input ${showError && error.index === index && error.item === 'expiredTime'? 'error': ''}`}
                                         placeholder='Enter number'
                                         thousandSeparator={true}
                                         allowNegative={false}
@@ -180,7 +180,7 @@ const WalletBalance = () => {
                                     />
                                 </div>
                                 <div className='input_div'>
-                                    <NumberFormat className={`black_input ${showError && error.index === index && error.item === 'ratio'? 'error': ''}`}
+                                    <NumericFormat className={`black_input ${showError && error.index === index && error.item === 'ratio'? 'error': ''}`}
                                         placeholder='Enter number'
                                         thousandSeparator={true}
                                         allowNegative={false}

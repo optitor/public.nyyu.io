@@ -4,7 +4,7 @@ import Modal from "react-modal"
 import { useDispatch } from "react-redux"
 import { navigate } from "gatsby"
 import { useMutation } from "@apollo/client"
-import NumberFormat from "react-number-format"
+import { NumericFormat } from "react-number-format"
 
 import { useAuction } from "../../providers/auction-context"
 import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
@@ -142,7 +142,7 @@ export default function AuctionPlaceBidModal() {
                     </div>
                 )}
                 <h4 className="range-label text-start mb-0">amount of Token</h4>
-                <NumberFormat className="range-input"
+                <NumericFormat className="range-input"
                     value={amount}
                     onValueChange={values => setAmount(values.value)}
                     isAllowed={({ floatValue }) => floatValue >= 1 && floatValue <= optCurrentRound?.totalToken}
@@ -151,7 +151,7 @@ export default function AuctionPlaceBidModal() {
                     allowNegative={false}
                 />
                 <h4 className="range-label text-start mb-0">Per token price (USD)</h4>
-                <NumberFormat className="range-input"
+                <NumericFormat className="range-input"
                     value={price}
                     onValueChange={values => setPrice(values.value? values.value: optCurrentRound?.minPrice)}
                     isAllowed={({ floatValue }) => floatValue >= optCurrentRound?.minPrice}
@@ -161,7 +161,7 @@ export default function AuctionPlaceBidModal() {
                     placeholder="Type the price per Token Here"
                 />
                 <h4 className="range-label text-start mb-0">Total price <span className="txt-green">({currency.value})</span></h4>
-                <NumberFormat
+                <NumericFormat
                     className="total-input"
                     value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount * currencyRate)).toFixed(3) * 10**3) / 10**3}
                     thousandSeparator={true}
@@ -171,7 +171,7 @@ export default function AuctionPlaceBidModal() {
                 />
                 <div className="text-center mb-3" style={{height: 20, fontWeight: 600}}>
                     {currency.label !== 'USD'?
-                        <NumberFormat
+                        <NumericFormat
                             className="txt-green"
                             value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount)).toFixed(3) * 10**3) / 10**3}
                             thousandSeparator={true}

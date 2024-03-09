@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from "react-number-format";
 import Modal from 'react-modal';
 import { Alert } from '@mui/material';
 import Select from 'react-select';
@@ -114,7 +114,7 @@ const AMLComponent = ({icon, prop, topic, thresholds = {}}) => {
                         </div>  
                         <div className='input'>
                             <p className={requirement.value === 'not_required'? 'disabled': ''} style={{fontSize: 12}}>Threshold</p>
-                            <NumberFormat className={`black_input ${requirement.value === 'not_required'? 'disabled': ''}`}
+                            <NumericFormat className={`black_input ${requirement.value === 'not_required'? 'disabled': ''}`}
                                 disabled={requirement.value === 'not_required'? true: false}
                                 placeholder='Enter number'
                                 thousandSeparator={true}

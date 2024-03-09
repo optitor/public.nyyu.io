@@ -8,7 +8,7 @@ import LayoutForCreate from "../../../components/admin/LayoutForCreate";
 
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import Select from 'react-select';
@@ -125,7 +125,7 @@ const IndexPage = () => {
                                         />
                                     </div>
                                     <div className="mt-4">
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <div className="date_picker">           
                                                 <p className={`${showError && sendToError.time? 'error': ''}`}>Mailing Date and Time</p>                             
                                                 <MobileDateTimePicker  

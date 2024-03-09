@@ -7,7 +7,7 @@ import axios from "axios";
 import DepositModal from "./DepositModal";
 import WithdrawModal from "./WithdrawModal";
 import CustomSpinner from "../common/custom-spinner";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { useQuery } from "@apollo/client";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { AiFillEyeInvisible } from '@react-icons/all-files/ai/AiFillEyeInvisible';
@@ -36,14 +36,14 @@ const Asset = ({ item, isHideAsset }) => {
                 </div>
             </td>
             <td>
-                <NumberFormat
+                <NumericFormat
                     value={roundNumber(item.free + item.hold, precision)}
                     className="coin-price fw-bold"
                     displayType={"text"}
                     thousandSeparator={true}
                     renderText={(value, props) => <p {...props}>{isHideAsset? obscureValueString: value + ' ' + item.tokenSymbol}</p>}
                 />
-                <NumberFormat
+                <NumericFormat
                     value={Number(item.balance  * currencyRate).toFixed(2)}
                     className="coin-percent"
                     displayType={"text"}
@@ -200,7 +200,7 @@ export default function InternalWallet() {
                         </>
                     ) : (
                         <>
-                            <NumberFormat
+                            <NumericFormat
                                 value={
                                     equity !== 'BTC'
                                         ? totalBalance === 0
@@ -219,7 +219,7 @@ export default function InternalWallet() {
                                     </p>
                                 )}
                             />
-                            <NumberFormat
+                            <NumericFormat
                                 value={
                                     equity !== 'BTC'
                                         ? totalBalance === 0

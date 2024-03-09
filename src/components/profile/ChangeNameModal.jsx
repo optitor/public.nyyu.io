@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { isBrowser } from "react-device-detect";
 import Modal from "react-modal";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { CloseIcon } from "../../utilities/imgImport";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
@@ -147,7 +147,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                             </div>
                             <div className="text-end">
                                 Price:
-                                <NumberFormat
+                                <NumericFormat
                                     className="text-success fw-bold px-1"
                                     thousandSeparator={true}
                                     value={cost / ndbPriceUSD}

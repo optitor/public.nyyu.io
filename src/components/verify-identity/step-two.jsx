@@ -5,7 +5,7 @@ import { VerifyIdStep2 } from "../../utilities/imgImport";
 import Loading from "../common/Loading";
 import { useVerification } from "./verification-context";
 import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
@@ -128,7 +128,7 @@ export default function StepTwo() {
                                 {genderError}
                             </div> */}
                         </div>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <div>
                                 <p className="form-label mt-4">Date of Birth</p>
                                 <MobileDatePicker

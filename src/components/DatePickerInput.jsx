@@ -1,18 +1,12 @@
-import React, { useState } from 'react';
-import { DatePicker } from '@mui/x-date-picker';
+import React from 'react';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-function DatePickerInput() {
-  const [selectedDay, setSelectedDay] = useState(null);
-
+function DatePickerInput({ children }) {
   return (
-    <div>
-      <input 
-        type="text" 
-        value={selectedDay ? selectedDay.toLocaleDateString() : ''} 
-        readOnly 
-      />
-      <DatePicker selected={selectedDay} onDayClick={setSelectedDay} />
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {children}
+    </LocalizationProvider>
   );
 }
 

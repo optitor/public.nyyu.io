@@ -1,5 +1,5 @@
 import React from "react"
-import NumberFormat from "react-number-format"
+import { NumericFormat } from "react-number-format";
 import { roundNumber } from "../../utilities/number"
 
 export default function OrderSummary({ bidAmount }) {
@@ -11,7 +11,7 @@ export default function OrderSummary({ bidAmount }) {
                 <div className="order-list">
                     <div className="d-flex justify-content-between">
                         <p className="order-list__label">Total order</p>
-                        <NumberFormat
+                        <NumericFormat
                             className="order-list__label"
                             displayType={"text"}
                             suffix=' USD'
@@ -41,7 +41,7 @@ export default function OrderSummary({ bidAmount }) {
                     >
                         Order total:
                     </p>
-                    <NumberFormat
+                    <NumericFormat
                         className="order-total"
                         displayType={"text"}
                         suffix=' USD'

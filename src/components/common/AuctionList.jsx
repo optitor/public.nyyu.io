@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import { useAuction } from "../../providers/auction-context"
-import { renderNumberFormat } from "../../utilities/number"
+import { renderNumericFormat } from "../../utilities/number"
 
 const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, paidAmount, ndbAmount, winningResult, isCurrentUser }) => {
     const currency = useSelector(state => state.favAssets.currency)
@@ -9,9 +9,9 @@ const AuctionList = ({ ranking, fullName, tokenPrice, mainAmount, paidAmount, nd
     const { isAuction } = useAuction()
     
     const currencyRate = currencyRates[currency.value] ?? 1
-    const totalPaidAmount = renderNumberFormat((paidAmount * currencyRate), '', 2, true);
-    const totalBidAmount = renderNumberFormat((mainAmount * currencyRate), '', 2, false, 'dimgrey');
-    const totalNdbAmount = renderNumberFormat(ndbAmount, '', 0, false, 'dimgrey');
+    const totalPaidAmount = renderNumericFormat((paidAmount * currencyRate), '', 2, true);
+    const totalBidAmount = renderNumericFormat((mainAmount * currencyRate), '', 2, false, 'dimgrey');
+    const totalNdbAmount = renderNumericFormat(ndbAmount, '', 0, false, 'dimgrey');
 
     const winning = isAuction? winningResult: true;
 

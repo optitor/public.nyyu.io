@@ -8,7 +8,7 @@ import validator from "validator";
 import _ from "lodash";
 import styled from 'styled-components';
 import Select, { components } from "react-select";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { Icon } from "@iconify/react";
 import { useQuery, useMutation } from '@apollo/client';
 import { useAccount } from "wagmi";
@@ -16,7 +16,7 @@ import CustomSpinner from "../common/custom-spinner";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import { getPaypalPaymentFee, getBankTransferFee } from "../../utilities/utility-methods";
 import { PaypalFiat } from '../../utilities/imgImport';
-import { renderNumberFormat, roundNumber } from '../../utilities/number';
+import { renderNumericFormat, roundNumber } from '../../utilities/number';
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { censorEmail } from "../../utilities/string";
@@ -91,7 +91,7 @@ const SelectOption = (props) => {
                     alt={props.data.value}
                 />
                 <p className="coin-label ms-3">
-                    <NumberFormat
+                    <NumericFormat
                         value={value}
                         displayType={'text'}
                         thousandSeparator={true}
@@ -117,7 +117,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             icon: item.symbol,
             balance: item.balance,
             networks: SupportedCoins[item.tokenSymbol]?.networks,
-            isDisabled: item.tokenSymbol == "NDB" ? true : false
+            isDisabled: item.tokenSymbol === "NDB" ? true : false
         };
     }), ['balance'], ['desc']);
 
@@ -395,8 +395,8 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         {topic: 'Account Number', content: returnValue.accountNumber},
         {topic: 'Recipient Address', content: returnValue.address},
         {topic: 'Post Code', content: returnValue.postCode},
-        {topic: 'token Amount', content: renderNumberFormat(Number(returnValue.tokenAmount).toFixed(8), returnValue.sourceToken)},
-        {topic: 'Withdraw Amount', content: renderNumberFormat(Number(returnValue.withdrawAmount).toFixed(2), returnValue.targetCurrency)},
+        {topic: 'token Amount', content: renderNumericFormat(Number(returnValue.tokenAmount).toFixed(8), returnValue.sourceToken)},
+        {topic: 'Withdraw Amount', content: renderNumericFormat(Number(returnValue.withdrawAmount).toFixed(2), returnValue.targetCurrency)},
     ];
     // -----------------------------------------------
     
@@ -508,7 +508,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                 <div className="select_div">
                                     <p className="subtitle">Amount</p>
                                     <div className='black_input withdraw_amount ps-2'>
-                                        <NumberFormat
+                                        <NumericFormat
                                             value={withdrawAmount}
                                             thousandSeparator={true}
                                             onValueChange={(values) => {
@@ -615,7 +615,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                             <div className="mt-3">
                                 <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat?.value}</span>)</p>
                                 <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
-                                    <NumberFormat id="transferAmount" className="ms-2"
+                                    <NumericFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
                                         allowNegative={false}
                                         value={transferAmount}
@@ -626,7 +626,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     />
                                     <div>
                                         Transaction fee{' '}
-                                        <NumberFormat
+                                        <NumericFormat
                                             thousandSeparator={true}
                                             suffix={' ' + currency.symbol}
                                             displayType='text'
@@ -694,7 +694,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                             <div className="mt-3">
                                 <p className="subtitle">Amount (<span className='txt-green'>{selectedAssetFiat?.value}</span>)</p>
                                 <div className="black_input transfer_input" onClick={() => jq('input#transferAmount').trigger('focus')} aria-hidden="true" >
-                                    <NumberFormat id="transferAmount" className="ms-2"
+                                    <NumericFormat id="transferAmount" className="ms-2"
                                         thousandSeparator={true}
                                         allowNegative={false}
                                         value={transferAmount}
@@ -705,7 +705,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                     />
                                     <div>
                                         Bank transfer fee{' '}
-                                        <NumberFormat
+                                        <NumericFormat
                                             thousandSeparator={true}
                                             suffix={' ' + currency.symbol}
                                             displayType='text'

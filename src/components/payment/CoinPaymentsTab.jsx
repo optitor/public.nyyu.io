@@ -13,8 +13,8 @@ import { Icon } from "@iconify/react";
 import axios from "axios";
 import _ from "lodash";
 import Select, { components } from "react-select";
-import ReactTooltip from "react-tooltip";
-import NumberFormat from "react-number-format";
+import { Tooltip } from "react-tooltip";
+import { NumericFormat } from "react-number-format";
 import CircularProgress from "@mui/material/CircularProgress";
 import Countdown from 'react-countdown';
 
@@ -287,7 +287,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount, paySuccess }) => {
                                     options={{ message: "copied" }}
                                 >
                                     <div className="show_value cursor-pointer">
-                                        <NumberFormat
+                                        <NumericFormat
                                             className="coin_value"
                                             displayType={"text"}
                                             value={coinQuantity}
@@ -297,7 +297,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount, paySuccess }) => {
                                             )}
                                         />
                                         <div className="d-flex">
-                                            <NumberFormat
+                                            <NumericFormat
                                                 className="order_value"
                                                 displayType={"text"}
                                                 value={roundNumber(bidAmount, 2)}
@@ -410,7 +410,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount, paySuccess }) => {
                                 <Icon icon='bi:question-circle' />
                             </span>
                         </div>
-                        <ReactTooltip place="right" type="light" effect="solid" id='coinpayments-tooltip'>
+                        <Tooltip place="right" type="light" effect="solid" id='coinpayments-tooltip'>
                             <div
                                 className="text-justify"
                                 style={{
@@ -419,7 +419,7 @@ const CoinPaymentsTab = ({ currentRound, bidAmount, paySuccess }) => {
                             >
                                 {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                             </div>
-                        </ReactTooltip>
+                        </Tooltip>
                     </div>
                     {depositAddress && createdAt && (
                         <p className="payment-expire my-auto">

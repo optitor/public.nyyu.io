@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import Modal from 'react-modal';
 import { Alert } from '@mui/material';
 import { device } from '../../../../utilities/device';
@@ -121,7 +121,7 @@ const KYC_AML_Component = () => {
                     <div className='input'>
                         {showError? (error? <Alert severity="error">{error}</Alert>: <Alert severity="success">Success! Please click Save Button</Alert>): ''}
                         <p className='mt-2' style={{fontSize: 12}}>Points</p>
-                        <NumberFormat className={`black_input ${showError && error? 'error': ''}`}
+                        <NumericFormat className={`black_input ${showError && error? 'error': ''}`}
                             placeholder='Enter number'
                             thousandSeparator={true}
                             allowNegative={false}

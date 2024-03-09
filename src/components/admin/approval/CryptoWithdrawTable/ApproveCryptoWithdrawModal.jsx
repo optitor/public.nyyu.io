@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
 import _ from 'lodash';
 import * as Query from '../../../../apollo/graphqls/querys/Approval'
-import { renderNumberFormat } from '../../../../utilities/number';
+import { renderNumericFormat } from '../../../../utilities/number';
 import CustomSpinner from "../../../common/custom-spinner";
 import { useCryptoWithdraw } from "./useCryptoWithdraw";
 import * as Mutation from '../../../../apollo/graphqls/mutations/Approval';
@@ -153,11 +153,11 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                     <div className='mt-3'>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Token Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
+                            <p className="col-6 text-end">{renderNumericFormat(withdrawData.tokenAmount, withdrawData.sourceToken)}</p>
                         </div>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Withdraw Amount</p>
-                            <p className="col-6 text-end">{renderNumberFormat(withdrawData.withdrawAmount, withdrawData.sourceToken)}</p>
+                            <p className="col-6 text-end">{renderNumericFormat(withdrawData.withdrawAmount, withdrawData.sourceToken)}</p>
                         </div>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Network</p>

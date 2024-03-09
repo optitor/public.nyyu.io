@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import validator from "validator";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { useQuery } from "@apollo/client";
 import * as Query from './../../../apollo/graphqls/querys/Auction'
 
@@ -14,7 +14,7 @@ import { secondsToDhms } from "../../../utilities/number";
 
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import Select from 'react-select';
@@ -159,7 +159,7 @@ const IndexPage = () => {
                                     </div>
                                     <div>
                                         <p>Round Number</p>
-                                        <NumberFormat className={`black_input disabled`}
+                                        <NumericFormat className={`black_input disabled`}
                                             placeholder='Auto-Generated'
                                             thousandSeparator={true}
                                             allowNegative={false}
@@ -169,7 +169,7 @@ const IndexPage = () => {
                                     </div>
                                 </div>
                                 <div className="div2 mt-4">
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <div>           
                                             <p className={`${showError && roundDataError.startTime? 'error': ''}`}>Round Start Time</p>                             
                                             <MobileDateTimePicker
@@ -231,7 +231,7 @@ const IndexPage = () => {
                                     <div>
                                         <p>Total Token Amount</p>  
                                         <div className="token_div">
-                                            <NumberFormat
+                                            <NumericFormat
                                                 value={totalTokenAmount}
                                                 className="white_input"
                                                 displayType='text'
@@ -248,7 +248,7 @@ const IndexPage = () => {
                                     <div>    
                                         <p>Previous Reserved Price</p>                                     
                                         <div className="token_div">
-                                            <NumberFormat
+                                            <NumericFormat
                                                 value={prevReservedPrice}
                                                 className="white_input"
                                                 displayType='text'
@@ -294,7 +294,7 @@ const IndexPage = () => {
                                         </div> 
                                         <div className="select_div col-sm-4">
                                             <p>Avatar Token</p>
-                                            <NumberFormat className={`black_input ${showError && avatarError.avatarToken? 'error': ''}`}
+                                            <NumericFormat className={`black_input ${showError && avatarError.avatarToken? 'error': ''}`}
                                                 placeholder='Enter number'
                                                 thousandSeparator={true}
                                                 allowNegative={false}

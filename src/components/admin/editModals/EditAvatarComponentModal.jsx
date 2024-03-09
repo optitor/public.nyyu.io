@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { Icon } from '@iconify/react';
 import Modal from 'react-modal';
 import _ from 'lodash';
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
+
 import parse from 'html-react-parser';
 
 import Stepper2 from "../../../components/admin/Stepper2";
@@ -251,7 +252,7 @@ const EditAvatarComponentModal = ({isModalOpen, setIsModalOpen, datum ={}}) => {
                         <div className="row">
                             <div className="col-sm-4">
                                 <p>Price {Number(avatarInfo.price) === 0? '(Free)': ''}</p>
-                                <NumberFormat className={`black_input`}
+                                <NumericFormat className={`black_input`}
                                     placeholder='Enter number'
                                     thousandSeparator={true}
                                     allowNegative={false}
@@ -261,7 +262,7 @@ const EditAvatarComponentModal = ({isModalOpen, setIsModalOpen, datum ={}}) => {
                             </div>
                             <div className="col-sm-4">
                                 <p>Limitation {Number(avatarInfo.limitation) === 0? '(Unlimited)': ''}</p>
-                                <NumberFormat className={`black_input`}
+                                <NumericFormat className={`black_input`}
                                     placeholder='Enter number'
                                     thousandSeparator={true}
                                     allowNegative={false}

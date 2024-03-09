@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import { roundNumber } from "../../utilities/number";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 
@@ -19,7 +19,7 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                     <div className="order-list-coinpayment border-0">
                         <div className="d-flex justify-content-between my-3">
                             <p className="order-list__label">Total order</p>
-                            <NumberFormat
+                            <NumericFormat
                                 className="order-list__detail"
                                 displayType={"text"}
                                 suffix=' USD'
@@ -32,7 +32,7 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                         </div>
                         <div className="d-flex justify-content-between my-3">
                             <p className="order-list__label">Fee</p>
-                            <NumberFormat
+                            <NumericFormat
                                 className="order-list__detail"
                                 displayType={"text"}
                                 suffix=' USD'
@@ -59,7 +59,7 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                     >
                         Order total:
                     </p>
-                    <NumberFormat
+                    <NumericFormat
                         className="order-total"
                         displayType={"text"}
                         suffix=' USD'

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 
 export const numberWithLength = (num, len=2) => {
     return `${num}`.padStart(len, "0")
@@ -202,8 +202,8 @@ export const roundNumber = (number, decimals) => {
     return Math.floor(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };
 
-export const renderNumberFormat = (value, unit = '', decimalScale = 8, fixedDecimalScale = false, color='white') => (
-    <NumberFormat
+export const renderNumericFormat = (value, unit = '', decimalScale = 8, fixedDecimalScale = false, color='white') => (
+    <NumericFormat
         value={value}
         displayType={'text'}
         thousandSeparator={true}

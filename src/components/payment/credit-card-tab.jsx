@@ -9,7 +9,7 @@ import {
     useElements,
 } from "@stripe/react-stripe-js";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import ReactTooltip from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import { Icon } from '@iconify/react';
 import { CheckBox } from "../common/FormControl";
 import {
@@ -497,7 +497,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                     <Icon icon='bi:question-circle' />
                                 </span>
                             </div>
-                            <ReactTooltip
+                            <Tooltip
                                 id="question-mark-tooltip"
                                 place="right"
                                 type="light"
@@ -511,7 +511,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                                 >
                                     {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                                 </div>
-                            </ReactTooltip>
+                            </Tooltip>
                         </div>
                         <p className="payment-expire my-auto text-uppercase">
                             payment expires in{" "}

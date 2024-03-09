@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Tab, TabList } from "react-tabs";
 import { Icon } from '@iconify/react';
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 
 import { useAuction } from "../../providers/auction-context";
 
@@ -67,7 +67,7 @@ export default function AuctionRoundNavigator() {
                     <div className="mt-3">
                         <span className="text-[#959595]">Token Available </span>
                         <span className="fw-500">
-                            <NumberFormat
+                            <NumericFormat
                                 value={isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount}
                                 thousandSeparator={true}
                                 displayType='text'

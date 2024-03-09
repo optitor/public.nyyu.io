@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import { renderNumberFormat } from '../../../../utilities/number';
+import { renderNumericFormat } from '../../../../utilities/number';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import ApproveBankWithdrawModal from './ApproveBankWithdrawModal';
@@ -20,12 +20,12 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='sourceToken'>
                     <Main>
-                        <p>{renderNumberFormat(Number(datum.tokenAmount).toFixed(8), datum.sourceToken)}</p>
+                        <p>{renderNumericFormat(Number(datum.tokenAmount).toFixed(8), datum.sourceToken)}</p>
                     </Main>
                 </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumberFormat(Number(datum.withdrawAmount).toFixed(2), datum.targetCurrency)}</p>
+                        <p>{renderNumericFormat(Number(datum.withdrawAmount).toFixed(2), datum.targetCurrency)}</p>
                     </Main>
                 </div>
                 <div className='requestedAt'>
@@ -75,7 +75,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Token Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(Number(datum.tokenAmount).toFixed(8), datum.sourceToken)}</p>
+                            <p>{renderNumericFormat(Number(datum.tokenAmount).toFixed(8), datum.sourceToken)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -83,7 +83,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Withdraw Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumberFormat(Number(datum.withdrawAmount).toFixed(2), datum.targetCurrency)}</p>
+                            <p>{renderNumericFormat(Number(datum.withdrawAmount).toFixed(2), datum.targetCurrency)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>

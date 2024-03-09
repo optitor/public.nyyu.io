@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAccount, useConnect } from "wagmi";
-import ReactTooltip from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import { BsQuestionCircle } from "@react-icons/all-files/bs/BsQuestionCircle";
 import { BiWallet } from "@react-icons/all-files/bi/BiWallet";
 
@@ -64,7 +64,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                             <span data-tip='tooltip' data-for='ndb_wallet_tooltip'>
                                 <BsQuestionCircle />
                             </span>
-                            <ReactTooltip place="left" type="light" effect="solid" id='ndb_wallet_tooltip'>
+                            <Tooltip place="left" type="light" effect="solid" id='ndb_wallet_tooltip'>
                                 <div
                                     className="text-justify"
                                     style={{
@@ -73,7 +73,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                                 >
                                     {NDB_WALLET_TOOLTIP_CONTENT}
                                 </div>
-                            </ReactTooltip>
+                            </Tooltip>
                         </div>
                         <div className="img_div">
                             <img src={selectedWallet === 'internal'? NyyuWalletSelected: NyyuWallet} alt='nyyu wallet' />
@@ -92,7 +92,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                             <span data-tip='tooltip' data-for='external_wallet_tooltip'>
                                 <BsQuestionCircle />
                             </span>
-                            <ReactTooltip place="left" type="light" effect="solid" id='external_wallet_tooltip'>
+                            <Tooltip place="left" type="light" effect="solid" id='external_wallet_tooltip'>
                                 <div
                                     className="text-justify"
                                     style={{
@@ -101,7 +101,7 @@ const WalletSelector = ({selectedWallet, walletChanged}) => {
                                 >
                                     {EXTERNAL_WALLET_TOOLTIP_CONTENT}
                                 </div>
-                            </ReactTooltip>
+                            </Tooltip>
                         </div>
                         <div className="img_div">
                             <BiWallet />

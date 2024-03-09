@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { REFER_AVATAR, SPINNER } from '../../../utilities/imgImport';
 import { useReferral } from '../ReferralContext';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 
 const InvitedList = ({loading, invitedList}) => {
     const { btcPrice } = useReferral();
@@ -27,7 +27,7 @@ const InvitedList = ({loading, invitedList}) => {
                         {hidden ? 
                             <div className='fs-15px text-white fw-bold ls-1px'>********</div>: 
                             <div className='fs-15px text-white fw-bold ls-1px'>
-                                <NumberFormat
+                                <NumericFormat
                                     value={user.amount}
                                     displayType='text'
                                     thousandSeparator={true}
@@ -37,12 +37,12 @@ const InvitedList = ({loading, invitedList}) => {
                                         </>
                                     )}
                                 >
-                                </NumberFormat>
+                                </NumericFormat>
                             </div>}
                         {hidden ? 
                             <div className='fs-11px txt-baseprice'>********</div>:
                             <div className='fs-11px txt-baseprice'>
-                                <NumberFormat
+                                <NumericFormat
                                     value={(user.amount * priceFactor).toFixed(decimals)}
                                     displayType='text'
                                     thousandSeparator={true}
@@ -52,7 +52,7 @@ const InvitedList = ({loading, invitedList}) => {
                                         </>
                                     )}
                                 >
-                                </NumberFormat>
+                                </NumericFormat>
                             </div>}
                     </div>
                 </div>

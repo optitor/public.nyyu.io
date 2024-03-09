@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "gatsby"
 import { Icon } from '@iconify/react';
 import _ from 'lodash';
-import NumberFormat from "react-number-format";
+import { NumericFormat } from "react-number-format";
 import parse from 'html-react-parser';
 
 import Seo from "../../../components/seo";
@@ -229,7 +229,7 @@ const IndexPage = () => {
                                 <div className="row">
                                     <div className="col-sm-4">
                                         <p>Price {Number(avatarInfo.price) === 0? '(Free)': ''}</p>
-                                        <NumberFormat className={`black_input`}
+                                        <NumericFormat className={`black_input`}
                                             placeholder='Enter number'
                                             thousandSeparator={true}
                                             allowNegative={false}
@@ -239,7 +239,7 @@ const IndexPage = () => {
                                     </div>
                                     <div className="col-sm-4">
                                         <p>Limitation {Number(avatarInfo.limitation) === 0? '(Unlimited)': ''}</p>
-                                        <NumberFormat className={`black_input`}
+                                        <NumericFormat className={`black_input`}
                                             placeholder='Enter number'
                                             thousandSeparator={true}
                                             allowNegative={false}

@@ -1,4 +1,4 @@
-import decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { removeCookie, NDB_Paypal_TrxType, NDB_Privilege } from './cookies';
 
 let inMemoryAuthTokenDefault = {
@@ -18,7 +18,7 @@ export const isBrowser = typeof window !== `undefined`
 
 // TODO: Check if these work as expected
 export const isTokenExpired = authToken => {
-  return authToken ? (Date.now() - decode(authToken).exp * 1000 > 0) : true
+  return authToken ? (Date.now() - jwtDecode(authToken).exp * 1000 > 0) : true
 }
 
 export const isLoggedOut = () => {
@@ -48,7 +48,7 @@ export const setAuthToken = (authToken) => {
     return
   }
   localStorage.setItem(ACCESS_TOKEN, authToken)
-  inMemoryAuthToken = { authToken, authExpiration: decode(authToken).exp }
+  inMemoryAuthToken = { authToken, authExpiration: jwtDecode(authToken).exp }
 }
 
 export const setLoggedOutTime = () => {
@@ -61,13 +61,13 @@ const checkInMemoryAuthToken = () => {
   if (inMemoryAuthToken === inMemoryAuthTokenDefault) {
     const authToken = localStorage.getItem(ACCESS_TOKEN)
     if (!authToken) return
-    inMemoryAuthToken = { authToken, authExpiration: decode(authToken).exp }
+    inMemoryAuthToken = { authToken, authExpiration: jwtDecode(authToken).exp }
   }
 }
 
 // Getter
 
-export const getEmailfromTempToken = (tempToken) => decode(tempToken).sub
+export const getEmailfromTempToken = (tempToken) => jwtDecode(tempToken).sub
 
 export const getInMemoryAuthToken = () => {
   if (!isBrowser) return null
