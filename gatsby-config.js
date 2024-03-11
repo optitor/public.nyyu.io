@@ -70,7 +70,7 @@ module.exports = {
         },
     ],
     flags: {
-        PARALLEL_QUERY_RUNNING: false,
+        PARALLEL_QUERY_RUNNING: true,
         // DEV_SSR: true,
     }
 }

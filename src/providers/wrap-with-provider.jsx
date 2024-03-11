@@ -11,19 +11,7 @@ import { WagmiProvider } from 'wagmi';
 import { client } from "../apollo/client";
 import store from "../redux/store";
 
-const connectors = {
-  coinbaseWallet: coinbaseWallet({
-    appName: 'NYYU PAY',
-  }),
-  walletConnect: walletConnect({ 
-    appName: 'NYYU PAY'
-  }),
-  metaMask: metaMask({ 
-    appName: 'NYYU PAY'
-  }),
-};
-
-export const chains = createConfig({
+export const config = createConfig({
   chains: [mainnet, bsc, bscTestnet],
   connectors: [
     coinbaseWallet({
@@ -48,7 +36,9 @@ export const wrapRootElement = ({ element }) => {
   return (
     <ReduxProvider store={store}>
       <ApolloProvider client={client}>
-        <WagmiProvider client={connectors} chains={chains}>
+        <WagmiProvider   
+            config={config}
+            reconnectOnMount={true}>
           {element}
         </WagmiProvider>
       </ApolloProvider>
