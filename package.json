@@ -135,10 +135,10 @@
   ],
   "license": "0BSD",
   "scripts": {
-    "build": "gatsby build",
+    "build": "set NODE_OPTIONS=--max-old-space-size=8192 NODE_ENV=production && gatsby build",
     "develop": "gatsby develop --port 4000",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "gatsby develop -H 0.0.0.0",
+    "start": "set NODE_OPTIONS=--max-old-space-size=8192 NODE_ENV=development && gatsby develop -H 0.0.0.0",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
