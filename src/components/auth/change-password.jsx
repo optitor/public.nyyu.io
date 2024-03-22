@@ -9,6 +9,7 @@ import CustomSpinner from "../common/custom-spinner"
 import { useResetPassword } from "../../apollo/model/auth"
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
 import { passwordValidatorOptions } from "../../utilities/staticData"
+import { isBrowser } from "../../utilities/auth"
 import Seo from '../seo';
 
 const ForgetPassword = () => {
@@ -37,13 +38,15 @@ const ForgetPassword = () => {
         resetPasswordMutation(email, token, password)
     }
     useEffect(() => {
-        if ("FORGOT_PASSWORD_EMAIL" in localStorage) {
+        if (isBrowser && "FORGOT_PASSWORD_EMAIL" in localStorage) {
             const tempEmail = localStorage.getItem("FORGOT_PASSWORD_EMAIL")
             setLoading(false)
-            return setEmail(tempEmail)
+            setEmail(tempEmail)
+        } else {
+            navigate(ROUTES.forgotPassword)
         }
-        return navigate(ROUTES.forgotPassword)
     }, [])
+
     const pending = resetPasswordResults?.loading
     const webserviceError = resetPasswordResults?.data?.resetPassword === "Failed"
 

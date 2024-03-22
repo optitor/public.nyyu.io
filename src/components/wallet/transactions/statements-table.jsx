@@ -3,11 +3,8 @@ import Pagination from "react-js-pagination";
 import Select from "react-select";
 import axios from 'axios';
 import { Icon } from '@iconify/react';
-import {
-    AccordionDownIcon,
-    AccordionUpIcon,
-    SPINNER
-} from "../../../utilities/imgImport";
+import { isBrowser } from "../../../utilities/auth";
+import { AccordionDownIcon, AccordionUpIcon, SPINNER } from "../../../utilities/imgImport";
 import { createDateFromDateObject } from "../../../utilities/utility-methods";
 import { useTransactions } from "./transactions-context";
 import DatePickerInput from '../../DatePickerInput';
@@ -17,8 +14,7 @@ import CustomSpinner from "../../common/custom-spinner";
 import { NumericFormat } from "react-number-format";
 import { useSelector } from "react-redux";
 import { Icons } from "../../../utilities/Icons";
-
-import { downloadContent as downloadSingle } from "../../../utilities/utility-methods";
+import { useDownload } from "../../../utilities/useDownload";
 
 const depositOptions = [
     { value: "deposit", label: "Deposit" },
@@ -41,27 +37,21 @@ export default function StatementsTable() {
     // Containers
     // const user = useSelector((state) => state.auth.user);
     const [loading, setLoading] = useState(true);
-    const [pending] = useState(false);
-    const { itemsCountPerPage, createDateFromDate, createTimeFromDate } =
-        useTransactions();
     const [currentRowOpen, setCurrentRowOpen] = useState(-1);
     const [activePage, setActivePage] = useState(1);
-    const [list, setList] = useState([]);
     const [sortType, setSortType] = useState(null);
+    const [selectedPeriodIndex, setSelectedPeriodIndex] = useState(0);
+    const [selectedPeriodOption, setSelectedPeriodOption] = useState( periodOptions[selectedPeriodIndex] );
+    const [selectedDepositOption, setSelectedDepositOption] = useState( depositOptions[0] );
+    const { itemsCountPerPage, createDateFromDate, createTimeFromDate } = useTransactions();
+    const [pending] = useState(false);
     const [depositList, setDepositList] = useState([]);
     const [withdrawList, setWithdrawList] = useState([]);
     const [bidList, setBidList] = useState([]);
     const [buyList, setBuyList] = useState([]);
-
-    const [selectedPeriodIndex, setSelectedPeriodIndex] = useState(0);
-    const [selectedPeriodOption, setSelectedPeriodOption] = useState(
-        periodOptions[selectedPeriodIndex]
-    );
-    const [selectedDepositOption, setSelectedDepositOption] = useState(
-        depositOptions[0]
-    );
-
     const [singleDownloading, setSingleDonwloading] = useState(false);
+    const [download, isDownloading] = useDownload();
+    const [list, setList] = useState([]);
 
     // Utility variables.
     const now = new Date();
@@ -441,29 +431,17 @@ export default function StatementsTable() {
                 ...buyList,
             ]);
     };
+
     const downloadContent = async (_from, _to) => {
+        const fromDate = new Date(_from).toISOString().split('T')[0];
+        const toDate = new Date(_to).toISOString().split('T')[0];
+        // This assumes your download function just needs the URL to initiate the download
+        const downloadUrl = `${process.env.GATSBY_API_BASE_URL}/download/pdf/transactions?from=${fromDate}&to=${toDate}`;
         try {
-            const token = localStorage.getItem("ACCESS_TOKEN");
-            const response = await axios({
-                url: `${process.env.GATSBY_API_BASE_URL}/download/pdf/transactions`,
-                method: 'GET',
-                responseType: 'blob',
-                params: { from:_from, to:_to },
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            const fromDate = new Date(_from).toISOString().split('T')[0];
-            const toDate = new Date(_to).toISOString().split('T')[0];
-            link.setAttribute('download', `transactions-${fromDate} ~ ${toDate}.pdf`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Now calling the download function from the useDownload hook with the prepared URL
+            download(downloadUrl);
         } catch (error) {
-            console.log(error);
+            console.error("Download failed:", error);
         }
     };
 
@@ -578,16 +556,16 @@ export default function StatementsTable() {
                             )}
                         </div>
                         <div className='mb-2 cursor-pointer' onClick={() => {
-                            const _from = from.getTime();
+                            const _from = from.getTime(); // Assuming 'from' is a Date object
                             const _to = new Date(
                                 to.getFullYear(),
                                 to.getMonth(),
                                 to.getDate() + 1
-                                ).getTime();
-                            downloadContent(_from, _to);
+                            ).getTime(); // Adjusts 'to' Date object to include the end of the day
+                        downloadContent(_from, _to); // Calls the updated downloadContent function
                         }}>
                             <Icon icon='bx:download' className="download_icon" />
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -826,7 +804,7 @@ export default function StatementsTable() {
                                                                     if(singleDownloading) return;
                                                                     setSingleDonwloading(true);
                                                                     try {
-                                                                        await downloadSingle(id, tx, payment);
+                                                                        // await downloadSingle(id, tx, payment);
                                                                     } catch (error) {
                                                                         console.log(error);
                                                                     }

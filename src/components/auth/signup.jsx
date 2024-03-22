@@ -4,7 +4,6 @@ import { useMutation } from "@apollo/client";
 import Select from "react-select";
 import validator from "validator";
 import { FaExclamationCircle } from "@react-icons/all-files/fa/FaExclamationCircle";
-
 import {
     passwordValidatorOptions,
     social_links,
@@ -99,8 +98,11 @@ const Singup = () => {
             });
 
         // checking referral code
-        const referralCode = localStorage.getItem("referralCode");
-        console.log('referral code in sign up: ', referralCode);
+        let referralCode = null;
+        if (isBrowser) {
+            referralCode = localStorage.getItem("referralCode");
+        }
+        console.log('referral code in sign up: ', referralCode);        
         if (!error)
             signupMutation({ variables: { email, password: pwd, country: country.value, referredByCode:referralCode } });
     };

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import { Link, navigate } from "gatsby"
 import { useQuery } from "@apollo/client"
 import { useQueryParam, StringParam } from "use-query-params";
-
 import Seo from "../components/seo"
 import { Certik, Hero2 } from "../utilities/imgImport"
 import CountDown from "../components/common/countdown"
