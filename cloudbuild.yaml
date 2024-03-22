@@ -2,8 +2,10 @@
   # Step to build your container image
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
+    env: ['NODE_OPTIONS=--max-old-space-size=4096'] # Increase the memory limit to 4GB
   - name: 'gcr.io/cloud-builders/npm'
     args: ['run', 'build']
+    env: ['NODE_OPTIONS=--max-old-space-size=4096'] # Increase the memory limit to 4GB
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/nyyu-391719/frontend-nyyu-io-prod', '.']
   
