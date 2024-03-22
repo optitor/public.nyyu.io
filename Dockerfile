@@ -1,6 +1,6 @@
 # Use the official Node.js 16.20.0 image.
 # https://hub.docker.com/_/node
-FROM node:18
+FROM node:18.19.1
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
@@ -17,7 +17,7 @@ RUN npm cache clean --force
 RUN npm install -g npm@10.5.0
 
 # Install production dependencies.
-RUN npm install --unsafe-perm --production
+RUN npm install --production
 
 # Declare build arguments for environment variables
 ARG GATSBY_ENV_VAR
