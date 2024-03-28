@@ -3,9 +3,9 @@ import { ApolloProvider } from "@apollo/client";
 import { Provider as ReduxProvider } from "react-redux";
 import { createConfig, http } from '@wagmi/core'
 import { mainnet, bsc, bscTestnet } from '@wagmi/core/chains'
-import { metaMask } from "@wagmi/connectors";
-import { coinbaseWallet } from "@wagmi/connectors";
-import { walletConnect } from "@wagmi/connectors";
+// import { metaMask } from "@wagmi/connectors";
+// import { coinbaseWallet } from "@wagmi/connectors";
+// import { walletConnect } from "@wagmi/connectors";
 import { WagmiProvider } from 'wagmi';
 
 import { client } from "../apollo/client";
@@ -13,17 +13,17 @@ import store from "../redux/store";
 
 export const config = createConfig({
   chains: [mainnet, bsc, bscTestnet],
-  connectors: [
-    coinbaseWallet({
-      appName: 'NYYU PAY',
-    }),
-    walletConnect({ 
-      appName: 'NYYU PAY'
-    }),
-    metaMask({ 
-      appName: 'NYYU PAY'
-    }),
-  ],
+  // connectors: [
+  //   coinbaseWallet({
+  //     appName: 'NYYU PAY',
+  //   }),
+  //   walletConnect({ 
+  //     appName: 'NYYU PAY'
+  //   }),
+  //   metaMask({ 
+  //     appName: 'NYYU PAY'
+  //   }),
+  // ],
   transports: {
     1: http(`https://mainnet.infura.io/v3/${process.env.GATSBY_APP_INFURA_ID}`),
     56: http(`https://bsc-dataseed.binance.org`),
