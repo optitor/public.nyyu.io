@@ -1,6 +1,6 @@
 # Use the official Node.js 16.20.0 image.
 # https://hub.docker.com/_/node
-FROM node:20.12.1
+FROM node:18.19.1
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
