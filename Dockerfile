@@ -17,7 +17,7 @@ RUN npm cache clean --force
 RUN npm install -g npm@10.5.0
 
 # Install production dependencies.
-RUN npm install --production --force
+RUN npm install --production
 
 # Declare build arguments for environment variables
 ARG GATSBY_ENV_VAR
