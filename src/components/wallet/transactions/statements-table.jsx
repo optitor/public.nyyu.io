@@ -10,7 +10,8 @@ import {
 } from "../../../utilities/imgImport";
 import { createDateFromDateObject } from "../../../utilities/utility-methods";
 import { useTransactions } from "./transactions-context";
-import DatePickerInput from '../../DatePickerInput';
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import "react-day-picker/lib/style.css";
 import { GET_STATEMENTS } from "./queries";
 import { useQuery } from "@apollo/client";
 import CustomSpinner from "../../common/custom-spinner";
@@ -532,7 +533,7 @@ export default function StatementsTable() {
                         <div className="d-flex align-items-center gap-2 mb-2 ">
                             <div className="date-title">start date:</div>
                             {selectedPeriodOption.value === "custom" ? (
-                                <DatePickerInput
+                                <DayPickerInput
                                     placeholder="DD/MM/YYYY"
                                     format="DD/MM/YYYY"
                                     className="start-date-picker"
@@ -556,7 +557,7 @@ export default function StatementsTable() {
                         <div className="d-flex align-items-center gap-2 mb-2">
                             <div className="date-title">end date:</div>
                             {selectedPeriodOption.value === "custom" ? (
-                                <DatePickerInput
+                                <DayPickerInput
                                     placeholder="DD/MM/YYYY"
                                     format="DD/MM/YYYY"
                                     className="start-date-picker"
