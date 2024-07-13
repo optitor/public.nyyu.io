@@ -22,12 +22,6 @@ RUN npm install --unsafe-perm --production
 # Copy local code to the container image.
 COPY . ./
 
-# Set Node.js options (optional)
-ENV NODE_OPTIONS="--max-old-space-size=8192"
-
-# Set Node environment to production
-ENV NODE_ENV=production
-
 # Build the Gatsby site
 RUN npm run build
 
