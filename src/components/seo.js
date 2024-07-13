@@ -9,7 +9,7 @@ import * as React from "react"
 import PropTypes from "prop-types"
 import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
-// import LiveChat from './shared/LiveChat'
+import LiveChat from './shared/LiveChat'
 
 function Seo({ description, lang, meta, title }) {
     const { site } = useStaticQuery(
@@ -72,7 +72,7 @@ function Seo({ description, lang, meta, title }) {
                 //     },
                 // ].concat(meta)}
             />
-            {/* <LiveChat /> */}
+            <LiveChat />
         </>
     )
 }
