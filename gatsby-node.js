@@ -70,15 +70,18 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
             }),
         ],
         externals: [
-            ({ context, request }, callback) => {
-                const IGNORES = ['electron'];
-                if (IGNORES.includes(request)) {
+            (function () {
+                var IGNORES = [
+                    'electron'
+                ];
+                return function (context, request, callback) {
+                if (IGNORES.indexOf(request) >= 0) {
                     return callback(null, "require('" + request + "')");
                 }
                 return callback();
-            }
-        ]
-        
+                };
+            })()
+            ]
     });
 
     if(stage === 'build-javascript' || stage === 'develop') {

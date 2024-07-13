@@ -16,7 +16,6 @@ import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import { useMutation } from '@apollo/client';
-import { isBrowser } from "../../utilities/auth";
 
 const airdrops = [
     {
@@ -91,19 +90,20 @@ const Wallet = () => {
 
     let orderCaptured = false;
 
-    if (isBrowser && window.location.href.includes('token=') && !orderCaptured) {
+    if (window.location.href.includes('token=') && !orderCaptured) {
         var url = new URL(window.location.href);
         let token = url.searchParams.get("token");
         orderCaptured = true;
         captureOrderForDeposit({variables: {orderId: token}});
     }
-    
-    if (isBrowser && localStorage.getItem('PayPalDepositToken') != null && !orderCaptured) {
+
+    if (localStorage.getItem('PayPalDepositToken') != null && localStorage.getItem('PayPalDepositToken') != undefined && !orderCaptured) {
         orderCaptured = true;
         let possibleToken = localStorage.getItem('PayPalDepositToken');
         captureOrderForDeposit({variables: {orderId: possibleToken}});
+        localStorage.setItem('PayPalDepositToken', null);
         localStorage.removeItem('PayPalDepositToken');
-    }    
+    }
 
     return (
         <>
