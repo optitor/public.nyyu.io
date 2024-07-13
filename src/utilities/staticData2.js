@@ -24,27 +24,27 @@ export const Letter_U = `<svg width="147" height="122" viewBox="0 0 147 122" fil
 </svg>`
 
 export const SUPPORTED_COINS = [
-    // {
-    //     value: "BTC",
-    //     label: "BTC",
-    //     icon: BTC,
-    //     networks: [
-    //         { label: "Bitcoin", value: "BTC", network: "BTC", address: "" },
-    //         // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2', network: 'BEP2' },
-    //         { label: "Bitcoin/BTCB Token (BSC Chain)", value: "BTC.BEP20", network: "BEP20", address: ""},
-    //         // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN', network: 'LN' },
-    //     ],
-    // },
-    // {
-    //     value: "ETH",
-    //     label: "ETH",
-    //     icon: ETH,
-    //     networks: [
-    //         { label: "Ethereum", value: "ETH", network: "ERC20", address: "0x64ff637fb478863b7468bc97d30a5bf3a428a1fd"},
-    //         // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
-    //         { label: "Ethereum Token (BSC Chain)", value: "ETH.BEP20", network: "BEP20", address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8"},
-    //     ],
-    // },
+    {
+        value: "BTC",
+        label: "BTC",
+        icon: BTC,
+        networks: [
+            { label: "Bitcoin", value: "BTC", network: "BTC", address: "" },
+            // { label: 'Bitcoin/BTCB Token (BC Chain)', value: 'BTC.BEP2', network: 'BEP2' },
+            { label: "Bitcoin/BTCB Token (BSC Chain)", value: "BTC.BEP20", network: "BEP20", address: ""},
+            // { label: 'Bitcoin (Lightning Network)', value: 'BTC.LN', network: 'LN' },
+        ],
+    },
+    {
+        value: "ETH",
+        label: "ETH",
+        icon: ETH,
+        networks: [
+            { label: "Ethereum", value: "ETH", network: "ERC20", address: "0x64ff637fb478863b7468bc97d30a5bf3a428a1fd"},
+            // { label: 'Ethereum (BC Chain)', value: 'ETH.BEP2', network: 'BEP2' },
+            { label: "Ethereum Token (BSC Chain)", value: "ETH.BEP20", network: "BEP20", address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8"},
+        ],
+    },
     {
         value: "BNB",
         label: "BNB",
@@ -55,23 +55,23 @@ export const SUPPORTED_COINS = [
             { label: "BNB Coin (ERC20)", value: "BNB.ERC20", network: "ERC20", address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52"},
         ],
     },
-    // {
-    //     value: "USDC",
-    //     label: "USDC",
-    //     icon: USDC,
-    //     networks: [
-    //         { label: "USD Coin (ERC20)", value: "USDC", network: "ERC20", address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"},
-    //         { label: "USD Coin (BSC Chain)", value: "USDC.BEP20", network: "BEP20", address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"},
-    //         // { label: "USD Coin (Tron/TRC20)", value: "USDC.TRC20", network: "TRC20", address: ""},
-    //     ],
-    // },
+    {
+        value: "USDC",
+        label: "USDC",
+        icon: USDC,
+        networks: [
+            { label: "USD Coin (ERC20)", value: "USDC", network: "ERC20", address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"},
+            { label: "USD Coin (BSC Chain)", value: "USDC.BEP20", network: "BEP20", address: "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"},
+            // { label: "USD Coin (Tron/TRC20)", value: "USDC.TRC20", network: "TRC20", address: ""},
+        ],
+    },
     {
         value: "USDT",
         label: "USDT",
         icon: USDT,
         networks: [
             // { label: "Tether USD (Tron/TRC20)", value: "USDT.TRC20", network: "TRC20", address: ""},
-            // { label: "Tether USD (ERC20)", value: "USDT.ERC20", network: "ERC20", address: "0xdac17f958d2ee523a2206206994597c13d831ec7"},
+            { label: "Tether USD (ERC20)", value: "USDT.ERC20", network: "ERC20", address: "0xdac17f958d2ee523a2206206994597c13d831ec7"},
             // { label: "Tether USD (Omni Layer)", value: "USDT", network: "USDT", address: ""},
             // { label: 'Tether USD (BC Chain)', value: 'USDT.BEP2', network: 'BEP2' },
             { label: "Tether USD (BSC Chain)", value: "USDT.BEP20", network: "BEP20", address: "0x55d398326f99059ff775485246999027b3197955" },
@@ -106,14 +106,14 @@ export const SUPPORTED_COINS = [
     //         { label: "SHIBA INU (BSC Chain)", value: "SHIB.BEP20", network: "BEP20", address: "0x2859e4544c4bb03966803b044a93563bd2d0dd4d"},
     //     ],
     // },
-    // {
-    //     value: "SOL",
-    //     label: "SOL",
-    //     icon: SOL,
-    //     networks: [
-    //         { label: "Solana", value: "SOL", network: "SOL", address: "" }
-    //     ],
-    // },
+    {
+        value: "SOL",
+        label: "SOL",
+        icon: SOL,
+        networks: [
+            { label: "Solana", value: "SOL", network: "SOL", address: "" }
+        ],
+    },
     // {
     //     value: "ADA",
     //     label: "ADA",
