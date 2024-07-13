@@ -321,7 +321,7 @@ const IndexPage = () => {
             <div className="text-light home-page-no-active-round d-flex flex-column justify-content-center h-100">
                 <div className="title">Presale will start soon!</div>
                 <div className="sub-title">
-                    <Link to="https://api.ndb.technology/widget/form/rSkVvg3fKgsWSbckbyhM">subscribe</Link> to our waiting list.
+                    <Link to="https://share.hsforms.com/1uASSxWOlQsWUX3inkpWpTQ4jiis">subscribe</Link> to our waiting list.
                 </div>
             </div>
         </div>
