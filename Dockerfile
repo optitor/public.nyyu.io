@@ -13,9 +13,6 @@ COPY package*.json ./
 # Clean npm cache forcefully before installing dependencies
 RUN npm cache clean --force
 
-# install npm version 10.5.0
-RUN npm install -g npm@10.5.0
-
 # Install production dependencies.
 RUN npm install --unsafe-perm --production
 

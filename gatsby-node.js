@@ -1,4 +1,3 @@
-const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const webpack = require('webpack');
@@ -35,8 +34,7 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
                 "util": false,
                 "http": require.resolve('stream-http'),
                 "https": require.resolve('https-browserify'),
-                "os": false,
-                "object.assign/polyfill": path.resolve("./node_modules/object.assign/polyfill.js"),
+                "os": false
             },
         },
         module: {
