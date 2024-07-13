@@ -9,21 +9,21 @@ import UserTable from "../../components/admin/users/UserTable";
 // import FiatTable from "../../components/admin/users/FiatTable";
 // import KYBTable from "../../components/admin/users/KYBTable";
 
-// const wallets = [
-//     {name: 'Amy Matthews', avatar: 'Tesla.12' },
-//     {name: 'Amira Kandovsky', avatar: 'Voltapancake' },
-//     {name: 'Bernard Lane', avatar: 'CutieCurry' },
-//     {name: 'Joseph Martini', avatar: 'Johnson Johnson' },
-//     {name: 'Tom Jager', avatar: 'Cruto1431' },
-// ];
+const wallets = [
+    {name: 'Amy Matthews', avatar: 'Tesla.12' },
+    {name: 'Amira Kandovsky', avatar: 'Voltapancake' },
+    {name: 'Bernard Lane', avatar: 'CutieCurry' },
+    {name: 'Joseph Martini', avatar: 'Johnson Johnson' },
+    {name: 'Tom Jager', avatar: 'Cruto1431' },
+];
 
-// const fiats = [
-//     {name: 'Amy Matthews', avatar: 'Tesla.12', status: 'complete' },
-//     {name: 'Amira Kandovsky', avatar: 'Voltapancake', status: 'pending' },
-//     {name: 'Bernard Lane', avatar: 'CutieCurry', status: 'pending' },
-//     {name: 'Joseph Martini', avatar: 'Johnson Johnson', status: 'complete' },
-//     {name: 'Tom Jager', avatar: 'Cruto1431', status: 'complete' },
-// ];
+const fiats = [
+    {name: 'Amy Matthews', avatar: 'Tesla.12', status: 'complete' },
+    {name: 'Amira Kandovsky', avatar: 'Voltapancake', status: 'pending' },
+    {name: 'Bernard Lane', avatar: 'CutieCurry', status: 'pending' },
+    {name: 'Joseph Martini', avatar: 'Johnson Johnson', status: 'complete' },
+    {name: 'Tom Jager', avatar: 'Cruto1431', status: 'complete' },
+];
 
 const IndexPage = () => {
     return (
