@@ -20,7 +20,7 @@ import GOLD from '../../../images/tier_png/gold.svg';
 import PLAT from '../../../images/tier_png/plat.svg';
 import DIA from '../../../images/tier_png/diamond.svg';
 import { useQuery } from '@apollo/client';
-import { Tooltip } from 'react-tooltip';
+import ReactTooltip from 'react-tooltip';
 
 const tierImages = [
     BASIC, BRONZE, SILVER, GOLD, PLAT, DIA
@@ -252,7 +252,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                         size='1.4em' 
                         style={{top:'16px', right:'14px'}}/>
                     {(timelock > 0) && 
-                    <Tooltip place="left" type="light" effect="solid" id='timelock-tooltip'>
+                    <ReactTooltip place="left" type="light" effect="solid" id='timelock-tooltip'>
                         <div
                             className="text-justify"
                             style={{
@@ -261,7 +261,7 @@ const ReferralLink = ({referrerInfo, onChangeWallet}) => {
                         >
                             {timelockHover}
                         </div>
-                    </Tooltip>}
+                    </ReactTooltip>}
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { AiFillEye } from '@react-icons/all-files/ai/AiFillEye';
 
 import { SPINNER } from '../../../utilities/imgImport';
 import { updateHiddenStatus } from '../../../redux/actions/tempAction';
-import { NumericFormat } from 'react-number-format';
+import NumberFormat from 'react-number-format';
 
 const QUOTE = "USDT";
 const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
@@ -38,7 +38,7 @@ const LockedNDBBalance = ({loading, totalLocked}) => {
         <div className='lh-54px'>
             {!hidden ? 
                 <>{loading ? <img src={SPINNER} width='17px' height='17px' alt='spinner'/> : 
-                    <NumericFormat
+                    <NumberFormat
                         value={Number(totalLocked).toFixed(2)}
                         className='fs-24px fw-600 lh-54px txt-green'
                         displayType='text'
@@ -56,7 +56,7 @@ const LockedNDBBalance = ({loading, totalLocked}) => {
         <div className='fs-14px text-[#959595] mt-3 lh-18px'>
             {!hidden ? 
                 <>{loading ? <img src={SPINNER} width='15px' height='15px' alt='spinner'/> : 
-                <NumericFormat
+                <NumberFormat
                     value={((totalLocked * ndbPrice) / price).toFixed(decimals)}
                     className='text-[#959595] fs-15px'
                     displayType='text'

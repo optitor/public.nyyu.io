@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
 import { roundNumber } from "../../utilities/number";
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
 import Countdown from 'react-countdown';
 import { useAuction } from "../../providers/auction-context";
 import { GET_CRYPTO_AUCTOIN_TX_BYID, GET_CRYPTO_PRESALE_TX_BYID } from '../../apollo/graphqls/querys/Payment';
@@ -68,7 +68,7 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Balance remaining</p>
                         {coinData.coinValue ? (
-                            <NumericFormat
+                            <NumberFormat
                                 className="order-list__detail"
                                 displayType={"text"}
                                 suffix={` ${coinData.coinSymbol}`}
@@ -115,7 +115,7 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
                     <div className="d-flex justify-content-between my-3">
                         <p className="order-list__label">Transaction fee</p>
                         {coinData?.transactionFee ? (
-                            <NumericFormat
+                            <NumberFormat
                                 className="order-list__detail"
                                 displayType={"text"}
                                 suffix={` USD`}
@@ -140,7 +140,7 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
                     >
                         Order total:
                     </p>
-                    <NumericFormat
+                    <NumberFormat
                         className="order-total"
                         displayType={"text"}
                         suffix=' USD'
@@ -152,7 +152,7 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
                     />
                 </div>
                 {coinData.coinValue ? (
-                    <NumericFormat
+                    <NumberFormat
                         style={{ textAlign: "right", color: "dimgrey" }}
                         displayType={"text"}
                         suffix={` ${coinData.coinSymbol}`}

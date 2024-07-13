@@ -26,7 +26,7 @@ import TierDetailsTab from "./profile/TierDetailsTab";
 import Avatar from "../components/dress-up/avatar";
 import { QuestionMark } from "../utilities/imgImport";
 import AccountDetails from "./profile/account-details";
-import { Tooltip } from "react-tooltip";
+import ReactTooltip from "react-tooltip";
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice";
 import { logout } from "../utilities/auth";
 import { getShuftiStatusByReference } from "../utilities/utility-methods";
@@ -354,7 +354,7 @@ const Profile = () => {
                                                                     }
                                                                     alt="Question Mark"
                                                                 />
-                                                                <Tooltip
+                                                                <ReactTooltip
                                                                     id="question-mark-tooltip"
                                                                     place="right"
                                                                     type="light"
@@ -370,7 +370,7 @@ const Profile = () => {
                                                                             TWO_FACTOR_AUTH_TOOLTIP_CONTENT
                                                                         }
                                                                     </div>
-                                                                </Tooltip>
+                                                                </ReactTooltip>
                                                             </div>
                                                             <div className="title_mobile">
                                                                 <div className="text-center">
@@ -385,7 +385,7 @@ const Profile = () => {
                                                                     }
                                                                     alt="Question Mark"
                                                                 />
-                                                                <Tooltip
+                                                                <ReactTooltip
                                                                     id="question-mark-tooltip"
                                                                     place="left"
                                                                     type="light"
@@ -401,7 +401,7 @@ const Profile = () => {
                                                                             TWO_FACTOR_AUTH_TOOLTIP_CONTENT
                                                                         }
                                                                     </div>
-                                                                </Tooltip>
+                                                                </ReactTooltip>
                                                             </div>
                                                         </h4>
                                                         <div className="row w-100 mx-auto">

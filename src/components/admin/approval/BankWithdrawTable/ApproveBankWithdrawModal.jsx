@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
 import * as Query from '../../../../apollo/graphqls/querys/Approval';
 import * as Mutation from '../../../../apollo/graphqls/mutations/Approval';
-import { renderNumericFormat } from '../../../../utilities/number';
+import { renderNumberFormat } from '../../../../utilities/number';
 import CustomSpinner from "../../../common/custom-spinner";
 import { showFailAlarm, showSuccessAlarm } from "../../AlarmModal";
 import { useBankWithdraw } from "./useBankWithdraw";
@@ -181,11 +181,11 @@ const ApproveBankWithdrawModal = ({ isOpen, setIsOpen, datum }) => {
                     <div className='mt-3'>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Token Amount</p>
-                            <p className="col-6 text-end">{renderNumericFormat(Number(withdrawData.tokenAmount).toFixed(8), withdrawData.sourceToken)}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(Number(withdrawData.tokenAmount).toFixed(8), withdrawData.sourceToken)}</p>
                         </div>
                         <div className="row mb-2">
                             <p className="col-6 text-muted">Withdraw Amount</p>
-                            <p className="col-6 text-end">{renderNumericFormat(Number(withdrawData.withdrawAmount).toFixed(2), withdrawData.targetCurrency)}</p>
+                            <p className="col-6 text-end">{renderNumberFormat(Number(withdrawData.withdrawAmount).toFixed(2), withdrawData.targetCurrency)}</p>
                         </div>
                         <hr className='text-white' />
                         <div className="row mb-2">

@@ -5,12 +5,12 @@ import { navigate } from 'gatsby';
 import Modal from "react-modal";
 import Select, { components } from "react-select";
 import { useQuery, useMutation } from '@apollo/client';
-import { useSendTransaction, useAccount  } from 'wagmi';
+import { useSendTransaction, useNetwork  } from 'wagmi';
 import _ from "lodash";
 import { CircularProgress } from '@mui/material';
 import Web3 from 'web3';
-import { getBigInt } from 'ethers';
-import { NumericFormat } from 'react-number-format';
+import { BigNumber } from 'ethers';
+import NumberFormat from 'react-number-format';
 
 import { roundNumber } from '../../utilities/number';
 import { QUOTE, TICKER_24hr } from './data';
@@ -52,7 +52,7 @@ export default function TokenSelectModal({
     // load from redux
     const { round_id: currentRound, bid_amount: bidAmount, order_id: orderId } = useSelector((state) => state?.placeBid);
     
-    const { activeChain, switchNetworkAsync } = useAccount();
+    const { activeChain, switchNetworkAsync } = useNetwork();
     const [ supportedCoins, setSupportedCoins ] = useState([]);
     const [ selectedCoin, setSelectedCoin ] = useState({}); 
     const [ network, setNetwork ] = useState(defaultNetwork);
@@ -140,7 +140,7 @@ export default function TokenSelectModal({
                         const result = await sendTransactionAsync({
                             request: {
                                 to: resData?.depositAddress,
-                                value: getBigInt(_.toInteger(payamount))
+                                value: BigNumber.from(_.toInteger(payamount))
                             }
                         });
                         
@@ -179,7 +179,7 @@ export default function TokenSelectModal({
                         const result = await sendTransactionAsync({
                             request: {
                                 to: resData?.depositAddress,
-                                value: getBigInt(_.toInteger(payamount))
+                                value: BigNumber.from(_.toInteger(payamount))
                             }
                         });
                         
@@ -321,7 +321,7 @@ export default function TokenSelectModal({
                                             />
                                             <div className="cryptocoin-amount">
                                                 <div className="show_value">
-                                                    <NumericFormat
+                                                    <NumberFormat
                                                         className="coin_value"
                                                         displayType={"text"}
                                                         value={roundNumber(coinQuantity, 8)}
@@ -330,7 +330,7 @@ export default function TokenSelectModal({
                                                             <p {...props}>{value}</p>
                                                         )}
                                                     />
-                                                    <NumericFormat
+                                                    <NumberFormat
                                                         className="order_value"
                                                         displayType={"text"}
                                                         value={roundNumber(bidAmount, 2)}

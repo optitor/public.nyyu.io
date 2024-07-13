@@ -1,57 +1,99 @@
-import React from "react";
-import { ApolloProvider } from "@apollo/client";
+import React from "react"
+import { AuthProvider } from "../hooks/useAuth"
+import { ApolloProvider } from "@apollo/client"
 import { Provider as ReduxProvider } from "react-redux";
-import { createConfig, http } from '@wagmi/core'
-import { mainnet, bsc, bscTestnet } from '@wagmi/core/chains'
-import { metaMask } from "@wagmi/connectors";
-import { coinbaseWallet } from "@wagmi/connectors";
-import { walletConnect } from "@wagmi/connectors";
-import { WagmiProvider } from 'wagmi';
+import { Provider as WalletProvider, chain, defaultChains, createClient } from 'wagmi'
+import { WalletConnectConnector } from '@wagmi/connectors'
+import { CoinbaseWalletConnector } from '@wagmi/connectors'
+import { MetaMaskConnector } from '@wagmi/connectors'
 
-import { client } from "../apollo/client";
-import store from "../redux/store";
+import { client } from "../apollo/client"
+import store from '../redux/store';
+// import { INFURA_ID } from "../utilities/staticData"
 
-const connectors = {
-  coinbaseWallet: coinbaseWallet({
-    appName: 'NYYU PAY',
-  }),
-  walletConnect: walletConnect({ 
-    appName: 'NYYU PAY'
-  }),
-  metaMask: metaMask({ 
-    appName: 'NYYU PAY'
-  }),
-};
-
-export const chains = createConfig({
-  chains: [mainnet, bsc, bscTestnet],
-  connectors: [
-    coinbaseWallet({
-      appName: 'NYYU PAY',
-    }),
-    walletConnect({ 
-      appName: 'NYYU PAY'
-    }),
-    metaMask({ 
-      appName: 'NYYU PAY'
-    }),
-  ],
-  transports: {
-    1: http(`https://mainnet.infura.io/v3/${process.env.GATSBY_APP_INFURA_ID}`),
-    56: http(`https://bsc-dataseed.binance.org`),
-    97: http(`https://data-seed-prebsc-1-s1.binance.org:8545/`),
+// API key for Ethereum node
+// Two popular services are Infura (infura.io) and Alchemy (alchemy.com)
+// const infuraId = process.env.INFURA_ID
+// const infuraId = INFURA_ID
+// Chains for connectors to support
+const chains = defaultChains
+const bscChain = {
+  id: 56,
+  name: 'Binance Smart Chain',
+  nativeCurrency: {
+    name: 'Binance', symbol: 'BNB', decimals: 18
   },
+  rpcUrls: {
+    default: 'https://bsc-dataseed.binance.org/'
+  },
+  blockExplorers: {
+    default: {name: 'Bscscan', url: 'https://bscscan.com'}
+  }
+};
+chains.push(bscChain);
+
+const bscTestChain = {
+  id: 97,
+  name: 'Smart Chain - Testnet',
+  nativeCurrency: {
+    name: 'Binance', symbol: 'BNB', decimals: 12
+  },
+  rpcUrls: {
+    default: 'https://data-seed-prebsc-1-s1.binance.org:8545/'
+  },
+  blockExplorers: {
+    default: {name: 'Bsctestscan', url: 'https://testnet.bscscan.com'}
+  }
+}
+chains.push(bscTestChain);
+
+// Set up connectors
+const defaultChain = chain.mainnet;
+if(typeof window !== `undefined`) {
+  window.Buffer = window.Buffer || require("buffer").Buffer;
+}
+const connectors = createClient({
+    autoConnect: false,
+    connectors({chainId}) {
+        const chain = defaultChain;
+        const rpcUrl = "https://mainnet.infura.io/v3/b3926273acc243d1ab72dfe9f2be8539";
+        return [
+            new MetaMaskConnector({chains}),
+            new CoinbaseWalletConnector({
+                chains,
+                options: {
+                    appName: 'Nyyu',
+                    chainId: chain.id,
+                    jsonRpcUrl: rpcUrl
+                }
+            }),
+            new WalletConnectConnector({
+                chains,
+                options: {
+                    qrcode: true,
+                    rpc: { [chain.id]: rpcUrl },
+                },
+            }),
+            // new InjectedConnector({
+            //     chains,
+            //     options: { name: 'Injected' },
+            // }),
+        ]
+    }
 })
+
 
 // eslint-disable-next-line react/display-name,react/prop-types
 export const wrapRootElement = ({ element }) => {
   return (
     <ReduxProvider store={store}>
       <ApolloProvider client={client}>
-        <WagmiProvider client={connectors} chains={chains}>
-          {element}
-        </WagmiProvider>
+        <AuthProvider>
+          <WalletProvider client={connectors}>
+            {element}
+          </WalletProvider>
+        </AuthProvider>
       </ApolloProvider>
     </ReduxProvider>
-  );
-};
+  )
+}

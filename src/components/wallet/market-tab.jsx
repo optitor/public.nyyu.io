@@ -3,7 +3,7 @@ import React, { useReducer, useEffect, useState, useRef } from "react";
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from "axios";
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
 import { numberSign, numFormatter } from "../../utilities/number";
 import icons from "base64-cryptocurrency-icons";
 import { Icon } from "@iconify/react";
@@ -145,7 +145,7 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             <td className="text-center">
                 <p className="coin-price text-center">
                     {price?
-                    <NumericFormat
+                    <NumberFormat
                         value={Math.round(price * Number(currencyRate).toFixed(2) * 10**8) / 10**8}
                         thousandSeparator={true}
                         displayType='text'

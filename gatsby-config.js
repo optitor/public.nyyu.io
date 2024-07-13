@@ -1,6 +1,7 @@
 require("dotenv").config({
     path: `.env.${process.env.NODE_ENV}`,
 })
+const GATSBY_ANALYTIC_KEY = "UA-239898697-1"
 module.exports = {
     siteMetadata: {
         title: `NYYU`,
@@ -9,30 +10,29 @@ module.exports = {
         siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
     },
     plugins: [
+        // {
+        //     resolve: `gatsby-plugin-gdpr-cookies`,
+        //     options: {
+        //       googleAnalytics: {
+        //         trackingId: 'UA-239898697-1', // leave empty if you want to disable the tracker
+        //         cookieName: 'gatsby-gdpr-google-analytics', // default
+        //         anonymize: true, // default
+        //         allowAdFeatures: false // default
+        //       },
+        //       googleTagManager: {
+        //         trackingId: 'GTM-T3PBD6T', // leave empty if you want to disable the tracker
+        //         cookieName: 'gatsby-gdpr-google-tagmanager', // default
+        //         dataLayerName: 'dataLayer', // default
+        //       },
+        //       // defines the environments where the tracking should be available  - default is ["production"]
+        //       environments: ['production']
+        //     },
+        //   },
+
+        `gatsby-plugin-webfonts`,
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-styled-components`,
         `gatsby-plugin-image`,
-        `gatsby-plugin-use-query-params`,
-        `gatsby-plugin-sass`,
-        `gatsby-plugin-sharp`,
-        `gatsby-transformer-sharp`,
-        {
-            resolve: `gatsby-plugin-webfonts`,
-            options: {
-              fonts: {
-                google: [
-                  {
-                    family: "Montserrat",
-                    variants: ["300", "400", "500" , "700", "800"],
-                  },
-                  {
-                    family: "Open Sans Condensed",
-                    variants: ["300", "700"],
-                  },
-                ],
-              },
-            },
-          },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
@@ -40,38 +40,32 @@ module.exports = {
                 path: `${__dirname}/src/images`,
             },
         },
+        // `gatsby-transformer-sharp`,
+        // `gatsby-plugin-sharp`,
+        // {
+        //     resolve: `gatsby-plugin-manifest`,
+        //     options: {
+        //         name: `gatsby-starter-default`,
+        //         short_name: `starter`,
+        //         start_url: `/`,
+        //         background_color: `#663399`,
+        //         display: `minimal-ui`,
+        //         icon: `src/images/favicon.png`, // This path is relative to the root of the site.
+        //     },
+        // },
+        `gatsby-plugin-sass`,
         {
             resolve: `gatsby-plugin-google-fonts`,
             options: {
                 fonts: [`Montserrat\:300,400,500,700,800`],
             },
-        }, 
+        },
         {
             resolve: "gatsby-plugin-no-sourcemaps",
         },
-        {
-            resolve: "gatsby-plugin-google-tagmanager",
-            options: {
-              id: process.env.GOOGLE_TAGMANAGER_ID,
-              includeInDevelopment: false,
-              defaultDataLayer: { platform: "gatsby" },
-            },
-          },
-          {
-            resolve: `gatsby-plugin-manifest`,
-            options: {
-                name: `gatsby-starter-default`,
-                short_name: `starter`,
-                start_url: `/`,
-                background_color: `#663399`,
-                display: `standalone`,
-                icon: `src/images/favicon.png`, // This path is relative to the root of the site.
-            },
-        },
+        "gatsby-plugin-use-query-params"
     ],
     flags: {
-        PARALLEL_QUERY_RUNNING: false,
-        // DEV_SSR: true,
+        PARALLEL_QUERY_RUNNING: true
     }
 }
-          

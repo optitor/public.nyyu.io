@@ -14,7 +14,7 @@ import DatePickerInput from '../../DatePickerInput';
 import { GET_STATEMENTS } from "./queries";
 import { useQuery } from "@apollo/client";
 import CustomSpinner from "../../common/custom-spinner";
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
 import { useSelector } from "react-redux";
 import { Icons } from "../../../utilities/Icons";
 
@@ -671,7 +671,7 @@ export default function StatementsTable() {
                                             </td>
                                             <td className="pe-5 pe-sm-0 white-space-nowrap text-uppercase">
                                                 <div className="text-sm-end fs-16px">
-                                                    <NumericFormat
+                                                    <NumberFormat
                                                         value={amount}
                                                         displayType="text"
                                                         thousandSeparator={true}
@@ -746,7 +746,7 @@ export default function StatementsTable() {
                                                                 amount:
                                                             </span>
                                                             <span className="fw-500">
-                                                                <NumericFormat
+                                                                <NumberFormat
                                                                     value={
                                                                         amount
                                                                     }

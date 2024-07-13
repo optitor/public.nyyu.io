@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import Countdown, { zeroPad } from 'react-countdown';
 
 import { useAuction } from "../../providers/auction-context"
-import { renderNumericFormat } from "../../utilities/number"
+import { renderNumberFormat } from "../../utilities/number"
 import PercentageBar from "./percentage-bar"
 import { ROUTES } from "../../utilities/routes";
 import { isBrowser } from "../../utilities/auth";
@@ -65,7 +65,7 @@ export default function AuctionRoundDetails() {
                         {isAuction ? "Reserved Price" : "Token Price"}{" "}
                     </p>
                     <p className="value">
-                        {renderNumericFormat(Number((isAuction ? optCurrentRound?.minPrice : optCurrentRound?.tokenPrice) * currencyRate).toFixed(4), currency.label)}
+                        {renderNumberFormat(Number((isAuction ? optCurrentRound?.minPrice : optCurrentRound?.tokenPrice) * currencyRate).toFixed(4), currency.label)}
                     </p>
                 </div>
                 <div>

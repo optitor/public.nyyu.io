@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import Select, { components } from "react-select";
 import _ from "lodash";
 import { Icon } from "@iconify/react";
-import { Tooltip } from "react-tooltip";
-import { NumericFormat } from "react-number-format";
+import ReactTooltip from "react-tooltip";
+import NumberFormat from "react-number-format";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
@@ -46,7 +46,7 @@ const SelectOption = (props) => {
                     alt={data.value}
                 />
                 <div className="d-flex justify-content-between w-100 ms-2">
-                    <NumericFormat
+                    <NumberFormat
                         className="ms-2"
                         displayType={"text"}
                         value={setAmountWithPrecision(
@@ -198,7 +198,7 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                 <p className="text-lightgrey mb-1">
                                     Payment amount
                                 </p>
-                                <NumericFormat
+                                <NumberFormat
                                     className="black_input form-control ps-3"
                                     displayType={"text"}
                                     suffix=' USD'
@@ -226,7 +226,7 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                         <Icon icon='bi:question-circle' />
                                     </span>
                                 </div>
-                                <Tooltip
+                                <ReactTooltip
                                     id="ndb-wallet-question-mark-tooltip"
                                     place="right"
                                     type="light"
@@ -240,7 +240,7 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                     >
                                         {PAYMENT_FRACTION_TOOLTIP_CONTENT}
                                     </div>
-                                </Tooltip>
+                                </ReactTooltip>
                             </div>
                             <p className="payment-expire my-auto text-uppercase">
                                 payment expires in{" "}

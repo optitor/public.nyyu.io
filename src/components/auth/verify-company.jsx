@@ -1,7 +1,7 @@
 import { Link, navigate } from "gatsby"
 import React, { useReducer, useCallback, useState } from "react"
 import { Icon } from "@iconify/react"
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import SimpleHeader from "../header/simple-header"
@@ -158,7 +158,7 @@ const VerifyCompany = () => {
                                 placeholder="Name"
                             />
                             <p className="form-label mt-3">Incoporation Date</p>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <MobileDatePicker
                                     inputFormat="yyyy-MM-dd"
                                     value={incop_date}

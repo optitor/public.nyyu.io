@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "gatsby";
 import { Icon } from '@iconify/react';
 import parse from 'html-react-parser';
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
 
 import Seo from "../../../components/seo"
 import Stepper2 from "../../../components/admin/Stepper2";
@@ -119,7 +119,7 @@ const IndexPage = () => {
                                     </div>
                                     <div>
                                         <p>Tier Threshold</p>
-                                        <NumericFormat className={`black_input ${showError && detailsError.point? 'error': ''}`}
+                                        <NumberFormat className={`black_input ${showError && detailsError.point? 'error': ''}`}
                                             placeholder='Enter number'
                                             thousandSeparator={true}
                                             allowNegative={false}
@@ -129,7 +129,7 @@ const IndexPage = () => {
                                     </div>
                                     <div>
                                         <p>Tier Level</p>
-                                        <NumericFormat className={`black_input ${showError && detailsError.level? 'error': ''}`}
+                                        <NumberFormat className={`black_input ${showError && detailsError.level? 'error': ''}`}
                                             placeholder='Enter number'
                                             thousandSeparator={true}
                                             allowNegative={false}

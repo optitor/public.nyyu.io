@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import _ from "lodash";
 import styled from "styled-components";
 import Select, { components } from "react-select";
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
 import Loading from "../common/Loading";
 import { Icon } from "@iconify/react";
 import { useMutation, useQuery } from "@apollo/client";
@@ -578,7 +578,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     jq("input#transferAmount").trigger("focus")
                                 }
                             >
-                                <NumericFormat
+                                <NumberFormat
                                     id="transferAmount"
                                     className="ms-2"
                                     thousandSeparator={true}
@@ -592,7 +592,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 />
                                 <div>
                                     Bank transfer fee{" "}
-                                    <NumericFormat
+                                    <NumberFormat
                                         thousandSeparator={true}
                                         suffix={" " + currency.symbol}
                                         displayType="text"
@@ -710,7 +710,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     jq("input#transferAmount").trigger("focus")
                                 }
                             >
-                                <NumericFormat
+                                <NumberFormat
                                     id="transferAmount"
                                     className="ms-2"
                                     thousandSeparator={true}
@@ -725,7 +725,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                 />
                                 <div>
                                     Transaction fee{" "}
-                                    <NumericFormat
+                                    <NumberFormat
                                         thousandSeparator={true}
                                         suffix={
                                             " " + currency.symbol
@@ -804,7 +804,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                                 ).trigger("focus")
                                             }
                                         >
-                                            <NumericFormat
+                                            <NumberFormat
                                                 id="transferAmount"
                                                 className="ms-2"
                                                 thousandSeparator={true}
@@ -820,7 +820,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                             />
                                             <div>
                                                 Stripe fee{" "}
-                                                <NumericFormat
+                                                <NumberFormat
                                                     thousandSeparator={true}
                                                     suffix={
                                                         " " + currency.symbol

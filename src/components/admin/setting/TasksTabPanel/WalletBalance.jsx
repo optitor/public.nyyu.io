@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 import { Alert } from '@mui/material';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
-import { NumericFormat } from 'react-number-format';
+import NumberFormat from 'react-number-format';
 import { update_Task_Setting } from '../../../../redux/actions/tasksAction';
 
 const WalletBalance = () => {
@@ -67,7 +67,7 @@ const WalletBalance = () => {
                             <p>Wallet Balance <span style={{marginLeft: 15}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} /></span></p>
                         </div>
                         <div className='threshold'>
-                            <NumericFormat
+                            <NumberFormat
                                 value={tasks.wallet[0]?.amount}
                                 displayType={'text'}
                                 thousandSeparator={true}
@@ -75,7 +75,7 @@ const WalletBalance = () => {
                             />
                         </div>
                         <div className='points'>
-                            <NumericFormat
+                            <NumberFormat
                                 value={tasks.wallet[0]?.point}
                                 displayType={'text'}
                                 thousandSeparator={true}
@@ -95,7 +95,7 @@ const WalletBalance = () => {
                                 <UnitRow key={index}>
                                     <div className='task'></div>
                                     <div className='threshold'>
-                                        <NumericFormat
+                                        <NumberFormat
                                             key={index}
                                             value={value.amount}
                                             displayType={'text'}
@@ -104,7 +104,7 @@ const WalletBalance = () => {
                                         />
                                     </div>
                                     <div className='points'>
-                                        <NumericFormat
+                                        <NumberFormat
                                             key={index}
                                             value={value.point}
                                             displayType={'text'}
@@ -151,7 +151,7 @@ const WalletBalance = () => {
                         return (
                             <UnitRowForMobile key={index}>
                                 <div className='left'>
-                                    <NumericFormat
+                                    <NumberFormat
                                         key={index}
                                         style={{fontWeight: 400}}
                                         value={value.amount}
@@ -161,7 +161,7 @@ const WalletBalance = () => {
                                     />
                                 </div>
                                 <div className='right'>
-                                    <NumericFormat
+                                    <NumberFormat
                                         key={index}
                                         style={{fontWeight: 400}}
                                         value={value.point}
@@ -209,7 +209,7 @@ const WalletBalance = () => {
                         return (
                             <div key={index} className='input'>
                                 <div className='input_div'>
-                                    <NumericFormat className={`black_input ${showError && error.index === index && error.item === 'amount'? 'error': ''}`}
+                                    <NumberFormat className={`black_input ${showError && error.index === index && error.item === 'amount'? 'error': ''}`}
                                         placeholder='Enter number'
                                         thousandSeparator={true}
                                         allowNegative={false}
@@ -221,7 +221,7 @@ const WalletBalance = () => {
                                     />
                                 </div>
                                 <div className='input_div'>
-                                    <NumericFormat className={`black_input ${showError && error.index === index && error.item === 'point'? 'error': ''}`}
+                                    <NumberFormat className={`black_input ${showError && error.index === index && error.item === 'point'? 'error': ''}`}
                                         placeholder='Enter number'
                                         thousandSeparator={true}
                                         allowNegative={false}

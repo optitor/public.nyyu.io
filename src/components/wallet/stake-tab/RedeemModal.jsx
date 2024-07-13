@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Modal from 'react-modal';
-import { renderNumericFormat } from '../../../utilities/number';
+import { renderNumberFormat } from '../../../utilities/number';
 import { NDB } from '../../../utilities/imgImport';
 import CustomSpinner from '../../common/custom-spinner';
 
@@ -15,9 +15,9 @@ export default function RedeemModal({isModalOpen, setIsModalOpen, data={}}) {
     };
 
     const redeemData = [
-        {label: 'Total amount', value: renderNumericFormat(1, 'NDB')},
-        {label: 'Reward amount', value: renderNumericFormat(2.71, 'WATT')},
-        {label: 'Est. APY', value: renderNumericFormat(5.23, '%')},
+        {label: 'Total amount', value: renderNumberFormat(1, 'NDB')},
+        {label: 'Reward amount', value: renderNumberFormat(2.71, 'WATT')},
+        {label: 'Est. APY', value: renderNumberFormat(5.23, '%')},
         {label: 'Stake date', value: '2021-12-16'},
         {label: 'Locked period', value: '60 days'},
         {label: 'Interest end date', value: '2022-02-16'},

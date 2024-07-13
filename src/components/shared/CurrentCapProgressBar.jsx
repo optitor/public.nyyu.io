@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import axios from "axios";
 import { useQuery } from "@apollo/client";
 import { Skeleton } from '@mui/material';
-import { renderNumericFormat } from "../../utilities/number";
+import { renderNumberFormat } from "../../utilities/number";
 import { GET_LAST_ROUND } from "../../apollo/graphqls/querys/Auction";
 
 export default function CurrentCapProgressBar() {
@@ -52,7 +52,7 @@ export default function CurrentCapProgressBar() {
                     <div className="d-flex justify-content-between">
                         <p className="current-value d-flex flex-column flex-sm-row align-items-start">
                             <span className="me-2">current cap</span>
-                            {renderNumericFormat(currentCap, '', 2, false, '#23c865')}
+                            {renderNumberFormat(currentCap, '', 2, false, '#23c865')}
                         </p>
                         <p className="end-value d-flex flex-column flex-sm-row align-items-end">
                             <span>Max supply</span>

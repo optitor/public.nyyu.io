@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Modal from 'react-modal';
-import { NumericFormat } from 'react-number-format';
+import NumberFormat from 'react-number-format';
 import { Checkbox } from '@mui/material';
-import { renderNumericFormat } from '../../../utilities/number';
+import { renderNumberFormat } from '../../../utilities/number';
 import { NDB } from '../../../utilities/imgImport';
 import CustomSpinner from '../../common/custom-spinner';
 
@@ -45,7 +45,7 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
                     <div className='black_input d-flex justify-content-between align-items-center ps-2'>
                         <div>
                             <img src={NDB} alt="ndb coin" style={{width: 40}} className="m-2" />
-                            <NumericFormat
+                            <NumberFormat
                                 className="border-0 bg-transparent text-white"
                                 value={stakingAmount}
                                 thousandSeparator={true}
@@ -67,11 +67,11 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
                         <h5 className="text-white">Locked amount limitation</h5>
                         <div className="d-flex justify-content-between">
                             <p className="fs-14px">Minimum</p>
-                            <p>{renderNumericFormat(1, 'NDB')}</p>
+                            <p>{renderNumberFormat(1, 'NDB')}</p>
                         </div>
                         <div className="d-flex justify-content-between">
                             <p className="fs-14px">Maximum</p>
-                            <p>{renderNumericFormat(8, 'NDB')}</p>
+                            <p>{renderNumberFormat(8, 'NDB')}</p>
                         </div>
                     </div>
                     <hr className="txt-grey my-2" />
@@ -87,7 +87,7 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
                         </div>
                         <div className="d-flex justify-content-between">
                             <p className="fs-14px">Est. APY</p>
-                            <p>{renderNumericFormat(5.23, '%')}</p>
+                            <p>{renderNumberFormat(5.23, '%')}</p>
                         </div>
                     </div>
                     <hr className="txt-grey my-2" />

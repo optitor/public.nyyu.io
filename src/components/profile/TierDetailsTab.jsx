@@ -4,7 +4,7 @@ import { GET_TASK_SETTING, GET_USER_TIER_TASK } from "./profile-queries";
 import { useState } from "react";
 import CustomSpinner from "../common/custom-spinner";
 import { QuestionMark } from "../../utilities/imgImport";
-import { Tooltip } from "react-tooltip";
+import ReactTooltip from "react-tooltip";
 import { useSelector } from "react-redux";
 
 export default function TierDetailsTab({ shuftiStatus }) {
@@ -143,7 +143,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                     />
                                 </div>
                             </div>
-                            <Tooltip
+                            <ReactTooltip
                                 id="qmark-icon-tooltip"
                                 place="bottom"
                                 type="light"
@@ -164,7 +164,7 @@ export default function TierDetailsTab({ shuftiStatus }) {
                                         );
                                     })}
                                 </div>
-                            </Tooltip>
+                            </ReactTooltip>
                         </div>
                         <div className="detail_item text-end text-sm-start">
                             {gainPointsData?.wallet}/6000

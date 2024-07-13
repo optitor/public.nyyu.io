@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react"
 import { useSelector } from 'react-redux'
 import Slider from "rc-slider"
-import { NumericFormat } from "react-number-format";
+import NumberFormat from 'react-number-format'
 import { useAuction } from "../../providers/auction-context"
-import { renderNumericFormat } from "../../utilities/number"
+import { renderNumberFormat } from "../../utilities/number"
 
 
 export default function PresalePlaceOrderHome() {
@@ -37,7 +37,7 @@ export default function PresalePlaceOrderHome() {
         <>
             <h3 className="range-label">amount of token</h3>
             <div className="d-flex align-items-center mb-4">
-                <NumericFormat className="range-input"
+                <NumberFormat className="range-input"
                     value={amount}
                     onValueChange={values => {
                         setAmount(values.value);
@@ -61,7 +61,7 @@ export default function PresalePlaceOrderHome() {
                 <div className="col-lg-8">
                     <div className="w-100 d-flex justify-content-between align-items-center">
                         <div className="w-100 d-flex flex-column justify-content-center align-items-end">
-                            <NumericFormat
+                            <NumberFormat
                                 className="presale-total-input"
                                 value={totalPrice}
                                 onValueChange={values => {
@@ -80,7 +80,7 @@ export default function PresalePlaceOrderHome() {
             </div>
             <div className="text-center" style={{height: 20, fontWeight: 600}}>
                 {currency.label !== 'USD'?
-                    <NumericFormat
+                    <NumberFormat
                         className="txt-green"
                         value={Number(optCurrentRound?.tokenPrice * amount).toFixed(2)}
                         thousandSeparator={true}
@@ -96,7 +96,7 @@ export default function PresalePlaceOrderHome() {
                         <p className="txt-green">This is a referred account. You will get an extra 10% of NDB Tokens with your first purchase. Make it count!</p>
                     </div>
                     <div className="col-lg-4 d-flex align-items-center justify-content-center">
-                        <p className="my-2 fs-18px">Extra: {renderNumericFormat(Number(amount * 0.1).toFixed(1), 'NDB')}</p>
+                        <p className="my-2 fs-18px">Extra: {renderNumberFormat(Number(amount * 0.1).toFixed(1), 'NDB')}</p>
                     </div>
                 </div>
             )}

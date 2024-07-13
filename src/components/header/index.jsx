@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client"
 import { Link, navigate } from "gatsby"
 import { isBrowser } from "../../utilities/auth"
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport"
-import { Tooltip } from "react-tooltip"
+import ReactTooltip from "react-tooltip"
 
 import { useAuth } from "../../hooks/useAuth"
 import { setCurrentAuthInfo } from "../../redux/actions/authAction"
@@ -222,7 +222,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                             alt="Bell Icon"
                                         />
                                     </Link>
-                                    <Tooltip
+                                    <ReactTooltip
                                         id="bell-icon-tooltip"
                                         place="bottom"
                                         type="light"
@@ -234,7 +234,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                         >
                                             no unread notification
                                         </div>
-                                    </Tooltip>
+                                    </ReactTooltip>
                                 </li>
                                 <li className="pe-sm-3 px-0 scale-75">
                                     <Link to={ROUTES.profile}>

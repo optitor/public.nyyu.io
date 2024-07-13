@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
 import Modal from 'react-modal';
 import { Icon } from "@iconify/react";
 import Select, { components } from 'react-select';
@@ -149,7 +149,7 @@ const ApproveBankDepositModal = ({ isOpen, setIsOpen, datum }) => {
                             }}
                         />
                         <p className="text-muted mt-2">Amount</p>
-                        <NumericFormat
+                        <NumberFormat
                             className='black_input'
                             thousandSeparator={true}
                             prefix={currencyCode.symbol + ' '}

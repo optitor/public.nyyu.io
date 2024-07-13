@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { useConnect, useAccount, useDisconnect, } from "wagmi"
 import { navigate } from "gatsby"
 import { isMobile } from "react-device-detect"
-import { Tooltip } from "react-tooltip"
+import ReactTooltip from "react-tooltip"
 import { Icon } from "@iconify/react";
 
 import { CheckBox } from "../common/FormControl"
@@ -110,7 +110,7 @@ export default function PaymentExternalWalletTab() {
                         <Icon icon='bi:question-circle' />
                     </span>
                 </div>
-                <Tooltip
+                <ReactTooltip
                     id="external-wallet-question-mark-tooltip"
                     place="right"
                     type="light"
@@ -126,7 +126,7 @@ export default function PaymentExternalWalletTab() {
                             PAYMENT_FRACTION_TOOLTIP_CONTENT
                         }
                     </div>
-                </Tooltip>
+                </ReactTooltip>
             </div>
             <p className="payment-expire my-auto text-uppercase">
                 payment expires in{" "}

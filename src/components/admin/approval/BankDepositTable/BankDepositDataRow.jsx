@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import { renderNumericFormat } from '../../../../utilities/number';
+import { renderNumberFormat } from '../../../../utilities/number';
 import { device } from '../../../../utilities/device';
 import { width } from './columnWidth';
 import ApproveBankDepositModal from './ApproveBankDepositModal';
@@ -25,22 +25,22 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumericFormat(datum.amount, datum.fiatType)}</p>
+                        <p>{renderNumberFormat(datum.amount, datum.fiatType)}</p>
                     </Main>
                 </div>
                 <div className='usdAmount'>
                     <Main>
-                        <p>{renderNumericFormat(datum.usdAmount)}</p>
+                        <p>{renderNumberFormat(datum.usdAmount)}</p>
                     </Main>
                 </div>
                 <div className='fee'>
                     <Main>
-                        <p>{renderNumericFormat(datum.fee)}</p>
+                        <p>{renderNumberFormat(datum.fee)}</p>
                     </Main>
                 </div>
                 <div className='deposited'>
                     <Main>
-                        <p>{renderNumericFormat(datum.deposited)}</p>
+                        <p>{renderNumberFormat(datum.deposited)}</p>
                     </Main>
                 </div>
                 <div className='approve'>
@@ -94,7 +94,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Deposit Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumericFormat(datum.amount, datum.fiatType)}</p>
+                            <p>{renderNumberFormat(datum.amount, datum.fiatType)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -102,7 +102,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>USD Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumericFormat(datum.usdAmount)}</p>
+                            <p>{renderNumberFormat(datum.usdAmount)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -110,7 +110,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Fee (USD)</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumericFormat(datum.fee)}</p>
+                            <p>{renderNumberFormat(datum.fee)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -118,7 +118,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Deposited (USD)</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumericFormat(datum.deposited)}</p>
+                            <p>{renderNumberFormat(datum.deposited)}</p>
                         </div>
                     </UnitRowForMobile>
                 </div>

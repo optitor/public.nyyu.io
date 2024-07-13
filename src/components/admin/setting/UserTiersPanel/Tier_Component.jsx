@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import svgToDataURL from 'svg-to-dataurl';
 import { Icon } from '@iconify/react';
-import { NumericFormat } from 'react-number-format';
+import NumberFormat from 'react-number-format';
 import { device } from '../../../../utilities/device';
 import ConfirmModal from '../../ConfirmModal';
 import EditUserTierModal from './../../editModals/EditUserTierModal';
@@ -29,7 +29,7 @@ const TierComponent = ({tier = {}}) => {
                     <p>{tier.name}</p>
                 </div>
                 <div className='threshold'>
-                    <NumericFormat
+                    <NumberFormat
                         value={tier.point}
                         displayType={'text'}
                         thousandSeparator={true}
@@ -37,7 +37,7 @@ const TierComponent = ({tier = {}}) => {
                     />
                 </div>
                 <div className='txnFee'>
-                    <NumericFormat
+                    <NumberFormat
                         value={0.1}
                         displayType={'text'}
                         suffix={' %'}

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
-import { NumericFormat } from 'react-number-format';
+import NumberFormat from 'react-number-format';
 import Modal from 'react-modal';
 import { Alert } from '@mui/material';
 import { device } from '../../../../utilities/device';
@@ -64,7 +64,7 @@ const AuctionRound = () => {
                 </div>
                 <div className='points'>
                     <Main>
-                        <NumericFormat                                            
+                        <NumberFormat                                            
                             value={tasks.auction}
                             displayType={'text'}
                             thousandSeparator={true}
@@ -102,7 +102,7 @@ const AuctionRound = () => {
                             <p style={{color: 'dimgrey'}}>Points per round</p>
                         </div>
                         <div className='right'>
-                            <NumericFormat                                            
+                            <NumberFormat                                            
                                 value={tasks.auction}
                                 displayType={'text'}
                                 thousandSeparator={true}
@@ -136,7 +136,7 @@ const AuctionRound = () => {
                     <div className='input'>
                         {showError? (error? <Alert severity="error">{error}</Alert>: <Alert severity="success">Success! Please click Save Button</Alert>): ''}
                         <p className='mt-2' style={{fontSize: 12}}>Points per round</p>
-                        <NumericFormat className={`black_input ${showError && error? 'error': ''}`}
+                        <NumberFormat className={`black_input ${showError && error? 'error': ''}`}
                             placeholder='Enter number'
                             thousandSeparator={true}
                             allowNegative={false}

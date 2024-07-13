@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Icon } from '@iconify/react';
 import { device } from '../../../../utilities/device';
-import { renderNumericFormat } from '../../../../utilities/number';
+import { renderNumberFormat } from '../../../../utilities/number';
 import { width } from './columnWidth';
 import ApproveCryptoWithdrawModal from './ApproveCryptoWithdrawModal';
 
@@ -20,12 +20,12 @@ const RoundDataRow = ({ datum }) => {
                 </div>
                 <div className='sourceToken'>
                     <Main>
-                        <p>{renderNumericFormat(datum.tokenAmount, datum.sourceToken)}</p>
+                        <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
                     </Main>
                 </div>
                 <div className='amount'>
                     <Main>
-                        <p>{renderNumericFormat(datum.withdrawAmount, datum.sourceToken)}</p>
+                        <p>{renderNumberFormat(datum.withdrawAmount, datum.sourceToken)}</p>
                     </Main>
                 </div>
                 <div className='time'>
@@ -75,7 +75,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Token Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumericFormat(datum.tokenAmount, datum.sourceToken)}</p>
+                            <p>{renderNumberFormat(datum.tokenAmount, datum.sourceToken)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
@@ -83,7 +83,7 @@ const RoundDataRow = ({ datum }) => {
                             <p>Withdarw Amount</p>
                         </div>
                         <div className='right'>
-                            <p>{renderNumericFormat(datum.withdrawAmount, datum.sourceToken)}</p>
+                            <p>{renderNumberFormat(datum.withdrawAmount, datum.sourceToken)}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>

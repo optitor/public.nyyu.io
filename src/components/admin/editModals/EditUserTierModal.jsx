@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import Modal from 'react-modal';
 import { Icon } from '@iconify/react';
 import parse from 'html-react-parser';
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
 
 import Stepper2 from "../../../components/admin/Stepper2";
 import Alert from '@mui/material/Alert';
@@ -137,7 +137,7 @@ const IndexPage = ({ isModalOpen, setIsModalOpen, tier = {} }) => {
                             </div>
                             <div>
                                 <p>Tier Threshold</p>
-                                <NumericFormat className={`black_input ${showError && detailsError.point? 'error': ''}`}
+                                <NumberFormat className={`black_input ${showError && detailsError.point? 'error': ''}`}
                                     placeholder='Enter number'
                                     thousandSeparator={true}
                                     allowNegative={false}
