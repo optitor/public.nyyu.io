@@ -18,9 +18,7 @@ import CountDownPending from "../components/common/countdown-pending"
 import { isBrowser } from "../utilities/auth";
 import CurrentCapProgressBar from "../components/shared/CurrentCapProgressBar";
 
-const IndexPage = ({ location }) => {
-    const searchParams = new URLSearchParams(location.search);
-    const referralCode = searchParams.get('referralCode');
+const IndexPage = () => {
    
     // Containers
     const auth = useAuth()
@@ -28,7 +26,7 @@ const IndexPage = ({ location }) => {
     const [loading, setLoading] = useState(true)
     const [currentRound, setCurrentRound] = useState(null)
     
-    // const [referralCode] = useQueryParam("referralCode", StringParam);
+    const [referralCode] = useQueryParam("referralCode", StringParam);
 
     // For catching the redirect Url from Paypal.
     useEffect(() => {
