@@ -44,6 +44,8 @@ export const parseNumber = (str) => {
     return parseFloat(cleaned) || 0;
 };
 
+// ============= MISSING FUNCTIONS THAT NEED TO BE ADDED =============
+
 // Add numbers with commas for formatting
 export const numberWithCommas = (x) => {
     if (x === null || x === undefined || x === "") return "0";
@@ -56,32 +58,10 @@ export const numberWithLength = (num, length = 2) => {
     return num.toString().padStart(length, "0");
 };
 
-export const renderNumberFormat = (
-    value,
-    prefix = "",
-    suffix = "",
-    decimals = 2,
-    useThousandSeparator = true,
-    color = null,
-) => {
-    // Handle null, undefined, or invalid values
-    if (value === null || value === undefined || value === "" || isNaN(value)) {
-        return `${prefix}0${suffix}`;
-    }
-
-    // Convert to number and handle decimals
-    const numValue = Number(value);
-    const formattedValue = numValue.toFixed(decimals);
-
-    // Add thousand separators if requested
-    const displayValue = useThousandSeparator
-        ? numberWithCommas(formattedValue)
-        : formattedValue;
-
-    // Return with prefix and suffix
-    const result = `${prefix}${displayValue}${suffix}`;
-
-    return result;
+// Render formatted numbers with prefix/suffix
+export const renderNumberFormat = (value, prefix = "", suffix = "") => {
+    if (value === null || value === undefined || value === "") return "0";
+    return `${prefix}${numberWithCommas(value)}${suffix}`;
 };
 
 // Add sign to numbers (+ or -)
@@ -117,7 +97,7 @@ export const formatBytes = (bytes, decimals = 2) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
 
-// Convert seconds to days, hours, minutes, seconds - THIS WAS MISSING!
+// Convert seconds to days, hours, minutes, seconds object
 export const secondsToDhms = (seconds) => {
     if (seconds === null || seconds === undefined || seconds < 0) {
         return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -131,18 +111,38 @@ export const secondsToDhms = (seconds) => {
     return { days: d, hours: h, minutes: m, seconds: s };
 };
 
-// Calculate percentage between two numbers
-export const calculatePercentage = (part, total) => {
-    if (total === 0 || total === null || total === undefined) return 0;
-    return ((part / total) * 100).toFixed(2);
+// NEW: Convert seconds to a formatted string for display
+export const secondsToDhmsString = (seconds) => {
+    const time = secondsToDhms(seconds);
+    const parts = [];
+
+    if (time.days > 0) {
+        parts.push(`${time.days} day${time.days !== 1 ? "s" : ""}`);
+    }
+    if (time.hours > 0) {
+        parts.push(`${time.hours} hour${time.hours !== 1 ? "s" : ""}`);
+    }
+    if (time.minutes > 0) {
+        parts.push(`${time.minutes} minute${time.minutes !== 1 ? "s" : ""}`);
+    }
+    if (time.seconds > 0 || parts.length === 0) {
+        parts.push(`${time.seconds} second${time.seconds !== 1 ? "s" : ""}`);
+    }
+
+    return parts.join(", ");
 };
 
-// Convert currency using exchange rates
-export const convertCurrency = (amount, fromRate = 1, toRate = 1) => {
-    if (isNaN(amount) || amount === null || amount === undefined) return 0;
-    // Convert from source currency to USD, then to target currency
-    const usdAmount = amount / fromRate;
-    return usdAmount * toRate;
+// NEW: Convert seconds to compact format (like "2d 5h 30m")
+export const secondsToCompactString = (seconds) => {
+    const time = secondsToDhms(seconds);
+    const parts = [];
+
+    if (time.days > 0) parts.push(`${time.days}d`);
+    if (time.hours > 0) parts.push(`${time.hours}h`);
+    if (time.minutes > 0) parts.push(`${time.minutes}m`);
+    if (time.seconds > 0 || parts.length === 0) parts.push(`${time.seconds}s`);
+
+    return parts.join(" ");
 };
 
 // Wrapper component for easier migration from v4 to v5

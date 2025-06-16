@@ -10,7 +10,7 @@ import dayjs from "../../../utilities/dayjs-config";
 import Seo from "../../../components/seo";
 import Stepper from "../../../components/admin/Stepper";
 import LayoutForCreate from "../../../components/admin/LayoutForCreate";
-import { secondsToDhms } from "../../../utilities/number";
+import { secondsToDhmsString } from "../../../utilities/number";
 
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
@@ -236,7 +236,7 @@ const IndexPage = () => {
                                             <input
                                                 className="white_input"
                                                 readOnly
-                                                value={secondsToDhms(
+                                                value={secondsToDhmsString(
                                                     duration / 1000,
                                                 )}
                                             />
@@ -461,7 +461,9 @@ const IndexPage = () => {
                                         <div className="item">
                                             <p>Round Time</p>
                                             <p>
-                                                {secondsToDhms(duration / 1000)}
+                                                {secondsToDhmsString(
+                                                    duration / 1000,
+                                                )}
                                             </p>
                                         </div>
                                     </div>
