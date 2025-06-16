@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import { Tab, TabList } from "react-tabs";
-import { Icon } from '@iconify/react';
-import NumberFormat from "react-number-format";
+import { Icon } from "@iconify/react";
+import { NumericFormat as NumberFormat } from "react-number-format";
 
 import { useAuction } from "../../providers/auction-context";
 
 export default function AuctionRoundNavigator() {
     // Containers
     const auction = useAuction();
-    const { optCurrentRound, entireRounds, currentRoundNumber, setCurrentRoundNumber, isAuction } = auction;
-    const [canGoNext, setCanGoNext] = useState(true)
-    const [canGoBack, setCanGoBack] = useState(true)
+    const {
+        optCurrentRound,
+        entireRounds,
+        currentRoundNumber,
+        setCurrentRoundNumber,
+        isAuction,
+    } = auction;
+    const [canGoNext, setCanGoNext] = useState(true);
+    const [canGoBack, setCanGoBack] = useState(true);
 
     useEffect(() => {
-        setCanGoNext(entireRounds?.length !== currentRoundNumber)
-    }, [entireRounds, currentRoundNumber])
+        setCanGoNext(entireRounds?.length !== currentRoundNumber);
+    }, [entireRounds, currentRoundNumber]);
 
     useEffect(() => {
-        setCanGoBack(currentRoundNumber !== 1)
-    }, [currentRoundNumber])
+        setCanGoBack(currentRoundNumber !== 1);
+    }, [currentRoundNumber]);
 
     // Methods
     const reset = () => {
@@ -48,12 +54,12 @@ export default function AuctionRoundNavigator() {
                             onClick={goBack}
                             disabled={!canGoBack}
                         >
-                            <Icon icon='ooui:previous-ltr' />
+                            <Icon icon="ooui:previous-ltr" />
                         </button>
                         <div className="fw-bold text-uppercase fs-30px border-bottom border-3 border-success px-2">
                             <div>
                                 Round
-                                {" " + (optCurrentRound?.round?? '')}
+                                {" " + (optCurrentRound?.round ?? "")}
                             </div>
                         </div>
                         <button
@@ -61,18 +67,24 @@ export default function AuctionRoundNavigator() {
                             onClick={goNext}
                             disabled={!canGoNext}
                         >
-                            <Icon icon='ooui:previous-rtl'/>
+                            <Icon icon="ooui:previous-rtl" />
                         </button>
                     </div>
                     <div className="mt-3">
                         <span className="text-[#959595]">Token Available </span>
                         <span className="fw-500">
                             <NumberFormat
-                                value={isAuction ? optCurrentRound?.totalToken : optCurrentRound?.tokenAmount}
+                                value={
+                                    isAuction
+                                        ? optCurrentRound?.totalToken
+                                        : optCurrentRound?.tokenAmount
+                                }
                                 thousandSeparator={true}
-                                displayType='text'
+                                displayType="text"
                                 allowNegative={false}
-                                renderText={(value, props) => <span {...props}>{value}</span>}
+                                renderText={(value, props) => (
+                                    <span {...props}>{value}</span>
+                                )}
                             />
                         </span>
                     </div>

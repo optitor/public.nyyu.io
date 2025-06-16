@@ -1,10 +1,14 @@
-import React from "react"
-import { navigate } from "gatsby"
+import React from "react";
+import { navigate } from "gatsby";
 import { useDispatch } from "react-redux";
-import { logout } from "../../utilities/auth"
-import { ROUTES } from "../../utilities/routes"
-import { removeCookie, NDB_FavAssets, NDB_Privilege } from '../../utilities/cookies';
-import { logOutUser } from "../../redux/actions/authAction";
+import { logout } from "../../utilities/auth";
+import { ROUTES } from "../../utilities/routes";
+import {
+    removeCookie,
+    NDB_FavAssets,
+    NDB_Privilege,
+} from "../../utilities/cookies";
+import { logOutUser } from "../../store/actions/authAction";
 
 export default function SignOutTab() {
     const dispatch = useDispatch();
@@ -14,9 +18,9 @@ export default function SignOutTab() {
         logout(() => {
             removeCookie(NDB_FavAssets);
             removeCookie(NDB_Privilege);
-            navigate(ROUTES.home)
-        })
-    }
+            navigate(ROUTES.home);
+        });
+    };
 
     return (
         <div className="sign-out">
@@ -28,5 +32,5 @@ export default function SignOutTab() {
                 </button>
             </div>
         </div>
-    )
+    );
 }

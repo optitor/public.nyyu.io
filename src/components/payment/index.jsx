@@ -24,7 +24,7 @@ import CoinPaymentsTab from "./CoinPaymentsTab";
 import OrderSummary from "./order-summary";
 import OrderSummaryOfCoinPayments from "./OrderSummaryOfCoinPayments";
 import OrderSummaryOfCreditCard from "./order-summary-of-credit-card";
-import { set_All_Fees } from "../../redux/actions/settingAction";
+import { set_All_Fees } from "../../store/actions/settingAction";
 import OrderSummaryNDBWallet from "./OrderSummaryNDBWallet";
 import NDBWalletTab from "./NDBWalletTab";
 import PaymentExternalWalletTab from "./payment-external-wallet-tab";
@@ -42,7 +42,6 @@ import {
 import { ROUTES } from "../../utilities/routes";
 import AuctionProvider from "../../providers/auction-context";
 import CurrentCapProgressBar from "../shared/CurrentCapProgressBar";
-
 
 const payment_types = [
     { icon: CryptoCoin, value: "cryptocoin", label: "Cryptocoin" },
@@ -62,23 +61,23 @@ const Payment = () => {
         bid_amount: bidAmount,
         order_id: orderId,
     } = useSelector((state) => state?.placeBid);
-    
+
     const [allFees, setAllFees] = useState(null);
     const [payPalLoading, setPayPalLoading] = useState(false);
     const [paySuccess, setPaySuccess] = useState(false);
 
     const dispatch = useDispatch();
     const loading = !(allFees && !payPalLoading);
-    
+
     // if (!isSSR && !currentRound) navigate(ROUTES.auction);
     // TODO: uncomment the above line later on.
 
     const [tabIndex, setTabIndex] = useState(0);
 
     useEffect(() => {
-        if(currentRound === 0) navigate(ROUTES.auction);
+        if (currentRound === 0) navigate(ROUTES.auction);
     }, [currentRound]);
-    
+
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
             setAllFees(data.getAllFees);
@@ -179,22 +178,20 @@ const Payment = () => {
                                                     setTabIndex(idx + 1)
                                                 }
                                                 style={{
-                                                    display : 
+                                                    display:
                                                         idx === 2 && "none",
-                                                            
+
                                                     width: "calc(50% - 6px)",
-                                                        // idx === 0
-                                                        //     ? "100%"
-                                                        //     : "calc(50% - 6px)",
+                                                    // idx === 0
+                                                    //     ? "100%"
+                                                    //     : "calc(50% - 6px)",
                                                     marginRight:
                                                         idx === 0 || idx === 3
-                                                         ? "12px" 
-                                                         : "0",
-                                                        // idx % 2 === 0 || idx === 0
-                                                        //     ? "0"
-                                                        //     : "12px",
-
-                                                           
+                                                            ? "12px"
+                                                            : "0",
+                                                    // idx % 2 === 0 || idx === 0
+                                                    //     ? "0"
+                                                    //     : "12px",
                                                 }}
                                             >
                                                 <img
@@ -262,7 +259,10 @@ const Payment = () => {
                             </div>
                         </div>
                         {tabIndex === 1 && (
-                            <OrderSummaryOfCoinPayments bidAmount={bidAmount} setPaymentSuccess={setPaySuccess} />
+                            <OrderSummaryOfCoinPayments
+                                bidAmount={bidAmount}
+                                setPaymentSuccess={setPaySuccess}
+                            />
                         )}
                         {tabIndex === 2 && (
                             <OrderSummaryOfCreditCard bidAmount={bidAmount} />

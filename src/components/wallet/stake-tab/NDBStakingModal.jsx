@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
-import { Icon } from '@iconify/react';
-import Modal from 'react-modal';
-import NumberFormat from 'react-number-format';
-import { Checkbox } from '@mui/material';
-import { renderNumberFormat } from '../../../utilities/number';
-import { NDB } from '../../../utilities/imgImport';
-import CustomSpinner from '../../common/custom-spinner';
+import React, { useState } from "react";
+import { Icon } from "@iconify/react";
+import Modal from "react-modal";
+import { NumberFormat } from "../../../utilities/number";
+import { Checkbox } from "@mui/material";
+import { renderNumberFormat } from "../../../utilities/number";
+import { NDB } from "../../../utilities/imgImport";
+import CustomSpinner from "../../common/custom-spinner";
 
-const label = { inputProps: { 'aria-label': 'Checkbox for agreement' } };
+const label = { inputProps: { "aria-label": "Checkbox for agreement" } };
 
-export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) {
+export default function NDBStakingModal({
+    isModalOpen,
+    setIsModalOpen,
+    data = {},
+}) {
     const [pending, setPending] = useState(false);
     const [agreed, setAgreed] = useState(false);
-    const [stakingAmount, setStakingAmount] = useState('');
+    const [stakingAmount, setStakingAmount] = useState("");
 
     const closeModal = () => setIsModalOpen(false);
-    const handleSubmit = () => {
-
-    };
+    const handleSubmit = () => {};
 
     return (
         <Modal
@@ -28,7 +30,7 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
             overlayClassName="pwd-modal__overlay"
         >
             <div className="pwd-modal__header">
-                <div className='d-flex justify-content-center align-items-center'>
+                <div className="d-flex justify-content-center align-items-center">
                     <h4 className="font-bold">NDB Staking</h4>
                 </div>
                 <div
@@ -41,10 +43,15 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
                 </div>
             </div>
             <form className="form" onSubmit={(e) => e.preventDefault()}>
-                <div className='input'>
-                    <div className='black_input d-flex justify-content-between align-items-center ps-2'>
+                <div className="input">
+                    <div className="black_input d-flex justify-content-between align-items-center ps-2">
                         <div>
-                            <img src={NDB} alt="ndb coin" style={{width: 40}} className="m-2" />
+                            <img
+                                src={NDB}
+                                alt="ndb coin"
+                                style={{ width: 40 }}
+                                className="m-2"
+                            />
                             <NumberFormat
                                 className="border-0 bg-transparent text-white"
                                 value={stakingAmount}
@@ -57,21 +64,25 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
                                 placeholder="Enter the amount"
                             />
                         </div>
-                        <p className="btn" aria-hidden="true"
+                        <p
+                            className="btn"
+                            aria-hidden="true"
                             onClick={() => {
                                 // setStakingAmount(roundNumber())
                             }}
-                        ><span className="txt-green">MAX</span></p>
+                        >
+                            <span className="txt-green">MAX</span>
+                        </p>
                     </div>
                     <div className="my-3">
                         <h5 className="text-white">Locked amount limitation</h5>
                         <div className="d-flex justify-content-between">
                             <p className="fs-14px">Minimum</p>
-                            <p>{renderNumberFormat(1, 'NDB')}</p>
+                            <p>{renderNumberFormat(1, "NDB")}</p>
                         </div>
                         <div className="d-flex justify-content-between">
                             <p className="fs-14px">Maximum</p>
-                            <p>{renderNumberFormat(8, 'NDB')}</p>
+                            <p>{renderNumberFormat(8, "NDB")}</p>
                         </div>
                     </div>
                     <hr className="txt-grey my-2" />
@@ -87,27 +98,40 @@ export default function NDBStakingModal({isModalOpen, setIsModalOpen, data={}}) 
                         </div>
                         <div className="d-flex justify-content-between">
                             <p className="fs-14px">Est. APY</p>
-                            <p>{renderNumberFormat(5.23, '%')}</p>
+                            <p>{renderNumberFormat(5.23, "%")}</p>
                         </div>
                     </div>
                     <hr className="txt-grey my-2" />
                     <div className="d-flex align-items-center my-3">
-                        <Checkbox {...label} color="success" id="agree_for_ndb_saving"
-                            value={agreed} onChange={e => setAgreed(e.target.checked)}
+                        <Checkbox
+                            {...label}
+                            color="success"
+                            id="agree_for_ndb_saving"
+                            value={agreed}
+                            onChange={(e) => setAgreed(e.target.checked)}
                             sx={{
                                 color: "#23c865",
-                                '&.Mui-checked': {
+                                "&.Mui-checked": {
                                     color: "#23c865",
                                 },
-                                padding: 0
+                                padding: 0,
                             }}
                         />
-                        <label htmlFor='agree_for_ndb_saving' className="fs-13px ms-2">I have read and agree to ndb savings service agreement</label>
+                        <label
+                            htmlFor="agree_for_ndb_saving"
+                            className="fs-13px ms-2"
+                        >
+                            I have read and agree to ndb savings service
+                            agreement
+                        </label>
                     </div>
-                    <button className="btn btn-outline-light w-100 rounded-0 fw-bold text-uppercase my-4" style={{height: 47}}
-                        onClick={handleSubmit} disabled={pending || !agreed}
+                    <button
+                        className="btn btn-outline-light w-100 rounded-0 fw-bold text-uppercase my-4"
+                        style={{ height: 47 }}
+                        onClick={handleSubmit}
+                        disabled={pending || !agreed}
                     >
-                        {pending? <CustomSpinner />: 'Stake'}
+                        {pending ? <CustomSpinner /> : "Stake"}
                     </button>
                 </div>
             </form>

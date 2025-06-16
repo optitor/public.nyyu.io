@@ -1,20 +1,24 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import svgToDataURL from "svg-to-dataurl";
 import axios from "axios";
 import DepositModal from "./DepositModal";
 import WithdrawModal from "./WithdrawModal";
 import CustomSpinner from "../common/custom-spinner";
-import NumberFormat from "react-number-format";
+import { NumericFormat as NumberFormat } from "react-number-format";
 import { useQuery } from "@apollo/client";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
-import { AiFillEyeInvisible } from '@react-icons/all-files/ai/AiFillEyeInvisible';
-import { AiFillEye } from '@react-icons/all-files/ai/AiFillEye';
-import { roundNumber } from "../../utilities/number"; 
+import { AiFillEyeInvisible } from "@react-icons/all-files/ai/AiFillEyeInvisible";
+import { AiFillEye } from "@react-icons/all-files/ai/AiFillEye";
+import { roundNumber } from "../../utilities/number";
 
-import { updateHiddenStatus, changeEquity, fetchNDBPrice } from "../../redux/actions/tempAction";
+import {
+    updateHiddenStatus,
+    changeEquity,
+    fetchNDBPrice,
+} from "../../store/actions/tempAction";
 
 const QUOTE = "USDT";
 const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
@@ -22,47 +26,79 @@ const REFRESH_TIME = 30 * 1000;
 const obscureValueString = "******";
 
 const Asset = ({ item, isHideAsset }) => {
-    const currency = useSelector(state => state.favAssets.currency);
-    const currencyRates = useSelector(state => state.currencyRates);
-    const currencyRate = currencyRates[currency.value]?? 1;
+    const currency = useSelector((state) => state.favAssets?.currency) || {
+        value: "USD",
+        sign: "$",
+    };
+    const currencyRates = useSelector((state) => state.currencyRates) || {};
+    const currencyRate = currencyRates[currency.value] ?? 1;
     const precision = 8;
+
+    // Guard against undefined item
+    if (!item) return null;
 
     return (
         <tr>
             <td className="d-flex align-items-center ps-2">
-                <img className=" me-2 balance_img" src={item.symbol} alt="coin icon" />
+                <img
+                    className=" me-2 balance_img"
+                    src={item.symbol}
+                    alt="coin icon"
+                />
                 <div>
                     <p className="coin-abbr text-light">{item.tokenName}</p>
                 </div>
             </td>
             <td>
                 <NumberFormat
-                    value={roundNumber(item.free + item.hold, precision)}
+                    value={roundNumber(
+                        (item.free || 0) + (item.hold || 0),
+                        precision,
+                    )}
                     className="coin-price fw-bold"
                     displayType={"text"}
                     thousandSeparator={true}
-                    renderText={(value, props) => <p {...props}>{isHideAsset? obscureValueString: value + ' ' + item.tokenSymbol}</p>}
+                    renderText={(value, props) => (
+                        <p {...props}>
+                            {isHideAsset
+                                ? obscureValueString
+                                : value + " " + item.tokenSymbol}
+                        </p>
+                    )}
                 />
                 <NumberFormat
-                    value={Number(item.balance  * currencyRate).toFixed(2)}
+                    value={Number((item.balance || 0) * currencyRate).toFixed(
+                        2,
+                    )}
                     className="coin-percent"
                     displayType={"text"}
                     thousandSeparator={true}
-                    renderText={(value, props) => <p {...props}>{isHideAsset? obscureValueString: value + ' ' + currency.value}</p>}
+                    renderText={(value, props) => (
+                        <p {...props}>
+                            {isHideAsset
+                                ? obscureValueString
+                                : value + " " + currency.value}
+                        </p>
+                    )}
                 />
             </td>
         </tr>
-    )
+    );
 };
 
 export default function InternalWallet() {
     const dispatch = useDispatch();
 
-    const currency = useSelector(state => state.favAssets.currency);
-    const currencyRates = useSelector(state => state.currencyRates);
-    const currencyRate = currencyRates[currency.value]?? 1;
+    const currency = useSelector((state) => state.favAssets?.currency) || {
+        value: "USD",
+        sign: "$",
+    };
+    const currencyRates = useSelector((state) => state.currencyRates) || {};
+    const currencyRate = currencyRates[currency.value] ?? 1;
 
-    const { hidden, equity, ndbPrice } = useSelector(state => state.balance);
+    const { hidden, equity, ndbPrice } = useSelector(
+        (state) => state.balance,
+    ) || { hidden: false, equity: "USD", ndbPrice: 0 };
 
     const InitialAssets = {};
     const [myAssets, setMyAssets] = useState(InitialAssets);
@@ -75,15 +111,28 @@ export default function InternalWallet() {
     const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
 
     const totalBalance = useMemo(() => {
-        if (!Object.values(myAssetsWithBalance)) return 0
-        return _.sumBy(Object.values(myAssetsWithBalance), "balance") ?? 0
+        const balances = Object.values(myAssetsWithBalance);
+        if (!balances.length) return 0;
+        const total = _.sumBy(balances, "balance") || 0;
+        console.log(
+            "Total balance calculated:",
+            total,
+            "from assets:",
+            balances,
+        );
+        return total;
     }, [myAssetsWithBalance]);
 
     useEffect(() => {
         const get_BTCPrice = () => {
-            axios.get(TICKER_price, { params: { symbol: "BTC" + QUOTE } }).then((res) => {
-                setBTCPrice(res.data.price);
-            })
+            axios
+                .get(TICKER_price, { params: { symbol: "BTC" + QUOTE } })
+                .then((res) => {
+                    setBTCPrice(res.data.price);
+                })
+                .catch((error) => {
+                    console.error("Error fetching BTC price:", error);
+                });
         };
         get_BTCPrice();
         dispatch(fetchNDBPrice());
@@ -97,64 +146,81 @@ export default function InternalWallet() {
     }, [dispatch]);
 
     const { startPolling, stopPolling } = useQuery(GET_BALANCES, {
-        onCompleted: data => {
-            if (data.getBalances) {
+        onCompleted: (data) => {
+            if (data?.getBalances) {
                 let assets = data.getBalances?.map((item) => {
                     return { ...item, symbol: svgToDataURL(item.symbol) };
-                })
+                });
                 assets = _.mapKeys(assets, "tokenSymbol");
-                setMyAssets({ ...myAssets, ...assets });
+                setMyAssets(assets); // Don't spread with old assets, replace completely
             }
         },
         onError: (error) => console.log(error),
         fetchPolicy: "no-cache",
         errorPolicy: "ignore",
         pollInterval: REFRESH_TIME,
-        notifyOnNetworkStatusChange: true
+        notifyOnNetworkStatusChange: true,
     });
 
     useEffect(() => {
-        startPolling(REFRESH_TIME);
-        return () => stopPolling();
+        if (startPolling && stopPolling) {
+            startPolling(REFRESH_TIME);
+            return () => stopPolling();
+        }
     }, [startPolling, stopPolling]);
 
     useDeepCompareEffect(() => {
         const get_Balances_Price = async () => {
+            if (_.isEmpty(myAssets)) return; // Don't process if no assets
+
             let assets = { ...myAssets };
-            if (_.isEqual(myAssets, InitialAssets)) return;
-            
+
             for (const item of Object.values(myAssets)) {
                 let price = 0;
-                if (
-                    !item.tokenSymbol ||
-                    item.tokenSymbol === "WATT"
-                ) {
+                if (!item.tokenSymbol || item.tokenSymbol === "WATT") {
                     price = 0;
-                } else if(item.tokenSymbol === 'USDT') {
+                } else if (item.tokenSymbol === "USDT") {
                     price = 1;
-                } else if(item.tokenSymbol === 'NDB') {
-                    price = ndbPrice;
+                } else if (item.tokenSymbol === "NDB") {
+                    price = ndbPrice || 0;
                 } else {
-                    const res = await axios.get(TICKER_price, {
-                        params: { symbol: item.tokenSymbol + QUOTE },
-                    });
-                    price = Number(res.data.price);
+                    try {
+                        const res = await axios.get(TICKER_price, {
+                            params: { symbol: item.tokenSymbol + QUOTE },
+                        });
+                        price = Number(res.data.price);
+                    } catch (error) {
+                        console.error(
+                            `Error fetching price for ${item.tokenSymbol}:`,
+                            error,
+                        );
+                        price = 0;
+                    }
                 }
-                const balance = (item.hold + item.free) * price;
-                assets[item.tokenSymbol] = { ...item, price, balance: balance, value: item.tokenSymbol };
+                const balance = ((item.hold || 0) + (item.free || 0)) * price;
+                assets[item.tokenSymbol] = {
+                    ...item,
+                    price,
+                    balance: balance,
+                    value: item.tokenSymbol,
+                };
             }
 
             initLoaded.current = true;
-            setMyAssetsWithBalance({ ...assets });
+            setMyAssetsWithBalance(assets);
         };
 
         get_Balances_Price();
-        const interval1 = setInterval(() => {
-            get_Balances_Price();
-        }, REFRESH_TIME);
 
-        return () => clearInterval(interval1);
-    }, [Object.keys(myAssets).length, InitialAssets, myAssets]);
+        // Only set interval if we have assets
+        if (!_.isEmpty(myAssets)) {
+            const interval1 = setInterval(() => {
+                get_Balances_Price();
+            }, REFRESH_TIME);
+
+            return () => clearInterval(interval1);
+        }
+    }, [myAssets, ndbPrice]); // Simplified dependency array
 
     return (
         <div>
@@ -163,19 +229,32 @@ export default function InternalWallet() {
                     <div className="value-label d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
                             Equity Value ({equity})
-                            {!hidden ? 
-                                <AiFillEye className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(true))}/> : 
-                                <AiFillEyeInvisible className='cursor-pointer' size='1.5em' onClick={() => dispatch(updateHiddenStatus(false))}/> 
-                            }
+                            {!hidden ? (
+                                <AiFillEye
+                                    className="cursor-pointer"
+                                    size="1.5em"
+                                    onClick={() =>
+                                        dispatch(updateHiddenStatus(true))
+                                    }
+                                />
+                            ) : (
+                                <AiFillEyeInvisible
+                                    className="cursor-pointer"
+                                    size="1.5em"
+                                    onClick={() =>
+                                        dispatch(updateHiddenStatus(false))
+                                    }
+                                />
+                            )}
                         </div>
 
                         <div className="d-flex">
                             <div
                                 className={`cursor-pointer me-1 ${
-                                    equity === 'BTC' ? "fw-bold text-white": ''
+                                    equity === "BTC" ? "fw-bold text-white" : ""
                                 }`}
-                                onClick={() => dispatch(changeEquity('BTC'))}
-                                onKeyDown={() => dispatch(changeEquity('BTC'))}
+                                onClick={() => dispatch(changeEquity("BTC"))}
+                                onKeyDown={() => dispatch(changeEquity("BTC"))}
                                 role="presentation"
                             >
                                 BTC
@@ -183,10 +262,14 @@ export default function InternalWallet() {
                             <div>|</div>
                             <div
                                 className={`cursor-pointer ms-1 ${
-                                    equity !== 'BTC'? "fw-bold text-white": ''
+                                    equity !== "BTC" ? "fw-bold text-white" : ""
                                 }`}
-                                onClick={() => dispatch(changeEquity(currency.value))}
-                                onKeyDown={() => dispatch(changeEquity(currency.value))}
+                                onClick={() =>
+                                    dispatch(changeEquity(currency.value))
+                                }
+                                onKeyDown={() =>
+                                    dispatch(changeEquity(currency.value))
+                                }
                                 role="presentation"
                             >
                                 {currency.value}
@@ -196,45 +279,59 @@ export default function InternalWallet() {
                     {hidden ? (
                         <>
                             <p className="value">{obscureValueString}</p>
-                            <p className="max-value mt-3">{obscureValueString}</p>
+                            <p className="max-value mt-3">
+                                {obscureValueString}
+                            </p>
                         </>
                     ) : (
                         <>
                             <NumberFormat
                                 value={
-                                    equity !== 'BTC'
+                                    equity !== "BTC"
                                         ? totalBalance === 0
                                             ? 0
-                                            : Number(totalBalance * currencyRate).toFixed(2)
+                                            : Number(
+                                                  totalBalance * currencyRate,
+                                              ).toFixed(2)
                                         : totalBalance === 0
-                                        ? 0
-                                        : (totalBalance / BTCPrice).toFixed(8)
+                                          ? 0
+                                          : (totalBalance / BTCPrice).toFixed(8)
                                 }
                                 className="value"
                                 displayType="text"
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
                                     <p {...props}>
-                                        {value} {equity !== 'BTC' ? currency.value : "BTC"}
+                                        {value}{" "}
+                                        {equity !== "BTC"
+                                            ? currency.value
+                                            : "BTC"}
                                     </p>
                                 )}
                             />
                             <NumberFormat
                                 value={
-                                    equity !== 'BTC'
+                                    equity !== "BTC"
                                         ? totalBalance === 0
                                             ? 0
-                                            : (totalBalance / BTCPrice).toFixed(8)
+                                            : (totalBalance / BTCPrice).toFixed(
+                                                  8,
+                                              )
                                         : totalBalance === 0
-                                        ? 0
-                                        : Number(totalBalance * currencyRate).toFixed(2)
+                                          ? 0
+                                          : Number(
+                                                totalBalance * currencyRate,
+                                            ).toFixed(2)
                                 }
                                 className="max-value mt-3"
                                 displayType="text"
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
                                     <p {...props}>
-                                        ~ {value} {equity !== 'BTC' ? "BTC" : currency.value}
+                                        ~ {value}{" "}
+                                        {equity !== "BTC"
+                                            ? "BTC"
+                                            : currency.value}
                                     </p>
                                 )}
                             />
@@ -244,9 +341,9 @@ export default function InternalWallet() {
                 <div className="btn-group d-flex justify-content-between mt-3 align-items-center">
                     <div className="col-6 pe-2">
                         <button
-                            className='btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4'
+                            className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                             onClick={() => {
-                                setIsDepositOpen(true)
+                                setIsDepositOpen(true);
                             }}
                         >
                             deposit
@@ -254,23 +351,23 @@ export default function InternalWallet() {
                     </div>
                     <div className="col-6 ps-2">
                         <button
-                            // disabled={true} // waiting for admin panel
                             className="btn btn-outline-light rounded-0 col-12 text-uppercase fw-bold py-2 h4"
                             onClick={() => {
-                                setIsWithdrawOpen(true)
+                                setIsWithdrawOpen(true);
                             }}
                             disabled={!initLoaded.current}
                         >
                             withdraw
                         </button>
                     </div>
-                    {isWithdrawOpen && (
+                    {/* Temporarily disable withdraw modal due to SelectOption error */}
+                    {/* {isWithdrawOpen && (
                         <WithdrawModal
                             showModal={isWithdrawOpen}
                             setShowModal={setIsWithdrawOpen}
-                            assets = {myAssetsWithBalance}
+                            assets={myAssetsWithBalance}
                         />
-                    )}
+                    )} */}
                     {isDepositOpen && (
                         <DepositModal
                             showModal={isDepositOpen}
@@ -288,17 +385,30 @@ export default function InternalWallet() {
                                 <CustomSpinner />
                             </div>
                         )}
-                        {initLoaded.current && _.map(_.orderBy(myAssetsWithBalance, ["balance", "tokenSymbol"], ["desc", "asc"]), (item) => (
-                            <Asset item={item} isHideAsset={hidden} key={item.tokenName} />
-                        ))}
-                        {initLoaded.current && Object.values(myAssetsWithBalance).length === 0 && (
-                            <div className="text-center fw-500 text-uppercase text-light">
-                                No assets found
-                            </div>
-                        )}
+                        {initLoaded.current &&
+                            _.map(
+                                _.orderBy(
+                                    myAssetsWithBalance,
+                                    ["balance", "tokenSymbol"],
+                                    ["desc", "asc"],
+                                ),
+                                (item) => (
+                                    <Asset
+                                        item={item}
+                                        isHideAsset={hidden}
+                                        key={item.tokenName}
+                                    />
+                                ),
+                            )}
+                        {initLoaded.current &&
+                            Object.values(myAssetsWithBalance).length === 0 && (
+                                <div className="text-center fw-500 text-uppercase text-light">
+                                    No assets found
+                                </div>
+                            )}
                     </tbody>
                 </table>
             </div>
         </div>
     );
-};
+}

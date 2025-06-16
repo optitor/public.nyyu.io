@@ -1,17 +1,17 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components"
-import { Icon } from "@iconify/react"
-import { device } from "../../../../utilities/device"
-import { width } from "./columnWidth"
-import ConfirmModal from "../../ConfirmModal"
-import { make_Allow_Country } from "../../../../redux/actions/geoLocationAction";
+import styled from "styled-components";
+import { Icon } from "@iconify/react";
+import { device } from "../../../../utilities/device";
+import { width } from "./columnWidth";
+import ConfirmModal from "../../ConfirmModal";
+import { make_Allow_Country } from "../../../../store/actions/geoLocationAction";
 
 const GeoDataRow = ({ datum }) => {
     const dispatch = useDispatch();
 
-    const [show, setShow] = useState(false)
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+    const [show, setShow] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [deletePending, setDeletePending] = useState(false);
 
     const deleteCountry = async () => {
@@ -19,14 +19,16 @@ const GeoDataRow = ({ datum }) => {
         await dispatch(make_Allow_Country(datum.id));
         setDeletePending(false);
         setIsConfirmOpen(false);
-    }
+    };
 
     return (
         <>
             <DataRow>
                 <div className="country">
                     <Main>
-                        <p style={{ fontSize: 16, fontWeight: "700" }}>{datum.country}</p>
+                        <p style={{ fontSize: 16, fontWeight: "700" }}>
+                            {datum.country}
+                        </p>
                     </Main>
                 </div>
                 <div className="note">
@@ -51,7 +53,10 @@ const GeoDataRow = ({ datum }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className="left">
-                            <p className="text-white" style={{ fontSize: 16, fontWeight: "700" }}>
+                            <p
+                                className="text-white"
+                                style={{ fontSize: 16, fontWeight: "700" }}
+                            >
                                 {datum.country}
                             </p>
                         </div>
@@ -102,10 +107,10 @@ const GeoDataRow = ({ datum }) => {
                 pending={deletePending}
             />
         </>
-    )
-}
+    );
+};
 
-export default GeoDataRow
+export default GeoDataRow;
 
 const DataRow = styled.div`
     min-height: 80px;
@@ -137,14 +142,14 @@ const DataRow = styled.div`
     @media screen and (max-width: ${device["phone"]}) {
         display: none;
     }
-`
+`;
 
 const Main = styled.div`
     height: 65px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-`
+`;
 
 // For Mobile
 const DataRowForMobile = styled.div`
@@ -159,7 +164,7 @@ const DataRowForMobile = styled.div`
         display: flex;
         flex-direction: column;
     }
-`
+`;
 
 const UnitRowForMobile = styled.div`
     display: flex;
@@ -176,4 +181,4 @@ const UnitRowForMobile = styled.div`
         color: #f32d2d;
         font-size: 22px;
     }
-`
+`;

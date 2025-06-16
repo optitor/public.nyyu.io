@@ -1,6 +1,6 @@
-import React from "react"
-import NumberFormat from "react-number-format"
-import { roundNumber } from "../../utilities/number"
+import React from "react";
+import { NumericFormat as NumberFormat } from "react-number-format";
+import { roundNumber } from "../../utilities/number";
 
 export default function OrderSummary({ bidAmount }) {
     return (
@@ -14,7 +14,7 @@ export default function OrderSummary({ bidAmount }) {
                         <NumberFormat
                             className="order-list__label"
                             displayType={"text"}
-                            suffix=' USD'
+                            suffix=" USD"
                             value={roundNumber(bidAmount, 2)}
                             thousandSeparator={true}
                             renderText={(value, props) => (
@@ -44,7 +44,7 @@ export default function OrderSummary({ bidAmount }) {
                     <NumberFormat
                         className="order-total"
                         displayType={"text"}
-                        suffix=' USD'
+                        suffix=" USD"
                         value={roundNumber(bidAmount, 2)}
                         thousandSeparator={true}
                         renderText={(value, props) => (
@@ -54,5 +54,5 @@ export default function OrderSummary({ bidAmount }) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

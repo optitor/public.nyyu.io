@@ -12,7 +12,7 @@ import { Alert, Rating } from "@mui/material"
 import { capitalizeFirstLetter } from "../../../utilities/string"
 import DressupModal from "../../../components/dress-up/dressup-modal"
 import { EmptyAvatar, EmptyBlackAvatar } from "../../../utilities/imgImport";
-import { create_New_Avatar } from './../../../redux/actions/avatarAction';
+import { create_New_Avatar } from './../../../store/actions/avatarAction';
 
 const CreateAvatar = () => {
     const dispatch = useDispatch();

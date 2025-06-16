@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { isBrowser } from "react-device-detect";
 import Modal from "react-modal";
-import NumberFormat from "react-number-format";
+import { NumericFormat as NumberFormat } from "react-number-format";
 import { CloseIcon } from "../../utilities/imgImport";
 import CustomSpinner from "../common/custom-spinner";
 import { FormInput } from "../common/FormControl";
@@ -63,7 +63,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
             }
 
             const matchedPriceNameItems = allBuyNamePrices.filter(
-                (item) => item.numOfChars === value.length
+                (item) => item.numOfChars === value.length,
             );
             if (matchedPriceNameItems && matchedPriceNameItems?.length) {
                 const fooCost = matchedPriceNameItems[0].price;
@@ -159,8 +159,7 @@ export default function ChangeNameModal({ isOpen, setIsOpen }) {
                             <div className="mb-3 mt-4">
                                 {error && (
                                     <span className="errorsapn">
-                                        <FaExclamationCircle />{" "}
-                                        {error}
+                                        <FaExclamationCircle /> {error}
                                     </span>
                                 )}
                                 <button

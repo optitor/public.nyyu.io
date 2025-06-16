@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import NumberFormat from "react-number-format";
+import { NumericFormat as NumberFormat } from "react-number-format";
 import { roundNumber } from "../../utilities/number";
 import { getStripePaymentFee } from "../../utilities/utility-methods";
 
@@ -22,7 +22,7 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                             <NumberFormat
                                 className="order-list__detail"
                                 displayType={"text"}
-                                suffix=' USD'
+                                suffix=" USD"
                                 value={roundNumber(bidAmount, 2)}
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
@@ -35,7 +35,7 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                             <NumberFormat
                                 className="order-list__detail"
                                 displayType={"text"}
-                                suffix=' USD'
+                                suffix=" USD"
                                 value={roundNumber(stripePaymentFee, 2)}
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
@@ -62,8 +62,11 @@ export default function OrderSummaryOfCreditCard({ bidAmount }) {
                     <NumberFormat
                         className="order-total"
                         displayType={"text"}
-                        suffix=' USD'
-                        value={roundNumber(Number(bidAmount) + Number(stripePaymentFee), 2)}
+                        suffix=" USD"
+                        value={roundNumber(
+                            Number(bidAmount) + Number(stripePaymentFee),
+                            2,
+                        )}
                         thousandSeparator={true}
                         renderText={(value, props) => (
                             <p {...props}>~ {value}</p>

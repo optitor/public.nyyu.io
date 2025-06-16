@@ -1,33 +1,33 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "gatsby"
-import { Icon } from '@iconify/react';
+import { Link } from "gatsby";
+import { Icon } from "@iconify/react";
 import validator from "validator";
-import names from 'random-names-generator';
-import _ from 'lodash';
+import names from "random-names-generator";
+import _ from "lodash";
 
-import Seo from "../../../components/seo"
+import Seo from "../../../components/seo";
 import Stepper from "../../../components/admin/Stepper";
 import LayoutForCreate from "../../../components/admin/LayoutForCreate";
 
-import { Alert } from '@mui/material';
-import Select from 'react-select';
+import { Alert } from "@mui/material";
+import Select from "react-select";
 import { countryList } from "../../../utilities/countryAlpha2";
 
 import PaginationBar from "../../../components/admin/PaginationBar";
-import { fetch_Avatars } from './../../../redux/actions/avatarAction';
+import { fetch_Avatars } from "./../../../store/actions/avatarAction";
 import AvatarImage from "../../../components/admin/shared/AvatarImage";
 import ShowAvatarModal from "../../../components/admin/shared/ShowAvatarModal";
-import { create_New_User } from "../../../redux/actions/userAction";
+import { create_New_User } from "../../../store/actions/userAction";
 import { Roles } from "../../../utilities/staticData";
 
-const Countries = countryList.map(item => {
-    return {label: item.name, value: item["alpha-2"]};
+const Countries = countryList.map((item) => {
+    return { label: item.name, value: item["alpha-2"] };
 });
 
 const IndexPage = () => {
     const dispatch = useDispatch();
-    const avatars = useSelector(state => state.data);
+    const avatars = useSelector((state) => state.data);
 
     useEffect(() => {
         dispatch(fetch_Avatars());
@@ -36,7 +36,7 @@ const IndexPage = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [showError, setShowError] = useState(false);
     const [isShowAvatarOpen, setIsShowAvatarOpen] = useState(false);
-    const [searchValue, setSearchValue] = useState('');
+    const [searchValue, setSearchValue] = useState("");
     const [pending, setPending] = useState(false);
     const [searchedAvatars, setSearchedAvatars] = useState([]);
     const [avatarsPerPage, setAvatarsPerPage] = useState([]);
@@ -45,35 +45,40 @@ const IndexPage = () => {
 
     useEffect(() => {
         const avatarList = Object.values(avatars);
-        if(!searchValue) {
+        if (!searchValue) {
             setSearchedAvatars(avatarList);
         } else {
-            const filteredAvatars = avatarList.filter(item => {
-                return (item?.fname + item?.surname).toLowerCase().includes(searchValue.toLowerCase());
+            const filteredAvatars = avatarList.filter((item) => {
+                return (item?.fname + item?.surname)
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase());
             });
             setSearchedAvatars(filteredAvatars);
         }
     }, [searchValue, dispatch, avatars]);
 
     useEffect(() => {
-        setAvatarsPerPage(searchedAvatars.slice((page - 1) * limit, page * limit));
+        setAvatarsPerPage(
+            searchedAvatars.slice((page - 1) * limit, page * limit),
+        );
     }, [searchedAvatars, page, limit, searchValue]);
 
     //------- Round Data and Validation
     // Round Data
     const initialDetails = {
-        email: '',
+        email: "",
         country: {},
-        role: Roles[0]
+        role: Roles[0],
     };
     const [details, setDetails] = useState(initialDetails);
 
     // Details Data Validation
     const detailsDataError = useMemo(() => {
-        if(!details.email) return {email: 'Email is required'};
-        if(!validator.isEmail(details.email)) return {email: 'Email is invalid'};
-        if(!details.country.value) return {country: 'Please select country'};
-        if(!details.role.value) return {role: 'Please select role'};
+        if (!details.email) return { email: "Email is required" };
+        if (!validator.isEmail(details.email))
+            return { email: "Email is invalid" };
+        if (!details.country.value) return { country: "Please select country" };
+        if (!details.role.value) return { role: "Please select role" };
         return {};
     }, [details]);
 
@@ -83,25 +88,25 @@ const IndexPage = () => {
 
     // Avatar Data Validation
     const avatarDataError = useMemo(() => {
-        if(Object.keys(avatar).length === 0) return 'Please select a avatar';
-        return '';
+        if (Object.keys(avatar).length === 0) return "Please select a avatar";
+        return "";
     }, [avatar]);
 
     //-------- User display name and Validation
-    const [userName, setUserName] = useState('');
+    const [userName, setUserName] = useState("");
     const userNameError = useMemo(() => {
-        if(!userName) return 'User`s display name is required';
-        return '';
+        if (!userName) return "User`s display name is required";
+        return "";
     }, [userName]);
 
-    const selectAvatar = item => {
-        setAvatar({})
+    const selectAvatar = (item) => {
+        setAvatar({});
         setAvatar(item);
         setIsShowAvatarOpen(true);
     };
 
     const setUserDetails = () => {
-        if(Object.values(detailsDataError)[0]) {
+        if (Object.values(detailsDataError)[0]) {
             setShowError(true);
             return;
         }
@@ -110,7 +115,7 @@ const IndexPage = () => {
     };
 
     const setAvatarData = () => {
-        if(avatarDataError) {
+        if (avatarDataError) {
             setShowError(true);
             return;
         }
@@ -119,7 +124,7 @@ const IndexPage = () => {
     };
 
     const setUserDispalyName = () => {
-        if(userNameError) {
+        if (userNameError) {
             setShowError(true);
             return;
         }
@@ -145,120 +150,213 @@ const IndexPage = () => {
             <Seo title="Create User" />
             <main className="create-user-page">
                 <LayoutForCreate>
-                    <Link className="close" to="/admin"><Icon icon="codicon:chrome-close" /></Link>
+                    <Link className="close" to="/admin">
+                        <Icon icon="codicon:chrome-close" />
+                    </Link>
                     <p className="subtitle">Create a User</p>
-                    <Stepper currentStep={currentStep} texts={['Details', 'Avatar', 'Name']}/>
+                    <Stepper
+                        currentStep={currentStep}
+                        texts={["Details", "Avatar", "Name"]}
+                    />
                     {currentStep === 1 && (
                         <>
                             <div className="input_div">
-                                {showError? (Object.values(detailsDataError)[0]? <Alert severity="error">{Object.values(detailsDataError)[0]}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
+                                {showError ? (
+                                    Object.values(detailsDataError)[0] ? (
+                                        <Alert severity="error">
+                                            {Object.values(detailsDataError)[0]}
+                                        </Alert>
+                                    ) : (
+                                        <Alert severity="success">
+                                            Success! Please click Next Button
+                                        </Alert>
+                                    )
+                                ) : (
+                                    ""
+                                )}
                                 <div className="div1">
                                     <div>
                                         <p>Email</p>
-                                        <input className={`black_input ${showError && detailsDataError.email? 'error': ''}`}
-                                            value={details.email} 
-                                            onChange={e => setDetails({...details, email: e.target.value})}
+                                        <input
+                                            className={`black_input ${showError && detailsDataError.email ? "error" : ""}`}
+                                            value={details.email}
+                                            onChange={(e) =>
+                                                setDetails({
+                                                    ...details,
+                                                    email: e.target.value,
+                                                })
+                                            }
                                         />
                                     </div>
                                     <div>
                                         <p>Country of residence</p>
                                         <Select
-                                            className={`black_input ${showError && detailsDataError.country? 'error': ''}`}
+                                            className={`black_input ${showError && detailsDataError.country ? "error" : ""}`}
                                             value={details.country}
-                                            onChange={selected => {
-                                                setDetails({...details, country: selected});
+                                            onChange={(selected) => {
+                                                setDetails({
+                                                    ...details,
+                                                    country: selected,
+                                                });
                                             }}
                                             options={Countries}
                                             styles={customSelectStyles}
                                         />
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <div className="div1 mt-3">
                                     <div>
                                         <p>Role</p>
                                         <Select
-                                            className={`black_input ${showError && detailsDataError.role? 'error': ''}`}
+                                            className={`black_input ${showError && detailsDataError.role ? "error" : ""}`}
                                             value={details.role}
-                                            onChange={selected => {
-                                                setDetails({...details, role: selected});
+                                            onChange={(selected) => {
+                                                setDetails({
+                                                    ...details,
+                                                    role: selected,
+                                                });
                                             }}
                                             options={Roles}
                                             styles={customSelectStyles}
-
                                         />
                                     </div>
                                     <div>
                                         <p className="disabled">Password</p>
-                                        <input  className='black_input disabled' disabled
+                                        <input
+                                            className="black_input disabled"
+                                            disabled
                                             placeholder="Auto generated and send to email"
                                         />
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                             <div className="button_div">
-                                <Link className="btn previous" to="/admin">Cancel</Link>
-                                <button className="btn next" onClick={setUserDetails}>Next</button>
+                                <Link className="btn previous" to="/admin">
+                                    Cancel
+                                </Link>
+                                <button
+                                    className="btn next"
+                                    onClick={setUserDetails}
+                                >
+                                    Next
+                                </button>
                             </div>
                         </>
                     )}
                     {currentStep === 2 && (
                         <>
                             <div>
-                                {showError? (avatarDataError? <Alert severity="error">{avatarDataError}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
+                                {showError ? (
+                                    avatarDataError ? (
+                                        <Alert severity="error">
+                                            {avatarDataError}
+                                        </Alert>
+                                    ) : (
+                                        <Alert severity="success">
+                                            Success! Please click Next Button
+                                        </Alert>
+                                    )
+                                ) : (
+                                    ""
+                                )}
                                 <div className="avatar_div">
-                                    <input className="black_input" placeholder="Search"
+                                    <input
+                                        className="black_input"
+                                        placeholder="Search"
                                         value={searchValue}
-                                        onChange={e => setSearchValue(e.target.value)}
+                                        onChange={(e) =>
+                                            setSearchValue(e.target.value)
+                                        }
                                     />
                                     <div className="avatars mt-3">
                                         {avatarsPerPage.map((item, index) => {
                                             return (
-                                                <div className={`avatar ${avatar.id === item.id? 'avatar--selected': ''}`}
-                                                    key={item.id} onClick={() => selectAvatar(item)} onKeyDown={() => selectAvatar(item)} role="button" tabIndex={0}
+                                                <div
+                                                    className={`avatar ${avatar.id === item.id ? "avatar--selected" : ""}`}
+                                                    key={item.id}
+                                                    onClick={() =>
+                                                        selectAvatar(item)
+                                                    }
+                                                    onKeyDown={() =>
+                                                        selectAvatar(item)
+                                                    }
+                                                    role="button"
+                                                    tabIndex={0}
                                                 >
                                                     <div className="image">
-                                                        <AvatarImage avatar={item} />
+                                                        <AvatarImage
+                                                            avatar={item}
+                                                        />
                                                     </div>
                                                     <p title={item.surname}>
                                                         {item.surname}
                                                     </p>
                                                 </div>
-                                            )
+                                            );
                                         })}
                                     </div>
-                                    {_.isEmpty(avatarsPerPage)?
-                                        <p className="text-center">
-                                            No avatar
-                                        </p>
-                                        :
+                                    {_.isEmpty(avatarsPerPage) ? (
+                                        <p className="text-center">No avatar</p>
+                                    ) : (
                                         <div className="d-flex justify-content-center">
-                                            <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={searchedAvatars.length} />
+                                            <PaginationBar
+                                                setPage={setPageInfo}
+                                                page={page}
+                                                limit={limit}
+                                                total={searchedAvatars.length}
+                                            />
                                         </div>
-                                    }
+                                    )}
                                 </div>
                             </div>
                             <div className="button_div">
-                                <button className="btn previous" onClick={() => setCurrentStep(1)}>Previous</button>
-                                <button className="btn next" onClick={setAvatarData}>Next</button>
+                                <button
+                                    className="btn previous"
+                                    onClick={() => setCurrentStep(1)}
+                                >
+                                    Previous
+                                </button>
+                                <button
+                                    className="btn next"
+                                    onClick={setAvatarData}
+                                >
+                                    Next
+                                </button>
                             </div>
                         </>
                     )}
                     {currentStep === 3 && (
                         <>
                             <div className="input_div">
-                                {showError? (userNameError? <Alert severity="error">{userNameError}</Alert>: <Alert severity="success">Success! Please click Next Button</Alert>): ''}
+                                {showError ? (
+                                    userNameError ? (
+                                        <Alert severity="error">
+                                            {userNameError}
+                                        </Alert>
+                                    ) : (
+                                        <Alert severity="success">
+                                            Success! Please click Next Button
+                                        </Alert>
+                                    )
+                                ) : (
+                                    ""
+                                )}
                                 <div className="display-name">
                                     <div className="d-flex align-items-end justify-content-start">
                                         <h5 className="random-display mb-0 fw-bold me-4">
                                             {avatar.surname}.
                                         </h5>
                                         <div>
-                                            <p className="form-label">Your display name</p>
+                                            <p className="form-label">
+                                                Your display name
+                                            </p>
                                             <input
                                                 className="black_input"
                                                 type="text"
                                                 value={userName}
-                                                onChange={(e) => setUserName(e.target.value)}
+                                                onChange={(e) =>
+                                                    setUserName(e.target.value)
+                                                }
                                             />
                                         </div>
                                     </div>
@@ -266,10 +364,18 @@ const IndexPage = () => {
                                         <p
                                             className="random-text"
                                             onClick={() =>
-                                                setUserName(names.random().substring(0, 7))
+                                                setUserName(
+                                                    names
+                                                        .random()
+                                                        .substring(0, 7),
+                                                )
                                             }
                                             onKeyDown={() =>
-                                                setUserName(names.random().substring(0, 7))
+                                                setUserName(
+                                                    names
+                                                        .random()
+                                                        .substring(0, 7),
+                                                )
                                             }
                                             role="presentation"
                                         >
@@ -279,20 +385,32 @@ const IndexPage = () => {
                                 </div>
                             </div>
                             <div className="button_div">
-                                <button className="btn previous" onClick={() => setCurrentStep(2)}>Previous</button>
-                                <button className="btn next" onClick={setUserDispalyName}>Next</button>
+                                <button
+                                    className="btn previous"
+                                    onClick={() => setCurrentStep(2)}
+                                >
+                                    Previous
+                                </button>
+                                <button
+                                    className="btn next"
+                                    onClick={setUserDispalyName}
+                                >
+                                    Next
+                                </button>
                             </div>
                         </>
                     )}
                     {currentStep === 4 && (
                         <>
-                            <div className="input_div">                               
+                            <div className="input_div">
                                 <div className="for_desktop">
                                     <div className="row">
                                         <div className="col-sm-4 col-6">
                                             <div className="item">
                                                 <p>Display Name</p>
-                                                <p>{avatar.surname}.{userName}</p>
+                                                <p>
+                                                    {avatar.surname}.{userName}
+                                                </p>
                                             </div>
                                             <div className="item">
                                                 <p>Country</p>
@@ -317,43 +435,45 @@ const IndexPage = () => {
                                             <div className="item">
                                                 <p>Avatar</p>
                                                 <p>{avatar.surname}</p>
-                                            </div>  
+                                            </div>
                                             <div className="item">
                                                 <AvatarImage avatar={avatar} />
                                             </div>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                                 <div className="for_phone">
                                     <div className="row">
                                         <div className="col-sm-3 mb-4">
                                             <div className="item">
                                                 <AvatarImage avatar={avatar} />
-                                            </div>  
+                                            </div>
                                             <div className="item text-center">
                                                 <p>Avatar</p>
                                                 <p>{avatar.surname}</p>
-                                            </div>                                              
+                                            </div>
                                         </div>
                                         <div className="col-sm-4 col-6 mb-4">
                                             <div className="item">
                                                 <p>Display Name</p>
-                                                <p>{avatar.surname}.{userName}</p>
-                                            </div>                                        
+                                                <p>
+                                                    {avatar.surname}.{userName}
+                                                </p>
+                                            </div>
                                             <div className="item">
                                                 <p>Country</p>
                                                 <p>{details.country.label}</p>
-                                            </div>                                        
+                                            </div>
                                             <div className="item">
                                                 <p>Role</p>
                                                 <p>{details.role.label}</p>
-                                            </div>                                     
+                                            </div>
                                         </div>
                                         <div className="col-sm-5 col-6">
                                             <div className="item">
                                                 <p>Email</p>
                                                 <p>{details.email}</p>
-                                            </div>  
+                                            </div>
                                             <div className="item">
                                                 <p>Password</p>
                                                 <p>********</p>
@@ -363,44 +483,59 @@ const IndexPage = () => {
                                 </div>
                             </div>
                             <div className="button_div">
-                                <button className="btn previous" onClick={() => setCurrentStep(3)}>Previous</button>
-                                <button className="btn next" onClick={handleSubmit} disabled={pending}>{pending? 'Saving. . .': 'Save'}</button>
+                                <button
+                                    className="btn previous"
+                                    onClick={() => setCurrentStep(3)}
+                                >
+                                    Previous
+                                </button>
+                                <button
+                                    className="btn next"
+                                    onClick={handleSubmit}
+                                    disabled={pending}
+                                >
+                                    {pending ? "Saving. . ." : "Save"}
+                                </button>
                             </div>
                         </>
                     )}
-                    <ShowAvatarModal isModalOpen={isShowAvatarOpen} setIsModalOpen={setIsShowAvatarOpen} avatar={avatar} />
+                    <ShowAvatarModal
+                        isModalOpen={isShowAvatarOpen}
+                        setIsModalOpen={setIsShowAvatarOpen}
+                        avatar={avatar}
+                    />
                 </LayoutForCreate>
             </main>
         </>
-    )
-}
+    );
+};
 
 export default IndexPage;
 
 const customSelectStyles = {
     option: (provided, state) => ({
-      ...provided,
-      color: 'white',
-      backgroundColor: state.isSelected ? '#23c865' : '#1e1e1e',
-      fontSize: 14
-    }),
-    control: provided => ({
-      ...provided,
-      backgroundColor: '#1e1e1e',
-      border: 'none',
-      borderRadius: 0
-    }),
-    menu: provided => ({
         ...provided,
-        backgroundColor: '#1e1e1e',
-        border: '1px solid white',
+        color: "white",
+        backgroundColor: state.isSelected ? "#23c865" : "#1e1e1e",
+        fontSize: 14,
     }),
-    singleValue: provided => ({
+    control: (provided) => ({
         ...provided,
-        color: 'white',
+        backgroundColor: "#1e1e1e",
+        border: "none",
+        borderRadius: 0,
     }),
-    input: provided => ({
+    menu: (provided) => ({
         ...provided,
-        color: 'white'
-    })
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+    }),
+    singleValue: (provided) => ({
+        ...provided,
+        color: "white",
+    }),
+    input: (provided) => ({
+        ...provided,
+        color: "white",
+    }),
 };

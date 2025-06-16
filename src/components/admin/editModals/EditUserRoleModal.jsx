@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import Select from 'react-select';
-import Modal from 'react-modal';
-import { Icon } from '@iconify/react';
-import { change_User_Role } from '../../../redux/actions/userAction';
-import { Roles } from '../../../utilities/staticData';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import Select from "react-select";
+import Modal from "react-modal";
+import { Icon } from "@iconify/react";
+import { change_User_Role } from "../../../store/actions/userAction";
+import { Roles } from "../../../utilities/staticData";
 
 const EditUserRoleModal = ({ isModalOpen, setIsModalOpen, datum }) => {
     const dispatch = useDispatch();
-    const isAdmin = datum?.role.includes('ROLE_ADMIN');
-    const [userRole, setUserRole] = useState(isAdmin? Roles[1]: Roles[0]);
+    const isAdmin = datum?.role.includes("ROLE_ADMIN");
+    const [userRole, setUserRole] = useState(isAdmin ? Roles[1] : Roles[0]);
     const [pending, setPending] = useState(false);
 
-
-    const handleChangeUserRole = async e => {
+    const handleChangeUserRole = async (e) => {
         e.preventDefault();
         setPending(true);
         const updateData = {
             id: datum.id,
             email: datum.email,
-            role: userRole.value
+            role: userRole.value,
         };
         await dispatch(change_User_Role(updateData));
         setPending(false);
@@ -51,9 +50,9 @@ const EditUserRoleModal = ({ isModalOpen, setIsModalOpen, datum }) => {
                         Role
                     </p>
                     <Select
-                        className='black_input'
+                        className="black_input"
                         value={userRole}
-                        onChange={selected => {
+                        onChange={(selected) => {
                             setUserRole(selected);
                         }}
                         options={Roles}
@@ -61,46 +60,47 @@ const EditUserRoleModal = ({ isModalOpen, setIsModalOpen, datum }) => {
                     />
                 </div>
                 <div className="pwd-modal__footer mt-5">
-                    <button className="btn previous" onClick={() => setIsModalOpen(false)}>
+                    <button
+                        className="btn previous"
+                        onClick={() => setIsModalOpen(false)}
+                    >
                         Cancel
                     </button>
-                    <button className="btn next"
-                        onClick={handleChangeUserRole}
-                    >
-                        {pending? 'Changing. . .': 'Change Role'}
+                    <button className="btn next" onClick={handleChangeUserRole}>
+                        {pending ? "Changing. . ." : "Change Role"}
                     </button>
                 </div>
             </form>
         </Modal>
-    )
+    );
 };
 
 export default EditUserRoleModal;
 
 const customSelectStyles = {
     option: (provided, state) => ({
-      ...provided,
-      color: 'white',
-      backgroundColor: state.isSelected ? '#23c865' : '#1e1e1e',
-      fontSize: 14
-    }),
-    control: provided => ({
-      ...provided,
-      backgroundColor: '#1e1e1e',
-      border: 'none',
-      borderRadius: 0
-    }),
-    menu: provided => ({
         ...provided,
-        backgroundColor: '#1e1e1e',
-        border: '1px solid white',
+        color: "white",
+        backgroundColor: state.isSelected ? "#23c865" : "#1e1e1e",
+        fontSize: 14,
     }),
-    singleValue: provided => ({
+    control: (provided) => ({
         ...provided,
-        color: 'white',
+        backgroundColor: "#1e1e1e",
+        border: "none",
+        borderRadius: 0,
     }),
-    input: provided => ({
+    menu: (provided) => ({
         ...provided,
-        color: 'white'
-    })
+        backgroundColor: "#1e1e1e",
+        border: "1px solid white",
+    }),
+    singleValue: (provided) => ({
+        ...provided,
+        color: "white",
+    }),
+    input: (provided) => ({
+        ...provided,
+        color: "white",
+    }),
 };

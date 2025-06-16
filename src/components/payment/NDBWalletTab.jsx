@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import Select, { components } from "react-select";
 import _ from "lodash";
 import { Icon } from "@iconify/react";
-import ReactTooltip from "react-tooltip";
-import NumberFormat from "react-number-format";
+import { ReactTooltip } from "../../utilities/tooltip";
+import { NumericFormat as NumberFormat } from "react-number-format";
 import { GET_BALANCES } from "../../apollo/graphqls/querys/Auth";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
 import CustomSpinner from "../common/custom-spinner";
@@ -29,7 +29,7 @@ const { Option } = components;
 
 const setAmountWithPrecision = (tokenType, amount) => {
     let precision = 8;
-    
+
     return (
         Math.round(amount * Math.pow(10, precision)) / Math.pow(10, precision)
     );
@@ -51,7 +51,7 @@ const SelectOption = (props) => {
                         displayType={"text"}
                         value={setAmountWithPrecision(
                             data.tokenType,
-                            data.amount
+                            data.amount,
                         )}
                         thousandSeparator={true}
                         renderText={(value, props) => <p {...props}>{value}</p>}
@@ -79,7 +79,7 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
     const NDBWalletPaymentFee = getNDBWalletPaymentFee(
         user,
         allFees,
-        bidAmount
+        bidAmount,
     );
     const finalPaymentAmount = Number(bidAmount) + Number(NDBWalletPaymentFee);
 
@@ -89,7 +89,7 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
             if (data.getBalances) {
                 let list = data.getBalances?.filter(
                     (token) =>
-                        token.tokenName !== "NDB" && token.tokenName !== "WATT"
+                        token.tokenName !== "NDB" && token.tokenName !== "WATT",
                 );
                 list = _.orderBy(list, ["free"], ["desc"]);
                 list = list.map((item) => ({
@@ -201,8 +201,11 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                 <NumberFormat
                                     className="black_input form-control ps-3"
                                     displayType={"text"}
-                                    suffix=' USD'
-                                    value={roundNumber(Number(finalPaymentAmount), 2)}
+                                    suffix=" USD"
+                                    value={roundNumber(
+                                        Number(finalPaymentAmount),
+                                        2,
+                                    )}
                                     thousandSeparator={true}
                                     renderText={(value, props) => (
                                         <p {...props}>~ {value}</p>
@@ -219,11 +222,12 @@ export default function NDBWalletTab({ bidAmount, currentRound, orderId }) {
                                 />
                                 <div className="allow-text text-light">
                                     Do you allow fraction of order compleation?
-                                    <span className="ms-2 fs-20px"
+                                    <span
+                                        className="ms-2 fs-20px"
                                         data-tip="React-tooltip"
-                                        data-for='ndb-wallet-question-mark-tooltip'
+                                        data-for="ndb-wallet-question-mark-tooltip"
                                     >
-                                        <Icon icon='bi:question-circle' />
+                                        <Icon icon="bi:question-circle" />
                                     </span>
                                 </div>
                                 <ReactTooltip

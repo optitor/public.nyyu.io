@@ -1,7 +1,10 @@
 import React, { useReducer, useState } from "react";
 import { Link, navigate } from "gatsby";
 import validator from "validator";
-import { passwordValidatorOptions, social_links } from "../../utilities/staticData";
+import {
+    passwordValidatorOptions,
+    social_links,
+} from "../../utilities/staticData";
 import { FormInput } from "../common/FormControl";
 import AuthLayout from "../common/AuthLayout";
 import CustomSpinner from "../common/custom-spinner";
@@ -11,21 +14,24 @@ import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
 import { useMutation } from "@apollo/client";
 import VerifyMutliFA from "./verify-multiFA";
 import TwoFactorModal from "../profile/two-factor-modal";
-import Seo from '../seo';
+import Seo from "../seo";
 
 const Signin = () => {
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        email: "",
-        pwd: "",
-        remember: false,
-        emailError: "",
-        pwdError: "",
-        authError: false,
-        pwdVisible: false,
-        tempToken: "",
-        twoStep: [],
-        tfaOpen: false,
-    });
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            email: "",
+            pwd: "",
+            remember: false,
+            emailError: "",
+            pwdError: "",
+            authError: false,
+            pwdVisible: false,
+            tempToken: "",
+            twoStep: [],
+            tfaOpen: false,
+        },
+    );
 
     const {
         email,
@@ -45,23 +51,43 @@ const Signin = () => {
     const [signinMutation, { loading }] = useMutation(GraphQL.SIGNIN, {
         retry: 1,
         onCompleted: (data) => {
+            console.log("🔐 Initial signin response:", data);
+            console.log("🔐 Signin status:", data.signin?.status);
+            console.log(
+                "🔐 Signin token:",
+                data.signin?.token ? "Present" : "Missing",
+            );
+            console.log("🔐 TwoStep methods:", data.signin?.twoStep);
+
             setState({
                 tempToken: data.signin.token,
                 twoStep: data.signin.twoStep,
             });
 
             if (data.signin.status === "Failed") {
+                console.log("❌ Signin failed:", data.signin.token);
                 setState({ authError: true });
                 setSuccess(false);
-                if (data.signin.token === "Please enable a two-step verification") {
-                    //Open select 2FA modal
+                if (
+                    data.signin.token ===
+                    "Please enable a two-step verification"
+                ) {
+                    console.log("🔐 Opening 2FA modal");
                     setState({ tfaOpen: true });
-                } else if (data.signin.token === "The account's email address is not verified") {
+                } else if (
+                    data.signin.token ===
+                    "The account's email address is not verified"
+                ) {
+                    console.log("📧 Email not verified - redirecting");
                     navigate(ROUTES.verifyEmail + email);
                 }
             } else if (data.signin.status === "Success") {
+                console.log("✅ Signin success - showing 2FA form");
                 setSuccess(true);
             }
+        },
+        onError: (error) => {
+            console.error("🚨 Signin mutation error:", error);
         },
     });
 
@@ -74,7 +100,10 @@ const Signin = () => {
             setState({ emailError: "Invalid email address" });
             error = true;
         }
-        if (!pwd || !validator.isStrongPassword(pwd, passwordValidatorOptions)) {
+        if (
+            !pwd ||
+            !validator.isStrongPassword(pwd, passwordValidatorOptions)
+        ) {
             setState({
                 pwdError:
                     "Password must contain at least 8 characters, including UPPER/lowercase and numbers!",
@@ -93,7 +122,7 @@ const Signin = () => {
 
     return (
         <>
-            <Seo title='Sign In' />
+            <Seo title="Sign In" />
             <AuthLayout>
                 <TwoFactorModal
                     is2FAModalOpen={tfaOpen}
@@ -118,7 +147,7 @@ const Signin = () => {
                     />
                 ) : (
                     <>
-                    <h3 className="signup-head mb-4">Sign In</h3>
+                        <h3 className="signup-head mb-4">Sign In</h3>
                         <form className="form">
                             <div className="form-group">
                                 <FormInput
@@ -126,7 +155,9 @@ const Signin = () => {
                                     type="text"
                                     label="Email"
                                     value={email}
-                                    onChange={(e) => setState({ email: e.target.value })}
+                                    onChange={(e) =>
+                                        setState({ email: e.target.value })
+                                    }
                                     placeholder="Enter email"
                                     error={emailError}
                                 />
@@ -136,7 +167,9 @@ const Signin = () => {
                                     type={pwdVisible ? "text" : "password"}
                                     label="Password"
                                     value={pwd}
-                                    onChange={(e) => setState({ pwd: e.target.value })}
+                                    onChange={(e) =>
+                                        setState({ pwd: e.target.value })
+                                    }
                                     placeholder="Enter password"
                                     error={pwdError}
                                 />
@@ -147,11 +180,20 @@ const Signin = () => {
                                         type="checkbox"
                                         value={pwdVisible}
                                         className="form-check-input"
-                                        onChange={() => setState({ pwdVisible: !pwdVisible })}
+                                        onChange={() =>
+                                            setState({
+                                                pwdVisible: !pwdVisible,
+                                            })
+                                        }
                                     />
-                                    <div className="keep-me-signed-in-text">Show password</div>
+                                    <div className="keep-me-signed-in-text">
+                                        Show password
+                                    </div>
                                 </label>
-                                <Link className="txt-green forget-pwd" to={ROUTES.forgotPassword}>
+                                <Link
+                                    className="txt-green forget-pwd"
+                                    to={ROUTES.forgotPassword}
+                                >
                                     Forgot password?
                                 </Link>
                             </div>
@@ -162,7 +204,9 @@ const Signin = () => {
                                         name="remember"
                                         value={remember}
                                         className="form-check-input"
-                                        onChange={() => setState({ remember: !remember })}
+                                        onChange={() =>
+                                            setState({ remember: !remember })
+                                        }
                                     />
                                     <div className="keep-me-signed-in-text">
                                         Keep me signed in in this device
@@ -180,10 +224,14 @@ const Signin = () => {
                                 disabled={loading}
                                 onClick={signUserIn}
                             >
-                                <div className={`${loading ? "opacity-100" : "opacity-0"}`}>
+                                <div
+                                    className={`${loading ? "opacity-100" : "opacity-0"}`}
+                                >
                                     <CustomSpinner />
                                 </div>
-                                <div className={`${loading ? "ms-3" : "pe-4"}`}>sign in</div>
+                                <div className={`${loading ? "ms-3" : "pe-4"}`}>
+                                    sign in
+                                </div>
                             </button>
                         </form>
                         <ul className="social-links">

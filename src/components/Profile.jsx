@@ -18,7 +18,7 @@ import { GET_USER } from "../apollo/graphqls/querys/Auth";
 import ConnectWalletTab from "./profile/connect-wallet-tab";
 import React, { useEffect, useState } from "react";
 import DeleteAccountModal from "./profile/delete-account-modal";
-import { setCurrentAuthInfo } from "../redux/actions/authAction";
+import { setCurrentAuthInfo } from "../store/actions/authAction";
 import NotificationRecent from "./profile/notification-recent-switch";
 import NotificationSetting from "./profile/notification-setting-switch";
 import ProfileChangePasswordModal from "./profile/change-password-modal";
@@ -26,23 +26,23 @@ import TierDetailsTab from "./profile/TierDetailsTab";
 import Avatar from "../components/dress-up/avatar";
 import { QuestionMark } from "../utilities/imgImport";
 import AccountDetails from "./profile/account-details";
-import ReactTooltip from "react-tooltip";
+import { ReactTooltip } from "../utilities/tooltip";
 import { GET_SHUFT_REFERENCE } from "./verify-identity/kyc-webservice";
 import { logout } from "../utilities/auth";
 import { getShuftiStatusByReference } from "../utilities/utility-methods";
 import TierProgressBar from "./profile/TierProgressBar";
 import DressupModal from "./dress-up/dressup-user-modal";
-import { getAuthInfo } from "../redux/actions/authAction";
+import { getAuthInfo } from "../store/actions/authAction";
 import { UPDATE_AVATARSET } from "../apollo/graphqls/mutations/AvatarComponent";
 import { GET_USER_TIERS } from "../apollo/graphqls/querys/UserTier";
 import { GET_DISCORD } from "./profile/profile-queries";
 
 const Profile = () => {
     const dispatch = useDispatch();
-    const targetTabIndex = useSelector(state => state.profileTab);
-    
+    const targetTabIndex = useSelector((state) => state.profileTab);
+
     const [tab, setTab] = useState(targetTabIndex !== 2 ? targetTabIndex : 0);
-    const [userTiersData, setUserTiersData] = useState(null)
+    const [userTiersData, setUserTiersData] = useState(null);
     const [tabIndex, setTabIndex] = useState(tab);
     const [displayName, setDisplayName] = useState("");
     const [discordName, setDiscordName] = useState("");
@@ -50,18 +50,19 @@ const Profile = () => {
     const [isDressUpModalOpen, setIsDressUpModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [currentProfileTab, setCurrentProfileTab] = useState(
-        profile_tabs[tab]
+        profile_tabs[tab],
     );
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
+        useState(false);
     const [shuftiStatus, setShuftiStatus] = useState(null);
     const [shuftReference, setShuftiReference] = useState(null);
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
 
     useQuery(GET_USER_TIERS, {
         onCompleted: (data) => {
-            setUserTiersData(data?.getUserTiers)
+            setUserTiersData(data?.getUserTiers);
         },
-    })
+    });
 
     // Webservice
     const { data: userData, refetch } = useQuery(GET_USER, {
@@ -82,14 +83,14 @@ const Profile = () => {
         fetchPolicy: "network-only",
     });
 
-    const {loading: loadingDiscord} = useQuery(GET_DISCORD, {
-        onCompleted: data => {
-            if(data.getDiscord) {
+    const { loading: loadingDiscord } = useQuery(GET_DISCORD, {
+        onCompleted: (data) => {
+            if (data.getDiscord) {
                 setDiscordName(data.getDiscord);
             }
         },
     });
-    
+
     useQuery(GET_SHUFT_REFERENCE, {
         onCompleted: (data) => {
             setShuftiReference(data?.getShuftiReference);
@@ -101,14 +102,15 @@ const Profile = () => {
 
     const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
-            dispatch(getAuthInfo())
+            dispatch(getAuthInfo());
         },
         onError: (err) => {
-            console.log("received Mutation data", err)
-        }
-    })
+            console.log("received Mutation data", err);
+        },
+    });
 
-    const loadingPage = !(displayName && userTiersData && shuftiStatus) || loadingDiscord;
+    const loadingPage =
+        !(displayName && userTiersData && shuftiStatus) || loadingDiscord;
     // Containers
     const user = userData?.getUser;
     const twoStep = user?.security
@@ -116,10 +118,10 @@ const Profile = () => {
         : [];
 
     const currentTier = userTiersData?.filter(
-        (item) => item?.level === user?.tierLevel
+        (item) => item?.level === user?.tierLevel,
     );
     const nextTier = userTiersData?.filter(
-        (item) => item?.level === user?.tierLevel + 1
+        (item) => item?.level === user?.tierLevel + 1,
     );
 
     // Methods
@@ -189,16 +191,16 @@ const Profile = () => {
 
     useEffect(() => dispatch(setCurrentAuthInfo(user)), [dispatch, user]);
 
-    const getShuftiStatusByReferenceFn = async() => {
+    const getShuftiStatusByReferenceFn = async () => {
         if (!shuftiReferenceLoading) {
             const response = await getShuftiStatusByReference(
-                shuftReference?.reference
+                shuftReference?.reference,
             );
             return setShuftiStatus(response);
         }
-    }
+    };
     useEffect(() => {
-        getShuftiStatusByReferenceFn()
+        getShuftiStatusByReferenceFn();
     }, [shuftiReferenceLoading]);
 
     if (loadingPage) return <Loading />;
@@ -230,10 +232,15 @@ const Profile = () => {
                         <div className="row">
                             <div className="col-lg-3 profile-page__left border-light border-0 border-end">
                                 <div className="user-info">
-                                    <div className="my-5 user-info__avatar"
-                                       onClick={() => setIsDressUpModalOpen(true)}
-                                       onKeyDown={() => setIsDressUpModalOpen(true)}
-                                       style={{opacity: loading? 0.5: 1}}
+                                    <div
+                                        className="my-5 user-info__avatar"
+                                        onClick={() =>
+                                            setIsDressUpModalOpen(true)
+                                        }
+                                        onKeyDown={() =>
+                                            setIsDressUpModalOpen(true)
+                                        }
+                                        style={{ opacity: loading ? 0.5 : 1 }}
                                     >
                                         <Avatar />
                                     </div>
@@ -248,7 +255,12 @@ const Profile = () => {
                                         ) : (
                                             <></>
                                         )}
-                                        <p className="text-truncate fs-18px" title={displayName}>{displayName}</p>
+                                        <p
+                                            className="text-truncate fs-18px"
+                                            title={displayName}
+                                        >
+                                            {displayName}
+                                        </p>
                                     </div>
                                     <p className="silver-cnt">
                                         {nextTier?.length > 0 &&
@@ -298,7 +310,12 @@ const Profile = () => {
                             <div className="col-lg-9 profile-page__right">
                                 {tabIndex === 0 && (
                                     <>
-                                        <Tabs defaultIndex={targetTabIndex === 2 ? 1 : 0} className="detail-tab">
+                                        <Tabs
+                                            defaultIndex={
+                                                targetTabIndex === 2 ? 1 : 0
+                                            }
+                                            className="detail-tab"
+                                        >
                                             <TabList>
                                                 <Tab>
                                                     <div className="pt-3">
@@ -311,8 +328,16 @@ const Profile = () => {
                                                     </div>
                                                 </Tab>
                                                 <Tab
-                                                    onClick={() => setIsDressUpModalOpen(true)}
-                                                    onKeyDown={() => setIsDressUpModalOpen(true)}
+                                                    onClick={() =>
+                                                        setIsDressUpModalOpen(
+                                                            true,
+                                                        )
+                                                    }
+                                                    onKeyDown={() =>
+                                                        setIsDressUpModalOpen(
+                                                            true,
+                                                        )
+                                                    }
                                                 >
                                                     <div className="pt-3">
                                                         Dress Up
@@ -434,9 +459,23 @@ const Profile = () => {
                                             </TabPanel>
                                             <TabPanel>
                                                 <>
-                                                    <div className="user-info_avatar cursor-pointer" style={{opacity: loading? 0.5: 1}}
-                                                        onClick={() => setIsDressUpModalOpen(true)}
-                                                        onKeyDown={() => setIsDressUpModalOpen(true)}
+                                                    <div
+                                                        className="user-info_avatar cursor-pointer"
+                                                        style={{
+                                                            opacity: loading
+                                                                ? 0.5
+                                                                : 1,
+                                                        }}
+                                                        onClick={() =>
+                                                            setIsDressUpModalOpen(
+                                                                true,
+                                                            )
+                                                        }
+                                                        onKeyDown={() =>
+                                                            setIsDressUpModalOpen(
+                                                                true,
+                                                            )
+                                                        }
                                                     >
                                                         <Avatar />
                                                     </div>
@@ -479,28 +518,31 @@ const Profile = () => {
                             </div>
                         </div>
                     </section>
-                    {isPasswordModalOpen &&
-                    <ProfileChangePasswordModal
-                        isPasswordModalOpen={isPasswordModalOpen}
-                        setIsPasswordModalOpen={setIsPasswordModalOpen}
-                    />}
-                    {isDeleteAccountModalOpen &&
-                    <DeleteAccountModal
-                        isDeleteAccountModalOpen={isDeleteAccountModalOpen}
-                        setIsDeleteAccountModalOpen={
-                            setIsDeleteAccountModalOpen
-                        }
-                    />}
-                    {isDressUpModalOpen && 
-                    <DressupModal
-                        setIsModalOpen={setIsDressUpModalOpen}
-                        isModalOpen={isDressUpModalOpen}
-                        onSave={(res) => {
-                            updateAvatarSet({
-                                variables: { ...res }
-                            })
-                        }}
-                    />}
+                    {isPasswordModalOpen && (
+                        <ProfileChangePasswordModal
+                            isPasswordModalOpen={isPasswordModalOpen}
+                            setIsPasswordModalOpen={setIsPasswordModalOpen}
+                        />
+                    )}
+                    {isDeleteAccountModalOpen && (
+                        <DeleteAccountModal
+                            isDeleteAccountModalOpen={isDeleteAccountModalOpen}
+                            setIsDeleteAccountModalOpen={
+                                setIsDeleteAccountModalOpen
+                            }
+                        />
+                    )}
+                    {isDressUpModalOpen && (
+                        <DressupModal
+                            setIsModalOpen={setIsDressUpModalOpen}
+                            isModalOpen={isDressUpModalOpen}
+                            onSave={(res) => {
+                                updateAvatarSet({
+                                    variables: { ...res },
+                                });
+                            }}
+                        />
+                    )}
                 </main>
             </>
         );
@@ -513,14 +555,14 @@ const customSelectStyles = {
     option: (provided, state) => ({
         ...provided,
         color: "white",
-        backgroundColor: state.isSelected? '#000000': undefined,
+        backgroundColor: state.isSelected ? "#000000" : undefined,
         fontSize: 14,
-        fontWeight: 'bold',
-        borderBottom: '1px solid dimgrey',
-        cursor: 'pointer',
-        ':hover': {
-            backgroundColor: 'inherit'
-        }
+        fontWeight: "bold",
+        borderBottom: "1px solid dimgrey",
+        cursor: "pointer",
+        ":hover": {
+            backgroundColor: "inherit",
+        },
     }),
     control: (provided) => ({
         ...provided,
@@ -528,12 +570,12 @@ const customSelectStyles = {
         border: "none",
         borderRadius: 0,
         height: 47,
-        cursor: 'pointer'
+        cursor: "pointer",
     }),
-    input: provided => ({
+    input: (provided) => ({
         ...provided,
-        color: 'white',
-        paddingLeft: 7
+        color: "white",
+        paddingLeft: 7,
     }),
     menu: (provided) => ({
         ...provided,
@@ -541,25 +583,25 @@ const customSelectStyles = {
         backgroundColor: "#1e1e1e",
         border: "1px solid white",
     }),
-    menuList: provided => ({
+    menuList: (provided) => ({
         ...provided,
         borderRadius: 0,
         margin: 0,
-        padding: 0
+        padding: 0,
     }),
-    valueContainer: provided => ({
+    valueContainer: (provided) => ({
         ...provided,
-        padding: 0
+        padding: 0,
     }),
     singleValue: (provided) => ({
         ...provided,
         color: "white",
         fontSize: 20,
         fontWeight: "bold",
-        marginLeft: 10
+        marginLeft: 10,
     }),
-    placeholder: provided => ({
+    placeholder: (provided) => ({
         ...provided,
-        color: 'dimgrey'
-    })
+        color: "dimgrey",
+    }),
 };

@@ -4,15 +4,15 @@ import Select from "react-select";
 import { VerifyIdStep2 } from "../../utilities/imgImport";
 import Loading from "../common/Loading";
 import { useVerification } from "./verification-context";
-import TextField from '@mui/material/TextField';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import TextField from "@mui/material/TextField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 
 const GENDER_LIST = [
-    {label: "Female", value: "F"},
-    {label: "Male", value: "M"},
-]
+    { label: "Female", value: "F" },
+    { label: "Male", value: "M" },
+];
 
 export default function StepTwo() {
     // Containers
@@ -44,7 +44,6 @@ export default function StepTwo() {
         }
         if (!error) return verification.nextStep();
     };
-    
 
     // Render
     verification.shuftReferencePayload?.docStatus === true &&
@@ -55,7 +54,7 @@ export default function StepTwo() {
             <div className={`${!loading && "d-none"}`}>
                 <Loading />
             </div>
-            <div 
+            <div
                 className={`col-12 mx-auto mt-3 mt-sm-0 ${loading && "d-none"}`}
             >
                 <h4 className="text-center  mt-5 mt-sm-2 mb-4">
@@ -67,7 +66,7 @@ export default function StepTwo() {
                             step 1
                         </div>
                         <div className="text-light fs-14px fw-bold">
-                        Confirm your ID information
+                            Confirm your ID information
                         </div>
                     </div>
                     <img
@@ -128,16 +127,22 @@ export default function StepTwo() {
                                 {genderError}
                             </div> */}
                         </div>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <div>
                                 <p className="form-label mt-4">Date of Birth</p>
                                 <MobileDatePicker
                                     showTodayButton
                                     value={verification.dob}
                                     onChange={(newValue) => {
-                                        verification.setDob(newValue.toLocaleDateString('fr-CA'));
+                                        verification.setDob(
+                                            newValue.toLocaleDateString(
+                                                "fr-CA",
+                                            ),
+                                        );
                                     }}
-                                    renderInput={(params) => <TextField {...params} />}
+                                    renderInput={(params) => (
+                                        <TextField {...params} />
+                                    )}
                                 />
                                 <div className="text-danger mt-2 fs-12px">
                                     {dateError}
@@ -149,9 +154,15 @@ export default function StepTwo() {
                                     showTodayButton
                                     value={verification.expiryDate}
                                     onChange={(newValue) => {
-                                        verification.setExpiryDate(newValue.toLocaleDateString('fr-CA'));
+                                        verification.setExpiryDate(
+                                            newValue.toLocaleDateString(
+                                                "fr-CA",
+                                            ),
+                                        );
                                     }}
-                                    renderInput={(params) => <TextField {...params} />}
+                                    renderInput={(params) => (
+                                        <TextField {...params} />
+                                    )}
                                 />
                                 <div className="text-danger mt-2 fs-12px">
                                     {dateError}
@@ -180,21 +191,20 @@ export default function StepTwo() {
     );
 }
 
-
 const GenderSelectStyle = {
-    control: provided => ({
+    control: (provided) => ({
         ...provided,
         height: 38,
-        borderRadius: 0
+        borderRadius: 0,
     }),
-    valueContainer: provided => ({
+    valueContainer: (provided) => ({
         ...provided,
-        paddingTop: 0
+        paddingTop: 0,
     }),
-    input: provided => ({
+    input: (provided) => ({
         ...provided,
         padding: 0,
-        margin: 0
+        margin: 0,
     }),
     singleValue: (provided) => ({
         ...provided,

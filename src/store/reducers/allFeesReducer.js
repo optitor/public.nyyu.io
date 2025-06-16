@@ -1,4 +1,4 @@
-import * as types from './../actionTypes';
+import * as types from "../actionTypes";
 
 export const allFeesReducer = (state = {}, action) => {
     switch (action.type) {
@@ -7,4 +7,4 @@ export const allFeesReducer = (state = {}, action) => {
         default:
             return state;
     }
-}
+};

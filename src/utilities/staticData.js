@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
     // Facebook,
     Amazon,
@@ -8,26 +8,36 @@ import {
     MetaMask,
     TrustWallet,
     WalletConnect,
-} from "./imgImport"
-import { ROUTES } from "./routes"
-export const OAUTH2_REDIRECT_URI = `${process.env.GATSBY_SITE_URL}/oauth2/redirect`
+} from "./imgImport";
+import { ROUTES } from "./routes";
+export const OAUTH2_REDIRECT_URI = `${process.env.GATSBY_SITE_URL}/oauth2/redirect`;
 
-export const BINANCE_API_KEY = "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582"
+export const BINANCE_API_KEY =
+    "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582";
 const API_BASE_URL = process.env.GATSBY_API_BASE_URL;
 export const social_links = [
     {
         icon: Google,
-        to: API_BASE_URL + "/oauth2/authorize/google?redirect_uri=" + OAUTH2_REDIRECT_URI,
+        to:
+            API_BASE_URL +
+            "/oauth2/authorize/google?redirect_uri=" +
+            OAUTH2_REDIRECT_URI,
     },
     {
         icon: Linkedin,
-        to: API_BASE_URL + "/oauth2/authorize/linkedin?redirect_uri=" + OAUTH2_REDIRECT_URI,
+        to:
+            API_BASE_URL +
+            "/oauth2/authorize/linkedin?redirect_uri=" +
+            OAUTH2_REDIRECT_URI,
     },
     {
         icon: Amazon,
-        to: API_BASE_URL + "/oauth2/authorize/amazon?redirect_uri=" + OAUTH2_REDIRECT_URI,
+        to:
+            API_BASE_URL +
+            "/oauth2/authorize/amazon?redirect_uri=" +
+            OAUTH2_REDIRECT_URI,
     },
-]
+];
 
 export const passwordValidatorOptions = {
     minLength: 8,
@@ -42,61 +52,63 @@ export const passwordValidatorOptions = {
     pointsForContainingUpper: 10,
     pointsForContainingNumber: 10,
     pointsForContainingSymbol: 10,
-}
+};
 
-export const COLOR_LOAD = "#ffffff"
-export const COLOR_ON = "#23c865"
-export const COLOR_OFF = "#626161"
+export const COLOR_LOAD = "#ffffff";
+export const COLOR_ON = "#23c865";
+export const COLOR_OFF = "#626161";
 
-export const INFURA_ID = "b3926273acc243d1ab72dfe9f2be8539"
+export const INFURA_ID = "b3926273acc243d1ab72dfe9f2be8539";
 
 export const wallets = {
     metaMask: {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
         warn: "MetaMask is not supported by your Browser",
-        short: 'MetaMask Wallet'
+        short: "MetaMask Wallet",
     },
     walletConnect: {
         icon: WalletConnect,
         desc: "Scan with WalletConnect to connect",
         warn: "WalletConnect is not supported",
-        short: 'WalletConnect Wallet'
+        short: "WalletConnect Wallet",
     },
     coinbaseWallet: {
         icon: Coinbase,
         desc: "Connect to your Coinbase Account",
         warn: "Coinbase Account is not supported",
-        short: 'CoinBase Wallet'
+        short: "CoinBase Wallet",
     },
     trustWallet: {
         icon: TrustWallet,
         desc: "Connect to your Trust wallet",
         warn: "Trust wallet is only supported on Mobile",
-        short: 'TrustWallet'
+        short: "TrustWallet",
     },
-}
+};
 
 export const externalWallets = [
     {
         icon: MetaMask,
         title: "MetaMask Wallet",
-        value: 'metamask'
-    }, {
+        value: "metamask",
+    },
+    {
         icon: WalletConnect,
         title: "WalletConnect",
-        value: 'wallet_connect'
-    }, {
+        value: "wallet_connect",
+    },
+    {
         icon: Coinbase,
         title: "Coinbase account",
-        value: 'coinbase_account'
-    }, {
+        value: "coinbase_account",
+    },
+    {
         icon: TrustWallet,
         title: "Trust Wallet",
-        value: 'trust_wallet'
+        value: "trust_wallet",
     },
-
-]
+];
 
 export const profile_tabs = [
     {
@@ -119,7 +131,7 @@ export const profile_tabs = [
         label: "SIGN OUT",
         index: 3,
     },
-]
+];
 
 export const recentNotifications = [
     {
@@ -142,7 +154,7 @@ export const recentNotifications = [
         status: true,
         act: "There are only 40 tokens left",
     },
-]
+];
 
 export const Currencies = [
     {
@@ -187,37 +199,42 @@ export const Currencies = [
         value: "CHF",
         symbol: "CHF",
     },
-]
+];
 
 export const TRANSACTION_TYPES = {
     deposit: "DEPOSIT",
     withdraw: "WITHDRAW",
-}
+};
 
 export const PAYMENT_FRACTION_TOOLTIP_CONTENT =
-    "If your bid is the last one to be accepted and there are not enough tokens to fulfil your order, by checking this box you allow us to complete your order with the remaining tokens only."
+    "If your bid is the last one to be accepted and there are not enough tokens to fulfil your order, by checking this box you allow us to complete your order with the remaining tokens only.";
 
-export const TWO_FACTOR_AUTH_TOOLTIP_CONTENT = "Enable 2FA to secure your account. Email 2FA can be used along with mobile or Google authentication."
+export const TWO_FACTOR_AUTH_TOOLTIP_CONTENT =
+    "Enable 2FA to secure your account. Email 2FA can be used along with mobile or Google authentication.";
 
 export const AUCTION_TOOLTIP_CONTENT1 =
-    "You can easily move between rounds to have a more clear understanding about auction statistics."
+    "You can easily move between rounds to have a more clear understanding about auction statistics.";
 
 export const AUCTION_TOOLTIP_CONTENT2 =
-    "Access charts to see more detailed information about NDB token performance"
+    "Access charts to see more detailed information about NDB token performance";
 
-export const NDB_WALLET_TOOLTIP_CONTENT = 'The balance will be available under the wallet page'
-export const EXTERNAL_WALLET_TOOLTIP_CONTENT = 'The balance will be transferred to your external wallet. Fees may be applicable.'
+export const NDB_WALLET_TOOLTIP_CONTENT =
+    "The balance will be available under the wallet page";
+export const EXTERNAL_WALLET_TOOLTIP_CONTENT =
+    "The balance will be transferred to your external wallet. Fees may be applicable.";
 
 export const FAQ_CONTENT = [
     {
         question: "What is the Dual Token System?",
         answer: (
             <p>
-                The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
-                the Volt Token, a variable supply token. The Dual token brings more incentives to
-                the users and partners. For example, with this method we can provide to our partners
-                more accurate measurements of the interest in their companies by utilizing our
-                services and products from their customer’s perspective.
+                The Dual Token System combines two tokens, the NDB token, a
+                fixed supply token, and the Volt Token, a variable supply token.
+                The Dual token brings more incentives to the users and partners.
+                For example, with this method we can provide to our partners
+                more accurate measurements of the interest in their companies by
+                utilizing our services and products from their customer’s
+                perspective.
             </p>
         ),
     },
@@ -225,12 +242,15 @@ export const FAQ_CONTENT = [
         question: "What is Volt Token?",
         answer: (
             <p>
-                The Volt token is the driving force behind the applications and interacts with NDB
-                token. These tokens will be of variable supply, burnable and mintable and serve to
-                power its applications. Through Volt token, the users will have the possibility to
-                lease and access benefits from our products. Furthermore, the token can be used as
-                an energy tracker for utility providers and consumers to earn rewards. There are
-                also plans for this token to be used as a form of energy payment in the future.
+                The Volt token is the driving force behind the applications and
+                interacts with NDB token. These tokens will be of variable
+                supply, burnable and mintable and serve to power its
+                applications. Through Volt token, the users will have the
+                possibility to lease and access benefits from our products.
+                Furthermore, the token can be used as an energy tracker for
+                utility providers and consumers to earn rewards. There are also
+                plans for this token to be used as a form of energy payment in
+                the future.
             </p>
         ),
     },
@@ -238,11 +258,13 @@ export const FAQ_CONTENT = [
         question: "What is the NDB token?",
         answer: (
             <p>
-                The NDB token is a tool for demonstrating the buyer’s interests in the partnership
-                between companies inside our ecosystem. The inclusion of new proposals into our
-                blockchain ecosystem enables people to stake their NDB tokens and support the
-                project, company, or individuals. By staking NDB tokens on different Pools, you can
-                earn dividends as Volt tokens over the staked amount.
+                The NDB token is a tool for demonstrating the buyer’s interests
+                in the partnership between companies inside our ecosystem. The
+                inclusion of new proposals into our blockchain ecosystem enables
+                people to stake their NDB tokens and support the project,
+                company, or individuals. By staking NDB tokens on different
+                Pools, you can earn dividends as Volt tokens over the staked
+                amount.
             </p>
         ),
     },
@@ -250,11 +272,12 @@ export const FAQ_CONTENT = [
         question: "What is Airdrop?",
         answer: (
             <p>
-                Our Airdrop function is the initial incentive for people to stake their NDB tokens
-                into the Pools. The Airdrop will come as a reward for the interaction between the
-                Pool entity and our products and services. As the ecosystem grows, more features
-                will be announced, guaranteeing advantages on-chain and off-chain for the user’s
-                interaction with specific Pools.
+                Our Airdrop function is the initial incentive for people to
+                stake their NDB tokens into the Pools. The Airdrop will come as
+                a reward for the interaction between the Pool entity and our
+                products and services. As the ecosystem grows, more features
+                will be announced, guaranteeing advantages on-chain and
+                off-chain for the user’s interaction with specific Pools.
             </p>
         ),
     },
@@ -262,9 +285,10 @@ export const FAQ_CONTENT = [
         question: "What are the pools?",
         answer: (
             <p>
-                Pools are the mechanism used for the token to gather and measure intention from
-                users and organizations for us and our partners. The Pools act as quantifiers for
-                value and will play an essential role in the early stages.
+                Pools are the mechanism used for the token to gather and measure
+                intention from users and organizations for us and our partners.
+                The Pools act as quantifiers for value and will play an
+                essential role in the early stages.
             </p>
         ),
     },
@@ -272,10 +296,11 @@ export const FAQ_CONTENT = [
         question: "What is the relationship between both tokens?",
         answer: (
             <p>
-                NDB token interacts with Volt, both of which price-wise, interact freely on the open
-                market. The interaction of NDB and Volt tokens will maintain the interest of users
-                in the ecosystem, and create economic checks and balances to regulate the demand for
-                tokens.
+                NDB token interacts with Volt, both of which price-wise,
+                interact freely on the open market. The interaction of NDB and
+                Volt tokens will maintain the interest of users in the
+                ecosystem, and create economic checks and balances to regulate
+                the demand for tokens.
             </p>
         ),
     },
@@ -283,13 +308,16 @@ export const FAQ_CONTENT = [
         question: "What is the NDB Hub?",
         answer: (
             <p>
-                NDB Hub is an institution governed by Voltamond SA based in Switzerland tasked with
-                assessing and putting forward growth proposals related to energy applications. It is
-                also responsible for maintaining and safeguarding the best interests of this project
-                through oversight on maintaining developers, seeking feedback from the community,
-                and searching for product improvement where needed. It will assess and seek
-                potential partners that support the growth of the ecosystem. This initiative is the
-                primary organization through which the NDB and Volt token operate.
+                NDB Hub is an institution governed by Voltamond SA based in
+                Switzerland tasked with assessing and putting forward growth
+                proposals related to energy applications. It is also responsible
+                for maintaining and safeguarding the best interests of this
+                project through oversight on maintaining developers, seeking
+                feedback from the community, and searching for product
+                improvement where needed. It will assess and seek potential
+                partners that support the growth of the ecosystem. This
+                initiative is the primary organization through which the NDB and
+                Volt token operate.
             </p>
         ),
     },
@@ -297,11 +325,13 @@ export const FAQ_CONTENT = [
         question: "How can I earn more tokens?",
         answer: (
             <p>
-                You can stake your NDB tokens on the different categories of Pools, to earn
-                dividends as Volt tokens based on the staked value. In addition to that, you should
-                bear in mind that NDB-powered devices constantly generate energy. That is why, when
-                you have a device containing our products, you can earn Volt tokens for the unused
-                energy sent to the grid when the device is inactive.
+                You can stake your NDB tokens on the different categories of
+                Pools, to earn dividends as Volt tokens based on the staked
+                value. In addition to that, you should bear in mind that
+                NDB-powered devices constantly generate energy. That is why,
+                when you have a device containing our products, you can earn
+                Volt tokens for the unused energy sent to the grid when the
+                device is inactive.
             </p>
         ),
     },
@@ -309,19 +339,21 @@ export const FAQ_CONTENT = [
         question: "How to send tokens to external sources?",
         answer: (
             <p>
-                The in-built function of NDB App will allow users to move their tokens to private
-                external wallets, or you can keep your tokens in custodian parties like crypto
-                exchanges.
+                The in-built function of NDB App will allow users to move their
+                tokens to private external wallets, or you can keep your tokens
+                in custodian parties like crypto exchanges.
             </p>
         ),
     },
     {
-        question: "Can I stake my NDB tokens without having an account on the NDB App?",
+        question:
+            "Can I stake my NDB tokens without having an account on the NDB App?",
         answer: (
             <p>
-                Safety and security of users of our platform is one of the top priorities for NDB.
-                That is why, before you stake NDB tokens into a Pool of any kind, you must submit
-                the required documents for the KYC process from our App.
+                Safety and security of users of our platform is one of the top
+                priorities for NDB. That is why, before you stake NDB tokens
+                into a Pool of any kind, you must submit the required documents
+                for the KYC process from our App.
             </p>
         ),
     },
@@ -329,7 +361,8 @@ export const FAQ_CONTENT = [
         question: "Which protocol are the tokens using?",
         answer: (
             <p>
-                The NDB token is created in IBEP-20 protocol using the Binance Smart Chain network.
+                The NDB token is created in IBEP-20 protocol using the Binance
+                Smart Chain network.
             </p>
         ),
     },
@@ -337,14 +370,15 @@ export const FAQ_CONTENT = [
         question: "Can I charge my devices with NDB token?",
         answer: (
             <p>
-                No, NDB token serves as a tool to demonstrate the buyer’s interest in the
-                partnership between companies inside the NDB ecosystem, but you can stake your NDB
-                tokens to earn Volt. With Volt tokens you can lease and access benefits from NDB’s
+                No, NDB token serves as a tool to demonstrate the buyer’s
+                interest in the partnership between companies inside the NDB
+                ecosystem, but you can stake your NDB tokens to earn Volt. With
+                Volt tokens you can lease and access benefits from NDB’s
                 products.
             </p>
         ),
     },
-]
+];
 
 export const NEWS_CONTENT = [
     {
@@ -352,53 +386,42 @@ export const NEWS_CONTENT = [
         date: "17.01.2022",
         answer: (
             <p>
-                The Dual Token System combines two tokens, the NDB token, a fixed supply token, and
-                the Volt Token, a variable supply token. The Dual token brings more incentives to
-                the users and partners. For example, with this method we can provide to our partners
-                more accurate measurements of the interest in their companies by utilizing our
-                services and products from their customer’s perspective.
+                The Dual Token System combines two tokens, the NDB token, a
+                fixed supply token, and the Volt Token, a variable supply token.
+                The Dual token brings more incentives to the users and partners.
+                For example, with this method we can provide to our partners
+                more accurate measurements of the interest in their companies by
+                utilizing our services and products from their customer’s
+                perspective.
             </p>
         ),
     },
     {
         question: "Latest NDB news",
         date: "08.01.2022",
-        answer: (
-            <p>
-            </p>
-        ),
+        answer: <p></p>,
     },
     {
         question: "Latest activities",
         date: "26.12.2021",
-        answer: (
-            <p>
-            </p>
-        ),
+        answer: <p></p>,
     },
     {
         question: "API updates",
         date: "19.12.2021",
-        answer: (
-            <p>
-            </p>
-        ),
+        answer: <p></p>,
     },
     {
         question: "Crypto airdrop",
         date: "12.12.2021",
-        answer: (
-            <p>
-            </p>
-        ),
+        answer: <p></p>,
     },
-]
+];
 
 export const NDB_TOKEN_CONTENT = `Since the beginning of NDB’s project the vision is to provide clean green technologies to the world. The NDB token is not a security token nor does it represent any shares of NDB SA.
 
 By using NDB token you will be able to contribute to the development of our technologies and our vision. We plan to expand our ecosystem to multiple areas including deep space exploration, sustainable fashion, quantum computing, and more. 
-`
-
+`;
 
 export const VerificationDocumentTypes = [
     {
@@ -413,7 +436,7 @@ export const VerificationDocumentTypes = [
         label: "Driving License",
         value: "driving_license",
     },
-]
+];
 
 export const VerificationStepThreeDocumentTypes = [
     {
@@ -444,7 +467,7 @@ export const VerificationStepThreeDocumentTypes = [
         label: "Bank statement",
         value: "bank_statement",
     },
-]
+];
 
 export const navigationLinks = [
     {
@@ -454,76 +477,76 @@ export const navigationLinks = [
         subMenu: [
             {
                 label: "Wallet",
-                url: ROUTES.wallet
+                url: ROUTES.wallet,
             },
             {
                 label: "Sale",
-                url: ROUTES.auction
+                url: ROUTES.auction,
             },
             {
                 label: "Profile",
-                url: ROUTES.profile
+                url: ROUTES.profile,
             },
             {
                 label: "Support",
-                url: ROUTES.faq
+                url: ROUTES.faq,
             },
             {
                 label: "Invite & Earn",
-                url: ROUTES.referral
-            }
-        ]
+                url: ROUTES.referral,
+            },
+        ],
     },
     {
         label: "Money",
         url: "https://ndb.money/",
-        active: false
+        active: false,
     },
     {
         label: "City",
         url: "https://ndb.city",
-        active: false
+        active: false,
     },
     {
         label: "Watt",
         url: "https://watt.green/",
-        active: false
+        active: false,
     },
     {
         label: "Charenji",
         url: "https://charenji.me/",
-        active: false
+        active: false,
     },
-]
+];
 
 export const footerLinks = [
     {
         label: "Fee",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4702148482973-Fee",
+        url: "https://docs.nyyu.io/docs/services/fee-structure",
     },
     {
         label: "Bug bounty",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4701682263965-Nyyu-Bug-Bounty",
+        url: "https://docs.nyyu.io/docs/services/bug-bounty",
     },
     {
         label: "Apply for listings",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4702050460701-Apply-for-Listing",
+        url: "https://docs.nyyu.io/docs/services/token-listing",
     },
     {
         label: "Launchpad",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4701834986653-Apply-for-Launchpad",
+        url: "https://docs.nyyu.io/docs/services/start-up-listing",
     },
     {
         label: "Terms of use",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4702478722973-Terms-of-Use",
+        url: "https://docs.nyyu.io/docs/corporate/terms-of-use",
     },
     {
         label: "Privacy policy",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4702279624605-Privacy-Policy",
+        url: "https://docs.nyyu.io/docs/corporate/privacy-policy",
     },
     {
         label: "AML policy",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4702344288925-AML-Policy",
+        url: "https://docs.nyyu.io/docs/corporate/aml-cft",
     },
     {
         label: "About us",
@@ -531,16 +554,18 @@ export const footerLinks = [
     },
     {
         label: "Contacts",
-        url: "https://help.nyyu.io/hc/en-gb/articles/4729648541213-How-do-I-contact-nyyu-support-",
-    }
-]
+        url: "https://docs.nyyu.io/docs/corporate/contact-us",
+    },
+];
 
 export const Roles = [
-    { label: 'USER', value: 'ROLE_USER' },
-    { label: 'ADMIN', value: 'ROLE_ADMIN' }
-]
+    { label: "USER", value: "ROLE_USER" },
+    { label: "ADMIN", value: "ROLE_ADMIN" },
+];
 
-export const ZendeskURLWithJWT = 'https://nyyu.zendesk.com/access/jwt?jwt=';
+export const ZendeskURLWithJWT = "https://nyyu.zendesk.com/access/jwt?jwt=";
 
-export const CLIENT_ID = "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425"
-export const SECRET = "$2y$10$501VfRCMRXitkUmuHhJCPelM5MYTdvzO3S8qlY319L9bnDdVJp24C"
+export const CLIENT_ID =
+    "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425";
+export const SECRET =
+    "$2y$10$501VfRCMRXitkUmuHhJCPelM5MYTdvzO3S8qlY319L9bnDdVJp24C";

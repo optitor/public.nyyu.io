@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { Icon } from "@iconify/react";
@@ -7,14 +7,17 @@ import Modal from "react-modal";
 import { device } from "../../../../utilities/device";
 import { width } from "./columnWidth";
 import ConfirmModal from "../../ConfirmModal";
-import EditUserRoleModal from '../../editModals/EditUserRoleModal';
+import EditUserRoleModal from "../../editModals/EditUserRoleModal";
 import * as Mutation from "../../../../apollo/graphqls/mutations/User";
 import { showFailAlarm, showSuccessAlarm } from "../../AlarmModal";
-import { suspend_User_By_Admin, release_User_By_Admin } from "../../../../redux/actions/userAction";
+import {
+    suspend_User_By_Admin,
+    release_User_By_Admin,
+} from "../../../../store/actions/userAction";
 
 const UserDataRow = ({ datum }) => {
     const dispatch = useDispatch();
-    const { userTiers } = useSelector(state => state);
+    const { userTiers } = useSelector((state) => state);
 
     const [show, setShow] = useState(false);
     const [showBtns, setShowBtns] = useState(false);
@@ -24,34 +27,37 @@ const UserDataRow = ({ datum }) => {
     const [email, setEmail] = useState(datum.email);
     const [pending, setPending] = useState(false);
 
-    const [resetPasswordMutation] = useMutation(Mutation.RESET_PASSWORD_BY_ADMIN, {
-        onCompleted: data => {
-            if(data.resetPasswordByAdmin) {
-                showSuccessAlarm(`User's password reseted successfully`);
-            }
-            setPending(false);
-            setIsPassModalOpen(false);
+    const [resetPasswordMutation] = useMutation(
+        Mutation.RESET_PASSWORD_BY_ADMIN,
+        {
+            onCompleted: (data) => {
+                if (data.resetPasswordByAdmin) {
+                    showSuccessAlarm(`User's password reseted successfully`);
+                }
+                setPending(false);
+                setIsPassModalOpen(false);
+            },
+            onError: (err) => {
+                console.log(err.message);
+                showFailAlarm("Action failed", "Ops! Something went wrong!");
+                setPending(false);
+            },
         },
-        onError: err => {
-            console.log(err.message);
-            showFailAlarm('Action failed', 'Ops! Something went wrong!');
-            setPending(false);
-        }
-    });
+    );
 
-    const handleResetPassword = e => {
+    const handleResetPassword = (e) => {
         e.preventDefault();
         setPending(true);
         resetPasswordMutation({
             variables: {
-                email: datum.email
-            }
+                email: datum.email,
+            },
         });
     };
 
     const handleUser = async () => {
         setPending(true);
-        if(!datum.isSuspended) {
+        if (!datum.isSuspended) {
             await dispatch(suspend_User_By_Admin(datum));
         } else {
             await dispatch(release_User_By_Admin(datum));
@@ -65,11 +71,17 @@ const UserDataRow = ({ datum }) => {
             <DataRow>
                 <Main>
                     <div className="name">
-                        <p style={{ color: "#ffffff", fontWeight: "700" }}>{datum.name}</p>
-                        <p style={{ fontSize: 14, color: "dimgrey" }}>{datum.avatar}</p>
+                        <p style={{ color: "#ffffff", fontWeight: "700" }}>
+                            {datum.name}
+                        </p>
+                        <p style={{ fontSize: 14, color: "dimgrey" }}>
+                            {datum.avatar}
+                        </p>
                     </div>
                     <div className="contact">
-                        <p className={datum.isSuspended? 'text-danger' : ''}>{datum.email}</p>
+                        <p className={datum.isSuspended ? "text-danger" : ""}>
+                            {datum.email}
+                        </p>
                         <p>{datum.phone}</p>
                     </div>
                     <div className="password">
@@ -79,8 +91,8 @@ const UserDataRow = ({ datum }) => {
                                 <Icon
                                     icon="clarity:refresh-line"
                                     onClick={() => {
-                                        setEmail(datum.email)
-                                        setIsPassModalOpen(true)
+                                        setEmail(datum.email);
+                                        setIsPassModalOpen(true);
                                     }}
                                 />
                             </span>
@@ -91,14 +103,21 @@ const UserDataRow = ({ datum }) => {
                     </div>
                     <div className="privilege">
                         <p className="privilege">
-                            {datum.isSuspended? <b className="text-danger">Suspended</b> : datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}
+                            {datum.isSuspended ? (
+                                <b className="text-danger">Suspended</b>
+                            ) : datum?.role.includes("ROLE_ADMIN") ? (
+                                "ADMIN"
+                            ) : (
+                                "USER"
+                            )}
                             {!show && <Icon icon="whh:avatar" />}
                         </p>
                     </div>
                     <div className="action">
                         <div className="btns">
                             <span className="edit">
-                                <Icon icon="clarity:note-edit-line"
+                                <Icon
+                                    icon="clarity:note-edit-line"
                                     onClick={() => setIsEditOpen(true)}
                                 />
                             </span>
@@ -110,7 +129,14 @@ const UserDataRow = ({ datum }) => {
                                     onClick={() => setShow(!show)}
                                 />
                             </span>
-                            <span className={`trash ${datum.isSuspended? 'txt-green': 'text-danger'}`} title={datum.isSuspended? 'Release User': 'Suspend User'}>
+                            <span
+                                className={`trash ${datum.isSuspended ? "txt-green" : "text-danger"}`}
+                                title={
+                                    datum.isSuspended
+                                        ? "Release User"
+                                        : "Suspend User"
+                                }
+                            >
                                 <Icon
                                     icon="tabler:ban"
                                     onClick={() => setIsConfirmOpen(true)}
@@ -123,7 +149,11 @@ const UserDataRow = ({ datum }) => {
                             {!show ? (
                                 <span>
                                     <Icon
-                                        icon={showBtns ? "ep:close-bold" : "bi:three-dots"}
+                                        icon={
+                                            showBtns
+                                                ? "ep:close-bold"
+                                                : "bi:three-dots"
+                                        }
                                         onClick={() => setShowBtns(!showBtns)}
                                     />
                                 </span>
@@ -142,7 +172,8 @@ const UserDataRow = ({ datum }) => {
                             <Main>
                                 <div className="btns">
                                     <span className="edit">
-                                        <Icon icon="clarity:note-edit-line"
+                                        <Icon
+                                            icon="clarity:note-edit-line"
                                             onClick={() => setIsEditOpen(true)}
                                         />
                                     </span>
@@ -152,28 +183,43 @@ const UserDataRow = ({ datum }) => {
                                             data-bs-toggle="collapse"
                                             data-bs-target={`#id${datum.id}`}
                                             onClick={() => {
-                                                setShow(!show)
-                                                setShowBtns(!showBtns)
+                                                setShow(!show);
+                                                setShowBtns(!showBtns);
                                             }}
                                         />
                                     </span>
-                                    <span className={`trash ${datum.isSuspended? 'txt-green': 'text-danger'}`} title={datum.isSuspended? 'Release User': 'Suspend User'}>
+                                    <span
+                                        className={`trash ${datum.isSuspended ? "txt-green" : "text-danger"}`}
+                                        title={
+                                            datum.isSuspended
+                                                ? "Release User"
+                                                : "Suspend User"
+                                        }
+                                    >
                                         <Icon
                                             icon="tabler:ban"
-                                            onClick={() => setIsConfirmOpen(true)}
+                                            onClick={() =>
+                                                setIsConfirmOpen(true)
+                                            }
                                         />
                                     </span>
                                 </div>
                             </Main>
                             <Toggle style={{ display: show ? "flex" : "none" }}>
                                 <div className="btns">
-                                    <span className={`mailbox ${datum.verify?.emailVerified? 'txt-green': ''}`}>
+                                    <span
+                                        className={`mailbox ${datum.verify?.emailVerified ? "txt-green" : ""}`}
+                                    >
                                         <Icon icon="uil:mailbox" />
                                     </span>
-                                    <span className={`user ${datum.verify?.kycVerified? 'txt-green': ''}`}>
+                                    <span
+                                        className={`user ${datum.verify?.kycVerified ? "txt-green" : ""}`}
+                                    >
                                         <Icon icon="ant-design:user-outlined" />
                                     </span>
-                                    <span className={`phone ${datum.verify?.phoneVerified? 'txt-green': ''}`}>
+                                    <span
+                                        className={`phone ${datum.verify?.phoneVerified ? "txt-green" : ""}`}
+                                    >
                                         <Icon icon="bi:phone" />
                                     </span>
                                 </div>
@@ -200,13 +246,19 @@ const UserDataRow = ({ datum }) => {
                         </div>
                         <div className="action">
                             <div className="btns">
-                                <span className={`mailbox ${datum.verify?.emailVerified? 'txt-green': ''}`}>
+                                <span
+                                    className={`mailbox ${datum.verify?.emailVerified ? "txt-green" : ""}`}
+                                >
                                     <Icon icon="uil:mailbox" />
                                 </span>
-                                <span className={`user ${datum.verify?.kycVerified? 'txt-green': ''}`}>
+                                <span
+                                    className={`user ${datum.verify?.kycVerified ? "txt-green" : ""}`}
+                                >
                                     <Icon icon="ant-design:user-outlined" />
                                 </span>
-                                <span className={`phone ${datum.verify?.phoneVerified? 'txt-green': ''}`}>
+                                <span
+                                    className={`phone ${datum.verify?.phoneVerified ? "txt-green" : ""}`}
+                                >
                                     <Icon icon="bi:phone" />
                                 </span>
                             </div>
@@ -215,7 +267,11 @@ const UserDataRow = ({ datum }) => {
                             <div>
                                 <span className="showBtns">
                                     <Icon
-                                        icon={showBtns ? "ep:close-bold" : "bi:three-dots"}
+                                        icon={
+                                            showBtns
+                                                ? "ep:close-bold"
+                                                : "bi:three-dots"
+                                        }
                                         onClick={() => setShowBtns(!showBtns)}
                                     />
                                 </span>
@@ -229,7 +285,14 @@ const UserDataRow = ({ datum }) => {
                 <div>
                     <UnitRowForMobile>
                         <div className="left">
-                            <p className={datum.isSuspended? "text-danger": "text-white"} style={{ fontSize: 16, fontWeight: "700" }}>
+                            <p
+                                className={
+                                    datum.isSuspended
+                                        ? "text-danger"
+                                        : "text-white"
+                                }
+                                style={{ fontSize: 16, fontWeight: "700" }}
+                            >
                                 {datum.email}
                             </p>
                             <p style={{ color: "dimgrey" }}>{datum.avatar}</p>
@@ -238,7 +301,11 @@ const UserDataRow = ({ datum }) => {
                             <p>
                                 <span>
                                     <Icon
-                                        icon={showBtns ? "ep:close-bold" : "bi:three-dots"}
+                                        icon={
+                                            showBtns
+                                                ? "ep:close-bold"
+                                                : "bi:three-dots"
+                                        }
                                         onClick={() => setShowBtns(!showBtns)}
                                     />
                                 </span>
@@ -247,8 +314,11 @@ const UserDataRow = ({ datum }) => {
                                 <Main>
                                     <div className="btns">
                                         <span className="edit">
-                                            <Icon icon="clarity:note-edit-line"
-                                                onClick={() => setIsEditOpen(true)}
+                                            <Icon
+                                                icon="clarity:note-edit-line"
+                                                onClick={() =>
+                                                    setIsEditOpen(true)
+                                                }
                                             />
                                         </span>
                                         <span className="eye">
@@ -257,28 +327,45 @@ const UserDataRow = ({ datum }) => {
                                                 data-bs-toggle="collapse"
                                                 data-bs-target={`#id${datum.id}`}
                                                 onClick={() => {
-                                                    setShow(!show)
-                                                    setShowBtns(!showBtns)
+                                                    setShow(!show);
+                                                    setShowBtns(!showBtns);
                                                 }}
                                             />
                                         </span>
-                                        <span className={`trash ${datum.isSuspended? 'txt-green': 'text-danger'}`} title={datum.isSuspended? 'Release User': 'Suspend User'}>
+                                        <span
+                                            className={`trash ${datum.isSuspended ? "txt-green" : "text-danger"}`}
+                                            title={
+                                                datum.isSuspended
+                                                    ? "Release User"
+                                                    : "Suspend User"
+                                            }
+                                        >
                                             <Icon
                                                 icon="tabler:ban"
-                                                onClick={() => setIsConfirmOpen(true)}
+                                                onClick={() =>
+                                                    setIsConfirmOpen(true)
+                                                }
                                             />
                                         </span>
                                     </div>
                                 </Main>
-                                <Toggle style={{ display: show ? "flex" : "none" }}>
+                                <Toggle
+                                    style={{ display: show ? "flex" : "none" }}
+                                >
                                     <div className="btns">
-                                        <span className={`mailbox ${datum.verify?.emailVerified? 'txt-green': ''}`}>
+                                        <span
+                                            className={`mailbox ${datum.verify?.emailVerified ? "txt-green" : ""}`}
+                                        >
                                             <Icon icon="uil:mailbox" />
                                         </span>
-                                        <span className={`user ${datum.verify?.kycVerified? 'txt-green': ''}`}>
+                                        <span
+                                            className={`user ${datum.verify?.kycVerified ? "txt-green" : ""}`}
+                                        >
                                             <Icon icon="ant-design:user-outlined" />
                                         </span>
-                                        <span className={`phone ${datum.verify?.phoneVerified? 'txt-green': ''}`}>
+                                        <span
+                                            className={`phone ${datum.verify?.phoneVerified ? "txt-green" : ""}`}
+                                        >
                                             <Icon icon="bi:phone" />
                                         </span>
                                     </div>
@@ -351,11 +438,19 @@ const UserDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className="left">
-                            <p style={{ fontSize: 14, fontWeight: 600 }}>Privilege</p>
+                            <p style={{ fontSize: 14, fontWeight: 600 }}>
+                                Privilege
+                            </p>
                         </div>
                         <div className="right" style={{ width: "50%" }}>
                             <p style={{ textTransform: "uppercase" }}>
-                                {datum.isSuspended? <b className="text-danger">Suspended</b> : datum?.role.includes('ROLE_ADMIN')? 'ADMIN': 'USER'}{" "}
+                                {datum.isSuspended ? (
+                                    <b className="text-danger">Suspended</b>
+                                ) : datum?.role.includes("ROLE_ADMIN") ? (
+                                    "ADMIN"
+                                ) : (
+                                    "USER"
+                                )}{" "}
                                 <span>
                                     <Icon icon="whh:avatar" />
                                 </span>
@@ -380,7 +475,9 @@ const UserDataRow = ({ datum }) => {
                     </UnitRowForMobile>
                     <UnitRowForMobile>
                         <div className="left">
-                            <p style={{ color: "dimgray" }}>External Wallet Address</p>
+                            <p style={{ color: "dimgray" }}>
+                                External Wallet Address
+                            </p>
                         </div>
                         <div className="right">
                             <p>{datum.ext_wallet_address}</p>
@@ -424,7 +521,9 @@ const UserDataRow = ({ datum }) => {
                 </div>
                 <form className="form" onSubmit={(e) => e.preventDefault()}>
                     <div className="description">
-                        <p>To reset a user's password type in the user's email.</p>
+                        <p>
+                            To reset a user's password type in the user's email.
+                        </p>
                         <p>They will be sent an email with the new password.</p>
                     </div>
                     <div className="input">
@@ -438,31 +537,48 @@ const UserDataRow = ({ datum }) => {
                         />
                     </div>
                     <div className="pwd-modal__footer mt-5">
-                        <button className="btn previous" onClick={() => setIsPassModalOpen(false)}>
+                        <button
+                            className="btn previous"
+                            onClick={() => setIsPassModalOpen(false)}
+                        >
                             Cancel
                         </button>
-                        <button className="btn next"
+                        <button
+                            className="btn next"
                             onClick={handleResetPassword}
                             disabled={pending}
-                        >{pending? 'Reseting. . .': 'Reset Password'}</button>
+                        >
+                            {pending ? "Reseting. . ." : "Reset Password"}
+                        </button>
                     </div>
                 </form>
             </Modal>
-            {isEditOpen && <EditUserRoleModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />}
-            {isConfirmOpen &&
-            <ConfirmModal
-                title={!datum.isSuspended? `Are you sure you want to suspend this user?`: 'Are you sure you want to release this user?'}
-                isModalOpen={isConfirmOpen}
-                setIsModalOpen={setIsConfirmOpen}
-                confirmData={datum.email}
-                doAction={handleUser}
-                pending={pending}
-            />}
+            {isEditOpen && (
+                <EditUserRoleModal
+                    isModalOpen={isEditOpen}
+                    setIsModalOpen={setIsEditOpen}
+                    datum={datum}
+                />
+            )}
+            {isConfirmOpen && (
+                <ConfirmModal
+                    title={
+                        !datum.isSuspended
+                            ? `Are you sure you want to suspend this user?`
+                            : "Are you sure you want to release this user?"
+                    }
+                    isModalOpen={isConfirmOpen}
+                    setIsModalOpen={setIsConfirmOpen}
+                    confirmData={datum.email}
+                    doAction={handleUser}
+                    pending={pending}
+                />
+            )}
         </>
-    )
-}
+    );
+};
 
-export default UserDataRow
+export default UserDataRow;
 
 const DataRow = styled.div`
     min-height: 80px;
@@ -509,7 +625,7 @@ const DataRow = styled.div`
     @media screen and (max-width: ${device["phone"]}) {
         display: none;
     }
-`
+`;
 
 const Main = styled.div`
     height: 80px;
@@ -545,7 +661,7 @@ const Main = styled.div`
             border-right: 2px solid dimgrey;
         }
     }
-`
+`;
 
 const Toggle = styled.div`
     height: 80px;
@@ -572,7 +688,7 @@ const Toggle = styled.div`
             border-right: 2px solid dimgrey;
         }
     }
-`
+`;
 
 const BtnsContainer = styled.div`
     position: absolute;
@@ -583,7 +699,7 @@ const BtnsContainer = styled.div`
     background: #000000;
     transition: 0.3s;
     display: ${(props) => {
-        return props.show ? "block" : "none"
+        return props.show ? "block" : "none";
     }};
     &:after {
         content: " ";
@@ -603,7 +719,7 @@ const BtnsContainer = styled.div`
             bottom: unset;
         }
     }
-`
+`;
 
 // For Mobile
 const DataRowForMobile = styled.div`
@@ -616,7 +732,7 @@ const DataRowForMobile = styled.div`
         display: flex;
         flex-direction: column;
     }
-`
+`;
 
 const UnitRowForMobile = styled.div`
     display: flex;

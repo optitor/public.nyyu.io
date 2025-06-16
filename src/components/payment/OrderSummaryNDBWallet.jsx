@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import NumberFormat from "react-number-format";
+import { NumericFormat as NumberFormat } from "react-number-format";
 import { roundNumber } from "../../utilities/number";
 import { getNDBWalletPaymentFee } from "../../utilities/utility-methods";
 
@@ -8,7 +8,11 @@ export default function OrderSummaryNDBWallet({ bidAmount }) {
     // Containers
     const { allFees } = useSelector((state) => state);
     const user = useSelector((state) => state.auth.user);
-    const NDBWalletPaymentFee = getNDBWalletPaymentFee(user, allFees, bidAmount);
+    const NDBWalletPaymentFee = getNDBWalletPaymentFee(
+        user,
+        allFees,
+        bidAmount,
+    );
 
     // Render
     return (
@@ -22,7 +26,7 @@ export default function OrderSummaryNDBWallet({ bidAmount }) {
                             <NumberFormat
                                 className="order-list__detail"
                                 displayType={"text"}
-                                suffix=' USD'
+                                suffix=" USD"
                                 value={roundNumber(bidAmount, 2)}
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
@@ -35,7 +39,7 @@ export default function OrderSummaryNDBWallet({ bidAmount }) {
                             <NumberFormat
                                 className="order-list__detail"
                                 displayType={"text"}
-                                suffix=' USD'
+                                suffix=" USD"
                                 value={roundNumber(NDBWalletPaymentFee, 2)}
                                 thousandSeparator={true}
                                 renderText={(value, props) => (
@@ -53,14 +57,20 @@ export default function OrderSummaryNDBWallet({ bidAmount }) {
                     className="d-flex justify-content-between border-top border-light"
                     style={{ paddingTop: "11px", paddingBottom: "10px" }}
                 >
-                    <p className="order-list__label" style={{ color: "dimgrey" }}>
+                    <p
+                        className="order-list__label"
+                        style={{ color: "dimgrey" }}
+                    >
                         Order total:
                     </p>
                     <NumberFormat
                         className="order-total"
                         displayType={"text"}
-                        suffix=' USD'
-                        value={roundNumber(Number(bidAmount) + Number(NDBWalletPaymentFee), 2)}
+                        suffix=" USD"
+                        value={roundNumber(
+                            Number(bidAmount) + Number(NDBWalletPaymentFee),
+                            2,
+                        )}
                         thousandSeparator={true}
                         renderText={(value, props) => (
                             <p {...props}>~ {value}</p>

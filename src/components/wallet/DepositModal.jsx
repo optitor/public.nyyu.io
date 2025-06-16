@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 import jq from "jquery";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 import Modal from "react-modal";
 import _ from "lodash";
 import styled from "styled-components";
 import Select, { components } from "react-select";
-import NumberFormat from "react-number-format";
+import { NumericFormat as NumberFormat } from "react-number-format";
 import Loading from "../common/Loading";
 import { Icon } from "@iconify/react";
 import { useMutation, useQuery } from "@apollo/client";
@@ -14,18 +14,26 @@ import { generateQR } from "../../utilities/string";
 import CustomSpinner from "../common/custom-spinner";
 import StripeDepositSection from "./deposit/StripeDepositSection";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
-import { getStripePaymentFee, getPaypalPaymentFee, getBankTransferFee } from "../../utilities/utility-methods";
+import {
+    getStripePaymentFee,
+    getPaypalPaymentFee,
+    getBankTransferFee,
+} from "../../utilities/utility-methods";
 import { useSelector } from "react-redux";
 import {
     Plaid,
     PaypalFiat,
     CreditCards,
-    USDT
+    USDT,
 } from "../../utilities/imgImport";
 import { SUPPORTED_COINS } from "../../utilities/staticData2";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
 import * as Query from "../../apollo/graphqls/querys/Payment";
-import { setCookie, NDB_Paypal_TrxType, NDB_Deposit } from '../../utilities/cookies';
+import {
+    setCookie,
+    NDB_Paypal_TrxType,
+    NDB_Deposit,
+} from "../../utilities/cookies";
 import { roundNumber } from "../../utilities/number";
 import CountDownDeposit from "../../components/common/CountdownDeposit";
 
@@ -43,7 +51,7 @@ const CURRENCIES_BANK = [
     { label: "EUR", value: "EUR", symbol: "€" },
 ];
 
-const DEPOSIT_COINS = SUPPORTED_COINS.filter(item => item.value !== 'NDB');
+const DEPOSIT_COINS = SUPPORTED_COINS.filter((item) => item.value !== "NDB");
 
 const BankTransferData = {
     EUR: {
@@ -70,7 +78,7 @@ const BankTransferData = {
 };
 
 const BankTrxDescription = {
-    first: 'Incoming payments can take 3 working days to be added to your wallet',
+    first: "Incoming payments can take 3 working days to be added to your wallet",
     second: `Please make sure you use the
         <span className="txt-green">reference number</span>
         indicated above when you are making the transfer, otherwise we may not be able to locate your transaction.`,
@@ -79,10 +87,10 @@ const BankTrxDescription = {
 const { Option } = components;
 const MIN_VALUE = 1;
 
-const CRYPTOCURRENCY = 'CRYPTOCURRENCY';
-const PAYPAL = 'PAYPAL';
-const STRIP = 'STRIP';
-const BANKTRANSER = 'BANKTRANSER';
+const CRYPTOCURRENCY = "CRYPTOCURRENCY";
+const PAYPAL = "PAYPAL";
+const STRIP = "STRIP";
+const BANKTRANSER = "BANKTRANSER";
 
 const SelectOption = (props) => {
     return (
@@ -106,7 +114,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [tabIndex, setTabIndex] = useState(1);
     const [copied, setCopied] = useState(false);
     const [pending, setPending] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
 
     const [coinQRCode, setCoinQRCode] = useState("");
 
@@ -124,7 +132,7 @@ export default function DepositModal({ showModal, setShowModal }) {
 
     const [copyText, setCopyText] = useState("");
 
-    const [depositType, setDepositType] = useState('');
+    const [depositType, setDepositType] = useState("");
     const [allFees, setAllFees] = useState({});
 
     const loadingStripe = !allFees;
@@ -140,12 +148,12 @@ export default function DepositModal({ showModal, setShowModal }) {
     }, [depositData]);
 
     useEffect(() => {
-        setError('');
-    }, [tabIndex, currentStep])
+        setError("");
+    }, [tabIndex, currentStep]);
 
     useQuery(GET_ALL_FEES, {
         onCompleted: (data) => {
-            setAllFees( _.mapKeys(data.getAllFees, "tierLevel"));
+            setAllFees(_.mapKeys(data.getAllFees, "tierLevel"));
         },
         onError: (error) => console.log(error),
     });
@@ -161,14 +169,14 @@ export default function DepositModal({ showModal, setShowModal }) {
                     setPending(false);
                     setCurrentStep(2);
                 }
-                setError('');
+                setError("");
             },
             onError: (err) => {
                 // console.log("get deposit address: ", err);
                 setError(err.message);
                 setPending(false);
             },
-        }
+        },
     );
 
     const goBackToMain = () => {
@@ -180,7 +188,7 @@ export default function DepositModal({ showModal, setShowModal }) {
     };
 
     const create_Charge_For_Deposit = () => {
-        setError('');
+        setError("");
         setPending(true);
         setDepositType(CRYPTOCURRENCY);
         const createData = {
@@ -194,24 +202,27 @@ export default function DepositModal({ showModal, setShowModal }) {
     };
 
     //-------- Fetching the state of confirming coinpayment trx.
-    const {startPolling, stopPolling} = useQuery(Query.GET_COINPAYMENT_DEPOSITTX_BYID, {
-        variables: {
-            id: depositData?.id
+    const { startPolling, stopPolling } = useQuery(
+        Query.GET_COINPAYMENT_DEPOSITTX_BYID,
+        {
+            variables: {
+                id: depositData?.id,
+            },
+            onCompleted: (data) => {
+                if (data.getCoinpaymentDepositTxById) {
+                    setConfirmById(data.getCoinpaymentDepositTxById);
+                }
+            },
+            onError: (err) => {
+                console.log(err.message);
+            },
+            pollInterval: IntervalTime,
+            notifyOnNetworkStatusChange: true,
         },
-        onCompleted: (data) => {
-            if (data.getCoinpaymentDepositTxById) {
-                setConfirmById(data.getCoinpaymentDepositTxById);
-            }
-        },
-        onError: (err) => {
-            console.log(err.message);
-        },
-        pollInterval: IntervalTime,
-        notifyOnNetworkStatusChange: true
-    });
+    );
 
     useEffect(() => {
-        if(depositData?.id) return startPolling(IntervalTime);
+        if (depositData?.id) return startPolling(IntervalTime);
         return stopPolling();
     }, [depositData?.id, startPolling, stopPolling]);
     //-----------------------------------------------------------------
@@ -244,7 +255,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 }
             }
             setLoading(false);
-            setError('');
+            setError("");
         },
         onError: (err) => {
             // console.log('paypal deposit error',err);
@@ -272,7 +283,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 setReferenceNumber(data.bankForDeposit);
                 setCurrentStep(3);
             }
-            setError('');
+            setError("");
             setPending(false);
         },
         onError: (err) => {
@@ -408,7 +419,8 @@ export default function DepositModal({ showModal, setShowModal }) {
                             <div className="width2 mt-5">
                                 <div className="row">
                                     <div className="col-sm-6">
-                                        <FiatButton className="inactive"
+                                        <FiatButton
+                                            className="inactive"
                                             disabled={true}
                                         >
                                             <img src={Plaid} alt="plaid" />
@@ -418,7 +430,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         <FiatButton
                                             className="active"
                                             onClick={() => {
-                                                setDepositType(PAYPAL)
+                                                setDepositType(PAYPAL);
                                                 setCurrentStep(3);
                                             }}
                                         >
@@ -434,7 +446,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         <FiatButton
                                             className="active"
                                             onClick={() => {
-                                                setDepositType(STRIP)
+                                                setDepositType(STRIP);
                                                 setCurrentStep(3);
                                             }}
                                         >
@@ -448,15 +460,16 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         <FiatButton
                                             className="active"
                                             onClick={() => {
-                                                setDepositType(BANKTRANSER)
-                                                handleBankForDeposit()
+                                                setDepositType(BANKTRANSER);
+                                                handleBankForDeposit();
                                             }}
                                             disabled={pending}
                                         >
-                                            {pending?
-                                                <CustomSpinner />:
+                                            {pending ? (
+                                                <CustomSpinner />
+                                            ) : (
                                                 <p>Standard bank transfer</p>
-                                            }
+                                            )}
                                         </FiatButton>
                                     </div>
                                 </div>
@@ -466,7 +479,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                 )}
                 {currentStep === 2 &&
                     !_.isEmpty(depositData) &&
-                    (depositType === CRYPTOCURRENCY) && (
+                    depositType === CRYPTOCURRENCY && (
                         <div className="deposit width3">
                             <div className="address_div">
                                 <p className="subtitle">Deposit Address</p>
@@ -508,50 +521,75 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                 </div>
                                 <p className="desc mt-2">
-                                    Send only <span className="txt-green">{selectedAsset.value}</span>{" "}
+                                    Send only{" "}
+                                    <span className="txt-green">
+                                        {selectedAsset.value}
+                                    </span>{" "}
                                     to this deposit address. Ensure the network
-                                    is <span className="txt-green">{network.label}</span>
+                                    is{" "}
+                                    <span className="txt-green">
+                                        {network.label}
+                                    </span>
                                 </p>
                                 <div className="stats_div">
                                     <div className="stats">
                                         <p className="topic">Status</p>
                                         <p className="content">
-                                            {!confirmById?.depositStatus? 'Waiting for your funds': 'Received'}
+                                            {!confirmById?.depositStatus
+                                                ? "Waiting for your funds"
+                                                : "Received"}
                                         </p>
                                     </div>
                                     <div className="stats">
                                         <p className="topic">Received so far</p>
                                         <p className="content">
-                                            {roundNumber(confirmById?.cryptoAmount, 8)} {selectedAsset.value}
+                                            {roundNumber(
+                                                confirmById?.cryptoAmount,
+                                                8,
+                                            )}{" "}
+                                            {selectedAsset.value}
                                         </p>
                                     </div>
-                                    {!(network.network === 'BEP20' || network.network === 'ERC20') && 
-                                    <>
-                                        <hr />
-                                        <div className="stats">
-                                            <p className="topic">
-                                                Time left to confirm funds
-                                            </p>
-                                            <div className="content">
-                                                {!confirmById?.depositStatus?
-                                                    <CountDownDeposit deadline={confirmById?.createdAt + 8 * 3600 * 1000} />
-                                                    :
-                                                    <span className='txt-green'>Confirmed</span>
-                                                }
+                                    {!(
+                                        network.network === "BEP20" ||
+                                        network.network === "ERC20"
+                                    ) && (
+                                        <>
+                                            <hr />
+                                            <div className="stats">
+                                                <p className="topic">
+                                                    Time left to confirm funds
+                                                </p>
+                                                <div className="content">
+                                                    {!confirmById?.depositStatus ? (
+                                                        <CountDownDeposit
+                                                            deadline={
+                                                                confirmById?.createdAt +
+                                                                8 * 3600 * 1000
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <span className="txt-green">
+                                                            Confirmed
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="stats">
-                                            <p className="topic">Payment ID</p>
-                                            <p className="content">
-                                                {depositData?.id}
-                                            </p>
-                                        </div>
-                                    </>}
+                                            <div className="stats">
+                                                <p className="topic">
+                                                    Payment ID
+                                                </p>
+                                                <p className="content">
+                                                    {depositData?.id}
+                                                </p>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     )}
-                {currentStep === 3 && (depositType === BANKTRANSER) && (
+                {currentStep === 3 && depositType === BANKTRANSER && (
                     <div className="deposit width2 mb-5">
                         <h5 className="text-center">Bank transfer deposit</h5>
                         <div>
@@ -572,7 +610,8 @@ export default function DepositModal({ showModal, setShowModal }) {
                         <div className="mt-3">
                             <p className="subtitle">Amount</p>
                             <div
-                                className="black_input transfer_input" aria-hidden="true"
+                                className="black_input transfer_input"
+                                aria-hidden="true"
                                 onClick={() =>
                                     jq("input#transferAmount").trigger("focus")
                                 }
@@ -596,9 +635,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                                         suffix={" " + currency.symbol}
                                         displayType="text"
                                         allowNegative={false}
-                                        value={
-                                            Number(getBankTransferFee(user, allFees, transferAmount))
-                                        }
+                                        value={Number(
+                                            getBankTransferFee(
+                                                user,
+                                                allFees,
+                                                transferAmount,
+                                            ),
+                                        )}
                                         decimalScale={2}
                                     />
                                 </div>
@@ -606,9 +649,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </div>
                         <div className="mt-3">
                             <p>
-                                The <span className='txt-green'>{currency.label}</span> will be
-                                converted to <span className='txt-green'>USDT</span> and deposited to
-                                the wallet
+                                The{" "}
+                                <span className="txt-green">
+                                    {currency.label}
+                                </span>{" "}
+                                will be converted to{" "}
+                                <span className="txt-green">USDT</span> and
+                                deposited to the wallet
                             </p>
                             <div className="black_input usdt_div">
                                 <img src={USDT} alt="usdt" className="ms-2" />
@@ -624,7 +671,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </button>
                     </div>
                 )}
-                {currentStep === 4 && (depositType === BANKTRANSER) && (
+                {currentStep === 4 && depositType === BANKTRANSER && (
                     <div className="deposit width2 mb-5">
                         <h4 className="text-center">
                             {currency.label} Deposits Only
@@ -673,7 +720,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </div>
                         <p className="subtitle mt-5">
                             {parse(BankTrxDescription.second)}
-                        </p>                        
+                        </p>
                         <button
                             className="btn btn-outline-light rounded-0 w-100 fw-bold mt-3"
                             onClick={closeModal}
@@ -683,7 +730,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                     </div>
                 )}
 
-                {currentStep === 3 && (depositType === PAYPAL) && (
+                {currentStep === 3 && depositType === PAYPAL && (
                     <div className="deposit width2">
                         <h5 className="text-center">Paypal deposit</h5>
                         <div>
@@ -704,7 +751,8 @@ export default function DepositModal({ showModal, setShowModal }) {
                         <div className="mt-3">
                             <p className="subtitle">Amount</p>
                             <div
-                                className="black_input transfer_input" aria-hidden="true"
+                                className="black_input transfer_input"
+                                aria-hidden="true"
                                 onClick={() =>
                                     jq("input#transferAmount").trigger("focus")
                                 }
@@ -719,24 +767,22 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     onValueChange={(values) =>
                                         setTransferAmount(values.value)
                                     }
-                                    placeholder={'Min 1 ' + currency.symbol}
+                                    placeholder={"Min 1 " + currency.symbol}
                                     autoComplete="off"
                                 />
                                 <div>
                                     Transaction fee{" "}
                                     <NumberFormat
                                         thousandSeparator={true}
-                                        suffix={
-                                            " " + currency.symbol
-                                        }
+                                        suffix={" " + currency.symbol}
                                         displayType="text"
                                         allowNegative={false}
                                         value={Number(
                                             getPaypalPaymentFee(
                                                 user,
                                                 allFees,
-                                                transferAmount
-                                            )
+                                                transferAmount,
+                                            ),
                                         )}
                                         decimalScale={2}
                                     />
@@ -745,9 +791,13 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </div>
                         <div className="mt-3">
                             <p>
-                                The <span className='txt-green'>{currency.label}</span> will be
-                                converted to <span className='txt-green'>USDT</span> and deposited to
-                                the wallet
+                                The{" "}
+                                <span className="txt-green">
+                                    {currency.label}
+                                </span>{" "}
+                                will be converted to{" "}
+                                <span className="txt-green">USDT</span> and
+                                deposited to the wallet
                             </p>
                             <div className="black_input usdt_div">
                                 <img src={USDT} alt="usdt" className="ms-2" />
@@ -759,14 +809,17 @@ export default function DepositModal({ showModal, setShowModal }) {
                             onClick={() => {
                                 initPaypalCheckout();
                             }}
-                            disabled={!transferAmount || Number(transferAmount) < MIN_VALUE}
+                            disabled={
+                                !transferAmount ||
+                                Number(transferAmount) < MIN_VALUE
+                            }
                         >
                             CONTINUE
                         </button>
                         <p className="mt-2 text-warning">{error}</p>
                     </div>
                 )}
-                {currentStep === 3 && (depositType === STRIP) && (
+                {currentStep === 3 && depositType === STRIP && (
                     <div className="deposit width2">
                         <div>
                             {loadingStripe ? (
@@ -796,10 +849,11 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     <div className="mt-3">
                                         <p className="subtitle">Amount</p>
                                         <div
-                                            className="black_input transfer_input" aria-hidden="true"
+                                            className="black_input transfer_input"
+                                            aria-hidden="true"
                                             onClick={() =>
                                                 jq(
-                                                    "input#transferAmount"
+                                                    "input#transferAmount",
                                                 ).trigger("focus")
                                             }
                                         >
@@ -812,7 +866,7 @@ export default function DepositModal({ showModal, setShowModal }) {
                                                 value={transferAmount}
                                                 onValueChange={(values) =>
                                                     setTransferAmount(
-                                                        values.value
+                                                        values.value,
                                                     )
                                                 }
                                                 autoComplete="off"
@@ -830,8 +884,8 @@ export default function DepositModal({ showModal, setShowModal }) {
                                                         getStripePaymentFee(
                                                             user,
                                                             allFees,
-                                                            transferAmount
-                                                        )
+                                                            transferAmount,
+                                                        ),
                                                     )}
                                                     decimalScale={2}
                                                 />
@@ -840,10 +894,15 @@ export default function DepositModal({ showModal, setShowModal }) {
                                     </div>
                                     <div className="mt-3">
                                         <p>
-                                            The <span className='txt-green'>{currency.label}</span>{" "}
+                                            The{" "}
+                                            <span className="txt-green">
+                                                {currency.label}
+                                            </span>{" "}
                                             will be converted to{" "}
-                                            <span className='txt-green'>USDT</span> and deposited to
-                                            the wallet
+                                            <span className="txt-green">
+                                                USDT
+                                            </span>{" "}
+                                            and deposited to the wallet
                                         </p>
                                         <div className="black_input usdt_div">
                                             <img
@@ -866,12 +925,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                         </div>
                     </div>
                 )}
-                {currentStep === 4 && (depositType === STRIP) && (
+                {currentStep === 4 && depositType === STRIP && (
                     <StripeDepositSection
                         closeModal={closeModal}
-                        amount={
-                            Number(transferAmount)
-                        }
+                        amount={Number(transferAmount)}
                         currency={currency}
                     />
                 )}

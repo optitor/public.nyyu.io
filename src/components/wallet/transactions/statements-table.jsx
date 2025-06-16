@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Pagination from "react-js-pagination";
 import Select from "react-select";
-import axios from 'axios';
-import { Icon } from '@iconify/react';
+import axios from "axios";
+import { Icon } from "@iconify/react";
 import {
     AccordionDownIcon,
     AccordionUpIcon,
-    SPINNER
+    SPINNER,
 } from "../../../utilities/imgImport";
 import { createDateFromDateObject } from "../../../utilities/utility-methods";
 import { useTransactions } from "./transactions-context";
-import DayPickerInput from "react-day-picker/DayPickerInput";
-import "react-day-picker/lib/style.css";
+import { DayPickerInput } from "../../../utilities/date-picker";
+import "react-day-picker/dist/style.css";
 import { GET_STATEMENTS } from "./queries";
 import { useQuery } from "@apollo/client";
 import CustomSpinner from "../../common/custom-spinner";
-import NumberFormat from "react-number-format";
+import { NumericFormat as NumberFormat } from "react-number-format";
 import { useSelector } from "react-redux";
 import { Icons } from "../../../utilities/Icons";
-
 import { downloadContent as downloadSingle } from "../../../utilities/utility-methods";
 
 const depositOptions = [
@@ -56,10 +55,10 @@ export default function StatementsTable() {
 
     const [selectedPeriodIndex, setSelectedPeriodIndex] = useState(0);
     const [selectedPeriodOption, setSelectedPeriodOption] = useState(
-        periodOptions[selectedPeriodIndex]
+        periodOptions[selectedPeriodIndex],
     );
     const [selectedDepositOption, setSelectedDepositOption] = useState(
-        depositOptions[0]
+        depositOptions[0],
     );
 
     const [singleDownloading, setSingleDonwloading] = useState(false);
@@ -69,27 +68,27 @@ export default function StatementsTable() {
     const lastWeek = new Date(
         now.getFullYear(),
         now.getMonth(),
-        now.getDate() - 7
+        now.getDate() - 7,
     );
     const lastMonth = new Date(
         now.getFullYear(),
         now.getMonth() - 1,
-        now.getDate()
+        now.getDate(),
     );
     const last4Month = new Date(
         now.getFullYear(),
         now.getMonth() - 4,
-        now.getDate()
+        now.getDate(),
     );
     const last6Month = new Date(
         now.getFullYear(),
         now.getMonth() - 6,
-        now.getDate()
+        now.getDate(),
     );
     const lastYear = new Date(
         now.getFullYear() - 1,
         now.getMonth(),
-        now.getDate()
+        now.getDate(),
     );
     const allTime = new Date(0);
     const timeFrames = [
@@ -102,7 +101,7 @@ export default function StatementsTable() {
     ];
     const [from, setFrom] = useState(timeFrames[selectedPeriodIndex]);
     const [to, setTo] = useState(now);
-    
+
     // Webserver
     const { refetch } = useQuery(GET_STATEMENTS, {
         fetchPolicy: "network-only",
@@ -112,7 +111,7 @@ export default function StatementsTable() {
             to: new Date(
                 to.getFullYear(),
                 to.getMonth(),
-                to.getDate() + 1
+                to.getDate() + 1,
             ).getTime(),
         },
         onCompleted: (data) => {
@@ -128,8 +127,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.fiatAmount,
                         type: "Paypal Deposit",
-                        tx: 'DEPOSIT',
-                        payment: 'PAYPAL',
+                        tx: "DEPOSIT",
+                        payment: "PAYPAL",
                         paymentId: item?.paypalOrderId,
                         asset: item?.fiatType,
                     };
@@ -145,8 +144,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.amount,
                         type: "Crypto Deposit",
-                        tx: 'DEPOSIT',
-                        payment: 'CRYPTO',
+                        tx: "DEPOSIT",
+                        payment: "CRYPTO",
                         paymentId: "---",
                         asset: item?.coin,
                     };
@@ -163,8 +162,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.amount,
                         type: "Credit Card Deposit",
-                        tx: 'DEPOSIT',
-                        payment: 'CREDIT',
+                        tx: "DEPOSIT",
+                        payment: "CREDIT",
                         paymentId: item?.paymentMethodId,
                         asset: item?.fiatType,
                     };
@@ -182,8 +181,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.withdrawAmount,
                         type: "Crypto Withdraw",
-                        tx: 'WITHDRAW',
-                        payment: 'CRYPTO',
+                        tx: "WITHDRAW",
+                        payment: "CRYPTO",
                         paymentId: "---",
                         asset: item?.sourceToken,
                     };
@@ -199,8 +198,8 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.withdrawAmount,
                         type: "Paypal Withdraw",
-                        tx: 'WITHDRAW',
-                        payment: 'PAYPAL',
+                        tx: "WITHDRAW",
+                        payment: "PAYPAL",
                         paymentId: "---",
                         asset: item?.targetCurrency,
                     };
@@ -221,7 +220,7 @@ export default function StatementsTable() {
                         paymentId: item?.paymentMethodId,
                         asset: item?.fiatType,
                     };
-                }
+                },
             );
             const paypalBidFooList = data.getStatement.paypalAuctionTxns.map(
                 (item) => {
@@ -237,7 +236,7 @@ export default function StatementsTable() {
                         paymentId: item?.paypalOrderId,
                         asset: item?.fiatType,
                     };
-                }
+                },
             );
 
             const coinPaymentBidFooList =
@@ -271,7 +270,7 @@ export default function StatementsTable() {
                         paymentId: item?.paymentMethodId,
                         asset: item?.fiatType,
                     };
-                }
+                },
             );
             const paypalBuyFooList = data.getStatement.paypalPresaleTxns.map(
                 (item) => {
@@ -287,7 +286,7 @@ export default function StatementsTable() {
                         paymentId: item?.paypalOrderId,
                         asset: item?.fiatType,
                     };
-                }
+                },
             );
             const coinPaymentBuyFooList =
                 data.getStatement.coinpaymentPresaleTxns.map((item) => {
@@ -316,12 +315,12 @@ export default function StatementsTable() {
                         status: item?.status,
                         amount: item?.amount,
                         type: "Bank Deposit",
-                        tx: 'DEPOSIT',
-                        payment: 'BANK',
+                        tx: "DEPOSIT",
+                        payment: "BANK",
                         paymentId: "---",
                         asset: item?.fiatType,
                     };
-                }
+                },
             );
 
             // Binding
@@ -365,8 +364,8 @@ export default function StatementsTable() {
                     sortType === down
                         ? setSortType(up)
                         : sortType === up
-                        ? setSortType(down)
-                        : setSortType(up)
+                          ? setSortType(down)
+                          : setSortType(up)
                 }
             >
                 <div>{title}</div>
@@ -378,15 +377,15 @@ export default function StatementsTable() {
                     {sortType === down
                         ? Icons.down()
                         : sortType === up
-                        ? Icons.up()
-                        : Icons.up()}
+                          ? Icons.up()
+                          : Icons.up()}
                 </div>
             </div>
         </th>
     );
     const toggleDetails = (index) => {
         const previousItem = document.getElementById(
-            `transaction-details-${currentRowOpen}`
+            `transaction-details-${currentRowOpen}`,
         );
         if (previousItem) previousItem.classList.toggle("d-none");
 
@@ -447,19 +446,22 @@ export default function StatementsTable() {
             const token = localStorage.getItem("ACCESS_TOKEN");
             const response = await axios({
                 url: `${process.env.GATSBY_API_BASE_URL}/download/pdf/transactions`,
-                method: 'GET',
-                responseType: 'blob',
-                params: { from:_from, to:_to },
+                method: "GET",
+                responseType: "blob",
+                params: { from: _from, to: _to },
                 headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
             const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
+            const link = document.createElement("a");
             link.href = url;
-            const fromDate = new Date(_from).toISOString().split('T')[0];
-            const toDate = new Date(_to).toISOString().split('T')[0];
-            link.setAttribute('download', `transactions-${fromDate} ~ ${toDate}.pdf`);
+            const fromDate = new Date(_from).toISOString().split("T")[0];
+            const toDate = new Date(_to).toISOString().split("T")[0];
+            link.setAttribute(
+                "download",
+                `transactions-${fromDate} ~ ${toDate}.pdf`,
+            );
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -483,25 +485,25 @@ export default function StatementsTable() {
                 list.sort(
                     (item2, item1) =>
                         new Date(item1.date).getTime() -
-                        new Date(item2.date).getTime()
-                )
+                        new Date(item2.date).getTime(),
+                ),
             );
         if (sortType === "date_up")
             return setList(
                 list.sort(
                     (item2, item1) =>
                         new Date(item2.date).getTime() -
-                        new Date(item1.date).getTime()
-                )
+                        new Date(item1.date).getTime(),
+                ),
             );
         if (sortType === "amount_down")
             return setList(
-                list.sort((item2, item1) => item1.amount - item2.amount)
+                list.sort((item2, item1) => item1.amount - item2.amount),
             );
 
         if (sortType === "amount_up")
             return setList(
-                list.sort((item2, item1) => item2.amount - item1.amount)
+                list.sort((item2, item1) => item2.amount - item1.amount),
             );
         if (sortType === "fee_down")
             return setList(list.sort((item2, item1) => item1.fee - item2.fee));
@@ -515,7 +517,7 @@ export default function StatementsTable() {
         <>
             <div className="text-capitalize text-light pt-4 px-4">
                 <div className="row">
-                    <div className='col-xl-5 d-flex justify-content-around mb-2'>
+                    <div className="col-xl-5 d-flex justify-content-around mb-2">
                         <Select
                             isSearchable={false}
                             options={depositOptions}
@@ -529,7 +531,7 @@ export default function StatementsTable() {
                             onChange={onPeriodOptionChange}
                         />
                     </div>
-                    <div className='col-xl-7 d-flex flex-column flex-sm-row justify-content-start justify-content-sm-around align-items-center date_pickers'>
+                    <div className="col-xl-7 d-flex flex-column flex-sm-row justify-content-start justify-content-sm-around align-items-center date_pickers">
                         <div className="d-flex align-items-center gap-2 mb-2 ">
                             <div className="date-title">start date:</div>
                             {selectedPeriodOption.value === "custom" ? (
@@ -549,7 +551,9 @@ export default function StatementsTable() {
                                 <input
                                     type="text"
                                     disabled
-                                    value={createDateFromDateObject(new Date(from))}
+                                    value={createDateFromDateObject(
+                                        new Date(from),
+                                    )}
                                     className="start-date-picker disabled text-secondary"
                                 />
                             )}
@@ -573,21 +577,29 @@ export default function StatementsTable() {
                                 <input
                                     type="text"
                                     disabled
-                                    value={createDateFromDateObject(new Date(to))}
+                                    value={createDateFromDateObject(
+                                        new Date(to),
+                                    )}
                                     className="start-date-picker disabled text-secondary"
                                 />
                             )}
                         </div>
-                        <div className='mb-2 cursor-pointer' onClick={() => {
-                            const _from = from.getTime();
-                            const _to = new Date(
-                                to.getFullYear(),
-                                to.getMonth(),
-                                to.getDate() + 1
+                        <div
+                            className="mb-2 cursor-pointer"
+                            onClick={() => {
+                                const _from = from.getTime();
+                                const _to = new Date(
+                                    to.getFullYear(),
+                                    to.getMonth(),
+                                    to.getDate() + 1,
                                 ).getTime();
-                            downloadContent(_from, _to);
-                        }}>
-                            <Icon icon='bx:download' className="download_icon" />
+                                downloadContent(_from, _to);
+                            }}
+                        >
+                            <Icon
+                                icon="bx:download"
+                                className="download_icon"
+                            />
                         </div>
                     </div>
                 </div>
@@ -638,7 +650,7 @@ export default function StatementsTable() {
                         list
                             ?.slice(
                                 (activePage - 1) * itemsCountPerPage,
-                                activePage * itemsCountPerPage
+                                activePage * itemsCountPerPage,
                             )
                             ?.map(
                                 ({
@@ -703,7 +715,7 @@ export default function StatementsTable() {
                                                             id ===
                                                                 currentRowOpen
                                                                 ? -1
-                                                                : id
+                                                                : id,
                                                         )
                                                     }
                                                 >
@@ -820,38 +832,68 @@ export default function StatementsTable() {
                                                         </div>
                                                     </div>
                                                     <div className="fs-12px d-flex flex-column">
-                                                        {tx !== undefined && 
-                                                        <button
-                                                            className={`btn fs-12px p-0 text-success text-decoration-success text-decoration-underline`}
-                                                            onClick={async () => {
-                                                                    if(singleDownloading) return;
-                                                                    setSingleDonwloading(true);
+                                                        {tx !== undefined && (
+                                                            <button
+                                                                className={`btn fs-12px p-0 text-success text-decoration-success text-decoration-underline`}
+                                                                onClick={async () => {
+                                                                    if (
+                                                                        singleDownloading
+                                                                    )
+                                                                        return;
+                                                                    setSingleDonwloading(
+                                                                        true,
+                                                                    );
                                                                     try {
-                                                                        await downloadSingle(id, tx, payment);
+                                                                        await downloadSingle(
+                                                                            id,
+                                                                            tx,
+                                                                            payment,
+                                                                        );
                                                                     } catch (error) {
-                                                                        console.log(error);
+                                                                        console.log(
+                                                                            error,
+                                                                        );
                                                                     }
-                                                                    setSingleDonwloading(false);
-                                                                }
-                                                            }
-                                                        >
-                                                            <span className={singleDownloading ? 'download-visible': "download-hidden"}>
-                                                                <img src={SPINNER} width="12" height="12" alt="loading spinner"/>
-                                                                &nbsp;&nbsp;
-                                                            </span>Get PDF Receipt
-                                                        </button>}
-                                                        <button className="btn btn-link text-light fs-12px d-none"
+                                                                    setSingleDonwloading(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <span
+                                                                    className={
+                                                                        singleDownloading
+                                                                            ? "download-visible"
+                                                                            : "download-hidden"
+                                                                    }
+                                                                >
+                                                                    <img
+                                                                        src={
+                                                                            SPINNER
+                                                                        }
+                                                                        width="12"
+                                                                        height="12"
+                                                                        alt="loading spinner"
+                                                                    />
+                                                                    &nbsp;&nbsp;
+                                                                </span>
+                                                                Get PDF Receipt
+                                                            </button>
+                                                        )}
+                                                        <button
+                                                            className="btn btn-link text-light fs-12px d-none"
                                                             // onClick={() => handleHideActivity(id)}
                                                             disabled={pending}
                                                         >
-                                                            {pending? 'Processing . . .' : 'Hide this activity'}
+                                                            {pending
+                                                                ? "Processing . . ."
+                                                                : "Hide this activity"}
                                                         </button>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
                                     </>
-                                )
+                                ),
                             )
                     )}
                 </table>
@@ -872,4 +914,4 @@ export default function StatementsTable() {
             )}
         </>
     );
-};
+}

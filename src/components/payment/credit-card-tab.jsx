@@ -9,8 +9,8 @@ import {
     useElements,
 } from "@stripe/react-stripe-js";
 import { PAYMENT_FRACTION_TOOLTIP_CONTENT } from "../../utilities/staticData";
-import ReactTooltip from "react-tooltip";
-import { Icon } from '@iconify/react';
+import { ReactTooltip } from "../../utilities/tooltip";
+import { Icon } from "@iconify/react";
 import { CheckBox } from "../common/FormControl";
 import {
     DELETE_CARD,
@@ -106,13 +106,12 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     /// stripe payment id
     const [stripePaymentId, setStripePaymentId] = useState(0);
 
-
     // Countdown
     const initialTime = 5 * 1000;
     const interval = 1000;
     const [timeLeft, { start: startTimer }] = useCountDown(
         initialTime,
-        interval
+        interval,
     );
 
     const style = {
@@ -148,7 +147,7 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 if (data.payStripeForAuction.error) {
                     setRequestPending(false);
                     let error = data.payStripeForPresale.error;
-                    error = error.split(';')[0];
+                    error = error.split(";")[0];
                     return setError(error);
                 }
                 const { clientSecret, requiresAction } =
@@ -203,11 +202,11 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                 if (data.payStripeForPreSale.error) {
                     setRequestPending(false);
                     console.log(data.payStripeForPreSale.error);
-                    const error = data.payStripeForPreSale.error.split(';')[0];
+                    const error = data.payStripeForPreSale.error.split(";")[0];
                     return setError(error);
                 }
                 const { clientSecret, requiresAction, paymentId } =
-                data.payStripeForPreSale;
+                    data.payStripeForPreSale;
                 if (requiresAction === false || requiresAction === null) {
                     startTimer();
                     setRequestPending(false);
@@ -332,7 +331,11 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     return successfulPayment === true ? (
         <div className="text-center p-4">
             <div className="mb-4">
-                <Icon icon="akar-icons:circle-check" className="text-success" style={{width: 100, height: 100}} />
+                <Icon
+                    icon="akar-icons:circle-check"
+                    className="text-success"
+                    style={{ width: 100, height: 100 }}
+                />
             </div>
             <div className="text-capitalize fs-28px fw-bold text-success">
                 payment successful
@@ -344,7 +347,11 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
     ) : successfulPayment === false ? (
         <div className="text-center p-4">
             <div className="mb-4">
-                <Icon icon="charm:circle-cross" className="text-white" style={{width: 100, height: 100}} />
+                <Icon
+                    icon="charm:circle-cross"
+                    className="text-white"
+                    style={{ width: 100, height: 100 }}
+                />
             </div>
             <div className="text-capitalize text-light fs-28px fw-bold">
                 payment failed
@@ -490,11 +497,12 @@ const CardSection = ({ amount, round, savedCards, setSavedCards, orderId }) => {
                             ></CheckBox>
                             <div className="allow-text text-light">
                                 Do you allow fraction of order compleation?
-                                <span className="ms-2 fs-20px"
+                                <span
+                                    className="ms-2 fs-20px"
                                     data-tip="React-tooltip"
-                                    data-for='question-mark-tooltip'
+                                    data-for="question-mark-tooltip"
                                 >
-                                    <Icon icon='bi:question-circle' />
+                                    <Icon icon="bi:question-circle" />
                                 </span>
                             </div>
                             <ReactTooltip

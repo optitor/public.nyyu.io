@@ -1,7 +1,8 @@
 const TerserPlugin = require('terser-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const webpack = require('webpack');
-// Implement the Gatsby API “onCreatePage”. This is
+
+// Implement the Gatsby API "onCreatePage". This is
 // called after every page is created.
 exports.onCreatePage = async ({ page, actions }) => {
     const { createPage } = actions;
@@ -34,17 +35,23 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
                 "util": false,
                 "http": require.resolve('stream-http'),
                 "https": require.resolve('https-browserify'),
-                "os": false
+                "os": false,
+                "path": require.resolve("path-browserify"),
+                "fs": false
             },
         },
         module: {
             rules: [
                 {
                     test: /\.html$/,
-                    loader: require.resolve('html-loader'),
-                    options: {
-                        minimize: false,
-                    },
+                    use: [
+                        {
+                            loader: require.resolve('html-loader'),
+                            options: {
+                                minimize: false,
+                            },
+                        }
+                    ]
                 },
                 {
                     test: /bad-module/,
@@ -53,18 +60,23 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
             ],
         },
         optimization: {
-            splitChunks: false,
-            minimize: true,
-            minimizer: [
+            minimize: stage === 'build-javascript',
+            minimizer: stage === 'build-javascript' ? [
                 new TerserPlugin({
                     parallel: true,
+                    terserOptions: {
+                        compress: {
+                            drop_console: true,
+                        },
+                    },
                 }),
-            ],
+            ] : [],
         },
         plugins: [
             new NodePolyfillPlugin(),
             new webpack.ProvidePlugin({
                 Buffer: [require.resolve("buffer/"), "Buffer"],
+                process: require.resolve("process/browser"),
             }),
         ],
         externals: [
@@ -79,18 +91,18 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions, plugins, getConfig }
                 return callback();
                 };
             })()
-            ]
+        ]
     });
 
     if(stage === 'build-javascript' || stage === 'develop') {
         const config = getConfig();
         const miniCssExtractPlugin = config.plugins.find(
-            plugin => plugin.constructor.name === 'MiniCssExtractPlugin'
-          )
-          if (miniCssExtractPlugin) {
+            plugin => plugin.constructor && plugin.constructor.name === 'MiniCssExtractPlugin'
+        )
+        if (miniCssExtractPlugin) {
             miniCssExtractPlugin.options.ignoreOrder = true
-          }
-          actions.replaceWebpackConfig(config)
+        }
+        actions.replaceWebpackConfig(config)
     }
 
     if (getConfig().mode === 'production') {

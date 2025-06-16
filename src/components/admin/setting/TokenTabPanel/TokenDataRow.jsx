@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
-import svgToDataURL  from 'svg-to-dataurl';
-import { Icon } from '@iconify/react';
-import { device } from '../../../../utilities/device';
-import { width } from './columnWidth';
-import ConfirmModal from '../../ConfirmModal';
-import EditTokenModal from '../../editModals/EditTokenModal';
-import { delete_Token } from "../../../../redux/actions/tokenAction"
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import styled from "styled-components";
+import svgToDataURL from "svg-to-dataurl";
+import { Icon } from "@iconify/react";
+import { device } from "../../../../utilities/device";
+import { width } from "./columnWidth";
+import ConfirmModal from "../../ConfirmModal";
+import EditTokenModal from "../../editModals/EditTokenModal";
+import { delete_Token } from "../../../../store/actions/tokenAction";
 
 const TokenDataRow = ({ datum = {} }) => {
     const dispatch = useDispatch();
@@ -27,36 +27,52 @@ const TokenDataRow = ({ datum = {} }) => {
     return (
         <>
             <DataRow>
-                <div className='image'>
+                <div className="image">
                     <Main>
-                        <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" />
+                        <img
+                            src={svgToDataURL(datum.symbol)}
+                            data-id={datum.id}
+                            alt="token"
+                        />
                     </Main>
                 </div>
-                <div className='name'>
+                <div className="name">
                     <Main>
-                        <p style={{fontSize: 16, fontWeight: '700'}}>{datum.tokenName}</p>
+                        <p style={{ fontSize: 16, fontWeight: "700" }}>
+                            {datum.tokenName}
+                        </p>
                     </Main>
                 </div>
-                <div className='symbol'>
+                <div className="symbol">
                     <Main>
                         <p>{datum.tokenSymbol}</p>
                     </Main>
                 </div>
-                <div className='network'>
+                <div className="network">
                     <Main>
                         <p>{datum.network}</p>
                     </Main>
                 </div>
-                <div className='address'>
+                <div className="address">
                     <Main>
                         <p>{datum.address}</p>
                     </Main>
                 </div>
-                <div className='edit'>
+                <div className="edit">
                     <Main>
                         <p>
-                            <span className='edit'><Icon icon="clarity:note-edit-line" onClick={() => setIsEditOpen(true)} /></span>
-                            <span className='delete'><Icon icon="akar-icons:trash-can" onClick={() => setIsConfirmOpen(true)} /></span>
+                            <span className="edit">
+                                <Icon
+                                    icon="clarity:note-edit-line"
+                                    onClick={() => setIsEditOpen(true)}
+                                />
+                            </span>
+                            <span className="delete">
+                                <Icon
+                                    icon="akar-icons:trash-can"
+                                    onClick={() => setIsConfirmOpen(true)}
+                                />
+                            </span>
                         </p>
                     </Main>
                 </div>
@@ -64,57 +80,92 @@ const TokenDataRow = ({ datum = {} }) => {
             <DataRowForMobile>
                 <div>
                     <UnitRowForMobile>
-                        <div className='left' style={{width: '10%'}}>
-                            <img src={svgToDataURL(datum.symbol)} data-id={datum.id} alt="token" style={{width: 30}}/>
+                        <div className="left" style={{ width: "10%" }}>
+                            <img
+                                src={svgToDataURL(datum.symbol)}
+                                data-id={datum.id}
+                                alt="token"
+                                style={{ width: 30 }}
+                            />
                         </div>
-                        <div className='left' style={{width: '60%'}}>
-                            <p className='text-white' style={{fontSize: 16, fontWeight: '700'}}>{datum.tokenName}</p>
-                        </div>
-                        <div className='right'>
-                            <p>
-                                <span className='edit'><Icon icon="clarity:note-edit-line" onClick={() => setIsEditOpen(true)} /></span>
+                        <div className="left" style={{ width: "60%" }}>
+                            <p
+                                className="text-white"
+                                style={{ fontSize: 16, fontWeight: "700" }}
+                            >
+                                {datum.tokenName}
                             </p>
                         </div>
-                        <div className='right'>
+                        <div className="right">
                             <p>
-                                <span className='delete'><Icon icon="akar-icons:trash-can" onClick={() => setIsConfirmOpen(true)} /></span>
+                                <span className="edit">
+                                    <Icon
+                                        icon="clarity:note-edit-line"
+                                        onClick={() => setIsEditOpen(true)}
+                                    />
+                                </span>
                             </p>
                         </div>
-                        <div className='right'>
+                        <div className="right">
                             <p>
-                                <span style={{fontSize: 16}}><Icon icon={show? "ant-design:caret-up-filled": "ant-design:caret-down-filled"} data-bs-toggle="collapse" data-bs-target={`#id${datum.id}`} onClick={() => setShow(!show)} /></span>
+                                <span className="delete">
+                                    <Icon
+                                        icon="akar-icons:trash-can"
+                                        onClick={() => setIsConfirmOpen(true)}
+                                    />
+                                </span>
+                            </p>
+                        </div>
+                        <div className="right">
+                            <p>
+                                <span style={{ fontSize: 16 }}>
+                                    <Icon
+                                        icon={
+                                            show
+                                                ? "ant-design:caret-up-filled"
+                                                : "ant-design:caret-down-filled"
+                                        }
+                                        data-bs-toggle="collapse"
+                                        data-bs-target={`#id${datum.id}`}
+                                        onClick={() => setShow(!show)}
+                                    />
+                                </span>
                             </p>
                         </div>
                     </UnitRowForMobile>
                 </div>
-                <div id={`id${datum.id}`} className='collapse'>
+                <div id={`id${datum.id}`} className="collapse">
                     <UnitRowForMobile>
-                        <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Symbol</p>
+                        <div className="left">
+                            <p style={{ color: "dimgrey" }}>Symbol</p>
                         </div>
-                        <div className='right'>
+                        <div className="right">
                             <p>{datum.tokenSymbol}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
-                        <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Network</p>
+                        <div className="left">
+                            <p style={{ color: "dimgrey" }}>Network</p>
                         </div>
-                        <div className='right'>
+                        <div className="right">
                             <p>{datum.network}</p>
                         </div>
                     </UnitRowForMobile>
                     <UnitRowForMobile>
-                        <div className='left'>
-                            <p style={{color: 'dimgrey'}}>Address</p>
+                        <div className="left">
+                            <p style={{ color: "dimgrey" }}>Address</p>
                         </div>
-                        <div className='right'>
+                        <div className="right">
                             <p>{datum.address}</p>
                         </div>
                     </UnitRowForMobile>
                 </div>
             </DataRowForMobile>
-            <EditTokenModal isModalOpen={isEditOpen} setIsModalOpen={setIsEditOpen} datum={datum} />
+            <EditTokenModal
+                isModalOpen={isEditOpen}
+                setIsModalOpen={setIsEditOpen}
+                datum={datum}
+            />
             <ConfirmModal
                 isModalOpen={isConfirmOpen}
                 setIsModalOpen={setIsConfirmOpen}
@@ -138,7 +189,7 @@ const DataRow = styled.div`
     svg {
         cursor: pointer;
     }
-    &>div.image {
+    & > div.image {
         width: ${width.image};
         img {
             width: 60%;
@@ -146,11 +197,19 @@ const DataRow = styled.div`
             margin: auto;
         }
     }
-    &>div.name {width: ${width.name};}
-    &>div.symbol {width: ${width.symbol};}
-    &>div.network {width: ${width.network};}
-    &>div.address {width: ${width.address};}
-    &>div.edit {
+    & > div.name {
+        width: ${width.name};
+    }
+    & > div.symbol {
+        width: ${width.symbol};
+    }
+    & > div.network {
+        width: ${width.network};
+    }
+    & > div.address {
+        width: ${width.address};
+    }
+    & > div.edit {
         width: ${width.edit};
 
         p {
@@ -162,13 +221,13 @@ const DataRow = styled.div`
                     color: #23c865;
                 }
                 &.delete {
-                    color: #F32D2D;
+                    color: #f32d2d;
                 }
             }
         }
     }
 
-    @media screen and (max-width: ${device['phone']}){
+    @media screen and (max-width: ${device["phone"]}) {
         display: none;
     }
 `;
@@ -185,32 +244,32 @@ const DataRowForMobile = styled.div`
     min-height: 50px;
     border-bottom: 1px solid #464646;
     padding: 16px;
-    display: none;    
+    display: none;
     svg {
         cursor: pointer;
     }
-    @media screen and (max-width: ${device['phone']}){
+    @media screen and (max-width: ${device["phone"]}) {
         display: flex;
         flex-direction: column;
-    } 
+    }
 `;
 
 const UnitRowForMobile = styled.div`
     display: flex;
     justify-content: space-between;
-    &>div.left {
+    & > div.left {
         width: 40%;
     }
-    &>div.right {
+    & > div.right {
         p {
-            text-align: right;   
+            text-align: right;
             span {
                 font-size: 22px;
                 &.edit {
                     color: #23c865;
                 }
                 &.delete {
-                    color: #F32D2D;
+                    color: #f32d2d;
                 }
             }
         }

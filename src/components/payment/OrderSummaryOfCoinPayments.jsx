@@ -2,22 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useQuery } from "@apollo/client";
 import { roundNumber } from "../../utilities/number";
-import NumberFormat from "react-number-format";
-import Countdown from 'react-countdown';
+import { NumericFormat as NumberFormat } from "react-number-format";
+import Countdown from "react-countdown";
 import { useAuction } from "../../providers/auction-context";
-import { GET_CRYPTO_AUCTOIN_TX_BYID, GET_CRYPTO_PRESALE_TX_BYID } from '../../apollo/graphqls/querys/Payment';
+import {
+    GET_CRYPTO_AUCTOIN_TX_BYID,
+    GET_CRYPTO_PRESALE_TX_BYID,
+} from "../../apollo/graphqls/querys/Payment";
 
 const Completionist = () => <span>Payment expired!</span>;
 
 // Renderer callback with condition
 const renderer = ({ hours, minutes, seconds, completed }) => {
-  if (completed) {
-    // Render a completed state
-    return <Completionist />;
-  } else {
-    // Render a countdown
-    return <span>{hours}h: {minutes}m: {seconds}s</span>;
-  }
+    if (completed) {
+        // Render a completed state
+        return <Completionist />;
+    } else {
+        // Render a countdown
+        return (
+            <span>
+                {hours}h: {minutes}m: {seconds}s
+            </span>
+        );
+    }
 };
 
 const EXPIRE_TIME = 8 * 3600 * 1000;
@@ -30,28 +37,33 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
 
     const [isSuccess, setIsSucess] = useState(false);
 
-    const { startPolling, stopPolling } = useQuery(isAuction ? GET_CRYPTO_AUCTOIN_TX_BYID : GET_CRYPTO_PRESALE_TX_BYID, {
-        variables: {
-            id: coinData.paymentId
+    const { startPolling, stopPolling } = useQuery(
+        isAuction ? GET_CRYPTO_AUCTOIN_TX_BYID : GET_CRYPTO_PRESALE_TX_BYID,
+        {
+            variables: {
+                id: coinData.paymentId,
+            },
+            onCompleted: (data) => {
+                const resData = isAuction
+                    ? data.getCryptoAuctionTxById
+                    : data.getCryptoPresaleTxById;
+                if (resData?.depositStatus === 1) {
+                    setPaymentSuccess(true);
+                    setIsSucess(true);
+                }
+            },
+            onError: (error) => console.log(error),
+            fetchPolicy: "no-cache",
+            errorPolicy: "ignore",
+            pollInterval: POLL_INTERVAL_TIME,
+            notifyOnNetworkStatusChange: true,
         },
-        onCompleted: (data) => {
-            const resData = isAuction? data.getCryptoAuctionTxById: data.getCryptoPresaleTxById;
-            if(resData?.depositStatus === 1) {
-                setPaymentSuccess(true);
-                setIsSucess(true);
-            }
-        },
-        onError: (error) => console.log(error),
-        fetchPolicy: "no-cache",
-        errorPolicy: "ignore",
-        pollInterval: POLL_INTERVAL_TIME,
-        notifyOnNetworkStatusChange: true
-    })
+    );
 
     useEffect(() => {
-        if (coinData.paymentId) return startPolling(POLL_INTERVAL_TIME)
-        if (isSuccess) return stopPolling()
-    }, [coinData.paymentId, isSuccess, startPolling, stopPolling])
+        if (coinData.paymentId) return startPolling(POLL_INTERVAL_TIME);
+        if (isSuccess) return stopPolling();
+    }, [coinData.paymentId, isSuccess, startPolling, stopPolling]);
 
     return (
         <div className="col-lg-4 d-flex flex-column justify-content-between">
@@ -62,7 +74,13 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
                     <div className="d-flex justify-content-between">
                         <p className="order-list__label">Status</p>
                         <p className="order-list__detail">
-                            {isSuccess? <span className="txt-green fw-bold">Success</span>: 'Waiting for your funds'}
+                            {isSuccess ? (
+                                <span className="txt-green fw-bold">
+                                    Success
+                                </span>
+                            ) : (
+                                "Waiting for your funds"
+                            )}
                         </p>
                     </div>
                     <div className="d-flex justify-content-between my-3">
@@ -95,13 +113,13 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
                             Time left to confirm funds
                         </p>
                         <p className="order-list__detail">
-                            {(coinData?.paymentId && coinData?.createdAt)? (
+                            {coinData?.paymentId && coinData?.createdAt ? (
                                 <Countdown
                                     zeroPadTime={2}
                                     date={coinData?.createdAt + EXPIRE_TIME}
                                     renderer={renderer}
                                 />
-                            ): (
+                            ) : (
                                 <span>8h: 0m: 0s</span>
                             )}
                         </p>
@@ -143,7 +161,7 @@ export default function OrderSummary({ bidAmount, setPaymentSuccess }) {
                     <NumberFormat
                         className="order-total"
                         displayType={"text"}
-                        suffix=' USD'
+                        suffix=" USD"
                         value={roundNumber(bidAmount, 2)}
                         thousandSeparator={true}
                         renderText={(value, props) => (

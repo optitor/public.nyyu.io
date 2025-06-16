@@ -2,9 +2,7 @@
 import React, { useReducer } from "react";
 import Header from "./../header";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import {
-    Airdrop,
-} from "../../utilities/imgImport";
+import { Airdrop } from "../../utilities/imgImport";
 import { useWindowSize } from "../../utilities/customHook";
 import AirdropDetail from "../AirdropDetail";
 import MarketTab from "./market-tab";
@@ -15,7 +13,7 @@ import InternalWallet from "./internal-wallet";
 import Seo from "../seo";
 import TransactionsProvider from "./transactions/transactions-context";
 import * as Mutation from "../../apollo/graphqls/mutations/Payment";
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client";
 
 const airdrops = [
     {
@@ -58,13 +56,10 @@ const Wallet = () => {
         {
             detail_show: false,
             index: 0,
-        }
+        },
     );
-    
-    const {
-        detail_show,
-        index,
-    } = state;
+
+    const { detail_show, index } = state;
 
     const handleClick = (idx) => {
         setState({ detail_show: true });
@@ -75,34 +70,41 @@ const Wallet = () => {
         setState({ joinAirdrop: true });
     };
 
-    const [captureOrderForDeposit] = useMutation(Mutation.CAPTURE_ORDER_FOR_DEPOSIT, {
-        onCompleted: (data) => {
-            if (data.captureOrderForDeposit) {
-                alert('Your checkout was successfully!')
-            } else {
-                alert('Error in checkout with PayPal');
-            }
+    const [captureOrderForDeposit] = useMutation(
+        Mutation.CAPTURE_ORDER_FOR_DEPOSIT,
+        {
+            onCompleted: (data) => {
+                if (data.captureOrderForDeposit) {
+                    alert("Your checkout was successfully!");
+                } else {
+                    alert("Error in checkout with PayPal");
+                }
+            },
+            onError: (err) => {
+                alert("Error in checkout with PayPal");
+            },
         },
-        onError: (err) => {
-            alert('Error in checkout with PayPal');
-        },
-    });
+    );
 
     let orderCaptured = false;
 
-    if (window.location.href.includes('token=') && !orderCaptured) {
+    if (window.location.href.includes("token=") && !orderCaptured) {
         var url = new URL(window.location.href);
         let token = url.searchParams.get("token");
         orderCaptured = true;
-        captureOrderForDeposit({variables: {orderId: token}});
+        captureOrderForDeposit({ variables: { orderId: token } });
     }
 
-    if (localStorage.getItem('PayPalDepositToken') != null && localStorage.getItem('PayPalDepositToken') != undefined && !orderCaptured) {
+    if (
+        localStorage.getItem("PayPalDepositToken") != null &&
+        localStorage.getItem("PayPalDepositToken") != undefined &&
+        !orderCaptured
+    ) {
         orderCaptured = true;
-        let possibleToken = localStorage.getItem('PayPalDepositToken');
-        captureOrderForDeposit({variables: {orderId: possibleToken}});
-        localStorage.setItem('PayPalDepositToken', null);
-        localStorage.removeItem('PayPalDepositToken');
+        let possibleToken = localStorage.getItem("PayPalDepositToken");
+        captureOrderForDeposit({ variables: { orderId: possibleToken } });
+        localStorage.setItem("PayPalDepositToken", null);
+        localStorage.removeItem("PayPalDepositToken");
     }
 
     return (
@@ -176,16 +178,22 @@ const Wallet = () => {
                                                         <td className="w-50">
                                                             <div className="d-flex align-items-start ps-2">
                                                                 <img
-                                                                    src={item.icon}
+                                                                    src={
+                                                                        item.icon
+                                                                    }
                                                                     alt="coin icon"
                                                                     className="me-2"
                                                                 />
                                                                 <div>
                                                                     <p className="coin-abbr">
-                                                                        {item.name}
+                                                                        {
+                                                                            item.name
+                                                                        }
                                                                     </p>
                                                                     <p className="coin-name mobile-not">
-                                                                        {item.desc}
+                                                                        {
+                                                                            item.desc
+                                                                        }
                                                                     </p>
                                                                 </div>
                                                             </div>

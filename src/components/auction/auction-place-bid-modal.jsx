@@ -1,73 +1,79 @@
-import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
-import Modal from "react-modal"
-import { useDispatch } from "react-redux"
-import { navigate } from "gatsby"
-import { useMutation } from "@apollo/client"
-import NumberFormat from "react-number-format"
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import Modal from "react-modal";
+import { useDispatch } from "react-redux";
+import { navigate } from "gatsby";
+import { useMutation } from "@apollo/client";
+import { NumericFormat as NumberFormat } from "react-number-format";
 
-import { useAuction } from "../../providers/auction-context"
-import { setBidInfo, setCurrentRound } from "../../redux/actions/bidAction"
+import { useAuction } from "../../providers/auction-context";
+import { setBidInfo, setCurrentRound } from "../../store/actions/bidAction";
 
-import { CloseIcon } from "../../utilities/imgImport"
-import { ROUTES } from "../../utilities/routes"
-import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid"
-import CustomSpinner from "../common/custom-spinner"
+import { CloseIcon } from "../../utilities/imgImport";
+import { ROUTES } from "../../utilities/routes";
+import { INCREASE_BID, PLACE_BID } from "../../apollo/graphqls/mutations/Bid";
+import CustomSpinner from "../common/custom-spinner";
 
 export default function AuctionPlaceBidModal() {
-    const currency = useSelector(state => state.favAssets.currency);
-    const currencyRates = useSelector(state => state.currencyRates);
-    const currencyRate = currencyRates[currency.value]?? 1;
+    // Fix: Add proper null checking for currency
+    const favAssets = useSelector((state) => state.favAssets);
+    const currency = favAssets?.currency || {
+        value: "USD",
+        label: "USD",
+        sign: "$",
+    };
+    const currencyRates = useSelector((state) => state.currencyRates) || {};
+    const currencyRate = currencyRates[currency.value] ?? 1;
 
-    // Containers
-    const auction = useAuction()
-    const dispatch = useDispatch()
-    const { optCurrentRound, isBid, getBid } = auction
-    const [amount, setAmount] = useState(1)
-    const [price, setPrice] = useState(optCurrentRound?.minPrice)
-    const [preAmount, setPreAmount] = useState(1);
-    const [prePrice, setPrePrice] = useState(1);
-    const [error, setError] = useState("")
-    const [reqPending, setReqPending] = useState(false)
+    const auction = useAuction();
+    const dispatch = useDispatch();
+    const { optCurrentRound, getBid, isBid } = auction;
 
-    // Webservice
+    // State
+    const [amount, setAmount] = useState(1);
+    const [price, setPrice] = useState(optCurrentRound?.placeBid || 1);
+    const [error, setError] = useState("");
+    const [reqPending, setReqPending] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
+    // Mutations
     const [placeBid] = useMutation(PLACE_BID, {
         onCompleted: () => {
-            navigate(ROUTES.payment)
-            setReqPending(false)
-            auction.setBidModal(false)
+            navigate(ROUTES.payment);
+            setReqPending(false);
+            setIsOpen(false);
         },
         onError: (err) => {
-            setError(err.message)
-            setReqPending(false)
+            setError(err.message);
+            setReqPending(false);
         },
-    })
-    
+    });
+
     const [increaseBid] = useMutation(INCREASE_BID, {
         onCompleted: () => {
-            navigate(ROUTES.payment)
-            setReqPending(false)
-            auction.setBidModal(false)
+            navigate(ROUTES.payment);
+            setReqPending(false);
+            setIsOpen(false);
         },
         onError: (err) => {
-            setError(err.message)
-            setReqPending(false)
+            setError(err.message);
+            setReqPending(false);
         },
-    })
+    });
 
-    // Methods
     const bidMutation = () => {
-        setReqPending(true)
-        setError("")
-        if (auction.isBid) {
+        setReqPending(true);
+        setError("");
+
+        if (isBid) {
             placeBid({
                 variables: {
                     roundId: optCurrentRound?.id,
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
-            })
-            dispatch(setBidInfo(Number(price * amount)))
+            });
+            dispatch(setBidInfo(Number(price * amount)));
         } else {
             increaseBid({
                 variables: {
@@ -75,123 +81,174 @@ export default function AuctionPlaceBidModal() {
                     tokenAmount: amount,
                     tokenPrice: price,
                 },
-            })
-            dispatch(setBidInfo(Number(price * amount - prePrice * preAmount)))
+            });
+            dispatch(setBidInfo(Number(price * amount)));
         }
-        dispatch(setCurrentRound(optCurrentRound?.id))
-    }
+        dispatch(setCurrentRound(optCurrentRound?.id));
+    };
 
-    useEffect(() => {
-        if (getBid)
-            if (Object.keys(getBid).length !== 0) {
-                setPrice(isBid ? optCurrentRound?.placeBid : getBid.tokenPrice)
-                setAmount(isBid ? 1 : getBid.tokenAmount)
-                if(!isBid) {
-                    setPreAmount(getBid.tokenAmount)
-                    setPrePrice(getBid.tokenPrice)
-                }
-            }
-    }, [getBid, optCurrentRound?.placeBid, isBid])
+    // Calculate values in selected currency
+    const priceInCurrency = price * currencyRate;
+    const totalInCurrency = amount * priceInCurrency;
 
-    // Render
     return (
         <Modal
-            isOpen={auction.bidModal}
-            onRequestClose={() => auction.setBidModal(false)}
+            isOpen={isOpen}
+            onRequestClose={() => setIsOpen(false)}
+            className="auction-bid-modal"
+            overlayClassName="modal-overlay"
             ariaHideApp={false}
-            className="place-bid"
-            overlayClassName="place-bid__overlay"
         >
-            <div className="tfa-modal__header">
-                <div
-                    onClick={() => auction.setBidModal(false)}
-                    onKeyDown={() => auction.setBidModal(false)}
-                    role="button"
-                    tabIndex="0"
-                >
-                    <img
-                        width="14px"
-                        height="14px"
-                        src={CloseIcon}
-                        alt="close"
-                    />
-                </div>
-            </div>
-            <div className="tablet-view">
-                {error && (
-                    <div className="mt-1 mb-4">
-                        <div className="d-flex align-items-center gap-2 text-start">
-                            <svg
-                                className="icon-23px text-danger"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                            <p className="text-danger fw-500 text-[#959595]">
-                                {error}
-                            </p>
-                        </div>
-                    </div>
-                )}
-                <h4 className="range-label text-start mb-0">amount of Token</h4>
-                <NumberFormat className="range-input"
-                    value={amount}
-                    onValueChange={values => setAmount(values.value)}
-                    isAllowed={({ floatValue }) => floatValue >= 1 && floatValue <= optCurrentRound?.totalToken}
-                    thousandSeparator={true}
-                    decimalScale={0}
-                    allowNegative={false}
-                />
-                <h4 className="range-label text-start mb-0">Per token price (USD)</h4>
-                <NumberFormat className="range-input"
-                    value={price}
-                    onValueChange={values => setPrice(values.value? values.value: optCurrentRound?.minPrice)}
-                    isAllowed={({ floatValue }) => floatValue >= optCurrentRound?.minPrice}
-                    thousandSeparator={true}
-                    decimalScale={4}
-                    allowNegative={false}
-                    placeholder="Type the price per Token Here"
-                />
-                <h4 className="range-label text-start mb-0">Total price <span className="txt-green">({currency.value})</span></h4>
-                <NumberFormat
-                    className="total-input"
-                    value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount * currencyRate)).toFixed(3) * 10**3) / 10**3}
-                    thousandSeparator={true}
-                    displayType='text'
-                    allowNegative={false}
-                    renderText={(value, props) => <p {...props}>{value}</p>}
-                />
-                <div className="text-center mb-3" style={{height: 20, fontWeight: 600}}>
-                    {currency.label !== 'USD'?
-                        <NumberFormat
-                            className="txt-green"
-                            value={Math.round(Number(Math.max(optCurrentRound?.minPrice, price * amount)).toFixed(3) * 10**3) / 10**3}
-                            thousandSeparator={true}
-                            displayType='text'
-                            allowNegative={false}
-                            renderText={(value, props) => <span {...props}>{value} USD</span>}
-                        />: ''
-                    }
-                </div>
+            <div className="modal-header">
+                <h4>Place Bid</h4>
                 <button
-                    className="btn btn-outline-light rounded-0 fw-bold w-100 fs-20px py-3 text-uppercase"
-                    onClick={() => bidMutation()}
-                    disabled={reqPending}
+                    onClick={() => setIsOpen(false)}
+                    className="close-button"
                 >
-                    <div className="d-flex align-items-center justify-content-center gap-3">
-                        {reqPending && <CustomSpinner />}
-                        {auction.isBid ? "Place Bid" : "Increase Bid"}
-                    </div>
+                    <img src={CloseIcon} alt="close" />
                 </button>
             </div>
+
+            <div className="modal-body">
+                <div
+                    className="currency-info"
+                    style={{
+                        fontSize: "12px",
+                        color:
+                            Object.keys(currencyRates).length > 0
+                                ? "#00ff88"
+                                : "#ffa500",
+                        marginBottom: "15px",
+                        textAlign: "center",
+                    }}
+                >
+                    Currency: {currency.sign}
+                    {currency.value}
+                    {Object.keys(currencyRates).length === 0 && (
+                        <span style={{ color: "#ffa500" }}>
+                            {" "}
+                            (rates loading...)
+                        </span>
+                    )}
+                </div>
+
+                <div className="form-group">
+                    <label>Token Amount</label>
+                    <NumberFormat
+                        value={amount}
+                        onValueChange={(values) => {
+                            const { floatValue } = values;
+                            setAmount(floatValue || 1);
+                        }}
+                        className="form-control"
+                        placeholder="Enter amount"
+                        thousandSeparator={true}
+                        allowNegative={false}
+                        decimalScale={2}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>
+                        Price per Token ({currency.value})
+                        {currency.value !== "USD" &&
+                            Object.keys(currencyRates).length > 0 && (
+                                <span
+                                    style={{
+                                        fontSize: "11px",
+                                        color: "#888",
+                                        marginLeft: "8px",
+                                    }}
+                                >
+                                    (≈ ${price.toFixed(4)} USD)
+                                </span>
+                            )}
+                    </label>
+                    <NumberFormat
+                        value={priceInCurrency}
+                        onValueChange={(values) => {
+                            const { floatValue } = values;
+                            const usdPrice = (floatValue || 1) / currencyRate;
+                            setPrice(usdPrice);
+                        }}
+                        className="form-control"
+                        placeholder={`Enter price in ${currency.value}`}
+                        prefix={currency.sign}
+                        thousandSeparator={true}
+                        allowNegative={false}
+                        decimalScale={4}
+                    />
+                </div>
+
+                <div
+                    className="total-display"
+                    style={{
+                        background: "rgba(0, 255, 136, 0.1)",
+                        padding: "15px",
+                        borderRadius: "8px",
+                        margin: "15px 0",
+                    }}
+                >
+                    <div className="d-flex justify-content-between">
+                        <span>Total Cost:</span>
+                        <span style={{ color: "#00ff88", fontWeight: "600" }}>
+                            {currency.sign}
+                            {totalInCurrency.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 4,
+                            })}
+                            {currency.value !== "USD" &&
+                                Object.keys(currencyRates).length > 0 && (
+                                    <span
+                                        style={{
+                                            fontSize: "11px",
+                                            color: "#888",
+                                            display: "block",
+                                        }}
+                                    >
+                                        ≈ ${(amount * price).toFixed(2)} USD
+                                    </span>
+                                )}
+                        </span>
+                    </div>
+                </div>
+
+                {error && (
+                    <div className="alert alert-danger" role="alert">
+                        {error}
+                    </div>
+                )}
+
+                <div className="modal-actions">
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => setIsOpen(false)}
+                        disabled={reqPending}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={bidMutation}
+                        disabled={
+                            reqPending ||
+                            amount < 1 ||
+                            price < (optCurrentRound?.minPrice || 1)
+                        }
+                    >
+                        {reqPending ? (
+                            <div className="d-flex align-items-center">
+                                <CustomSpinner />
+                                <span className="ms-2">Processing...</span>
+                            </div>
+                        ) : (
+                            `${isBid ? "Place" : "Increase"} Bid`
+                        )}
+                    </button>
+                </div>
+            </div>
         </Modal>
-    )
+    );
 }

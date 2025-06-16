@@ -1,36 +1,36 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import _ from 'lodash';
+import React, { useEffect, useState, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import _ from "lodash";
 import { Icon } from "@iconify/react";
-import { device } from '../../../../utilities/device';
-import UserDataRow from './UserDataRow';
-import PaginationBar from '../../PaginationBar';
-import { width } from './columnWidth';
-import Loading from './../../shared/Loading';
-import { get_Users } from '../../../../redux/actions/userAction';
-import { get_User_Tiers_WithoutSvg } from '../../../../redux/actions/userTierAction';
+import { device } from "../../../../utilities/device";
+import UserDataRow from "./UserDataRow";
+import PaginationBar from "../../PaginationBar";
+import { width } from "./columnWidth";
+import Loading from "./../../shared/Loading";
+import { get_Users } from "../../../../store/actions/userAction";
+import { get_User_Tiers_WithoutSvg } from "../../../../store/actions/userTierAction";
 
 const UserTable = () => {
     const dispatch = useDispatch();
-    const { data } = useSelector(state => state);
+    const { data } = useSelector((state) => state);
     const [loading, setLoading] = useState(false);
     const [pageInfo, setPageInfo] = useState({ page: 1, limit: 5 });
     const { page, limit } = pageInfo;
     const [pageData, setPageData] = useState([]);
 
     // Search Bar
-    const [inputText, setInputText] = useState('');
-    const [searchValue, setSearchValue] = useState('');
+    const [inputText, setInputText] = useState("");
+    const [searchValue, setSearchValue] = useState("");
 
-    const hanldeEnterKeyDown = e => {
-        if(e.key === 'Enter') {
+    const hanldeEnterKeyDown = (e) => {
+        if (e.key === "Enter") {
             setSearchValue(inputText);
         }
     };
 
     useEffect(() => {
-        (async function() {
+        (async function () {
             setLoading(true);
             await dispatch(get_User_Tiers_WithoutSvg());
             await dispatch(get_Users());
@@ -39,8 +39,14 @@ const UserTable = () => {
     }, [dispatch]);
 
     const showData = useMemo(() => {
-        const sortedData = _.orderBy(Object.values(data), ['regDate'], ['asc']);
-        return !searchValue? sortedData: sortedData.filter(item => String(item?.email).toLowerCase().includes(searchValue.toLowerCase())) ;
+        const sortedData = _.orderBy(Object.values(data), ["regDate"], ["asc"]);
+        return !searchValue
+            ? sortedData
+            : sortedData.filter((item) =>
+                  String(item?.email)
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase()),
+              );
     }, [data, searchValue]);
 
     useEffect(() => {
@@ -51,41 +57,67 @@ const UserTable = () => {
         <>
             <SearchBar>
                 <button title="See All">
-                    <Icon icon='bi:list-stars' onClick={() => {setSearchValue(''); setInputText('');}} />
+                    <Icon
+                        icon="bi:list-stars"
+                        onClick={() => {
+                            setSearchValue("");
+                            setInputText("");
+                        }}
+                    />
                 </button>
-                <div className='d-flex align-items-center'>
+                <div className="d-flex align-items-center">
                     <p>Email </p>
-                    <input className='mx-2 px-1' type='text' value={inputText} onChange={e => setInputText(e.target.value)} onKeyDown={hanldeEnterKeyDown} />
-                    <button onClick={() => setSearchValue(inputText)} disabled={!inputText} title="Search">
-                        <Icon icon='carbon:search' />
+                    <input
+                        className="mx-2 px-1"
+                        type="text"
+                        value={inputText}
+                        onChange={(e) => setInputText(e.target.value)}
+                        onKeyDown={hanldeEnterKeyDown}
+                    />
+                    <button
+                        onClick={() => setSearchValue(inputText)}
+                        disabled={!inputText}
+                        title="Search"
+                    >
+                        <Icon icon="carbon:search" />
                     </button>
                 </div>
             </SearchBar>
             <TableHead>
-                <div className='name'>Name</div>
-                <div className='contact'>Contact</div>
-                <div className='password'>Password</div>
-                <div className='country'>Country</div>
-                <div className='privilege'>Privilege</div>
+                <div className="name">Name</div>
+                <div className="contact">Contact</div>
+                <div className="password">Password</div>
+                <div className="country">Country</div>
+                <div className="privilege">Privilege</div>
                 <div id="action">Action</div>
                 <div id="brief"></div>
             </TableHead>
             <TableHeadForMobile>
-                <div className='name'>Users Data</div>
+                <div className="name">Users Data</div>
             </TableHeadForMobile>
-            {loading?
-                <Loading />:
-                (
-                    <>
-                        <TableBody>
-                            {pageData.map((datum) => {
-                                return <UserDataRow key={datum.id} datum={datum} index={datum.id} />
-                            })}
-                        </TableBody>
-                        <PaginationBar setPage={setPageInfo} page={page} limit={limit} total={showData.length} />
-                    </>
-                )
-            }
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    <TableBody>
+                        {pageData.map((datum) => {
+                            return (
+                                <UserDataRow
+                                    key={datum.id}
+                                    datum={datum}
+                                    index={datum.id}
+                                />
+                            );
+                        })}
+                    </TableBody>
+                    <PaginationBar
+                        setPage={setPageInfo}
+                        page={page}
+                        limit={limit}
+                        total={showData.length}
+                    />
+                </>
+            )}
         </>
     );
 };
@@ -101,30 +133,48 @@ const TableHead = styled.div`
     justify-content: space-between;
     font-size: 14px;
     font-weight: 600;
-    &>div {
+    & > div {
         padding: 8px 2px;
     }
-    &>div.name {width: ${width.name}; padding-left: 16px;}
-    &>div.contact {width: ${width.contact};}
-    &>div.password {width: ${width.password};}
-    &>div.country {width: ${width.country};}
-    &>div.privilege {width: ${width.privilege};}
-    &>div#action {width: ${width.action}; padding-left: 25px;}
-    &>div#brief {width: ${width.brief};}
+    & > div.name {
+        width: ${width.name};
+        padding-left: 16px;
+    }
+    & > div.contact {
+        width: ${width.contact};
+    }
+    & > div.password {
+        width: ${width.password};
+    }
+    & > div.country {
+        width: ${width.country};
+    }
+    & > div.privilege {
+        width: ${width.privilege};
+    }
+    & > div#action {
+        width: ${width.action};
+        padding-left: 25px;
+    }
+    & > div#brief {
+        width: ${width.brief};
+    }
 
-    &>div#brief {
+    & > div#brief {
         display: none;
     }
-    @media screen and (max-width: ${device['laptop-md']}){
-        &>div.privilege {width: 13%;}
-        &>div#action {
+    @media screen and (max-width: ${device["laptop-md"]}) {
+        & > div.privilege {
+            width: 13%;
+        }
+        & > div#action {
             display: none;
         }
-        &>div#brief {
+        & > div#brief {
             display: block;
         }
     }
-    @media screen and (max-width: ${device['phone']}){
+    @media screen and (max-width: ${device["phone"]}) {
         display: none;
     }
 `;
@@ -136,9 +186,11 @@ const TableHeadForMobile = styled.div`
     align-items: center;
     font-size: 14px;
     font-weight: 600;
-    &>div.name {padding-left: 16px;}
+    & > div.name {
+        padding-left: 16px;
+    }
     display: none;
-    @media screen and (max-width: ${device['phone']}){
+    @media screen and (max-width: ${device["phone"]}) {
         display: flex;
     }
 `;

@@ -1,7 +1,7 @@
 require("dotenv").config({
     path: `.env.${process.env.NODE_ENV}`,
-})
-const GATSBY_ANALYTIC_KEY = "UA-239898697-1"
+});
+
 module.exports = {
     siteMetadata: {
         title: `NYYU`,
@@ -10,37 +10,38 @@ module.exports = {
         siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
     },
     plugins: [
+        // Modern Google Analytics with GDPR compliance
         {
-            resolve: "gatsby-plugin-hubspot",
+            resolve: `gatsby-plugin-google-gtag`,
             options: {
-              trackingCode: "7628932",
-              respectDNT: false,
-              productionOnly: true,
+                trackingIds: [
+                    "UA-239898697-1", // Google Analytics / GA
+                    "GTM-T3PBD6T", // Google Tag Manager
+                ],
+                pluginConfig: {
+                    head: false,
+                    respectDNT: true,
+                    exclude: ["/preview/**", "/do-not-track/me/too/"],
+                },
+                gtagConfig: {
+                    anonymize_ip: true,
+                    cookie_expires: 0,
+                },
             },
         },
+        // Modern Google Tag Manager
         {
-            resolve: `gatsby-plugin-gdpr-cookies`,
+            resolve: `gatsby-plugin-google-tagmanager`,
             options: {
-              googleAnalytics: {
-                trackingId: 'UA-239898697-1', // leave empty if you want to disable the tracker
-                cookieName: 'gatsby-gdpr-google-analytics', // default
-                anonymize: true, // default
-                allowAdFeatures: false // default
-              },
-              googleTagManager: {
-                trackingId: 'GTM-T3PBD6T', // leave empty if you want to disable the tracker
-                cookieName: 'gatsby-gdpr-google-tagmanager', // default
-                dataLayerName: 'dataLayer', // default
-              },
-              // defines the environments where the tracking should be available  - default is ["production"]
-              environments: ['production']
+                id: "GTM-T3PBD6T",
+                includeInDevelopment: false,
+                defaultDataLayer: { platform: "gatsby" },
+                routeChangeEventName: "gatsby-route-change",
+                enableWebVitalsTracking: true,
             },
-          },
-
-        `gatsby-plugin-webfonts`,
+        },
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-styled-components`,
-        `gatsby-theme-material-ui`,
         `gatsby-plugin-image`,
         {
             resolve: `gatsby-source-filesystem`,
@@ -54,27 +55,30 @@ module.exports = {
         {
             resolve: `gatsby-plugin-manifest`,
             options: {
-                name: `gatsby-starter-default`,
-                short_name: `starter`,
+                name: `NYYU - NDB Token Pre-sale`,
+                short_name: `NYYU`,
                 start_url: `/`,
                 background_color: `#663399`,
+                theme_color: `#663399`,
                 display: `minimal-ui`,
-                icon: `src/images/favicon.png`, // This path is relative to the root of the site.
+                icon: `src/images/favicon.png`,
+                cache_busting_mode: "query",
+                include_favicon: true,
+                legacy: true,
+                theme_color_in_head: false,
+                // Fix preload warnings by controlling resource hints
+                icon_options: {
+                    purpose: `any maskable`,
+                },
             },
         },
         `gatsby-plugin-sass`,
-        {
-            resolve: `gatsby-plugin-google-fonts`,
-            options: {
-                fonts: [`Montserrat\:300,400,500,700,800`],
-            },
-        },
-        {
-            resolve: "gatsby-plugin-no-sourcemaps",
-        },
-        "gatsby-plugin-use-query-params"
     ],
     flags: {
-        PARALLEL_QUERY_RUNNING: true
-    }
-}
+        FAST_DEV: true,
+        PRESERVE_FILE_DOWNLOAD_CACHE: true,
+        PARALLEL_SOURCING: true,
+        // Disable resource hints that may cause preload warnings
+        DEV_SSR: false,
+    },
+};
