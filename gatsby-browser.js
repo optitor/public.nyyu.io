@@ -6,6 +6,9 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import "react-tabs/style/react-tabs.css";
 import "rc-slider/assets/index.css";
 
+// Configure dayjs BEFORE any components load
+import "./src/utilities/dayjs-config";
+
 export { wrapRootElement } from "./src/providers/wrap-with-provider";
 
 // Modern way to handle consent for Google Analytics

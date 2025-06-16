@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import { useQuery } from "@apollo/client";
 import validator from "validator";
 import { NumericFormat as NumberFormat } from "react-number-format";
+import dayjs from "../../../utilities/dayjs-config";
 
 import Seo from "../../../components/seo";
 import Stepper from "../../../components/admin/Stepper";
@@ -29,11 +30,11 @@ const IndexPage = () => {
     const prevReservedPrice = 100;
 
     //------- Round Data and Validation
-    // Round Data
+    // Round Data - Initialize with dayjs objects
     const initialRoundData = {
         roundNumber: "",
-        startTime: Date.now(),
-        endTime: Date.now(),
+        startTime: dayjs(),
+        endTime: dayjs().add(1, "hour"),
     };
     const [roundData, setRoundData] = useState(initialRoundData);
 
@@ -48,11 +49,9 @@ const IndexPage = () => {
 
     const duration = useMemo(() => {
         if (!roundData.startTime || !roundData.endTime) return "";
-        if (new Date(roundData.endTime) <= new Date(roundData.startTime))
+        if (dayjs(roundData.endTime).isBefore(dayjs(roundData.startTime)))
             return "";
-        return (
-            new Date(roundData.endTime) - new Date(roundData.startTime) + 1000
-        );
+        return dayjs(roundData.endTime).diff(dayjs(roundData.startTime)) + 1000;
     }, [roundData]);
 
     // Round Data Validation
@@ -60,18 +59,15 @@ const IndexPage = () => {
     roundDataError = useMemo(() => {
         if (!roundData.roundNumber)
             return { roundNumber: "Round Number is required" };
-        if (!roundData.startTime)
-            return { startTime: "Round Start Time is required" };
-        if (!validator.isDate(new Date(roundData.startTime)))
-            return { startTime: "Round Start Time is invalid" };
-        if (!roundData.endTime)
-            return { endTime: "Round End Time is required" };
-        if (!validator.isDate(new Date(roundData.endTime)))
-            return { endTime: "Round End Time is invalid" };
+        if (!roundData.startTime || !dayjs(roundData.startTime).isValid())
+            return {
+                startTime: "Round Start Time is required and must be valid",
+            };
+        if (!roundData.endTime || !dayjs(roundData.endTime).isValid())
+            return { endTime: "Round End Time is required and must be valid" };
         if (
-            Math.round(
-                new Date(roundData.endTime) - new Date(roundData.startTime),
-            ) <= 0
+            dayjs(roundData.endTime).isBefore(dayjs(roundData.startTime)) ||
+            dayjs(roundData.endTime).isSame(dayjs(roundData.startTime))
         )
             return { endTime: "Round End Time must be after Start Time" };
         return {};
@@ -88,43 +84,26 @@ const IndexPage = () => {
     const [tokenData, setTokenData] = useState(initialTokenData);
 
     // Token Data Validation
-    let tokenDataError = {};
-    tokenDataError = useMemo(() => {
+    const tokenDataError = useMemo(() => {
         if (!tokenData.tokenAmount)
             return { tokenAmount: "Token Amount is required" };
-        if (!validator.isNumeric(tokenData.tokenAmount))
-            return { tokenAmount: "Token Amount must be number" };
+        if (isNaN(tokenData.tokenAmount))
+            return { tokenAmount: "Token Amount must be a number" };
         if (!tokenData.ReservedPrice)
             return { ReservedPrice: "Reserved Price is required" };
-        if (!validator.isNumeric(tokenData.ReservedPrice))
-            return { ReservedPrice: "Reserved Price must be number" };
+        if (isNaN(tokenData.ReservedPrice))
+            return { ReservedPrice: "Reserved Price must be a number" };
         return {};
     }, [tokenData]);
 
-    //--------- Task Data and Validation
+    //-------- Task Data and Validation
     // Task Data
-    const [taskData, setTaskData] = useState([
-        { task: "", url: "" },
-        { task: "", url: "" },
-    ]);
+    const [taskData, setTaskData] = useState([{ task: "", url: "" }]);
 
-    const deleteTask = (index) => {
-        let array = [...taskData];
-        array.splice(index, 1);
-        setTaskData([...array]);
-    };
-
+    // Task Data Validation
     const taskDataError = useMemo(() => {
-        if (!taskData.length)
-            return { item: "noTask", desc: "One task is required at least" };
-        for (let i = 0; i < taskData.length; i++) {
-            if (!taskData[i].task)
-                return { index: i, item: "task", desc: "Input is required" };
-            if (!taskData[i].url)
-                return { index: i, item: "url", desc: "Input is required" };
-            if (!validator.isURL(taskData[i].url))
-                return { index: i, item: "url", desc: "Please enter a URL" };
-        }
+        const hasEmptyTasks = taskData.some((item) => !item.task.trim());
+        if (hasEmptyTasks) return { item: "All tasks must be filled" };
         return {};
     }, [taskData]);
 
@@ -158,8 +137,8 @@ const IndexPage = () => {
     const handleSubmit = async () => {
         setPending(true);
         const createData = {
-            startedAt: Number(roundData.startTime),
-            endedAt: Number(roundData.endTime),
+            startedAt: dayjs(roundData.startTime).valueOf(),
+            endedAt: dayjs(roundData.endTime).valueOf(),
             tokenAmount: Number(tokenData.tokenAmount),
             tokenPrice: Number(tokenData.ReservedPrice),
             conditions: taskData,
@@ -191,40 +170,29 @@ const IndexPage = () => {
                                         </Alert>
                                     ) : (
                                         <Alert severity="success">
-                                            Success! Please click Next Button
+                                            Success!
                                         </Alert>
                                     )
                                 ) : (
                                     ""
                                 )}
-                                <div className="div1">
-                                    <div>
-                                        <p>Round ID</p>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Round Number
+                                        </p>
                                         <input
-                                            className="black_input disabled"
-                                            placeholder="Auto-Generated"
-                                            disabled
-                                        />
-                                    </div>
-                                    <div>
-                                        <p>Round Number</p>
-                                        <NumberFormat
-                                            className={`black_input disabled`}
-                                            placeholder="Auto-Generated"
-                                            thousandSeparator={true}
-                                            allowNegative={false}
-                                            value={roundData.roundNumber}
+                                            className="white_input"
                                             readOnly
+                                            value={roundData.roundNumber}
                                         />
                                     </div>
-                                </div>
-                                <div className="div2 mt-4">
                                     <LocalizationProvider
                                         dateAdapter={AdapterDayjs}
                                     >
-                                        <div>
+                                        <div className="col-md-6">
                                             <p
-                                                className={`${showError && roundDataError.startTime ? "error" : ""}`}
+                                                className={`form-label ${showError && roundDataError.startTime ? "error" : ""}`}
                                             >
                                                 Round Start Time
                                             </p>
@@ -243,9 +211,9 @@ const IndexPage = () => {
                                                 )}
                                             />
                                         </div>
-                                        <div>
+                                        <div className="col-md-6">
                                             <p
-                                                className={`${showError && roundDataError.endTime ? "error" : ""}`}
+                                                className={`form-label ${showError && roundDataError.endTime ? "error" : ""}`}
                                             >
                                                 Round End Time
                                             </p>
@@ -263,7 +231,7 @@ const IndexPage = () => {
                                                 )}
                                             />
                                         </div>
-                                        <div>
+                                        <div className="col-md-6">
                                             <p>Total Time</p>
                                             <input
                                                 className="white_input"
@@ -299,113 +267,47 @@ const IndexPage = () => {
                                         </Alert>
                                     ) : (
                                         <Alert severity="success">
-                                            Success! Please click Next Button
+                                            Success!
                                         </Alert>
                                     )
                                 ) : (
                                     ""
                                 )}
-                                <div className="div1">
-                                    <div>
-                                        <p>Token Amount</p>
-                                        <input
-                                            className={`black_input ${showError && tokenDataError.tokenAmount ? "error" : ""}`}
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Token Amount
+                                        </p>
+                                        <NumberFormat
+                                            className="white_input"
                                             value={tokenData.tokenAmount}
-                                            onChange={(e) =>
+                                            onValueChange={(values) => {
                                                 setTokenData({
                                                     ...tokenData,
-                                                    tokenAmount: e.target.value,
-                                                })
-                                            }
+                                                    tokenAmount: values.value,
+                                                });
+                                            }}
+                                            thousandSeparator={true}
+                                            placeholder="Enter token amount"
                                         />
                                     </div>
-                                    <div>
-                                        <p>Reserved Price</p>
-                                        <input
-                                            className={`black_input ${showError && tokenDataError.ReservedPrice ? "error" : ""}`}
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Reserved Price ($)
+                                        </p>
+                                        <NumberFormat
+                                            className="white_input"
                                             value={tokenData.ReservedPrice}
-                                            onChange={(e) =>
+                                            onValueChange={(values) => {
                                                 setTokenData({
                                                     ...tokenData,
-                                                    ReservedPrice:
-                                                        e.target.value,
-                                                })
-                                            }
+                                                    ReservedPrice: values.value,
+                                                });
+                                            }}
+                                            thousandSeparator={true}
+                                            placeholder="Enter reserved price"
+                                            prefix="$"
                                         />
-                                    </div>
-                                </div>
-                                <div className="div1 mt-4">
-                                    <div>
-                                        <p>Total Token Amount</p>
-                                        <div className="token_div">
-                                            <input
-                                                className="white_input"
-                                                value={totalTokenAmount}
-                                                readOnly
-                                            />
-                                            <div>
-                                                {[5, 10, 20, 50].map(
-                                                    (value) => {
-                                                        return (
-                                                            <button
-                                                                key={value}
-                                                                onClick={() =>
-                                                                    setTokenData(
-                                                                        {
-                                                                            ...tokenData,
-                                                                            tokenAmount:
-                                                                                String(
-                                                                                    (totalTokenAmount *
-                                                                                        value) /
-                                                                                        100,
-                                                                                ),
-                                                                        },
-                                                                    )
-                                                                }
-                                                            >
-                                                                {value}%
-                                                            </button>
-                                                        );
-                                                    },
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Previous Reserved Price</p>
-                                        <div className="token_div">
-                                            <input
-                                                className="white_input"
-                                                value={prevReservedPrice + "$"}
-                                                readOnly
-                                            />
-                                            <div>
-                                                {[5, 10, 20, 50].map(
-                                                    (value) => {
-                                                        return (
-                                                            <button
-                                                                key={value}
-                                                                onClick={() =>
-                                                                    setTokenData(
-                                                                        {
-                                                                            ...tokenData,
-                                                                            ReservedPrice:
-                                                                                String(
-                                                                                    (prevReservedPrice *
-                                                                                        value) /
-                                                                                        100,
-                                                                                ),
-                                                                        },
-                                                                    )
-                                                                }
-                                                            >
-                                                                {value}%
-                                                            </button>
-                                                        );
-                                                    },
-                                                )}
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -427,70 +329,99 @@ const IndexPage = () => {
                     )}
                     {currentStep === 3 && (
                         <>
-                            <div className="input_div custom_scrollbar">
+                            <div className="input_div">
                                 {showError ? (
                                     taskDataError.item ? (
                                         <Alert severity="error">
-                                            {taskDataError.desc}
+                                            {taskDataError.item}
                                         </Alert>
                                     ) : (
                                         <Alert severity="success">
-                                            Success! Please click Next Button
+                                            Success!
                                         </Alert>
                                     )
                                 ) : (
                                     ""
                                 )}
-                                {taskData.map((task, index) => {
-                                    return (
+                                <div className="conditions_div">
+                                    {taskData.map((item, index) => (
                                         <div
-                                            className="condition_div"
                                             key={index}
+                                            className="condition_item"
                                         >
-                                            <div className="task_div">
-                                                <input
-                                                    className={`black_input ${showError && taskDataError.index === index && taskDataError.item === "task" ? "error" : ""}`}
-                                                    value={task.task}
-                                                    onChange={(e) => {
-                                                        taskData[index].task =
-                                                            e.target.value;
-                                                        setTaskData([
-                                                            ...taskData,
-                                                        ]);
-                                                    }}
-                                                    placeholder="Task"
-                                                />
-                                                <input
-                                                    className={`black_input ${showError && taskDataError.index === index && taskDataError.item === "url" ? "error" : ""}`}
-                                                    value={task.url}
-                                                    onChange={(e) => {
-                                                        taskData[index].url =
-                                                            e.target.value;
-                                                        setTaskData([
-                                                            ...taskData,
-                                                        ]);
-                                                    }}
-                                                    placeholder="URL"
-                                                />
-                                            </div>
-                                            <div className="btn_div">
-                                                <Icon
-                                                    icon="bytesize:trash"
-                                                    onClick={() =>
-                                                        deleteTask(index)
-                                                    }
-                                                />
+                                            <div className="row">
+                                                <div className="col-md-5">
+                                                    <p className="form-label">
+                                                        Task {index + 1}
+                                                    </p>
+                                                    <input
+                                                        className="white_input"
+                                                        type="text"
+                                                        value={item.task}
+                                                        onChange={(e) => {
+                                                            const newTaskData =
+                                                                [...taskData];
+                                                            newTaskData[
+                                                                index
+                                                            ].task =
+                                                                e.target.value;
+                                                            setTaskData(
+                                                                newTaskData,
+                                                            );
+                                                        }}
+                                                        placeholder="Enter task description"
+                                                    />
+                                                </div>
+                                                <div className="col-md-5">
+                                                    <p className="form-label">
+                                                        URL (Optional)
+                                                    </p>
+                                                    <input
+                                                        className="white_input"
+                                                        type="url"
+                                                        value={item.url}
+                                                        onChange={(e) => {
+                                                            const newTaskData =
+                                                                [...taskData];
+                                                            newTaskData[
+                                                                index
+                                                            ].url =
+                                                                e.target.value;
+                                                            setTaskData(
+                                                                newTaskData,
+                                                            );
+                                                        }}
+                                                        placeholder="Enter URL"
+                                                    />
+                                                </div>
+                                                <div className="col-md-2">
+                                                    {taskData.length > 1 && (
+                                                        <button
+                                                            className="btn-remove"
+                                                            onClick={() => {
+                                                                const newTaskData =
+                                                                    taskData.filter(
+                                                                        (
+                                                                            _,
+                                                                            i,
+                                                                        ) =>
+                                                                            i !==
+                                                                            index,
+                                                                    );
+                                                                setTaskData(
+                                                                    newTaskData,
+                                                                );
+                                                            }}
+                                                        >
+                                                            <Icon icon="mdi:delete" />
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    );
-                                })}
-                                <div className="add_btn_div">
+                                    ))}
                                     <Icon
-                                        className={
-                                            taskDataError.item === "noTask"
-                                                ? "error"
-                                                : ""
-                                        }
+                                        className={`add_icon ${taskDataError.item ? "error" : ""}`}
                                         icon="akar-icons:plus"
                                         onClick={() =>
                                             setTaskData([
@@ -541,19 +472,11 @@ const IndexPage = () => {
                                         </div>
                                         <div className="item">
                                             <p>Reserved Price</p>
-                                            <p>{tokenData.ReservedPrice}</p>
+                                            <p>${tokenData.ReservedPrice}</p>
                                         </div>
-                                    </div>
-                                    <div className="col-sm-3">
                                         <div className="item">
-                                            <p>Task</p>
-                                            {taskData.map((task, index) => {
-                                                return (
-                                                    <p key={index}>
-                                                        {task.task}
-                                                    </p>
-                                                );
-                                            })}
+                                            <p>Tasks Count</p>
+                                            <p>{taskData.length}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -570,7 +493,7 @@ const IndexPage = () => {
                                     onClick={handleSubmit}
                                     disabled={pending}
                                 >
-                                    {pending ? "Saving. . ." : "Save"}
+                                    {pending ? "Creating..." : "Create"}
                                 </button>
                             </div>
                         </>

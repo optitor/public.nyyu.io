@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import validator from "validator";
 import { NumericFormat as NumberFormat } from "react-number-format";
 import { useQuery } from "@apollo/client";
+import dayjs from "../../../utilities/dayjs-config";
 import * as Query from "./../../../apollo/graphqls/querys/Auction";
 
 import Seo from "../../../components/seo";
@@ -41,18 +42,18 @@ const IndexPage = () => {
     const prevReservedPrice = 100;
 
     //------- Round Data and Validation
-    // Round Data
+    // Round Data - Initialize with dayjs objects
     const initialRoundData = {
         roundNumber: "",
-        startTime: Date.now(),
-        endTime: Date.now(),
+        startTime: dayjs(),
+        endTime: dayjs().add(1, "hour"),
     };
     const [roundData, setRoundData] = useState(initialRoundData);
 
     const { data: newRound } = useQuery(Query.GET_NEW_ROUND, {
         fetchPolicy: "network-only",
         onCompleted: () => {
-            if (newRound.getNewRound) {
+            if (newRound && newRound.getNewRound) {
                 setRoundData({
                     ...roundData,
                     roundNumber: newRound.getNewRound,
@@ -63,30 +64,24 @@ const IndexPage = () => {
 
     const duration = useMemo(() => {
         if (!roundData.startTime || !roundData.endTime) return "";
-        if (new Date(roundData.endTime) <= new Date(roundData.startTime))
+        if (dayjs(roundData.endTime).isBefore(dayjs(roundData.startTime)))
             return "";
-        return (
-            new Date(roundData.endTime) - new Date(roundData.startTime) + 1000
-        );
+        return dayjs(roundData.endTime).diff(dayjs(roundData.startTime)) + 1000;
     }, [roundData]);
-    // console.log(roundData)
 
     // Round Data Validation
     const roundDataError = useMemo(() => {
         if (!roundData.roundNumber)
             return { roundNumber: "Round Number is required" };
-        if (!roundData.startTime)
-            return { startTime: "Round Start Time is required" };
-        if (!validator.isDate(new Date(roundData.startTime)))
-            return { startTime: "Round Start Time is invalid" };
-        if (!roundData.endTime)
-            return { endTime: "Round End Time is required" };
-        if (!validator.isDate(new Date(roundData.endTime)))
-            return { endTime: "Round End Time is invalid" };
+        if (!roundData.startTime || !dayjs(roundData.startTime).isValid())
+            return {
+                startTime: "Round Start Time is required and must be valid",
+            };
+        if (!roundData.endTime || !dayjs(roundData.endTime).isValid())
+            return { endTime: "Round End Time is required and must be valid" };
         if (
-            Math.round(
-                new Date(roundData.endTime) - new Date(roundData.startTime),
-            ) <= 0
+            dayjs(roundData.endTime).isBefore(dayjs(roundData.startTime)) ||
+            dayjs(roundData.endTime).isSame(dayjs(roundData.startTime))
         )
             return { endTime: "Round End Time must be after Start Time" };
         return {};
@@ -150,17 +145,14 @@ const IndexPage = () => {
     const handleSubmit = async () => {
         setPending(true);
         const createData = {
-            startedAt: Number(roundData.startTime),
-            duration: Number(duration),
-            totalToken: Number(tokenData.tokenAmount),
-            minPrice: Number(tokenData.ReservedPrice),
-            avatar: avatars[avatar.value]?.avatarSet.map((item) => {
-                return { groupId: item.groupId, compId: item.compId };
-            }),
-            token: Number(avatarToken),
+            startedAt: dayjs(roundData.startTime).valueOf(),
+            endedAt: dayjs(roundData.endTime).valueOf(),
+            tokenAmount: Number(tokenData.tokenAmount),
+            tokenPrice: Number(tokenData.ReservedPrice),
+            avatarId: avatar.value,
+            avatarToken: Number(avatarToken),
         };
         await dispatch(create_Auction(createData));
-        // console.log(createData)
         setPending(false);
     };
 
@@ -169,13 +161,13 @@ const IndexPage = () => {
             <Seo title="Create Auction" />
             <main className="create-auction-page">
                 <LayoutForCreate>
-                    <Link className="close" to="/admin">
+                    <Link className="close" to={ROUTES.admin}>
                         <Icon icon="codicon:chrome-close" />
                     </Link>
-                    <p className="subtitle">Create Auction</p>
+                    <p className="subtitle">Create Auction Round</p>
                     <Stepper
                         currentStep={currentStep}
-                        texts={["ID & Time", "Token", "Avatar"]}
+                        texts={["ID & Time", "Token", "Avatar", "Summary"]}
                     />
                     {currentStep === 1 && (
                         <>
@@ -187,40 +179,29 @@ const IndexPage = () => {
                                         </Alert>
                                     ) : (
                                         <Alert severity="success">
-                                            Success! Please click Next Button
+                                            Success!
                                         </Alert>
                                     )
                                 ) : (
                                     ""
                                 )}
-                                <div className="div1">
-                                    <div>
-                                        <p>Round ID</p>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Round Number
+                                        </p>
                                         <input
-                                            className="black_input disabled"
-                                            placeholder="Auto-Generated"
-                                            disabled
-                                        />
-                                    </div>
-                                    <div>
-                                        <p>Round Number</p>
-                                        <NumberFormat
-                                            className={`black_input disabled`}
-                                            placeholder="Auto-Generated"
-                                            thousandSeparator={true}
-                                            allowNegative={false}
-                                            value={roundData.roundNumber}
+                                            className="white_input"
                                             readOnly
+                                            value={roundData.roundNumber}
                                         />
                                     </div>
-                                </div>
-                                <div className="div2 mt-4">
                                     <LocalizationProvider
                                         dateAdapter={AdapterDayjs}
                                     >
-                                        <div>
+                                        <div className="col-md-6">
                                             <p
-                                                className={`${showError && roundDataError.startTime ? "error" : ""}`}
+                                                className={`form-label ${showError && roundDataError.startTime ? "error" : ""}`}
                                             >
                                                 Round Start Time
                                             </p>
@@ -238,9 +219,9 @@ const IndexPage = () => {
                                                 )}
                                             />
                                         </div>
-                                        <div>
+                                        <div className="col-md-6">
                                             <p
-                                                className={`${showError && roundDataError.endTime ? "error" : ""}`}
+                                                className={`form-label ${showError && roundDataError.endTime ? "error" : ""}`}
                                             >
                                                 Round End Time
                                             </p>
@@ -258,7 +239,7 @@ const IndexPage = () => {
                                                 )}
                                             />
                                         </div>
-                                        <div>
+                                        <div className="col-md-6">
                                             <p>Total Time</p>
                                             <input
                                                 className="white_input"
@@ -297,117 +278,47 @@ const IndexPage = () => {
                                         </Alert>
                                     ) : (
                                         <Alert severity="success">
-                                            Success! Please click Next Button
+                                            Success!
                                         </Alert>
                                     )
                                 ) : (
                                     ""
                                 )}
-                                <div className="div1">
-                                    <div>
-                                        <p>Token Amount</p>
-                                        <input
-                                            className={`black_input ${showError && tokenDataError.tokenAmount ? "error" : ""}`}
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Token Amount
+                                        </p>
+                                        <NumberFormat
+                                            className="white_input"
                                             value={tokenData.tokenAmount}
-                                            onChange={(e) =>
+                                            onValueChange={(values) => {
                                                 setTokenData({
                                                     ...tokenData,
-                                                    tokenAmount: e.target.value,
-                                                })
-                                            }
+                                                    tokenAmount: values.value,
+                                                });
+                                            }}
+                                            thousandSeparator={true}
+                                            placeholder="Enter token amount"
                                         />
                                     </div>
-                                    <div>
-                                        <p>Reserved Price</p>
-                                        <input
-                                            className={`black_input ${showError && tokenDataError.ReservedPrice ? "error" : ""}`}
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Reserved Price ($)
+                                        </p>
+                                        <NumberFormat
+                                            className="white_input"
                                             value={tokenData.ReservedPrice}
-                                            onChange={(e) =>
+                                            onValueChange={(values) => {
                                                 setTokenData({
                                                     ...tokenData,
-                                                    ReservedPrice:
-                                                        e.target.value,
-                                                })
-                                            }
+                                                    ReservedPrice: values.value,
+                                                });
+                                            }}
+                                            thousandSeparator={true}
+                                            placeholder="Enter reserved price"
+                                            prefix="$"
                                         />
-                                    </div>
-                                </div>
-                                <div className="div1 mt-4">
-                                    <div>
-                                        <p>Total Token Amount</p>
-                                        <div className="token_div">
-                                            <NumberFormat
-                                                value={totalTokenAmount}
-                                                className="white_input"
-                                                displayType="text"
-                                                thousandSeparator={true}
-                                                readOnly
-                                            />
-                                            <div>
-                                                {[5, 10, 20, 50].map(
-                                                    (value) => {
-                                                        return (
-                                                            <button
-                                                                key={value}
-                                                                onClick={() =>
-                                                                    setTokenData(
-                                                                        {
-                                                                            ...tokenData,
-                                                                            tokenAmount:
-                                                                                String(
-                                                                                    (totalTokenAmount *
-                                                                                        value) /
-                                                                                        100,
-                                                                                ),
-                                                                        },
-                                                                    )
-                                                                }
-                                                            >
-                                                                {value}%
-                                                            </button>
-                                                        );
-                                                    },
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Previous Reserved Price</p>
-                                        <div className="token_div">
-                                            <NumberFormat
-                                                value={prevReservedPrice}
-                                                className="white_input"
-                                                displayType="text"
-                                                thousandSeparator={true}
-                                                readOnly
-                                            />
-                                            <div>
-                                                {[5, 10, 20, 50].map(
-                                                    (value) => {
-                                                        return (
-                                                            <button
-                                                                key={value}
-                                                                onClick={() =>
-                                                                    setTokenData(
-                                                                        {
-                                                                            ...tokenData,
-                                                                            ReservedPrice:
-                                                                                String(
-                                                                                    (prevReservedPrice *
-                                                                                        value) /
-                                                                                        100,
-                                                                                ),
-                                                                        },
-                                                                    )
-                                                                }
-                                                            >
-                                                                {value}%
-                                                            </button>
-                                                        );
-                                                    },
-                                                )}
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -437,47 +348,48 @@ const IndexPage = () => {
                                         </Alert>
                                     ) : (
                                         <Alert severity="success">
-                                            Success! Please click Next Button
+                                            Success!
                                         </Alert>
                                     )
                                 ) : (
                                     ""
                                 )}
-                                <div className="avatar_div mt-4">
-                                    <div className="row">
-                                        <div className="avatarImage_div col-sm-4">
-                                            <AvatarImage
-                                                avatar={avatars[avatar?.value]}
-                                            />
-                                        </div>
-                                        <div className="select_div col-sm-4">
-                                            <p>Avatar</p>
-                                            <Select
-                                                id="select_avatar"
-                                                value={avatar}
-                                                onChange={(selected) => {
-                                                    setAuctionAvatar(selected);
-                                                }}
-                                                options={Avatars}
-                                                styles={customSelectStyles}
-                                                placeholder="Select Avatar"
-                                            />
-                                        </div>
-                                        <div className="select_div col-sm-4">
-                                            <p>Avatar Token</p>
-                                            <NumberFormat
-                                                className={`black_input ${showError && avatarError.avatarToken ? "error" : ""}`}
-                                                placeholder="Enter number"
-                                                thousandSeparator={true}
-                                                allowNegative={false}
-                                                value={avatarToken}
-                                                onValueChange={({ value }) => {
-                                                    setAvatarToken(value);
-                                                }}
-                                            />
-                                        </div>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Select Avatar
+                                        </p>
+                                        <Select
+                                            styles={customSelectStyles}
+                                            value={avatar}
+                                            onChange={setAuctionAvatar}
+                                            options={Avatars}
+                                            placeholder="Choose Avatar"
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <p className="form-label">
+                                            Avatar Token
+                                        </p>
+                                        <NumberFormat
+                                            className="white_input"
+                                            value={avatarToken}
+                                            onValueChange={(values) => {
+                                                setAvatarToken(values.value);
+                                            }}
+                                            thousandSeparator={true}
+                                            placeholder="Enter avatar token amount"
+                                        />
                                     </div>
                                 </div>
+                                {avatar.value && (
+                                    <div className="avatar_preview">
+                                        <p className="form-label">
+                                            Avatar Preview
+                                        </p>
+                                        <AvatarImage avatarId={avatar.value} />
+                                    </div>
+                                )}
                             </div>
                             <div className="button_div">
                                 <button
@@ -498,98 +410,47 @@ const IndexPage = () => {
                     {currentStep === 4 && (
                         <>
                             <div className="input_div">
-                                <div className="for_desktop">
-                                    <div className="row">
-                                        <div className="col-sm-4 col-6">
-                                            <div className="item">
-                                                <p>Round ID</p>
-                                                <p>********</p>
-                                            </div>
-                                            <div className="item">
-                                                <p>Round Number</p>
-                                                <p>{roundData.roundNumber}</p>
-                                            </div>
-                                            <div className="item">
-                                                <p>Round Time</p>
-                                                <p>
-                                                    {secondsToDhms(
-                                                        duration / 1000,
-                                                    )}
-                                                </p>
-                                            </div>
+                                <div className="row">
+                                    <div className="col-sm-4 col-6">
+                                        <div className="item">
+                                            <p>Round ID</p>
+                                            <p>Auto-generated</p>
                                         </div>
-                                        <div className="col-sm-5 col-6">
-                                            <div className="item">
-                                                <p>Token Amount</p>
-                                                <p>{tokenData.tokenAmount}</p>
-                                            </div>
-                                            <div className="item">
-                                                <p>Reserved Price</p>
-                                                <p>{tokenData.ReservedPrice}</p>
-                                            </div>
-                                            <div className="item">
-                                                <p>Avatar Token</p>
-                                                <p>{avatarToken}</p>
-                                            </div>
+                                        <div className="item">
+                                            <p>Round Number</p>
+                                            <p>{roundData.roundNumber}</p>
                                         </div>
-                                        <div className="col-sm-3">
-                                            <div className="item">
-                                                <p>Avatar</p>
-                                                <p>{avatar.label}</p>
-                                            </div>
-                                            <div className="item">
-                                                <AvatarImage
-                                                    avatar={
-                                                        avatars[avatar?.value]
-                                                    }
-                                                />
-                                            </div>
+                                        <div className="item">
+                                            <p>Round Time</p>
+                                            <p>
+                                                {secondsToDhms(duration / 1000)}
+                                            </p>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="for_phone">
-                                    <div className="row">
-                                        <div className="col-sm-3 mb-4">
-                                            <div className="item">
-                                                <AvatarImage
-                                                    avatar={
-                                                        avatars[avatar?.value]
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="item text-center">
-                                                <p>Avatar</p>
-                                                <p>{avatar.label}</p>
-                                            </div>
+                                    <div className="col-sm-5 col-6">
+                                        <div className="item">
+                                            <p>Token Amount</p>
+                                            <p>{tokenData.tokenAmount}</p>
                                         </div>
-                                        <div className="col-sm-4 col-6 mb-4">
-                                            <div className="item">
-                                                <p>Round ID</p>
-                                                <p>Auto-generated</p>
-                                            </div>
-                                            <div className="item">
-                                                <p>Round Number</p>
-                                                <p>{roundData.roundNumber}</p>
-                                            </div>
-                                            <div className="item">
-                                                <p>Round Time</p>
-                                                <p>
-                                                    {secondsToDhms(
-                                                        duration / 1000,
-                                                    )}
-                                                </p>
-                                            </div>
+                                        <div className="item">
+                                            <p>Reserved Price</p>
+                                            <p>${tokenData.ReservedPrice}</p>
                                         </div>
-                                        <div className="col-sm-5 col-6">
-                                            <div className="item">
-                                                <p>Token Amount</p>
-                                                <p>{tokenData.tokenAmount}</p>
-                                            </div>
-                                            <div className="item">
-                                                <p>Reserved Price</p>
-                                                <p>{tokenData.ReservedPrice}</p>
-                                            </div>
+                                        <div className="item">
+                                            <p>Avatar Token</p>
+                                            <p>{avatarToken}</p>
                                         </div>
+                                    </div>
+                                    <div className="col-sm-3">
+                                        <div className="item">
+                                            <p>Avatar</p>
+                                            <p>{avatar.label}</p>
+                                        </div>
+                                        {avatar.value && (
+                                            <AvatarImage
+                                                avatarId={avatar.value}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -605,7 +466,7 @@ const IndexPage = () => {
                                     onClick={handleSubmit}
                                     disabled={pending}
                                 >
-                                    {pending ? "Saving. . ." : "Save"}
+                                    {pending ? "Creating..." : "Create Auction"}
                                 </button>
                             </div>
                         </>
@@ -622,28 +483,23 @@ const customSelectStyles = {
     option: (provided, state) => ({
         ...provided,
         color: "white",
-        backgroundColor: state.isSelected ? "#23c865" : "#1e1e1e",
+        backgroundColor: state.isSelected ? "#0066cc" : "#2d3748",
+        "&:hover": {
+            backgroundColor: "#4a5568",
+        },
     }),
     control: (provided) => ({
         ...provided,
-        backgroundColor: "#1e1e1e",
-        borderRadius: 0,
-    }),
-    menu: (provided) => ({
-        ...provided,
-        backgroundColor: "#1e1e1e",
-        border: "1px solid white",
+        backgroundColor: "#2d3748",
+        borderColor: "#4a5568",
+        color: "white",
     }),
     singleValue: (provided) => ({
         ...provided,
         color: "white",
     }),
-    input: (provided) => ({
+    menu: (provided) => ({
         ...provided,
-        color: "white",
-    }),
-    placeholder: (provided) => ({
-        ...provided,
-        color: "dimgrey",
+        backgroundColor: "#2d3748",
     }),
 };

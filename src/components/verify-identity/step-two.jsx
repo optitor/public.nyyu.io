@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Select from "react-select";
+import dayjs from "../../utilities/dayjs-config";
 import { VerifyIdStep2 } from "../../utilities/imgImport";
 import Loading from "../common/Loading";
 import { useVerification } from "./verification-context";
@@ -21,11 +22,14 @@ export default function StepTwo() {
     const [surnameError, setSurnameError] = useState("");
     const [dateError, setDateError] = useState("");
     const [loading, setLoading] = useState(true);
+
     const onNextButtonClick = (e) => {
         e.preventDefault();
         setFirstNameError("");
         setSurnameError("");
+        setDateError("");
         let error = false;
+
         if (!verification.firstName) {
             error = true;
             setFirstNameError("Please fill out the first name field");
@@ -46,168 +50,137 @@ export default function StepTwo() {
     };
 
     // Render
-    verification.shuftReferencePayload?.docStatus === true &&
-        verification.nextStep();
-
-    return (
-        <>
-            <div className={`${!loading && "d-none"}`}>
-                <Loading />
-            </div>
-            <div
-                className={`col-12 mx-auto mt-3 mt-sm-0 ${loading && "d-none"}`}
-            >
-                <h4 className="text-center  mt-5 mt-sm-2 mb-4">
-                    Verify your identity
-                </h4>
-                <div className="text-center">
-                    <div className="d-block d-sm-none">
-                        <div className="txt-green text-uppercase fw-bold fs-18px mb-3">
-                            step 1
-                        </div>
-                        <div className="text-light fs-14px fw-bold">
-                            Confirm your ID information
-                        </div>
-                    </div>
-                    <img
-                        className="d-sm-block d-none"
-                        src={VerifyIdStep2}
-                        onLoad={() => setLoading(false)}
-                        alt="step indicator"
-                    />
-                </div>
-                <div className="my-sm-5 verify-step1">
-                    <div className="mt-5 text-light fs-25px fw-bold text-center d-sm-block d-none">
-                        Confirm your ID information
-                        <div className="fs-16px fw-500">
-                            Make edits if needed
-                        </div>
-                    </div>
-                    <div className="col-sm-8 col-12 mx-auto">
-                        <div className="">
-                            <p className="form-label mt-4">First name</p>
+    if (verification.shuftReferencePayload?.docStatus === "SUCCESS") {
+        return (
+            <div className="step-2">
+                <img
+                    src={VerifyIdStep2}
+                    alt="verify-step-2"
+                    onLoad={() => setLoading(false)}
+                />
+                <Loading loading={loading} />
+                <div className="input_div">
+                    <div className="row">
+                        <div className="col-md-6">
+                            <p className="form-label">First Name</p>
                             <input
+                                className="white_input"
                                 type="text"
-                                className="form-control"
                                 value={verification.firstName}
                                 onChange={(e) =>
                                     verification.setFirstName(e.target.value)
                                 }
-                                placeholder="First name"
+                                placeholder="Enter first name"
                             />
                             <div className="text-danger mt-2 fs-12px">
                                 {firstNameError}
                             </div>
                         </div>
-                        <div>
-                            <p className="form-label mt-4">Last Name</p>
+                        <div className="col-md-6">
+                            <p className="form-label">Surname</p>
                             <input
+                                className="white_input"
                                 type="text"
-                                className="form-control"
                                 value={verification.surname}
                                 onChange={(e) =>
                                     verification.setSurname(e.target.value)
                                 }
-                                placeholder="Surname"
+                                placeholder="Enter surname"
                             />
                             <div className="text-danger mt-2 fs-12px">
                                 {surnameError}
                             </div>
                         </div>
-                        <div>
-                            <p className="form-label mt-4">Gender</p>
+                        {/* Gender selection - commented out as in original
+                        <div className="col-md-6">
+                            <p className="form-label">Gender</p>
                             <Select
-                                options={GENDER_LIST}
                                 value={verification.gender}
-                                onChange={(v) => verification.setGender(v)}
-                                placeholder="Choose country"
-                                styles={GenderSelectStyle}
+                                onChange={verification.setGender}
+                                options={GENDER_LIST}
+                                placeholder="Select gender"
                             />
-                            {/* <div className="text-danger mt-2 fs-12px">
+                            <div className="text-danger mt-2 fs-12px">
                                 {genderError}
-                            </div> */}
-                        </div>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <div>
-                                <p className="form-label mt-4">Date of Birth</p>
-                                <MobileDatePicker
-                                    showTodayButton
-                                    value={verification.dob}
-                                    onChange={(newValue) => {
+                            </div>
+                        </div> */}
+                    </div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <div>
+                            <p className="form-label mt-4">Date of Birth</p>
+                            <MobileDatePicker
+                                showTodayButton
+                                value={
+                                    verification.dob
+                                        ? dayjs(verification.dob)
+                                        : null
+                                }
+                                onChange={(newValue) => {
+                                    if (newValue && dayjs(newValue).isValid()) {
                                         verification.setDob(
                                             newValue.toLocaleDateString(
                                                 "fr-CA",
                                             ),
                                         );
-                                    }}
-                                    renderInput={(params) => (
-                                        <TextField {...params} />
-                                    )}
-                                />
-                                <div className="text-danger mt-2 fs-12px">
-                                    {dateError}
-                                </div>
+                                    }
+                                }}
+                                renderInput={(params) => (
+                                    <TextField {...params} />
+                                )}
+                            />
+                            <div className="text-danger mt-2 fs-12px">
+                                {dateError}
                             </div>
-                            <div>
-                                <p className="form-label mt-4">Expiry Date</p>
-                                <MobileDatePicker
-                                    showTodayButton
-                                    value={verification.expiryDate}
-                                    onChange={(newValue) => {
+                        </div>
+                        <div>
+                            <p className="form-label mt-4">Expiry Date</p>
+                            <MobileDatePicker
+                                showTodayButton
+                                value={
+                                    verification.expiryDate
+                                        ? dayjs(verification.expiryDate)
+                                        : null
+                                }
+                                onChange={(newValue) => {
+                                    if (newValue && dayjs(newValue).isValid()) {
                                         verification.setExpiryDate(
                                             newValue.toLocaleDateString(
                                                 "fr-CA",
                                             ),
                                         );
-                                    }}
-                                    renderInput={(params) => (
-                                        <TextField {...params} />
-                                    )}
-                                />
-                                <div className="text-danger mt-2 fs-12px">
-                                    {dateError}
-                                </div>
+                                    }
+                                }}
+                                renderInput={(params) => (
+                                    <TextField {...params} />
+                                )}
+                            />
+                            <div className="text-danger mt-2 fs-12px">
+                                {dateError}
                             </div>
-                        </LocalizationProvider>
-                    </div>
-
-                    <div className="d-flex justify-content-center gap-3 mt-5 col-md-12">
-                        <button
-                            className="btn btn-outline-light rounded-0 px-5 py-2 text-uppercase fw-500 col-sm-3 col-6"
-                            onClick={() => window.history.back()}
-                        >
-                            back
-                        </button>
-                        <button
-                            className="btn btn-success rounded-0 px-5 py-2 text-uppercase fw-500 text-light col-sm-3 col-6"
-                            onClick={onNextButtonClick}
-                        >
-                            next
-                        </button>
-                    </div>
+                        </div>
+                    </LocalizationProvider>
+                </div>
+                <div className="btn_div">
+                    <button
+                        className="btn white"
+                        onClick={verification.previousStep}
+                    >
+                        Previous
+                    </button>
+                    <button className="btn blue" onClick={onNextButtonClick}>
+                        Next
+                    </button>
                 </div>
             </div>
-        </>
+        );
+    }
+
+    return (
+        <div className="step-2">
+            <div className="loading-state">
+                <p>Processing document verification...</p>
+                <Loading loading={true} />
+            </div>
+        </div>
     );
 }
-
-const GenderSelectStyle = {
-    control: (provided) => ({
-        ...provided,
-        height: 38,
-        borderRadius: 0,
-    }),
-    valueContainer: (provided) => ({
-        ...provided,
-        paddingTop: 0,
-    }),
-    input: (provided) => ({
-        ...provided,
-        padding: 0,
-        margin: 0,
-    }),
-    singleValue: (provided) => ({
-        ...provided,
-        fontSize: 13,
-    }),
-};
