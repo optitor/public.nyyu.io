@@ -1,0 +1,29 @@
+# .github/workflows/mirror.yml
+name: Mirror to Public Repo
+
+on:
+  push:
+    branches:
+      - production  # or your default branch
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # full history
+
+      - name: Remove sensitive files
+        run: |
+          rm -f .env
+          rm -rf secret-folder-if-any
+
+      - name: Push to public repo
+        run: |
+          git config --global user.email "nima@golsharifi.com"
+          git config --global user.name "optitor"
+          git remote add public https://x-access-token:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/optitor/public.nyyu.io.git
+          git push --force public HEAD:main
