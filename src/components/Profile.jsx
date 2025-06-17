@@ -3,6 +3,9 @@ import Loading from "./common/Loading";
 import { navigate } from "gatsby";
 import { useQuery, useMutation } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from "@mui/material";
+import { Icon } from "@iconify/react";
+import Modal from "react-modal";
 
 import Header from "../components/header";
 import { ROUTES } from "../utilities/routes";
@@ -37,6 +40,46 @@ import { UPDATE_AVATARSET } from "../apollo/graphqls/mutations/AvatarComponent";
 import { GET_USER_TIERS } from "../apollo/graphqls/querys/UserTier";
 import { GET_DISCORD } from "./profile/profile-queries";
 
+const ErrorModal = ({ isOpen, onClose, title, message }) => {
+    if (!isOpen) return null;
+
+    return (
+        <Modal
+            isOpen={isOpen}
+            onRequestClose={onClose}
+            ariaHideApp={false}
+            className="support-modal"
+            overlayClassName="support-modal__overlay"
+        >
+            <div className="support-modal__header justify-content-end">
+                <div
+                    onClick={onClose}
+                    onKeyDown={onClose}
+                    role="button"
+                    tabIndex="0"
+                >
+                    <Icon icon="ep:close-bold" />
+                </div>
+            </div>
+            <div className="text-center p-4">
+                <h4 className="mb-3">{title}</h4>
+                <Alert
+                    severity={title.includes("Success") ? "success" : "error"}
+                    className="mb-3"
+                >
+                    {message}
+                </Alert>
+                <button
+                    className="btn btn-outline-light rounded-0 px-4 py-2 fw-bold text-uppercase mt-3"
+                    onClick={onClose}
+                >
+                    OK
+                </button>
+            </div>
+        </Modal>
+    );
+};
+
 const Profile = () => {
     const dispatch = useDispatch();
     const targetTabIndex = useSelector((state) => state.profileTab);
@@ -57,6 +100,12 @@ const Profile = () => {
     const [shuftiStatus, setShuftiStatus] = useState(null);
     const [shuftReference, setShuftiReference] = useState(null);
     const [shuftiReferenceLoading, setShuftiReferenceLoading] = useState(true);
+
+    const [errorModal, setErrorModal] = useState({
+        isOpen: false,
+        title: "",
+        message: "",
+    });
 
     useQuery(GET_USER_TIERS, {
         onCompleted: (data) => {
@@ -102,10 +151,46 @@ const Profile = () => {
 
     const [updateAvatarSet, { loading }] = useMutation(UPDATE_AVATARSET, {
         onCompleted: (data) => {
+            console.log("✅ Avatar updated successfully:", data);
+
+            // Refresh user data immediately to reflect changes
             dispatch(getAuthInfo());
+            refetch();
+
+            // Close the modal
+            setIsDressUpModalOpen(false);
+
+            // Show success message
+            setErrorModal({
+                isOpen: true,
+                title: "Success!",
+                message: "Your avatar has been updated successfully!",
+            });
         },
         onError: (err) => {
-            console.log("received Mutation data", err);
+            console.error("❌ Avatar update error:", err);
+
+            let title = "Update Failed";
+            let message = "Failed to update avatar. Please try again.";
+
+            // Handle specific error types
+            if (err.message.includes("Insufficient funds")) {
+                title = "Insufficient Funds";
+                message =
+                    "You don't have enough funds to purchase these avatar components. Please add funds to your account or select free components.";
+            } else if (err.message.includes("Unauthorized")) {
+                title = "Access Denied";
+                message =
+                    "You don't have permission to use some of these avatar components.";
+            } else {
+                message = err.message;
+            }
+
+            setErrorModal({
+                isOpen: true,
+                title: title,
+                message: message,
+            });
         },
     });
 
@@ -537,12 +622,26 @@ const Profile = () => {
                             setIsModalOpen={setIsDressUpModalOpen}
                             isModalOpen={isDressUpModalOpen}
                             onSave={(res) => {
+                                console.log("🎨 Saving avatar with data:", res);
                                 updateAvatarSet({
-                                    variables: { ...res },
+                                    variables: res,
                                 });
                             }}
                         />
                     )}
+
+                    <ErrorModal
+                        isOpen={errorModal.isOpen}
+                        title={errorModal.title}
+                        message={errorModal.message}
+                        onClose={() =>
+                            setErrorModal({
+                                isOpen: false,
+                                title: "",
+                                message: "",
+                            })
+                        }
+                    />
                 </main>
             </>
         );

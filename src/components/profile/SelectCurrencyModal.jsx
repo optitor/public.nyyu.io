@@ -10,6 +10,47 @@ import { EuropeanFlag } from "../../utilities/imgImport";
 import { Currencies } from "../../utilities/staticData2";
 import CustomSpinner from "../common/custom-spinner";
 import { changeEquity } from "../../store/actions/tempAction";
+import { Alert } from "@mui/material";
+
+const ErrorModal = ({ isOpen, onClose, title, message }) => {
+    if (!isOpen) return null;
+
+    return (
+        <Modal
+            isOpen={isOpen}
+            onRequestClose={onClose}
+            ariaHideApp={false}
+            className="support-modal"
+            overlayClassName="support-modal__overlay"
+        >
+            <div className="support-modal__header justify-content-end">
+                <div
+                    onClick={onClose}
+                    onKeyDown={onClose}
+                    role="button"
+                    tabIndex="0"
+                >
+                    <Icon icon="ep:close-bold" />
+                </div>
+            </div>
+            <div className="text-center p-4">
+                <h4 className="mb-3">{title}</h4>
+                <Alert
+                    severity={title.includes("Success") ? "success" : "error"}
+                    className="mb-3"
+                >
+                    {message}
+                </Alert>
+                <button
+                    className="btn btn-outline-light rounded-0 px-4 py-2 fw-bold text-uppercase mt-3"
+                    onClick={onClose}
+                >
+                    OK
+                </button>
+            </div>
+        </Modal>
+    );
+};
 
 const { Option } = components;
 
@@ -51,6 +92,12 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
     const [pending, setPending] = useState(false);
 
     const [selectedCurrency, setSelectedCurrency] = useState(savedCurrency);
+
+    const [errorModal, setErrorModal] = useState({
+        isOpen: false,
+        title: "",
+        message: "",
+    });
 
     // Don't block the dropdown based on currency rates loading
     // const loading = _.isEmpty(currencyRates);
@@ -136,9 +183,11 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
             setIsOpen(false);
 
             // Show success message
-            alert(
-                `Currency changed to ${selectedCurrency.value} successfully!`,
-            );
+            setErrorModal({
+                isOpen: true,
+                title: "Success!",
+                message: `Currency changed to ${selectedCurrency.value} successfully!`,
+            });
 
             // Force page refresh after a brief delay to ensure all components update
             setTimeout(() => {
@@ -146,7 +195,11 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
             }, 1000);
         } catch (error) {
             console.error("❌ Error updating currency:", error);
-            alert("Failed to update currency. Please try again.");
+            setErrorModal({
+                isOpen: true,
+                title: "Error",
+                message: "your error message here",
+            });
         } finally {
             setPending(false);
         }
@@ -244,6 +297,14 @@ const SelectCurrencyModal = ({ isOpen, setIsOpen }) => {
                     {pending ? <CustomSpinner /> : "CONFIRM"}
                 </button>
             </div>
+            <ErrorModal
+                isOpen={errorModal.isOpen}
+                title={errorModal.title}
+                message={errorModal.message}
+                onClose={() =>
+                    setErrorModal({ isOpen: false, title: "", message: "" })
+                }
+            />
         </Modal>
     );
 };

@@ -211,7 +211,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                             <ul className="d-flex align-items-center">
                                 <li className="scale-75 cursor-pointer pe-3 d-none d-sm-block">
                                     <a
-                                        href="https://twitter.com/ndbtechnology"
+                                        href="https://x.com/nyyuio"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >

@@ -1,18 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { useSelector } from "react-redux";
-import Modal from "react-modal"
-import Select from 'react-select';
-import parse from 'html-react-parser'
-import styled from "styled-components"
-import { DressupData } from "../../utilities/dressup-data"
-import { CloseIcon, EmptyAvatar, EmptyBlackAvatar } from "../../utilities/imgImport"
-import DressupHorizontalList from "./dressup-horizontal-list"
-import { hairColors, SkinColors } from './dressup-data';
-import { TabList, Tab } from 'react-tabs';
+import _ from "lodash";
+import Modal from "react-modal";
+import Select from "react-select";
+import parse from "html-react-parser";
+import styled from "styled-components";
+import { DressupData } from "../../utilities/dressup-data";
+import {
+    CloseIcon,
+    EmptyAvatar,
+    EmptyBlackAvatar,
+} from "../../utilities/imgImport";
+import DressupHorizontalList from "./dressup-user-horizontal-list";
+import { hairColors, SkinColors } from "./dressup-data";
+import { Tab, TabList } from "react-tabs";
 
-export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAvatarItems}) {
-    const avatarComponents = useSelector(state => state.avatarComponents);
-    let { loaded, hairStyles, facialStyles, expressions, hats, others } = avatarComponents;
+const init = {
+    hairStyles: { index: 0, updatable: false },
+    facialStyles: { index: 0, updatable: false },
+    expressions: { index: 0, updatable: false },
+    hats: { index: 0, updatable: false },
+    others: { index: 0, updatable: false },
+    hairColors: { index: 0, updatable: false },
+};
+
+export default function DressupModal({ isModalOpen, setIsModalOpen, onSave }) {
+    const avatarComponents = useSelector((state) => state.avatarComponents);
+    const selected = useSelector((state) => state.auth?.user?.avatar?.selected);
+    const hairColor = useSelector(
+        (state) => state.auth?.user?.avatar?.hairColor,
+    );
+    const skinColor = useSelector(
+        (state) => state.auth?.user?.avatar?.skinColor,
+    );
+
+    let { loaded, hairStyles, facialStyles, expressions, hats, others } =
+        avatarComponents;
     // Convert the mapKey Object to the array.
     hairStyles = Object.values(hairStyles);
     facialStyles = Object.values(facialStyles);
@@ -20,33 +43,142 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
     hats = Object.values(hats);
     others = Object.values(others);
 
-    const [selectedHairStyle, setSelectedHairStyle] = useState(0)
-    const [selectedHairColor, setSelectedHairColor] = useState(0)
-    const [selectedSkinColor, setSelectedSkinColor] = useState(SkinColors[0]);
-    const [selectedFacialStyle, setSelectedFacialStyle] = useState(0)
-    const [selectedExpression, setSelectedExpression] = useState(0)
-    const [selectedHat, setSelectedHat] = useState(0)
-    const [selectedOther, setSelectedOther] = useState(0)
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        init,
+    );
+    const [selectedTab, setSelectedTab] = useState(0);
 
-    const [selectedTab, setSelectedTab] = useState(0)
+    useEffect(() => {
+        if (!isModalOpen) return;
+        const avatar = JSON.parse(selected ?? "[]");
+        const avatarSet = _.mapKeys(avatar, "groupId");
+
+        const newState = Object.keys(init).map((key) => {
+            let index = Object.values(avatarComponents[key] ?? {}).findIndex(
+                (i) => i?.compId === avatarSet?.[key.slice(0, -1)]?.compId,
+            );
+            if (key === "hairColors") {
+                index = hairColors?.findIndex((item) => item === hairColor);
+                return { key, index, updatable: true };
+            }
+            return { key, index, updatable: index >= 0 };
+        });
+
+        const s = _.mapKeys(newState, "key");
+        setState(s);
+    }, [isModalOpen, selected, avatarComponents, hairColor]);
 
     const saveAvatarItems = () => {
-        setDressUpAvatarItems({
-            hairStyle: hairStyles[selectedHairStyle]?.compId,
-            facialStyle: facialStyles[selectedFacialStyle]?.compId,
-            expression: expressions[selectedExpression]?.compId,
-            hat: hats[selectedHat]?.compId,
-            other: others[selectedOther]?.compId,
-            hairColor: hairColors[selectedHairColor],
-            skinColor: selectedSkinColor.value
-        });
-        setIsModalOpen(false);
+        console.log("🎨 DressupModal - Saving avatar items...");
+        console.log("🔧 DressupModal - Current state:", state);
+        console.log("🎨 DressupModal - Avatar components:", avatarComponents);
+
+        try {
+            // Get only components that have been updated/selected
+            const avatarSets = Object.keys(avatarComponents)
+                .filter((key) => {
+                    const hasValidState = state[key]?.updatable ?? false;
+                    console.log(
+                        `🔍 Checking ${key}: updatable=${hasValidState}`,
+                    );
+                    return hasValidState;
+                })
+                .map((key) => {
+                    const index = state[key].index;
+                    const component = Object.values(avatarComponents[key])[
+                        index
+                    ];
+
+                    const avatarComponent = {
+                        groupId: component?.groupId ?? key.slice(0, -1),
+                        compId: component?.compId ?? 0,
+                    };
+
+                    console.log(`✅ Adding component ${key}:`, avatarComponent);
+                    return avatarComponent;
+                });
+
+            console.log("🎯 Final avatar sets:", avatarSets);
+            console.log("🎨 Hair color:", hairColors[selectedHairColor]);
+            console.log("🎨 Skin color:", selectedSkinColor.value);
+
+            // Prepare the save data
+            const saveData = {
+                components: avatarSets,
+                hairColor: hairColors[selectedHairColor] || null,
+                skinColor: selectedSkinColor?.value || null,
+            };
+
+            console.log("💾 Saving data:", saveData);
+
+            // Validate that we have at least some components
+            if (avatarSets.length === 0) {
+                console.warn("⚠️ No avatar components selected");
+                if (typeof window !== "undefined" && window.showFailAlarm) {
+                    window.showFailAlarm(
+                        "No Changes",
+                        "Please select at least one avatar component to save.",
+                    );
+                }
+                return;
+            }
+
+            // Call the onSave callback with the properly formatted data
+            if (onSave && typeof onSave === "function") {
+                console.log("📤 Calling onSave with data:", saveData);
+                onSave(saveData);
+            } else {
+                console.error("❌ onSave function not provided or invalid");
+            }
+
+            // Close the modal
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("❌ Error in saveAvatarItems:", error);
+            if (typeof window !== "undefined" && window.showFailAlarm) {
+                window.showFailAlarm(
+                    "Save Error",
+                    "Failed to prepare avatar data. Please try again.",
+                );
+            }
+        }
     };
 
     const closeModal = () => {
+        setState(init);
         setIsModalOpen(false);
     };
-    
+
+    const selectedHairColor = state.hairColors?.index ?? 0;
+    const selectedHairStyle = state.hairStyles?.index ?? 0;
+    const selectedFacialStyle = state.facialStyles?.index ?? 0;
+    const selectedHat = state.hats?.index ?? 0;
+    const selectedExpression = state.expressions?.index ?? 0;
+    const selectedOther = state.others?.index ?? 0;
+    const [selectedSkinColor, setSelectedSkinColor] = useState(
+        skinColor === "black" ? SkinColors[1] : SkinColors[0],
+    );
+
+    const saveButtonActive =
+        state.hairStyles?.updatable &&
+        state.facialStyles?.updatable &&
+        state.expressions?.updatable &&
+        state.hats?.updatable &&
+        state.others?.updatable;
+
+    // Debug function to help track state changes
+    const debugState = () => {
+        console.log("🔍 DressupModal Debug State:", {
+            state,
+            selectedHairColor,
+            selectedSkinColor,
+            avatarComponentsLoaded: loaded,
+            avatarComponentsKeys: Object.keys(avatarComponents),
+            saveButtonActive,
+        });
+    };
+
     return (
         <Modal
             isOpen={isModalOpen}
@@ -71,91 +203,127 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                         alt="close"
                     />
                 </div>
-            </div>            
+            </div>
+
             <div className="row m-0 py-4 text-white">
                 <div className="col-sm-4">
                     <div className="row">
                         <div className="profile">
                             <div className="image_div">
-                                <img src={selectedSkinColor.value === 'black'? EmptyBlackAvatar: EmptyAvatar} alt="back" />
-                                {loaded && (<>
-                                    <Hair
-                                        hairColor={hairColors[selectedHairColor]}
-                                        style={{
-                                            top: `${hairStyles[selectedHairStyle]?.top}%`,
-                                            left: `${hairStyles[selectedHairStyle]?.left}%`,
-                                            width: `${hairStyles[selectedHairStyle]?.width}%`
-                                        }}
-                                    >
-                                        {parse(hairStyles[selectedHairStyle]?.svg ?? "")}
-                                    </Hair>
-                                    <div style={{
-                                        top: `${expressions[selectedExpression]?.top}%`,
-                                        left: `${expressions[selectedExpression]?.left}%`,
-                                        width: `${expressions[selectedExpression]?.width}%`}}
-                                    >
-                                        {parse(expressions[selectedExpression]?.svg ?? "")}
-                                    </div>
-                                    <div style={{top: `${facialStyles[selectedFacialStyle]?.top}%`,
-                                        left: `${facialStyles[selectedFacialStyle]?.left}%`,
-                                        width: `${facialStyles[selectedFacialStyle]?.width}%`}}
-                                    >
-                                        {parse(facialStyles[selectedFacialStyle]?.svg ?? "")}
-                                    </div>
-                                    <div style={{top: `${hats[selectedHat]?.top}%`,
-                                        left: `${hats[selectedHat]?.left}%`,
-                                        width: `${hats[selectedHat]?.width}%`}}
-                                    >
-                                        {parse(hats[selectedHat]?.svg ?? "")}
-                                    </div>
-                                    <div style={{top: `${others[selectedOther]?.top}%`, 
-                                        left: `${others[selectedOther]?.left}%`,
-                                        width: `${others[selectedOther]?.width}%`}}
-                                    >
-                                        {parse(others[selectedOther]?.svg ?? "")}
-                                    </div>
-                                </>)}
+                                <img
+                                    src={
+                                        selectedSkinColor.value === "black"
+                                            ? EmptyBlackAvatar
+                                            : EmptyAvatar
+                                    }
+                                    alt="back"
+                                />
+                                {loaded && (
+                                    <>
+                                        <Hair
+                                            hairColor={
+                                                hairColors[selectedHairColor]
+                                            }
+                                            style={{
+                                                top: `${hairStyles[selectedHairStyle]?.top}%`,
+                                                left: `${hairStyles[selectedHairStyle]?.left}%`,
+                                                width: `${hairStyles[selectedHairStyle]?.width}%`,
+                                            }}
+                                        >
+                                            {parse(
+                                                hairStyles[selectedHairStyle]
+                                                    ?.svg ?? "",
+                                            )}
+                                        </Hair>
+                                        <div
+                                            style={{
+                                                top: `${facialStyles[selectedFacialStyle]?.top}%`,
+                                                left: `${facialStyles[selectedFacialStyle]?.left}%`,
+                                                width: `${facialStyles[selectedFacialStyle]?.width}%`,
+                                            }}
+                                        >
+                                            {parse(
+                                                facialStyles[
+                                                    selectedFacialStyle
+                                                ]?.svg ?? "",
+                                            )}
+                                        </div>
+                                        <div
+                                            style={{
+                                                top: `${expressions[selectedExpression]?.top}%`,
+                                                left: `${expressions[selectedExpression]?.left}%`,
+                                                width: `${expressions[selectedExpression]?.width}%`,
+                                            }}
+                                        >
+                                            {parse(
+                                                expressions[selectedExpression]
+                                                    ?.svg ?? "",
+                                            )}
+                                        </div>
+                                        <div
+                                            style={{
+                                                top: `${hats[selectedHat]?.top}%`,
+                                                left: `${hats[selectedHat]?.left}%`,
+                                                width: `${hats[selectedHat]?.width}%`,
+                                            }}
+                                        >
+                                            {parse(
+                                                hats[selectedHat]?.svg ?? "",
+                                            )}
+                                        </div>
+                                        <div
+                                            style={{
+                                                top: `${others[selectedOther]?.top}%`,
+                                                left: `${others[selectedOther]?.left}%`,
+                                                width: `${others[selectedOther]?.width}%`,
+                                            }}
+                                        >
+                                            {parse(
+                                                others[selectedOther]?.svg ??
+                                                    "",
+                                            )}
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                        </div>
-                        <div>
-                            <p className="w-50 m-auto mb-1 fw-bold">SKIN COLOR</p>
-                            <Select
-                                className='black_input w-50 m-auto'
-                                value={selectedSkinColor}
-                                onChange={selected => setSelectedSkinColor(selected)}
-                                options={SkinColors}
-                                styles={customSelectStyles}
-                                isSearchable={false}
-                            />
                         </div>
                         <div className="d-none d-sm-block">
-                            <div className="dress-up-modal-sections-list">
-                                {DressupData.tabs.map((item) => (
-                                    <div
-                                        onClick={() => setSelectedTab(item.index)}
-                                        onKeyDown={() => setSelectedTab(item.index)}
-                                        role="presentation"
-                                        key={item.index}
-                                        className={`${item.index === selectedTab && "active"}`}
-                                    >
-                                        {item.title}
-                                    </div>
-                                ))}
+                            <div className="color_div">
+                                <h4>skin color</h4>
+                                <Select
+                                    options={SkinColors}
+                                    defaultValue={selectedSkinColor}
+                                    onChange={setSelectedSkinColor}
+                                    styles={customSelectStyles}
+                                    isSearchable={false}
+                                />
                             </div>
-                            <button className="btn-save" onClick={saveAvatarItems}>save</button>
+                            <div className="button_div">
+                                <button
+                                    className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase ${
+                                        !saveButtonActive && "btn-secondary"
+                                    } ms-4`}
+                                    onClick={saveAvatarItems}
+                                    disabled={!saveButtonActive}
+                                >
+                                    save
+                                </button>
+                            </div>
                         </div>
                         <div className="d-block d-sm-none">
                             <TabList>
-                                {DressupData.tabs.map(item => (
+                                {DressupData.tabs.map((item) => (
                                     <Tab
-                                        onClick={() => setSelectedTab(item.index)}
-                                        onKeyDown={() => setSelectedTab(item.index)}
+                                        onClick={() =>
+                                            setSelectedTab(item.index)
+                                        }
+                                        onKeyDown={() =>
+                                            setSelectedTab(item.index)
+                                        }
                                         key={item.index}
                                         selected={selectedTab === item.index}
                                     >
-                                        <div className="pt-3">
-                                            {item.title}
-                                        </div>
+                                        <div className="pt-3">{item.title}</div>
                                     </Tab>
                                 ))}
                             </TabList>
@@ -166,41 +334,47 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                     {loaded && selectedTab === 0 && (
                         <div className="dress-up-modal-hair-section">
                             <DressupHorizontalList
-                                topic="hairStyles"
+                                topic="hairStyle"
                                 title={"hair style"}
                                 list={hairStyles}
                                 selectedItem={selectedHairStyle}
-                                setSelectedItem={setSelectedHairStyle}
+                                setSelectedItem={(res) =>
+                                    setState({ hairStyles: res })
+                                }
                             />
                             <div className="mt-4"></div>
                             <DressupHorizontalList
-                                topic="hairColors"
+                                topic="hairColor"
                                 title={"hair color"}
-                                hairStyle={selectedHairStyle}
-                                hairStyles={hairStyles}
                                 list={hairColors}
                                 selectedItem={selectedHairColor}
-                                setSelectedItem={setSelectedHairColor}
-                                secondRow
+                                setSelectedItem={(res) =>
+                                    setState({ hairColors: res })
+                                }
+                                isColor
                             />
                         </div>
                     )}
                     {loaded && selectedTab === 1 && (
                         <div className="dress-up-modal-hair-section">
                             <DressupHorizontalList
-                                topic="facialStyles"
-                                title={"facial style"}
+                                topic="facialStyle"
+                                title={"facial"}
                                 list={facialStyles}
                                 selectedItem={selectedFacialStyle}
-                                setSelectedItem={setSelectedFacialStyle}
+                                setSelectedItem={(res) =>
+                                    setState({ facialStyles: res })
+                                }
                             />
                             <div className="mt-4"></div>
                             <DressupHorizontalList
-                                topic="expressions"
-                                title={"expressions"}
+                                topic="expression"
+                                title={"expression"}
                                 list={expressions}
                                 selectedItem={selectedExpression}
-                                setSelectedItem={setSelectedExpression}
+                                setSelectedItem={(res) =>
+                                    setState({ expressions: res })
+                                }
                                 secondRow
                             />
                         </div>
@@ -208,27 +382,44 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                     {loaded && selectedTab === 2 && (
                         <div className="dress-up-modal-hair-section">
                             <DressupHorizontalList
-                                topic="hats"
+                                topic="hat"
                                 title={"hats"}
                                 list={hats}
                                 selectedItem={selectedHat}
-                                setSelectedItem={setSelectedHat}
+                                setSelectedItem={(res) =>
+                                    setState({ hats: res })
+                                }
                             />
                             <div className="mt-4"></div>
                             <DressupHorizontalList
-                                topic="others"
+                                topic="other"
                                 title={"others"}
                                 list={others}
                                 selectedItem={selectedOther}
-                                setSelectedItem={setSelectedOther}
+                                setSelectedItem={(res) =>
+                                    setState({ others: res })
+                                }
                                 secondRow
                             />
                         </div>
                     )}
                     <div className="d-block d-sm-none">
+                        <div className="color_div mt-4">
+                            <h4>skin color</h4>
+                            <Select
+                                options={SkinColors}
+                                defaultValue={selectedSkinColor}
+                                onChange={setSelectedSkinColor}
+                                styles={customSelectStyles}
+                                isSearchable={false}
+                            />
+                        </div>
                         <button
-                            className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase w-100 mt-4`}
+                            className={`btn btn-outline-light rounded-0 px-5 py-2 fw-bold text-uppercase w-100 mt-4 ${
+                                !saveButtonActive && "btn-secondary"
+                            }`}
                             onClick={saveAvatarItems}
+                            disabled={!saveButtonActive}
                         >
                             save
                         </button>
@@ -236,14 +427,14 @@ export default function DressupModal({ isModalOpen, setIsModalOpen, setDressUpAv
                 </div>
             </div>
         </Modal>
-    )
-};
+    );
+}
 
 const Hair = styled.div`
-    svg>path {
-        fill: ${props => {
-            return props.hairColor? props.hairColor: '#626161';
-        }}
+    svg > path {
+        fill: ${(props) => {
+            return props.hairColor ? props.hairColor : "#626161";
+        }};
     }
 `;
 
@@ -251,8 +442,9 @@ const customSelectStyles = {
     option: (provided, state) => ({
         ...provided,
         color: "white",
-        backgroundColor: state.isSelected ? "#23c865" : undefined,
+        backgroundColor: state.isSelected ? "#000000" : undefined,
         fontSize: 14,
+        fontWeight: "bold",
         borderBottom: "1px solid dimgrey",
         cursor: "pointer",
         ":hover": {
@@ -264,20 +456,25 @@ const customSelectStyles = {
         backgroundColor: "#1e1e1e",
         border: "none",
         borderRadius: 0,
-        height: 40,
+        height: 47,
         cursor: "pointer",
+    }),
+    input: (provided) => ({
+        ...provided,
+        color: "white",
+        paddingLeft: 7,
     }),
     menu: (provided) => ({
         ...provided,
+        borderRadius: 0,
         backgroundColor: "#1e1e1e",
         border: "1px solid white",
-        borderRadius: 0,
     }),
     menuList: (provided) => ({
         ...provided,
+        borderRadius: 0,
         margin: 0,
         padding: 0,
-        borderRadius: 0,
     }),
     valueContainer: (provided) => ({
         ...provided,
@@ -286,6 +483,8 @@ const customSelectStyles = {
     singleValue: (provided) => ({
         ...provided,
         color: "white",
+        fontSize: 20,
+        fontWeight: "bold",
         marginLeft: 10,
     }),
     placeholder: (provided) => ({
