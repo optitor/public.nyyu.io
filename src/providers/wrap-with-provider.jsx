@@ -96,10 +96,9 @@ const config = createConfig({
                         : "https://nyyu.io",
                 icons: ["https://nyyu.io/favicon.png"],
             },
-        }),
-        coinbaseWallet({
-            appName: "Nyyu",
-            appLogoUrl: "https://nyyu.io/favicon.png",
+            // Add these options for better compatibility
+            preferDesktop: true,
+            infuraAPIKey: process.env.GATSBY_INFURA_API_KEY, // Optional: Add if you have one
         }),
         walletConnect({
             projectId:
@@ -114,6 +113,22 @@ const config = createConfig({
                         : "https://nyyu.io",
                 icons: ["https://nyyu.io/favicon.png"],
             },
+            // Add these options for better error handling
+            showQrModal: true,
+            qrModalOptions: {
+                themeMode: "dark",
+                themeVariables: {
+                    "--wcm-z-index": "1000",
+                },
+            },
+        }),
+        coinbaseWallet({
+            appName: "Nyyu",
+            appLogoUrl: "https://nyyu.io/favicon.png",
+            // Add these options for better compatibility
+            darkMode: true,
+            overrideIsMetaMask: false,
+            enableMobileWalletLink: true,
         }),
     ],
     transports: {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useAccount, useConnect } from "wagmi";
 import { ReactTooltip } from "../../../utilities/tooltip";
 import { BsQuestionCircle } from "@react-icons/all-files/bs/BsQuestionCircle";
@@ -17,153 +17,206 @@ const shortFormatAddr = (addr) => {
 
 const WalletSelector = ({ selectedWallet, walletChanged }) => {
     // wagmi connectors
-    const { connect, connectors, isConnected } = useConnect();
-    const { data: accountInfo } = useAccount();
+    const { connect, connectors, isPending, error } = useConnect();
+    const { data: accountInfo, isConnected } = useAccount();
+    const [connectingId, setConnectingId] = useState(null);
 
-    if (!isConnected) {
-        walletChanged({ selectedWallet, address: null });
-    }
-
-    if (isConnected) {
-        walletChanged({ selectedWallet, address: accountInfo?.address });
-    }
-
-    // selected wallet type, Nyyu or external
-    const onChangeWallet = (wallet) => {
+    // Update parent component when connection status changes
+    useEffect(() => {
         walletChanged({
-            selectedWallet: wallet,
-            address: accountInfo?.address,
+            selectedWallet,
+            address: isConnected ? accountInfo?.address : null,
         });
-    };
+    }, [isConnected, accountInfo?.address, selectedWallet, walletChanged]);
+
+    // Handle external wallet connection
+    const handleConnect = useCallback(
+        async (connector) => {
+            if (isPending || connectingId) return;
+
+            try {
+                setConnectingId(connector.id);
+                console.log("Connecting to:", connector.name, connector.id);
+
+                await connect({ connector });
+            } catch (err) {
+                console.error("Connection failed:", err);
+            } finally {
+                setConnectingId(null);
+            }
+        },
+        [connect, isPending, connectingId],
+    );
+
+    // Handle wallet type selection
+    const onChangeWallet = useCallback(
+        (wallet) => {
+            walletChanged({
+                selectedWallet: wallet,
+                address: isConnected ? accountInfo?.address : null,
+            });
+        },
+        [walletChanged, isConnected, accountInfo?.address],
+    );
 
     return (
         <div className="mb-3 wallet_content">
             {selectedWallet === "external" ? (
                 <>
                     <div className="row pt-2">
-                        {connectors?.map((connector, idx) =>
-                            accountInfo &&
-                            accountInfo?.connector.name === connector.name ? (
-                                <div className="col-lg-6 mb-10px" key={idx}>
-                                    <div className="presale-connected external_wallet">
+                        {connectors?.map((connector, idx) => {
+                            const isCurrentConnector =
+                                accountInfo &&
+                                accountInfo?.connector?.id === connector.id;
+                            const isConnecting = connectingId === connector.id;
+                            const isReady =
+                                connector.type !== "unknown" &&
+                                typeof connector.connect === "function";
+
+                            if (isCurrentConnector) {
+                                return (
+                                    <div
+                                        className="col-lg-6 mb-10px"
+                                        key={`${connector.id}-${idx}`}
+                                    >
+                                        <div className="presale-connected external_wallet">
+                                            <img
+                                                src={
+                                                    wallets[connector.id]
+                                                        ?.icon ||
+                                                    wallets[
+                                                        connector.name?.toLowerCase()
+                                                    ]?.icon
+                                                }
+                                                alt="wallet icon"
+                                                className="wallet-icon"
+                                            />
+                                            <p className="txt-green">
+                                                {shortFormatAddr(
+                                                    accountInfo.address,
+                                                )}
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            }
+
+                            return (
+                                <div
+                                    className="col-lg-6"
+                                    key={`${connector.id}-${idx}`}
+                                    role="button"
+                                    tabIndex={isReady ? 0 : -1}
+                                    onClick={() =>
+                                        isReady &&
+                                        !isConnecting &&
+                                        handleConnect(connector)
+                                    }
+                                    onKeyDown={(e) => {
+                                        if (
+                                            (e.key === "Enter" ||
+                                                e.key === " ") &&
+                                            isReady &&
+                                            !isConnecting
+                                        ) {
+                                            e.preventDefault();
+                                            handleConnect(connector);
+                                        }
+                                    }}
+                                    style={{
+                                        cursor: isReady
+                                            ? "pointer"
+                                            : "not-allowed",
+                                    }}
+                                >
+                                    <div
+                                        className={`wallet-item external_wallet ${!isReady ? "inactive" : ""} ${isConnecting ? "connecting" : ""}`}
+                                    >
                                         <img
                                             src={
+                                                wallets[connector.id]?.icon ||
                                                 wallets[
-                                                    accountInfo.connector.id
+                                                    connector.name?.toLowerCase()
                                                 ]?.icon
                                             }
                                             alt="wallet icon"
                                             className="wallet-icon"
                                         />
-                                        <p className="txt-green">
-                                            {shortFormatAddr(
-                                                accountInfo.address,
-                                            )}
-                                        </p>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div
-                                    className="col-lg-6"
-                                    key={idx}
-                                    role="presentation"
-                                    onClick={() => connect(connector)}
-                                >
-                                    <div
-                                        className={`wallet-item  external_wallet ${!connector.ready && "inactive"}`}
-                                    >
-                                        <img
-                                            src={wallets[connector.id]?.icon}
-                                            alt="wallet icon"
-                                            className="wallet-icon"
-                                        />
                                         <p>
-                                            {connector.ready
-                                                ? wallets[connector.id]?.short
-                                                : "Not supported"}
+                                            {isConnecting
+                                                ? "Connecting..."
+                                                : isReady
+                                                  ? wallets[connector.id]
+                                                        ?.short ||
+                                                    wallets[
+                                                        connector.name?.toLowerCase()
+                                                    ]?.short ||
+                                                    connector.name
+                                                  : "Not supported"}
                                         </p>
                                     </div>
                                 </div>
-                            ),
-                        )}
+                            );
+                        })}
                     </div>
+                    {error && (
+                        <div className="py-2" style={{ color: "#e8503a" }}>
+                            {error?.message ?? "Failed to connect"}
+                        </div>
+                    )}
+                    {isPending && (
+                        <div className="py-2" style={{ color: "#17a2b8" }}>
+                            Connecting to wallet...
+                        </div>
+                    )}
                 </>
             ) : (
                 <div className="row">
                     <div className="col-lg-6 mt-2">
                         <button
-                            className={`destination_wallet ${selectedWallet === "internal" ? "selected_wallet" : ""}`}
+                            className={`destination_wallet ${selectedWallet === "internal" ? "active" : ""}`}
                             onClick={() => onChangeWallet("internal")}
                         >
-                            <div className="d-flex justify-content-end wallet_header">
-                                <span
-                                    data-tip="tooltip"
-                                    data-for="ndb_wallet_tooltip"
-                                >
-                                    <BsQuestionCircle />
-                                </span>
-                                <ReactTooltip
-                                    place="left"
-                                    type="light"
-                                    effect="solid"
-                                    id="ndb_wallet_tooltip"
-                                >
-                                    <div
-                                        className="text-justify"
-                                        style={{
-                                            width: "220px",
-                                        }}
-                                    >
-                                        {NDB_WALLET_TOOLTIP_CONTENT}
-                                    </div>
-                                </ReactTooltip>
-                            </div>
-                            <div className="img_div">
-                                <img
-                                    src={
-                                        selectedWallet === "internal"
-                                            ? NyyuWalletSelected
-                                            : NyyuWallet
-                                    }
-                                    alt="nyyu wallet"
-                                />
-                            </div>
-                            <h4 className="text-center">NYYU WALLET</h4>
+                            <img
+                                src={
+                                    selectedWallet === "internal"
+                                        ? NyyuWalletSelected
+                                        : NyyuWallet
+                                }
+                                alt="Nyyu Wallet"
+                            />
+                            <span>Nyyu Wallet</span>
+                            <ReactTooltip
+                                id="ndb-wallet-tooltip"
+                                multiline={true}
+                                place="top"
+                                content={NDB_WALLET_TOOLTIP_CONTENT}
+                            />
+                            <BsQuestionCircle
+                                data-tooltip-id="ndb-wallet-tooltip"
+                                className="question_mark"
+                                size={16}
+                            />
                         </button>
                     </div>
                     <div className="col-lg-6 mt-2">
                         <button
-                            className={`destination_wallet`}
+                            className={`destination_wallet ${selectedWallet === "external" ? "active" : ""}`}
                             onClick={() => onChangeWallet("external")}
-                            disabled={true}
                         >
-                            <div className="d-flex justify-content-end wallet_header">
-                                <span
-                                    data-tip="tooltip"
-                                    data-for="external_wallet_tooltip"
-                                >
-                                    <BsQuestionCircle />
-                                </span>
-                                <ReactTooltip
-                                    place="left"
-                                    type="light"
-                                    effect="solid"
-                                    id="external_wallet_tooltip"
-                                >
-                                    <div
-                                        className="text-justify"
-                                        style={{
-                                            width: "220px",
-                                        }}
-                                    >
-                                        {EXTERNAL_WALLET_TOOLTIP_CONTENT}
-                                    </div>
-                                </ReactTooltip>
-                            </div>
-                            <div className="img_div">
-                                <BiWallet />
-                            </div>
-                            <h4 className="text-center">EXTERNAL WALLET</h4>
+                            <BiWallet size={40} />
+                            <span>External Wallet</span>
+                            <ReactTooltip
+                                id="external-wallet-tooltip"
+                                multiline={true}
+                                place="top"
+                                content={EXTERNAL_WALLET_TOOLTIP_CONTENT}
+                            />
+                            <BsQuestionCircle
+                                data-tooltip-id="external-wallet-tooltip"
+                                className="question_mark"
+                                size={16}
+                            />
                         </button>
                     </div>
                 </div>
