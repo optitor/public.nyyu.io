@@ -1,9 +1,9 @@
 import React from "react";
-import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 
 import Seo from "./../../components/seo";
 import LayoutWithMenu from "../../components/admin/LayoutWithMenu";
-import SocialTable from '../../components/admin/setting/SocialTable';
+import SocialTable from "../../components/admin/setting/SocialTable";
 import GeoTable from "../../components/admin/setting/GeoTable";
 import KYCTabPanel from "../../components/admin/setting/KYCTabPanel";
 import AMLTabPanel from "../../components/admin/setting/AMLTabPanel";
@@ -14,15 +14,14 @@ import UserTiersPanel from "../../components/admin/setting/UserTiersPanel";
 import TasksTabPanel from "../../components/admin/setting/TasksTabPanel";
 
 const socials = [
-    {social: 'Facebook'},
-    {social: 'Google'},
-    {social: 'Twitter'},
-    {social: 'LinkedIn'},
-    {social: 'Apple'},
+    { social: "Facebook" },
+    { social: "Google" },
+    { social: "X" },
+    { social: "LinkedIn" },
+    { social: "Apple" },
 ];
 
 const IndexPage = () => {
-
     return (
         <>
             <Seo title="Admin Setting" />
@@ -73,7 +72,7 @@ const IndexPage = () => {
                 </LayoutWithMenu>
             </main>
         </>
-    )
-}
+    );
+};
 
 export default IndexPage;
