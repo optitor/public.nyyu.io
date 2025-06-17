@@ -4,7 +4,7 @@ name: Mirror to Public Repo
 on:
   push:
     branches:
-      - production  # or your default branch
+      - production
 
 jobs:
   sync:
@@ -14,18 +14,12 @@ jobs:
       - name: Checkout private repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # full history
+          fetch-depth: 0
 
       - name: Remove sensitive files
         run: |
           rm -f .env
           rm -rf secret-folder-if-any
-
-      - name: Debug token presence
-        run: |
-          echo "Token length: ${#PUBLIC_REPO_TOKEN}"
-        env:
-          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
 
       - name: Who owns the PAT?
         env:
@@ -35,13 +29,10 @@ jobs:
           curl -s -H "Authorization: token $TOKEN" https://api.github.com/user
 
       - name: Push to public repo
+        env:
+          PAT: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
           git config --global user.email "info@orb.group"
           git config --global user.name "golsharifi"
-
-          ENCODED_URL=$(echo "https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/optitor/public.nyyu.io.git" | jq -sRr @uri)
-          git remote add public "$ENCODED_URL"
-
+          git remote add public https://x-access-token:${PAT}@github.com/optitor/public.nyyu.io.git
           git push --force public HEAD:main
-        env:
-          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
