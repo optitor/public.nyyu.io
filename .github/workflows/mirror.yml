@@ -27,4 +27,3 @@ jobs:
           git config --global user.name "golsharifi"
           git remote add public https://x-access-token:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/optitor/public.nyyu.io.git
           git push --force public HEAD:main
-          
