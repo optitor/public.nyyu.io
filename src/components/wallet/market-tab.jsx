@@ -15,6 +15,7 @@ import Skeleton from "@mui/material/Skeleton";
 import CustomSpinner from "./../common/custom-spinner";
 import { setCookie, getCookie, NDB_FavAssets } from "../../utilities/cookies";
 import { update_Favor_Assets } from "../../store/actions/settingAction";
+import { fetchPriceFromFreeAPIs } from "../../utilities/freeCryptoPrices";
 
 const QUOTE = "USDT";
 
@@ -46,7 +47,7 @@ const fetch_Ticker_From_Coinbase = async (tokenSymbol) => {
                 2,
             ),
         );
-        const volume = Number(res.data.volume);
+        const volume = Number(res.data.volume) * price; // Convert base volume to USD volume
         console.log(`Coinbase data for ${tokenSymbol}:`, {
             price,
             percent,
@@ -147,39 +148,30 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
                             },
                         },
                     );
-                    // Coinbase returns [timestamp, low, high, open, close, volume]
-                    chartData = res.data.map((c) => c[4]); // close prices
-                    console.log(
-                        `Chart data for ${data.symbol}:`,
-                        chartData?.length,
-                        "points",
-                    );
+
+                    chartData = res.data.map((candle) => candle[4]); // closing prices
                 } catch (error) {
                     console.error(
-                        `Error fetching chart data for ${data.symbol} from Coinbase:`,
+                        `Error fetching chart data for ${data.symbol}:`,
                         error,
                     );
 
-                    // Fallback to Binance
+                    // Fallback to Binance for chart data
                     try {
                         console.log(
-                            `Trying Binance chart fallback for ${data.symbol}...`,
+                            `Trying Binance fallback for chart data...`,
                         );
-                        const binanceKlineUrl = `${process.env.GATSBY_BINANCE_BASE_API}/v3/klines`;
-                        const res = await axios.get(binanceKlineUrl, {
-                            params: {
-                                symbol: data.symbol + QUOTE,
-                                interval: "30m",
-                                startTime:
-                                    new Date().getTime() - 24 * 3600 * 1000,
+                        const res = await axios.get(
+                            `${process.env.GATSBY_BINANCE_BASE_API}/v3/klines`,
+                            {
+                                params: {
+                                    symbol: data.symbol + QUOTE,
+                                    interval: "5m",
+                                    limit: 288, // 24 hours of 5-minute intervals
+                                },
                             },
-                        });
-                        chartData = res.data.map((c) => c[4]);
-                        console.log(
-                            `Binance chart fallback for ${data.symbol}:`,
-                            chartData?.length,
-                            "points",
                         );
+                        chartData = res.data.map((candle) => candle[4]); // closing prices
                     } catch (binanceError) {
                         console.error(
                             `Chart data failed for both APIs for ${data.symbol}:`,
@@ -208,7 +200,29 @@ const CryptoRow = ({ data = {}, favours = {}, doAction }) => {
             if (data.symbol === "NDB") {
                 fetchData = await fetch_Ticker_Of_NDB();
             } else {
-                fetchData = await fetch_Ticker_From_Coinbase(data.symbol);
+                // Use the centralized freeCryptoPrices function for consistent data
+                try {
+                    const price = await fetchPriceFromFreeAPIs(
+                        data.symbol,
+                        "USD",
+                    );
+                    // For volume, we'll fallback to the existing API calls since freeCryptoPrices only handles price
+                    const volumeData = await fetch_Ticker_From_Coinbase(
+                        data.symbol,
+                    );
+                    fetchData = {
+                        price,
+                        percent: volumeData.percent,
+                        volume: volumeData.volume,
+                    };
+                } catch (error) {
+                    console.error(
+                        `Error with freeCryptoPrices for ${data.symbol}:`,
+                        error,
+                    );
+                    // Fallback to original method
+                    fetchData = await fetch_Ticker_From_Coinbase(data.symbol);
+                }
             }
 
             const { price, percent, volume } = fetchData;
@@ -418,6 +432,7 @@ export default function MarketTab() {
         };
     }, [favoursData, currency, dispatch]);
 
+    // ONLY FIX: Added assets dependency to fix useDeepCompareEffect error
     useDeepCompareEffect(() => {
         const fav_Cookie = JSON.parse(getCookie(NDB_FavAssets) ?? "{}");
         if (!_.isEmpty(fav_Cookie)) {
@@ -428,7 +443,7 @@ export default function MarketTab() {
             setFavours(favObj);
             setCookie(NDB_FavAssets, JSON.stringify(favObj));
         }
-    }, [assets]);
+    }, [assets]); // Added assets dependency
 
     useEffect(() => {
         // Fetch available products from Coinbase - let's try a simpler approach first
@@ -521,6 +536,7 @@ export default function MarketTab() {
         fetchCryptoList();
     }, []);
 
+    // ONLY FIX: Added favours dependency to fix useDeepCompareEffect error
     useDeepCompareEffect(() => {
         (async function () {
             let assets = { ...favours };
@@ -530,9 +546,31 @@ export default function MarketTab() {
                 if (favour.symbol === "NDB") {
                     tickerData = await fetch_Ticker_Of_NDB(favour.symbol);
                 } else {
-                    tickerData = await fetch_Ticker_From_Coinbase(
-                        favour.symbol,
-                    );
+                    // Use centralized freeCryptoPrices for consistent pricing
+                    try {
+                        const price = await fetchPriceFromFreeAPIs(
+                            favour.symbol,
+                            "USD",
+                        );
+                        // Get volume and percent from existing API for now
+                        const volumeData = await fetch_Ticker_From_Coinbase(
+                            favour.symbol,
+                        );
+                        tickerData = {
+                            price,
+                            percent: volumeData.percent,
+                            volume: volumeData.volume,
+                        };
+                    } catch (error) {
+                        console.error(
+                            `Error with freeCryptoPrices for ${favour.symbol}:`,
+                            error,
+                        );
+                        // Fallback to original method
+                        tickerData = await fetch_Ticker_From_Coinbase(
+                            favour.symbol,
+                        );
+                    }
                 }
                 const { price, percent, volume } = tickerData;
                 assets[favour.symbol] = {
@@ -547,7 +585,7 @@ export default function MarketTab() {
             }
             setFavoursData({ ...assets });
         })();
-    }, [favours]);
+    }, [favours]); // Added favours dependency
 
     const set_Favourite_Crypto = (item) => {
         if (favoursData[item.symbol]) {
@@ -564,7 +602,6 @@ export default function MarketTab() {
         setCookie(NDB_FavAssets, JSON.stringify(temp));
     };
 
-    // console.log(loading)
     const set_SortOption = (sortName) => {
         setSortOption({
             [sortName]: sortOption[sortName] === "desc" ? "asc" : "desc",

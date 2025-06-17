@@ -20,9 +20,209 @@ import {
     fetchNDBPrice,
 } from "../../store/actions/tempAction";
 
-import { TICKER_price, QUOTE, REFRESH_TIME } from "../../utilities/staticData2";
+// Free API endpoints (no rate limits, no API keys required)
+const FREE_APIS = {
+    // CoinGecko - Very reliable, widely used, free tier with good limits
+    COINGECKO: {
+        BASE: "https://api.coingecko.com/api/v3",
+        PRICES: "https://api.coingecko.com/api/v3/simple/price",
+    },
+    // CoinCap - Alternative free API
+    COINCAP: {
+        BASE: "https://api.coincap.io/v2",
+        ASSETS: "https://api.coincap.io/v2/assets",
+    },
+    // CryptoCompare - Another reliable free option
+    CRYPTOCOMPARE: {
+        BASE: "https://min-api.cryptocompare.com/data",
+        PRICES: "https://min-api.cryptocompare.com/data/pricemultifull",
+    },
+    // Binance - Keep as fallback (public endpoints)
+    BINANCE: {
+        BASE: "https://api.binance.com/api/v3",
+        TICKER: "https://api.binance.com/api/v3/ticker/price",
+    },
+};
+
+// Mapping for CoinGecko IDs (symbol to ID conversion)
+const COINGECKO_SYMBOL_MAP = {
+    BTC: "bitcoin",
+    ETH: "ethereum",
+    BNB: "binancecoin",
+    ADA: "cardano",
+    SOL: "solana",
+    XRP: "ripple",
+    DOT: "polkadot",
+    DOGE: "dogecoin",
+    AVAX: "avalanche-2",
+    SHIB: "shiba-inu",
+    MATIC: "matic-network",
+    UNI: "uniswap",
+    LINK: "chainlink",
+    LTC: "litecoin",
+    BCH: "bitcoin-cash",
+    ALGO: "algorand",
+    VET: "vechain",
+    ICP: "internet-computer",
+    FIL: "filecoin",
+    TRX: "tron",
+    ETC: "ethereum-classic",
+    XLM: "stellar",
+    THETA: "theta-token",
+    ATOM: "cosmos",
+    AXS: "axie-infinity",
+    SAND: "the-sandbox",
+    MANA: "decentraland",
+    CRO: "crypto-com-chain",
+    NEAR: "near",
+    FTM: "fantom",
+    ONE: "harmony",
+    HBAR: "hedera-hashgraph",
+    EGLD: "elrond-erd-2",
+    FLOW: "flow",
+    XTZ: "tezos",
+    ZEC: "zcash",
+    DASH: "dash",
+    KSM: "kusama",
+    WAVES: "waves",
+    COMP: "compound-governance-token",
+    MKR: "maker",
+    SUSHI: "sushi",
+    AAVE: "aave",
+    SNX: "havven",
+    YFI: "yearn-finance",
+    CRV: "curve-dao-token",
+    BAL: "balancer",
+    ZRX: "0x",
+    OMG: "omisego",
+    BNT: "bancor",
+    REP: "augur",
+    GRT: "the-graph",
+    ENJ: "enjincoin",
+    CHZ: "chiliz",
+    BAT: "basic-attention-token",
+    QTUM: "qtum",
+    ZIL: "zilliqa",
+    RVN: "ravencoin",
+    NANO: "nano",
+    SC: "siacoin",
+    DGB: "digibyte",
+    STMX: "storm",
+    HOT: "holotoken",
+    WIN: "wink",
+    BUSD: "binance-usd",
+    USDC: "usd-coin",
+};
+
+const QUOTE = "USDT";
+const REFRESH_TIME = 30000; // 30 seconds
 
 const obscureValueString = "******";
+
+// Enhanced price fetching with multiple API fallbacks
+const fetchPriceFromFreeAPIs = async (tokenSymbol) => {
+    console.log(`🔍 Fetching price for ${tokenSymbol} from free APIs...`);
+
+    // Method 1: Try CoinGecko (most reliable)
+    try {
+        const coinId =
+            COINGECKO_SYMBOL_MAP[tokenSymbol] || tokenSymbol.toLowerCase();
+        const response = await axios.get(FREE_APIS.COINGECKO.PRICES, {
+            params: {
+                ids: coinId,
+                vs_currencies: "usd",
+            },
+            timeout: 8000,
+        });
+
+        if (
+            response.data &&
+            response.data[coinId] &&
+            response.data[coinId].usd
+        ) {
+            const price = Number(response.data[coinId].usd);
+            console.log(`✅ CoinGecko price for ${tokenSymbol}: $${price}`);
+            return price;
+        }
+    } catch (error) {
+        console.warn(`⚠️ CoinGecko failed for ${tokenSymbol}:`, error.message);
+    }
+
+    // Method 2: Try CoinCap
+    try {
+        const response = await axios.get(
+            `${FREE_APIS.COINCAP.ASSETS}/${tokenSymbol.toLowerCase()}`,
+            {
+                timeout: 8000,
+            },
+        );
+
+        if (
+            response.data &&
+            response.data.data &&
+            response.data.data.priceUsd
+        ) {
+            const price = Number(response.data.data.priceUsd);
+            console.log(`✅ CoinCap price for ${tokenSymbol}: $${price}`);
+            return price;
+        }
+    } catch (error) {
+        console.warn(`⚠️ CoinCap failed for ${tokenSymbol}:`, error.message);
+    }
+
+    // Method 3: Try CryptoCompare
+    try {
+        const response = await axios.get(FREE_APIS.CRYPTOCOMPARE.PRICES, {
+            params: {
+                fsyms: tokenSymbol,
+                tsyms: "USD",
+                relaxedValidation: true,
+            },
+            timeout: 8000,
+        });
+
+        if (
+            response.data &&
+            response.data.RAW &&
+            response.data.RAW[tokenSymbol]
+        ) {
+            const price = Number(response.data.RAW[tokenSymbol].USD.PRICE);
+            console.log(`✅ CryptoCompare price for ${tokenSymbol}: $${price}`);
+            return price;
+        }
+    } catch (error) {
+        console.warn(
+            `⚠️ CryptoCompare failed for ${tokenSymbol}:`,
+            error.message,
+        );
+    }
+
+    // Method 4: Try Binance (as last resort)
+    try {
+        console.log(`🔄 Trying Binance fallback for ${tokenSymbol}...`);
+        const response = await axios.get(FREE_APIS.BINANCE.TICKER, {
+            params: { symbol: tokenSymbol + QUOTE },
+            timeout: 8000,
+        });
+
+        if (response.data && response.data.price) {
+            const price = Number(response.data.price);
+            console.log(
+                `✅ Binance fallback price for ${tokenSymbol}: $${price}`,
+            );
+            return price;
+        }
+    } catch (error) {
+        console.warn(
+            `⚠️ Binance fallback failed for ${tokenSymbol}:`,
+            error.message,
+        );
+    }
+
+    // All APIs failed
+    console.error(`❌ All APIs failed for ${tokenSymbol}`);
+    return 0;
+};
 
 const Asset = ({ item, isHideAsset }) => {
     const currency = useSelector((state) => state.favAssets?.currency) || {
@@ -124,16 +324,17 @@ export default function InternalWallet() {
     }, [myAssetsWithBalance]);
 
     useEffect(() => {
-        const get_BTCPrice = () => {
-            axios
-                .get(TICKER_price, { params: { symbol: "BTC" + QUOTE } })
-                .then((res) => {
-                    setBTCPrice(res.data.price);
-                })
-                .catch((error) => {
-                    console.error("Error fetching BTC price:", error);
-                });
+        const get_BTCPrice = async () => {
+            try {
+                const price = await fetchPriceFromFreeAPIs("BTC");
+                if (price > 0) {
+                    setBTCPrice(price);
+                }
+            } catch (error) {
+                console.error("Error fetching BTC price:", error);
+            }
         };
+
         get_BTCPrice();
         dispatch(fetchNDBPrice());
 
@@ -185,10 +386,7 @@ export default function InternalWallet() {
                     price = ndbPrice || 0;
                 } else {
                     try {
-                        const res = await axios.get(TICKER_price, {
-                            params: { symbol: item.tokenSymbol + QUOTE },
-                        });
-                        price = Number(res.data.price);
+                        price = await fetchPriceFromFreeAPIs(item.tokenSymbol);
                     } catch (error) {
                         console.error(
                             `Error fetching price for ${item.tokenSymbol}:`,
@@ -360,55 +558,43 @@ export default function InternalWallet() {
                             withdraw
                         </button>
                     </div>
-                    {/* Withdraw Modal - Re-enabled with proper asset mapping */}
-                    {isWithdrawOpen && (
-                        <WithdrawModal
-                            showModal={isWithdrawOpen}
-                            setShowModal={setIsWithdrawOpen}
-                            assets={myAssetsWithBalance}
-                        />
-                    )}
-                    {isDepositOpen && (
-                        <DepositModal
-                            showModal={isDepositOpen}
-                            setShowModal={setIsDepositOpen}
-                        />
-                    )}
                 </div>
             </div>
-
-            <div className="wallet_balances">
-                <table className="my-3">
+            <div className="mt-4">
+                <table className="wallet-transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        {!initLoaded.current && (
-                            <div className="text-center">
-                                <CustomSpinner />
-                            </div>
+                        {_.isEmpty(myAssetsWithBalance) ? (
+                            <tr>
+                                <td colSpan={2}>
+                                    <div className="d-flex justify-content-center mt-4">
+                                        <CustomSpinner />
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : (
+                            _.map(myAssetsWithBalance, (item) => (
+                                <Asset
+                                    key={item.tokenSymbol}
+                                    item={item}
+                                    isHideAsset={hidden}
+                                />
+                            ))
                         )}
-                        {initLoaded.current &&
-                            _.map(
-                                _.orderBy(
-                                    myAssetsWithBalance,
-                                    ["balance", "tokenSymbol"],
-                                    ["desc", "asc"],
-                                ),
-                                (item) => (
-                                    <Asset
-                                        item={item}
-                                        isHideAsset={hidden}
-                                        key={item.tokenName}
-                                    />
-                                ),
-                            )}
-                        {initLoaded.current &&
-                            Object.values(myAssetsWithBalance).length === 0 && (
-                                <div className="text-center fw-500 text-uppercase text-light">
-                                    No assets found
-                                </div>
-                            )}
                     </tbody>
                 </table>
             </div>
+            <DepositModal isOpen={isDepositOpen} setIsOpen={setIsDepositOpen} />
+            <WithdrawModal
+                isOpen={isWithdrawOpen}
+                setIsOpen={setIsWithdrawOpen}
+                assets={myAssetsWithBalance}
+            />
         </div>
     );
 }

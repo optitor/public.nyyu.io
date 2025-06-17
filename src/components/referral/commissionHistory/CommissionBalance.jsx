@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { AiFillEyeInvisible } from "@react-icons/all-files/ai/AiFillEyeInvisible";
 import { AiFillEye } from "@react-icons/all-files/ai/AiFillEye";
+import { NumericFormat as NumberFormat } from "react-number-format";
 
 import { SPINNER } from "../../../utilities/imgImport";
-import { useReferral } from "../ReferralContext";
+import { useReferral } from "../../../components/referral/ReferralContext";
 import {
     changeEquity,
     updateHiddenStatus,
 } from "../../../store/actions/tempAction";
-import { NumericFormat as NumberFormat } from "react-number-format";
+import { fetchPriceFromFreeAPIs } from "../../../utilities/freeCryptoPrices";
 
-const QUOTE = "USDT";
-const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
 const REFRESH_TIME = 30 * 1000;
 
 const CommissionBalance = ({ loading, totalEarned }) => {
@@ -51,17 +49,18 @@ const CommissionBalance = ({ loading, totalEarned }) => {
     useEffect(() => {
         const getBtcPrice = async () => {
             try {
-                const { data } = await axios.get(TICKER_price, {
-                    params: { symbol: "BTC" + QUOTE },
-                });
-                setBtcPrice(data.price);
-                if (equity === "BTC") {
-                    setPrice(data.price);
+                const fetchedBtcPrice = await fetchPriceFromFreeAPIs("BTC");
+                if (fetchedBtcPrice > 0) {
+                    setBtcPrice(fetchedBtcPrice);
+                    if (equity === "BTC") {
+                        setPrice(fetchedBtcPrice);
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching BTC price:", error);
             }
         };
+
         getBtcPrice();
         const interval = setInterval(() => {
             getBtcPrice();
@@ -88,86 +87,63 @@ const CommissionBalance = ({ loading, totalEarned }) => {
                         />
                     )}
                 </div>
-                <div className="ms-auto">
-                    <span
-                        className={`me-1 cursor-pointer ${equity === "BTC" ? "text-white fw-bold" : "txt-disable-gray"}`}
+                <div className="d-flex">
+                    <div
+                        className={`cursor-pointer ${
+                            equity === "BTC" ? "fw-bold text-white" : ""
+                        }`}
                         onClick={() => onChangeEquity("BTC")}
-                        onKeyDown={() => onChangeEquity("BTC")}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                onChangeEquity("BTC");
+                            }
+                        }}
                         role="button"
-                        tabIndex="0"
+                        tabIndex={0}
                     >
                         BTC
-                    </span>
-                    <span className="txt-disable-gray">|</span>
-                    <span
-                        className={`ms-1 cursor-pointer ${equity === currency ? "text-white fw-bold" : "txt-disable-gray"}`}
+                    </div>
+                    <div className="mx-1">|</div>
+                    <div
+                        className={`cursor-pointer ${
+                            equity !== "BTC" ? "fw-bold text-white" : ""
+                        }`}
                         onClick={() => onChangeEquity(currency)}
-                        onKeyDown={() => onChangeEquity(currency)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                onChangeEquity(currency);
+                            }
+                        }}
                         role="button"
-                        tabIndex="0"
+                        tabIndex={0}
                     >
                         {currency}
-                    </span>
+                    </div>
                 </div>
             </div>
-            <div className="lh-54px">
-                {!hidden ? (
-                    <>
-                        {loading ? (
-                            <img
-                                src={SPINNER}
-                                width="17px"
-                                height="17px"
-                                alt="spinner"
-                            />
-                        ) : (
-                            <NumberFormat
-                                value={totalEarned || 0}
-                                className="fs-30px fw-400 lh-54px"
-                                displayType="text"
-                                thousandSeparator={true}
-                                renderText={(value, props) => (
-                                    <p {...props}>{value} NDB</p>
-                                )}
-                            />
-                        )}
-                    </>
-                ) : (
-                    <p className="fs-30px fw-400 lh-54px">********</p>
-                )}
-            </div>
-            <div className="fs-14px text-[#959595] mt-3 lh-18px">
-                {!hidden ? (
-                    <>
-                        {loading ? (
-                            <img
-                                src={SPINNER}
-                                width="17px"
-                                height="17px"
-                                alt="spinner"
-                            />
-                        ) : (
-                            <NumberFormat
-                                value={(
-                                    (totalEarned || 0) *
-                                    (ndbPrice || 0) *
-                                    price
-                                ).toFixed(decimals)}
-                                displayType="text"
-                                thousandSeparator={true}
-                                renderText={(value, props) => (
-                                    <span {...props}>
-                                        ~ {value}{" "}
-                                        {equity !== "BTC" ? currency : "BTC"}
-                                    </span>
-                                )}
-                            />
-                        )}
-                    </>
-                ) : (
-                    <span>********</span>
-                )}
-            </div>
+            {hidden ? (
+                <p className="fs-34px fw-bold lh-54px">***********</p>
+            ) : loading ? (
+                <img
+                    src={SPINNER}
+                    alt="Loading..."
+                    className="py-3"
+                    width="60"
+                />
+            ) : (
+                <NumberFormat
+                    value={Number((totalEarned || 0) * (price || 1)).toFixed(
+                        decimals,
+                    )}
+                    displayType="text"
+                    thousandSeparator={true}
+                    renderText={(value, props) => (
+                        <p {...props} className="fs-34px fw-bold lh-54px">
+                            {value} {equity}
+                        </p>
+                    )}
+                />
+            )}
         </div>
     );
 };
