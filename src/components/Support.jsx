@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useMutation } from '@apollo/client';
+import SupportRequestModal from "./support/SupportRequestModal";
+import { useMutation } from "@apollo/client";
 import Header from "./header";
 import {
     SupportAuthenticator,
@@ -23,7 +24,7 @@ import DepositMissingModal from "./support/deposit-missing-modal";
 import ResetAuthenticatorModal from "./support/reset-authenticator-modal";
 import DeleteAccountModal from "./profile/delete-account-modal";
 import { ZendeskURLWithJWT } from "../utilities/staticData";
-import { GET_ZENDESK_JWT } from '../apollo/graphqls/mutations/Support';
+import { GET_ZENDESK_JWT } from "../apollo/graphqls/mutations/Support";
 import AlarmModal from "./admin/AlarmModal";
 import { RESET_GOOGLE_AUTH } from "../apollo/graphqls/mutations/Auth";
 
@@ -49,8 +50,7 @@ const setting = {
 const GOOGLE_AUTH_INDEX = 3;
 
 const FAQ = () => {
-
-    const [ selfServiceData, setSelfServiceData ] = useState([
+    const [selfServiceData, setSelfServiceData] = useState([
         {
             id: 0,
             label: "Reset Password",
@@ -77,7 +77,7 @@ const FAQ = () => {
             icon: SupportAuthenticator,
             clickEvent: () => handleGoogleAuth(),
             disabled: false,
-            error: 'Cannot Reset Google Authenticator',
+            error: "Cannot Reset Google Authenticator",
             hasError: false,
             pending: false,
         },
@@ -101,57 +101,71 @@ const FAQ = () => {
             icon: SupportDelete,
             clickEvent: () => setIsDeleteAccountModalOpen(true),
         },
+        // {
+        //     id: 7,
+        //     label: "Submit a Request",
+        //     icon: SupportRequest,
+        //     clickEvent: () => {
+        //         const link = document.createElement("a");
+        //         link.href = "https://help.nyyu.io/hc/en-gb/requests/new";
+        //         link.target = "_blank";
+        //         link.click();
+        //     },
+        // },
+
         {
             id: 7,
             label: "Submit a Request",
             icon: SupportRequest,
-            clickEvent: () => {
-                const link = document.createElement("a");
-                link.href = "https://help.nyyu.io/hc/en-gb/requests/new";
-                link.target = "_blank";
-                link.click();
-            },
+            clickEvent: () => setIsSupportRequestModalOpen(true),
         },
     ]);
 
     // Container
-    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
-    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] = useState(false);
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+        useState(false);
+    const [isUnlockAccountModalOpen, setIsUnlockAccountModalOpen] =
+        useState(false);
     const [isResetPhoneModalOpen, setIsResetPhoneModalOpen] = useState(false);
-    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] = useState(false);
-    const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] = useState(false);
-    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] = useState(false);
-    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
+    const [isResetAuthenticatorModalOpen, setIsResetAuthenticatorModalOpen] =
+        useState(false);
+    const [isDepositAssetModalOpen, setIsDepositAssetModalOpen] =
+        useState(false);
+    const [isDepositMissingModalOpen, setIsDepositMissingModalOpen] =
+        useState(false);
+    const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
+        useState(false);
     const [pending, setPending] = useState(false);
 
-    const [ qrcode, setQRcode ] = useState("");
-    const [ token, setToken ] = useState("");
+    const [qrcode, setQRcode] = useState("");
+    const [token, setToken] = useState("");
+    const [isSupportRequestModalOpen, setIsSupportRequestModalOpen] =
+        useState(false);
 
     const [getZendeskJwtMutation] = useMutation(GET_ZENDESK_JWT, {
-        onCompleted: data => {
-            if(data.getZendeskJwt) {
+        onCompleted: (data) => {
+            if (data.getZendeskJwt) {
                 const jwtToken = data.getZendeskJwt?.token;
                 window.location.assign(`${ZendeskURLWithJWT}${jwtToken}`);
             }
             setPending(false);
         },
-        onError: err => {
+        onError: (err) => {
             console.log(err.message);
             setPending(false);
-        }
+        },
     });
 
-    const [ getGoogleAuthSecret ] = useMutation(RESET_GOOGLE_AUTH, {
-        onCompleted: data => {
+    const [getGoogleAuthSecret] = useMutation(RESET_GOOGLE_AUTH, {
+        onCompleted: (data) => {
             setPending(false);
-            if(data.resetGoogleAuthRequest) {
-                const filtered = selfServiceData
-                    .map(item => {
-                        if(item.id === GOOGLE_AUTH_INDEX) {
-                            item.hasError = false;
-                            item.pending = false;
-                        }
-                        return item;
+            if (data.resetGoogleAuthRequest) {
+                const filtered = selfServiceData.map((item) => {
+                    if (item.id === GOOGLE_AUTH_INDEX) {
+                        item.hasError = false;
+                        item.pending = false;
+                    }
+                    return item;
                 });
                 setSelfServiceData(filtered);
                 setQRcode(data.resetGoogleAuthRequest.secret);
@@ -160,38 +174,43 @@ const FAQ = () => {
                 setIsResetAuthenticatorModalOpen(true);
             }
         },
-        onError: err => {
+        onError: (err) => {
             setPending(false);
             //set error
-            const filtered = selfServiceData
-                .map(item => {
-                    if(item.id === GOOGLE_AUTH_INDEX) {
-                        item.hasError = true;
-                        item.pending = false;
-                    }
-                    return item;
-            });
-            setSelfServiceData(filtered);
-        }
-    })
-
-    const handleGoogleAuth = () => {
-        // send google auth reset request
-        const filtered = selfServiceData
-            .map(item => {
-                if(item.id === GOOGLE_AUTH_INDEX) {
+            const filtered = selfServiceData.map((item) => {
+                if (item.id === GOOGLE_AUTH_INDEX) {
                     item.hasError = true;
-                    item.pending = true;
+                    item.pending = false;
                 }
                 return item;
             });
+            setSelfServiceData(filtered);
+        },
+    });
+
+    const handleGoogleAuth = () => {
+        // send google auth reset request
+        const filtered = selfServiceData.map((item) => {
+            if (item.id === GOOGLE_AUTH_INDEX) {
+                item.hasError = true;
+                item.pending = true;
+            }
+            return item;
+        });
         setSelfServiceData(filtered);
         getGoogleAuthSecret();
-    }
+    };
+
+    // const handleHelpCenter = () => {
+    //     setPending(true);
+    //     getZendeskJwtMutation();
+    // };
 
     const handleHelpCenter = () => {
-        setPending(true);
-        getZendeskJwtMutation();
+        const link = document.createElement("a");
+        link.href = "https://docs.nyyu.io/";
+        link.target = "_blank";
+        link.click();
     };
 
     // const handleHelpCommunity = () => {
@@ -213,21 +232,19 @@ const FAQ = () => {
                                 onClick={handleHelpCenter}
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
-                                    {pending?
+                                    {pending ? (
                                         <CustomSpinner />
-                                        :
-                                        (
-                                            <>
-                                                <div className="fw-bold text-uppercase support-banner-title">
-                                                    help center
-                                                </div>
-                                                <img
-                                                    src={SupportHelpCenter}
-                                                    alt="Support help center"
-                                                />
-                                            </>
-                                        )
-                                    }
+                                    ) : (
+                                        <>
+                                            <div className="fw-bold text-uppercase support-banner-title">
+                                                help center
+                                            </div>
+                                            <img
+                                                src={SupportHelpCenter}
+                                                alt="Support help center"
+                                            />
+                                        </>
+                                    )}
                                 </div>
                             </button>
                         </div>
@@ -235,13 +252,13 @@ const FAQ = () => {
                         <div className="col-lg-3 col-6 mb-2 pe-lg-10px">
                             <a
                                 className="h-100 border border-light text-light support-banner-item text-decoration-none d-block"
-                                href='https://help.nyyu.io/hc/en-gb/community/topics'
-                                target='_blank'
+                                href="https://docs.nyyu.io/docs/api/getting-started"
+                                target="_blank"
                                 rel="noreferrer"
                             >
                                 <div className="h-100 d-flex align-items-center justify-content-around flex-column gap-sm-0 gap-3 py-3 py-sm-0">
                                     <div className="fw-bold text-uppercase support-banner-title">
-                                        community
+                                        Developers
                                     </div>
                                     <img
                                         src={SupportCommunity}
@@ -250,7 +267,7 @@ const FAQ = () => {
                                 </div>
                             </a>
                         </div>
-                        
+
                         <div className="col-lg-6 col-12">
                             <div className="row row-x">
                                 {selfServiceData.map((item, index) => {
@@ -262,16 +279,28 @@ const FAQ = () => {
                                                 key={index}
                                                 className={`btn text-light border border-light text-center p-1`}
                                                 onClick={item?.clickEvent}
-                                                disabled={item?.disabled? true: false}
+                                                disabled={
+                                                    item?.disabled
+                                                        ? true
+                                                        : false
+                                                }
                                             >
-                                        
-                                                {item?.pending ? <CustomSpinner /> : 
-                                                <><img
-                                                    src={item?.icon}
-                                                    alt="item figure"
-                                                />
-                                                <div>{item.label}</div>
-                                                {item?.hasError && <div className="error-message">{item?.error}</div>}</>}
+                                                {item?.pending ? (
+                                                    <CustomSpinner />
+                                                ) : (
+                                                    <>
+                                                        <img
+                                                            src={item?.icon}
+                                                            alt="item figure"
+                                                        />
+                                                        <div>{item.label}</div>
+                                                        {item?.hasError && (
+                                                            <div className="error-message">
+                                                                {item?.error}
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
                                             </button>
                                         </div>
                                     );
@@ -291,31 +320,46 @@ const FAQ = () => {
                             setIsOpen={setIsResetPasswordModalOpen}
                         />
                     )}
-                    {isUnlockAccountModalOpen && <UnlockAccountModal
-                        isOpen={isUnlockAccountModalOpen}
-                        setIsOpen={setIsUnlockAccountModalOpen}
-                    />}
-                    {isResetPhoneModalOpen && <ResetPhoneModal
-                        isOpen={isResetPhoneModalOpen}
-                        setIsOpen={setIsResetPhoneModalOpen}
-                    />}
-                    {isResetAuthenticatorModalOpen && <ResetAuthenticatorModal
-                        isOpen={isResetAuthenticatorModalOpen}
-                        setIsOpen={setIsResetAuthenticatorModalOpen}
-                        secret={qrcode}
-                        token={token}
-                    />}
-                    {isDepositAssetModalOpen && <DepositAssetModal
-                        isOpen={isDepositAssetModalOpen}
-                        setIsOpen={setIsDepositAssetModalOpen}
-                    />}
-                    {isDepositMissingModalOpen && <DepositMissingModal
-                        isOpen={isDepositMissingModalOpen}
-                        setIsOpen={setIsDepositMissingModalOpen}
-                    />}
+                    {isUnlockAccountModalOpen && (
+                        <UnlockAccountModal
+                            isOpen={isUnlockAccountModalOpen}
+                            setIsOpen={setIsUnlockAccountModalOpen}
+                        />
+                    )}
+                    {isResetPhoneModalOpen && (
+                        <ResetPhoneModal
+                            isOpen={isResetPhoneModalOpen}
+                            setIsOpen={setIsResetPhoneModalOpen}
+                        />
+                    )}
+                    {isResetAuthenticatorModalOpen && (
+                        <ResetAuthenticatorModal
+                            isOpen={isResetAuthenticatorModalOpen}
+                            setIsOpen={setIsResetAuthenticatorModalOpen}
+                            secret={qrcode}
+                            token={token}
+                        />
+                    )}
+                    {isDepositAssetModalOpen && (
+                        <DepositAssetModal
+                            isOpen={isDepositAssetModalOpen}
+                            setIsOpen={setIsDepositAssetModalOpen}
+                        />
+                    )}
+                    {isDepositMissingModalOpen && (
+                        <DepositMissingModal
+                            isOpen={isDepositMissingModalOpen}
+                            setIsOpen={setIsDepositMissingModalOpen}
+                        />
+                    )}
                 </section>
                 <AlarmModal />
             </main>
+
+            <SupportRequestModal
+                isOpen={isSupportRequestModalOpen}
+                closeModal={() => setIsSupportRequestModalOpen(false)}
+            />
         </>
     );
 };
