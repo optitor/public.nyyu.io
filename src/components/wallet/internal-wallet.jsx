@@ -20,9 +20,8 @@ import {
     fetchNDBPrice,
 } from "../../store/actions/tempAction";
 
-const QUOTE = "USDT";
-const TICKER_price = `${process.env.GATSBY_BINANCE_BASE_API}/v3/ticker/price`;
-const REFRESH_TIME = 30 * 1000;
+import { TICKER_price, QUOTE, REFRESH_TIME } from "../../utilities/staticData2";
+
 const obscureValueString = "******";
 
 const Asset = ({ item, isHideAsset }) => {
@@ -41,9 +40,10 @@ const Asset = ({ item, isHideAsset }) => {
         <tr>
             <td className="d-flex align-items-center ps-2">
                 <img
-                    className=" me-2 balance_img"
+                    className="me-2 balance_img"
                     src={item.symbol}
                     alt="coin icon"
+                    style={{ width: "40px", height: "40px" }}
                 />
                 <div>
                     <p className="coin-abbr text-light">{item.tokenName}</p>
@@ -360,14 +360,14 @@ export default function InternalWallet() {
                             withdraw
                         </button>
                     </div>
-                    {/* Temporarily disable withdraw modal due to SelectOption error */}
-                    {/* {isWithdrawOpen && (
+                    {/* Withdraw Modal - Re-enabled with proper asset mapping */}
+                    {isWithdrawOpen && (
                         <WithdrawModal
                             showModal={isWithdrawOpen}
                             setShowModal={setIsWithdrawOpen}
                             assets={myAssetsWithBalance}
                         />
-                    )} */}
+                    )}
                     {isDepositOpen && (
                         <DepositModal
                             showModal={isDepositOpen}
