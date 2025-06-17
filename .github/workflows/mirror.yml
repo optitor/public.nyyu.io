@@ -27,11 +27,18 @@ jobs:
         env:
           PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
 
+      - name: Who owns the PAT?
+        env:
+          TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+        run: |
+          echo "Token owner:"
+          curl -s -H "Authorization: token $TOKEN" https://api.github.com/user
+
       - name: Push to public repo
         env:
-          PAT: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
           git config --global user.email "info@orb.group"
           git config --global user.name "golsharifi"
-          git remote add public https://x-access-token:${PAT}@github.com/optitor/public.nyyu.io.git
+          git remote add public https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/optitor/public.nyyu.io.git
           git push --force public HEAD:main
