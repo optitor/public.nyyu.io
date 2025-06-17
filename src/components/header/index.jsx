@@ -1,135 +1,60 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useQuery } from "@apollo/client";
 import { Link, navigate } from "gatsby";
 import { isBrowser } from "../../utilities/auth";
+import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
+// import ReactTooltip from "react-tooltip"
+
 import { useAuth } from "../../hooks/useAuth";
+import { setCurrentAuthInfo } from "../../store/actions/authAction";
+import { fetch_Avatar_Components } from "../../store/actions/avatarAction";
 
-// Import only what we know exists
-let Logo, Bell, NotificationBell;
-try {
-    const imgImports = require("../../utilities/imgImport");
-    Logo = imgImports.Logo;
-    Bell = imgImports.Bell;
-    NotificationBell = imgImports.NotificationBell;
-} catch (e) {
-    console.warn("Image imports not found");
-    Logo = "";
-    Bell = "";
-    NotificationBell = "";
-}
+import { navigationLinks, profile_tabs } from "../../utilities/staticData";
+import { GET_USER } from "../../apollo/graphqls/querys/Auth";
+import { ROUTES, navLinks } from "../../utilities/routes";
+import { GET_ALL_UNREAD_NOTIFICATIONS } from "../../apollo/graphqls/querys/Notification";
+import {
+    setCookie,
+    removeCookie,
+    NDB_Privilege,
+    NDB_Admin,
+} from "../../utilities/cookies";
+import { fetch_Favor_Assets } from "../../store/actions/settingAction";
+import { TWITTER, DISCORD } from "../../utilities/imgImport";
+import { logout } from "../../utilities/auth";
 
-// Import routes safely
-let ROUTES, navLinks;
-try {
-    const routeImports = require("../../utilities/routes");
-    ROUTES = routeImports.ROUTES;
-    navLinks = routeImports.navLinks;
-} catch (e) {
-    console.warn("Routes not found");
-    ROUTES = {
-        signIn: "/app/signin/",
-        signUp: "/app/signup/",
-        profile: "/app/profile/",
-        admin: "/admin",
-        app: "/app/",
-    };
-    navLinks = [];
-}
+// Working components
+import Avatar from "../dress-up/avatar";
+import UserTier from "./user-tier";
 
-// Import static data safely
-let navigationLinks, profile_tabs;
-try {
-    const staticData = require("../../utilities/staticData");
-    navigationLinks = staticData.navigationLinks || [];
-    profile_tabs = staticData.profile_tabs || [];
-} catch (e) {
-    console.warn("Static data not found");
-    navigationLinks = [];
-    profile_tabs = [];
-}
+// Safe component imports with fallbacks
+let ReactTooltip, InformBannedModal, InformMaintenanceModal;
 
-// Import actions safely
-let setCurrentAuthInfo, fetch_Avatar_Components, fetch_Favor_Assets;
 try {
-    const authActions = require("../../store/actions/authAction");
-    setCurrentAuthInfo = authActions.setCurrentAuthInfo;
+    ReactTooltip = require("react-tooltip").default || require("react-tooltip");
 } catch (e) {
-    console.warn("Auth actions not found");
-    setCurrentAuthInfo = () => ({ type: "DUMMY_ACTION" });
+    console.warn("ReactTooltip not found, using fallback");
+    ReactTooltip = ({ children, ...props }) => <div {...props}>{children}</div>;
 }
 
 try {
-    const avatarActions = require("../../store/actions/avatarAction");
-    fetch_Avatar_Components = avatarActions.fetch_Avatar_Components;
+    InformBannedModal =
+        require("./InformBannedModal").default ||
+        require("./InformBannedModal");
 } catch (e) {
-    console.warn("Avatar actions not found");
-    fetch_Avatar_Components = () => ({ type: "DUMMY_ACTION" });
+    console.warn("InformBannedModal not found, using fallback");
+    InformBannedModal = () => null;
 }
 
 try {
-    const settingActions = require("../../store/actions/settingAction");
-    fetch_Favor_Assets = settingActions.fetch_Favor_Assets;
+    InformMaintenanceModal =
+        require("./Inform_MaintenanceModal").default ||
+        require("./Inform_MaintenanceModal");
 } catch (e) {
-    console.warn("Setting actions not found");
-    fetch_Favor_Assets = () => ({ type: "DUMMY_ACTION" });
+    console.warn("InformMaintenanceModal not found, using fallback");
+    InformMaintenanceModal = () => null;
 }
-
-// Import GraphQL safely
-let GET_USER, GET_ALL_UNREAD_NOTIFICATIONS, useQuery;
-try {
-    const { useQuery: apolloUseQuery } = require("@apollo/client");
-    useQuery = apolloUseQuery;
-} catch (e) {
-    console.warn("Apollo client not found");
-    useQuery = () => ({ data: null, loading: false, error: null });
-}
-
-try {
-    const authQueries = require("../../apollo/graphqls/querys/Auth");
-    GET_USER = authQueries.GET_USER;
-} catch (e) {
-    console.warn("Auth queries not found");
-    GET_USER = null;
-}
-
-try {
-    const notificationQueries = require("../../apollo/graphqls/querys/Notification");
-    GET_ALL_UNREAD_NOTIFICATIONS =
-        notificationQueries.GET_ALL_UNREAD_NOTIFICATIONS;
-} catch (e) {
-    console.warn("Notification queries not found");
-    GET_ALL_UNREAD_NOTIFICATIONS = null;
-}
-
-// Import cookies safely
-let setCookie, removeCookie, NDB_Privilege, NDB_Admin;
-try {
-    const cookieUtils = require("../../utilities/cookies");
-    setCookie = cookieUtils.setCookie;
-    removeCookie = cookieUtils.removeCookie;
-    NDB_Privilege = cookieUtils.NDB_Privilege;
-    NDB_Admin = cookieUtils.NDB_Admin;
-} catch (e) {
-    console.warn("Cookie utilities not found");
-    setCookie = () => {};
-    removeCookie = () => {};
-    NDB_Privilege = "NDB_Privilege";
-    NDB_Admin = "NDB_Admin";
-}
-
-// Import auth utils safely
-let logout;
-try {
-    const authUtils = require("../../utilities/auth");
-    logout = authUtils.logout;
-} catch (e) {
-    console.warn("Auth utilities not found");
-    logout = () => {};
-}
-
-// Social media fallbacks
-const TWITTER = "https://twitter.com";
-const DISCORD = "https://discord.com";
 
 const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const dispatch = useDispatch();
@@ -141,42 +66,38 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         second: "we are unable to provide services to you.",
     });
 
-    // Webservice - always call hooks, but handle missing queries
-    const { data: user_data } = useQuery(GET_USER || `query { __typename }`);
+    // Webservice
+    const { data: user_data } = useQuery(GET_USER);
 
-    // Notifications query - always call but handle missing query
-    useQuery(GET_ALL_UNREAD_NOTIFICATIONS || `query { __typename }`, {
+    useQuery(GET_ALL_UNREAD_NOTIFICATIONS, {
         fetchPolicy: "network-only",
         errorPolicy: "none",
-        skip: !GET_ALL_UNREAD_NOTIFICATIONS, // Skip if query doesn't exist
         onCompleted: (data) => {
             if (!data?.getAllUnReadNotifications) return;
             setNewNotification(data?.getAllUnReadNotifications?.length !== 0);
         },
         onError: (err) => {
-            if (err.graphQLErrors && err.graphQLErrors[0]) {
-                if (err.graphQLErrors[0]?.isBannedCountry) {
-                    setInformMessage({
-                        first: `It seems you are accessing nyyu from an IP address belonging to ${err.graphQLErrors[0].country}.`,
-                        second: "we are unable to provide services to users from this region.",
-                    });
-                    navigate("/");
-                    setBanned(true);
-                    setIsBannedOpen(true);
-                } else if (err.graphQLErrors[0]?.isAnonymousIp) {
-                    setInformMessage({
-                        first: "It seems you are accessing nyyu via anonymous proxy, VPN or VPS.",
-                        second: "we are unable to provide services to you.",
-                    });
-                    navigate("/");
-                    setBanned(true);
-                    setIsBannedOpen(true);
-                } else if (err.graphQLErrors[0]?.isUnderMaintenance) {
-                    navigate("/");
-                    setBanned(true);
-                    setIsMaintenanceOpen(true);
-                    logout();
-                }
+            if (err.graphQLErrors[0]?.isBannedCountry) {
+                setInformMessage({
+                    first: `It seems you are accessing nyyu from an IP address belonging to ${err.graphQLErrors[0].country}.`,
+                    second: "we are unable to provide services to users from this region.",
+                });
+                navigate("/");
+                setBanned(true);
+                setIsBannedOpen(true);
+            } else if (err.graphQLErrors[0]?.isAnonymousIp) {
+                setInformMessage({
+                    first: "It seems you are accessing nyyu via anonymous proxy, VPN or VPS.",
+                    second: "we are unable to provide services to you.",
+                });
+                navigate("/");
+                setBanned(true);
+                setIsBannedOpen(true);
+            } else if (err.graphQLErrors[0]?.isUnderMaintenance) {
+                navigate("/");
+                setBanned(true);
+                setIsMaintenanceOpen(true);
+                logout();
             }
         },
     });
@@ -185,15 +106,9 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const auth = useAuth();
     const userInfo = user_data?.getUser;
     const [active, setActive] = useState(false);
-
-    // Safe selectors
-    const avatarComponents = useSelector(
-        (state) => state?.avatarComponents || { loaded: false },
-    );
-    const authState = useSelector((state) => state?.auth || {});
-    const { user, isAuthenticated } = authState;
-
+    const { avatarComponents } = useSelector((state) => state);
     const [newNotification, setNewNotification] = useState(false);
+    const { user, isAuthenticated } = useSelector((state) => state.auth);
     const isAdmin = user?.role && user?.role?.includes("ROLE_ADMIN");
 
     const isShowNavLinks =
@@ -206,10 +121,10 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
 
     // Methods
     useEffect(() => {
-        if (!avatarComponents.loaded && fetch_Avatar_Components) {
+        if (!avatarComponents.loaded) {
             dispatch(fetch_Avatar_Components());
         }
-        if (userInfo && setCurrentAuthInfo) {
+        if (userInfo) {
             dispatch(setCurrentAuthInfo(userInfo));
             if (userInfo.role && userInfo.role.includes("ROLE_ADMIN")) {
                 setCookie(NDB_Privilege, NDB_Admin);
@@ -230,9 +145,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     }, [active]);
 
     useEffect(() => {
-        if (fetch_Favor_Assets) {
-            dispatch(fetch_Favor_Assets());
-        }
+        dispatch(fetch_Favor_Assets());
     }, [dispatch]);
 
     const isActive = (paths) => {
@@ -247,11 +160,11 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
             <div className="px-4 d-flex justify-content-between">
                 <div className="d-flex align-items-center gap-5 text-white text-uppercase fw-bold">
                     <Link to="/" className="menu__logo d-flex" title="Logo">
-                        {Logo && <img src={Logo} alt="NDB Brand Logo" />}
+                        <img src={Logo} alt="NDB Brand Logo" />
                     </Link>
-                    {auth?.isLoggedIn() && isShowNavLinks && navLinks && (
+                    {auth?.isLoggedIn() && isShowNavLinks && (
                         <div className="d-none d-lg-flex justify-content-between gap-5">
-                            {navLinks.map((link, key) => {
+                            {navLinks?.map((link, key) => {
                                 return (
                                     <Link
                                         key={key}
@@ -282,102 +195,166 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                         {!auth?.isLoggedIn() ? (
                             !banned ? (
                                 !isCurrentSignin ? (
-                                    <>
-                                        <Link
-                                            to={ROUTES.signIn}
-                                            className="text-white text-decoration-none fw-bold me-3"
-                                        >
-                                            Sign In
-                                        </Link>
-                                        <Link
-                                            to={ROUTES.signUp}
-                                            className="btn btn-success fw-bold"
-                                        >
-                                            Sign Up
-                                        </Link>
-                                    </>
-                                ) : null
-                            ) : null
+                                    <Link
+                                        className="header-btn"
+                                        to={ROUTES.signIn}
+                                    >
+                                        Sign In
+                                    </Link>
+                                ) : (
+                                    ""
+                                )
+                            ) : (
+                                ""
+                            )
                         ) : (
-                            <ul className="d-flex justify-content-between align-items-center list-unstyled mb-0 gap-3">
-                                <li>
+                            <ul className="d-flex align-items-center">
+                                <li className="scale-75 cursor-pointer pe-3 d-none d-sm-block">
                                     <a
-                                        href={TWITTER}
+                                        href="https://twitter.com/ndbtechnology"
                                         target="_blank"
-                                        rel="noreferrer"
-                                        className="social-icon d-flex justify-content-center align-items-center bg-success"
+                                        rel="noopener noreferrer"
                                     >
-                                        <i className="fab fa-twitter" />
+                                        <img
+                                            src={TWITTER}
+                                            alt="twitter social link"
+                                            className="social-link"
+                                        />
                                     </a>
                                 </li>
-                                <li>
+                                <li className="scale-75 cursor-pointer pe-3 d-none d-sm-block">
                                     <a
-                                        href={DISCORD}
+                                        href="https://discord.gg/38tFxghPdz"
                                         target="_blank"
-                                        rel="noreferrer"
-                                        className="social-icon d-flex justify-content-center align-items-center bg-success"
+                                        rel="noopener noreferrer"
                                     >
-                                        <i className="fab fa-discord" />
+                                        <img
+                                            src={DISCORD}
+                                            alt="discord social link"
+                                            className="social-link"
+                                        />
                                     </a>
                                 </li>
-                                <li className="pe-sm-3 px-0 scale-75">
+                                <div className="dropdown me-2 d-block d-sm-none">
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary dropdown-toggle fs-16px px-3 py-2"
+                                        data-bs-toggle="dropdown"
+                                    >
+                                        Sale
+                                    </button>
+                                    <ul className="dropdown-menu">
+                                        <li>
+                                            <Link
+                                                className="fs-16px text-uppercase fw-bold"
+                                                to={ROUTES.auction}
+                                            >
+                                                Sale
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                className="fs-16px text-uppercase fw-bold"
+                                                to={ROUTES.referral}
+                                            >
+                                                Invite & Earn
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <li className="scale-75 cursor-pointer pe-3">
                                     <Link to={ROUTES.profile}>
-                                        {Bell && (
-                                            <img
-                                                onClick={
-                                                    setTabIndex
-                                                        ? () => {
+                                        <img
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={
+                                                isBrowser &&
+                                                window.location.pathname ===
+                                                    ROUTES.profile
+                                                    ? () => {
+                                                          setTabIndex &&
                                                               setTabIndex(1);
+                                                          setCurrentProfileTab &&
                                                               setCurrentProfileTab(
                                                                   profile_tabs[1],
                                                               );
-                                                              setTab(1);
-                                                          }
-                                                        : () => {
-                                                              dispatch({
-                                                                  type: "CREATE_NOTIFICATION_ROUTE",
-                                                              });
-                                                          }
-                                                }
-                                                src={
-                                                    newNotification
-                                                        ? NotificationBell
-                                                        : Bell
-                                                }
-                                                alt="Bell Icon"
-                                            />
-                                        )}
+                                                          setTab && setTab(1);
+                                                      }
+                                                    : () => {
+                                                          dispatch({
+                                                              type: "CREATE_NOTIFICATION_ROUTE",
+                                                          });
+                                                      }
+                                            }
+                                            onClick={
+                                                isBrowser &&
+                                                window.location.pathname ===
+                                                    ROUTES.profile
+                                                    ? () => {
+                                                          setTabIndex &&
+                                                              setTabIndex(1);
+                                                          setCurrentProfileTab &&
+                                                              setCurrentProfileTab(
+                                                                  profile_tabs[1],
+                                                              );
+                                                          setTab && setTab(1);
+                                                      }
+                                                    : () => {
+                                                          dispatch({
+                                                              type: "CREATE_NOTIFICATION_ROUTE",
+                                                          });
+                                                      }
+                                            }
+                                            src={
+                                                newNotification
+                                                    ? NotificationBell
+                                                    : Bell
+                                            }
+                                            alt="Bell Icon"
+                                        />
                                     </Link>
+                                    {/* Only render ReactTooltip if it's properly loaded */}
+                                    {typeof ReactTooltip === "function" && (
+                                        <ReactTooltip
+                                            id="bell-icon-tooltip"
+                                            place="bottom"
+                                            type="light"
+                                            effect="solid"
+                                        >
+                                            <div
+                                                className="text-uppercase text-center"
+                                                style={{ width: "200px" }}
+                                            >
+                                                no unread notification
+                                            </div>
+                                        </ReactTooltip>
+                                    )}
                                 </li>
                                 <li className="pe-sm-3 px-0 scale-75">
                                     <Link to={ROUTES.profile}>
                                         <div
-                                            className="avatar-placeholder user-avatar"
-                                            onClick={() => {
-                                                dispatch({
-                                                    type: "DISABLE_NOTIFICATION_ROUTE",
-                                                });
-                                            }}
+                                            className="avatar-container"
                                             style={{
-                                                width: "40px",
-                                                height: "40px",
-                                                borderRadius: "50%",
-                                                backgroundColor: "#6c757d",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                color: "white",
-                                                fontSize: "12px",
-                                                cursor: "pointer",
+                                                position: "relative",
+                                                display: "inline-block",
                                             }}
                                         >
-                                            U
+                                            <Avatar
+                                                onClick={() => {
+                                                    dispatch({
+                                                        type: "DISABLE_NOTIFICATION_ROUTE",
+                                                    });
+                                                }}
+                                                className="user-avatar"
+                                            />
+                                            <UserTier />
                                         </div>
                                     </Link>
                                 </li>
                             </ul>
                         )}
                     </div>
+                    {/* LoadCurrencyRates removed - handled in wrap-with-providers.jsx */}
                     <button
                         type="button"
                         className="menu__toggler"
@@ -392,7 +369,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 <div className="menu__content">
                     <div className="content d-md-flex align-items-center">
                         <ul className="content__section menu__items">
-                            {navigationLinks.map((link) => (
+                            {navigationLinks?.map((link) => (
                                 <li className="menu__item" key={link.label}>
                                     <a
                                         href={link.url}
@@ -401,44 +378,57 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                     >
                                         {link.label}
                                     </a>
-                                    {isAuthenticated &&
-                                        link.active &&
-                                        link.subMenu && (
-                                            <ul className="my-4 d-block d-lg-none">
-                                                {link.subMenu.map(
-                                                    (subLink, index) => (
-                                                        <li
-                                                            className="mb-3"
-                                                            key={index}
-                                                        >
-                                                            <Link
-                                                                to={subLink.url}
-                                                                className="fw-500 fs-20px d-block text-light header-item"
-                                                                activeClassName="first-letter:txt-green header-item"
-                                                            >
-                                                                {subLink.label}
-                                                            </Link>
-                                                        </li>
-                                                    ),
-                                                )}
-                                                {isAdmin && (
-                                                    <li className="mb-3">
+                                    {isAuthenticated && link.active && (
+                                        <ul className="my-4 d-block d-lg-none">
+                                            {link.subMenu?.map(
+                                                (subLink, index) => (
+                                                    <li
+                                                        className="mb-3"
+                                                        key={index}
+                                                    >
                                                         <Link
-                                                            to={ROUTES.admin}
+                                                            to={subLink.url}
                                                             className="fw-500 fs-20px d-block text-light header-item"
                                                             activeClassName="first-letter:txt-green header-item"
                                                         >
-                                                            ADMIN
+                                                            {subLink.label}
                                                         </Link>
                                                     </li>
-                                                )}
-                                            </ul>
-                                        )}
+                                                ),
+                                            )}
+                                            {isAdmin && (
+                                                <li className="mb-3">
+                                                    <Link
+                                                        to={ROUTES.admin}
+                                                        className="fw-500 fs-20px d-block text-light header-item"
+                                                        activeClassName="first-letter:txt-green header-item"
+                                                    >
+                                                        ADMIN
+                                                    </Link>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    )}
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
+                {/* Only render modals if they're properly loaded */}
+                {isBannedOpen && typeof InformBannedModal === "function" && (
+                    <InformBannedModal
+                        isModalOpen={isBannedOpen}
+                        setIsModalOpen={setIsBannedOpen}
+                        informMessage={informMessage}
+                    />
+                )}
+                {isMaintenanceOpen &&
+                    typeof InformMaintenanceModal === "function" && (
+                        <InformMaintenanceModal
+                            isModalOpen={isMaintenanceOpen}
+                            setIsModalOpen={setIsMaintenanceOpen}
+                        />
+                    )}
             </div>
         </nav>
     );

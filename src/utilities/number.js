@@ -44,7 +44,16 @@ export const parseNumber = (str) => {
     return parseFloat(cleaned) || 0;
 };
 
-// ============= MISSING FUNCTIONS THAT NEED TO BE ADDED =============
+// ============= CURRENCY CONVERSION FUNCTIONS =============
+
+// Convert amount using currency rate
+export const convertCurrency = (amount, rate = 1) => {
+    if (amount === null || amount === undefined || isNaN(amount)) return 0;
+    if (rate === null || rate === undefined || isNaN(rate)) rate = 1;
+    return Number(amount) * Number(rate);
+};
+
+// ============= NUMBER FORMATTING FUNCTIONS =============
 
 // Add numbers with commas for formatting
 export const numberWithCommas = (x) => {
@@ -58,10 +67,37 @@ export const numberWithLength = (num, length = 2) => {
     return num.toString().padStart(length, "0");
 };
 
-// Render formatted numbers with prefix/suffix
-export const renderNumberFormat = (value, prefix = "", suffix = "") => {
+// Render formatted numbers with prefix/suffix and optional color
+export const renderNumberFormat = (
+    value,
+    prefix = "",
+    suffix = "",
+    decimals = 2,
+    addCommas = true,
+    color = null,
+) => {
     if (value === null || value === undefined || value === "") return "0";
-    return `${prefix}${numberWithCommas(value)}${suffix}`;
+
+    let formattedValue = Number(value);
+
+    // Round to specified decimals
+    if (decimals >= 0) {
+        formattedValue = roundNumber(formattedValue, decimals);
+    }
+
+    // Add commas if requested
+    if (addCommas) {
+        formattedValue = numberWithCommas(formattedValue);
+    }
+
+    const result = `${prefix}${formattedValue}${suffix}`;
+
+    // Return with color styling if specified
+    if (color) {
+        return <span style={{ color }}>{result}</span>;
+    }
+
+    return result;
 };
 
 // Add sign to numbers (+ or -)
@@ -97,6 +133,8 @@ export const formatBytes = (bytes, decimals = 2) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
 
+// ============= TIME CONVERSION FUNCTIONS =============
+
 // Convert seconds to days, hours, minutes, seconds object
 export const secondsToDhms = (seconds) => {
     if (seconds === null || seconds === undefined || seconds < 0) {
@@ -111,7 +149,7 @@ export const secondsToDhms = (seconds) => {
     return { days: d, hours: h, minutes: m, seconds: s };
 };
 
-// NEW: Convert seconds to a formatted string for display
+// Convert seconds to a formatted string for display
 export const secondsToDhmsString = (seconds) => {
     const time = secondsToDhms(seconds);
     const parts = [];
@@ -132,7 +170,7 @@ export const secondsToDhmsString = (seconds) => {
     return parts.join(", ");
 };
 
-// NEW: Convert seconds to compact format (like "2d 5h 30m")
+// Convert seconds to compact format (like "2d 5h 30m")
 export const secondsToCompactString = (seconds) => {
     const time = secondsToDhms(seconds);
     const parts = [];
@@ -144,6 +182,41 @@ export const secondsToCompactString = (seconds) => {
 
     return parts.join(" ");
 };
+
+// ============= PERCENTAGE FUNCTIONS =============
+
+// Calculate percentage
+export const calculatePercentage = (value, total) => {
+    if (total === 0 || total === null || total === undefined) return 0;
+    if (value === null || value === undefined) return 0;
+    return (value / total) * 100;
+};
+
+// Format percentage with specified decimals
+export const formatPercentage = (value, decimals = 1) => {
+    if (value === null || value === undefined || isNaN(value)) return "0%";
+    return `${roundNumber(value, decimals)}%`;
+};
+
+// ============= VALIDATION FUNCTIONS =============
+
+// Check if value is a valid number
+export const isValidNumber = (value) => {
+    return (
+        !isNaN(value) &&
+        isFinite(value) &&
+        value !== null &&
+        value !== undefined
+    );
+};
+
+// Ensure value is within min/max bounds
+export const clampNumber = (value, min = 0, max = Infinity) => {
+    if (!isValidNumber(value)) return min;
+    return Math.max(min, Math.min(max, value));
+};
+
+// ============= REACT COMPONENT WRAPPERS =============
 
 // Wrapper component for easier migration from v4 to v5
 export const NumberFormatCustom = React.forwardRef((props, ref) => {
@@ -164,3 +237,6 @@ export const NumberFormatCustom = React.forwardRef((props, ref) => {
         />
     );
 });
+
+// Display name for development
+NumberFormatCustom.displayName = "NumberFormatCustom";
