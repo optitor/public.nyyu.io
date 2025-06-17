@@ -11,7 +11,7 @@ import Select, { components } from "react-select";
 import { NumericFormat as NumberFormat } from "react-number-format";
 import { Icon } from "@iconify/react";
 import { useQuery, useMutation } from "@apollo/client";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
 import CustomSpinner from "../common/custom-spinner";
 import { GET_ALL_FEES } from "../../apollo/graphqls/querys/Payment";
 import {
@@ -210,7 +210,20 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             };
         });
 
-    const { data: walletAccountData } = useAccount();
+    const {
+        address: walletAddress,
+        isConnected: isWalletConnected,
+        connector,
+    } = useAccount();
+    const { isPending: isConnecting } = useConnect();
+
+    // Create walletAccountData object for backward compatibility
+    const walletAccountData = isWalletConnected
+        ? {
+              address: walletAddress,
+              connector: connector,
+          }
+        : null;
 
     // State management
     const [selectedAsset, setSelectedAsset] = useState(myAssetsCrypto[0]);
@@ -396,7 +409,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                 setError("Insufficient balance");
                 return;
             }
-            if (!walletAccountData?.address) {
+            if (!isWalletConnected || !walletAddress) {
                 setError("Please connect your wallet");
                 return;
             }
@@ -484,7 +497,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             "." +
             network?.network +
             "." +
-            walletAccountData?.address +
+            walletAddress +
             "." +
             withdrawAmount;
 
@@ -497,7 +510,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
             amount: Number(withdrawAmount),
             sourceToken: selectedAsset?.value,
             network: network?.network,
-            des: walletAccountData?.address,
+            des: walletAddress,
             code: confirmCode,
         };
         cryptoWithdrawRequestMutation({
@@ -623,7 +636,7 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
         { topic: "User Email", content: censorEmail(user?.email || "") },
         {
             topic: "Destination wallet address",
-            content: walletAccountData?.address,
+            content: walletAddress || "Not connected", // Updated this line
         },
         { topic: "Source Token", content: selectedAsset?.value },
         { topic: "Withdraw Amount", content: withdrawAmount },
@@ -858,19 +871,25 @@ export default function WithdrawModal({ showModal, setShowModal, assets }) {
                                         onClick={generate_Withdraw_Code}
                                         disabled={
                                             pending ||
-                                            !walletAccountData?.address ||
+                                            isConnecting ||
+                                            !isWalletConnected ||
+                                            !walletAddress ||
                                             invalidForWithdraw
                                         }
                                     >
                                         <div
-                                            className={`${pending ? "opacity-100" : "opacity-0"} d-flex`}
+                                            className={`${pending || isConnecting ? "opacity-100" : "opacity-0"} d-flex`}
                                         >
                                             <CustomSpinner />
                                         </div>
                                         <div
-                                            className={`${pending ? "ms-3" : "pe-4"} text-uppercase`}
+                                            className={`${pending || isConnecting ? "ms-3" : "pe-4"} text-uppercase`}
                                         >
-                                            Next
+                                            {isConnecting
+                                                ? "Connecting..."
+                                                : pending
+                                                  ? "Processing..."
+                                                  : "Next"}
                                         </div>
                                     </button>
                                     {error && (

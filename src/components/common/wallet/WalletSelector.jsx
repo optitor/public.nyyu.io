@@ -3,6 +3,7 @@ import { useAccount, useConnect } from "wagmi";
 import { ReactTooltip } from "../../../utilities/tooltip";
 import { BsQuestionCircle } from "@react-icons/all-files/bs/BsQuestionCircle";
 import { BiWallet } from "@react-icons/all-files/bi/BiWallet";
+import { handleWalletError } from "../../../utilities/walletErrorHandler";
 
 import {
     wallets,
@@ -15,11 +16,75 @@ const shortFormatAddr = (addr) => {
     return addr.substring(0, 6) + "..." + addr.substring(addr.length - 4);
 };
 
+// Helper function to get wallet icon with fallback logic
+const getWalletIcon = (connector) => {
+    // Try multiple mapping strategies
+    const possibleKeys = [
+        connector.id,
+        connector.name,
+        connector.name?.toLowerCase(),
+        connector.name?.replace(/\s+/g, ""),
+        connector.name?.toLowerCase()?.replace(/\s+/g, ""),
+    ];
+
+    for (const key of possibleKeys) {
+        if (wallets[key]?.icon) {
+            return wallets[key].icon;
+        }
+    }
+
+    // Default fallback based on known connector types
+    if (connector.name?.toLowerCase().includes("metamask")) {
+        return wallets.metaMask?.icon || wallets.MetaMask?.icon;
+    }
+    if (connector.name?.toLowerCase().includes("coinbase")) {
+        return wallets.coinbaseWallet?.icon || wallets.coinbase?.icon;
+    }
+    if (connector.name?.toLowerCase().includes("walletconnect")) {
+        return wallets.walletConnect?.icon;
+    }
+
+    return null;
+};
+
+// Helper function to get wallet properties with fallback logic
+const getWalletProperty = (connector, property) => {
+    const possibleKeys = [
+        connector.id,
+        connector.name,
+        connector.name?.toLowerCase(),
+        connector.name?.replace(/\s+/g, ""),
+        connector.name?.toLowerCase()?.replace(/\s+/g, ""),
+    ];
+
+    for (const key of possibleKeys) {
+        if (wallets[key]?.[property]) {
+            return wallets[key][property];
+        }
+    }
+
+    // Default fallback based on known connector types
+    if (connector.name?.toLowerCase().includes("metamask")) {
+        return wallets.metaMask?.[property] || wallets.MetaMask?.[property];
+    }
+    if (connector.name?.toLowerCase().includes("coinbase")) {
+        return (
+            wallets.coinbaseWallet?.[property] || wallets.coinbase?.[property]
+        );
+    }
+    if (connector.name?.toLowerCase().includes("walletconnect")) {
+        return wallets.walletConnect?.[property];
+    }
+
+    return null;
+};
+
 const WalletSelector = ({ selectedWallet, walletChanged }) => {
     // wagmi connectors
     const { connect, connectors, isPending, error } = useConnect();
     const { data: accountInfo, isConnected } = useAccount();
     const [connectingId, setConnectingId] = useState(null);
+    const [userFriendlyError, setUserFriendlyError] = useState(null);
 
     // Update parent component when connection status changes
     useEffect(() => {
@@ -36,17 +101,28 @@ const WalletSelector = ({ selectedWallet, walletChanged }) => {
 
             try {
                 setConnectingId(connector.id);
+                setUserFriendlyError(null); // Clear previous errors
                 console.log("Connecting to:", connector.name, connector.id);
 
                 await connect({ connector });
             } catch (err) {
                 console.error("Connection failed:", err);
+                const friendlyError = handleWalletError(err, connector);
+                setUserFriendlyError(friendlyError);
             } finally {
                 setConnectingId(null);
             }
         },
         [connect, isPending, connectingId],
     );
+
+    // Handle errors from the useConnect hook
+    useEffect(() => {
+        if (error) {
+            const friendlyError = handleWalletError(error);
+            setUserFriendlyError(friendlyError);
+        }
+    }, [error]);
 
     // Handle wallet type selection
     const onChangeWallet = useCallback(
@@ -81,13 +157,7 @@ const WalletSelector = ({ selectedWallet, walletChanged }) => {
                                     >
                                         <div className="presale-connected external_wallet">
                                             <img
-                                                src={
-                                                    wallets[connector.id]
-                                                        ?.icon ||
-                                                    wallets[
-                                                        connector.name?.toLowerCase()
-                                                    ]?.icon
-                                                }
+                                                src={getWalletIcon(connector)}
                                                 alt="wallet icon"
                                                 className="wallet-icon"
                                             />
@@ -133,12 +203,7 @@ const WalletSelector = ({ selectedWallet, walletChanged }) => {
                                         className={`wallet-item external_wallet ${!isReady ? "inactive" : ""} ${isConnecting ? "connecting" : ""}`}
                                     >
                                         <img
-                                            src={
-                                                wallets[connector.id]?.icon ||
-                                                wallets[
-                                                    connector.name?.toLowerCase()
-                                                ]?.icon
-                                            }
+                                            src={getWalletIcon(connector)}
                                             alt="wallet icon"
                                             className="wallet-icon"
                                         />
@@ -146,12 +211,10 @@ const WalletSelector = ({ selectedWallet, walletChanged }) => {
                                             {isConnecting
                                                 ? "Connecting..."
                                                 : isReady
-                                                  ? wallets[connector.id]
-                                                        ?.short ||
-                                                    wallets[
-                                                        connector.name?.toLowerCase()
-                                                    ]?.short ||
-                                                    connector.name
+                                                  ? getWalletProperty(
+                                                        connector,
+                                                        "short",
+                                                    ) || connector.name
                                                   : "Not supported"}
                                         </p>
                                     </div>
@@ -159,9 +222,11 @@ const WalletSelector = ({ selectedWallet, walletChanged }) => {
                             );
                         })}
                     </div>
-                    {error && (
-                        <div className="py-2" style={{ color: "#e8503a" }}>
-                            {error?.message ?? "Failed to connect"}
+                    {(userFriendlyError || error) && (
+                        <div className="wallet-error">
+                            {userFriendlyError ||
+                                error?.message ||
+                                "Failed to connect"}
                         </div>
                     )}
                     {isPending && (
