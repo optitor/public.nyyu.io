@@ -6,6 +6,69 @@ import { isMobile } from "react-device-detect";
 
 const TRUST_URL = `https://link.trustwallet.com/open_url?coin_id=60&url=${process.env.GATSBY_SITE_URL}`;
 
+// Helper function to get wallet icon with fallback logic
+const getWalletIcon = (connector) => {
+    // Try multiple mapping strategies
+    const possibleKeys = [
+        connector.id,
+        connector.name,
+        connector.name?.toLowerCase(),
+        connector.name?.replace(/\s+/g, ""),
+        connector.name?.toLowerCase()?.replace(/\s+/g, ""),
+    ];
+
+    for (const key of possibleKeys) {
+        if (wallets[key]?.icon) {
+            return wallets[key].icon;
+        }
+    }
+
+    // Default fallback based on known connector types
+    if (connector.name?.toLowerCase().includes("metamask")) {
+        return wallets.metaMask?.icon || wallets.MetaMask?.icon;
+    }
+    if (connector.name?.toLowerCase().includes("coinbase")) {
+        return wallets.coinbaseWallet?.icon || wallets.coinbase?.icon;
+    }
+    if (connector.name?.toLowerCase().includes("walletconnect")) {
+        return wallets.walletConnect?.icon;
+    }
+
+    return null;
+};
+
+// Helper function to get wallet properties with fallback logic
+const getWalletProperty = (connector, property) => {
+    const possibleKeys = [
+        connector.id,
+        connector.name,
+        connector.name?.toLowerCase(),
+        connector.name?.replace(/\s+/g, ""),
+        connector.name?.toLowerCase()?.replace(/\s+/g, ""),
+    ];
+
+    for (const key of possibleKeys) {
+        if (wallets[key]?.[property]) {
+            return wallets[key][property];
+        }
+    }
+
+    // Default fallback based on known connector types
+    if (connector.name?.toLowerCase().includes("metamask")) {
+        return wallets.metaMask?.[property] || wallets.MetaMask?.[property];
+    }
+    if (connector.name?.toLowerCase().includes("coinbase")) {
+        return (
+            wallets.coinbaseWallet?.[property] || wallets.coinbase?.[property]
+        );
+    }
+    if (connector.name?.toLowerCase().includes("walletconnect")) {
+        return wallets.walletConnect?.[property];
+    }
+
+    return null;
+};
+
 export default function ConnectWalletTab() {
     const { data: accountData } = useAccount();
     const { connect, connectors, error, isPending } = useConnect();
@@ -46,7 +109,7 @@ export default function ConnectWalletTab() {
                 <div className="mb-10px">
                     <div className="connected">
                         <img
-                            src={wallets[accountData.connector.id]?.icon}
+                            src={getWalletIcon(accountData.connector)}
                             alt="wallet icon"
                         />
                         <p>{accountData?.address}</p>
@@ -95,28 +158,21 @@ export default function ConnectWalletTab() {
                                     className={`wallet-item ${!isReady ? "inactive" : ""} ${isConnecting ? "connecting" : ""}`}
                                 >
                                     <img
-                                        src={
-                                            wallets[connector.id]?.icon ||
-                                            wallets[
-                                                connector.name?.toLowerCase()
-                                            ]?.icon
-                                        }
+                                        src={getWalletIcon(connector)}
                                         alt="wallet icon"
                                     />
                                     <p>
                                         {isConnecting
                                             ? "Connecting..."
                                             : isReady
-                                              ? wallets[connector.id]?.desc ||
-                                                wallets[
-                                                    connector.name?.toLowerCase()
-                                                ]?.desc ||
-                                                `Connect ${connector.name}`
-                                              : wallets[connector.id]?.warn ||
-                                                wallets[
-                                                    connector.name?.toLowerCase()
-                                                ]?.warn ||
-                                                "Not supported"}
+                                              ? getWalletProperty(
+                                                    connector,
+                                                    "desc",
+                                                ) || `Connect ${connector.name}`
+                                              : getWalletProperty(
+                                                    connector,
+                                                    "warn",
+                                                ) || "Not supported"}
                                     </p>
                                 </div>
                             </div>

@@ -10,11 +10,13 @@ import {
     WalletConnect,
 } from "./imgImport";
 import { ROUTES } from "./routes";
+
 export const OAUTH2_REDIRECT_URI = `${process.env.GATSBY_SITE_URL}/oauth2/redirect`;
 
 export const BINANCE_API_KEY =
     "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582";
 const API_BASE_URL = process.env.GATSBY_API_BASE_URL;
+
 export const social_links = [
     {
         icon: Google,
@@ -60,30 +62,68 @@ export const COLOR_OFF = "#626161";
 
 export const INFURA_ID = "b3926273acc243d1ab72dfe9f2be8539";
 
+// Updated wallet mappings to match Wagmi v2 connector IDs
 export const wallets = {
+    // MetaMask connector ID in Wagmi v2
     metaMask: {
         icon: MetaMask,
         desc: "Connect to your MetaMask wallet",
         warn: "MetaMask is not supported by your Browser",
         short: "MetaMask Wallet",
     },
+    // Legacy support for old connector ID
+    metmask: {
+        icon: MetaMask,
+        desc: "Connect to your MetaMask wallet",
+        warn: "MetaMask is not supported by your Browser",
+        short: "MetaMask Wallet",
+    },
+    // WalletConnect connector ID in Wagmi v2
     walletConnect: {
         icon: WalletConnect,
         desc: "Scan with WalletConnect to connect",
         warn: "WalletConnect is not supported",
         short: "WalletConnect Wallet",
     },
+    // Coinbase Wallet connector ID in Wagmi v2
     coinbaseWallet: {
         icon: Coinbase,
         desc: "Connect to your Coinbase Account",
         warn: "Coinbase Account is not supported",
         short: "CoinBase Wallet",
     },
+    // Legacy support for old connector ID
+    coinbase: {
+        icon: Coinbase,
+        desc: "Connect to your Coinbase Account",
+        warn: "Coinbase Account is not supported",
+        short: "CoinBase Wallet",
+    },
+    // Trust Wallet (still handled manually)
     trustWallet: {
         icon: TrustWallet,
         desc: "Connect to your Trust wallet",
         warn: "Trust wallet is only supported on Mobile",
         short: "TrustWallet",
+    },
+    // Additional mappings for connector names (fallback)
+    MetaMask: {
+        icon: MetaMask,
+        desc: "Connect to your MetaMask wallet",
+        warn: "MetaMask is not supported by your Browser",
+        short: "MetaMask Wallet",
+    },
+    WalletConnect: {
+        icon: WalletConnect,
+        desc: "Scan with WalletConnect to connect",
+        warn: "WalletConnect is not supported",
+        short: "WalletConnect Wallet",
+    },
+    "Coinbase Wallet": {
+        icon: Coinbase,
+        desc: "Connect to your Coinbase Account",
+        warn: "Coinbase Account is not supported",
+        short: "CoinBase Wallet",
     },
 };
 
