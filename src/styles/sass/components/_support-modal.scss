@@ -1,3 +1,108 @@
+// Support Modal Styles - Complete and Consistent Design Pattern
+
+// Base support modal class (used by reset modals)
+.support-modal {
+    max-width: 750px;
+    width: 90%;
+    background: #000000;
+    border: 1px solid #333333;
+    border-radius: 0;
+    padding: 0;
+    outline: none;
+    position: relative;
+    margin: 2rem auto;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    @media (max-width: 768px) {
+        width: 95%;
+        margin: 1rem auto;
+        max-height: 95vh;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 2rem 1rem 2rem;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
+        text-transform: uppercase;
+        color: white;
+        position: relative;
+
+        @media (max-width: 768px) {
+            padding: 1.5rem 1.5rem 1rem 1.5rem;
+        }
+
+        // Close button styling
+        div[role="button"] {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            padding: 0.5rem;
+
+            &:hover {
+                opacity: 1;
+            }
+
+            img {
+                width: 14px;
+                height: 14px;
+                filter: invert(1); // Make close icon white
+            }
+        }
+    }
+
+    &__footer {
+        align-items: center;
+        padding: 1rem 2rem 2rem 2rem;
+
+        @media (max-width: 768px) {
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+        }
+
+        button {
+            display: block;
+        }
+
+        .btn-cancel {
+            margin-top: 11px;
+            background-color: unset;
+            border: unset;
+            font-size: 12px;
+            line-height: 23px;
+            color: white;
+        }
+
+        .btn-primary {
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 22px;
+            padding: 15px 95px;
+        }
+    }
+
+    .form {
+        padding: 18px 51px;
+        
+        @media (max-width: 768px) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    // Content area for reset modals
+    .my-5 {
+        padding: 1rem 2rem 2rem 2rem;
+
+        @media (max-width: 768px) {
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+        }
+    }
+}
+
 // Support Request Modal Styles - Matching Existing Design Pattern
 .modal-content-support-request {
     background: #000000;
@@ -33,6 +138,7 @@
             color: #ffffff;
             text-align: center;
             line-height: 1.2;
+            width: 100%; // Ensure full width for centering
             
             @media (max-width: 768px) {
                 font-size: 1.5rem;
@@ -318,8 +424,9 @@
     }
 }
 
-// Modal overlay - matching your dark overlay
-.modal-overlay {
+// Modal overlay classes - unified styling for both patterns
+.modal-overlay,
+.support-modal__overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -336,4 +443,51 @@
 @keyframes spin {
     0% { transform: translate(-50%, -50%) rotate(0deg); }
     100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+// Additional shared styles for form inputs in both modal types
+.support-modal,
+.modal-content-support-request {
+    // Common input styling
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        color: #000000;
+        border-radius: 0;
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        width: 100%;
+
+        &:focus {
+            background-color: #ffffff;
+            border-color: #666666;
+            box-shadow: none;
+            color: #000000;
+            outline: none;
+        }
+
+        &::placeholder {
+            color: #999999;
+            font-style: italic;
+        }
+    }
+
+    // Common button styling
+    button {
+        border-radius: 0;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    }
 }
