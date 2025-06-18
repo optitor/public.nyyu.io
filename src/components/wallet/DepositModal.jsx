@@ -91,6 +91,7 @@ const CRYPTOCURRENCY = "CRYPTOCURRENCY";
 const PAYPAL = "PAYPAL";
 const STRIP = "STRIP";
 const BANKTRANSER = "BANKTRANSER";
+const MPESA = "MPESA";
 
 const SelectOption = (props) => {
     return (
@@ -117,7 +118,6 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [error, setError] = useState("");
 
     const [coinQRCode, setCoinQRCode] = useState("");
-
     const [loading, setLoading] = useState(false);
 
     const networks = useMemo(() => selectedAsset.networks, [selectedAsset]);
@@ -130,8 +130,10 @@ export default function DepositModal({ showModal, setShowModal }) {
     const [transferAmount, setTransferAmount] = useState("");
     const [referenceNumber, setReferenceNumber] = useState(null);
 
-    const [copyText, setCopyText] = useState("");
+    // MPESA specific state
+    const [mpesaPhone, setMpesaPhone] = useState("");
 
+    const [copyText, setCopyText] = useState("");
     const [depositType, setDepositType] = useState("");
     const [allFees, setAllFees] = useState({});
 
@@ -164,7 +166,6 @@ export default function DepositModal({ showModal, setShowModal }) {
             onCompleted: (data) => {
                 if (data?.createChargeForDeposit) {
                     const resData = data?.createChargeForDeposit;
-
                     setDepositData(resData);
                     setPending(false);
                     setCurrentStep(2);
@@ -172,7 +173,6 @@ export default function DepositModal({ showModal, setShowModal }) {
                 setError("");
             },
             onError: (err) => {
-                // console.log("get deposit address: ", err);
                 setError(err.message);
                 setPending(false);
             },
@@ -184,6 +184,7 @@ export default function DepositModal({ showModal, setShowModal }) {
         setConfirmById(null);
         setCurrency(CURRENCIES[0]);
         setTransferAmount("");
+        setMpesaPhone("");
         setCurrentStep(1);
     };
 
@@ -199,6 +200,69 @@ export default function DepositModal({ showModal, setShowModal }) {
         createChargeForDepositMutation({
             variables: { ...createData },
         });
+    };
+
+    // MPESA handler function
+    const handleMpesaDeposit = async () => {
+        if (!transferAmount || !mpesaPhone) {
+            setError("Please enter amount and phone number");
+            return;
+        }
+
+        if (transferAmount < 100) {
+            setError("Minimum deposit amount is 100 KES");
+            return;
+        }
+
+        if (transferAmount > 150000) {
+            setError("Maximum deposit amount is 150,000 KES");
+            return;
+        }
+
+        if (mpesaPhone.length !== 9) {
+            setError("Please enter a valid 9-digit phone number");
+            return;
+        }
+
+        // Validate phone number starts with 7 (Kenyan mobile format)
+        if (!mpesaPhone.startsWith("7")) {
+            setError("Phone number must start with 7 (e.g., 712345678)");
+            return;
+        }
+
+        setPending(true);
+        setError("");
+
+        try {
+            // TODO: Replace with actual MPESA GraphQL mutation when backend is ready
+            console.log("🚀 MPESA Deposit Request:", {
+                amount: transferAmount,
+                phone: `+254${mpesaPhone}`,
+                currency: "KES",
+                cryptoType: "USDT",
+                userId: user?.id,
+            });
+
+            // Simulate API call for now (remove this when backend is ready)
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            // Simulate success response (remove this when backend is ready)
+            setError("");
+            alert(
+                `M-PESA payment request sent to +254${mpesaPhone} for ${transferAmount} KES.\n\nPlease check your phone and enter your M-PESA PIN to complete the transaction.\n\nYou will receive approximately ${(transferAmount * 0.0067).toFixed(2)} USDT in your wallet once payment is confirmed.`,
+            );
+
+            // Reset form and close modal
+            setTransferAmount("");
+            setMpesaPhone("");
+            setCurrentStep(1);
+            closeModal();
+        } catch (error) {
+            console.error("MPESA deposit error:", error);
+            setError("Failed to initiate M-PESA payment. Please try again.");
+        } finally {
+            setPending(false);
+        }
     };
 
     //-------- Fetching the state of confirming coinpayment trx.
@@ -229,6 +293,8 @@ export default function DepositModal({ showModal, setShowModal }) {
 
     const closeModal = () => {
         setDepositData(null);
+        setTransferAmount("");
+        setMpesaPhone("");
         setShowModal(false);
     };
 
@@ -240,7 +306,6 @@ export default function DepositModal({ showModal, setShowModal }) {
     };
 
     const handleCopyToClipboard = (text) => {
-        /* Copy the text inside the text field */
         navigator.clipboard.writeText(text);
         setCopyText(text);
     };
@@ -258,7 +323,6 @@ export default function DepositModal({ showModal, setShowModal }) {
             setError("");
         },
         onError: (err) => {
-            // console.log('paypal deposit error',err);
             setError(err.message);
             setLoading(false);
         },
@@ -287,7 +351,6 @@ export default function DepositModal({ showModal, setShowModal }) {
             setPending(false);
         },
         onError: (err) => {
-            // console.log('bank deposit error', err);
             setError(err.message);
             setPending(false);
         },
@@ -418,30 +481,40 @@ export default function DepositModal({ showModal, setShowModal }) {
                         {tabIndex === 2 && (
                             <div className="width2 mt-5">
                                 <div className="row">
-                                    <div className="col-sm-6">
-                                        <FiatButton
-                                            className="inactive"
-                                            disabled={true}
-                                        >
-                                            <img src={Plaid} alt="plaid" />
-                                        </FiatButton>
-                                    </div>
+                                    {/* MPESA Payment Option */}
                                     <div className="col-sm-6">
                                         <FiatButton
                                             className="active"
                                             onClick={() => {
-                                                setDepositType(PAYPAL);
+                                                setDepositType(MPESA);
                                                 setCurrentStep(3);
                                             }}
                                         >
-                                            <img
-                                                src={PaypalFiat}
-                                                alt="paypal"
-                                            />
+                                            <div className="payment-method-content">
+                                                <div className="mpesa-logo">
+                                                    <span
+                                                        style={{
+                                                            color: "#00D13B",
+                                                            fontWeight: "bold",
+                                                            fontSize: "18px",
+                                                        }}
+                                                    >
+                                                        M-PESA
+                                                    </span>
+                                                </div>
+                                                <small
+                                                    style={{
+                                                        color: "#888",
+                                                        fontSize: "12px",
+                                                    }}
+                                                >
+                                                    Mobile Money
+                                                </small>
+                                            </div>
                                         </FiatButton>
                                     </div>
-                                </div>
-                                <div className="row">
+
+                                    {/* Credit Cards (Stripe) - Keep Active */}
                                     <div className="col-sm-6">
                                         <FiatButton
                                             className="active"
@@ -456,6 +529,10 @@ export default function DepositModal({ showModal, setShowModal }) {
                                             />
                                         </FiatButton>
                                     </div>
+                                </div>
+
+                                <div className="row">
+                                    {/* Bank Transfer - Keep Active */}
                                     <div className="col-sm-6">
                                         <FiatButton
                                             className="active"
@@ -472,6 +549,38 @@ export default function DepositModal({ showModal, setShowModal }) {
                                             )}
                                         </FiatButton>
                                     </div>
+
+                                    {/* PayPal - Disabled */}
+                                    <div className="col-sm-6">
+                                        <FiatButton
+                                            className="inactive"
+                                            disabled={true}
+                                            title="PayPal temporarily disabled"
+                                        >
+                                            <div style={{ opacity: 0.5 }}>
+                                                <img
+                                                    src={PaypalFiat}
+                                                    alt="paypal"
+                                                />
+                                                <small
+                                                    style={{
+                                                        display: "block",
+                                                        color: "#888",
+                                                        fontSize: "10px",
+                                                        marginTop: "5px",
+                                                    }}
+                                                >
+                                                    Temporarily Disabled
+                                                </small>
+                                            </div>
+                                        </FiatButton>
+                                    </div>
+                                </div>
+
+                                <div className="mt-3 text-center">
+                                    <small style={{ color: "#888" }}>
+                                        More payment methods coming soon
+                                    </small>
                                 </div>
                             </div>
                         )}
@@ -589,6 +698,178 @@ export default function DepositModal({ showModal, setShowModal }) {
                             </div>
                         </div>
                     )}
+
+                {/* MPESA Deposit Step */}
+                {currentStep === 3 && depositType === MPESA && (
+                    <div className="width2">
+                        <div className="mpesa-deposit-section">
+                            <h4 className="text-center mb-4">
+                                Deposit via M-PESA
+                            </h4>
+
+                            {/* Amount Selection */}
+                            <div className="form-group mb-3">
+                                <label className="form-label text-white">
+                                    Amount to Deposit
+                                </label>
+                                <div className="input-group">
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        placeholder="Enter amount"
+                                        value={transferAmount}
+                                        onChange={(e) =>
+                                            setTransferAmount(e.target.value)
+                                        }
+                                        min="100"
+                                        max="150000"
+                                        step="1"
+                                        style={{
+                                            backgroundColor: "#1e1e1e",
+                                            border: "1px solid white",
+                                            color: "white",
+                                            borderRadius: "0",
+                                        }}
+                                    />
+                                    <span
+                                        className="input-group-text"
+                                        style={{
+                                            backgroundColor: "#333",
+                                            color: "white",
+                                            border: "1px solid white",
+                                            borderLeft: "none",
+                                        }}
+                                    >
+                                        KES
+                                    </span>
+                                </div>
+                                <small className="text-muted">
+                                    Minimum: 100 KES | Maximum: 150,000 KES
+                                </small>
+                            </div>
+
+                            {/* Phone Number Input */}
+                            <div className="form-group mb-3">
+                                <label className="form-label text-white">
+                                    M-PESA Phone Number
+                                </label>
+                                <div className="input-group">
+                                    <span
+                                        className="input-group-text"
+                                        style={{
+                                            backgroundColor: "#333",
+                                            color: "white",
+                                            border: "1px solid white",
+                                        }}
+                                    >
+                                        +254
+                                    </span>
+                                    <input
+                                        type="tel"
+                                        className="form-control"
+                                        placeholder="7XXXXXXXX"
+                                        value={mpesaPhone}
+                                        onChange={(e) =>
+                                            setMpesaPhone(e.target.value)
+                                        }
+                                        maxLength="9"
+                                        pattern="[0-9]{9}"
+                                        style={{
+                                            backgroundColor: "#1e1e1e",
+                                            border: "1px solid white",
+                                            borderLeft: "none",
+                                            color: "white",
+                                            borderRadius: "0",
+                                        }}
+                                    />
+                                </div>
+                                <small className="text-muted">
+                                    Enter your M-PESA registered phone number
+                                </small>
+                            </div>
+
+                            {/* Transaction Summary */}
+                            {transferAmount && mpesaPhone && (
+                                <div
+                                    className="transaction-summary mb-4 p-3"
+                                    style={{
+                                        backgroundColor:
+                                            "rgba(255, 255, 255, 0.1)",
+                                        borderRadius: "5px",
+                                        border: "1px solid #333",
+                                    }}
+                                >
+                                    <h6 className="text-white">
+                                        Transaction Summary
+                                    </h6>
+                                    <div className="d-flex justify-content-between">
+                                        <span>Amount:</span>
+                                        <span>{transferAmount} KES</span>
+                                    </div>
+                                    <div className="d-flex justify-content-between">
+                                        <span>Phone:</span>
+                                        <span>+254{mpesaPhone}</span>
+                                    </div>
+                                    <div className="d-flex justify-content-between">
+                                        <span>Conversion Rate:</span>
+                                        <span>1 KES = 0.0067 USD</span>
+                                    </div>
+                                    <div className="d-flex justify-content-between font-weight-bold">
+                                        <span>You'll receive:</span>
+                                        <span>
+                                            ~
+                                            {(transferAmount * 0.0067).toFixed(
+                                                2,
+                                            )}{" "}
+                                            USDT
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Submit Button */}
+                            <button
+                                className="btn btn-outline-light rounded-0 w-100 mt-3 fw-bold"
+                                onClick={handleMpesaDeposit}
+                                disabled={
+                                    !transferAmount ||
+                                    !mpesaPhone ||
+                                    pending ||
+                                    transferAmount < 100 ||
+                                    transferAmount > 150000 ||
+                                    mpesaPhone.length !== 9 ||
+                                    !mpesaPhone.startsWith("7")
+                                }
+                            >
+                                {pending ? (
+                                    <div className="d-flex align-items-center justify-content-center">
+                                        <CustomSpinner />
+                                        <span className="ms-2">
+                                            Processing...
+                                        </span>
+                                    </div>
+                                ) : (
+                                    "INITIATE M-PESA PAYMENT"
+                                )}
+                            </button>
+
+                            {error && (
+                                <div className="alert alert-danger mt-3">
+                                    {error}
+                                </div>
+                            )}
+
+                            <div className="mt-3 text-center">
+                                <small className="text-muted">
+                                    You will receive an M-PESA prompt on your
+                                    phone to complete the payment
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Bank Transfer Deposit Steps */}
                 {currentStep === 3 && depositType === BANKTRANSER && (
                     <div className="deposit width2 mb-5">
                         <h5 className="text-center">Bank transfer deposit</h5>
@@ -730,95 +1011,29 @@ export default function DepositModal({ showModal, setShowModal }) {
                     </div>
                 )}
 
+                {/* PayPal Deposit (Disabled) - Keep for reference */}
                 {currentStep === 3 && depositType === PAYPAL && (
                     <div className="deposit width2">
-                        <h5 className="text-center">Paypal deposit</h5>
-                        <div>
-                            <p className="subtitle">Currency</p>
-                            <Select
-                                className="black_input"
-                                options={CURRENCIES}
-                                value={currency}
-                                onChange={(selected) => {
-                                    setCurrency(selected);
-                                }}
-                                styles={customSelectStyles}
-                                components={{
-                                    IndicatorSeparator: null,
-                                }}
-                            />
-                        </div>
-                        <div className="mt-3">
-                            <p className="subtitle">Amount</p>
-                            <div
-                                className="black_input transfer_input"
-                                aria-hidden="true"
-                                onClick={() =>
-                                    jq("input#transferAmount").trigger("focus")
-                                }
-                            >
-                                <NumberFormat
-                                    id="transferAmount"
-                                    className="ms-2"
-                                    thousandSeparator={true}
-                                    prefix={currency.symbol + " "}
-                                    allowNegative={false}
-                                    value={transferAmount}
-                                    onValueChange={(values) =>
-                                        setTransferAmount(values.value)
-                                    }
-                                    placeholder={"Min 1 " + currency.symbol}
-                                    autoComplete="off"
-                                />
-                                <div>
-                                    Transaction fee{" "}
-                                    <NumberFormat
-                                        thousandSeparator={true}
-                                        suffix={" " + currency.symbol}
-                                        displayType="text"
-                                        allowNegative={false}
-                                        value={Number(
-                                            getPaypalPaymentFee(
-                                                user,
-                                                allFees,
-                                                transferAmount,
-                                            ),
-                                        )}
-                                        decimalScale={2}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-3">
-                            <p>
-                                The{" "}
-                                <span className="txt-green">
-                                    {currency.label}
-                                </span>{" "}
-                                will be converted to{" "}
-                                <span className="txt-green">USDT</span> and
-                                deposited to the wallet
+                        <div className="text-center p-4">
+                            <h5 className="text-warning">
+                                PayPal Temporarily Disabled
+                            </h5>
+                            <p className="text-muted">
+                                PayPal payments are currently unavailable.
+                                Please use M-PESA, Credit Card, or Bank Transfer
+                                instead.
                             </p>
-                            <div className="black_input usdt_div">
-                                <img src={USDT} alt="usdt" className="ms-2" />
-                                <p className="ms-2">USDT</p>
-                            </div>
+                            <button
+                                className="btn btn-outline-light rounded-0 mt-3"
+                                onClick={() => setCurrentStep(1)}
+                            >
+                                BACK TO PAYMENT OPTIONS
+                            </button>
                         </div>
-                        <button
-                            className="btn btn-outline-light rounded-0 w-100 mt-50px fw-bold"
-                            onClick={() => {
-                                initPaypalCheckout();
-                            }}
-                            disabled={
-                                !transferAmount ||
-                                Number(transferAmount) < MIN_VALUE
-                            }
-                        >
-                            CONTINUE
-                        </button>
-                        <p className="mt-2 text-warning">{error}</p>
                     </div>
                 )}
+
+                {/* Stripe Deposit Steps */}
                 {currentStep === 3 && depositType === STRIP && (
                     <div className="deposit width2">
                         <div>
@@ -1050,5 +1265,6 @@ const FiatButton = styled.button`
     }
     &.inactive {
         opacity: 0.4;
+        cursor: not-allowed;
     }
 `;

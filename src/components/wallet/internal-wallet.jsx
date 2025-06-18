@@ -589,10 +589,13 @@ export default function InternalWallet() {
                     </tbody>
                 </table>
             </div>
-            <DepositModal isOpen={isDepositOpen} setIsOpen={setIsDepositOpen} />
+            <DepositModal
+                showModal={isDepositOpen}
+                setShowModal={setIsDepositOpen}
+            />
             <WithdrawModal
-                isOpen={isWithdrawOpen}
-                setIsOpen={setIsWithdrawOpen}
+                showModal={isWithdrawOpen}
+                setShowModal={setIsWithdrawOpen}
                 assets={myAssetsWithBalance}
             />
         </div>
