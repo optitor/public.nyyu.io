@@ -1,32 +1,37 @@
-import React, { useCallback, useReducer } from "react"
-import { Link, navigate } from "gatsby"
-import { FormInput } from "../common/FormControl"
-import validator from "validator"
-import AuthLayout from "../common/AuthLayout"
-import { useForgotPassword } from "../../apollo/model/auth"
-import { useAuth } from "../../hooks/useAuth"
+import React, { useCallback, useReducer } from "react";
+import { Link, navigate } from "gatsby";
+import { FormInput } from "../common/FormControl";
+import validator from "validator";
+import AuthLayout from "../common/AuthLayout";
+import { useForgotPassword } from "../../apollo/model/auth";
+import { useAuth } from "../../hooks/useAuth";
 
 const ForgetPassword = () => {
-    const auth = useAuth()
+    const auth = useAuth();
 
-    if (auth?.isLoggedIn()) navigate("/app/profile")
+    if (auth?.isAuthenticated) navigate("/app/profile");
 
-    const [state, setState] = useReducer((old, action) => ({ ...old, ...action }), {
-        email: { value: "", error: "" },
-    })
-    const { email } = state
+    const [state, setState] = useReducer(
+        (old, action) => ({ ...old, ...action }),
+        {
+            email: { value: "", error: "" },
+        },
+    );
+    const { email } = state;
     const handleEmailChange = useCallback((e) => {
         setState({
             email: {
                 value: e.target.value,
-                error: validator.isEmail(e.target.value) ? "" : "Invalid email address",
+                error: validator.isEmail(e.target.value)
+                    ? ""
+                    : "Invalid email address",
             },
-        })
-    }, [])
+        });
+    }, []);
 
-    const [forgotPwdMutation, forgotPwdMutationResults] = useForgotPassword()
+    const [forgotPwdMutation, forgotPwdMutationResults] = useForgotPassword();
 
-    const disableForm = forgotPwdMutationResults.loading
+    const disableForm = forgotPwdMutationResults.loading;
 
     return (
         <AuthLayout>
@@ -34,8 +39,8 @@ const ForgetPassword = () => {
             <form
                 className="form"
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    forgotPwdMutation(email.value)
+                    e.preventDefault();
+                    forgotPwdMutation(email.value);
                 }}
             >
                 <div className="form-group">
@@ -49,7 +54,9 @@ const ForgetPassword = () => {
                     />
                 </div>
                 <div className="form-group text-white">
-                    <span className="signup-text-link">Didn't receive an email? </span>
+                    <span className="signup-text-link">
+                        Didn't receive an email?{" "}
+                    </span>
                     <Link className="signup-link" to="#">
                         Send again
                     </Link>
@@ -69,7 +76,7 @@ const ForgetPassword = () => {
                 </Link>
             </p>
         </AuthLayout>
-    )
-}
+    );
+};
 
-export default ForgetPassword
+export default ForgetPassword;

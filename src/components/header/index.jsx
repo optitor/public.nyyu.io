@@ -162,7 +162,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     <Link to="/" className="menu__logo d-flex" title="Logo">
                         <img src={Logo} alt="NDB Brand Logo" />
                     </Link>
-                    {auth?.isLoggedIn() && isShowNavLinks && (
+                    {auth?.isAuthenticated && isShowNavLinks && (
                         <div className="d-none d-lg-flex justify-content-between gap-5">
                             {navLinks?.map((link, key) => {
                                 return (
@@ -192,7 +192,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 </div>
                 <div className="d-flex align-items-center">
                     <div>
-                        {!auth?.isLoggedIn() ? (
+                        {!auth?.isAuthenticated ? (
                             !banned ? (
                                 !isCurrentSignin ? (
                                     <Link

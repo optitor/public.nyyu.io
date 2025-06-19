@@ -130,7 +130,9 @@ const IndexPage = () => {
 
     // Methods
     const placeABidButtonClick = () =>
-        auth?.isLoggedIn() ? navigate(ROUTES.auction) : navigate(ROUTES.signIn);
+        auth?.isAuthenticated
+            ? navigate(ROUTES.auction)
+            : navigate(ROUTES.signIn);
 
     const handleActionAfterDeadline = (status = 1) => {
         if (status === 1) {

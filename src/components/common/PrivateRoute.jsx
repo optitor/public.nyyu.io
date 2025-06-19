@@ -20,7 +20,7 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
         }
 
         const checkAuthAndDecide = () => {
-            const isAuthenticated = auth.isLoggedIn();
+            const isAuthenticated = auth.isAuthenticated;
             console.log("🛡️ PrivateRoute final auth check:");
             console.log("🔐 isLoggedIn result:", isAuthenticated);
             console.log(
@@ -47,7 +47,7 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
                         "⏳ Recently logged in, waiting longer before redirect...",
                     );
                     setTimeout(() => {
-                        const recheckAuth = auth.isLoggedIn();
+                        const recheckAuth = auth.isAuthenticated;
                         if (!recheckAuth) {
                             console.log(
                                 "❌ Still not authenticated after recheck - redirecting to signin",
@@ -86,7 +86,7 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
     useEffect(() => {
         if (auth?.initialized && auth?.authState?.forceCounter) {
             console.log("🔄 Auth state force counter changed, re-checking...");
-            const isAuthenticated = auth.isLoggedIn();
+            const isAuthenticated = auth.isAuthenticated;
 
             if (
                 !isAuthenticated &&

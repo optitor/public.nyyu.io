@@ -11,33 +11,134 @@ import {
 } from "./imgImport";
 import { ROUTES } from "./routes";
 
-export const OAUTH2_REDIRECT_URI = `${process.env.GATSBY_SITE_URL}/oauth2/redirect`;
+// Enhanced environment variable handling with fallbacks
+const getEnvVar = (varName, fallback = "") => {
+    const value = process.env[varName];
+    if (!value && process.env.NODE_ENV === "development") {
+        console.warn(
+            `⚠️ Environment variable ${varName} is not set. Using fallback: ${fallback}`,
+        );
+    }
+    return value || fallback;
+};
 
-export const BINANCE_API_KEY =
-    "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582";
+export const BINANCE_API_KEY = getEnvVar(
+    "GATSBY_BINANCE_API_KEY",
+    "qApI1beZsgoaiHpgbM2S1wMF83cYwRE5PEaFGp7urj6fzxv0RHfGbxZ0LRgY0582",
+);
 const API_BASE_URL = process.env.GATSBY_API_BASE_URL;
+
+// Enhanced OAuth redirect URI with mobile support
+// Enhanced OAuth redirect URI with proper environment variable handling
+const getSiteUrl = () => {
+    // First priority: GATSBY_SITE_URL environment variable
+    if (process.env.GATSBY_SITE_URL) {
+        return process.env.GATSBY_SITE_URL;
+    }
+
+    // Second priority: browser window (for client-side)
+    if (typeof window !== "undefined") {
+        return `${window.location.protocol}//${window.location.host}`;
+    }
+
+    // Third priority: fallback based on environment
+    if (process.env.NODE_ENV === "production") {
+        // In production, we should always have GATSBY_SITE_URL set
+        console.error(
+            "❌ GATSBY_SITE_URL must be set in production environment!",
+        );
+        console.error(
+            "Please add GATSBY_SITE_URL=https://your-domain.com to your production environment variables",
+        );
+
+        // Use GATSBY_PRODUCTION_URL as backup if available
+        return getEnvVar("GATSBY_PRODUCTION_URL", "http://localhost");
+    }
+
+    // Development fallback - use environment variable or default
+    return getEnvVar("GATSBY_DEV_URL", "http://localhost:4000");
+};
+
+export const OAUTH2_REDIRECT_URI = `${getSiteUrl()}/oauth2/redirect`;
+
+// Mobile OAuth redirect URI for Flutter/React Native apps
+export const MOBILE_OAUTH_REDIRECT_URI = getEnvVar(
+    "GATSBY_MOBILE_REDIRECT_URI",
+    "nyyu://oauth/callback",
+);
+
+// Generate secure state parameter for OAuth
+const generateStateParameter = () => {
+    if (
+        typeof window !== "undefined" &&
+        window.crypto &&
+        window.crypto.getRandomValues
+    ) {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        return array[0].toString(36);
+    }
+    return Math.random().toString(36).substring(2, 15);
+};
+
+// Enhanced OAuth URL creation
+const createOAuthURL = (provider, isMobile = false) => {
+    const redirectUri = isMobile
+        ? MOBILE_OAUTH_REDIRECT_URI
+        : OAUTH2_REDIRECT_URI;
+    const baseUrl = `${API_BASE_URL}/oauth2/authorize/${provider}`;
+
+    const params = new URLSearchParams({
+        redirect_uri: redirectUri,
+        response_type: "code",
+        scope: provider === "google" ? "email profile" : "email",
+        state: generateStateParameter(),
+        ...(isMobile && { mobile: "true" }),
+    });
+
+    return `${baseUrl}?${params.toString()}`;
+};
+
+// Detect if the request is from a mobile app (not mobile browser)
+const isMobileApp = () => {
+    if (typeof window === "undefined") return false;
+
+    // Check for actual mobile app interfaces
+    const hasFlutterInterface = window.flutter_inappwebview !== undefined;
+    const hasReactNativeInterface = window.ReactNativeWebView !== undefined;
+
+    // Check user agent for mobile app indicators
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isFlutterApp = userAgent.includes("flutter");
+
+    // Only return true for actual mobile apps, not mobile browsers
+    return hasFlutterInterface || hasReactNativeInterface || isFlutterApp;
+};
 
 export const social_links = [
     {
         icon: Google,
-        to:
-            API_BASE_URL +
-            "/oauth2/authorize/google?redirect_uri=" +
-            OAUTH2_REDIRECT_URI,
+        provider: "google",
+        to: createOAuthURL("google", isMobileApp()),
+        mobileTo: createOAuthURL("google", true),
+        name: "Google",
+        clientId: getEnvVar("GATSBY_GOOGLE_CLIENT_ID"),
     },
     {
         icon: Linkedin,
-        to:
-            API_BASE_URL +
-            "/oauth2/authorize/linkedin?redirect_uri=" +
-            OAUTH2_REDIRECT_URI,
+        provider: "linkedin",
+        to: createOAuthURL("linkedin", isMobileApp()),
+        mobileTo: createOAuthURL("linkedin", true),
+        name: "LinkedIn",
+        clientId: getEnvVar("GATSBY_LINKEDIN_CLIENT_ID"),
     },
     {
         icon: Amazon,
-        to:
-            API_BASE_URL +
-            "/oauth2/authorize/amazon?redirect_uri=" +
-            OAUTH2_REDIRECT_URI,
+        provider: "amazon",
+        to: createOAuthURL("amazon", isMobileApp()),
+        mobileTo: createOAuthURL("amazon", true),
+        name: "Amazon",
+        clientId: getEnvVar("GATSBY_AMAZON_CLIENT_ID"),
     },
 ];
 
@@ -60,7 +161,10 @@ export const COLOR_LOAD = "#ffffff";
 export const COLOR_ON = "#23c865";
 export const COLOR_OFF = "#626161";
 
-export const INFURA_ID = "b3926273acc243d1ab72dfe9f2be8539";
+export const INFURA_ID = getEnvVar(
+    "GATSBY_INFURA_ID",
+    "b3926273acc243d1ab72dfe9f2be8539",
+);
 
 // Updated wallet mappings to match Wagmi v2 connector IDs
 export const wallets = {
@@ -609,3 +713,75 @@ export const CLIENT_ID =
     "90xX0xMPoYxtLd6CdQFbOtaIZM7E0YHovKao7MnrUlrDIQxqYQ1644914425";
 export const SECRET =
     "$2y$10$501VfRCMRXitkUmuHhJCPelM5MYTdvzO3S8qlY319L9bnDdVJp24C";
+
+// Enhanced OAuth utility functions
+export const getOAuthUrl = (provider, mobile = false) => {
+    const link = social_links.find((l) => l.provider === provider);
+    if (!link) {
+        console.error(`OAuth provider '${provider}' not found`);
+        return null;
+    }
+    return mobile ? link.mobileTo : link.to;
+};
+
+export const isOAuthConfigured = (provider) => {
+    const link = social_links.find((l) => l.provider === provider);
+    return link && link.clientId;
+};
+
+// Validate OAuth configuration
+export const validateOAuthConfig = () => {
+    const issues = [];
+
+    if (!API_BASE_URL) {
+        issues.push("GATSBY_API_BASE_URL is not configured");
+    }
+
+    if (!process.env.GATSBY_SITE_URL) {
+        issues.push("GATSBY_SITE_URL is not configured");
+    }
+
+    social_links.forEach((link) => {
+        if (!link.clientId) {
+            issues.push(`${link.name} client ID is not configured`);
+        }
+    });
+
+    if (issues.length > 0 && process.env.NODE_ENV === "development") {
+        console.warn("⚠️ OAuth Configuration Issues:", issues);
+    }
+
+    return issues;
+};
+
+// Mobile OAuth utilities
+export const handleMobileOAuth = (provider) => {
+    if (!isMobileApp()) {
+        window.location.href = getOAuthUrl(provider, false);
+        return;
+    }
+
+    const mobileUrl = getOAuthUrl(provider, true);
+
+    if (window.flutter_inappwebview) {
+        window.flutter_inappwebview.callHandler("openOAuth", {
+            url: mobileUrl,
+            provider: provider,
+        });
+    } else if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(
+            JSON.stringify({
+                type: "oauth_request",
+                url: mobileUrl,
+                provider: provider,
+            }),
+        );
+    } else {
+        window.location.href = mobileUrl;
+    }
+};
+
+// Export configuration validation on module load
+if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    validateOAuthConfig();
+}
