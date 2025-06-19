@@ -402,10 +402,16 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     onError={handleError}
                     onSuccess={() => {
                         console.log(
-                            "🎉 2FA completed successfully - navigating to select figure",
+                            "🎉 2FA completed successfully from OAuth - navigating to wallet",
                         );
-                        navigate(ROUTES.selectFigure);
+                        // Navigate to wallet for OAuth login (since user is already authenticated)
+                        navigate(ROUTES.wallet, { replace: true });
                     }}
+                    resend={() => {
+                        console.log("🔄 Resending 2FA codes for OAuth login");
+                        // You might want to implement a resend mechanism here
+                    }}
+                    loading={false}
                 />
             )}
 
@@ -432,7 +438,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                         );
                         if (success) {
                             dispatch({ type: "SET_TFA_OPEN", payload: false });
-                            navigate(ROUTES.signIn);
+                            navigate(ROUTES.wallet); // Navigate to wallet instead of sign in
                         } else {
                             navigate(ROUTES.verifyFailed);
                         }

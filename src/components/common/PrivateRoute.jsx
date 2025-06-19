@@ -20,9 +20,11 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
         }
 
         const checkAuthAndDecide = () => {
-            const isAuthenticated = auth.isAuthenticated;
+            // Use auth.authState.isAuthenticated instead of auth.isAuthenticated
+            const isAuthenticated = auth.authState?.isAuthenticated;
             console.log("🛡️ PrivateRoute final auth check:");
-            console.log("🔐 isLoggedIn result:", isAuthenticated);
+            console.log("🔐 isAuthenticated result:", isAuthenticated);
+            console.log("🔐 Auth state:", auth.authState);
             console.log(
                 "📍 Current path:",
                 isBrowser ? window.location.pathname : "SSR",
@@ -47,7 +49,8 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
                         "⏳ Recently logged in, waiting longer before redirect...",
                     );
                     setTimeout(() => {
-                        const recheckAuth = auth.isAuthenticated;
+                        // Use auth.authState.isAuthenticated for recheck too
+                        const recheckAuth = auth.authState?.isAuthenticated;
                         if (!recheckAuth) {
                             console.log(
                                 "❌ Still not authenticated after recheck - redirecting to signin",
@@ -80,13 +83,14 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
         const timeoutId = setTimeout(checkAuthAndDecide, 100);
 
         return () => clearTimeout(timeoutId);
-    }, [auth?.initialized, auth]);
+    }, [auth?.initialized, auth?.authState?.isAuthenticated]);
 
     // Force re-check when auth state changes
     useEffect(() => {
         if (auth?.initialized && auth?.authState?.forceCounter) {
             console.log("🔄 Auth state force counter changed, re-checking...");
-            const isAuthenticated = auth.isAuthenticated;
+            // Use auth.authState.isAuthenticated instead of auth.isAuthenticated
+            const isAuthenticated = auth.authState?.isAuthenticated;
 
             if (
                 !isAuthenticated &&
@@ -97,10 +101,11 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
                 navigate(`/app/signin/`, { replace: true });
                 setShouldRender(false);
             } else {
+                console.log("✅ Force check: Authenticated - allowing render");
                 setShouldRender(true);
             }
         }
-    }, [auth?.authState?.forceCounter, auth]);
+    }, [auth?.authState?.forceCounter, auth?.authState?.isAuthenticated]);
 
     // Don't render anything until auth is ready and we've made a decision
     if (!isReady) {

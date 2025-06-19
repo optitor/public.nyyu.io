@@ -137,6 +137,9 @@ const Signin = () => {
                     redirect={false}
                 />
                 {success ? (
+                    // This is the section to replace in src/components/auth/signin.jsx
+                    // Find the VerifyMutliFA component usage and replace it with:
+
                     <VerifyMutliFA
                         twoStep={twoStep}
                         email={email}
@@ -144,6 +147,20 @@ const Signin = () => {
                         returnToSignIn={() => setSuccess(false)}
                         resend={(e) => signUserIn(e)}
                         loading={loading}
+                        onSuccess={() => {
+                            console.log(
+                                "🎉 2FA completed successfully from Sign In - navigating to wallet",
+                            );
+                            // Reset success state and let the auth system handle navigation
+                            setSuccess(false);
+                            // The navigation will be handled by the useSignIn2FA hook
+                        }}
+                        onError={(error) => {
+                            console.error("❌ 2FA Error from Sign In:", error);
+                            // You can show an error message here or reset the form
+                            setSuccess(false);
+                            // Optionally show an error message to the user
+                        }}
                     />
                 ) : (
                     <>

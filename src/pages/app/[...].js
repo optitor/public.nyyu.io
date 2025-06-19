@@ -37,16 +37,17 @@ const AuthRoute = ({ component: Component, location, ...rest }) => {
 
     // Check if user is logged in and redirect immediately
     React.useEffect(() => {
-        if (auth?.isAuthenticated) {
+        // Use auth.authState.isAuthenticated instead of auth.isAuthenticated
+        if (auth?.authState?.isAuthenticated) {
             console.log(
                 "🔄 AuthRoute: User logged in detected, redirecting to wallet",
             );
             navigate(`/app/wallet/`, { replace: true });
         }
-    }, [auth?.isAuthenticated]);
+    }, [auth?.authState?.isAuthenticated]);
 
     // Don't render the component if user is logged in (redirect is happening)
-    if (auth?.isAuthenticated) {
+    if (auth?.authState?.isAuthenticated) {
         return null;
     }
 
@@ -63,6 +64,7 @@ const App = () => {
                         <AuthRoute path="signin" component={SignIn} />
                         <AuthRoute path="signin/:error" component={SignIn} />
                         <AuthRoute path="signup" component={SignUp} />
+
                         <AuthRoute
                             path="verify-email/:email"
                             component={VerifyEmail}

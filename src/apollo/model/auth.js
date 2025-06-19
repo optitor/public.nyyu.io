@@ -5,6 +5,7 @@ import { isBrowser, setAuthToken } from "../../utilities/auth";
 import { ROUTES } from "../../utilities/routes";
 
 // Signin with 2FA
+// Signin with 2FA
 export const useSignIn2FA = () => {
     const [mutation, mutationResults] = useMutation(GraphQL.SIGNIN_2FA, {
         onCompleted: (data) => {
@@ -19,26 +20,28 @@ export const useSignIn2FA = () => {
                 console.log("❌ 2FA Failed:", data.confirm2FA.token);
                 return;
             } else if (data.confirm2FA.status === "Success") {
-                console.log(
-                    "✅ 2FA Success - Setting token only (letting AuthRoute handle redirect)",
-                );
+                console.log("✅ 2FA Success - Setting token and navigating");
                 console.log("🎯 Setting auth token...");
 
                 setAuthToken(data.confirm2FA.token);
 
                 console.log("🎯 Token set successfully");
-                console.log("🎯 AuthRoute will handle navigation to wallet");
 
-                // NO NAVIGATION HERE - let AuthRoute handle it
-                // Just force auth state update so AuthRoute can detect the login
+                // Navigate directly to wallet after successful 2FA
+                console.log("🎯 Navigating to wallet...");
+                setTimeout(() => {
+                    navigate(ROUTES.wallet, { replace: true });
+                }, 200);
+
+                // Also force auth state update for any remaining components
                 setTimeout(() => {
                     if (window.forceAuthUpdate) {
                         console.log(
-                            "🎫 Forcing auth update for AuthRoute detection",
+                            "🎫 Forcing auth update for state synchronization",
                         );
                         window.forceAuthUpdate();
                     }
-                }, 500);
+                }, 100);
             }
         },
         onError: (error) => {
@@ -86,26 +89,29 @@ export const useSignUp2FA = () => {
                     return;
                 } else if (data.confirmRequest2FA.status === "Success") {
                     console.log(
-                        "✅ SignUp 2FA Success - Setting token only (letting AuthRoute handle redirect)",
+                        "✅ SignUp 2FA Success - Setting token and navigating",
                     );
                     console.log("🎯 Setting auth token...");
 
                     setAuthToken(data.confirmRequest2FA.token);
 
                     console.log("🎯 Token set successfully");
-                    console.log(
-                        "🎯 AuthRoute will handle navigation to wallet",
-                    );
 
-                    // NO NAVIGATION HERE - let AuthRoute handle it
+                    // Navigate directly to select figure after successful signup 2FA
+                    console.log("🎯 Navigating to select figure...");
+                    setTimeout(() => {
+                        navigate(ROUTES.selectFigure, { replace: true });
+                    }, 200);
+
+                    // Also force auth state update
                     setTimeout(() => {
                         if (window.forceAuthUpdate) {
                             console.log(
-                                "🎫 Forcing auth update for AuthRoute detection",
+                                "🎫 Forcing auth update for state synchronization",
                             );
                             window.forceAuthUpdate();
                         }
-                    }, 500);
+                    }, 100);
                 }
             },
             onError: (error) => {

@@ -47,8 +47,9 @@ const App = () => {
     const isAdmin = getCookie(NDB_Privilege) === NDB_Admin;
     const auth = useAuth();
 
+    // Use auth.authState.isAuthenticated instead of auth.isAuthenticated
     if (
-        !auth?.isAuthenticated &&
+        !auth?.authState?.isAuthenticated &&
         isBrowser &&
         window.location.pathname !== ROUTES.signIn
     ) {
@@ -86,8 +87,12 @@ const App = () => {
             </>
         );
     } else {
-        if (isBrowser) navigate("/");
-        return null;
+        return (
+            <div>
+                <h1>Access Denied</h1>
+                <p>You don't have permission to access this area.</p>
+            </div>
+        );
     }
 };
 
