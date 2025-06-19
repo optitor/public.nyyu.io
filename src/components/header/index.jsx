@@ -4,7 +4,6 @@ import { useQuery } from "@apollo/client";
 import { Link, navigate } from "gatsby";
 import { isBrowser } from "../../utilities/auth";
 import { Bell, Logo, NotificationBell } from "../../utilities/imgImport";
-// import ReactTooltip from "react-tooltip"
 
 import { useAuth } from "../../hooks/useAuth";
 import { setCurrentAuthInfo } from "../../store/actions/authAction";
@@ -108,7 +107,10 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
     const [active, setActive] = useState(false);
     const { avatarComponents } = useSelector((state) => state);
     const [newNotification, setNewNotification] = useState(false);
-    const { user, isAuthenticated } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
+
+    // 🔧 FIX: Use auth hook for authentication state instead of Redux
+    const isAuthenticated = auth?.authState?.isAuthenticated || false;
     const isAdmin = user?.role && user?.role?.includes("ROLE_ADMIN");
 
     const isShowNavLinks =
@@ -155,6 +157,17 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
         );
     };
 
+    // Debug logging
+    useEffect(() => {
+        console.log("🔧 Menu Component Debug:");
+        console.log("🔐 Auth object:", auth);
+        console.log("🔐 Auth state:", auth?.authState);
+        console.log("🔐 isAuthenticated:", isAuthenticated);
+        console.log("🔐 isShowNavLinks:", isShowNavLinks);
+        console.log("🔐 User info:", userInfo);
+        console.log("🔐 User from Redux:", user);
+    }, [auth, isAuthenticated, isShowNavLinks, userInfo, user]);
+
     return (
         <nav className={active ? "menu menu--active" : "menu"}>
             <div className="px-4 d-flex justify-content-between">
@@ -162,7 +175,8 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                     <Link to="/" className="menu__logo d-flex" title="Logo">
                         <img src={Logo} alt="NDB Brand Logo" />
                     </Link>
-                    {auth?.isAuthenticated && isShowNavLinks && (
+                    {/* 🔧 FIX: Use isAuthenticated instead of auth?.isAuthenticated */}
+                    {isAuthenticated && isShowNavLinks && (
                         <div className="d-none d-lg-flex justify-content-between gap-5">
                             {navLinks?.map((link, key) => {
                                 return (
@@ -192,7 +206,8 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                 </div>
                 <div className="d-flex align-items-center">
                     <div>
-                        {!auth?.isAuthenticated ? (
+                        {/* 🔧 FIX: Use isAuthenticated instead of auth?.isAuthenticated */}
+                        {!isAuthenticated ? (
                             !banned ? (
                                 !isCurrentSignin ? (
                                     <Link
@@ -378,6 +393,7 @@ const Menu = ({ setTabIndex, setCurrentProfileTab, setTab }) => {
                                     >
                                         {link.label}
                                     </a>
+                                    {/* 🔧 FIX: Use isAuthenticated consistently here too */}
                                     {isAuthenticated && link.active && (
                                         <ul className="my-4 d-block d-lg-none">
                                             {link.subMenu?.map(
