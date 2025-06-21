@@ -1,6 +1,6 @@
-// src/components/oauth2/redirect.js
 import React, { useEffect, useReducer, useState } from "react";
 import { navigate } from "gatsby";
+import { useMutation } from "@apollo/client";
 import AuthLayout from "../common/AuthLayout";
 import VerifyMutliFA from "../auth/verify-multiFA";
 import TwoFactorModal from "../profile/two-factor-modal";
@@ -11,6 +11,7 @@ import AlarmModal, {
     showSuccessAlarm,
     showFailAlarm,
 } from "../admin/AlarmModal";
+import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
 
 // Enhanced reducer for better state management
 const initialState = {
@@ -71,6 +72,33 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
     const [state, dispatch] = useReducer(stateReducer, initialState);
     const [retryCount, setRetryCount] = useState(0);
     const maxRetries = 3;
+
+    // Add this mutation hook inside the component
+    const [resendVerifyCodeMutation, { loading: resendLoading }] = useMutation(
+        GraphQL.RESEND_VERIFY_CODE,
+        {
+            onCompleted: (data) => {
+                if (data.resendVerifyCode === "Success") {
+                    showSuccessAlarm(
+                        "Verification codes sent successfully",
+                        "New 2FA codes have been sent to your registered methods",
+                    );
+                } else {
+                    showFailAlarm(
+                        "Failed to send codes",
+                        "Unable to send verification codes. Please try again",
+                    );
+                }
+            },
+            onError: (error) => {
+                console.error("🚨 Resend verification code error:", error);
+                showFailAlarm(
+                    "Failed to send codes",
+                    error.message || "Network error occurred. Please try again",
+                );
+            },
+        },
+    );
 
     // Mobile OAuth detection
     const detectMobile = () => {
@@ -408,52 +436,25 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     returnToSignIn={() => navigate(ROUTES.signIn)}
                     onError={handleError}
                     onSuccess={() => {
-                        // Navigate to wallet for OAuth login (since user is already authenticated)
                         navigate(ROUTES.wallet, { replace: true });
                     }}
-                    resend={async () => {
-                        try {
-                            // Use the same resend logic as normal signin - trigger a re-request of 2FA codes
-                            const response = await fetch(
-                                `${process.env.GATSBY_API_BASE_URL}/auth/resend-2fa`,
-                                {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                        Authorization: `Bearer ${state.tempToken}`,
-                                    },
-                                    body: JSON.stringify({
-                                        email: state.email,
-                                        token: state.tempToken,
-                                    }),
-                                },
-                            );
-
-                            const result = await response.json();
-
-                            if (
-                                response.ok &&
-                                (result.success || result === "Success")
-                            ) {
-                                showSuccessAlarm(
-                                    "2FA codes resent successfully",
-                                    "New verification codes have been sent to your registered 2FA methods",
-                                );
-                            } else {
-                                showFailAlarm(
-                                    "Failed to resend codes",
-                                    result.message ||
-                                        "Unable to resend verification codes. Please try again",
-                                );
-                            }
-                        } catch (error) {
+                    resend={() => {
+                        if (!state.email) {
                             showFailAlarm(
-                                "Network error",
-                                "Unable to resend codes due to connection issues. Please check your network and try again",
+                                "Email not available",
+                                "Unable to resend codes. Please try signing in again",
                             );
+                            return;
                         }
+
+                        // Use the existing RESEND_VERIFY_CODE GraphQL mutation
+                        resendVerifyCodeMutation({
+                            variables: {
+                                email: state.email,
+                            },
+                        });
                     }}
-                    loading={false}
+                    loading={resendLoading} // Update this line to show loading during resend
                 />
             )}
 
