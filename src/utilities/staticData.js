@@ -1,9 +1,11 @@
 import React from "react";
 import {
-    // Facebook,
+    Facebook,
     Amazon,
     Google,
     Linkedin,
+    Apple,
+    Twitter,
     Coinbase,
     MetaMask,
     TrustWallet,
@@ -139,6 +141,32 @@ export const social_links = [
         mobileTo: createOAuthURL("amazon", true),
         name: "Amazon",
         clientId: getEnvVar("GATSBY_AMAZON_CLIENT_ID"),
+    },
+
+    {
+        icon: Apple,
+        provider: "apple",
+        to: createOAuthURL("apple", isMobileApp()),
+        mobileTo: createOAuthURL("apple", true),
+        name: "Apple",
+        clientId: getEnvVar("GATSBY_APPLE_CLIENT_ID"),
+    },
+    {
+        icon: Twitter,
+        provider: "twitter",
+        to: createOAuthURL("twitter", isMobileApp()),
+        mobileTo: createOAuthURL("twitter", true),
+        name: "Twitter",
+        clientId: getEnvVar("GATSBY_TWITTER_CLIENT_ID"),
+    },
+
+    {
+        icon: Facebook,
+        provider: "facebook",
+        to: createOAuthURL("facebook", isMobileApp()),
+        mobileTo: createOAuthURL("facebook", true),
+        name: "Facebook",
+        clientId: getEnvVar("GATSBY_FACEBOOK_CLIENT_ID"),
     },
 ];
 
