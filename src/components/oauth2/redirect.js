@@ -12,6 +12,7 @@ import AlarmModal, {
     showFailAlarm,
 } from "../admin/AlarmModal";
 import * as GraphQL from "../../apollo/graphqls/mutations/Auth";
+import * as SupportMutations from "../../apollo/graphqls/mutations/Support"; // Add this line
 
 // Enhanced reducer for better state management
 const initialState = {
@@ -74,14 +75,14 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
     const maxRetries = 3;
 
     // Add this mutation hook inside the component
-    const [resendVerifyCodeMutation, { loading: resendLoading }] = useMutation(
-        GraphQL.RESEND_VERIFY_CODE,
+    const [sendVerifyCodeMutation, { loading: resendLoading }] = useMutation(
+        SupportMutations.SEND_VERIFY_CODE,
         {
             onCompleted: (data) => {
-                if (data.resendVerifyCode === "Success") {
+                if (data.sendVerifyCode && data.sendVerifyCode !== "Failed") {
                     showSuccessAlarm(
                         "Verification codes sent successfully",
-                        "New 2FA codes have been sent to your registered methods",
+                        `New 2FA codes have been sent to ${data.sendVerifyCode}`,
                     );
                 } else {
                     showFailAlarm(
@@ -91,7 +92,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                 }
             },
             onError: (error) => {
-                console.error("🚨 Resend verification code error:", error);
+                console.error("🚨 Send verification code error:", error);
                 showFailAlarm(
                     "Failed to send codes",
                     error.message || "Network error occurred. Please try again",
@@ -439,22 +440,10 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                         navigate(ROUTES.wallet, { replace: true });
                     }}
                     resend={() => {
-                        if (!state.email) {
-                            showFailAlarm(
-                                "Email not available",
-                                "Unable to resend codes. Please try signing in again",
-                            );
-                            return;
-                        }
-
-                        // Use the existing RESEND_VERIFY_CODE GraphQL mutation
-                        resendVerifyCodeMutation({
-                            variables: {
-                                email: state.email,
-                            },
-                        });
+                        // Use the SEND_VERIFY_CODE mutation from Support - this one actually works!
+                        sendVerifyCodeMutation();
                     }}
-                    loading={resendLoading} // Update this line to show loading during resend
+                    loading={resendLoading}
                 />
             )}
 
