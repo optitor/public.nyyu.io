@@ -7,6 +7,10 @@ import TwoFactorModal from "../profile/two-factor-modal";
 import CustomSpinner from "../common/custom-spinner";
 import { ROUTES } from "../../utilities/routes";
 import { setAuthToken } from "../../utilities/auth";
+import AlarmModal, {
+    showSuccessAlarm,
+    showFailAlarm,
+} from "../admin/AlarmModal";
 
 // Enhanced reducer for better state management
 const initialState = {
@@ -332,6 +336,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                         Processing OAuth authentication...
                     </div>
                 </div>
+                <AlarmModal />
             </AuthLayout>
         );
     }
@@ -348,6 +353,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                         You can now close this window and return to the app.
                     </div>
                 </div>
+                <AlarmModal />
             </AuthLayout>
         );
     }
@@ -386,6 +392,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                         </button>
                     )}
                 </div>
+                <AlarmModal />
             </AuthLayout>
         );
     }
@@ -401,15 +408,50 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     returnToSignIn={() => navigate(ROUTES.signIn)}
                     onError={handleError}
                     onSuccess={() => {
-                        console.log(
-                            "🎉 2FA completed successfully from OAuth - navigating to wallet",
-                        );
                         // Navigate to wallet for OAuth login (since user is already authenticated)
                         navigate(ROUTES.wallet, { replace: true });
                     }}
-                    resend={() => {
-                        console.log("🔄 Resending 2FA codes for OAuth login");
-                        // You might want to implement a resend mechanism here
+                    resend={async () => {
+                        try {
+                            // Use the same resend logic as normal signin - trigger a re-request of 2FA codes
+                            const response = await fetch(
+                                `${process.env.GATSBY_API_BASE_URL}/auth/resend-2fa`,
+                                {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        Authorization: `Bearer ${state.tempToken}`,
+                                    },
+                                    body: JSON.stringify({
+                                        email: state.email,
+                                        token: state.tempToken,
+                                    }),
+                                },
+                            );
+
+                            const result = await response.json();
+
+                            if (
+                                response.ok &&
+                                (result.success || result === "Success")
+                            ) {
+                                showSuccessAlarm(
+                                    "2FA codes resent successfully",
+                                    "New verification codes have been sent to your registered 2FA methods",
+                                );
+                            } else {
+                                showFailAlarm(
+                                    "Failed to resend codes",
+                                    result.message ||
+                                        "Unable to resend verification codes. Please try again",
+                                );
+                            }
+                        } catch (error) {
+                            showFailAlarm(
+                                "Network error",
+                                "Unable to resend codes due to connection issues. Please check your network and try again",
+                            );
+                        }
                     }}
                     loading={false}
                 />
@@ -419,10 +461,6 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                 <TwoFactorModal
                     is2FAModalOpen={state.tfaOpen}
                     setIs2FAModalOpen={(isOpen) => {
-                        console.log(
-                            "🔐 TwoFactorModal setIs2FAModalOpen called with:",
-                            isOpen,
-                        );
                         if (!isOpen) {
                             navigate(ROUTES.signIn);
                         } else {
@@ -432,10 +470,6 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     email={state.email}
                     twoStep={state.twoStep}
                     onResult={(success) => {
-                        console.log(
-                            "🔐 TwoFactorModal onResult called with:",
-                            success,
-                        );
                         if (success) {
                             dispatch({ type: "SET_TFA_OPEN", payload: false });
                             navigate(ROUTES.wallet); // Navigate to wallet instead of sign in
@@ -447,6 +481,7 @@ const OAuth2RedirectHandler = ({ type, dataType, data }) => {
                     onError={handleError}
                 />
             )}
+            <AlarmModal />
         </AuthLayout>
     );
 };
